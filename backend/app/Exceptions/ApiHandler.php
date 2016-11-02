@@ -51,8 +51,8 @@ class ApiHandler extends ExceptionHandler
             $e = new HttpException(401, $e->getMessage());
         } elseif ($e instanceof AuthorizationException) {
             $e = new HttpException(403, $e->getMessage());
-        } elseif ($e instanceof MethodNotAllowedHttpException) {
-            $e = new HttpException(405, trans('errors.http.405'));
+        } elseif ($e instanceof HttpException) {
+            $e = new HttpException($e->getStatusCode(), trans("errors.http.{$e->getStatusCode()}"));
         }
 
         return $e;
