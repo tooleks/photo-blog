@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Users\AuthenticateUserRequest;
-use Illuminate\Contracts\Auth\Authenticatable;
 use App\Http\Requests\Users\CreateUserRequest;
 use App\Models\User;
 use App\Services\Users\Contracts\UserServiceContract;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 
