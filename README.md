@@ -16,11 +16,12 @@ composer install
 
 Create `./backend/.env` file from the example `./backend/.env.example`. Setup database connection credentials.
 
-#### REST API documentation
+#### REST API Documentation
 
-Run in the terminal to install application dependencies:
+Run following commands to install development dependencies:
 
 ```
+npm install
 npm install -g gulp api-doc
 ```
 
