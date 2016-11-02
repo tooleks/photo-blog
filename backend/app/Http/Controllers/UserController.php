@@ -53,7 +53,7 @@ class UserController extends Controller
      *          "created_at": "2016-10-24 12:24:33",
      *          "updated_at": "2016-10-24 14:38:05",
      *          "role": {
-     *              "name": "User"
+     *              "name": "Customer"
      *          }
      *      }
      *  }
@@ -90,7 +90,7 @@ class UserController extends Controller
      *          "created_at": "2016-10-24 12:24:33",
      *          "updated_at": "2016-10-24 14:38:05",
      *          "role": {
-     *              "name": "User"
+     *              "name": "Customer"
      *          }
      *      }
      *  }
@@ -126,7 +126,7 @@ class UserController extends Controller
      *          "created_at": "2016-10-24 12:24:33",
      *          "updated_at": "2016-10-24 14:38:05",
      *          "role": {
-     *              "name": "User"
+     *              "name": "Customer"
      *          }
      *      }
      *  }
@@ -167,7 +167,7 @@ class UserController extends Controller
      *          "created_at": "2016-10-24 12:24:33",
      *          "updated_at": "2016-10-24 14:38:05",
      *          "role": {
-     *              "name": "User"
+     *              "name": "Customer"
      *          }
      *      }
      *  }
