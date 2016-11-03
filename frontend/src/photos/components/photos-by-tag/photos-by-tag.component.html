@@ -1,0 +1,12 @@
+<div class="row">
+    <div class="col-sm-12">
+        <gallery [items]="getPhotos()"
+                 [initItemId]="queryParams['show']"
+                 [loadMoreCallback]="loadMorePhotos.bind(this)"
+                 [openViewCallback]="showPhotoCallback.bind(this)"
+                 [closeViewCallback]="hidePhotoCallback.bind(this)"></gallery>
+    </div>
+</div>
+<div class="load-more-container text-center">
+    <button class="btn btn-primary" (click)="loadMorePhotos()">Load more...</button>
+</div>
