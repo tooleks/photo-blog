@@ -1,4 +1,6 @@
 /src/**/*.js
 /src/**/*.js.map
 
-/src/env.ts
+/env.ts
+/env.js
+/env.js.map
