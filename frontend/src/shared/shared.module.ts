@@ -10,6 +10,7 @@ import {NavigatorServiceProvider} from './services/navigator';
 import {NotificatorService} from './services/notificator';
 import {FileSelectInputComponent} from './components/file-select-input/file-select-input.component';
 import {TagsSelectInputComponent} from './components/tags-select-input/tags-select-input.component';
+import {EnvService} from './services/env';
 
 @NgModule({
     imports: [
@@ -36,6 +37,7 @@ import {TagsSelectInputComponent} from './components/tags-select-input/tags-sele
         LockerServiceProvider,
         NavigatorServiceProvider,
         PagerServiceProvider,
+        EnvService,
     ],
 })
 export class SharedModule {

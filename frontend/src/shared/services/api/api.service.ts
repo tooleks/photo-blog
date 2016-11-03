@@ -3,7 +3,7 @@ import {Http, Headers, Response, URLSearchParams} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/Rx';
 import {ApiErrorHandler} from './api-error-handler';
-import {env} from '../../../../env';
+import {EnvService} from '../env';
 
 @Injectable()
 export class ApiService {
@@ -13,10 +13,11 @@ export class ApiService {
     searchParams:URLSearchParams;
     body:any;
 
-    constructor(@Inject(Http) private http:Http,
+    constructor(@Inject(EnvService) private envService:EnvService,
+                @Inject(Http) private http:Http,
                 @Inject(ApiErrorHandler) private errorHandler:ApiErrorHandler) {
-        this.apiUrl = env.apiUrl;
-        this.debug = env.debug;
+        this.apiUrl = this.envService.get('apiUrl');
+        this.debug = this.envService.get('debug');
     }
 
     get(url:string, options?:any) {
