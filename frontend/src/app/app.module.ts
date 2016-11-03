@@ -6,6 +6,7 @@ import {AppComponent} from './components/app/app.component';
 import {AppRouting, AppRoutingProviders} from './app.routing';
 import {SharedModule} from '../shared/shared.module';
 import {PhotosModule} from '../photos/photos.module';
+import {SignInFormComponent} from './components/signin-form/signin-form.component';
 
 @NgModule({
     imports: [
@@ -19,6 +20,7 @@ import {PhotosModule} from '../photos/photos.module';
     ],
     declarations: [
         AppComponent,
+        SignInFormComponent,
     ],
     exports: [
     ],

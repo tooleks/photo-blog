@@ -8,9 +8,11 @@ import {ApiService, ApiErrorHandler} from './services/api';
 import {LockerServiceProvider} from './services/locker';
 import {NavigatorServiceProvider} from './services/navigator';
 import {NotificatorService} from './services/notificator';
+import {EnvService} from './services/env';
+import {AuthService, AuthUserProviderService} from './services/auth';
 import {FileSelectInputComponent} from './components/file-select-input/file-select-input.component';
 import {TagsSelectInputComponent} from './components/tags-select-input/tags-select-input.component';
-import {EnvService} from './services/env';
+import {LocalStorageService} from './services/local-storage/local-storage.service';
 
 @NgModule({
     imports: [
@@ -32,12 +34,15 @@ import {EnvService} from './services/env';
     ],
     providers: [
         NotificatorService,
+        AuthService,
+        AuthUserProviderService,
         ApiService,
         ApiErrorHandler,
         LockerServiceProvider,
         NavigatorServiceProvider,
         PagerServiceProvider,
         EnvService,
+        LocalStorageService,
     ],
 })
 export class SharedModule {

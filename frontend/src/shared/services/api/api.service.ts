@@ -4,10 +4,11 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/Rx';
 import {ApiErrorHandler} from './api-error-handler';
 import {EnvService} from '../env';
+import {AuthUserProviderService} from '../auth/auth-user-provider.service';
 
 @Injectable()
 export class ApiService {
-    apiUrl:string;
+    apiBaseUrl:string;
     debug:boolean;
     headers:Headers;
     searchParams:URLSearchParams;
@@ -15,8 +16,9 @@ export class ApiService {
 
     constructor(@Inject(EnvService) private envService:EnvService,
                 @Inject(Http) private http:Http,
-                @Inject(ApiErrorHandler) private errorHandler:ApiErrorHandler) {
-        this.apiUrl = this.envService.get('apiUrl');
+                @Inject(ApiErrorHandler) private errorHandler:ApiErrorHandler,
+                @Inject(AuthUserProviderService) private authUserProviderService:AuthUserProviderService) {
+        this.apiBaseUrl = this.envService.get('apiBaseUrl');
         this.debug = this.envService.get('debug');
     }
 
@@ -70,6 +72,9 @@ export class ApiService {
     private getDefaultHeaders() {
         let headers = new Headers;
         headers.append('Accept', 'application/json');
+        if (this.authUserProviderService.getUser()) {
+            headers.append('Authorization', 'Bearer ' + this.authUserProviderService.getUser()['api_token']);
+        }
         return headers;
     }
 
@@ -97,8 +102,8 @@ export class ApiService {
         return this.body;
     }
 
-    private getAbsoluteUrl(url:string) {
-        return this.apiUrl + '/' + url;
+    private getAbsoluteUrl(relativeUrl:string) {
+        return this.apiBaseUrl + '/' + relativeUrl;
     }
 
     private extractData(response:Response) {
