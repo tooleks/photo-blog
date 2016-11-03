@@ -35,7 +35,7 @@ class UserController extends Controller
      * Authenticate user.
      *
      * @apiVersion 1.0.0
-     * @api {post} user Authenticate User
+     * @api {post} user/authenticate Authenticate User
      * @apiName AuthenticateUser
      * @apiGroup Users
      * @apiHeader {String} Accept application/json
