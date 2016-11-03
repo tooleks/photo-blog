@@ -18,4 +18,8 @@ export class AuthService {
     private onSignIn(user:UserModel) {
         this.localStorageService.set('user', user);
     }
+
+    signOut() {
+        this.localStorageService.set('user', null);
+    }
 }

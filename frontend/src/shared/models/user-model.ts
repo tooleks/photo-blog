@@ -6,8 +6,4 @@ export class UserModel {
     created_at:string;
     updated_at:string;
     role:any;
-
-    getApiToken() {
-        return this.api_token;
-    }
 }

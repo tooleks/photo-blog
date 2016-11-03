@@ -72,8 +72,8 @@ export class ApiService {
     private getDefaultHeaders() {
         let headers = new Headers;
         headers.append('Accept', 'application/json');
-        if (this.authUserProviderService.getUser()) {
-            headers.append('Authorization', 'Bearer ' + this.authUserProviderService.getUser()['api_token']);
+        if (this.authUserProviderService.isAuthenticatedUser()) {
+            headers.append('Authorization', 'Bearer ' + this.authUserProviderService.getUserApiToken());
         }
         return headers;
     }
