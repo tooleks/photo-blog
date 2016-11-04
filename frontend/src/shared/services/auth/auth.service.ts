@@ -1,25 +1,32 @@
 import {Injectable, Inject} from '@angular/core';
 import {ApiService} from '../api/api.service';
 import {UserModel} from '../../models/user-model';
-import {LocalStorageService} from '../local-storage/local-storage.service';
+import {AuthUserProviderService} from "./auth-user-provider.service";
+import {NotificatorService} from "../notificator/notificator.service";
 
 @Injectable()
 export class AuthService {
     constructor(@Inject(ApiService) private apiService:ApiService,
-                @Inject(LocalStorageService) private localStorageService:LocalStorageService) {
+                @Inject(AuthUserProviderService) private authUserProviderService:AuthUserProviderService,
+                @Inject(NotificatorService) private notificatorService:NotificatorService) {
     }
 
     signIn(email:string, password:string) {
-        this.apiService
-            .post('user/authenticate', {email: email, password: password})
-            .subscribe(this.onSignIn.bind(this));
-    }
-
-    private onSignIn(user:UserModel) {
-        this.localStorageService.set('user', user);
+        return new Promise((resolve) => {
+            this.apiService
+                .post('user/authenticate', {email: email, password: password})
+                .subscribe((user:UserModel) => {
+                    this.authUserProviderService.setUser(user);
+                    this.notificatorService.success('Hello, ' + user.name + '!');
+                    resolve(user);
+                });
+        });
     }
 
     signOut() {
-        this.localStorageService.set('user', null);
+        return new Promise((resolve) => {
+            this.authUserProviderService.setUser(null);
+            resolve();
+        });
     }
 }

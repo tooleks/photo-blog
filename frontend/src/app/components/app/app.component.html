@@ -1,12 +1,13 @@
 <div id="wrapper">
     <nav class="navbar-default navbar-static-side" role="navigation">
         <div class="sidebar-collapse">
-            <ul class="nav metismenu" id="side-menu">
+            <ul class="nav metismenu">
                 <li class="nav-header">
                     Photo Blog
                 </li>
-                <li><a [routerLink]="['signin']" routerLinkActive="active">Sing In</a></li>
-                <li><a [routerLink]="['photo/add']" routerLinkActive="active">Add Photo</a></li>
+                <li><a [routerLink]="['signin']" routerLinkActive="active" *ngIf="!authUserProviderService.isAuthenticatedUser()">Sing In</a></li>
+                <li><a [routerLink]="['signout']" routerLinkActive="active" *ngIf="authUserProviderService.isAuthenticatedUser()">Sing Out</a></li>
+                <li><a [routerLink]="['photo/add']" routerLinkActive="active" *ngIf="authUserProviderService.isAuthenticatedUser()">Add Photo</a></li>
                 <li><a [routerLink]="['photos']" routerLinkActive="active">All Photos</a></li>
                 <li class="active">
                     <a>Tags</a>

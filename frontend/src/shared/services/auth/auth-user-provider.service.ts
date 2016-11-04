@@ -7,6 +7,10 @@ export class AuthUserProviderService {
     constructor(@Inject(LocalStorageService) private localStorageService:LocalStorageService) {
     }
 
+    setUser(user:UserModel) {
+        this.localStorageService.set('user', user);
+    }
+    
     getUser() {
         return this.localStorageService.get('user');
     }
