@@ -19,7 +19,7 @@ const PhotosRoutes:Routes = [
         component: PhotosByTagComponent,
     },
     {
-        path: 'photos/search/:query',
+        path: 'photos/search',
         component: PhotosBySearchQueryComponent,
     },
 ];

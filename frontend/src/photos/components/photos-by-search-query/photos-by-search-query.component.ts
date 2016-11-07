@@ -34,11 +34,9 @@ export class PhotosBySearchQueryComponent {
             .map((queryParams) => queryParams['show'])
             .subscribe((show) => this.queryParams.show = parseInt(show));
 
-        this.route.params
+        this.route.queryParams
             .map((params) => params['query'])
             .subscribe((query) => {
-                console.log('PhotosBySearchQueryComponent');
-                console.log(query);
                 this.queryParams.query = query;
                 this.pager = this.pagerProvider.getInstance();
                 this.loadPhotos(this.pager.getLimitForPage(this.pager.getPage()), this.pager.getOffset(), this.queryParams.query);
