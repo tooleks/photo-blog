@@ -72,13 +72,10 @@ class PhotoThumbnailsListener
     public function onPhotoAfterSave(PhotoAfterSave $event)
     {
         if ($event->scenario === 'upload') {
-
             $event->photo->thumbnails()->get()->map(function (PhotoThumbnail $thumbnail) {
                 $this->fileSystem->delete($thumbnail->path);
             });
-
             $event->photo->thumbnails()->delete();
-
             if ($this->fileSystem->exists($event->photo->path)) {
                 foreach (config('main.photo.thumbnail.sizes') as $size) {
                     $thumbnailFilePath = $this->thumbnailService->createThumbnail(
@@ -94,7 +91,6 @@ class PhotoThumbnailsListener
                     ]);
                 }
             }
-
         }
     }
 
@@ -108,7 +104,6 @@ class PhotoThumbnailsListener
         $event->photo->thumbnails()->get()->map(function (PhotoThumbnail $thumbnail) {
             $this->fileSystem->delete($thumbnail->path);
         });
-
         $event->photo->thumbnails()->delete();
     }
 
