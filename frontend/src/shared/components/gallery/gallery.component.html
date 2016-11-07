@@ -1,3 +1,4 @@
+<div *ngIf="!items.length" class="alert alert-warning">No items found.</div>
 <a class="gl-image-thumb-container" *ngFor="let item of items" (click)="viewItem(item)">
     <span class="gl-image-thumb" [style.background-image]="'url(' + item.thumbnails[0].absolute_url + ')'"></span>
 </a>

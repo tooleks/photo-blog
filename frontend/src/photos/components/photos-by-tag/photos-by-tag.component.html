@@ -7,6 +7,6 @@
                  [closeViewCallback]="hidePhotoCallback.bind(this)"></gallery>
     </div>
 </div>
-<div class="load-more-container text-center">
+<div *ngIf="getPhotos().length" class="load-more-container text-center">
     <button class="btn btn-primary" (click)="loadMorePhotos()">Load more...</button>
 </div>

@@ -17,11 +17,16 @@ export class SearchFormComponent {
     }
 
     ngOnInit() {
+        this.route.queryParams
+            .map((params) => params['query'])
+            .subscribe((query) => {
+                this.query = query;
+            });
     }
 
     search() {
         if (this.query.length) {
-            this.navigatorService.navigate(['photos/search/', this.query]);
+            this.navigatorService.navigate(['photos/search'], {queryParams: {query: this.query}});
         } else {
             this.navigatorService.navigate(['']);
         }
