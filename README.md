@@ -24,7 +24,7 @@ php artisan config:app
 
 #### REST API Documentation
 
-Run the following commands to install development dependencies:
+Run the following commands (within the `./backend` directory) to install development dependencies:
 
 ```
 npm install
