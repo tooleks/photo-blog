@@ -10,7 +10,7 @@ export class AuthUserProviderService {
     setUser(user:UserModel) {
         this.localStorageService.set('user', user);
     }
-    
+
     getUser() {
         return this.localStorageService.get('user');
     }
@@ -21,6 +21,6 @@ export class AuthUserProviderService {
     }
 
     isAuthenticatedUser() {
-        return this.getUser();
+        return this.getUser() !== null;
     }
 }
