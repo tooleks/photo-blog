@@ -9,6 +9,21 @@
                     <a class="navbar-minimalize minimalize-styl-2 btn btn-primary"><i class="fa fa-bars"> </i></a>
                     <search-form></search-form>
                 </div>
+                <ul class="nav navbar-top-links navbar-right">
+                    <li>
+                        <span class="m-r-sm text-muted welcome-message"></span>
+                    </li>
+                    <li class="dropdown" *ngIf="authUserProviderService.isAuthenticatedUser()">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" aria-expanded="true">
+                            <i class="fa fa-user"></i> {{ authUserProviderService.getUser().name }}
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a [routerLink]="['photo/add']" routerLinkActive="active"><i class="fa fa-plus"></i> Add Photo</a></li>
+                            <li><a [routerLink]="['signout']" routerLinkActive="active"><i class="fa fa-sign-out"></i> Sign Out</a></li>
+                        </ul>
+                    </li>
+                    <li *ngIf="!authUserProviderService.isAuthenticatedUser()"><a [routerLink]="['signin']" routerLinkActive="active"><i class="fa fa-sign-in"> </i> Sign In</a></li>
+                </ul>
             </nav>
         </div>
         <div class="row wrapper border-bottom white-bg page-heading">
