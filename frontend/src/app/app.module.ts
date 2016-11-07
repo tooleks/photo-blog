@@ -8,6 +8,7 @@ import {SharedModule} from '../shared/shared.module';
 import {PhotosModule} from '../photos/photos.module';
 import {SignInFormComponent} from './components/signin-form/signin-form.component';
 import {SignOutComponent} from './components/signout/signout.component';
+import {SideBarComponent} from './components/layout/sidebar/sidebar.component';
 
 @NgModule({
     imports: [
@@ -23,6 +24,7 @@ import {SignOutComponent} from './components/signout/signout.component';
         AppComponent,
         SignInFormComponent,
         SignOutComponent,
+        SideBarComponent,
     ],
     exports: [
     ],

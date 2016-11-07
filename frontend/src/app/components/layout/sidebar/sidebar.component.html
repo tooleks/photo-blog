@@ -1,0 +1,17 @@
+<div class="sidebar-collapse">
+    <ul id="side-menu" class="nav metismenu">
+        <li class="nav-header"></li>
+        <li><a [routerLink]="['signin']" routerLinkActive="active" *ngIf="!authUserProviderService.isAuthenticatedUser()"><i class="fa fa-sign-in"> </i><span class="nav-label">Sing In</span></a></li>
+        <li><a [routerLink]="['signout']" routerLinkActive="active" *ngIf="authUserProviderService.isAuthenticatedUser()"><i class="fa fa-sign-out"> </i><span class="nav-label">Sing Out</span></a></li>
+        <li><a [routerLink]="['photo/add']" routerLinkActive="active" *ngIf="authUserProviderService.isAuthenticatedUser()"><i class="fa fa-plus-square"> </i><span class="nav-label">Add Photo</span></a></li>
+        <li><a [routerLink]="['photos']" routerLinkActive="active"><i class="fa fa fa-th-large"> </i><span class="nav-label">All Photos</span></a></li>
+        <li class="active">
+            <a><i class="fa fa-tags"> </i><span class="nav-label">Tags</span></a>
+            <ul class="nav nav-second-level collapse">
+                <li><a [routerLink]="['photos/tag', 'sky']" routerLinkActive="active">#sky</a></li>
+                <li><a [routerLink]="['photos/tag', 'water']" routerLinkActive="active">#water</a></li>
+                <li><a [routerLink]="['photos/tag', 'portrait']" routerLinkActive="active">#portrait</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>

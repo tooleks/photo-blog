@@ -12,7 +12,10 @@ module.exports = {
     },
 
     resolve: {
-        extensions: ['', '.js', '.ts']
+        extensions: ['', '.js', '.ts'],
+        alias: {
+            jquery: 'jquery/src/jquery'
+        }
     },
 
     module: {
@@ -66,9 +69,12 @@ module.exports = {
         new webpack.optimize.CommonsChunkPlugin({
             name: ['app', 'vendor', 'polyfills', 'env']
         }),
-
         new HtmlWebpackPlugin({
             template: 'src/index.html'
+        }),
+        new webpack.ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery'
         })
     ]
 };

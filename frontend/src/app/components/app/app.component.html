@@ -1,47 +1,26 @@
 <div id="wrapper">
     <nav class="navbar-default navbar-static-side" role="navigation">
-        <div class="sidebar-collapse">
-            <ul class="nav metismenu">
-                <li class="nav-header">
-                    Photo Blog
-                </li>
-                <li><a [routerLink]="['signin']" routerLinkActive="active" *ngIf="!authUserProviderService.isAuthenticatedUser()">Sing In</a></li>
-                <li><a [routerLink]="['signout']" routerLinkActive="active" *ngIf="authUserProviderService.isAuthenticatedUser()">Sing Out</a></li>
-                <li><a [routerLink]="['photo/add']" routerLinkActive="active" *ngIf="authUserProviderService.isAuthenticatedUser()">Add Photo</a></li>
-                <li><a [routerLink]="['photos']" routerLinkActive="active">All Photos</a></li>
-                <li class="active">
-                    <a>Tags</a>
-                    <ul class="nav nav-second-level collapse in">
-                        <li><a [routerLink]="['photos/tag', 'sky']" routerLinkActive="active">#sky</a></li>
-                        <li><a [routerLink]="['photos/tag', 'water']" routerLinkActive="active">#water</a></li>
-                        <li><a [routerLink]="['photos/tag', 'portrait']" routerLinkActive="active">#portrait</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </nav>
-    <nav class="navbar navbar-fixed-top" role="navigation">
-        <div class="navbar-header">
-            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary" href="#"><i class="fa fa-bars"></i> </a>
-            <form role="search" class="navbar-form-custom" method="post" action="">
-                <div class="form-group">
-                    <input type="text" class="form-control" name="top-search" id="top-search"/>
-                </div>
-            </form>
-        </div>
-        <div class="container-fluid">
-            <ul class="nav navbar-top-links navbar-right navbar-nav">
-                <li></li>
-            </ul>
-        </div>
+        <sidebar></sidebar>
     </nav>
     <div id="page-wrapper" class="gray-bg">
+        <div class="row border-bottom">
+            <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary"><i class="fa fa-bars"> </i></a>
+                    <form role="search" class="navbar-form-custom">
+                        <div class="form-group">
+                            <input placeholder="Search for something..." class="form-control" name="top-search" id="top-search" type="text">
+                        </div>
+                    </form>
+                </div>
+            </nav>
+        </div>
         <div class="row wrapper border-bottom white-bg page-heading">
             <div class="col-lg-9">
-                <h2>Foo</h2>
+                <h2></h2>
                 <ol class="breadcrumb">
                     <li>
-                        <a>Home</a>
+                        <a></a>
                     </li>
                 </ol>
             </div>
