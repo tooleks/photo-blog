@@ -14,6 +14,13 @@ Run the following command (within the `./backend` directory) to install applicat
 composer install
 ```
 
+Run the following command to setup application:
+
+```
+php artisan storage:link
+php artisan make:roles
+```
+
 Create the `./backend/.env` file from the example `./backend/.env.example`. Setup database connection credentials.
 
 #### REST API Documentation
