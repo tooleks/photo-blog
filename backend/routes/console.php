@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Foundation\Inspiring;
-
 /*
 |--------------------------------------------------------------------------
 | Console Routes
@@ -13,12 +11,15 @@ use Illuminate\Foundation\Inspiring;
 |
 */
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
+Artisan::command('config:app', function () {
+    $this->call('storage:link');
+    $this->call('migrate');
+    $this->call('make:roles');
 });
 
 Artisan::command('make:roles', function () {
     \App\Models\Role::truncate();
     \App\Models\Role::create(['name' => \App\Models\Role::NAME_ADMINISTRATOR]);
     \App\Models\Role::create(['name' => \App\Models\Role::NAME_CUSTOMER]);
+    $this->comment('Roles were successfully created.');
 });

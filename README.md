@@ -8,20 +8,19 @@ Apache 2.4, MySQL 5.7, Node.js 4.2, PHP 7.0, Laravel 5.3.
 
 #### Installation
 
+Create the `./backend/.env` file from the example `./backend/.env.example`. Setup database connection credentials.
+
 Run the following command (within the `./backend` directory) to install application dependencies:
 
 ```
 composer install
 ```
 
-Run the following command to setup application:
+Run the following command to configure application:
 
 ```
-php artisan storage:link
-php artisan make:roles
+php artisan config:app
 ```
-
-Create the `./backend/.env` file from the example `./backend/.env.example`. Setup database connection credentials.
 
 #### REST API Documentation
 
