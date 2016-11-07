@@ -10,6 +10,10 @@ import 'rxjs';
 import 'ng2-toastr/bundles/ng2-toastr.min.css';
 import 'ng2-toastr/ng2-toastr';
 
+import '../public/theme/js/inspinia.js';
+import '../public/theme/js/jquery.metismenu.js';
+import '../public/theme/js/jquery.slimscroll.js';
+
 import '../public/theme/css/bootstrap.css';
 import '../public/theme/font-awesome/css/font-awesome.css';
 import '../public/theme/css/style.css';
