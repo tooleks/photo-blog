@@ -48,4 +48,14 @@ export class PhotoService {
             }
         });
     }
+
+    getBySearchQuery(take:number, skip:number, query:string) {
+        return this.apiService.get('photos/search', {
+            params: {
+                take: take,
+                skip: skip,
+                query: query,
+            }
+        });
+    }
 }

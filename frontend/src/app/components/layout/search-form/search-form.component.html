@@ -3,6 +3,7 @@
         <input type="text"
                class="form-control"
                [(ngModel)]="query"
+               (keyup)="search()"
                name="query"
                placeholder="Search for something...">
     </div>
