@@ -3,6 +3,7 @@ import {Routes, RouterModule} from '@angular/router';
 import {PhotoFormComponent} from './components/photo-form/photo-form.component';
 import {PhotosComponent} from './components/photos/photos.component';
 import {PhotosByTagComponent} from './components/photos-by-tag/photos-by-tag.component';
+import {PhotosBySearchQueryComponent} from './components/photos-by-search-query/photos-by-search-query.component';
 
 const PhotosRoutes:Routes = [
     {
@@ -16,6 +17,10 @@ const PhotosRoutes:Routes = [
     {
         path: 'photos/tag/:tag',
         component: PhotosByTagComponent,
+    },
+    {
+        path: 'photos/search/:query',
+        component: PhotosBySearchQueryComponent,
     },
 ];
 

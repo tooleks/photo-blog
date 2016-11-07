@@ -16,17 +16,15 @@ export class NavigatorService {
 
     setQueryParam(name:string, value:any) {
         this.queryParams[name] = value;
-        this.navigate();
+        this.navigate([], {queryParams: this.queryParams});
     }
 
     unsetQueryParam(name:string) {
         delete this.queryParams[name];
-        this.navigate();
+        this.navigate([], {queryParams: this.queryParams});
     }
 
-    navigate(route:any = []) {
-        this.router.navigate(route, {
-            queryParams: this.queryParams,
-        });
+    navigate(route:any = [], extras:any = {}) {
+        this.router.navigate(route, extras);
     }
 }

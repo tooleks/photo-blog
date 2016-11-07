@@ -9,6 +9,7 @@ import {PhotosModule} from '../photos/photos.module';
 import {SignInFormComponent} from './components/signin-form/signin-form.component';
 import {SignOutComponent} from './components/signout/signout.component';
 import {SideBarComponent} from './components/layout/sidebar/sidebar.component';
+import {SearchFormComponent} from './components/layout/search-form/search-form.component';
 
 @NgModule({
     imports: [
@@ -22,9 +23,10 @@ import {SideBarComponent} from './components/layout/sidebar/sidebar.component';
     ],
     declarations: [
         AppComponent,
+        SideBarComponent,
+        SearchFormComponent,
         SignInFormComponent,
         SignOutComponent,
-        SideBarComponent,
     ],
     exports: [
     ],
