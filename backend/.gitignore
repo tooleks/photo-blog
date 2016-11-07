@@ -1,5 +1,5 @@
-/public/cache/
 /public/storage
+/public/storage/
 Homestead.json
 Homestead.yaml
 .env
