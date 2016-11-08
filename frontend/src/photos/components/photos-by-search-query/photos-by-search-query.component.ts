@@ -4,6 +4,7 @@ import {LockerService, LockerServiceProvider} from '../../../shared/services/loc
 import {NavigatorService, NavigatorServiceProvider} from '../../../shared/services/navigator';
 import {PagerService, PagerServiceProvider} from '../../../shared/services/pager';
 import {PhotoService} from '../../services/photo.service';
+import {PhotoModel} from '../../models/photo-model';
 
 @Component({
     selector: 'photos',
@@ -47,15 +48,23 @@ export class PhotosBySearchQueryComponent {
         return this.loadPhotos(this.pagerService.getLimit(), this.pagerService.getOffset(), this.queryParams.tag);
     }
 
-    loadPhotos(take:number, skip:number, tag:string) {
+    private processLoadPhotos(take:number, skip:number, query:string) {
+        let observer = this.photoService.getBySearchQuery(take, skip, query);
+        return observer.toPromise();
+    }
+
+    loadPhotos(take:number, skip:number, query:string) {
         return new Promise((resolve, reject) => {
             this.lockerService.isLocked() ? reject() : this.lockerService.lock();
-            this.photoService
-                .getBySearchQuery(take, skip, tag)
-                .subscribe((items:Object[]) => {
-                    this.setPhotos(items);
+            this.processLoadPhotos(take, skip, query)
+                .then((photos:PhotoModel[]) => {
+                    this.setPhotos(photos);
                     this.lockerService.unlock();
                     resolve(this.pagerService.getItems());
+                })
+                .catch((error:any) => {
+                    this.lockerService.unlock();
+                    reject(error);
                 });
         });
     }

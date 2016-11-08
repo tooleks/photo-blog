@@ -4,6 +4,7 @@ import {LockerService, LockerServiceProvider} from '../../../shared/services/loc
 import {NavigatorService, NavigatorServiceProvider} from '../../../shared/services/navigator';
 import {PagerService, PagerServiceProvider} from '../../../shared/services/pager';
 import {PhotoService} from '../../services/photo.service';
+import {PhotoModel} from '../../models/photo-model';
 
 @Component({
     selector: 'photos',
@@ -41,15 +42,23 @@ export class PhotosComponent {
         return this.loadPhotos(this.pagerService.getLimit(), this.pagerService.getOffset());
     }
 
+    private processLoadPhotos(take:number, skip:number) {
+        let observer = this.photoService.getAll(take, skip);
+        return observer.toPromise();
+    }
+
     loadPhotos(take:number, skip:number) {
         return new Promise((resolve, reject) => {
             this.lockerService.isLocked() ? reject() : this.lockerService.lock();
-            this.photoService
-                .getAll(take, skip)
-                .subscribe((photos:Object[]) => {
+            this.processLoadPhotos(take, skip)
+                .then((photos:PhotoModel[]) => {
                     this.setPhotos(photos);
                     this.lockerService.unlock();
                     resolve(this.pagerService.getItems());
+                })
+                .catch((error:any) => {
+                    this.lockerService.unlock();
+                    reject(error);
                 });
         });
     }
