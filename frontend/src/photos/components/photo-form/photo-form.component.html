@@ -14,9 +14,7 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Description</label>
                         <div class="col-sm-10">
-                            <textarea class="form-control"
-                                      rows="8"
-                                      [(ngModel)]="photo.description"></textarea>
+                            <textarea class="form-control" rows="8" [(ngModel)]="photo.description"></textarea>
                         </div>
                     </div>
                     <div class="hr-line-dashed"></div>
@@ -34,12 +32,8 @@
                             <div class="file">
                                 <span class="corner"></span>
                                 <div class="image">
-                                    <a [href]="photo.absolute_url"
-                                       target="_blank"
-                                       title="photo.description">
-                                        <img [src]="photo.thumbnails[0].absolute_url"
-                                             class="img-responsive"
-                                             alt="photo.description">
+                                    <a [href]="photo.absolute_url" target="_blank" title="photo.description">
+                                        <img [src]="photo.thumbnails[0].absolute_url" [alt]="photo.description" class="img-responsive">
                                     </a>
                                 </div>
                             </div>

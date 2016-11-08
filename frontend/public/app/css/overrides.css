@@ -6,6 +6,11 @@
     margin: 0 auto;
 }
 
+.file-box .file .icon,
+.file-box .file .image {
+    height: auto !important;
+}
+
 /* End: Layout */
 
 /* Start: Tag Input */

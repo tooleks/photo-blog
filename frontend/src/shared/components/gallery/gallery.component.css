@@ -47,7 +47,7 @@ gallery .gl-image-thumb {
     background-size: auto 450px;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1500px) {
     gallery .gl-image-thumb {
         background-size: auto 350px;
     }
