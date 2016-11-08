@@ -4,8 +4,36 @@ gallery {
 
 gallery .gl-image-thumb-container {
     float: left;
-    margin-right: 1px;
-    margin-bottom: 1px;
+    padding-right: 1px;
+    padding-bottom: 1px;
+}
+
+gallery .gl-image-thumb-container {
+    width: 20%;
+}
+
+@media (max-width: 1500px) {
+    gallery .gl-image-thumb-container {
+        width: 25%;
+    }
+}
+
+@media (max-width: 1000px) {
+    gallery .gl-image-thumb-container {
+        width: 33%;
+    }
+}
+
+@media (max-width: 768px) {
+    gallery .gl-image-thumb-container {
+        width: 50%;
+    }
+}
+
+@media (max-width: 360px) {
+    gallery .gl-image-thumb-container {
+        width: 100%;
+    }
 }
 
 gallery .gl-image-thumb {
@@ -14,9 +42,15 @@ gallery .gl-image-thumb {
 }
 
 gallery .gl-image-thumb {
-    width: 250px;
+    width: 100%;
     height: 170px;
-    background-size: auto 250px;
+    background-size: auto 450px;
+}
+
+@media (max-width: 1000px) {
+    gallery .gl-image-thumb {
+        background-size: auto 350px;
+    }
 }
 
 gallery .gl-backdrop {

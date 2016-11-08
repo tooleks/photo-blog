@@ -1,6 +1,12 @@
-.file .icon, .file .image {
-    height: auto !important;
+/* Start: Layout */
+
+#wrapper {
+    min-width: 320px;
+    max-width: 2000px;
+    margin: 0 auto;
 }
+
+/* End: Layout */
 
 /* Start: Tag Input */
 
