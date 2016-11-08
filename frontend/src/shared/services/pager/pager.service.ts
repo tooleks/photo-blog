@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 
 @Injectable()
 export class PagerService {
-    private limit:number = 12;
+    private limit:number = 100;
     private offset:number = 0;
     private page:number = 1;
     private items:Object[] = [];

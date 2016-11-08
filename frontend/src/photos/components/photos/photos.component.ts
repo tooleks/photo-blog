@@ -10,19 +10,19 @@ import {PhotoService} from '../../services/photo.service';
     template: require('./photos.component.html'),
 })
 export class PhotosComponent {
+    private queryParams:any = {};
     private pagerService:PagerService;
     private lockerService:LockerService;
     private navigatorService:NavigatorService;
-    queryParams:any = {};
 
     constructor(@Inject(ActivatedRoute) private route:ActivatedRoute,
                 @Inject(PagerServiceProvider) private pagerServiceProvider:PagerServiceProvider,
                 @Inject(LockerServiceProvider) private lockerServiceProvider:LockerServiceProvider,
                 @Inject(NavigatorServiceProvider) private navigatorServiceProvider:NavigatorServiceProvider,
                 @Inject(PhotoService) private photoService:PhotoService) {
-        this.pagerService = pagerServiceProvider.getInstance();
-        this.lockerService = lockerServiceProvider.getInstance();
-        this.navigatorService = navigatorServiceProvider.getInstance();
+        this.pagerService = this.pagerServiceProvider.getInstance();
+        this.lockerService = this.lockerServiceProvider.getInstance();
+        this.navigatorService = this.navigatorServiceProvider.getInstance();
     }
 
     ngOnInit() {
@@ -42,12 +42,8 @@ export class PhotosComponent {
     }
 
     loadPhotos(take:number, skip:number) {
-        if (this.lockerService.isLocked()) {
-            return;
-        } else {
-            this.lockerService.lock();
-        }
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
+            this.lockerService.isLocked() ? reject() : this.lockerService.lock();
             this.photoService
                 .getAll(take, skip)
                 .subscribe((photos:Object[]) => {

@@ -5,6 +5,7 @@ import {Component, Input, Inject, ElementRef} from '@angular/core';
     template: require('./file-select-input.component.html'),
 })
 export class FileSelectInputComponent {
+    @Input() disabled:boolean;
     @Input() onChangeCallback:any;
 
     constructor(@Inject(ElementRef) private element:ElementRef) {
