@@ -1,4 +1,6 @@
 <div class="ibox float-e-margins">
+    <div class="ibox-title" *ngIf="!photo.is_published"><h5>Add Photo</h5></div>
+    <div class="ibox-title" *ngIf="photo.is_published"><h5>Edit Photo</h5></div>
     <div class="ibox-content">
         <div class="row">
             <div class="col-sm-8">
