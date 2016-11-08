@@ -43,7 +43,7 @@ Route::put('/photo/{photo}', [
     'middleware' => ['can:update,photo'],
 ]);
 
-Route::put('/photo/{photo}/upload', [
+Route::post('/photo/{photo}/upload', [
     'uses' => 'PhotoController@upload',
     'middleware' => ['can:update,photo'],
 ]);

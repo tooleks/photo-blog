@@ -23,7 +23,7 @@ export class PhotoService {
     uploadById(id:number, file:FileList) {
         let form = new FormData;
         form.append('file', file);
-        return this.apiService.put('photo/' + id + '/upload', form);
+        return this.apiService.post('photo/' + id + '/upload', form);
     }
 
     deleteById(id:number) {
