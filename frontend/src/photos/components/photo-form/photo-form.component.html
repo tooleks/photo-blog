@@ -20,7 +20,7 @@
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">
                         <div class="col-sm-4 col-sm-offset-2">
-                            <button class="btn btn-primary" (click)="save()">Save</button>
+                            <button class="btn btn-primary" (click)="save()" [disabled]="lockerService.isLocked()">Save</button>
                         </div>
                     </div>
                 </div>
@@ -33,7 +33,8 @@
                                 <span class="corner"></span>
                                 <div class="image">
                                     <a [href]="photo.absolute_url" target="_blank" title="photo.description">
-                                        <img [src]="photo.thumbnails[0].absolute_url" [alt]="photo.description" class="img-responsive">
+                                        <img [src]="photo.thumbnails[0].absolute_url" [alt]="photo.description"
+                                             class="img-responsive">
                                     </a>
                                 </div>
                             </div>
@@ -42,10 +43,10 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12">
-                        <div class="btn btn-primary btn-file">
-                            <i class="fa fa-upload"></i> Upload File
-                            <file-select-input [onChangeCallback]="upload.bind(this)"></file-select-input>
-                        </div>
+                        <button class="btn btn-primary btn-file" [disabled]="lockerService.isLocked()">
+                            <i class="fa fa-upload"></i> {{ !lockerService.isLocked() ? 'Upload File' : 'Uploading...' }}
+                            <file-select-input [onChangeCallback]="upload.bind(this)" [disabled]="lockerService.isLocked()"></file-select-input>
+                        </button>
                     </div>
                 </div>
             </div>

@@ -28,42 +28,58 @@ export class PhotoFormComponent {
         this.photo = new PhotoModel;
     }
 
-    private onSave(photo:PhotoModel) {
-        this.photo = photo;
-        this.notificatorService.success('Record was successfully saved.');
-        this.navigatorService.navigate(['/photos']);
+    private processSave(photo:PhotoModel) {
+        let observer = photo.id ? this.photoService.updateById(photo.id, photo) : this.photoService.create(photo);
+        return observer.toPromise();
+    }
+
+    private processUpload(photo:PhotoModel, file:FileList) {
+        let observer = photo.id ? this.photoService.uploadById(photo.id, file) : this.photoService.upload(file);
+        return observer.toPromise();
     }
 
     save() {
-        if (!this.photo.id) {
-            this.photoService
-                .create(this.photo)
-                .subscribe(this.onSave.bind(this));
-        } else {
-            this.photoService
-                .updateById(this.photo.id, this.photo)
-                .subscribe(this.onSave.bind(this));
-        }
+        return (new Promise((resolve, reject) => {
+            this.lockerService.isLocked() ? reject() : this.lockerService.lock();
+            this.processSave(this.photo)
+                .then((photo:PhotoModel) => {
+                    this.lockerService.unlock();
+                    resolve(photo);
+                })
+                .catch((error:any) => {
+                    this.lockerService.unlock();
+                });
+        })).then(this.onSave.bind(this));
     }
 
-    private onUpload(photo:PhotoModel) {
+    onSave(photo:PhotoModel) {
+        this.photo = photo;
+        this.notificatorService.success('Record was successfully saved.');
+        this.navigatorService.navigate(['/photos']);
+        return photo;
+    }
+
+    upload(file:FileList) {
+        return (new Promise((resolve, reject) => {
+            this.lockerService.isLocked() ? reject() : this.lockerService.lock();
+            this.processUpload(this.photo, file)
+                .then((photo:PhotoModel) => {
+                    this.lockerService.unlock();
+                    resolve(photo);
+                })
+                .catch((error:any) => {
+                    this.lockerService.unlock();
+                });
+        })).then(this.onUpload.bind(this));
+    }
+
+    onUpload(photo:PhotoModel) {
         this.photo.id = photo.id;
         this.photo.is_uploaded = photo.is_uploaded;
         this.photo.absolute_url = photo.absolute_url;
         this.photo.updated_at = photo.updated_at;
         this.photo.thumbnails = photo.thumbnails;
         this.notificatorService.success('File was successfully uploaded.');
-    }
-
-    upload(file:FileList) {
-        if (this.photo.id) {
-            this.photoService
-                .uploadById(this.photo.id, file)
-                .subscribe(this.onUpload.bind(this));
-        } else {
-            this.photoService
-                .upload(file)
-                .subscribe(this.onUpload.bind(this));
-        }
+        return photo;
     }
 }
