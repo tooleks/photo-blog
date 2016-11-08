@@ -3,6 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {PhotoService} from '../../services/photo.service';
 import {PhotoModel} from '../../models/photo-model';
 import {NotificatorService} from '../../../shared/services/notificator/notificator.service';
+import {LockerService, LockerServiceProvider} from '../../../shared/services/locker';
 import {NavigatorService, NavigatorServiceProvider} from '../../../shared/services/navigator';
 
 @Component({
@@ -10,14 +11,17 @@ import {NavigatorService, NavigatorServiceProvider} from '../../../shared/servic
     template: require('./photo-form.component.html'),
 })
 export class PhotoFormComponent {
-    photo:PhotoModel = new PhotoModel;
+    private photo:PhotoModel = new PhotoModel;
+    private lockerService:LockerService;
     private navigatorService:NavigatorService;
 
     constructor(@Inject(ActivatedRoute) private route:ActivatedRoute,
                 @Inject(PhotoService) private photoService:PhotoService,
                 @Inject(NotificatorService) private notificatorService:NotificatorService,
+                @Inject(LockerServiceProvider) private lockerServiceProvider:LockerServiceProvider,
                 @Inject(NavigatorServiceProvider) private navigatorServiceProvider:NavigatorServiceProvider) {
-        this.navigatorService = navigatorServiceProvider.getInstance();
+        this.lockerService = this.lockerServiceProvider.getInstance();
+        this.navigatorService = this.navigatorServiceProvider.getInstance();
     }
 
     ngOnInit() {
