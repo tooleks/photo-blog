@@ -69,6 +69,7 @@ export class PhotoFormComponent {
                 })
                 .catch((error:any) => {
                     this.lockerService.unlock();
+                    reject(error);
                 });
         })).then(this.onUpload.bind(this));
     }
