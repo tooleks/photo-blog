@@ -50,6 +50,7 @@ class PhotoController extends Controller
      *          "created_at": "2016-10-24 12:24:33",
      *          "updated_at": "2016-10-24 14:38:05",
      *          "is_uploaded": true,
+     *          "is_published": true,
      *          "absolute_url": "http://path/to/photo/file",
      *          "tags": [
      *              {
@@ -101,6 +102,7 @@ class PhotoController extends Controller
      *          "created_at": "2016-10-24 12:24:33",
      *          "updated_at": "2016-10-24 14:38:05",
      *          "is_uploaded": true,
+     *          "is_published": true,
      *          "absolute_url": "http://path/to/photo/file",
      *          "tags": [
      *              {
@@ -149,6 +151,7 @@ class PhotoController extends Controller
      *          "created_at": "2016-10-24 12:24:33",
      *          "updated_at": "2016-10-24 14:38:05",
      *          "is_uploaded": true,
+     *          "is_published": true,
      *          "absolute_url": "http://path/to/photo/file",
      *          "tags": [
      *              {
@@ -203,6 +206,7 @@ class PhotoController extends Controller
      *          "created_at": "2016-10-24 12:24:33",
      *          "updated_at": "2016-10-24 14:38:05",
      *          "is_uploaded": true,
+     *          "is_published": true,
      *          "absolute_url": "http://path/to/photo/file",
      *          "tags": [
      *              {
@@ -288,6 +292,7 @@ class PhotoController extends Controller
      *              "created_at": "2016-10-24 12:24:33",
      *              "updated_at": "2016-10-24 14:38:05",
      *              "is_uploaded": true,
+     *              "is_published": true,
      *              "absolute_url": "http://path/to/photo/file",
      *              "tags": [
      *                  {
@@ -343,6 +348,7 @@ class PhotoController extends Controller
      *              "created_at": "2016-10-24 12:24:33",
      *              "updated_at": "2016-10-24 14:38:05",
      *              "is_uploaded": true,
+     *              "is_published": true,
      *              "absolute_url": "http://path/to/photo/file",
      *              "tags": [
      *                  {

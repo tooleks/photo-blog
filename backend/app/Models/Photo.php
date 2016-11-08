@@ -66,6 +66,7 @@ class Photo extends Model
      */
     protected $appends = [
         'is_uploaded',
+        'is_published',
         'absolute_url',
     ];
 
@@ -87,6 +88,16 @@ class Photo extends Model
     public function getIsUploadedAttribute()
     {
         return (bool)$this->path;
+    }
+
+    /**
+     * Getter for the 'is_published' virtual attribute.
+     *
+     * @return bool
+     */
+    public function getIsPublishedAttribute()
+    {
+        return !$this->is_draft;
     }
 
     /**
