@@ -13,6 +13,7 @@ import {AuthService, AuthUserProviderService} from './services/auth';
 import {FileSelectInputComponent} from './components/file-select-input/file-select-input.component';
 import {TagsSelectInputComponent} from './components/tags-select-input/tags-select-input.component';
 import {LocalStorageService} from './services/local-storage/local-storage.service';
+import {UserService} from './services/user';
 
 @NgModule({
     imports: [
@@ -36,6 +37,7 @@ import {LocalStorageService} from './services/local-storage/local-storage.servic
         NotificatorService,
         AuthService,
         AuthUserProviderService,
+        UserService,
         ApiService,
         ApiErrorHandler,
         LockerServiceProvider,

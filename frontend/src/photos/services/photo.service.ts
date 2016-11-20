@@ -7,31 +7,31 @@ export class PhotoService {
     }
 
     create(attributes:any) {
-        return this.apiService.post('photo', attributes);
+        return this.apiService.post('/photo', attributes);
     }
 
     upload(file:FileList) {
         let form = new FormData;
         form.append('file', file);
-        return this.apiService.post('photo/upload', form);
+        return this.apiService.post('/uploaded_photo', form);
     }
 
     updateById(id:number, attributes:any) {
-        return this.apiService.put('photo/' + id, attributes);
+        return this.apiService.put('/photo/' + id, attributes);
     }
 
     uploadById(id:number, file:FileList) {
         let form = new FormData;
         form.append('file', file);
-        return this.apiService.post('photo/' + id + '/upload', form);
+        return this.apiService.post('/uploaded_photo/' + id, form);
     }
 
     deleteById(id:number) {
-        return this.apiService.delete('photo/' + id);
+        return this.apiService.delete('/photo/' + id);
     }
 
     getAll(take:number, skip:number) {
-        return this.apiService.get('photos', {
+        return this.apiService.get('/photo', {
             params: {
                 take: take,
                 skip: skip,
@@ -40,7 +40,7 @@ export class PhotoService {
     }
 
     getByTag(take:number, skip:number, tag:string) {
-        return this.apiService.get('photos/search', {
+        return this.apiService.get('/photo', {
             params: {
                 take: take,
                 skip: skip,
@@ -50,7 +50,7 @@ export class PhotoService {
     }
 
     getBySearchQuery(take:number, skip:number, query:string) {
-        return this.apiService.get('photos/search', {
+        return this.apiService.get('/photo', {
             params: {
                 take: take,
                 skip: skip,

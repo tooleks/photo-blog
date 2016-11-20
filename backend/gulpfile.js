@@ -7,7 +7,7 @@ var gulp = require('gulp'),
  * Documentation file path: ./doc/api/dist/index.html
  */
 gulp.task('generate-api-doc', function (callback) {
-    return exec('apidoc -i ./app/ -o ../docs/api/dist', function (err, stdOut, stdErr) {
+    return exec('apidoc -i ./api/ -o ../docs/api/dist', function (err, stdOut, stdErr) {
         console.log(stdOut);
         console.log(stdErr);
         callback(stdErr);
