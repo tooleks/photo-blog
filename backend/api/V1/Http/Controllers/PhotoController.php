@@ -41,7 +41,6 @@ class PhotoController extends ResourceController
      *      "status": true,
      *      "data": {
      *          "id": 1,
-     *          "uploaded_photo_id": 1,
      *          "user_id": 1,
      *          "absolute_url": "http://path/to/photo/file",
      *          "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
@@ -78,7 +77,6 @@ class PhotoController extends ResourceController
      *      "status": true,
      *      "data": {
      *          "id": 1,
-     *          "uploaded_photo_id": 1,
      *          "user_id": 1,
      *          "absolute_url": "http://path/to/photo/file",
      *          "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
@@ -117,7 +115,6 @@ class PhotoController extends ResourceController
      *      "data": [
      *          {
      *              "id": 1,
-     *              "uploaded_photo_id": 1,
      *              "user_id": 1,
      *              "absolute_url": "http://path/to/photo/file",
      *              "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
@@ -159,7 +156,6 @@ class PhotoController extends ResourceController
      *      "status": true,
      *      "data": {
      *          "id": 1,
-     *          "uploaded_photo_id": 1,
      *          "user_id": 1,
      *          "absolute_url": "http://path/to/photo/file",
      *          "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",

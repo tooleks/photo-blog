@@ -35,7 +35,6 @@ class PhotoPresenter extends EntityPresenter
     {
         return [
             'id' => 'id',
-            'uploaded_photo_id' => 'id',
             'user_id' => 'user_id',
             'absolute_url' => 'absolute_url',
             'description' => 'description',
