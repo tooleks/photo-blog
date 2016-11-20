@@ -146,6 +146,7 @@ class UploadedPhotoResource implements Resource
         $photo = $this->photoModel
             ->withThumbnails()
             ->whereUploaded()
+            ->wherePublished(false)
             ->whereId($id)
             ->first();
 
