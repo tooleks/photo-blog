@@ -24,9 +24,11 @@ export class SignInFormComponent {
     }
 
     signIn() {
-        this.authService.signIn(this.form.email, this.form.password).then((user:UserModel) => {
-            this.notificatorService.success('Hello, ' + user.name + '!');
-            this.navigatorService.navigate(['/']);
-        });
+        this.authService
+            .signIn(this.form.email, this.form.password)
+            .then((user:UserModel) => {
+                this.notificatorService.success('Hello, ' + user.name + '!');
+                this.navigatorService.navigate(['/']);
+            });
     }
 }

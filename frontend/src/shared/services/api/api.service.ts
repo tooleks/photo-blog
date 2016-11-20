@@ -72,8 +72,8 @@ export class ApiService {
     private getDefaultHeaders() {
         let headers = new Headers;
         headers.append('Accept', 'application/json');
-        if (this.authUserProviderService.isAuthenticatedUser()) {
-            headers.append('Authorization', 'Bearer ' + this.authUserProviderService.getUserApiToken());
+        if (this.authUserProviderService.hasAuth()) {
+            headers.append('Authorization', 'Bearer ' + this.authUserProviderService.getAuthApiToken());
         }
         return headers;
     }
@@ -103,7 +103,7 @@ export class ApiService {
     }
 
     private getAbsoluteUrl(relativeUrl:string) {
-        return this.apiBaseUrl + '/' + relativeUrl;
+        return this.apiBaseUrl + relativeUrl;
     }
 
     private extractData(response:Response) {

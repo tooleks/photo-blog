@@ -13,7 +13,7 @@
                     <li>
                         <span class="m-r-sm text-muted welcome-message"></span>
                     </li>
-                    <li class="dropdown" *ngIf="authUserProviderService.isAuthenticatedUser()">
+                    <li class="dropdown" *ngIf="authUserProviderService.hasUser()">
                         <a class="dropdown-toggle count-info" data-toggle="dropdown" aria-expanded="true">
                             <i class="fa fa-user"></i> {{ authUserProviderService.getUser().name }}
                         </a>
@@ -22,7 +22,7 @@
                             <li><a [routerLink]="['signout']" routerLinkActive="active"><i class="fa fa-sign-out"></i> Sign Out</a></li>
                         </ul>
                     </li>
-                    <li *ngIf="!authUserProviderService.isAuthenticatedUser()"><a [routerLink]="['signin']" routerLinkActive="active"><i class="fa fa-sign-in"> </i> Sign In</a></li>
+                    <li *ngIf="!authUserProviderService.hasAuth()"><a [routerLink]="['signin']" routerLinkActive="active"><i class="fa fa-sign-in"> </i> Sign In</a></li>
                 </ul>
             </nav>
         </div>

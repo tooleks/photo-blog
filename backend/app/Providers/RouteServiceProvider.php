@@ -24,14 +24,6 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         parent::boot();
-
-        Route::bind('photo', function ($id) {
-            return $this->app->make(\App\Services\Photos\Contracts\PhotoServiceContract::class)->getById((int)$id);
-        });
-
-        Route::bind('user', function ($id) {
-            return $this->app->make(\App\Services\Users\Contracts\UserServiceContract::class)->getById((int)$id);
-        });
     }
 
     /**
@@ -41,7 +33,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map()
     {
-        $this->mapApiRoutes();
+         $this->mapWebRoutes();
     }
 
     /**
@@ -58,24 +50,6 @@ class RouteServiceProvider extends ServiceProvider
             'namespace' => $this->namespace,
         ], function ($router) {
             require base_path('routes/web.php');
-        });
-    }
-
-    /**
-     * Define the "api" routes for the application.
-     *
-     * These routes are typically stateless.
-     *
-     * @return void
-     */
-    protected function mapApiRoutes()
-    {
-        Route::group([
-            'middleware' => 'api',
-            'namespace' => $this->namespace,
-            'prefix' => 'api',
-        ], function ($router) {
-            require base_path('routes/api.php');
         });
     }
 }

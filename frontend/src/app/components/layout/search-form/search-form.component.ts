@@ -19,7 +19,7 @@ export class SearchFormComponent {
     ngOnInit() {
         this.route.queryParams
             .map((params) => params['query'])
-            .subscribe((query) => {
+            .subscribe((query:string) => {
                 this.query = query;
             });
     }

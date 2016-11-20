@@ -2,6 +2,7 @@ import {Component, Inject} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {PhotoService} from '../../services/photo.service';
 import {PhotoModel} from '../../models/photo-model';
+import {UploadedPhotoModel} from '../../models/uploaded-photo-model';
 import {NotificatorService} from '../../../shared/services/notificator/notificator.service';
 import {LockerService, LockerServiceProvider} from '../../../shared/services/locker';
 import {NavigatorService, NavigatorServiceProvider} from '../../../shared/services/navigator';
@@ -64,9 +65,9 @@ export class PhotoFormComponent {
         return (new Promise((resolve, reject) => {
             this.lockerService.isLocked() ? reject() : this.lockerService.lock();
             this.processUpload(this.photo, file)
-                .then((photo:PhotoModel) => {
+                .then((uploadedPhoto:UploadedPhotoModel) => {
                     this.lockerService.unlock();
-                    resolve(photo);
+                    resolve(uploadedPhoto);
                 })
                 .catch((error:any) => {
                     this.lockerService.unlock();
@@ -75,13 +76,14 @@ export class PhotoFormComponent {
         })).then(this.onUpload.bind(this));
     }
 
-    onUpload(photo:PhotoModel) {
-        this.photo.id = photo.id;
-        this.photo.is_uploaded = photo.is_uploaded;
-        this.photo.absolute_url = photo.absolute_url;
-        this.photo.updated_at = photo.updated_at;
-        this.photo.thumbnails = photo.thumbnails;
+    onUpload(uploadedPhoto:UploadedPhotoModel) {
+        this.photo.uploaded_photo_id = uploadedPhoto.id;
+        this.photo.user_id = uploadedPhoto.user_id;
+        this.photo.absolute_url = uploadedPhoto.absolute_url;
+        this.photo.created_at = uploadedPhoto.created_at;
+        this.photo.updated_at = uploadedPhoto.updated_at;
+        this.photo.thumbnails = uploadedPhoto.thumbnails;
         this.notificatorService.success('File was successfully uploaded.');
-        return photo;
+        return uploadedPhoto;
     }
 }
