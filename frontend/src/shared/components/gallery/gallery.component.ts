@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, HostListener} from '@angular/core';
 import {GalleryItem} from './gallery-item';
 
 @Component({
@@ -24,6 +24,28 @@ export class GalleryComponent {
                     this.viewItem(item);
                 }
             });
+        }
+    }
+
+    @HostListener('document:keydown', ['$event'])
+    handleKeyboardEvent(event:KeyboardEvent) {
+        console.log(event.key);
+        switch (event.key) {
+            case 'Escape':
+            {
+                this.closeView();
+                break;
+            }
+            case 'ArrowLeft':
+            {
+                this.viewPrevItem();
+                break;
+            }
+            case 'ArrowRight':
+            {
+                this.viewNextItem(true);
+                break;
+            }
         }
     }
 

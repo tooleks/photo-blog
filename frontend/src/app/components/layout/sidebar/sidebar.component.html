@@ -1,7 +1,7 @@
 <div class="sidebar-collapse">
     <ul id="side-menu" class="nav metismenu">
         <li class="nav-header"></li>
-        <li><a [routerLink]="['photo/add']" routerLinkActive="active" *ngIf="authUserProviderService.isAuthenticatedUser()"><i class="fa fa-plus"> </i><span class="nav-label">Add Photo</span></a></li>
+        <li><a [routerLink]="['photo/add']" routerLinkActive="active" *ngIf="authUserProviderService.hasAuth()"><i class="fa fa-plus"> </i><span class="nav-label">Add Photo</span></a></li>
         <li><a [routerLink]="['photos']" routerLinkActive="active"><i class="fa fa fa-th-large"> </i><span class="nav-label">All Photos</span></a></li>
         <li class="active">
             <a><i class="fa fa-tags"> </i><span class="nav-label">Tags</span></a>

@@ -9,7 +9,7 @@ use Gregwar\Image\Image;
 
 /**
  * Class ThumbnailService.
- * @property Filesystem fileSystem
+ * @property Filesystem $fs
  * @package App\Services\Thumbnails
  */
 class ThumbnailService implements ThumbnailServiceContract
@@ -17,26 +17,26 @@ class ThumbnailService implements ThumbnailServiceContract
     /**
      * ThumbnailService constructor.
      *
-     * @param Filesystem $fileSystem
+     * @param Filesystem $fs
      */
-    public function __construct(Filesystem $fileSystem)
+    public function __construct(Filesystem $fs)
     {
-        $this->fileSystem = $fileSystem;
+        $this->fs = $fs;
     }
 
     /**
      * @inheritdoc
      */
-    public function createThumbnail(string $originalFilePath, string $width = '100', string $height = '100'): string
+    public function createThumbnailFile(string $originalFilePath, string $width = '100', string $height = '100'): string
     {
-        if (!$this->fileSystem->exists($originalFilePath)) {
+        if (!$this->fs->exists($originalFilePath)) {
             throw new ThumbnailException('Original file does not exist.');
         }
 
         $thumbnailFilePath = $this->generateThumbnailFilePath($originalFilePath, $width, $height);
-        $thumbnailContent = $this->generateThumbnailFileContent($this->fileSystem->get($originalFilePath), $width, $height);
+        $thumbnailContent = $this->generateThumbnailFileContent($this->fs->get($originalFilePath), $width, $height);
 
-        if (!$this->fileSystem->put($thumbnailFilePath, $thumbnailContent)) {
+        if (!$this->fs->put($thumbnailFilePath, $thumbnailContent)) {
             throw new ThumbnailException('Thumbnail file saving error.');
         }
 

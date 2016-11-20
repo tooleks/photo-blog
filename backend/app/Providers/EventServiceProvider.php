@@ -11,25 +11,12 @@ class EventServiceProvider extends ServiceProvider
      *
      * @var array
      */
-    protected $listen = [
-        'App\Events\SomeEvent' => [
-            'App\Listeners\EventListener',
-        ],
-    ];
+    protected $listen = [];
 
     /**
      * @inheritdoc
      */
-    protected $subscribe = [
-        \App\Listeners\Photos\PhotoTagsListener::class,
-        \App\Listeners\Photos\PhotoFileListener::class,
-        \App\Listeners\Photos\PhotoThumbnailsListener::class,
-        \App\Listeners\Photos\PhotoIsDraftListener::class,
-        \App\Listeners\Photos\PhotoUserIdListener::class,
-
-        \App\Listeners\Users\UserApiTokenListener::class,
-        \App\Listeners\Users\UserRoleListener::class,
-    ];
+    protected $subscribe = [];
 
     /**
      * Register any events for your application.
@@ -39,7 +26,5 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         parent::boot();
-
-        //
     }
 }

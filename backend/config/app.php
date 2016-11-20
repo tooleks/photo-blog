@@ -178,9 +178,11 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
-        App\Services\Photos\Providers\PhotoServiceProvider::class,
         App\Services\Thumbnails\Providers\ThumbnailServiceProvider::class,
-        App\Services\Users\Providers\UserServiceProvider::class,
+
+        Api\V1\Providers\ApiServiceProvider::class,
+        Api\V1\Providers\AuthServiceProvider::class,
+        Api\V1\Providers\RouteServiceProvider::class,
 
     ],
 
