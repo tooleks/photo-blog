@@ -83,6 +83,8 @@ export class PhotoFormComponent {
                 this.lockerService.unlock();
                 return error;
             });
+        } else {
+            return new Promise((resolve, reject) => reject());
         }
     }
 }
