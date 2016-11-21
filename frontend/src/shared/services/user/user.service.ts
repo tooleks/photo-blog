@@ -8,12 +8,10 @@ export class UserService {
     }
 
     getById(id:number) {
-        return new Promise((resolve, reject) => {
-            return this.apiService
-                .get('/user/' + id)
-                .subscribe((user:UserModel) => {
-                    resolve(user);
-                })
-        });
+        return this.apiService.get('/user/' + id);
+    }
+
+    getAuthByCredentials(email:string, password:string) {
+        return this.apiService.post('/token', {email: email, password: password});
     }
 }

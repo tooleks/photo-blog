@@ -4,13 +4,15 @@
                  [initItemId]="queryParams['show']"
                  [loadMoreCallback]="loadMorePhotos.bind(this)"
                  [openViewCallback]="showPhotoCallback.bind(this)"
-                 [closeViewCallback]="hidePhotoCallback.bind(this)"></gallery>
+                 [closeViewCallback]="hidePhotoCallback.bind(this)"
+                 [editItemCallback]="redirectToEditPhoto.bind(this)"></gallery>
     </div>
 </div>
 <div *ngIf="getPhotos().length" class="load-more-container text-center">
-    <button
-            class="btn btn-primary text-uppercase"
-            [disabled]="lockerService.isLocked()"
-            (click)="loadMorePhotos()">{{ !lockerService.isLocked() ? 'Load More' : '...' }}
+    <button class="btn btn-primary text-uppercase"
+            (click)="loadMorePhotos()"
+            [disabled]="lockerService.isLocked()">
+        <i class="fa fa-spinner fa-spin" *ngIf="lockerService.isLocked()"></i>
+        {{ 'Load more' }}
     </button>
 </div>

@@ -42,39 +42,30 @@ export class PhotosComponent {
         return this.loadPhotos(this.pagerService.getLimit(), this.pagerService.getOffset());
     }
 
-    private processLoadPhotos(take:number, skip:number) {
-        let observer = this.photoService.getAll(take, skip);
-        return observer.toPromise();
+    loadPhotos(take:number, skip:number) {
+        if (this.lockerService.isLocked()) return new Promise((resolve, reject) => reject());
+        else this.lockerService.lock();
+        return this.photoService.getAll(take, skip).toPromise().then((photos:PhotoModel[]) => {
+            return this.pagerService.appendItems(photos).then((photos:PhotoModel[]) => {
+                this.navigatorService.setQueryParam('page', this.pagerService.getPage());
+                this.lockerService.unlock();
+                return photos;
+            });
+        }).catch((error:any) => {
+            this.lockerService.unlock();
+            return error;
+        });
     }
 
-    loadPhotos(take:number, skip:number) {
-        return new Promise((resolve, reject) => {
-            this.lockerService.isLocked() ? reject() : this.lockerService.lock();
-            this.processLoadPhotos(take, skip)
-                .then((photos:PhotoModel[]) => {
-                    this.setPhotos(photos);
-                    this.lockerService.unlock();
-                    resolve(this.pagerService.getItems());
-                })
-                .catch((error:any) => {
-                    this.lockerService.unlock();
-                    reject(error);
-                });
-        });
+    redirectToEditPhoto(photo:PhotoModel) {
+        this.navigatorService.navigate(['photo/edit', photo.id]);
     }
 
     getPhotos() {
         return this.pagerService.getItems();
     }
 
-    setPhotos(photos:Object[]) {
-        this.pagerService.addItems(photos);
-        if (this.pagerService.getPage() > 1) {
-            this.navigatorService.setQueryParam('page', this.pagerService.getPage());
-        }
-    }
-
-    showPhotoCallback(photo:any) {
+    showPhotoCallback(photo:PhotoModel) {
         this.navigatorService.setQueryParam('show', photo.id);
     }
 

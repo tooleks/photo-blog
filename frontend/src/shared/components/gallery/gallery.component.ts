@@ -12,6 +12,8 @@ export class GalleryComponent {
     @Input() loadMoreCallback:any;
     @Input() openViewCallback:any;
     @Input() closeViewCallback:any;
+    @Input() editItemCallback:any;
+    @Input() deleteItemCallback:any;
 
     activeItem:GalleryItem;
     activeItemIndex:number;
@@ -29,7 +31,6 @@ export class GalleryComponent {
 
     @HostListener('document:keydown', ['$event'])
     handleKeyboardEvent(event:KeyboardEvent) {
-        console.log(event.key);
         switch (event.key) {
             case 'Escape':
             {
@@ -78,6 +79,7 @@ export class GalleryComponent {
                 this.loadMoreCallback().then((items:any) => {
                     this.items = items;
                     this.viewNextItem(false);
+                }).catch((error:any) => {
                 });
             }
         }
@@ -89,5 +91,13 @@ export class GalleryComponent {
         if (typeof(this.closeViewCallback) === 'function') {
             this.closeViewCallback();
         }
+    }
+
+    editItem() {
+        this.editItemCallback(this.activeItem);
+    }
+
+    deleteItem() {
+        this.deleteItemCallback(this.activeItem);
     }
 }
