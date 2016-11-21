@@ -25,6 +25,9 @@ export class NavigatorService {
     }
 
     navigate(route:any = [], extras:any = {}) {
-        this.router.navigate(route, extras);
+        return new Promise((resolve, reject) => {
+            this.router.navigate(route, extras);
+            resolve();
+        });
     }
 }

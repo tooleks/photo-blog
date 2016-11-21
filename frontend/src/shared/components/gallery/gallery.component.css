@@ -107,7 +107,7 @@ gallery .gl-action {
     background-color: rgba(0, 0, 0, 0.45);
     color: #999;
     cursor: pointer;
-    font-size: 22px;
+    font-size: 18px;
     transition: transform 0.35s cubic-bezier(0, 0, 0.25, 1) 0s, opacity 0.35s cubic-bezier(0, 0, 0.25, 1) 0s, color 0.2s linear;
 }
 
@@ -123,11 +123,11 @@ gallery .gl-actions .gl-action {
 }
 
 gallery .gl-actions .gl-prev {
-    left: 20px;
+    left: 0;
 }
 
 gallery .gl-actions .gl-next {
-    right: 20px;
+    right: 0;
 }
 
 gallery .gl-navbar {
@@ -139,6 +139,10 @@ gallery .gl-navbar {
     z-index: 100030;
 }
 
-gallery .gl-navbar .gl-close {
+gallery .gl-navbar .gl-right {
     float: right;
+}
+
+gallery .gl-navbar .gl-left {
+    float: left;
 }

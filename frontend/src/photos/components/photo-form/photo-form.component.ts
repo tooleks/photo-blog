@@ -12,7 +12,7 @@ import {NavigatorService, NavigatorServiceProvider} from '../../../shared/servic
     template: require('./photo-form.component.html'),
 })
 export class PhotoFormComponent {
-    private photo:PhotoModel = new PhotoModel;
+    private photo:PhotoModel;
     private lockerService:LockerService;
     private navigatorService:NavigatorService;
 
@@ -27,63 +27,62 @@ export class PhotoFormComponent {
 
     ngOnInit() {
         this.photo = new PhotoModel;
+
+        this.route.params
+            .map((params) => params['id'])
+            .subscribe((id:number) => {
+                if (id) {
+                    this.photoService.getById(id).toPromise().then((photo:PhotoModel) => {
+                        this.photo = photo;
+                    });
+                }
+            });
     }
 
-    private processSave(photo:PhotoModel) {
-        let observer = photo.id ? this.photoService.updateById(photo.id, photo) : this.photoService.create(photo);
-        return observer.toPromise();
+    savePhoto() {
+        if (this.lockerService.isLocked()) return new Promise((resolve, reject) => reject());
+        else this.lockerService.lock();
+        let saver = this.photo.id ? this.photoService.updateById(this.photo.id, this.photo) : this.photoService.create(this.photo);
+        return saver.toPromise().then((photo:PhotoModel) => {
+            this.lockerService.unlock();
+            this.photo = photo;
+            this.notificatorService.success('Record was successfully saved.');
+            this.navigatorService.navigate(['/photos']);
+            return photo;
+        }).catch((error:any) => {
+            this.lockerService.unlock();
+            return error;
+        });
     }
 
-    private processUpload(photo:PhotoModel, file:FileList) {
-        let observer = photo.id ? this.photoService.uploadById(photo.id, file) : this.photoService.upload(file);
-        return observer.toPromise();
+    uploadPhoto(file:FileList) {
+        if (this.lockerService.isLocked()) return new Promise((resolve, reject) => reject());
+        else this.lockerService.lock();
+        let uploader = this.photo.id ? this.photoService.uploadById(this.photo.id, file) : this.photoService.upload(file);
+        return uploader.toPromise().then((uploadedPhoto:UploadedPhotoModel) => {
+            this.lockerService.unlock();
+            this.photo.uploaded_photo_id = uploadedPhoto.id;
+            this.photo.absolute_url = uploadedPhoto.absolute_url;
+            this.photo.thumbnails = uploadedPhoto.thumbnails;
+            this.notificatorService.success('File was successfully uploaded.');
+            return uploadedPhoto;
+        }).catch((error:any) => {
+            this.lockerService.unlock();
+            return error;
+        });
     }
 
-    save() {
-        return (new Promise((resolve, reject) => {
-            this.lockerService.isLocked() ? reject() : this.lockerService.lock();
-            this.processSave(this.photo)
-                .then((photo:PhotoModel) => {
-                    this.lockerService.unlock();
-                    resolve(photo);
-                })
-                .catch((error:any) => {
-                    this.lockerService.unlock();
-                    reject(error);
-                });
-        })).then(this.onSave.bind(this));
-    }
-
-    onSave(photo:PhotoModel) {
-        this.photo = photo;
-        this.notificatorService.success('Record was successfully saved.');
-        this.navigatorService.navigate(['/photos']);
-        return photo;
-    }
-
-    upload(file:FileList) {
-        return (new Promise((resolve, reject) => {
-            this.lockerService.isLocked() ? reject() : this.lockerService.lock();
-            this.processUpload(this.photo, file)
-                .then((uploadedPhoto:UploadedPhotoModel) => {
-                    this.lockerService.unlock();
-                    resolve(uploadedPhoto);
-                })
-                .catch((error:any) => {
-                    this.lockerService.unlock();
-                    reject(error);
-                });
-        })).then(this.onUpload.bind(this));
-    }
-
-    onUpload(uploadedPhoto:UploadedPhotoModel) {
-        this.photo.uploaded_photo_id = uploadedPhoto.id;
-        this.photo.user_id = uploadedPhoto.user_id;
-        this.photo.absolute_url = uploadedPhoto.absolute_url;
-        this.photo.created_at = uploadedPhoto.created_at;
-        this.photo.updated_at = uploadedPhoto.updated_at;
-        this.photo.thumbnails = uploadedPhoto.thumbnails;
-        this.notificatorService.success('File was successfully uploaded.');
-        return uploadedPhoto;
+    deletePhoto() {
+        if (this.photo.id) {
+            if (this.lockerService.isLocked()) return new Promise((resolve, reject) => reject());
+            else this.lockerService.lock();
+            return this.photoService.deleteById(this.photo.id).toPromise().then((result:any) => {
+                this.navigatorService.navigate(['/photos']);
+                return result;
+            }).catch((error:any) => {
+                this.lockerService.unlock();
+                return error;
+            });
+        }
     }
 }

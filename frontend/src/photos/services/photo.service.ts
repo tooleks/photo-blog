@@ -30,6 +30,10 @@ export class PhotoService {
         return this.apiService.delete('/photo/' + id);
     }
 
+    getById(id:number) {
+        return this.apiService.get('/photo/' + id);
+    }
+
     getAll(take:number, skip:number) {
         return this.apiService.get('/photo', {
             params: {

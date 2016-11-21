@@ -10,15 +10,17 @@
                      [src]="activeItem.absolute_url"
                      [alt]="activeItem.description"
                      [title]="activeItem.description"
-                     (click)="viewNextItem()">
+                     (click)="viewNextItem(true)">
             </div>
         </div>
         <div class="gl-actions">
             <a class="gl-action gl-prev" (click)="viewPrevItem()" title="Previous"><i class="fa fa-arrow-left"></i></a>
-            <a class="gl-action gl-next" (click)="viewNextItem()" title="Next"><i class="fa fa-arrow-right"></i></a>
+            <a class="gl-action gl-next" (click)="viewNextItem(true)" title="Next"><i class="fa fa-arrow-right"></i></a>
         </div>
         <div class="gl-navbar">
-            <a class="gl-action gl-close" (click)="closeView()" title="Close"><i class="fa fa-close"></i></a>
+            <a class="gl-action gl-right" (click)="closeView()" title="Close"><i class="fa fa-close"></i></a>
+            <a class="gl-action gl-left" (click)="editItem()" title="Edit" *ngIf="editItemCallback"><i class="fa fa-pencil"></i></a>
+            <a class="gl-action gl-left" (click)="deleteItem()" title="Delete" *ngIf="deleteItemCallback"><i class="fa fa-trash"></i></a>
         </div>
     </div>
 </div>

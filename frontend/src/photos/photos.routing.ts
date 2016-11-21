@@ -11,6 +11,10 @@ const PhotosRoutes:Routes = [
         component: PhotoFormComponent,
     },
     {
+        path: 'photo/edit/:id',
+        component: PhotoFormComponent,
+    },
+    {
         path: 'photos',
         component: PhotosComponent,
     },
