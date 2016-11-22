@@ -52,7 +52,7 @@ class DeleteUnusedDirectoriesWithinPhotoStorage extends Command
     {
         foreach ($this->getDirectoriesToDelete() as $directory) {
             if ($this->fs->deleteDirectory($directory)) {
-                $this->comment(sprintf('Directory were deleted: "%s".', $directory));
+                $this->comment(sprintf('Directory was deleted: "%s".', $directory));
             }
         }
     }
