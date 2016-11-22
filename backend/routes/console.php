@@ -14,5 +14,5 @@
 Artisan::command('config:app', function () {
     $this->call('storage:link');
     $this->call('migrate');
-    $this->call('make:roles');
+    $this->call('create:roles');
 });

@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property bool is_draft
  * @property Carbon created_at
  * @property Carbon updated_at
- * @property string short_description
+ * @property string directory_path
  * @property Collection $tags
  * @property Collection $thumbnails
  * @method static Photo whereUploaded()
@@ -84,6 +84,16 @@ class Photo extends Model
     public function setDescriptionAttribute($value)
     {
         $this->attributes['description'] = trim($value);
+    }
+
+    /**
+     * Getter for the 'directory_path' virtual attribute.
+     *
+     * @return bool
+     */
+    public function getDirectoryPathAttribute()
+    {
+        return $this->path ? pathinfo($this->path, PATHINFO_DIRNAME) : null;
     }
 
     /**

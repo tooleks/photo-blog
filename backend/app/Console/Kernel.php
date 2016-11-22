@@ -2,8 +2,9 @@
 
 namespace App\Console;
 
-use App\Console\Commands\CleanupPhotoFileSystem;
-use App\Console\Commands\MakeRoles;
+use App\Console\Commands\DeleteUploadedPhotosOlderThanWeek;
+use App\Console\Commands\DeleteUnusedDirectoriesWithinPhotoStorage;
+use App\Console\Commands\CreateRoles;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -15,20 +16,24 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        MakeRoles::class,
-        CleanupPhotoFileSystem::class,
+        DeleteUploadedPhotosOlderThanWeek::class,
+        DeleteUnusedDirectoriesWithinPhotoStorage::class,
+        CreateRoles::class,
     ];
 
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
      * @return void
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        $schedule->command('delete:uploaded_photos_older_than_week')
+            ->dailyAt('00:00');
+
+        $schedule->command('delete:unused_directories_within_photo_storage')
+            ->dailyAt('00:10');
     }
 
     /**
