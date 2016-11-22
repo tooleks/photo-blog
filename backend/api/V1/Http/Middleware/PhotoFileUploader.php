@@ -63,7 +63,7 @@ class PhotoFileUploader
     {
         $this->validate($request->all(), 'default');
 
-        $photoPath = $request->file('file')->store(sprintf('%s/%s', config('main.path.photos'), str_random(10)));
+        $photoPath = $request->file('file')->store(sprintf('%s/%s', config('main.storage.photos'), str_random(10)));
 
         if ($photoPath === false) {
             throw new FileException("File '{$photoPath}' saving error.");

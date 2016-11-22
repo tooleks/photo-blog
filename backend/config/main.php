@@ -7,7 +7,7 @@ return [
         'url' => '/',
     ],
 
-    'path' => [
+    'storage' => [
         'photos' => 'public/photos',
     ],
 
