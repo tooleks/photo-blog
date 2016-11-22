@@ -62,6 +62,21 @@ class Photo extends Model
     protected $appends = ['is_published'];
 
     /**
+     * @inheritdoc
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($photo) { // before delete() method call this
+            $photo->thumbnails()->delete();
+            $photo->thumbnails()->detach();
+            $photo->tags()->delete();
+            $photo->tags()->detach();
+        });
+    }
+
+    /**
      * Setter for the 'description' attribute.
      *
      * @param string $value

@@ -182,7 +182,7 @@ class UserResource implements Resource
 
         $user = $userPresenter->getOriginalEntity();
 
-        $result = $user->deleteWithRelationsOrFail();
+        $result = $user->delete();
 
         return (int)$result;
     }

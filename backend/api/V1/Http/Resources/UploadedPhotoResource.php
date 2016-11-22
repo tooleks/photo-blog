@@ -242,7 +242,7 @@ class UploadedPhotoResource implements Resource
 
         $photo = $uploadedPhotoPresenter->getOriginalEntity();
 
-        $result = $photo->deleteWithRelationsOrFail();
+        $result = $photo->delete();
 
         return (int)$result;
     }
