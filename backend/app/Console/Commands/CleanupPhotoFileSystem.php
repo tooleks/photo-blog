@@ -49,12 +49,12 @@ class CleanupPhotoFileSystem extends Command
      */
     public function handle()
     {
-        $directories = array_diff($this->getAllDirectories(), $this->getPhotoDirectories());
+        $directoriesToRemove = array_diff($this->getAllDirectories(), $this->getPhotoDirectories());
 
         array_map(function ($directory) {
             $this->comment($directory);
             $this->fs->deleteDirectory($directory);
-        }, $directories);
+        }, $directoriesToRemove);
     }
 
     /**
