@@ -2,7 +2,6 @@
 
 namespace App\Models\DB;
 
-use App\Core\Model\Relation;
 use Carbon\Carbon;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -33,8 +32,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Photo extends Model
 {
-    use Relation;
-
     /**
      * @inheritdoc
      */

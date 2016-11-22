@@ -2,7 +2,6 @@
 
 namespace App\Models\DB;
 
-use App\Core\Model\Relation;
 use Carbon\Carbon;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -25,7 +24,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  */
 class User extends Authenticatable
 {
-    use Notifiable, Relation;
+    use Notifiable;
 
     /**
      * @inheritdoc

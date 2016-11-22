@@ -6,11 +6,14 @@ use App\Core\Validator\Validator;
 use App\Models\DB\Photo;
 use Api\V1\Core\Resource\Contracts\Resource;
 use Api\V1\Models\Presenters\UploadedPhotoPresenter;
+use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Exception;
+use Throwable;
 
 /**
  * Class UploadedPhoto
+ * @property ConnectionInterface connection
  * @property Photo $photoModel
  * @package Api\V1\Http\Resources
  */
@@ -24,10 +27,12 @@ class UploadedPhotoResource implements Resource
     /**
      * UploadedPhoto constructor.
      *
+     * @param ConnectionInterface $connection
      * @param Photo $photoModel
      */
-    public function __construct(Photo $photoModel)
+    public function __construct(ConnectionInterface $connection, Photo $photoModel)
     {
+        $this->connection = $connection;
         $this->photoModel = $photoModel;
     }
 
@@ -169,6 +174,7 @@ class UploadedPhotoResource implements Resource
      *
      * @param array $attributes
      * @return UploadedPhotoPresenter
+     * @throws Throwable
      */
     public function create(array $attributes) : UploadedPhotoPresenter
     {
@@ -176,7 +182,18 @@ class UploadedPhotoResource implements Resource
 
         $photo = $this->photoModel->create();
 
-        $photo->saveWithRelationsOrFail(['is_draft' => true] + $attributes, ['thumbnails'], true);
+        $photo->fill(['is_draft' => true] + $attributes);
+        try {
+            $this->connection->beginTransaction();
+            $photo->saveOrFail();
+            $photo->thumbnails()->delete();
+            $photo->thumbnails()->detach();
+            $photo->thumbnails()->createMany($attributes['thumbnails']);
+            $this->connection->commit();
+        } catch (Throwable $e) {
+            $this->connection->rollBack();
+            throw $e;
+        }
 
         return $this->getById($photo->id);
     }
@@ -187,6 +204,7 @@ class UploadedPhotoResource implements Resource
      * @param UploadedPhotoPresenter $uploadedPhotoPresenter
      * @param array $attributes
      * @return UploadedPhotoPresenter
+     * @throws Throwable
      */
     public function update($uploadedPhotoPresenter, array $attributes) : UploadedPhotoPresenter
     {
@@ -196,7 +214,18 @@ class UploadedPhotoResource implements Resource
 
         $photo = $uploadedPhotoPresenter->getOriginalEntity();
 
-        $photo->saveWithRelationsOrFail($attributes, ['thumbnails'], true);
+        $photo->fill(['is_draft' => true] + $attributes);
+        try {
+            $this->connection->beginTransaction();
+            $photo->saveOrFail();
+            $photo->thumbnails()->delete();
+            $photo->thumbnails()->detach();
+            $photo->thumbnails()->createMany($attributes['thumbnails']);
+            $this->connection->commit();
+        } catch (Throwable $e) {
+            $this->connection->rollBack();
+            throw $e;
+        }
 
         return $this->getById($photo->id);
     }
