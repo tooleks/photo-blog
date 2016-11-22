@@ -40,7 +40,10 @@ export class PhotosByTagComponent {
             .subscribe((tag) => {
                 this.queryParams.tag = tag;
                 this.pagerService = this.pagerServiceProvider.getInstance();
-                this.loadPhotos(this.pagerService.getLimitForPage(this.pagerService.getPage()), this.pagerService.getOffset(), this.queryParams.tag);
+                this.loadPhotos(this.pagerService.getLimitForPage(this.pagerService.getPage()), this.pagerService.getOffset(), this.queryParams.tag)
+                    .then((photos:PhotoModel[]) => {
+                        this.empty = photos.length === 0;
+                    });
             });
     }
 
@@ -77,5 +80,9 @@ export class PhotosByTagComponent {
 
     hidePhotoCallback() {
         this.navigatorService.unsetQueryParam('show');
+    }
+
+    isEmpty() {
+        return !this.lockerService.isLocked() && this.empty === true;
     }
 }
