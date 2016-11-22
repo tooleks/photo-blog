@@ -71,7 +71,7 @@ class DeleteUploadedPhotosOlderThanWeek extends Command
     private function deletePhotoWithDirectory(Photo $photo)
     {
         if ($photo->delete()) {
-            $this->comment(sprintf('Photo were deleted: %s.', $photo->toJson()));
+            $this->comment(sprintf('Photo was deleted: %s.', $photo->toJson()));
         }
 
         if (!$photo->directory_path) {
@@ -79,7 +79,7 @@ class DeleteUploadedPhotosOlderThanWeek extends Command
         }
 
         if ($this->fs->deleteDirectory($photo->directory_path)) {
-            $this->comment(sprintf('Directory were deleted: "%s".', $photo->directory_path));
+            $this->comment(sprintf('Directory was deleted: "%s".', $photo->directory_path));
         }
     }
 }
