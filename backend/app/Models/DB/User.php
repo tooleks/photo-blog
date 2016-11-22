@@ -46,8 +46,8 @@ class User extends Authenticatable
     {
         parent::boot();
 
-        static::deleting(function ($photo) { // before delete() method call this
-            $photo->photos()->delete();
+        static::deleting(function (User $user) {
+            $user->photos()->delete();
         });
     }
 
