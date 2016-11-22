@@ -92,8 +92,12 @@ class TokenResource implements Resource
 
         $user = $this->userModel->whereEmail($attributes['email'])->first();
 
-        if ($user === null || !$this->hasher->check($attributes['password'], $user->password)) {
-            throw new ModelNotFoundException('Record not found.');
+        if ($user === null) {
+            throw new ModelNotFoundException('User not found.');
+        }
+
+        if (!$this->hasher->check($attributes['password'], $user->password)) {
+            throw new ModelNotFoundException('Invalid user password.');
         }
 
         $user->generateApiToken();

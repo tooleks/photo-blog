@@ -40,6 +40,18 @@ class User extends Authenticatable
     protected $with = ['role'];
 
     /**
+     * @inheritdoc
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($photo) { // before delete() method call this
+            $photo->photos()->delete();
+        });
+    }
+
+    /**
      * Set password hash.
      *
      * @param string $passwordHash
@@ -87,6 +99,14 @@ class User extends Authenticatable
     public function role()
     {
         return $this->belongsTo(Role::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function photos()
+    {
+        return $this->hasMany(Photo::class);
     }
 
     /**

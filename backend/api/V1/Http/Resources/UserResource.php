@@ -109,7 +109,7 @@ class UserResource implements Resource
             ->first();
 
         if ($user === null) {
-            throw new ModelNotFoundException('Record not found.');
+            throw new ModelNotFoundException('User not found.');
         };
 
         return new UserPresenter($user);
@@ -182,7 +182,7 @@ class UserResource implements Resource
 
         $user = $userPresenter->getOriginalEntity();
 
-        $result = $user->deleteWithRelationsOrFail();
+        $result = $user->delete();
 
         return (int)$result;
     }

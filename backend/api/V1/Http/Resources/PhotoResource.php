@@ -251,7 +251,7 @@ class PhotoResource implements Resource
 
         $photo = $photoPresenter->getOriginalEntity();
 
-        $result = $photo->deleteWithRelationsOrFail();
+        $result = $photo->delete();
 
         return (int)$result;
     }
