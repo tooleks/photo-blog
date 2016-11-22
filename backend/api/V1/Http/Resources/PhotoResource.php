@@ -7,11 +7,13 @@ use App\Core\Validator\Validator;
 use App\Models\DB\Photo;
 use Api\V1\Core\Resource\Contracts\Resource;
 use Api\V1\Models\Presenters\PhotoPresenter;
+use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Throwable;
 
 /**
  * Class PhotoResource
+ * @property ConnectionInterface connection
  * @property Photo $photoModel
  * @property UploadedPhotoResource uploadedPhotoResource
  * @package Api\V1\Http\Resources
@@ -26,11 +28,13 @@ class PhotoResource implements Resource
 
     /**
      * PhotoResource constructor.
+     * @param ConnectionInterface $connection
      * @param Photo $photoModel
      * @param UploadedPhotoResource $uploadedPhotoResource
      */
-    public function __construct(Photo $photoModel, UploadedPhotoResource $uploadedPhotoResource)
+    public function __construct(ConnectionInterface $connection, Photo $photoModel, UploadedPhotoResource $uploadedPhotoResource)
     {
+        $this->connection = $connection;
         $this->photoModel = $photoModel;
         $this->uploadedPhotoResource = $uploadedPhotoResource;
     }
@@ -132,7 +136,7 @@ class PhotoResource implements Resource
             ->first();
 
         if ($photo === null) {
-            throw new ModelNotFoundException('Record not found.');
+            throw new ModelNotFoundException('Photo not found.');
         };
 
         return new PhotoPresenter($photo);
@@ -186,7 +190,18 @@ class PhotoResource implements Resource
 
         $photo = $this->uploadedPhotoResource->getById($attributes['uploaded_photo_id'])->getOriginalEntity();
 
-        $photo->saveWithRelationsOrFail(['is_draft' => false] + $attributes, ['tags'], true);
+        $photo->fill(['is_draft' => false] + $attributes);
+        try {
+            $this->connection->beginTransaction();
+            $photo->saveOrFail();
+            $photo->tags()->delete();
+            $photo->tags()->detach();
+            $photo->tags()->createMany($attributes['tags']);
+            $this->connection->commit();
+        } catch (Throwable $e) {
+            $this->connection->rollBack();
+            throw $e;
+        }
 
         return $this->getById($photo->id);
     }
@@ -197,6 +212,7 @@ class PhotoResource implements Resource
      * @param PhotoPresenter $photoPresenter
      * @param array $attributes
      * @return PhotoPresenter
+     * @throws Throwable
      */
     public function update($photoPresenter, array $attributes) : PhotoPresenter
     {
@@ -206,7 +222,18 @@ class PhotoResource implements Resource
 
         $photo = $photoPresenter->getOriginalEntity();
 
-        $photo->saveWithRelationsOrFail($attributes, ['tags'], true);
+        $photo->fill(['is_draft' => false] + $attributes);
+        try {
+            $this->connection->beginTransaction();
+            $photo->saveOrFail();
+            $photo->tags()->delete();
+            $photo->tags()->detach();
+            $photo->tags()->createMany($attributes['tags']);
+            $this->connection->commit();
+        } catch (Throwable $e) {
+            $this->connection->rollBack();
+            throw $e;
+        }
 
         return $this->getById($photo->id);
     }

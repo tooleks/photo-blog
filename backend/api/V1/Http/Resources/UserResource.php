@@ -165,7 +165,7 @@ class UserResource implements Resource
             $user->setPasswordHash($this->hasher->make($attributes['password']));
         }
 
-        $user->saveWithRelationsOrFail($attributes);
+        $user->saveOrFail();
 
         return $this->getById($user->id);
     }
