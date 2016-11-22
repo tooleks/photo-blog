@@ -8,26 +8,26 @@ use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\Filesystem;
 
 /**
- * Class DeleteUploadedPhotosOlderThanWeek
+ * Class DeleteNotPublishedPhotosOlderThanWeek
  * @property Photo photoModel
  * @property Filesystem fs
  * @package App\Console\Commands
  */
-class DeleteUploadedPhotosOlderThanWeek extends Command
+class DeleteNotPublishedPhotosOlderThanWeek extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'delete:uploaded_photos_older_than_week';
+    protected $signature = 'delete:not_published_photos_older_than_week';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Delete uploaded photos older than week.';
+    protected $description = 'Delete not published photos older than week.';
 
     /**
      * Create a new command instance.

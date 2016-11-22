@@ -2,7 +2,7 @@
 
 namespace App\Console;
 
-use App\Console\Commands\DeleteUploadedPhotosOlderThanWeek;
+use App\Console\Commands\DeleteNotPublishedPhotosOlderThanWeek;
 use App\Console\Commands\DeleteUnusedDirectoriesWithinPhotoStorage;
 use App\Console\Commands\CreateRoles;
 use Illuminate\Console\Scheduling\Schedule;
@@ -16,7 +16,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        DeleteUploadedPhotosOlderThanWeek::class,
+        DeleteNotPublishedPhotosOlderThanWeek::class,
         DeleteUnusedDirectoriesWithinPhotoStorage::class,
         CreateRoles::class,
     ];
@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('delete:uploaded_photos_older_than_week')
+        $schedule->command('delete:not_published_photos_older_than_week')
             ->dailyAt('00:00');
 
         $schedule->command('delete:unused_directories_within_photo_storage')
