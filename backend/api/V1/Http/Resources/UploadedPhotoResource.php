@@ -155,7 +155,7 @@ class UploadedPhotoResource implements Resource
             ->first();
 
         if ($photo === null) {
-            throw new ModelNotFoundException('Record not found.');
+            throw new ModelNotFoundException('Uploaded photo not found.');
         };
 
         return new UploadedPhotoPresenter($photo);
