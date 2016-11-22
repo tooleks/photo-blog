@@ -68,7 +68,7 @@ class Photo extends Model
     {
         parent::boot();
 
-        static::deleting(function ($photo) { // before delete() method call this
+        static::deleting(function (Photo $photo) {
             $photo->thumbnails()->delete();
             $photo->thumbnails()->detach();
             $photo->tags()->delete();
