@@ -11,6 +11,7 @@ import {PhotoModel} from '../../models/photo-model';
     template: require('./photos-by-search-query.component.html'),
 })
 export class PhotosBySearchQueryComponent {
+    private empty:boolean;
     private queryParams:any = {};
     private pagerService:PagerService;
     private lockerService:LockerService;
@@ -40,7 +41,10 @@ export class PhotosBySearchQueryComponent {
             .subscribe((query) => {
                 this.queryParams.query = query;
                 this.pagerService = this.pagerServiceProvider.getInstance();
-                this.loadPhotos(this.pagerService.getLimitForPage(this.pagerService.getPage()), this.pagerService.getOffset(), this.queryParams.query);
+                this.loadPhotos(this.pagerService.getLimitForPage(this.pagerService.getPage()), this.pagerService.getOffset(), this.queryParams.query)
+                    .then((photos:PhotoModel[]) => {
+                        this.empty = photos.length === 0;
+                    });
             });
     }
 
@@ -77,5 +81,9 @@ export class PhotosBySearchQueryComponent {
 
     hidePhotoCallback() {
         this.navigatorService.unsetQueryParam('show');
+    }
+
+    isEmpty() {
+        return !this.lockerService.isLocked() && this.empty === true;
     }
 }

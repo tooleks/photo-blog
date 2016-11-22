@@ -11,6 +11,7 @@ import {PhotoModel} from '../../models/photo-model';
     template: require('./photos.component.html'),
 })
 export class PhotosComponent {
+    private empty:boolean;
     private queryParams:any = {};
     private pagerService:PagerService;
     private lockerService:LockerService;
@@ -35,7 +36,10 @@ export class PhotosComponent {
             .map((queryParams) => queryParams['show'])
             .subscribe((show) => this.queryParams.show = parseInt(show));
 
-        this.loadPhotos(this.pagerService.getLimitForPage(this.pagerService.getPage()), this.pagerService.getOffset());
+        this.loadPhotos(this.pagerService.getLimitForPage(this.pagerService.getPage()), this.pagerService.getOffset())
+            .then((photos:PhotoModel[]) => {
+                this.empty = photos.length === 0;
+            });
     }
 
     loadMorePhotos() {
@@ -71,5 +75,9 @@ export class PhotosComponent {
 
     hidePhotoCallback() {
         this.navigatorService.unsetQueryParam('show');
+    }
+
+    isEmpty() {
+        return !this.lockerService.isLocked() && this.empty === true;
     }
 }

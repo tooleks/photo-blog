@@ -1,6 +1,12 @@
 <div class="row">
     <div class="col-sm-12">
-        <gallery [items]="getPhotos()"
+        <div *ngIf="isEmpty()" class="widget p-xl text-center">
+            <div class="m-b-md">
+                <h1 class="m-xs">{{ 'No photos found.' }}</h1>
+            </div>
+        </div>
+        <gallery *ngIf="!isEmpty()"
+                 [items]="getPhotos()"
                  [initItemId]="queryParams['show']"
                  [loadMoreCallback]="loadMorePhotos.bind(this)"
                  [openViewCallback]="showPhotoCallback.bind(this)"
@@ -8,11 +14,13 @@
                  [editItemCallback]="redirectToEditPhoto.bind(this)"></gallery>
     </div>
 </div>
-<div *ngIf="getPhotos().length" class="load-more-container text-center">
-    <button class="btn btn-primary text-uppercase"
+<div *ngIf="!isEmpty()" class="load-more-container text-center">
+    <button *ngIf="!lockerService.isLocked()"
             (click)="loadMorePhotos()"
-            [disabled]="lockerService.isLocked()">
-        <i class="fa fa-spinner fa-spin" *ngIf="lockerService.isLocked()"></i>
+            class="btn btn-primary text-uppercase">
         {{ 'Load more' }}
     </button>
+    <div *ngIf="lockerService.isLocked()" class="text-uppercase">
+        <i class="fa fa-circle-o-notch fa-spin fa-2x"></i>
+    </div>
 </div>
