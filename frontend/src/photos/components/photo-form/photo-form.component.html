@@ -2,7 +2,37 @@
     <div class="ibox-title"><h5>{{ photo.absolute_url ? 'Edit Photo' : 'Add Photo' }}</h5></div>
     <div class="ibox-content">
         <div class="row">
-            <div class="col-sm-8">
+            <div class="col-md-4 col-md-push-8">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="file-box" *ngIf="photo.absolute_url">
+                            <div class="file">
+                                <span class="corner"></span>
+                                <div class="image">
+                                    <a [href]="photo.absolute_url" target="_blank" title="photo.description">
+                                        <img [src]="photo.thumbnails[0].absolute_url" [alt]="photo.description"
+                                             class="img-responsive">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <button class="btn btn-info btn-file" [disabled]="lockerService.isLocked()">
+                                <i class="fa fa-upload"></i>
+                                {{ 'Upload File' }}
+                                <file-select-input [onChangeCallback]="uploadPhoto.bind(this)"
+                                                   [disabled]="lockerService.isLocked()">
+                                </file-select-input>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 col-md-pull-4">
                 <div class="form-horizontal">
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Tags</label>
@@ -26,33 +56,6 @@
                                 {{ 'Delete' }}
                             </button>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="file-box" *ngIf="photo.absolute_url">
-                            <div class="file">
-                                <span class="corner"></span>
-                                <div class="image">
-                                    <a [href]="photo.absolute_url" target="_blank" title="photo.description">
-                                        <img [src]="photo.thumbnails[0].absolute_url" [alt]="photo.description"
-                                             class="img-responsive">
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12">
-                        <button class="btn btn-info btn-file" [disabled]="lockerService.isLocked()">
-                            <i class="fa fa-upload"></i>
-                            {{ 'Upload File' }}
-                            <file-select-input [onChangeCallback]="uploadPhoto.bind(this)"
-                                               [disabled]="lockerService.isLocked()"></file-select-input>
-                        </button>
                     </div>
                 </div>
             </div>

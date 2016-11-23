@@ -13,7 +13,7 @@ use Illuminate\Contracts\Support\Jsonable;
 abstract class EntityPresenter implements Arrayable, Jsonable, JsonSerializable
 {
     /**
-     * @var
+     * @var mixed
      */
     protected $entity;
 
