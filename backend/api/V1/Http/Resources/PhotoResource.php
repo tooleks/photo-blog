@@ -130,8 +130,8 @@ class PhotoResource implements Resource
         $photo = $this->photoModel
             ->withThumbnails()
             ->withTags()
-            ->whereUploaded()
-            ->wherePublished(true)
+            ->whereIsUploaded()
+            ->whereIsPublished(true)
             ->whereId($id)
             ->first();
 
@@ -158,8 +158,8 @@ class PhotoResource implements Resource
             ->distinct()
             ->withThumbnails()
             ->withTags()
-            ->whereUploaded()
-            ->wherePublished(true)
+            ->whereIsUploaded()
+            ->whereIsPublished(true)
             ->take($parameters['take'])
             ->skip($parameters['skip'])
             ->orderByCreatedAt('desc');
@@ -190,7 +190,9 @@ class PhotoResource implements Resource
 
         $photo = $this->uploadedPhotoResource->getById($attributes['uploaded_photo_id'])->getOriginalEntity();
 
-        $photo->fill(['is_draft' => false] + $attributes);
+        $photo->setIsPublishedAttribute(true);
+        $photo->fill($attributes);
+
         try {
             $this->connection->beginTransaction();
             $photo->saveOrFail();
@@ -222,7 +224,8 @@ class PhotoResource implements Resource
 
         $photo = $photoPresenter->getOriginalEntity();
 
-        $photo->fill(['is_draft' => false] + $attributes);
+        $photo->fill($attributes);
+
         try {
             $this->connection->beginTransaction();
             $photo->saveOrFail();

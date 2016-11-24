@@ -19,7 +19,7 @@ class CreatePhotosTable extends Migration
             $table->text('description')->nullable();
             $table->string('path')->nullable();
             $table->string('relative_url')->nullable();
-            $table->boolean('is_draft')->nullable();
+            $table->boolean('is_published')->nullable();
             $table->timestamps();
         });
     }

@@ -150,7 +150,7 @@ class UploadedPhotoResource implements Resource
     {
         $photo = $this->photoModel
             ->withThumbnails()
-            ->whereUploaded()
+            ->whereIsUploaded()
             ->whereId($id)
             ->first();
 
@@ -182,7 +182,9 @@ class UploadedPhotoResource implements Resource
 
         $photo = $this->photoModel->create();
 
-        $photo->fill(['is_draft' => true] + $attributes);
+        $photo->setIsPublishedAttribute(false);
+        $photo->fill($attributes);
+
         try {
             $this->connection->beginTransaction();
             $photo->saveOrFail();
@@ -214,7 +216,8 @@ class UploadedPhotoResource implements Resource
 
         $photo = $uploadedPhotoPresenter->getOriginalEntity();
 
-        $photo->fill(['is_draft' => true] + $attributes);
+        $photo->fill($attributes);
+
         try {
             $this->connection->beginTransaction();
             $photo->saveOrFail();
