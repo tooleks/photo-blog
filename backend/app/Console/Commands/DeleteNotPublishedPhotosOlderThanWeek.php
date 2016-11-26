@@ -53,7 +53,7 @@ class DeleteNotPublishedPhotosOlderThanWeek extends Command
         $this->photoModel
             ->withTags()
             ->withThumbnails()
-            ->wherePublished(false)
+            ->whereIsPublished(false)
             ->where('updated_at', '<', (new Carbon())->addWeek('-1'))
             ->chunk(500, function ($photos) {
                 /** @var Photo $photo */

@@ -8,10 +8,10 @@ use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
- * Class Json
- * @package App\Http\Middleware
+ * Class ConvertToJson
+ * @package Api\V1\Http\Middleware
  */
-class Json
+class ConvertToJson
 {
     /**
      * Handle an incoming request.
@@ -19,21 +19,35 @@ class Json
      * @param Request $request
      * @param Closure $next
      * @param string|null $guard
-     * @return mixed
+     * @return Response
      */
     public function handle($request, Closure $next, $guard = null)
+    {
+        $this->handleRequest($request);
+
+        $response = $next($request);
+
+        $this->handleResponse($response);
+
+        return $response;
+    }
+
+    /**
+     * @param Request $request
+     */
+    protected function handleRequest(&$request)
     {
         if (!$request->wantsJson()) {
             throw new BadRequestHttpException(trans('errors.http.400'));
         }
+    }
 
-        /** @var Response $response */
-
-        $response = $next($request);
-
-        $response->withHeaders([
-            'Content-type' => 'application/json',
-        ]);
+    /**
+     * @param Response $response
+     */
+    protected function handleResponse(&$response)
+    {
+        $response->header('Content-Type', 'application/json');
 
         if ($response->getStatusCode() === 200) {
             $response = response()->json([
@@ -41,7 +55,5 @@ class Json
                 'data' => $response->getOriginalContent(),
             ], $response->getStatusCode(), $response->headers->all());
         }
-
-        return $response;
     }
 }

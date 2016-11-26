@@ -50,7 +50,7 @@ Route::group(['prefix' => 'uploaded_photo'], function () {
         'uses' => 'UploadedPhotoController@create',
         'middleware' => [
             'can:create,' . \Api\V1\Models\Presenters\UploadedPhotoPresenter::class,
-            \Api\V1\Http\Middleware\UserIdAppender::class,
+            \Api\V1\Http\Middleware\AppendUserId::class,
         ],
     ]);
 

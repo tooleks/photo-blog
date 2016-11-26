@@ -21,6 +21,7 @@ abstract class CollectionPresenter extends Collection
 
     /**
      * CollectionPresenter constructor.
+     *
      * @param Collection $collection
      */
     public function __construct(Collection $collection)

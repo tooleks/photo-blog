@@ -4,15 +4,16 @@ namespace Api\V1\Http\Middleware;
 
 use App\Models\DB\Photo;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Closure;
 
 /**
- * Class PhotoDirectoryCleaner
+ * Class DeletePhotoDirectory
  * @property Filesystem $fs
- * @package App\Http\Middleware
+ * @package Api\V1\Http\Middleware
  */
-class PhotoDirectoryCleaner
+class DeletePhotoDirectory
 {
     /**
      * PhotoDirectoryCleaner constructor.
@@ -44,10 +45,12 @@ class PhotoDirectoryCleaner
             return $next($request);
         }
 
+        /** @var Response $response */
+
         $response = $next($request);
 
         if ($response->status() === 200) {
-            $this->fs->deleteDirectory(pathinfo($photo->path, PATHINFO_DIRNAME));
+            $this->fs->deleteDirectory($photo->directory_path);
         }
 
         return $response;

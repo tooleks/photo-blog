@@ -3,7 +3,7 @@
 namespace Api\V1\Http\Controllers;
 
 use Api\V1\Core\Resource\Contracts\Resource;
-use Api\V1\Http\Middleware\PhotoDirectoryCleaner;
+use Api\V1\Http\Middleware\DeletePhotoDirectory;
 use Api\V1\Http\Resources\PhotoResource;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
@@ -22,7 +22,7 @@ class PhotoController extends ResourceController
     {
         parent::__construct($request, $guard, $resource);
 
-        $this->middleware(PhotoDirectoryCleaner::class, ['only' => ['delete']]);
+        $this->middleware(DeletePhotoDirectory::class, ['only' => ['delete']]);
     }
 
     /**

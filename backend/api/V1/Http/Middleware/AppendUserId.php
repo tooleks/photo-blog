@@ -7,11 +7,11 @@ use Illuminate\Http\Request;
 use Closure;
 
 /**
- * Class UserIdAppender
+ * Class AppendCurrentUserId
  * @property Guard guard
- * @package App\Http\Middleware
+ * @package Api\V1\Http\Middleware
  */
-class UserIdAppender
+class AppendUserId
 {
     /**
      * UserIdAppender constructor.
