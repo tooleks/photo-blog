@@ -10,12 +10,12 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Closure;
 
 /**
- * Class PhotoFileUploader
+ * Class UploadPhotoFile
  * @property Filesystem $fs
  * @property ThumbnailService thumbnailService
- * @package App\Http\Middleware
+ * @package Api\V1\Http\Middleware
  */
-class PhotoFileUploader
+class UploadPhotoFile
 {
     use Validator;
 
