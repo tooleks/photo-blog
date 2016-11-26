@@ -182,7 +182,7 @@ class UploadedPhotoResource implements Resource
 
         $photo = $this->photoModel->create();
 
-        $photo->setIsPublishedAttribute(false);
+        $photo->is_published = false;
         $photo->fill($attributes);
 
         try {

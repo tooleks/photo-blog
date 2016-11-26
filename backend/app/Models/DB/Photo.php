@@ -21,10 +21,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property Collection $tags
  * @property Collection $thumbnails
  * @method static Photo whereIsUploaded()
- * @method static Photo whereIsPublished($value)
- * @method static Photo whereSearchQuery($searchQuery)
- * @method static Photo whereTag($tag)
- * @method static Photo whereId($id)
+ * @method static Photo whereIsPublished(bool $isPublished)
+ * @method static Photo whereSearchQuery(string $searchQuery)
+ * @method static Photo whereTag(string $tag)
+ * @method static Photo whereId(int $id)
  * @method static Photo orderByCreatedAt($direction)
  * @method static Photo withThumbnails()
  * @method static Photo withTags()
@@ -73,11 +73,11 @@ class Photo extends Model
     /**
      * Setter for the 'is_published' attribute.
      *
-     * @param bool $value
+     * @param bool $isPublished
      */
-    public function setIsPublishedAttribute(bool $value)
+    public function setIsPublishedAttribute($isPublished)
     {
-        $this->attributes['is_published'] = $value;
+        $this->attributes['is_published'] = (bool)$isPublished;
     }
 
     /**
@@ -135,12 +135,12 @@ class Photo extends Model
      * Scope a query to include only published photos.
      *
      * @param Builder $query
-     * @param bool $value
+     * @param bool $isPublished
      * @return Builder
      */
-    public function scopeWhereIsPublished($query, $value = true)
+    public function scopeWhereIsPublished($query, $isPublished)
     {
-        return $query->where('photos.is_published', $value);
+        return $query->where('photos.is_published', $isPublished);
     }
 
     /**

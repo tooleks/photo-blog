@@ -190,7 +190,7 @@ class PhotoResource implements Resource
 
         $photo = $this->uploadedPhotoResource->getById($attributes['uploaded_photo_id'])->getOriginalEntity();
 
-        $photo->setIsPublishedAttribute(true);
+        $photo->is_published = true;
         $photo->fill($attributes);
 
         try {
