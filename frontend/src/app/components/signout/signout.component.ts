@@ -8,10 +8,10 @@ import {UserModel} from '../../../shared/models/user-model';
     template: '',
 })
 export class SignOutComponent {
-    private navigatorService:NavigatorService;
+    protected navigatorService:NavigatorService;
 
-    constructor(@Inject(AuthService) private authService:AuthService,
-                @Inject(NavigatorServiceProvider) private navigatorServiceProvider:NavigatorServiceProvider) {
+    constructor(@Inject(AuthService) protected authService:AuthService,
+                @Inject(NavigatorServiceProvider) protected navigatorServiceProvider:NavigatorServiceProvider) {
         this.navigatorService = this.navigatorServiceProvider.getInstance();
     }
 

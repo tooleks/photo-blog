@@ -1,5 +1,6 @@
 import {Component, Inject} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
+import {TitleService} from '../../../shared/services/title';
 import {LockerServiceProvider} from '../../../shared/services/locker';
 import {NavigatorServiceProvider} from '../../../shared/services/navigator';
 import {PagerService, PagerServiceProvider} from '../../../shared/services/pager';
@@ -12,10 +13,11 @@ import {PhotosGrid} from '../photos-grid';
     template: require('./photos-by-search-query.component.html'),
 })
 export class PhotosBySearchQueryComponent extends PhotosGrid {
-    private queryParams:any = {};
-    private pagerService:PagerService;
+    protected queryParams:any = {};
+    protected pagerService:PagerService;
 
     constructor(@Inject(ActivatedRoute) protected route:ActivatedRoute,
+                @Inject(TitleService) protected titleService:TitleService,
                 @Inject(PagerServiceProvider) protected pagerServiceProvider:PagerServiceProvider,
                 @Inject(LockerServiceProvider) protected lockerServiceProvider:LockerServiceProvider,
                 @Inject(NavigatorServiceProvider) protected navigatorServiceProvider:NavigatorServiceProvider,
@@ -36,6 +38,7 @@ export class PhotosBySearchQueryComponent extends PhotosGrid {
         this.route.queryParams
             .map((params) => params['query'])
             .subscribe((query) => {
+                this.titleService.setTitle(['Photos', query]);
                 this.queryParams.query = query;
                 this.pagerService = this.pagerServiceProvider.getInstance();
                 this

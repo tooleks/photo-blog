@@ -4,10 +4,10 @@ import {NavigatorService, NavigatorServiceProvider} from '../navigator';
 
 @Injectable()
 export class ApiErrorHandler {
-    private navigatorService:NavigatorService;
+    protected navigatorService:NavigatorService;
 
-    constructor(@Inject(NotificatorService) private notificator:NotificatorService,
-                @Inject(NavigatorServiceProvider) private navigatorServiceProvider:NavigatorServiceProvider) {
+    constructor(@Inject(NotificatorService) protected notificator:NotificatorService,
+                @Inject(NavigatorServiceProvider) protected navigatorServiceProvider:NavigatorServiceProvider) {
         this.navigatorService = navigatorServiceProvider.getInstance();
     }
 
@@ -32,11 +32,11 @@ export class ApiErrorHandler {
         this.handleHttpError(error, body);
     }
 
-    private handleHttpError(error:any, body:any) {
+    protected handleHttpError(error:any, body:any) {
         this.notificator.error(body.message, error.status + ' Error');
     }
 
-    private handleValidationErrors(error:any, body:any) {
+    protected handleValidationErrors(error:any, body:any) {
         body.errors = body.errors || {};
         for (var property in body.errors) {
             if (body.errors.hasOwnProperty(property)) {

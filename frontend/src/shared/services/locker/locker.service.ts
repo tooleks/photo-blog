@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 
 @Injectable()
 export class LockerService {
-    private locked:boolean = false;
+    protected locked:boolean = false;
 
     lock() {
         this.locked = true;

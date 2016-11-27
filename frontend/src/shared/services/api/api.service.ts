@@ -8,17 +8,17 @@ import {AuthUserProviderService} from '../auth/auth-user-provider.service';
 
 @Injectable()
 export class ApiService {
-    apiBaseUrl:string;
+    apiUrl:string;
     debug:boolean;
     headers:Headers;
     searchParams:URLSearchParams;
     body:any;
 
-    constructor(@Inject(EnvService) private envService:EnvService,
-                @Inject(Http) private http:Http,
-                @Inject(ApiErrorHandler) private errorHandler:ApiErrorHandler,
-                @Inject(AuthUserProviderService) private authUserProviderService:AuthUserProviderService) {
-        this.apiBaseUrl = this.envService.get('apiBaseUrl');
+    constructor(@Inject(EnvService) protected envService:EnvService,
+                @Inject(Http) protected http:Http,
+                @Inject(ApiErrorHandler) protected errorHandler:ApiErrorHandler,
+                @Inject(AuthUserProviderService) protected authUserProviderService:AuthUserProviderService) {
+        this.apiUrl = this.envService.get('apiUrl');
         this.debug = this.envService.get('debug');
     }
 
@@ -50,7 +50,7 @@ export class ApiService {
             .catch(this.handleError.bind(this));
     }
 
-    private initializeOptions(options?:any) {
+    protected initializeOptions(options?:any) {
         options = options || {};
         return {
             headers: this.initializeHeaders(options.headers),
@@ -58,7 +58,7 @@ export class ApiService {
         };
     }
 
-    private initializeHeaders(headers?:any) {
+    protected initializeHeaders(headers?:any) {
         this.headers = this.getDefaultHeaders();
         headers = headers || {};
         for (var name in headers) {
@@ -69,7 +69,7 @@ export class ApiService {
         return this.headers;
     }
 
-    private getDefaultHeaders() {
+    protected getDefaultHeaders() {
         let headers = new Headers;
         headers.append('Accept', 'application/json');
         if (this.authUserProviderService.hasAuth()) {
@@ -78,7 +78,7 @@ export class ApiService {
         return headers;
     }
 
-    private initializeSearchParams(searchParams?:any) {
+    protected initializeSearchParams(searchParams?:any) {
         this.searchParams = this.getDefaultSearchParams();
         searchParams = searchParams || {};
         for (var name in searchParams) {
@@ -89,7 +89,7 @@ export class ApiService {
         return this.searchParams;
     }
 
-    private getDefaultSearchParams() {
+    protected getDefaultSearchParams() {
         let searchParams = new URLSearchParams;
         if (this.debug) {
             searchParams.set('XDEBUG_SESSION_START', 'START');
@@ -97,21 +97,21 @@ export class ApiService {
         return searchParams;
     }
 
-    private initializeBody(body?:any) {
+    protected initializeBody(body?:any) {
         this.body = body || {};
         return this.body;
     }
 
-    private getAbsoluteUrl(relativeUrl:string) {
-        return this.apiBaseUrl + relativeUrl;
+    protected getAbsoluteUrl(relativeUrl:string) {
+        return this.apiUrl + relativeUrl;
     }
 
-    private extractData(response:Response) {
+    protected extractData(response:Response) {
         let body = response.json();
         return body.data || {};
     }
 
-    private handleError(error:any) {
+    protected handleError(error:any) {
         this.errorHandler.handle(error);
         return Observable.throw(error.message);
     }

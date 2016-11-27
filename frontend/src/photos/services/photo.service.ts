@@ -3,7 +3,7 @@ import {ApiService} from '../../shared/services/api/api.service';
 
 @Injectable()
 export class PhotoService {
-    constructor(@Inject(ApiService) private apiService:ApiService) {
+    constructor(@Inject(ApiService) protected apiService:ApiService) {
     }
 
     create(attributes:any) {

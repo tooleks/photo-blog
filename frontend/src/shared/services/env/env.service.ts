@@ -3,7 +3,7 @@ import {env} from '../../../../env';
 
 @Injectable()
 export class EnvService {
-    private env:any;
+    protected env:any;
 
     constructor() {
         this.env = env;

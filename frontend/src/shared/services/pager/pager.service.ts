@@ -2,15 +2,15 @@ import {Injectable} from '@angular/core';
 
 @Injectable()
 export class PagerService {
-    private constant = {
+    protected constant = {
         MERGE_TYPE_APPEND: 'append',
         MERGE_TYPE_PREPEND: 'prepend',
     };
 
-    private limit:number = 100;
-    private offset:number = 0;
-    private page:number = 1;
-    private items:Object[] = [];
+    protected limit:number = 100;
+    protected offset:number = 0;
+    protected page:number = 1;
+    protected items:Object[] = [];
 
     appendItems(items:any) {
         return new Promise((resolve, reject) => {
@@ -53,16 +53,16 @@ export class PagerService {
         return this.items;
     }
 
-    private calculatePage() {
+    protected calculatePage() {
         return Math.ceil(this.items.length / this.limit);
     }
 
-    private mergeItems(items:any, mergeType:string) {
+    protected mergeItems(items:any, mergeType:string) {
         if (mergeType === this.constant.MERGE_TYPE_APPEND) this.items = this.items.concat(items);
         if (mergeType === this.constant.MERGE_TYPE_PREPEND) this.items = items.concat(this.items);
     }
 
-    private getItemsCount() {
+    protected getItemsCount() {
         return this.items.length;
     }
 }
