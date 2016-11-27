@@ -6,6 +6,6 @@ import {AuthUserProviderService} from '../../../../shared/services/auth/auth-use
     template: require('./sidebar.component.html'),
 })
 export class SideBarComponent {
-    constructor(@Inject(AuthUserProviderService) private authUserProviderService:AuthUserProviderService) {
+    constructor(@Inject(AuthUserProviderService) protected authUserProviderService:AuthUserProviderService) {
     }
 }

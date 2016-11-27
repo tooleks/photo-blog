@@ -1,5 +1,6 @@
 import {Component, Inject} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
+import {TitleService} from '../../../shared/services/title';
 import {PhotoService} from '../../services/photo.service';
 import {PhotoModel} from '../../models/photo-model';
 import {UploadedPhotoModel} from '../../models/uploaded-photo-model';
@@ -12,26 +13,30 @@ import {NavigatorService, NavigatorServiceProvider} from '../../../shared/servic
     template: require('./photo-form.component.html'),
 })
 export class PhotoFormComponent {
-    private photo:PhotoModel;
-    private lockerService:LockerService;
-    private navigatorService:NavigatorService;
+    protected photo:PhotoModel;
+    protected lockerService:LockerService;
+    protected navigatorService:NavigatorService;
 
-    constructor(@Inject(ActivatedRoute) private route:ActivatedRoute,
-                @Inject(PhotoService) private photoService:PhotoService,
-                @Inject(NotificatorService) private notificatorService:NotificatorService,
-                @Inject(LockerServiceProvider) private lockerServiceProvider:LockerServiceProvider,
-                @Inject(NavigatorServiceProvider) private navigatorServiceProvider:NavigatorServiceProvider) {
+    constructor(@Inject(ActivatedRoute) protected route:ActivatedRoute,
+                @Inject(TitleService) protected titleService:TitleService,
+                @Inject(PhotoService) protected photoService:PhotoService,
+                @Inject(NotificatorService) protected notificatorService:NotificatorService,
+                @Inject(LockerServiceProvider) protected lockerServiceProvider:LockerServiceProvider,
+                @Inject(NavigatorServiceProvider) protected navigatorServiceProvider:NavigatorServiceProvider) {
         this.lockerService = this.lockerServiceProvider.getInstance();
         this.navigatorService = this.navigatorServiceProvider.getInstance();
     }
 
     ngOnInit() {
+        this.titleService.setTitle('Add Photo');
+
         this.photo = new PhotoModel;
 
         this.route.params
             .map((params) => params['id'])
             .subscribe((id:number) => {
                 if (id) {
+                    this.titleService.setTitle('Edit Photo');
                     this.photoService.getById(id).toPromise().then((photo:PhotoModel) => {
                         this.photo = photo;
                     });

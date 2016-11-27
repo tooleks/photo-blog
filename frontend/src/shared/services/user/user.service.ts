@@ -4,7 +4,7 @@ import {UserModel} from '../../models/user-model';
 
 @Injectable()
 export class UserService {
-    constructor(@Inject(ApiService) private apiService:ApiService) {
+    constructor(@Inject(ApiService) protected apiService:ApiService) {
     }
 
     getById(id:number) {

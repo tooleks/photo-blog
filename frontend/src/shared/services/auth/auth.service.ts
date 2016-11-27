@@ -6,8 +6,8 @@ import {UserService} from '../user/user.service';
 
 @Injectable()
 export class AuthService {
-    constructor(@Inject(UserService) private userService:UserService,
-                @Inject(AuthUserProviderService) private authUserProviderService:AuthUserProviderService) {
+    constructor(@Inject(UserService) protected userService:UserService,
+                @Inject(AuthUserProviderService) protected authUserProviderService:AuthUserProviderService) {
     }
 
     signIn(email:string, password:string) {

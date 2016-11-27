@@ -8,7 +8,7 @@ export class FileSelectInputComponent {
     @Input() disabled:boolean;
     @Input() onChangeCallback:any;
 
-    constructor(@Inject(ElementRef) private element:ElementRef) {
+    constructor(@Inject(ElementRef) protected element:ElementRef) {
     }
 
     onChange() {

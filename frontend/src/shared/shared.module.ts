@@ -7,6 +7,7 @@ import {PagerServiceProvider} from './services/pager';
 import {ApiService, ApiErrorHandler} from './services/api';
 import {LockerServiceProvider} from './services/locker';
 import {NavigatorServiceProvider} from './services/navigator';
+import {TitleService} from './services/title';
 import {NotificatorService} from './services/notificator';
 import {EnvService} from './services/env';
 import {AuthService, AuthUserProviderService} from './services/auth';
@@ -34,6 +35,7 @@ import {UserService} from './services/user';
         TagsSelectInputComponent,
     ],
     providers: [
+        TitleService,
         NotificatorService,
         AuthService,
         AuthUserProviderService,

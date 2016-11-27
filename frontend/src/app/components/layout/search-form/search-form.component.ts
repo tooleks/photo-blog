@@ -8,11 +8,11 @@ import 'rxjs/Rx';
     template: require('./search-form.component.html'),
 })
 export class SearchFormComponent {
-    private navigatorService:NavigatorService;
-    private query:string;
+    protected navigatorService:NavigatorService;
+    protected query:string;
 
-    constructor(@Inject(ActivatedRoute) private route:ActivatedRoute,
-                @Inject(NavigatorServiceProvider) private navigatorServiceProvider:NavigatorServiceProvider) {
+    constructor(@Inject(ActivatedRoute) protected route:ActivatedRoute,
+                @Inject(NavigatorServiceProvider) protected navigatorServiceProvider:NavigatorServiceProvider) {
         this.navigatorService = this.navigatorServiceProvider.getInstance();
     }
 

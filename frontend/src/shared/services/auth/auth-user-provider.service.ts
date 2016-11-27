@@ -4,7 +4,7 @@ import {UserModel} from '../../models/user-model';
 
 @Injectable()
 export class AuthUserProviderService {
-    constructor(@Inject(LocalStorageService) private localStorageService:LocalStorageService) {
+    constructor(@Inject(LocalStorageService) protected localStorageService:LocalStorageService) {
     }
 
     setAuth(auth:any) {
