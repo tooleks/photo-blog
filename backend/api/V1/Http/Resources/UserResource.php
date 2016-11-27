@@ -139,7 +139,7 @@ class UserResource implements Resource
         $user->generateApiToken();
         $user->setCustomerRole();
 
-        $user->saveWithRelationsOrFail($attributes);
+        $user->saveOrFail($attributes);
 
         return $this->getById($user->id);
     }
