@@ -85,7 +85,7 @@ export class PhotosBySearchQueryComponent {
     }
 
     loadMore() {
-        return this.load(this.pagerService.getLimit(), this.pagerService.getOffset(), this.queryParams.tag);
+        return this.load(this.pagerService.getLimit(), this.pagerService.getOffset(), this.queryParams.query);
     }
 
     setPageNumber() {
