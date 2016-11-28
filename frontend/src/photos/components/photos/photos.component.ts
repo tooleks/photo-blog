@@ -1,29 +1,32 @@
 import {Component, Inject} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {TitleService} from '../../../shared/services/title';
-import {LockerServiceProvider} from '../../../shared/services/locker';
-import {NavigatorServiceProvider} from '../../../shared/services/navigator';
+import {SyncProcessService, SyncProcessServiceProvider} from '../../../shared/services/sync-process';
+import {NavigatorService, NavigatorServiceProvider} from '../../../shared/services/navigator';
 import {PagerService, PagerServiceProvider} from '../../../shared/services/pager';
 import {PhotoService} from '../../services/photo.service';
 import {PhotoModel} from '../../models/photo-model';
-import {PhotosGrid} from '../photos-grid';
 
 @Component({
     selector: 'photos',
     template: require('./photos.component.html'),
 })
-export class PhotosComponent extends PhotosGrid {
+export class PhotosComponent {
+    protected empty:boolean;
     protected queryParams:any = {};
     protected pagerService:PagerService;
+    protected syncProcessService:SyncProcessService;
+    protected navigatorService:NavigatorService;
 
     constructor(@Inject(ActivatedRoute) protected route:ActivatedRoute,
                 @Inject(TitleService) protected titleService:TitleService,
                 @Inject(PagerServiceProvider) protected pagerServiceProvider:PagerServiceProvider,
-                @Inject(LockerServiceProvider) protected lockerServiceProvider:LockerServiceProvider,
+                @Inject(SyncProcessServiceProvider) protected syncProcessServiceProvider:SyncProcessServiceProvider,
                 @Inject(NavigatorServiceProvider) protected navigatorServiceProvider:NavigatorServiceProvider,
                 @Inject(PhotoService) protected photoService:PhotoService) {
-        super(lockerServiceProvider, navigatorServiceProvider);
+        this.navigatorService = this.navigatorServiceProvider.getInstance();
         this.pagerService = this.pagerServiceProvider.getInstance();
+        this.syncProcessService = this.syncProcessServiceProvider.getInstance();
     }
 
     ngOnInit() {
@@ -31,50 +34,73 @@ export class PhotosComponent extends PhotosGrid {
 
         this.route.queryParams
             .map((queryParams) => queryParams['page'])
-            .subscribe((page:string) => this.pagerService.setPage(Number(page)));
+            .subscribe((page:string) => {
+                this.pagerService.setPage(Number(page));
+            });
 
         this.route.queryParams
             .map((queryParams) => queryParams['show'])
-            .subscribe((show:string) => this.queryParams.show = Number(show));
-
-        this
-            .loadPhotos(
-                this.pagerService.getLimitForPage(this.pagerService.getPage()),
-                this.pagerService.getOffset()
-            )
-            .then((photos:PhotoModel[]) => {
-                this.empty = photos.length === 0;
+            .subscribe((show:string) => {
+                this.queryParams.show = Number(show);
             });
-    }
 
-    loadMorePhotos() {
-        return this.loadPhotos(this.pagerService.getLimit(), this.pagerService.getOffset());
+        this.load(
+            this.pagerService.getLimitForPage(this.pagerService.getPage()),
+            this.pagerService.getOffset()
+        ).then((photos:PhotoModel[]) => {
+            this.empty = photos.length === 0;
+        });
     }
 
     loadPhotos(take:number, skip:number) {
-        if (this.lockerService.isLocked()) {
-            return new Promise((resolve, reject) => reject());
-        } else {
-            this.lockerService.lock();
-        }
-
-        return this.photoService
-            .getAll(take, skip).toPromise()
-            .then((photos:PhotoModel[]) => {
-                return this.pagerService
-                    .appendItems(photos)
-                    .then((photos:PhotoModel[]) => {
-                        this.navigatorService.setQueryParam('page', this.pagerService.getPage());
-                        this.lockerService.unlock();
-                        return photos;
-                    });
-            }).catch((error:any) => {
-                this.lockerService.unlock();
-                return error;
-            });
+        return this.photoService.getAll(take, skip).toPromise().then((photos:PhotoModel[]) => {
+            return this.pagerService.appendItems(photos);
+        });
     }
 
     getPhotos() {
         return this.pagerService.getItems();
+    }
+
+    load(take:number, skip:number) {
+        return this.syncProcessService.startProcess().then(() => {
+            return this.loadPhotos(take, skip);
+        }).then((result:any) => {
+            this.syncProcessService.endProcess();
+            this.setPageNumber();
+            return result;
+        }).catch((error:any) => {
+            this.syncProcessService.endProcess();
+            return error;
+        });
+    }
+
+    loadMore() {
+        return this.load(this.pagerService.getLimit(), this.pagerService.getOffset());
+    }
+
+    setPageNumber() {
+        let page = this.pagerService.getPage();
+        if (page > 1) this.navigatorService.setQueryParam('page', page);
+    }
+
+    isEmpty() {
+        return !this.syncProcessService.isProcessing() && this.empty === true;
+    }
+
+    isLoading() {
+        return this.syncProcessService.isProcessing();
+    }
+
+    onShowPhoto(photo:PhotoModel) {
+        this.navigatorService.setQueryParam('show', photo.id);
+    }
+
+    onHidePhoto() {
+        this.navigatorService.unsetQueryParam('show');
+    }
+
+    navigateToEditPhoto(photo:PhotoModel) {
+        this.navigatorService.navigate(['photo/edit', photo.id]);
     }
 }

@@ -7,10 +7,21 @@ export class PagerService {
         MERGE_TYPE_PREPEND: 'prepend',
     };
 
-    protected limit:number = 100;
-    protected offset:number = 0;
-    protected page:number = 1;
-    protected items:Object[] = [];
+    protected limit:number;
+    protected offset:number;
+    protected page:number;
+    protected items:Object[];
+
+    constructor() {
+        this.reset();
+    }
+
+    reset() {
+        this.limit = 100;
+        this.offset = 0;
+        this.page = 1;
+        this.items = [];
+    }
 
     appendItems(items:any) {
         return new Promise((resolve, reject) => {

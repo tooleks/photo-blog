@@ -6,16 +6,14 @@
         <gallery *ngIf="!isEmpty()"
                  [items]="getPhotos()"
                  [initItemId]="queryParams['show']"
-                 [loadMoreCallback]="loadMorePhotos.bind(this)"
-                 [openViewCallback]="showPhotoCallback.bind(this)"
-                 [closeViewCallback]="hidePhotoCallback.bind(this)"
+                 [loadMoreCallback]="loadMore.bind(this)"
+                 [openViewCallback]="onShowPhoto.bind(this)"
+                 [closeViewCallback]="onHidePhoto.bind(this)"
                  [editItemCallback]="navigateToEditPhoto.bind(this)"></gallery>
     </div>
 </div>
 <div *ngIf="!isEmpty()" class="load-more-container text-center">
-    <button *ngIf="!isLoading()"
-            (click)="loadMorePhotos()"
-            class="btn btn-primary text-uppercase">
+    <button *ngIf="!isLoading()" (click)="loadMore()" class="btn btn-primary text-uppercase">
         {{ 'Load more' }}
     </button>
     <div *ngIf="isLoading()" class="text-uppercase">
