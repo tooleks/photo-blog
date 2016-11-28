@@ -64,9 +64,6 @@ export class PhotoFormComponent {
             this.notificatorService.success('Photo was successfully saved.');
             this.navigatorService.navigate(['/photos']);
             return result;
-        }).catch((error:any) => {
-            this.syncProcessService.endProcess();
-            return error;
         });
     }
 
@@ -88,9 +85,6 @@ export class PhotoFormComponent {
             this.syncProcessService.endProcess();
             this.notificatorService.success('File was successfully uploaded.');
             return result;
-        }).catch((error:any) => {
-            this.syncProcessService.endProcess();
-            return error;
         });
     }
 
@@ -100,7 +94,7 @@ export class PhotoFormComponent {
     }
 
     deletePhoto() {
-        if (!this.photo.id) return Promise.reject({message: 'Invalid photo id.'});
+        if (!this.photo.id) return Promise.reject(new Error('Invalid photo id.'));
 
         return this.syncProcessService.startProcess().then(() => {
             return this.processDeletePhoto();
@@ -109,9 +103,6 @@ export class PhotoFormComponent {
             this.notificatorService.success('Photo was successfully deleted.');
             this.navigatorService.navigate(['/photos']);
             return result;
-        }).catch((error:any) => {
-            this.syncProcessService.endProcess();
-            return error;
         });
     }
 }

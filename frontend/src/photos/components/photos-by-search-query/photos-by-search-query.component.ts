@@ -61,13 +61,13 @@ export class PhotosBySearchQueryComponent {
             });
     }
 
-    loadPhotos(take:number, skip:number, query:string) {
+    protected loadPhotos(take:number, skip:number, query:string) {
         return this.photoService.getBySearchQuery(take, skip, query).toPromise().then((photos:PhotoModel[]) => {
             return this.pagerService.appendItems(photos);
         });
     }
 
-    getPhotos() {
+    protected getPhotos() {
         return this.pagerService.getItems();
     }
 
@@ -78,9 +78,6 @@ export class PhotosBySearchQueryComponent {
             this.syncProcessService.endProcess();
             this.setPageNumber();
             return result;
-        }).catch((error:any) => {
-            this.syncProcessService.endProcess();
-            return error;
         });
     }
 

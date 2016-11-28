@@ -11,11 +11,10 @@ export class SyncProcessService {
 
     startProcess() {
         return new Promise((resolve, reject) => {
-            if (!this.lockerService.isLocked()) {
-                resolve(this.lockerService.lock());
-            } else {
-                reject({message: 'Locked process error.'});
-            }
+            !this.lockerService.isLocked() ? resolve(this.lockerService.lock()) : reject(new Error('Process is locked.'));
+        }).catch((error:any) => {
+            this.lockerService.unlock();
+            throw error;
         });
     }
 

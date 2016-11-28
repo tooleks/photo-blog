@@ -61,27 +61,27 @@ export class PhotosByTagComponent {
             });
     }
 
-     loadPhotos(take:number, skip:number, tag:string) {
+    protected loadPhotos(take:number, skip:number, tag:string) {
         return this.photoService.getByTag(take, skip, tag).toPromise().then((photos:PhotoModel[]) => {
             return this.pagerService.appendItems(photos);
         });
     }
 
-     getPhotos() {
+    protected getPhotos() {
         return this.pagerService.getItems();
     }
 
     load(take:number, skip:number, tag:string) {
-        return this.syncProcessService.startProcess().then(() => {
-            return this.loadPhotos(take, skip, tag);
-        }).then((result:any) => {
-            this.syncProcessService.endProcess();
-            this.setPageNumber();
-            return result;
-        }).catch((error:any) => {
-            this.syncProcessService.endProcess();
-            return error;
-        });
+        return this.syncProcessService
+            .startProcess()
+            .then(() => {
+                return this.loadPhotos(take, skip, tag);
+            })
+            .then((result:any) => {
+                this.syncProcessService.endProcess();
+                this.setPageNumber();
+                return result;
+            });
     }
 
     loadMore() {

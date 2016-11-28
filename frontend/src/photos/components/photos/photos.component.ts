@@ -52,13 +52,13 @@ export class PhotosComponent {
         });
     }
 
-    loadPhotos(take:number, skip:number) {
+    protected loadPhotos(take:number, skip:number) {
         return this.photoService.getAll(take, skip).toPromise().then((photos:PhotoModel[]) => {
             return this.pagerService.appendItems(photos);
         });
     }
 
-    getPhotos() {
+    protected getPhotos() {
         return this.pagerService.getItems();
     }
 
@@ -69,9 +69,6 @@ export class PhotosComponent {
             this.syncProcessService.endProcess();
             this.setPageNumber();
             return result;
-        }).catch((error:any) => {
-            this.syncProcessService.endProcess();
-            return error;
         });
     }
 
