@@ -18,11 +18,15 @@
                             <i class="fa fa-user"></i> {{ authUserProviderService.getUser().name }}
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a [routerLink]="['photo/add']" routerLinkActive="active"><i class="fa fa-plus"></i> Add Photo</a></li>
-                            <li><a [routerLink]="['signout']" routerLinkActive="active"><i class="fa fa-sign-out"></i> Sign Out</a></li>
+                            <li><a [routerLink]="['photo/add']" routerLinkActive="active"><i class="fa fa-plus"></i> Add
+                                Photo</a></li>
+                            <li><a [routerLink]="['signout']" routerLinkActive="active"><i class="fa fa-sign-out"></i>
+                                Sign Out</a></li>
                         </ul>
                     </li>
-                    <li *ngIf="!authUserProviderService.hasAuth()"><a [routerLink]="['signin']" routerLinkActive="active"><i class="fa fa-sign-in"> </i> Sign In</a></li>
+                    <li *ngIf="!authUserProviderService.hasAuth()"><a [routerLink]="['signin']"
+                                                                      routerLinkActive="active"><i
+                            class="fa fa-sign-in"> </i> Sign In</a></li>
                 </ul>
             </nav>
         </div>
@@ -47,7 +51,7 @@
         </div>
         <div class="footer">
             <div>
-                <strong>Copyright</strong> &copy; 2016
+                Copyright &copy; <strong>{{ envService.get('appName') }}</strong> 2016
             </div>
         </div>
     </div>

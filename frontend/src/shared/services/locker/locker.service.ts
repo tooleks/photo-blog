@@ -6,10 +6,12 @@ export class LockerService {
 
     lock() {
         this.locked = true;
+        return this.locked;
     }
 
     unlock() {
         this.locked = false;
+        return this.locked;
     }
 
     isLocked() {

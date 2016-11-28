@@ -6,6 +6,7 @@ import {GalleryComponent} from './components/gallery/gallery.component';
 import {PagerServiceProvider} from './services/pager';
 import {ApiService, ApiErrorHandler} from './services/api';
 import {LockerServiceProvider} from './services/locker';
+import {SyncProcessServiceProvider} from './services/sync-process';
 import {NavigatorServiceProvider} from './services/navigator';
 import {TitleService} from './services/title';
 import {NotificatorService} from './services/notificator';
@@ -43,6 +44,7 @@ import {UserService} from './services/user';
         ApiService,
         ApiErrorHandler,
         LockerServiceProvider,
+        SyncProcessServiceProvider,
         NavigatorServiceProvider,
         PagerServiceProvider,
         EnvService,

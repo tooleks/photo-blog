@@ -5,7 +5,7 @@ import {PhotoService} from '../../services/photo.service';
 import {PhotoModel} from '../../models/photo-model';
 import {UploadedPhotoModel} from '../../models/uploaded-photo-model';
 import {NotificatorService} from '../../../shared/services/notificator/notificator.service';
-import {LockerService, LockerServiceProvider} from '../../../shared/services/locker';
+import {SyncProcessService, SyncProcessServiceProvider} from '../../../shared/services/sync-process';
 import {NavigatorService, NavigatorServiceProvider} from '../../../shared/services/navigator';
 
 @Component({
@@ -14,16 +14,16 @@ import {NavigatorService, NavigatorServiceProvider} from '../../../shared/servic
 })
 export class PhotoFormComponent {
     protected photo:PhotoModel;
-    protected lockerService:LockerService;
+    protected syncProcessService:SyncProcessService;
     protected navigatorService:NavigatorService;
 
     constructor(@Inject(ActivatedRoute) protected route:ActivatedRoute,
                 @Inject(TitleService) protected titleService:TitleService,
                 @Inject(PhotoService) protected photoService:PhotoService,
                 @Inject(NotificatorService) protected notificatorService:NotificatorService,
-                @Inject(LockerServiceProvider) protected lockerServiceProvider:LockerServiceProvider,
+                @Inject(SyncProcessServiceProvider) protected syncProcessServiceProvider:SyncProcessServiceProvider,
                 @Inject(NavigatorServiceProvider) protected navigatorServiceProvider:NavigatorServiceProvider) {
-        this.lockerService = this.lockerServiceProvider.getInstance();
+        this.syncProcessService = this.syncProcessServiceProvider.getInstance();
         this.navigatorService = this.navigatorServiceProvider.getInstance();
     }
 
@@ -35,61 +35,74 @@ export class PhotoFormComponent {
         this.route.params
             .map((params) => params['id'])
             .subscribe((id:number) => {
-                if (id) {
-                    this.titleService.setTitle('Edit Photo');
-                    this.photoService.getById(id).toPromise().then((photo:PhotoModel) => {
-                        this.photo = photo;
-                    });
-                }
+                if (!id) return;
+
+                this.titleService.setTitle('Edit Photo');
+
+                this.photoService.getById(id).toPromise().then((photo:PhotoModel) => {
+                    this.photo.setAttributes(photo);
+                });
             });
     }
 
-    savePhoto() {
-        if (this.lockerService.isLocked()) return new Promise((resolve, reject) => reject());
-        else this.lockerService.lock();
-        let saver = this.photo.id ? this.photoService.updateById(this.photo.id, this.photo) : this.photoService.create(this.photo);
+    protected processSavePhoto() {
+        let saver = this.photo.id
+            ? this.photoService.updateById(this.photo.id, this.photo)
+            : this.photoService.create(this.photo);
+
         return saver.toPromise().then((photo:PhotoModel) => {
-            this.lockerService.unlock();
-            this.photo = photo;
-            this.notificatorService.success('Record was successfully saved.');
-            this.navigatorService.navigate(['/photos']);
+            this.photo.setAttributes(photo);
             return photo;
-        }).catch((error:any) => {
-            this.lockerService.unlock();
-            return error;
         });
     }
 
-    uploadPhoto(file:FileList) {
-        if (this.lockerService.isLocked()) return new Promise((resolve, reject) => reject());
-        else this.lockerService.lock();
-        let uploader = this.photo.id ? this.photoService.uploadById(this.photo.id, file) : this.photoService.upload(file);
-        return uploader.toPromise().then((uploadedPhoto:UploadedPhotoModel) => {
-            this.lockerService.unlock();
-            this.photo.uploaded_photo_id = uploadedPhoto.id;
-            this.photo.absolute_url = uploadedPhoto.absolute_url;
-            this.photo.thumbnails = uploadedPhoto.thumbnails;
-            this.notificatorService.success('File was successfully uploaded.');
-            return uploadedPhoto;
-        }).catch((error:any) => {
-            this.lockerService.unlock();
-            return error;
+    save() {
+        return this.syncProcessService.startProcess().then(() => {
+            return this.processSavePhoto();
+        }).then((result:any) => {
+            this.syncProcessService.endProcess();
+            this.notificatorService.success('Photo was successfully saved.');
+            this.navigatorService.navigate(['/photos']);
+            return result;
         });
+    }
+
+    protected processUploadPhoto(file:FileList) {
+        let uploader = this.photo.id
+            ? this.photoService.uploadById(this.photo.id, file)
+            : this.photoService.upload(file);
+
+        return uploader.toPromise().then((uploadedPhoto:UploadedPhotoModel) => {
+            this.photo.setUploadedAttributes(uploadedPhoto);
+            return uploadedPhoto;
+        });
+    }
+
+    upload(file:FileList) {
+        return this.syncProcessService.startProcess().then(() => {
+            return this.processUploadPhoto(file);
+        }).then((result:any) => {
+            this.syncProcessService.endProcess();
+            this.notificatorService.success('File was successfully uploaded.');
+            return result;
+        });
+    }
+
+    protected processDeletePhoto() {
+        let deleter = this.photoService.deleteById(this.photo.id);
+        return deleter.toPromise();
     }
 
     deletePhoto() {
-        if (this.photo.id) {
-            if (this.lockerService.isLocked()) return new Promise((resolve, reject) => reject());
-            else this.lockerService.lock();
-            return this.photoService.deleteById(this.photo.id).toPromise().then((result:any) => {
-                this.navigatorService.navigate(['/photos']);
-                return result;
-            }).catch((error:any) => {
-                this.lockerService.unlock();
-                return error;
-            });
-        } else {
-            return new Promise((resolve, reject) => reject());
-        }
+        if (!this.photo.id) return Promise.reject(new Error('Invalid photo id.'));
+
+        return this.syncProcessService.startProcess().then(() => {
+            return this.processDeletePhoto();
+        }).then((result:any) => {
+            this.syncProcessService.endProcess();
+            this.notificatorService.success('Photo was successfully deleted.');
+            this.navigatorService.navigate(['/photos']);
+            return result;
+        });
     }
 }

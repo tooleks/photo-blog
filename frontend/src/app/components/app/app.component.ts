@@ -17,6 +17,6 @@ export class AppComponent {
     }
 
     ngOnInit() {
-        this.titleService.setTitle('');
+        this.titleService.setTitle(this.envService.get('appName'));
     }
 }

@@ -79,7 +79,6 @@ export class GalleryComponent {
                 this.loadMoreCallback().then((items:any) => {
                     this.items = items;
                     this.viewNextItem(false);
-                }).catch((error:any) => {
                 });
             }
         }
