@@ -42,13 +42,13 @@ abstract class ResourceController extends Controller
     }
 
     /**
-     * Get resources list.
+     * Get resources.
      *
      * @return mixed
      */
     public function getList()
     {
-        return $this->resource->getList(
+        return $this->resource->get(
             $this->request->query->get('take', 10),
             $this->request->query->get('skip', 0),
             $this->request->all()

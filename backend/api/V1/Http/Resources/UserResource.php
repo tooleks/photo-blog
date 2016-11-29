@@ -118,7 +118,7 @@ class UserResource implements Resource
     /**
      * @inheritdoc
      */
-    public function getList($take, $skip, array $parameters)
+    public function get($take, $skip, array $parameters)
     {
         throw new Exception('Method not implemented.');
     }
