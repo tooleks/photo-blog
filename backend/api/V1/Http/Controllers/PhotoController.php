@@ -107,7 +107,7 @@ class PhotoController extends ResourceController
      * @apiName Get Collection
      * @apiGroup Photo
      * @apiHeader {String} Accept application/json
-     * @apiParam {Integer{1..N}} take
+     * @apiParam {Integer{1..100}} take
      * @apiParam {Integer{0..N}} skip
      * @apiSuccessExample {json} Success-Response:
      *  {
