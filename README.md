@@ -23,6 +23,12 @@ php artisan config:app
 php artisan create:administrator_user
 ```
 
+Add the following line to your crontab to setup scheduler:
+
+```
+* * * * * php /path/to/artisan schedule:run >> /dev/null 2>&1
+```
+
 #### REST API Documentation
 
 Run the following commands (within the `./backend` directory) to install development dependencies:
