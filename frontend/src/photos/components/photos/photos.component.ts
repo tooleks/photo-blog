@@ -69,7 +69,7 @@ export class PhotosComponent {
             this.syncProcessService.endProcess();
             this.setPageNumber();
             return result;
-        });
+        }).catch(this.syncProcessService.handleErrors.bind(this.syncProcessService));
     }
 
     loadMore() {
