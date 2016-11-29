@@ -78,7 +78,7 @@ Route::group(['prefix' => 'photo'], function () {
     ]);
 
     Route::get('/', [
-        'uses' => 'PhotoController@getList',
+        'uses' => 'PhotoController@getCollection',
     ]);
 
     Route::get('/{photo}', [

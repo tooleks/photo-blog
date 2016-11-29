@@ -34,7 +34,7 @@ class PhotoController extends ResourceController
      * @apiHeader {String} Content-type application/json
      * @apiParam {Integer{1..N}} uploaded_photo_id Unique resource ID.
      * @apiParam {Integer{1..65535}} description Description.
-     * @apiParam {Object[]} tags Tags list.
+     * @apiParam {Object[]} tags Tags collection.
      * @apiParam {String{1..255}} tags.text Tag text.
      * @apiSuccessExample {json} Success-Response:
      *  {
@@ -103,8 +103,8 @@ class PhotoController extends ResourceController
 
     /**
      * @apiVersion 1.0.0
-     * @api {get} /v1/photo Get List
-     * @apiName Get List
+     * @api {get} /v1/photo Get Collection
+     * @apiName Get Collection
      * @apiGroup Photo
      * @apiHeader {String} Accept application/json
      * @apiParam {Integer{1..N}} take
@@ -149,7 +149,7 @@ class PhotoController extends ResourceController
      * @apiHeader {String} Content-type application/json
      * @apiParam {Integer{1..N}} :id Unique resource ID.
      * @apiParam {Integer{1..65535}} description Description.
-     * @apiParam {Object[]} tags Tags list.
+     * @apiParam {Object[]} tags Tags collection.
      * @apiParam {String{1..255}} tags.text Tag text.
      * @apiSuccessExample {json} Success-Response:
      *  {

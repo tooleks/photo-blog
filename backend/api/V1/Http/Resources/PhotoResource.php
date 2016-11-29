@@ -24,7 +24,7 @@ class PhotoResource implements Resource
 
     const VALIDATION_CREATE = 'create';
     const VALIDATION_UPDATE = 'update';
-    const VALIDATION_GET_LIST = 'get-list';
+    const VALIDATION_GET_COLLECTION = 'get.collection';
 
     /**
      * PhotoResource constructor.
@@ -92,12 +92,13 @@ class PhotoResource implements Resource
                     'max:255',
                 ],
             ],
-            static::VALIDATION_GET_LIST => [
+            static::VALIDATION_GET_COLLECTION => [
                 'take' => [
                     'required',
                     'filled',
                     'integer',
                     'min:1',
+                    'max:100',
                 ],
                 'skip' => [
                     'required',
@@ -143,16 +144,16 @@ class PhotoResource implements Resource
     }
 
     /**
-     * Get resources by parameters.
+     * Get resources collection by parameters.
      *
      * @param int $take
      * @param int $skip
      * @param array $parameters
      * @return PhotoCollectionPresenter
      */
-    public function get($take, $skip, array $parameters) : PhotoCollectionPresenter
+    public function getCollection($take, $skip, array $parameters) : PhotoCollectionPresenter
     {
-        $parameters = $this->validate(['take' => $take, 'skip' => $skip] + $parameters, static::VALIDATION_GET_LIST);
+        $parameters = $this->validate(['take' => $take, 'skip' => $skip] + $parameters, static::VALIDATION_GET_COLLECTION);
 
         $this->photoModel = $this->photoModel
             ->distinct()
