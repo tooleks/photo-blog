@@ -64,7 +64,7 @@ export class PhotoFormComponent {
             this.notificatorService.success('Photo was successfully saved.');
             this.navigatorService.navigate(['/photos']);
             return result;
-        });
+        }).catch(this.syncProcessService.handleErrors.bind(this.syncProcessService));
     }
 
     protected processUploadPhoto(file:FileList) {
@@ -85,7 +85,7 @@ export class PhotoFormComponent {
             this.syncProcessService.endProcess();
             this.notificatorService.success('File was successfully uploaded.');
             return result;
-        });
+        }).catch(this.syncProcessService.handleErrors.bind(this.syncProcessService));
     }
 
     protected processDeletePhoto() {
@@ -103,6 +103,6 @@ export class PhotoFormComponent {
             this.notificatorService.success('Photo was successfully deleted.');
             this.navigatorService.navigate(['/photos']);
             return result;
-        });
+        }).catch(this.syncProcessService.handleErrors.bind(this.syncProcessService));
     }
 }

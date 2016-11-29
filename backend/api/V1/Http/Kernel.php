@@ -25,9 +25,9 @@ class Kernel extends HttpKernel
      */
     protected $middlewareGroups = [
         'api.v1' => [
+            'json_api',
             'throttle:60,1',
             'bindings',
-            'json',
         ],
     ];
 
@@ -43,7 +43,7 @@ class Kernel extends HttpKernel
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
-        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'json' => \Api\V1\Http\Middleware\ConvertToJson::class,
+        'throttle' => \Api\V1\Http\Middleware\ThrottleRequests::class,
+        'json_api' => \Api\V1\Http\Middleware\JsonApi::class,
     ];
 }

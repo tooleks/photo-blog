@@ -4,14 +4,14 @@ namespace Api\V1\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
- * Class ConvertToJson
+ * Class JsonApi
  * @package Api\V1\Http\Middleware
  */
-class ConvertToJson
+class JsonApi
 {
     /**
      * Handle an incoming request.
@@ -23,37 +23,59 @@ class ConvertToJson
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        $this->handleRequest($request);
+        $request = $this->handleRequest($request);
 
         $response = $next($request);
 
-        $this->handleResponse($response);
-
-        return $response;
+        return $this->buildResponse($response);
     }
 
     /**
+     * Handle incoming request.
+     *
      * @param Request $request
+     * @return Request
+     * @throws BadRequestHttpException
      */
-    protected function handleRequest(&$request)
+    protected function handleRequest(Request $request)
     {
         if (!$request->wantsJson()) {
             throw new BadRequestHttpException(trans('errors.http.400'));
         }
+
+        return $request;
     }
 
     /**
+     * Create a JSON API response.
+     *
      * @param Response $response
+     * @return Response
      */
-    protected function handleResponse(&$response)
+    protected function buildResponse(Response $response)
     {
-        $response->header('Content-Type', 'application/json');
-
         if ($response->getStatusCode() === 200) {
             $response = response()->json([
                 'status' => true,
                 'data' => $response->getOriginalContent(),
             ], $response->getStatusCode(), $response->headers->all());
         }
+
+        return $this->addHeaders($response);
+    }
+
+    /**
+     * Add the JSON API header information to the given response.
+     *
+     * @param Response $response
+     * @return Response
+     */
+    protected function addHeaders(Response $response)
+    {
+        $headers = ['Content-Type' => 'application/json'];
+
+        $response->headers->add($headers);
+
+        return $response;
     }
 }

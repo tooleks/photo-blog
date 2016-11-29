@@ -72,16 +72,13 @@ export class PhotosByTagComponent {
     }
 
     load(take:number, skip:number, tag:string) {
-        return this.syncProcessService
-            .startProcess()
-            .then(() => {
-                return this.loadPhotos(take, skip, tag);
-            })
-            .then((result:any) => {
-                this.syncProcessService.endProcess();
-                this.setPageNumber();
-                return result;
-            });
+        return this.syncProcessService.startProcess().then(() => {
+            return this.loadPhotos(take, skip, tag);
+        }).then((result:any) => {
+            this.syncProcessService.endProcess();
+            this.setPageNumber();
+            return result;
+        }).catch(this.syncProcessService.handleErrors.bind(this.syncProcessService));
     }
 
     loadMore() {

@@ -4,7 +4,7 @@ namespace Api\V1\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class AllowCorsRequests
@@ -26,10 +26,24 @@ class AllowCorsRequests
 
         $response = $next($request);
 
-        $response
-            ->header('Access-Control-Allow-Origin', '*')
-            ->header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT, DELETE')
-            ->header('Access-Control-Allow-Headers', 'Content-Type, Accept, Authorization, X-Requested-With');
+        return $this->addHeaders($response);
+    }
+
+    /**
+     * Add the CORS header information to the given response.
+     *
+     * @param Response $response
+     * @return Response
+     */
+    protected function addHeaders(Response $response)
+    {
+        $headers = [
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Methods' => 'POST, GET, OPTIONS, PUT, DELETE',
+            'Access-Control-Allow-Headers' => 'Content-Type, Accept, Authorization, X-Requested-With',
+        ];
+
+        $response->headers->add($headers);
 
         return $response;
     }
