@@ -27,7 +27,7 @@ class Kernel extends HttpKernel
         'api.v1' => [
             'throttle:60,1',
             'bindings',
-            'json',
+            'json_api',
         ],
     ];
 
@@ -44,6 +44,6 @@ class Kernel extends HttpKernel
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'json' => \Api\V1\Http\Middleware\ConvertToJson::class,
+        'json_api' => \Api\V1\Http\Middleware\JsonApi::class,
     ];
 }

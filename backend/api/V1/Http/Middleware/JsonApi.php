@@ -8,10 +8,10 @@ use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
- * Class ConvertToJson
+ * Class JsonApi
  * @package Api\V1\Http\Middleware
  */
-class ConvertToJson
+class JsonApi
 {
     /**
      * Handle an incoming request.
