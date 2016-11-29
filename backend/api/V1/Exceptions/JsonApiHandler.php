@@ -14,10 +14,10 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Debug\Exception\FlattenException;
 
 /**
- * Class Handler
- * @package App\Exceptions
+ * Class JsonApiHandler
+ * @package Api\V1\Exceptions
  */
-class Handler extends ExceptionHandler
+class JsonApiHandler extends ExceptionHandler
 {
     /**
      * @inheritdoc
@@ -51,7 +51,7 @@ class Handler extends ExceptionHandler
         } elseif ($e instanceof AuthorizationException) {
             $e = new HttpException(403, $e->getMessage());
         } elseif ($e instanceof HttpException) {
-            $e = new HttpException($e->getStatusCode(), trans("errors.http.{$e->getStatusCode()}"));
+            $e = new HttpException($e->getStatusCode(), trans("errors.http.{$e->getStatusCode()}"), null, $e->getHeaders());
         }
 
         return $e;
