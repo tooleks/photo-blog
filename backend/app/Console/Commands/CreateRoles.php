@@ -24,7 +24,7 @@ class CreateRoles extends Command
      *
      * @var string
      */
-    protected $description = 'Create roles.';
+    protected $description = 'Create roles';
 
     /**
      * Create a new command instance.

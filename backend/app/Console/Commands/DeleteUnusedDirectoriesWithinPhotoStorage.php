@@ -27,7 +27,7 @@ class DeleteUnusedDirectoriesWithinPhotoStorage extends Command
      *
      * @var string
      */
-    protected $description = 'Delete unused directories within photo storage.';
+    protected $description = 'Delete unused directories within photo storage';
 
     /**
      * Create a new command instance.
