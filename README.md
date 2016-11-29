@@ -16,10 +16,11 @@ Run the following command (within the `./backend` directory) to install applicat
 composer install
 ```
 
-Run the following command to configure application:
+Run the following commands to configure application:
 
 ```
 php artisan config:app
+php artisan create:administrator_user
 ```
 
 #### REST API Documentation
