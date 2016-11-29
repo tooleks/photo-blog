@@ -23,7 +23,7 @@ php artisan config:app
 php artisan create:administrator_user
 ```
 
-Add the following line to your crontab to setup scheduler:
+Add the following line to your crontab to setup scheduler (change `/home/tooleks/Web/photo-blog/README.md` to real path):
 
 ```
 * * * * * php /path/to/artisan schedule:run >> /dev/null 2>&1
