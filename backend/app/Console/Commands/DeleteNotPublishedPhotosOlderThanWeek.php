@@ -27,7 +27,7 @@ class DeleteNotPublishedPhotosOlderThanWeek extends Command
      *
      * @var string
      */
-    protected $description = 'Delete not published photos older than week.';
+    protected $description = 'Delete not published photos older than week';
 
     /**
      * Create a new command instance.

@@ -10,9 +10,3 @@
 | simple approach to interacting with each command's IO methods.
 |
 */
-
-Artisan::command('config:app', function () {
-    $this->call('storage:link');
-    $this->call('migrate');
-    $this->call('create:roles');
-});
