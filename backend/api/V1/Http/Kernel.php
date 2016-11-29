@@ -14,6 +14,7 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middleware = [
+        \Api\V1\Http\Middleware\AllowCorsRequests::class,
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
     ];
 
@@ -24,7 +25,6 @@ class Kernel extends HttpKernel
      */
     protected $middlewareGroups = [
         'api.v1' => [
-            'allow_cors',
             'json_api',
             'throttle:60,1',
             'bindings',
@@ -44,7 +44,6 @@ class Kernel extends HttpKernel
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'throttle' => \Api\V1\Http\Middleware\ThrottleRequests::class,
-        'allow_cors' => \Api\V1\Http\Middleware\AllowCorsRequests::class,
         'json_api' => \Api\V1\Http\Middleware\JsonApi::class,
     ];
 }
