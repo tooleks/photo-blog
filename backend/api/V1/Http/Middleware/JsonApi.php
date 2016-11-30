@@ -23,27 +23,13 @@ class JsonApi
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        $request = $this->handleRequest($request);
-
-        $response = $next($request);
-
-        return $this->buildResponse($response);
-    }
-
-    /**
-     * Handle incoming request.
-     *
-     * @param Request $request
-     * @return Request
-     * @throws BadRequestHttpException
-     */
-    protected function handleRequest(Request $request)
-    {
         if (!$request->wantsJson()) {
             throw new BadRequestHttpException(trans('errors.http.400'));
         }
 
-        return $request;
+        $response = $next($request);
+
+        return $this->buildResponse($response);
     }
 
     /**
@@ -72,9 +58,7 @@ class JsonApi
      */
     protected function addHeaders(Response $response)
     {
-        $headers = ['Content-Type' => 'application/json'];
-
-        $response->headers->add($headers);
+        $response->headers->add(['Content-Type' => 'application/json']);
 
         return $response;
     }

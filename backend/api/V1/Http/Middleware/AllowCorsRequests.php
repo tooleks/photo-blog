@@ -37,13 +37,11 @@ class AllowCorsRequests
      */
     protected function addHeaders(Response $response)
     {
-        $headers = [
+        $response->headers->add([
             'Access-Control-Allow-Origin' => '*',
             'Access-Control-Allow-Methods' => 'POST, GET, OPTIONS, PUT, DELETE',
             'Access-Control-Allow-Headers' => 'Content-Type, Accept, Authorization, X-Requested-With',
-        ];
-
-        $response->headers->add($headers);
+        ]);
 
         return $response;
     }
