@@ -13,6 +13,9 @@ use Throwable;
 
 /**
  * Class UploadedPhoto
+ *
+ * The class provides CRUD for photos that are uploaded.
+ *
  * @property ConnectionInterface connection
  * @property Photo $photoModel
  * @package Api\V1\Http\Resources
