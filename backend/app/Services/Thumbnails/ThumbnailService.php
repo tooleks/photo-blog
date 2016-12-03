@@ -5,7 +5,8 @@ namespace App\Services\Thumbnails;
 use App\Services\Thumbnails\Contracts\ThumbnailServiceContract;
 use App\Services\Thumbnails\Exceptions\ThumbnailException;
 use Illuminate\Contracts\Filesystem\Filesystem;
-use Gregwar\Image\Image;
+use Imagine\Image\Box;
+use Imagine\Imagick\Imagine;
 
 /**
  * Class ThumbnailService.
@@ -14,7 +15,8 @@ use Gregwar\Image\Image;
  */
 class ThumbnailService implements ThumbnailServiceContract
 {
-    const TYPE_ZOOM_CROP = 'zoomCrop';
+    const THUMBNAIL_INSET = 'inset';
+    const THUMBNAIL_OUTBOUND = 'outbound';
 
     /**
      * ThumbnailService constructor.
@@ -33,7 +35,7 @@ class ThumbnailService implements ThumbnailServiceContract
         string $originalFilePath,
         string $width = '100',
         string $height = '100',
-        string $type = self::TYPE_ZOOM_CROP
+        string $type = self::THUMBNAIL_INSET
     ): string
     {
         if (!$this->fs->exists($originalFilePath)) {
@@ -41,7 +43,13 @@ class ThumbnailService implements ThumbnailServiceContract
         }
 
         $thumbnailFilePath = $this->generateThumbnailFilePath($originalFilePath, $width, $height);
-        $thumbnailContent = $this->generateThumbnailFileContent($this->fs->get($originalFilePath), $width, $height, $type);
+        $thumbnailContent = $this->generateThumbnailFileContent(
+            $this->fs->get($originalFilePath),
+            pathinfo($originalFilePath, PATHINFO_EXTENSION),
+            $width,
+            $height,
+            $type
+        );
 
         if (!$this->fs->put($thumbnailFilePath, $thumbnailContent)) {
             throw new ThumbnailException('Thumbnail file saving error.');
@@ -55,12 +63,16 @@ class ThumbnailService implements ThumbnailServiceContract
      */
     public function generateThumbnailFileContent(
         string $originalContent,
+        string $format,
         string $width = '100',
         string $height = '100',
-        string $type = self::TYPE_ZOOM_CROP
+        string $type = self::THUMBNAIL_INSET
     ) : string
     {
-        return Image::fromData($originalContent)->$type($width, $height)->get();
+        return (new Imagine)
+            ->load($originalContent)
+            ->thumbnail(new Box($width, $height), $type)
+            ->get($format);
     }
 
     /**

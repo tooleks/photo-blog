@@ -19,7 +19,14 @@ return [
     'photo' => [
         'thumbnails' => [
             [
-                'type' => 'zoomCrop',
+                'type' => 'inset',
+                'size' => [
+                    'width' => 1500,
+                    'height' => 1500,
+                ],
+            ],
+            [
+                'type' => 'outbound',
                 'size' => [
                     'width' => 500,
                     'height' => 500,
