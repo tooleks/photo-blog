@@ -13,6 +13,9 @@ use Mockery\CountValidator\Exception;
 
 /**
  * Class Token
+ *
+ * The class provides CRUD for user tokens.
+ *
  * @property User userModel
  * @property Guard guard
  * @property Hasher hasher

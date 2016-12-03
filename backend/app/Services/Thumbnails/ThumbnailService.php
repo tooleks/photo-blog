@@ -5,7 +5,8 @@ namespace App\Services\Thumbnails;
 use App\Services\Thumbnails\Contracts\ThumbnailServiceContract;
 use App\Services\Thumbnails\Exceptions\ThumbnailException;
 use Illuminate\Contracts\Filesystem\Filesystem;
-use Gregwar\Image\Image;
+use Imagine\Image\Box;
+use Imagine\Imagick\Imagine;
 
 /**
  * Class ThumbnailService.
@@ -14,6 +15,9 @@ use Gregwar\Image\Image;
  */
 class ThumbnailService implements ThumbnailServiceContract
 {
+    const THUMBNAIL_INSET = 'inset';
+    const THUMBNAIL_OUTBOUND = 'outbound';
+
     /**
      * ThumbnailService constructor.
      *
@@ -27,14 +31,25 @@ class ThumbnailService implements ThumbnailServiceContract
     /**
      * @inheritdoc
      */
-    public function createThumbnailFile(string $originalFilePath, string $width = '100', string $height = '100'): string
+    public function createThumbnailFile(
+        string $originalFilePath,
+        string $width = '100',
+        string $height = '100',
+        string $type = self::THUMBNAIL_INSET
+    ): string
     {
         if (!$this->fs->exists($originalFilePath)) {
             throw new ThumbnailException('Original file does not exist.');
         }
 
         $thumbnailFilePath = $this->generateThumbnailFilePath($originalFilePath, $width, $height);
-        $thumbnailContent = $this->generateThumbnailFileContent($this->fs->get($originalFilePath), $width, $height);
+        $thumbnailContent = $this->generateThumbnailFileContent(
+            $this->fs->get($originalFilePath),
+            pathinfo($originalFilePath, PATHINFO_EXTENSION),
+            $width,
+            $height,
+            $type
+        );
 
         if (!$this->fs->put($thumbnailFilePath, $thumbnailContent)) {
             throw new ThumbnailException('Thumbnail file saving error.');
@@ -44,18 +59,20 @@ class ThumbnailService implements ThumbnailServiceContract
     }
 
     /**
-     * Generate thumbnail file content.
-     *
-     * @param string $originalContent
-     * @param string $width
-     * @param string $height
-     * @return string
+     * @inheritdoc
      */
-    public function generateThumbnailFileContent(string $originalContent, string $width = '100', string $height = '100') : string
+    public function generateThumbnailFileContent(
+        string $originalContent,
+        string $format,
+        string $width = '100',
+        string $height = '100',
+        string $type = self::THUMBNAIL_INSET
+    ) : string
     {
-        return Image::fromData($originalContent)
-            ->zoomCrop($width, $height)
-            ->get();
+        return (new Imagine)
+            ->load($originalContent)
+            ->thumbnail(new Box($width, $height), $type)
+            ->get($format);
     }
 
     /**
@@ -68,13 +85,10 @@ class ThumbnailService implements ThumbnailServiceContract
      */
     private function generateThumbnailFilePath(string $originalFilePath, string $width = '100', string $height = '100')
     {
-        return sprintf(
-            '%s/%s_%sx%s.%s',
+        return sprintf('%s/%s_%sx%s.%s',
             pathinfo($originalFilePath, PATHINFO_DIRNAME),
             pathinfo($originalFilePath, PATHINFO_FILENAME),
-            $width,
-            $height,
-            pathinfo($originalFilePath, PATHINFO_EXTENSION)
-        );
+            $width, $height,
+            pathinfo($originalFilePath, PATHINFO_EXTENSION));
     }
 }

@@ -13,6 +13,9 @@ use Throwable;
 
 /**
  * Class PhotoResource
+ *
+ * The class provides CRUD for photos that are uploaded and published.
+ *
  * @property ConnectionInterface connection
  * @property Photo $photoModel
  * @property UploadedPhotoResource uploadedPhotoResource

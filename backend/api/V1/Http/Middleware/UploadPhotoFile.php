@@ -71,9 +71,9 @@ class UploadPhotoFile
 
         $attributes = ['path' => $photoPath, 'relative_url' => $this->fs->url($photoPath)];
 
-        foreach (config('main.photo.thumbnail.sizes') as $size) {
-            $thumbnailPath = $this->thumbnailService->createThumbnailFile($photoPath, $size['width'], $size['height']);
-            $attributes['thumbnails'][] = $size + ['path' => $thumbnailPath, 'relative_url' => $this->fs->url($thumbnailPath)];
+        foreach (config('main.photo.thumbnails') as $thumbnail) {
+            $thumbnailPath = $this->thumbnailService->createThumbnailFile($photoPath, $thumbnail['size']['width'], $thumbnail['size']['height'], $thumbnail['type']);
+            $attributes['thumbnails'][] = $thumbnail['size'] + ['path' => $thumbnailPath, 'relative_url' => $this->fs->url($thumbnailPath)];
         }
 
         $request->merge($attributes);

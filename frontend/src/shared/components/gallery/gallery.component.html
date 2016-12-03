@@ -1,5 +1,5 @@
 <a class="gl-image-thumb-container" *ngFor="let item of items" (click)="viewItem(item)">
-    <span class="gl-image-thumb" [style.background-image]="'url(' + item.thumbnails[0].absolute_url + ')'"></span>
+    <span class="gl-image-thumb" [style.background-image]="'url(' + item.thumbnails[1].absolute_url + ')'"></span>
 </a>
 <div *ngIf="activeItem">
     <div class="gl-backdrop"></div>
@@ -7,7 +7,7 @@
         <div class="gl-view">
             <div class="gl-img-container">
                 <img class="gl-img"
-                     [src]="activeItem.absolute_url"
+                     [src]="activeItem.thumbnails[0].absolute_url"
                      [alt]="activeItem.description"
                      [title]="activeItem.description"
                      (click)="viewNextItem(true)">

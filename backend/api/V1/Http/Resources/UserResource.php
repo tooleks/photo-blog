@@ -13,6 +13,9 @@ use Exception;
 
 /**
  * Class UserResource
+ *
+ * The class provides CRUD for users.
+ *
  * @property User userModel
  * @property Hasher hasher
  * @package Api\V1\Http\Resources
