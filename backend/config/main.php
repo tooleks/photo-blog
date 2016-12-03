@@ -17,9 +17,10 @@ return [
     ],
 
     'photo' => [
-        'thumbnail' => [
-            'sizes' => [
-                [
+        'thumbnails' => [
+            [
+                'type' => 'zoomCrop',
+                'size' => [
                     'width' => 500,
                     'height' => 500,
                 ],

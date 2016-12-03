@@ -16,9 +16,10 @@ interface ThumbnailServiceContract
      * @param string $originalFilePath
      * @param string $width
      * @param string $height
+     * @param string $type
      * @return string
      */
-    public function createThumbnailFile(string $originalFilePath, string $width, string $height): string;
+    public function createThumbnailFile(string $originalFilePath, string $width, string $height, string $type): string;
 
     /**
      * Generate thumbnail file content.
@@ -26,7 +27,8 @@ interface ThumbnailServiceContract
      * @param string $originalContent
      * @param string $width
      * @param string $height
+     * @param string $type
      * @return string
      */
-    public function generateThumbnailFileContent(string $originalContent, string $width, string $height) : string;
+    public function generateThumbnailFileContent(string $originalContent, string $width, string $height, string $type) : string;
 }
