@@ -57,3 +57,9 @@ npm install
 ```
 
 Create the `./frontend/env.ts` file from the example `./frontend/env.ts.example`. Setup API connection credentials.
+
+Run the following command (within the `./frontend` directory) to start dev server:
+
+```
+npm start
+```
