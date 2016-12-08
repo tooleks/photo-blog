@@ -2,7 +2,7 @@
 
 namespace Api\V1\Models\Presenters;
 
-use App\Core\Presenter\CollectionPresenter;
+use Tooleks\Laravel\Presenter\CollectionPresenter;
 
 /**
  * Class TagCollectionPresenter
@@ -13,5 +13,8 @@ class TagCollectionPresenter extends CollectionPresenter
     /**
      * @inheritdoc
      */
-    protected $entityPresenterClassName = TagPresenter::class;
+    protected function getModelPresenterClass() : string
+    {
+        return TagPresenter::class;
+    }
 }

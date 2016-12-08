@@ -192,7 +192,7 @@ class PhotoResource implements Resource
 
         $attributes = $this->validate($attributes, static::VALIDATION_CREATE);
 
-        $photo = $this->uploadedPhotoResource->getById($attributes['uploaded_photo_id'])->getOriginalEntity();
+        $photo = $this->uploadedPhotoResource->getById($attributes['uploaded_photo_id'])->getOriginalModel();
 
         $photo->is_published = true;
         $photo->fill($attributes);
@@ -226,7 +226,7 @@ class PhotoResource implements Resource
 
         $attributes = $this->validate($attributes, static::VALIDATION_UPDATE);
 
-        $photo = $photoPresenter->getOriginalEntity();
+        $photo = $photoPresenter->getOriginalModel();
 
         $photo->fill($attributes);
 
@@ -256,7 +256,7 @@ class PhotoResource implements Resource
     {
         /** @var Photo $photo */
 
-        $photo = $photoPresenter->getOriginalEntity();
+        $photo = $photoPresenter->getOriginalModel();
 
         $result = $photo->delete();
 

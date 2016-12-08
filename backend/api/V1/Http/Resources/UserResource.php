@@ -162,7 +162,7 @@ class UserResource implements Resource
 
         $attributes = $this->validate($attributes, static::VALIDATION_UPDATE);
 
-        $user = $userPresenter->getOriginalEntity();
+        $user = $userPresenter->getOriginalModel();
 
         if (isset($attributes['password'])) {
             $user->setPasswordHash($this->hasher->make($attributes['password']));
@@ -183,7 +183,7 @@ class UserResource implements Resource
     {
         /** @var User $photo */
 
-        $user = $userPresenter->getOriginalEntity();
+        $user = $userPresenter->getOriginalModel();
 
         $result = $user->delete();
 

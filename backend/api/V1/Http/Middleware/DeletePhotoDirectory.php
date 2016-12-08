@@ -38,9 +38,9 @@ class DeletePhotoDirectory
         /** @var Photo $photo */
 
         if (isset($request->uploadedPhoto)) {
-            $photo = $request->uploadedPhoto->getOriginalEntity();
+            $photo = $request->uploadedPhoto->getOriginalModel();
         } elseif (isset($request->photo)) {
-            $photo = $request->photo->getOriginalEntity();
+            $photo = $request->photo->getOriginalModel();
         } else {
             return $next($request);
         }

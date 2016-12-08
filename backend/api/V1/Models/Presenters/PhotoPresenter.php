@@ -2,36 +2,28 @@
 
 namespace Api\V1\Models\Presenters;
 
-use App\Core\Presenter\EntityPresenter;
 use App\Models\DB\Photo;
-use Exception;
+use Tooleks\Laravel\Presenter\ModelPresenter;
 
 /**
  * Class PhotoPresenter
- * @property Photo entity
+ * @property Photo originalModel
  * @package Api\V1\Models\Presenters
  */
-class PhotoPresenter extends EntityPresenter
+class PhotoPresenter extends ModelPresenter
 {
     /**
-     * PhotoPresenter constructor.
-     *
-     * @param Photo $entity
-     * @throws Exception
+     * @inheritdoc
      */
-    public function __construct($entity)
+    protected function getOriginalModelClass() : string
     {
-        parent::__construct($entity);
-
-        if (!($entity instanceof Photo)) {
-            throw new Exception('Invalid entity type.');
-        }
+        return Photo::class;
     }
 
     /**
      * @inheritdoc
      */
-    protected function map()
+    protected function getAttributesMap() : array
     {
         return [
             'id' => 'id',
@@ -48,40 +40,40 @@ class PhotoPresenter extends EntityPresenter
     /**
      * @return string
      */
-    public function createdAt()
+    public function getCreatedAtAttribute()
     {
-        return (string)$this->entity->created_at ?? null;
+        return (string)$this->originalModel->created_at ?? null;
     }
 
     /**
      * @return string
      */
-    public function updatedAt()
+    public function getUpdatedAtAttribute()
     {
-        return (string)$this->entity->updated_at ?? null;
+        return (string)$this->originalModel->updated_at ?? null;
     }
 
     /**
      * @return string
      */
-    public function absoluteUrl()
+    public function getAbsoluteUrlAttribute()
     {
-        return $this->entity->relative_url ? url(config('main.website.url')) . $this->entity->relative_url : '';
+        return $this->originalModel->relative_url ? url(config('main.website.url')) . $this->originalModel->relative_url : '';
     }
 
     /**
      * @return ThumbnailCollectionPresenter
      */
-    public function thumbnails()
+    public function getThumbnailsAttribute()
     {
-        return new ThumbnailCollectionPresenter($this->entity->thumbnails);
+        return new ThumbnailCollectionPresenter($this->originalModel->thumbnails);
     }
 
     /**
      * @return TagCollectionPresenter
      */
-    public function tags()
+    public function getTagsAttribute()
     {
-        return new TagCollectionPresenter($this->entity->tags);
+        return new TagCollectionPresenter($this->originalModel->tags);
     }
 }

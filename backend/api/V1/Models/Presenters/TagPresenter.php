@@ -2,36 +2,28 @@
 
 namespace Api\V1\Models\Presenters;
 
-use App\Core\Presenter\EntityPresenter;
 use App\Models\DB\Tag;
-use Exception;
+use Tooleks\Laravel\Presenter\ModelPresenter;
 
 /**
  * Class TagPresenter
- * @property Tag entity
+ * @property Tag originalModel
  * @package Api\V1\Models\Presenters
  */
-class TagPresenter extends EntityPresenter
+class TagPresenter extends ModelPresenter
 {
     /**
-     * RolePresenter constructor.
-     *
-     * @param Tag $entity
-     * @throws Exception
+     * @inheritdoc
      */
-    public function __construct($entity)
+    protected function getOriginalModelClass() : string
     {
-        parent::__construct($entity);
-
-        if (!($entity instanceof Tag)) {
-            throw new Exception('Invalid entity type.');
-        }
+        return Tag::class;
     }
 
     /**
      * @inheritdoc
      */
-    protected function map()
+    protected function getAttributesMap() : array
     {
         return [
             'text' => 'text',

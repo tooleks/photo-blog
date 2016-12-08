@@ -217,7 +217,7 @@ class UploadedPhotoResource implements Resource
 
         $attributes = $this->validate($attributes, static::VALIDATION_UPDATE);
 
-        $photo = $uploadedPhotoPresenter->getOriginalEntity();
+        $photo = $uploadedPhotoPresenter->getOriginalModel();
 
         $photo->fill($attributes);
 
@@ -246,7 +246,7 @@ class UploadedPhotoResource implements Resource
     {
         /** @var Photo $photo */
 
-        $photo = $uploadedPhotoPresenter->getOriginalEntity();
+        $photo = $uploadedPhotoPresenter->getOriginalModel();
 
         $result = $photo->delete();
 
