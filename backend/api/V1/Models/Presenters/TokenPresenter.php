@@ -2,35 +2,28 @@
 
 namespace Api\V1\Models\Presenters;
 
-use App\Core\Presenter\EntityPresenter;
 use App\Models\DB\User;
-use Exception;
+use Tooleks\Laravel\Presenter\ModelPresenter;
 
 /**
  * Class TokenPresenter
+ * @property User originalModel
  * @package Api\V1\Models\Presenters
  */
-class TokenPresenter extends EntityPresenter
+class TokenPresenter extends ModelPresenter
 {
     /**
-     * TokenPresenter constructor.
-     *
-     * @param User $entity
-     * @throws Exception
+     * @inheritdoc
      */
-    public function __construct($entity)
+    protected function getOriginalModelClass() : string
     {
-        parent::__construct($entity);
-
-        if (!($entity instanceof User)) {
-            throw new Exception('Invalid entity type.');
-        }
+        return User::class;
     }
 
     /**
      * @inheritdoc
      */
-    protected function map()
+    protected function getAttributesMap() : array
     {
         return [
             'user_id' => 'id',

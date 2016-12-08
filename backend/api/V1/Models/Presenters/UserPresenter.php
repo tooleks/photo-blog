@@ -2,9 +2,8 @@
 
 namespace Api\V1\Models\Presenters;
 
-use App\Core\Presenter\EntityPresenter;
 use App\Models\DB\User;
-use Exception;
+use Tooleks\Laravel\Presenter\ModelPresenter;
 
 /**
  * Class UserPresenter
@@ -13,27 +12,20 @@ use Exception;
  * @property string email
  * @package Api\V1\Models\Presenters
  */
-class UserPresenter extends EntityPresenter
+class UserPresenter extends ModelPresenter
 {
     /**
-     * UserPresenter constructor.
-     *
-     * @param User $entity
-     * @throws Exception
+     * @inheritdoc
      */
-    public function __construct($entity)
+    protected function getOriginalModelClass() : string
     {
-        parent::__construct($entity);
-
-        if (!($entity instanceof User)) {
-            throw new Exception('Invalid entity type.');
-        }
+        return User::class;
     }
 
     /**
      * @inheritdoc
      */
-    protected function map()
+    protected function getAttributesMap() : array
     {
         return [
             'id' => 'id',
@@ -48,24 +40,24 @@ class UserPresenter extends EntityPresenter
     /**
      * @return string
      */
-    public function createdAt()
+    public function getCreatedAtAttribute()
     {
-        return (string)$this->entity->created_at ?? null;
+        return (string)$this->originalModel->created_at ?? null;
     }
 
     /**
      * @return string
      */
-    public function updatedAt()
+    public function getUpdatedAtAttribute()
     {
-        return (string)$this->entity->updated_at ?? null;
+        return (string)$this->originalModel->updated_at ?? null;
     }
 
     /**
      * @return string
      */
-    public function role()
+    public function getRoleAttribute()
     {
-        return new RolePresenter($this->entity->role);
+        return new RolePresenter($this->originalModel->role);
     }
 }

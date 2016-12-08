@@ -2,36 +2,28 @@
 
 namespace Api\V1\Models\Presenters;
 
-use App\Core\Presenter\EntityPresenter;
 use App\Models\DB\Role;
-use Exception;
+use Tooleks\Laravel\Presenter\ModelPresenter;
 
 /**
  * Class RolePresenter
- * @property Role role
+ * @property Role originalModel
  * @package Api\V1\Models\Presenters
  */
-class RolePresenter extends EntityPresenter
+class RolePresenter extends ModelPresenter
 {
     /**
-     * RolePresenter constructor.
-     *
-     * @param Role $entity
-     * @throws Exception
+     * @inheritdoc
      */
-    public function __construct($entity)
+    protected function getOriginalModelClass() : string
     {
-        parent::__construct($entity);
-
-        if (!($entity instanceof Role)) {
-            throw new Exception('Invalid entity type.');
-        }
+        return Role::class;
     }
 
     /**
      * @inheritdoc
      */
-    protected function map()
+    protected function getAttributesMap() : array
     {
         return [
             'name' => 'name',

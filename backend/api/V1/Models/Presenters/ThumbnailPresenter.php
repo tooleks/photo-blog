@@ -2,36 +2,28 @@
 
 namespace Api\V1\Models\Presenters;
 
-use App\Core\Presenter\EntityPresenter;
 use App\Models\DB\Thumbnail;
-use Exception;
+use Tooleks\Laravel\Presenter\ModelPresenter;
 
 /**
  * Class TokenPresenter
- * @property Thumbnail $entity
+ * @property Thumbnail originalModel
  * @package Api\V1\Models\Presenters
  */
-class ThumbnailPresenter extends EntityPresenter
+class ThumbnailPresenter extends ModelPresenter
 {
     /**
-     * ThumbnailPresenter constructor.
-     *
-     * @param Thumbnail $entity
-     * @throws Exception
+     * @inheritdoc
      */
-    public function __construct($entity)
+    protected function getOriginalModelClass() : string
     {
-        parent::__construct($entity);
-
-        if (!($entity instanceof Thumbnail)) {
-            throw new Exception('Invalid entity type.');
-        }
+        return Thumbnail::class;
     }
 
     /**
      * @inheritdoc
      */
-    protected function map()
+    protected function getAttributesMap() : array
     {
         return [
             'absolute_url' => 'absolute_url',
@@ -43,8 +35,8 @@ class ThumbnailPresenter extends EntityPresenter
     /**
      * @return string
      */
-    public function absoluteUrl()
+    public function getAbsoluteUrlAttribute()
     {
-        return $this->entity->relative_url ? url(config('main.website.url')) . $this->entity->relative_url : '';
+        return $this->originalModel->relative_url ? url(config('main.website.url')) . $this->originalModel->relative_url : '';
     }
 }
