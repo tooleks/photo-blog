@@ -37,6 +37,6 @@ class ThumbnailPresenter extends ModelPresenter
      */
     public function getAbsoluteUrlAttribute()
     {
-        return $this->originalModel->relative_url ? url(config('main.website.url')) . $this->originalModel->relative_url : '';
+        return $this->originalModel->relative_url ? url(config('app.url')) . $this->originalModel->relative_url : '';
     }
 }

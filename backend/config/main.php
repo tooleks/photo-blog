@@ -2,11 +2,6 @@
 
 return [
 
-    'website' => [
-        'name' => '',
-        'url' => '/',
-    ],
-
     'storage' => [
         'photos' => 'public/photos',
     ],
