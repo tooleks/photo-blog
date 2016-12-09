@@ -60,14 +60,24 @@ class UploadPhotoFile
     {
         $this->validate($request->all(), 'default');
 
-        $filePath = $request->file('file')->store(sprintf('%s/%s', config('main.storage.photos'), str_random(10)));
+        $photoFilePath = $request->file('file')->store($this->generateDirPath());
 
-        if ($filePath === false) {
-            throw new FileNotFoundException("File '{$filePath}' saving error.");
+        if ($photoFilePath === false) {
+            throw new FileNotFoundException("File '{$photoFilePath}' saving error.");
         }
 
-        $request->merge(['path' => $filePath, 'relative_url' => $this->fs->url($filePath)]);
+        $request->merge(['path' => $photoFilePath, 'relative_url' => $this->fs->url($photoFilePath)]);
 
         return $next($request);
+    }
+
+    /**
+     * Generate directory path for photo.
+     *
+     * @return string
+     */
+    protected function generateDirPath()
+    {
+        return sprintf('%s/%s', config('main.storage.photos'), str_random(10));
     }
 }
