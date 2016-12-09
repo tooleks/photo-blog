@@ -167,8 +167,6 @@ return [
          * Package Service Providers...
          */
 
-
-
         /*
          * Application Service Providers...
          */
@@ -178,8 +176,9 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
-        App\Services\Thumbnails\Providers\ThumbnailServiceProvider::class,
-
+        /*
+         * API V1 Service Providers...
+         */
         Api\V1\Providers\ApiServiceProvider::class,
         Api\V1\Providers\AuthServiceProvider::class,
         Api\V1\Providers\RouteServiceProvider::class,

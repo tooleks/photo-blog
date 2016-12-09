@@ -5,6 +5,7 @@ namespace Api\V1\Http\Controllers;
 use Api\V1\Core\Resource\Contracts\Resource;
 use Api\V1\Http\Middleware\DeletePhotoDirectory;
 use Api\V1\Http\Middleware\UploadPhotoFile;
+use Api\V1\Http\Middleware\CreateThumbnailFiles;
 use Api\V1\Http\Resources\UploadedPhotoResource;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
@@ -24,6 +25,7 @@ class UploadedPhotoController extends ResourceController
         parent::__construct($request, $guard, $resource);
 
         $this->middleware(UploadPhotoFile::class, ['only' => ['create', 'update']]);
+        $this->middleware(CreateThumbnailFiles::class, ['only' => ['create', 'update']]);
         $this->middleware(DeletePhotoDirectory::class, ['only' => ['delete']]);
     }
 

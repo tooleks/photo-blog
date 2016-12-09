@@ -2,6 +2,7 @@
 
 namespace Api\V1\Http\Middleware;
 
+use App\Core\ThumbnailsGenerator\Contracts\ThumbnailsGeneratorContract;
 use App\Core\Validator\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Filesystem\Filesystem;
@@ -9,11 +10,12 @@ use League\Flysystem\FileNotFoundException;
 use Closure;
 
 /**
- * Class UploadPhotoFile
+ * Class CreateThumbnailFiles
  * @property Filesystem fs
+ * @property ThumbnailsGeneratorContract thumbnailsGenerator
  * @package Api\V1\Http\Middleware
  */
-class UploadPhotoFile
+class CreateThumbnailFiles
 {
     use Validator;
 
@@ -21,10 +23,12 @@ class UploadPhotoFile
      * PhotoFileUploader constructor.
      *
      * @param Filesystem $fs
+     * @param ThumbnailsGeneratorContract $thumbnailsGenerator
      */
-    public function __construct(Filesystem $fs)
+    public function __construct(Filesystem $fs, ThumbnailsGeneratorContract $thumbnailsGenerator)
     {
         $this->fs = $fs;
+        $this->thumbnailsGenerator = $thumbnailsGenerator;
     }
 
     /**
@@ -34,14 +38,15 @@ class UploadPhotoFile
     {
         return [
             'default' => [
-                'file' => [
+                'path' => [
                     'required',
                     'filled',
-                    'file',
-                    'image',
-                    'mimes:jpeg,png',
-                    'min:' . config('main.upload.min-size'),
-                    'max:' . config('main.upload.max-size'),
+                    'string',
+                ],
+                'relative_url' => [
+                    'required',
+                    'filled',
+                    'string',
                 ],
             ],
         ];
@@ -60,13 +65,7 @@ class UploadPhotoFile
     {
         $this->validate($request->all(), 'default');
 
-        $filePath = $request->file('file')->store(sprintf('%s/%s', config('main.storage.photos'), str_random(10)));
-
-        if ($filePath === false) {
-            throw new FileNotFoundException("File '{$filePath}' saving error.");
-        }
-
-        $request->merge(['path' => $filePath, 'relative_url' => $this->fs->url($filePath)]);
+        $request->merge(['thumbnails' => $this->thumbnailsGenerator->generateThumbnails($request->get('path'))]);
 
         return $next($request);
     }

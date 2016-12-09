@@ -19,17 +19,17 @@ return [
     'photo' => [
         'thumbnails' => [
             [
-                'type' => 'inset',
+                'mode' => 'inset',
                 'size' => [
                     'width' => 1500,
                     'height' => 1500,
                 ],
             ],
             [
-                'type' => 'outbound',
+                'mode' => 'inset',
                 'size' => [
-                    'width' => 500,
-                    'height' => 500,
+                    'width' => 600,
+                    'height' => 600,
                 ],
             ],
         ],
