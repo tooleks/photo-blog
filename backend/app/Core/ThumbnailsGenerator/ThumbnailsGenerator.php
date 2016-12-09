@@ -47,21 +47,21 @@ class ThumbnailsGenerator implements ThumbnailsGeneratorContract
                 $config['mode']
             );
 
-            $thumbnailPath = $this->getThumbnailFilePath(
+            $thumbnailFilePath = $this->getThumbnailFilePath(
                 $originalFilePath,
                 $thumbnailImage->getSize()->getWidth(),
                 $thumbnailImage->getSize()->getHeight()
             );
 
-            if (!$this->fs->put($thumbnailPath, $thumbnailImage->get($this->getThumbnailExtension($originalFilePath)))) {
-                throw new ThumbnailException(sprintf('An error occurred while saving thumbnail file "%s".', $thumbnailPath));
-            };
+            if (!$this->fs->put($thumbnailFilePath, $thumbnailImage->get($this->getThumbnailExtension($originalFilePath)))) {
+                throw new ThumbnailException(sprintf('An error occurred while saving thumbnail file "%s".', $thumbnailFilePath));
+            }
 
             $metaData[] = [
                 'width' => $thumbnailImage->getSize()->getWidth(),
                 'height' => $thumbnailImage->getSize()->getHeight(),
-                'path' => $thumbnailPath,
-                'relative_url' => $this->fs->url($thumbnailPath),
+                'path' => $thumbnailFilePath,
+                'relative_url' => $this->fs->url($thumbnailFilePath),
             ];
         }
 
