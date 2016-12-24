@@ -4,7 +4,7 @@ import {SyncProcessService} from './sync-process.service';
 
 @Injectable()
 export class SyncProcessServiceProvider {
-    getInstance() {
+    getInstance = ():SyncProcessService => {
         return new SyncProcessService(new LockerServiceProvider);
-    }
+    };
 }

@@ -11,7 +11,7 @@ export class ApiErrorHandler {
         this.navigatorService = navigatorServiceProvider.getInstance();
     }
 
-    handle(error:any) {
+    handle = (error:any) => {
         let body = error.json();
 
         if (error.status === 0) {
@@ -30,18 +30,18 @@ export class ApiErrorHandler {
         }
 
         this.handleHttpError(error, body);
-    }
+    };
 
-    protected handleHttpError(error:any, body:any) {
+    protected handleHttpError = (error:any, body:any) => {
         this.notificator.error(body.message, error.status + ' Error');
-    }
+    };
 
-    protected handleValidationErrors(error:any, body:any) {
+    protected handleValidationErrors = (error:any, body:any) => {
         body.errors = body.errors || {};
         for (var property in body.errors) {
             if (body.errors.hasOwnProperty(property)) {
                 body.errors[property].forEach((message:string) => this.notificator.warning(message));
             }
         }
-    }
+    };
 }

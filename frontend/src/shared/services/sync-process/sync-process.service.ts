@@ -19,15 +19,12 @@ export class SyncProcessService {
         this.lockerService.unlock();
     };
 
-    isProcessing = () => {
-        return this.lockerService.isLocked();
-    };
+    isProcessing = ():boolean => this.lockerService.isLocked();
 
     handleErrors = (error:any) => {
         if (!error || error instanceof Error && error.message !== 'process.locked') {
             this.lockerService.unlock();
         }
-
         throw error;
     };
 }

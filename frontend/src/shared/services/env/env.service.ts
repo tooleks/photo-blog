@@ -9,7 +9,7 @@ export class EnvService {
         this.env = env;
     }
 
-    get(property:string) {
+    get = (property:string) => {
         return this.env.hasOwnProperty(property) ? this.env[property] : null;
-    }
+    };
 }

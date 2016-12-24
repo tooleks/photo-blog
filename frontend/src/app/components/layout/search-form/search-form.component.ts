@@ -24,11 +24,11 @@ export class SearchFormComponent {
             });
     }
 
-    search() {
+    search = () => {
         if (this.query.length) {
             this.navigatorService.navigate(['photos/search'], {queryParams: {query: this.query}});
         } else {
             this.navigatorService.navigate(['']);
         }
-    }
+    };
 }

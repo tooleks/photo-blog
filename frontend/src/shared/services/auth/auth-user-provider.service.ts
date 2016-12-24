@@ -7,38 +7,28 @@ export class AuthUserProviderService {
     constructor(@Inject(LocalStorageService) protected localStorageService:LocalStorageService) {
     }
 
-    setAuth(auth:any) {
+    setAuth = (auth:any) => {
         this.localStorageService.set('auth', auth);
-        return new Promise((resolve, reject) => {
-            resolve(auth);
-        });
-    }
+        return Promise.resolve(auth);
+    };
 
-    getAuth() {
-        return this.localStorageService.get('auth');
-    }
+    getAuth = () => this.localStorageService.get('auth');
 
-    hasAuth() {
-        return this.getAuth() !== null;
-    }
+    hasAuth = () => this.getAuth() !== null;
 
-    getAuthApiToken() {
+    getAuthApiToken = () => {
         let auth = this.getAuth();
         return auth ? auth.api_token : null;
-    }
+    };
 
-    setUser(user:UserModel) {
+    setUser = (user:UserModel) => {
         this.localStorageService.set('user', user);
         return new Promise((resolve, reject) => {
             resolve(user);
         });
-    }
+    };
 
-    getUser() {
-        return this.localStorageService.get('user');
-    }
+    getUser = () => this.localStorageService.get('user');
 
-    hasUser() {
-        return this.getUser() !== null;
-    }
+    hasUser = () => this.getUser() !== null;
 }

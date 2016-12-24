@@ -14,20 +14,15 @@ export class NavigatorService {
         });
     }
 
-    setQueryParam(name:string, value:any) {
+    setQueryParam = (name:string, value:any):Promise<boolean> => {
         this.queryParams[name] = value;
-        this.navigate([], {queryParams: this.queryParams});
-    }
+        return this.navigate([], {queryParams: this.queryParams});
+    };
 
-    unsetQueryParam(name:string) {
+    unsetQueryParam = (name:string):Promise<boolean> => {
         delete this.queryParams[name];
-        this.navigate([], {queryParams: this.queryParams});
-    }
+        return this.navigate([], {queryParams: this.queryParams});
+    };
 
-    navigate(route:any = [], extras:any = {}) {
-        return new Promise((resolve, reject) => {
-            this.router.navigate(route, extras);
-            resolve();
-        });
-    }
+    navigate = (route:any = [], extras:any = {}):Promise<boolean> => this.router.navigate(route, extras);
 }
