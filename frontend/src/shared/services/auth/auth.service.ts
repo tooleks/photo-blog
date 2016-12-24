@@ -10,29 +10,18 @@ export class AuthService {
                 @Inject(AuthUserProviderService) protected authUserProviderService:AuthUserProviderService) {
     }
 
-    signIn(email:string, password:string) {
+    signIn = (email:string, password:string) => {
         return new Promise((resolve, reject) => {
             this.userService
                 .getAuthByCredentials(email, password)
-                .subscribe((auth:AuthModel) => {
-                    this.authUserProviderService
-                        .setAuth(auth)
-                        .then((auth:AuthModel) => {
-                            this.userService
-                                .getById(auth.user_id)
-                                .subscribe((user:UserModel) => {
-                                    this.authUserProviderService
-                                        .setUser(user)
-                                        .then((user:UserModel) => {
-                                            resolve(user);
-                                        });
-                                });
-                        });
+                .then((auth:AuthModel) => {
+                    this.authUserProviderService.setAuth(auth);
+                    this.userService.getById(auth.user_id).then((user:UserModel) => resolve(this.authUserProviderService.setUser(user)));
                 });
         });
-    }
+    };
 
-    signOut() {
+    signOut = () => {
         return new Promise((resolve, reject) => {
             if (this.authUserProviderService.hasAuth()) {
                 let user:UserModel = this.authUserProviderService.getUser();
@@ -43,5 +32,5 @@ export class AuthService {
                 reject();
             }
         });
-    }
+    };
 }
