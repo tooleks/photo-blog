@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {TagInputModule} from 'ng2-tag-input';
-import {GalleryComponent} from './components/gallery/gallery.component';
+import {GalleryComponent, GalleryGridComponent} from './components/gallery';
 import {PagerServiceProvider} from './services/pager';
 import {ApiService, ApiErrorHandler} from './services/api';
 import {LockerServiceProvider} from './services/locker';
@@ -25,6 +25,7 @@ import {UserService} from './services/user';
     ],
     declarations: [
         GalleryComponent,
+        GalleryGridComponent,
         FileSelectInputComponent,
         TagsSelectInputComponent,
     ],
@@ -32,6 +33,7 @@ import {UserService} from './services/user';
         CommonModule,
         FormsModule,
         GalleryComponent,
+        GalleryGridComponent,
         FileSelectInputComponent,
         TagsSelectInputComponent,
     ],

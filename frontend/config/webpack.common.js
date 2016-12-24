@@ -8,7 +8,7 @@ module.exports = {
         'env': './env.ts',
         'polyfills': './src/polyfills.ts',
         'vendor': './src/vendor.ts',
-        'app': './src/main.ts'
+        'app': './src/app.ts'
     },
 
     resolve: {

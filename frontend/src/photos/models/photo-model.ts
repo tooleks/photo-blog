@@ -1,6 +1,5 @@
 import {TagModel} from './tag-model';
 import {ThumbnailModel} from './thumbnail-model';
-import {UploadedPhotoModel} from "./uploaded-photo-model";
 
 export class PhotoModel {
     id:number;

@@ -2,78 +2,55 @@ import {Injectable} from '@angular/core';
 
 @Injectable()
 export class PagerService {
-    protected constant = {
-        MERGE_TYPE_APPEND: 'append',
-        MERGE_TYPE_PREPEND: 'prepend',
-    };
-
     protected limit:number;
     protected offset:number;
     protected page:number;
-    protected items:Object[];
+    protected items:Array<any>;
 
-    constructor() {
-        this.reset();
+    constructor(limit?:number, offset?:number) {
+        this.reset(limit, offset);
     }
 
-    reset() {
-        this.limit = 100;
-        this.offset = 0;
+    reset = (limit?:number, offset?:number) => {
+        this.limit = limit ? limit : 20;
+        this.offset = offset ? offset : 0;
         this.page = 1;
         this.items = [];
-    }
+    };
 
-    appendItems(items:any) {
-        return new Promise((resolve, reject) => {
-            this.mergeItems(items, this.constant.MERGE_TYPE_APPEND);
-            this.offset = this.getItemsCount();
-            this.setPage(this.calculatePage());
-            resolve(this.items);
-        });
-    }
-
-    prependItems(items:any) {
-        this.mergeItems(items, this.constant.MERGE_TYPE_PREPEND);
+    appendItems = (items:Array<any>) => {
+        this.items = this.items.concat(items);
         this.offset = this.getItemsCount();
         this.setPage(this.calculatePage());
-    }
+        return Promise.resolve(this.items);
+    };
 
-    getLimitForPage(page:number) {
+    prependItems = (items:Array<any>) => {
+        this.items = items.concat(this.items);
+        this.offset = this.getItemsCount();
+        this.setPage(this.calculatePage());
+        return Promise.resolve(this.items);
+    };
+
+    getLimitForPage = (page:number):number => {
         return page !== undefined ? this.limit * Math.abs(Math.ceil(page)) : this.limit;
-    }
+    };
 
-    getLimit() {
-        return this.limit;
-    }
+    getLimit = ():number => this.limit;
 
-    getOffset() {
-        return this.offset;
-    }
+    getOffset = ():number => this.offset;
 
-    getPage() {
-        return this.page;
-    }
+    getPage = ():number => this.page;
 
-    setPage(page:number) {
+    setPage = (page:number) => {
         if (page > 1) {
             this.page = page;
         }
-    }
+    };
 
-    getItems() {
-        return this.items;
-    }
+    getItems = ():Array<any> => this.items;
 
-    protected calculatePage() {
-        return Math.ceil(this.items.length / this.limit);
-    }
+    protected calculatePage = ():number => Math.ceil(this.items.length / this.limit);
 
-    protected mergeItems(items:any, mergeType:string) {
-        if (mergeType === this.constant.MERGE_TYPE_APPEND) this.items = this.items.concat(items);
-        if (mergeType === this.constant.MERGE_TYPE_PREPEND) this.items = items.concat(this.items);
-    }
-
-    protected getItemsCount() {
-        return this.items.length;
-    }
+    protected getItemsCount = ():number => this.items.length;
 }

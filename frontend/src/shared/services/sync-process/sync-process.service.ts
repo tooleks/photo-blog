@@ -9,25 +9,25 @@ export class SyncProcessService {
         this.lockerService = this.lockerServiceProvider.getInstance();
     }
 
-    startProcess() {
+    startProcess = () => {
         return new Promise((resolve, reject) => {
             !this.lockerService.isLocked() ? resolve(this.lockerService.lock()) : reject(new Error('process.locked'));
         });
-    }
+    };
 
-    endProcess() {
+    endProcess = () => {
         this.lockerService.unlock();
-    }
+    };
 
-    isProcessing() {
+    isProcessing = () => {
         return this.lockerService.isLocked();
-    }
+    };
 
-    handleErrors(error:any) {
+    handleErrors = (error:any) => {
         if (!error || error instanceof Error && error.message !== 'process.locked') {
             this.lockerService.unlock();
         }
 
         throw error;
-    }
+    };
 }

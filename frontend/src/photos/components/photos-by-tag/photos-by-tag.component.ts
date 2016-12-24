@@ -61,52 +61,49 @@ export class PhotosByTagComponent {
             });
     }
 
-    protected loadPhotos(take:number, skip:number, tag:string) {
-        return this.photoService.getByTag(take, skip, tag).toPromise().then((photos:PhotoModel[]) => {
-            return this.pagerService.appendItems(photos);
-        });
-    }
+    protected loadPhotos = (take:number, skip:number, tag:string) => {
+        return this.photoService
+            .getByTag(take, skip, tag)
+            .toPromise()
+            .then((photos:PhotoModel[]) => this.pagerService.appendItems(photos));
+    };
 
-    protected getPhotos() {
-        return this.pagerService.getItems();
-    }
+    protected getPhotos = () => this.pagerService.getItems();
 
-    load(take:number, skip:number, tag:string) {
-        return this.syncProcessService.startProcess().then(() => {
-            return this.loadPhotos(take, skip, tag);
-        }).then((result:any) => {
-            this.syncProcessService.endProcess();
-            this.setPageNumber();
-            return result;
-        }).catch(this.syncProcessService.handleErrors.bind(this.syncProcessService));
-    }
+    load = (take:number, skip:number, tag:string) => {
+        return this.syncProcessService
+            .startProcess()
+            .then(() => this.loadPhotos(take, skip, tag))
+            .then((result:any) => {
+                this.syncProcessService.endProcess();
+                this.setPageNumber();
+                return result;
+            })
+            .catch(this.syncProcessService.handleErrors);
+    };
 
-    loadMore() {
-        return this.load(this.pagerService.getLimit(), this.pagerService.getOffset(), this.queryParams.tag);
-    }
+    loadMore = () => this.load(this.pagerService.getLimit(), this.pagerService.getOffset(), this.queryParams.tag);
 
-    setPageNumber() {
+    setPageNumber = () => {
         let page = this.pagerService.getPage();
-        if (page > 1) this.navigatorService.setQueryParam('page', page);
-    }
+        if (page > 1) {
+            this.navigatorService.setQueryParam('page', page);
+        }
+    };
 
-    isEmpty() {
-        return !this.syncProcessService.isProcessing() && this.empty === true;
-    }
+    isEmpty = ():boolean => !this.syncProcessService.isProcessing() && this.empty === true;
 
-    isLoading() {
-        return this.syncProcessService.isProcessing();
-    }
+    isLoading = ():boolean => this.syncProcessService.isProcessing();
 
-    onShowPhoto(photo:PhotoModel) {
+    onShowPhoto = (photo:PhotoModel) => {
         this.navigatorService.setQueryParam('show', photo.id);
-    }
+    };
 
-    onHidePhoto() {
+    onHidePhoto = () => {
         this.navigatorService.unsetQueryParam('show');
-    }
+    };
 
-    navigateToEditPhoto(photo:PhotoModel) {
+    navigateToEditPhoto = (photo:PhotoModel) => {
         this.navigatorService.navigate(['photo/edit', photo.id]);
-    }
+    };
 }

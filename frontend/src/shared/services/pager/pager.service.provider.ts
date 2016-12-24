@@ -3,7 +3,7 @@ import {PagerService} from './pager.service';
 
 @Injectable()
 export class PagerServiceProvider {
-    getInstance() {
-        return new PagerService;
+    getInstance(limit?:number, offset?:number) {
+        return new PagerService(limit, offset);
     }
 }

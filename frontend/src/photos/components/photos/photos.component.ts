@@ -44,60 +44,55 @@ export class PhotosComponent {
                 this.queryParams.show = Number(show);
             });
 
-        this.load(
-            this.pagerService.getLimitForPage(this.pagerService.getPage()),
-            this.pagerService.getOffset()
-        ).then((photos:PhotoModel[]) => {
-            this.empty = photos.length === 0;
-        });
+        this.load(this.pagerService.getLimitForPage(this.pagerService.getPage()), this.pagerService.getOffset())
+            .then((photos:PhotoModel[]) => {
+                this.empty = photos.length === 0;
+            });
     }
 
-    protected loadPhotos(take:number, skip:number) {
-        return this.photoService.getAll(take, skip).toPromise().then((photos:PhotoModel[]) => {
-            return this.pagerService.appendItems(photos);
-        });
-    }
+    protected loadPhotos = (take:number, skip:number) => {
+        return this.photoService
+            .getAll(take, skip)
+            .toPromise()
+            .then((photos:PhotoModel[]) => this.pagerService.appendItems(photos));
+    };
 
-    protected getPhotos() {
-        return this.pagerService.getItems();
-    }
+    protected getPhotos = () => this.pagerService.getItems();
 
-    load(take:number, skip:number) {
-        return this.syncProcessService.startProcess().then(() => {
-            return this.loadPhotos(take, skip);
-        }).then((result:any) => {
-            this.syncProcessService.endProcess();
-            this.setPageNumber();
-            return result;
-        }).catch(this.syncProcessService.handleErrors.bind(this.syncProcessService));
-    }
+    load = (take:number, skip:number) => {
+        return this.syncProcessService
+            .startProcess()
+            .then(() => this.loadPhotos(take, skip))
+            .then((result:any) => {
+                this.syncProcessService.endProcess();
+                this.setPageNumber();
+                return result;
+            })
+            .catch(this.syncProcessService.handleErrors);
+    };
 
-    loadMore() {
-        return this.load(this.pagerService.getLimit(), this.pagerService.getOffset());
-    }
+    loadMore = () => this.load(this.pagerService.getLimit(), this.pagerService.getOffset());
 
-    setPageNumber() {
+    setPageNumber = () => {
         let page = this.pagerService.getPage();
-        if (page > 1) this.navigatorService.setQueryParam('page', page);
-    }
+        if (page > 1) {
+            this.navigatorService.setQueryParam('page', page);
+        }
+    };
 
-    isEmpty() {
-        return !this.syncProcessService.isProcessing() && this.empty === true;
-    }
+    isEmpty = ():boolean => !this.syncProcessService.isProcessing() && this.empty === true;
 
-    isLoading() {
-        return this.syncProcessService.isProcessing();
-    }
+    isLoading = ():boolean => this.syncProcessService.isProcessing();
 
-    onShowPhoto(photo:PhotoModel) {
+    onShowPhoto = (photo:PhotoModel) => {
         this.navigatorService.setQueryParam('show', photo.id);
-    }
+    };
 
-    onHidePhoto() {
+    onHidePhoto = () => {
         this.navigatorService.unsetQueryParam('show');
-    }
+    };
 
-    navigateToEditPhoto(photo:PhotoModel) {
+    navigateToEditPhoto = (photo:PhotoModel) => {
         this.navigatorService.navigate(['photo/edit', photo.id]);
-    }
+    };
 }

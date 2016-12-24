@@ -28,24 +28,27 @@ export class PhotoFormComponent {
     }
 
     ngOnInit() {
-        this.titleService.setTitle('Add Photo');
-
         this.photo = new PhotoModel;
+
+        this.titleService.setTitle('Add Photo');
 
         this.route.params
             .map((params) => params['id'])
             .subscribe((id:number) => {
-                if (!id) return;
+                if (!id) {
+                    return;
+                }
 
                 this.titleService.setTitle('Edit Photo');
 
-                this.photoService.getById(id).toPromise().then((photo:PhotoModel) => {
-                    this.photo.setAttributes(photo);
-                });
+                this.photoService
+                    .getById(id)
+                    .toPromise()
+                    .then((photo:PhotoModel) => this.photo.setAttributes(photo));
             });
     }
 
-    protected processSavePhoto() {
+    protected processSavePhoto = () => {
         let saver = this.photo.id
             ? this.photoService.updateById(this.photo.id, this.photo)
             : this.photoService.create(this.photo);
@@ -54,20 +57,22 @@ export class PhotoFormComponent {
             this.photo.setAttributes(photo);
             return photo;
         });
-    }
+    };
 
-    save() {
-        return this.syncProcessService.startProcess().then(() => {
-            return this.processSavePhoto();
-        }).then((result:any) => {
-            this.syncProcessService.endProcess();
-            this.notificatorService.success('Photo was successfully saved.');
-            this.navigatorService.navigate(['/photos']);
-            return result;
-        }).catch(this.syncProcessService.handleErrors.bind(this.syncProcessService));
-    }
+    save = () => {
+        return this.syncProcessService
+            .startProcess()
+            .then(() => this.processSavePhoto())
+            .then((result:any) => {
+                this.syncProcessService.endProcess();
+                this.notificatorService.success('Photo was successfully saved.');
+                this.navigatorService.navigate(['/photos']);
+                return result;
+            })
+            .catch(this.syncProcessService.handleErrors);
+    };
 
-    protected processUploadPhoto(file:FileList) {
+    protected processUploadPhoto = (file:FileList) => {
         let uploader = this.photo.id
             ? this.photoService.uploadById(this.photo.id, file)
             : this.photoService.upload(file);
@@ -76,33 +81,39 @@ export class PhotoFormComponent {
             this.photo.setUploadedAttributes(uploadedPhoto);
             return uploadedPhoto;
         });
-    }
+    };
 
-    upload(file:FileList) {
-        return this.syncProcessService.startProcess().then(() => {
-            return this.processUploadPhoto(file);
-        }).then((result:any) => {
-            this.syncProcessService.endProcess();
-            this.notificatorService.success('File was successfully uploaded.');
-            return result;
-        }).catch(this.syncProcessService.handleErrors.bind(this.syncProcessService));
-    }
+    upload = (file:FileList) => {
+        return this.syncProcessService
+            .startProcess()
+            .then(() => this.processUploadPhoto(file))
+            .then((result:any) => {
+                this.syncProcessService.endProcess();
+                this.notificatorService.success('File was successfully uploaded.');
+                return result;
+            })
+            .catch(this.syncProcessService.handleErrors);
+    };
 
-    protected processDeletePhoto() {
+    protected processDeletePhoto = () => {
         let deleter = this.photoService.deleteById(this.photo.id);
         return deleter.toPromise();
-    }
+    };
 
-    deletePhoto() {
-        if (!this.photo.id) return Promise.reject(new Error('Invalid photo id.'));
+    deletePhoto = () => {
+        if (!this.photo.id) {
+            return Promise.reject(new Error('Invalid photo id.'));
+        }
 
-        return this.syncProcessService.startProcess().then(() => {
-            return this.processDeletePhoto();
-        }).then((result:any) => {
-            this.syncProcessService.endProcess();
-            this.notificatorService.success('Photo was successfully deleted.');
-            this.navigatorService.navigate(['/photos']);
-            return result;
-        }).catch(this.syncProcessService.handleErrors.bind(this.syncProcessService));
-    }
+        return this.syncProcessService
+            .startProcess()
+            .then(() => this.processDeletePhoto())
+            .then((result:any) => {
+                this.syncProcessService.endProcess();
+                this.notificatorService.success('Photo was successfully deleted.');
+                this.navigatorService.navigate(['/photos']);
+                return result;
+            })
+            .catch(this.syncProcessService.handleErrors);
+    };
 }
