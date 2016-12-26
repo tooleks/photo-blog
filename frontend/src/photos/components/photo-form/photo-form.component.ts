@@ -43,7 +43,6 @@ export class PhotoFormComponent {
 
                 this.photoService
                     .getById(id)
-                    .toPromise()
                     .then((photo:PhotoModel) => this.photo.setAttributes(photo));
             });
     }
@@ -53,7 +52,7 @@ export class PhotoFormComponent {
             ? this.photoService.updateById(this.photo.id, this.photo)
             : this.photoService.create(this.photo);
 
-        return saver.toPromise().then((photo:PhotoModel) => {
+        return saver.then((photo:PhotoModel) => {
             this.photo.setAttributes(photo);
             return photo;
         });
@@ -77,7 +76,7 @@ export class PhotoFormComponent {
             ? this.photoService.uploadById(this.photo.id, file)
             : this.photoService.upload(file);
 
-        return uploader.toPromise().then((uploadedPhoto:UploadedPhotoModel) => {
+        return uploader.then((uploadedPhoto:UploadedPhotoModel) => {
             this.photo.setUploadedAttributes(uploadedPhoto);
             return uploadedPhoto;
         });
@@ -95,10 +94,7 @@ export class PhotoFormComponent {
             .catch(this.syncProcessService.handleErrors);
     };
 
-    protected processDeletePhoto = () => {
-        let deleter = this.photoService.deleteById(this.photo.id);
-        return deleter.toPromise();
-    };
+    protected processDeletePhoto = () => this.photoService.deleteById(this.photo.id);
 
     deletePhoto = () => {
         if (!this.photo.id) {

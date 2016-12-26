@@ -66,7 +66,6 @@ export class PhotosByTagComponent {
     protected loadPhotos = (take:number, skip:number, tag:string) => {
         return this.photoService
             .getByTag(take, skip, tag)
-            .toPromise()
             .then((photos:PhotoModel[]) => this.pagerService.appendItems(photos));
     };
 

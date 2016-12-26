@@ -66,7 +66,6 @@ export class PhotosBySearchQueryComponent {
     protected loadPhotos = (take:number, skip:number, query:string) => {
         return this.photoService
             .getBySearchQuery(take, skip, query)
-            .toPromise()
             .then((photos:PhotoModel[]) => this.pagerService.appendItems(photos));
     };
 

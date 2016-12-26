@@ -55,7 +55,6 @@ export class PhotosComponent {
     protected loadPhotos = (take:number, skip:number) => {
         return this.photoService
             .getAll(take, skip)
-            .toPromise()
             .then((photos:PhotoModel[]) => this.pagerService.appendItems(photos));
     };
 
