@@ -4,7 +4,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/Rx';
 import {ApiErrorHandler} from './api-error-handler';
 import {EnvService} from '../env';
-import {AuthUserProviderService} from '../auth/auth-user-provider.service';
+import {AuthProviderService} from '../auth/auth-provider.service';
 
 @Injectable()
 export class ApiService {
@@ -14,7 +14,7 @@ export class ApiService {
     constructor(@Inject(EnvService) protected envService:EnvService,
                 @Inject(Http) protected http:Http,
                 @Inject(ApiErrorHandler) protected errorHandler:ApiErrorHandler,
-                @Inject(AuthUserProviderService) protected authUserProviderService:AuthUserProviderService) {
+                @Inject(AuthProviderService) protected authProviderService:AuthProviderService) {
         this.apiUrl = this.envService.get('apiUrl');
         this.debug = this.envService.get('debug');
     }
@@ -69,8 +69,8 @@ export class ApiService {
     protected getDefaultHeaders = ():Headers => {
         let defaultHeaders = new Headers;
         defaultHeaders.append('Accept', 'application/json');
-        if (this.authUserProviderService.hasAuth()) {
-            defaultHeaders.append('Authorization', 'Bearer ' + this.authUserProviderService.getAuthApiToken());
+        if (this.authProviderService.hasAuth()) {
+            defaultHeaders.append('Authorization', 'Bearer ' + this.authProviderService.getAuthApiToken());
         }
         return defaultHeaders;
     };

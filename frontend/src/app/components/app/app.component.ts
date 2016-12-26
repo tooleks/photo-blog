@@ -1,5 +1,5 @@
 import {Component, Inject} from '@angular/core';
-import {AuthUserProviderService} from '../../../shared/services/auth';
+import {AuthProviderService} from '../../../shared/services/auth';
 import {EnvService} from '../../../shared/services/env';
 import {TitleService} from '../../../shared/services/title/title.service';
 
@@ -13,7 +13,7 @@ import '../../../../public/app/css/overrides.css';
 export class AppComponent {
     constructor(@Inject(EnvService) protected envService:EnvService,
                 @Inject(TitleService) protected titleService:TitleService,
-                @Inject(AuthUserProviderService) protected authUserProviderService:AuthUserProviderService) {
+                @Inject(AuthProviderService) protected authProviderService:AuthProviderService) {
     }
 
     ngOnInit() {

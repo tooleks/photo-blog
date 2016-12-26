@@ -4,7 +4,7 @@ import {TitleService} from '../../../shared/services/title';
 import {SyncProcessService, SyncProcessServiceProvider} from '../../../shared/services/sync-process';
 import {NavigatorService, NavigatorServiceProvider} from '../../../shared/services/navigator';
 import {PagerService, PagerServiceProvider} from '../../../shared/services/pager';
-import {AuthUserProviderService} from '../../../shared/services/auth';
+import {AuthProviderService} from '../../../shared/services/auth';
 import {PhotoService} from '../../services/photo.service';
 import {PhotoModel} from '../../models/photo-model';
 
@@ -21,7 +21,7 @@ export class PhotosComponent {
 
     constructor(@Inject(ActivatedRoute) protected route:ActivatedRoute,
                 @Inject(TitleService) protected titleService:TitleService,
-                @Inject(AuthUserProviderService) protected authUserProvider:AuthUserProviderService,
+                @Inject(AuthProviderService) protected authUserProvider:AuthProviderService,
                 @Inject(PagerServiceProvider) protected pagerServiceProvider:PagerServiceProvider,
                 @Inject(SyncProcessServiceProvider) protected syncProcessServiceProvider:SyncProcessServiceProvider,
                 @Inject(NavigatorServiceProvider) protected navigatorServiceProvider:NavigatorServiceProvider,

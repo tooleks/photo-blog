@@ -11,7 +11,7 @@ import {NavigatorServiceProvider} from './services/navigator';
 import {TitleService} from './services/title';
 import {NotificatorService} from './services/notificator';
 import {EnvService} from './services/env';
-import {AuthService, AuthUserProviderService} from './services/auth';
+import {AuthService, AuthProviderService} from './services/auth';
 import {FileSelectInputComponent} from './components/file-select-input/file-select-input.component';
 import {TagsSelectInputComponent} from './components/tags-select-input/tags-select-input.component';
 import {LocalStorageService} from './services/local-storage/local-storage.service';
@@ -41,7 +41,7 @@ import {UserService} from './services/user';
         TitleService,
         NotificatorService,
         AuthService,
-        AuthUserProviderService,
+        AuthProviderService,
         UserService,
         ApiService,
         ApiErrorHandler,

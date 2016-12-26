@@ -10,7 +10,7 @@
                  [loadMoreCallback]="loadMore"
                  [openItemCallback]="onShowPhoto"
                  [closeItemCallback]="onHidePhoto"
-                 [editItemCallback]="authUserProvider.hasUser() ? navigateToEditPhoto : false"></gallery>
+                 [editItemCallback]="authUserProvider.isAuthenticated() ? navigateToEditPhoto : false"></gallery>
     </div>
 </div>
 <div *ngIf="!isEmpty()"

@@ -1,11 +1,11 @@
 import {Component, Inject} from '@angular/core';
-import {AuthUserProviderService} from '../../../../shared/services/auth/auth-user-provider.service';
+import {AuthProviderService} from '../../../../shared/services/auth';
 
 @Component({
     selector: 'sidebar',
     template: require('./sidebar.component.html'),
 })
 export class SideBarComponent {
-    constructor(@Inject(AuthUserProviderService) protected authUserProviderService:AuthUserProviderService) {
+    constructor(@Inject(AuthProviderService) protected authProviderService:AuthProviderService) {
     }
 }

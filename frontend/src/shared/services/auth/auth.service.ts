@@ -1,32 +1,27 @@
 import {Injectable, Inject} from '@angular/core';
-import {UserModel} from '../../models/user-model';
-import {AuthUserProviderService} from './auth-user-provider.service';
-import {AuthModel} from '../../models/auth-model';
+import {AuthProviderService} from './auth-provider.service';
 import {UserService} from '../user/user.service';
+import {AuthModel, UserModel} from '../../models';
 
 @Injectable()
 export class AuthService {
     constructor(@Inject(UserService) protected userService:UserService,
-                @Inject(AuthUserProviderService) protected authUserProviderService:AuthUserProviderService) {
+                @Inject(AuthProviderService) protected authProviderService:AuthProviderService) {
     }
 
-    signIn = (email:string, password:string) => {
-        return new Promise((resolve, reject) => {
-            this.userService
-                .getAuthByCredentials(email, password)
-                .then((auth:AuthModel) => {
-                    this.authUserProviderService.setAuth(auth);
-                    this.userService.getById(auth.user_id).then((user:UserModel) => resolve(this.authUserProviderService.setUser(user)));
-                });
-        });
+    signIn = (email:string, password:string):Promise<UserModel> => {
+        return this.userService.getAuthByCredentials(email, password)
+            .then(this.authProviderService.setAuth)
+            .then((auth:AuthModel):Promise<UserModel> => this.userService.getById(auth.user_id))
+            .then(this.authProviderService.setUser);
     };
 
-    signOut = () => {
+    signOut = ():Promise<UserModel> => {
         return new Promise((resolve, reject) => {
-            if (this.authUserProviderService.hasAuth()) {
-                let user:UserModel = this.authUserProviderService.getUser();
-                this.authUserProviderService.setAuth(null);
-                this.authUserProviderService.setUser(null);
+            if (this.authProviderService.isAuthenticated()) {
+                let user:UserModel = this.authProviderService.getUser();
+                this.authProviderService.setAuth(null);
+                this.authProviderService.setUser(null);
                 resolve(user);
             } else {
                 reject();

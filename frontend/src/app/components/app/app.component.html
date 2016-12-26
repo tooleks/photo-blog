@@ -13,9 +13,9 @@
                     <li>
                         <span class="m-r-sm text-muted welcome-message"></span>
                     </li>
-                    <li class="dropdown" *ngIf="authUserProviderService.hasUser()">
+                    <li class="dropdown" *ngIf="authProviderService.isAuthenticated()">
                         <a class="dropdown-toggle count-info" data-toggle="dropdown" aria-expanded="true">
-                            <i class="fa fa-user"></i> {{ authUserProviderService.getUser().name }}
+                            <i class="fa fa-user"></i> {{ authProviderService.getUser().name }}
                         </a>
                         <ul class="dropdown-menu">
                             <li><a [routerLink]="['photo/add']" routerLinkActive="active"><i class="fa fa-plus"></i> Add
@@ -24,7 +24,7 @@
                                 Sign Out</a></li>
                         </ul>
                     </li>
-                    <li *ngIf="!authUserProviderService.hasAuth()"><a [routerLink]="['signin']"
+                    <li *ngIf="!authProviderService.isAuthenticated()"><a [routerLink]="['signin']"
                                                                       routerLinkActive="active"><i
                             class="fa fa-sign-in"> </i> Sign In</a></li>
                 </ul>
