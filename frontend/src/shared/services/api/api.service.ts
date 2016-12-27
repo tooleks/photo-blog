@@ -109,6 +109,7 @@ export class ApiService {
 
     protected handleError = (error:any) => {
         this.errorHandler.handle(error);
-        return Observable.throw(error.message);
+        let body = response.json();
+        return Observable.throw(new Error(body.message));
     };
 }
