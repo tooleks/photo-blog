@@ -73,14 +73,11 @@ export class PhotosBySearchQueryComponent {
 
     load = (take:number, skip:number, query:string) => {
         return this.syncProcessService
-            .startProcess()
-            .then(() => this.loadPhotos(take, skip, query))
+            .process(() => this.loadPhotos(take, skip, query))
             .then((result:any) => {
-                this.syncProcessService.endProcess();
                 this.setPageNumber();
                 return result;
-            })
-            .catch(this.syncProcessService.handleErrors);
+            });
     };
 
     loadMore = () => this.load(this.pagerService.getLimit(), this.pagerService.getOffset(), this.queryParams.query);

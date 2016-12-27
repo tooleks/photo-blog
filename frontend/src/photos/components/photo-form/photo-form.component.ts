@@ -60,15 +60,12 @@ export class PhotoFormComponent {
 
     save = () => {
         return this.syncProcessService
-            .startProcess()
-            .then(() => this.processSavePhoto())
+            .process(this.processSavePhoto)
             .then((result:any) => {
-                this.syncProcessService.endProcess();
                 this.notificatorService.success('Photo was successfully saved.');
                 this.navigatorService.navigate(['/photos']);
                 return result;
-            })
-            .catch(this.syncProcessService.handleErrors);
+            });
     };
 
     protected processUploadPhoto = (file:FileList) => {
@@ -84,14 +81,11 @@ export class PhotoFormComponent {
 
     upload = (file:FileList) => {
         return this.syncProcessService
-            .startProcess()
-            .then(() => this.processUploadPhoto(file))
+            .process(() => this.processUploadPhoto(file))
             .then((result:any) => {
-                this.syncProcessService.endProcess();
                 this.notificatorService.success('File was successfully uploaded.');
                 return result;
-            })
-            .catch(this.syncProcessService.handleErrors);
+            });
     };
 
     protected processDeletePhoto = () => this.photoService.deleteById(this.photo.id);
@@ -102,14 +96,11 @@ export class PhotoFormComponent {
         }
 
         return this.syncProcessService
-            .startProcess()
-            .then(() => this.processDeletePhoto())
+            .process(this.processDeletePhoto)
             .then((result:any) => {
-                this.syncProcessService.endProcess();
                 this.notificatorService.success('Photo was successfully deleted.');
                 this.navigatorService.navigate(['/photos']);
                 return result;
-            })
-            .catch(this.syncProcessService.handleErrors);
+            });
     };
 }

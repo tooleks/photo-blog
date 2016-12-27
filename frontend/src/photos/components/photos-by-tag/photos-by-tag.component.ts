@@ -73,14 +73,11 @@ export class PhotosByTagComponent {
 
     load = (take:number, skip:number, tag:string) => {
         return this.syncProcessService
-            .startProcess()
-            .then(() => this.loadPhotos(take, skip, tag))
+            .process(() => this.loadPhotos(take, skip, tag))
             .then((result:any) => {
-                this.syncProcessService.endProcess();
                 this.setPageNumber();
                 return result;
-            })
-            .catch(this.syncProcessService.handleErrors);
+            });
     };
 
     loadMore = () => this.load(this.pagerService.getLimit(), this.pagerService.getOffset(), this.queryParams.tag);

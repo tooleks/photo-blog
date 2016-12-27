@@ -62,14 +62,11 @@ export class PhotosComponent {
 
     load = (take:number, skip:number) => {
         return this.syncProcessService
-            .startProcess()
-            .then(() => this.loadPhotos(take, skip))
+            .process(() => this.loadPhotos(take, skip))
             .then((result:any) => {
-                this.syncProcessService.endProcess();
                 this.setPageNumber();
                 return result;
-            })
-            .catch(this.syncProcessService.handleErrors);
+            });
     };
 
     loadMore = () => this.load(this.pagerService.getLimit(), this.pagerService.getOffset());
