@@ -3,34 +3,35 @@ import {LockerService, LockerServiceProvider} from '../locker';
 
 @Injectable()
 export class SyncProcessService {
-    protected lockerService:LockerService;
+    private locker:LockerService;
 
-    constructor(@Inject(LockerServiceProvider) protected lockerServiceProvider:LockerServiceProvider) {
-        this.lockerService = this.lockerServiceProvider.getInstance();
+    constructor(@Inject(LockerServiceProvider) lockerProvider:LockerServiceProvider) {
+        this.locker = lockerProvider.getInstance();
     }
 
     process = (callback:any) => this.startProcess(callback).then(this.endProcess).catch(this.handleProcessErrors);
 
-    isProcessing = ():boolean => this.lockerService.isLocked();
+    isProcessing = ():boolean => this.locker.isLocked();
 
-    protected startProcess = (callback:any) => new Promise((resolve, reject) => {
-        if (!this.lockerService.isLocked()) {
-            this.lockerService.lock();
+    private startProcess = (callback:any):Promise<any> => new Promise((resolve, reject) => {
+        if (!this.locker.isLocked()) {
+            this.locker.lock();
             resolve(callback());
         } else {
-            reject(new Error('process.locked'));
+            reject(new Error(SyncProcessService.name));
         }
     });
 
-    protected endProcess = (result:any) => {
-        this.lockerService.unlock();
+    private endProcess = (result:any) => {
+        this.locker.unlock();
         return result;
     };
 
-    protected handleProcessErrors = (error:any) => {
-        if (error.message !== 'process.locked') {
-            this.lockerService.unlock();
+    private handleProcessErrors = (error:any) => {
+        if (error instanceof Error && error.message !== SyncProcessService.name) {
+            this.locker.unlock();
         }
-        throw error;
+
+        return Promise.reject(error);
     };
 }
