@@ -73,7 +73,7 @@ export class PhotosBySearchQueryComponent {
 
     load = (take:number, skip:number, query:string) => {
         return this.syncProcessService
-            .process(() => this.loadPhotos(take, skip, query))
+            .process(this.loadPhotos, [take, skip, query])
             .then((result:any) => {
                 this.setPageNumber();
                 return result;

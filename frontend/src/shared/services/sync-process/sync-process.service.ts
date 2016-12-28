@@ -9,14 +9,14 @@ export class SyncProcessService {
         this.locker = lockerProvider.getInstance();
     }
 
-    process = (callback:any) => this.startProcess(callback).then(this.endProcess).catch(this.handleProcessErrors);
+    process = (callback:any, args?:any):Promise<any> => this.startProcess(callback, args).then(this.endProcess).catch(this.handleProcessErrors);
 
     isProcessing = ():boolean => this.locker.isLocked();
 
-    private startProcess = (callback:any):Promise<any> => new Promise((resolve, reject) => {
+    private startProcess = (callback:any, args?:any) => new Promise((resolve, reject) => {
         if (!this.locker.isLocked()) {
             this.locker.lock();
-            resolve(callback());
+            resolve(callback(...args));
         } else {
             reject(new Error(SyncProcessService.name));
         }

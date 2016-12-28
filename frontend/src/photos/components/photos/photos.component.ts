@@ -62,7 +62,7 @@ export class PhotosComponent {
 
     load = (take:number, skip:number) => {
         return this.syncProcessService
-            .process(() => this.loadPhotos(take, skip))
+            .process(this.loadPhotos, [take, skip])
             .then((result:any) => {
                 this.setPageNumber();
                 return result;

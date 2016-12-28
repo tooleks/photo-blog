@@ -81,7 +81,7 @@ export class PhotoFormComponent {
 
     upload = (file:FileList) => {
         return this.syncProcessService
-            .process(() => this.processUploadPhoto(file))
+            .process(this.processUploadPhoto, [file])
             .then((result:any) => {
                 this.notificatorService.success('File was successfully uploaded.');
                 return result;
