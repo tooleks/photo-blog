@@ -17,8 +17,7 @@ export class SyncProcessService {
         if (!this.lockerService.isLocked()) {
             this.lockerService.lock();
             resolve(callback());
-        }
-        else {
+        } else {
             reject(new Error('process.locked'));
         }
     });

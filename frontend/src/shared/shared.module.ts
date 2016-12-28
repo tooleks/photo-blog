@@ -4,7 +4,8 @@ import {FormsModule} from '@angular/forms';
 import {TagInputModule} from 'ng2-tag-input';
 import {GalleryComponent, GalleryGridComponent} from './components/gallery';
 import {PagerServiceProvider} from './services/pager';
-import {ApiService, ApiErrorHandler} from './services/api';
+import {ApiService, ApiErrorHandler as BaseApiErrorHandler} from './services/api';
+import {ApiErrorHandler} from './services/api-error-handler';
 import {LockerServiceProvider} from './services/locker';
 import {SyncProcessServiceProvider} from './services/sync-process';
 import {NavigatorServiceProvider} from './services/navigator';
@@ -45,6 +46,7 @@ import {UserService} from './services/user';
         UserService,
         ApiService,
         ApiErrorHandler,
+        {provide: BaseApiErrorHandler, useClass: ApiErrorHandler},
         LockerServiceProvider,
         SyncProcessServiceProvider,
         NavigatorServiceProvider,

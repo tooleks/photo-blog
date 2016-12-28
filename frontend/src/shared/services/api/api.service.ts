@@ -1,6 +1,5 @@
 import {Injectable, Inject} from '@angular/core';
 import {Http, Headers, Response, URLSearchParams} from '@angular/http';
-import {Observable} from 'rxjs/Observable';
 import 'rxjs/Rx';
 import {ApiErrorHandler} from './api-error-handler';
 import {EnvService} from '../env';
@@ -8,43 +7,43 @@ import {AuthProviderService} from '../auth/auth-provider.service';
 
 @Injectable()
 export class ApiService {
-    apiUrl:string;
+    url:string;
     debug:boolean;
 
-    constructor(@Inject(EnvService) protected envService:EnvService,
-                @Inject(Http) protected http:Http,
-                @Inject(ApiErrorHandler) protected errorHandler:ApiErrorHandler,
-                @Inject(AuthProviderService) protected authProviderService:AuthProviderService) {
-        this.apiUrl = this.envService.get('apiUrl');
+    constructor(@Inject(EnvService) public envService:EnvService,
+                @Inject(Http) public http:Http,
+                @Inject(ApiErrorHandler) public errorHandler:ApiErrorHandler,
+                @Inject(AuthProviderService) public authProviderService:AuthProviderService) {
+        this.url = this.envService.get('apiUrl');
         this.debug = this.envService.get('debug');
     }
 
     get = (url:string, options?:any) => {
         return this.http
             .get(this.getAbsoluteUrl(url), this.initializeOptions(options))
-            .map(this.extractData)
-            .catch(this.handleError);
+            .map(this.extractResponseData)
+            .catch(this.errorHandler.handleResponse);
     };
 
     post = (url:string, body?:any, options?:any) => {
         return this.http
             .post(this.getAbsoluteUrl(url), this.initializeBody(body), this.initializeOptions(options))
-            .map(this.extractData)
-            .catch(this.handleError);
+            .map(this.extractResponseData)
+            .catch(this.errorHandler.handleResponse);
     };
 
     put = (url:string, body?:any, options?:any) => {
         return this.http
             .put(this.getAbsoluteUrl(url), this.initializeBody(body), this.initializeOptions(options))
-            .map(this.extractData)
-            .catch(this.handleError);
+            .map(this.extractResponseData)
+            .catch(this.errorHandler.handleResponse);
     };
 
     delete = (url:string, options?:any) => {
         return this.http
             .delete(this.getAbsoluteUrl(url), this.initializeOptions(options))
-            .map(this.extractData)
-            .catch(this.handleError);
+            .map(this.extractResponseData)
+            .catch(this.errorHandler.handleResponse);
     };
 
     protected initializeOptions = (options?:any) => {
@@ -94,22 +93,9 @@ export class ApiService {
         return defaultSearchParams;
     };
 
-    protected initializeBody = (body?:any) => {
-        return body || {};
-    };
+    protected initializeBody = (body?:any) => body || {};
 
-    protected getAbsoluteUrl = (relativeUrl:string):string => {
-        return this.apiUrl + relativeUrl;
-    };
+    protected getAbsoluteUrl = (relativeUrl:string):string => this.url + relativeUrl;
 
-    protected extractData = (response:Response) => {
-        let body = response.json();
-        return body.data || {};
-    };
-
-    protected handleError = (response:any) => {
-        this.errorHandler.handle(response);
-        let body = response.json();
-        return Observable.throw(new Error(body.message));
-    };
+    protected extractResponseData = (response:Response) => response.json().data || {};
 }
