@@ -19,7 +19,10 @@ export class SignOutComponent {
         this.authService
             .signOut()
             .then((user:UserModel) => {
-                this.navigatorService.navigate(['/signin'])
+                this.navigatorService.navigate(['/signin']);
+            })
+            .catch((error:any) => {
+                this.navigatorService.navigate(['/signin']);
             });
     }
 }

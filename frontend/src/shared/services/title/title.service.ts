@@ -10,15 +10,13 @@ export class TitleService {
                 @Inject(Title) protected title:Title) {
     }
 
-    setTitle(newTitle:any):void {
+    setTitle = (newTitle:any):void => {
         this.title.setTitle(this.buildTitle(newTitle));
-    }
+    };
 
-    getTitle():string {
-        return this.title.getTitle();
-    }
+    getTitle = ():string => this.title.getTitle();
 
-    protected buildTitle(newTitle:any) {
+    protected buildTitle = (newTitle:any) => {
         let titlePieces = [this.envService.get('appName')];
 
         if (!newTitle) {
@@ -32,5 +30,5 @@ export class TitleService {
         }
 
         return titlePieces.reverse().join(this.pathSeparator);
-    }
+    };
 }

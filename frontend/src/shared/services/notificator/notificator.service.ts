@@ -6,19 +6,19 @@ export class NotificatorService {
     constructor(@Inject(ToastsManager) protected toastsManager:ToastsManager) {
     }
 
-    error(message:string, title?:string) {
+    error = (message:string, title?:string) => {
         this.toastsManager.error(message, title);
-    }
+    };
 
-    warning(message:string, title?:string) {
+    warning = (message:string, title?:string) => {
         this.toastsManager.warning(message, title);
-    }
+    };
 
-    success(message:string, title?:string) {
+    success = (message:string, title?:string) => {
         this.toastsManager.success(message, title);
-    }
+    };
 
-    info(message:string, title?:string) {
+    info = (message:string, title?:string) => {
         this.toastsManager.info(message, title);
-    }
+    };
 }

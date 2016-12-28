@@ -18,12 +18,12 @@ export class TagsSelectInputComponent {
         }
     }
 
-    onAdd(item:string) {
+    onAdd = (item:string) => {
         this.tags.push({text: item});
         this.tagsChange.emit(this.tags);
-    }
+    };
 
-    onRemove(item:string) {
+    onRemove = (item:string) => {
         let tags:Tag[] = [];
         this.tags.forEach((tag:Tag) => {
             if (tag.text != item) {
@@ -32,9 +32,7 @@ export class TagsSelectInputComponent {
         });
         this.tags = tags;
         this.tagsChange.emit(this.tags);
-    }
+    };
 
-    transform(item:string) {
-        return item.toLowerCase();
-    }
+    transform = (item:string) => item.toLowerCase();
 }

@@ -4,6 +4,7 @@ import {TitleService} from '../../../shared/services/title';
 import {SyncProcessService, SyncProcessServiceProvider} from '../../../shared/services/sync-process';
 import {NavigatorService, NavigatorServiceProvider} from '../../../shared/services/navigator';
 import {PagerService, PagerServiceProvider} from '../../../shared/services/pager';
+import {AuthProviderService} from '../../../shared/services/auth';
 import {PhotoService} from '../../services/photo.service';
 import {PhotoModel} from '../../models/photo-model';
 
@@ -20,6 +21,7 @@ export class PhotosByTagComponent {
 
     constructor(@Inject(ActivatedRoute) protected route:ActivatedRoute,
                 @Inject(TitleService) protected titleService:TitleService,
+                @Inject(AuthProviderService) protected authUserProvider:AuthProviderService,
                 @Inject(PagerServiceProvider) protected pagerServiceProvider:PagerServiceProvider,
                 @Inject(SyncProcessServiceProvider) protected syncProcessServiceProvider:SyncProcessServiceProvider,
                 @Inject(NavigatorServiceProvider) protected navigatorServiceProvider:NavigatorServiceProvider,
@@ -61,52 +63,45 @@ export class PhotosByTagComponent {
             });
     }
 
-    protected loadPhotos(take:number, skip:number, tag:string) {
-        return this.photoService.getByTag(take, skip, tag).toPromise().then((photos:PhotoModel[]) => {
-            return this.pagerService.appendItems(photos);
-        });
-    }
+    protected loadPhotos = (take:number, skip:number, tag:string) => {
+        return this.photoService
+            .getByTag(take, skip, tag)
+            .then((photos:PhotoModel[]) => this.pagerService.appendItems(photos));
+    };
 
-    protected getPhotos() {
-        return this.pagerService.getItems();
-    }
+    protected getPhotos = () => this.pagerService.getItems();
 
-    load(take:number, skip:number, tag:string) {
-        return this.syncProcessService.startProcess().then(() => {
-            return this.loadPhotos(take, skip, tag);
-        }).then((result:any) => {
-            this.syncProcessService.endProcess();
-            this.setPageNumber();
-            return result;
-        }).catch(this.syncProcessService.handleErrors.bind(this.syncProcessService));
-    }
+    load = (take:number, skip:number, tag:string) => {
+        return this.syncProcessService
+            .process(() => this.loadPhotos(take, skip, tag))
+            .then((result:any) => {
+                this.setPageNumber();
+                return result;
+            });
+    };
 
-    loadMore() {
-        return this.load(this.pagerService.getLimit(), this.pagerService.getOffset(), this.queryParams.tag);
-    }
+    loadMore = () => this.load(this.pagerService.getLimit(), this.pagerService.getOffset(), this.queryParams.tag);
 
-    setPageNumber() {
+    setPageNumber = () => {
         let page = this.pagerService.getPage();
-        if (page > 1) this.navigatorService.setQueryParam('page', page);
-    }
+        if (page > 1) {
+            this.navigatorService.setQueryParam('page', page);
+        }
+    };
 
-    isEmpty() {
-        return !this.syncProcessService.isProcessing() && this.empty === true;
-    }
+    isEmpty = ():boolean => !this.syncProcessService.isProcessing() && this.empty === true;
 
-    isLoading() {
-        return this.syncProcessService.isProcessing();
-    }
+    isLoading = ():boolean => this.syncProcessService.isProcessing();
 
-    onShowPhoto(photo:PhotoModel) {
+    onShowPhoto = (photo:PhotoModel) => {
         this.navigatorService.setQueryParam('show', photo.id);
-    }
+    };
 
-    onHidePhoto() {
+    onHidePhoto = () => {
         this.navigatorService.unsetQueryParam('show');
-    }
+    };
 
-    navigateToEditPhoto(photo:PhotoModel) {
+    navigateToEditPhoto = (photo:PhotoModel) => {
         this.navigatorService.navigate(['photo/edit', photo.id]);
-    }
+    };
 }

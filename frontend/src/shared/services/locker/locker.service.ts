@@ -4,17 +4,9 @@ import {Injectable} from '@angular/core';
 export class LockerService {
     protected locked:boolean = false;
 
-    lock() {
-        this.locked = true;
-        return this.locked;
-    }
+    lock = () => this.locked = true;
 
-    unlock() {
-        this.locked = false;
-        return this.locked;
-    }
+    unlock = () => this.locked = false;
 
-    isLocked() {
-        return this.locked === true;
-    }
+    isLocked = () => this.locked === true;
 }

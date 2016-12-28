@@ -19,11 +19,7 @@ export class FileSelectInputComponent {
         }
     }
 
-    getFile() {
-        return this.element.nativeElement.firstElementChild.files[0];
-    }
+    getFile = () => this.element.nativeElement.firstElementChild.files[0];
 
-    isFile() {
-        return this.element.nativeElement.firstElementChild.files.length > 0;
-    }
+    isFile = () => this.element.nativeElement.firstElementChild.files.length > 0;
 }

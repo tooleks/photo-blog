@@ -8,7 +8,7 @@ export class NavigatorServiceProvider {
                 @Inject(Router) protected router:Router) {
     }
 
-    getInstance() {
+    getInstance = ():NavigatorService => {
         return new NavigatorService(this.route, this.router);
-    }
+    };
 }

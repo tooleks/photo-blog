@@ -1,5 +1,4 @@
-import {Component, Input, HostListener} from '@angular/core';
-import {GalleryItem} from './gallery-item';
+import {Component, Input, HostListener, SimpleChanges} from '@angular/core';
 
 @Component({
     selector: 'gallery',
@@ -7,96 +6,111 @@ import {GalleryItem} from './gallery-item';
     styles: [require('./gallery.component.css').toString()],
 })
 export class GalleryComponent {
-    @Input() items:GalleryItem[] = [];
-    @Input() initItemId:string;
+    @Input() items:Array<any> = [];
+    @Input() defaultActiveItemId:string;
     @Input() loadMoreCallback:any;
-    @Input() openViewCallback:any;
-    @Input() closeViewCallback:any;
+    @Input() openItemCallback:any;
+    @Input() closeItemCallback:any;
     @Input() editItemCallback:any;
     @Input() deleteItemCallback:any;
 
-    activeItem:GalleryItem;
+    activeItem:any;
     activeItemIndex:number;
 
-    ngOnChanges(changes:any) {
-        if (this.initItemId && changes['items']) {
-            this.items.forEach((item:GalleryItem) => {
-                if (item.id == this.initItemId) {
-                    this.initItemId = null;
-                    this.viewItem(item);
-                }
-            });
+    ngOnChanges(changes:SimpleChanges) {
+        if (this.defaultActiveItemId && this.items.length) {
+            this.viewItemById(this.defaultActiveItemId);
+            this.defaultActiveItemId = null;
         }
-    }
+    };
 
     @HostListener('document:keydown', ['$event'])
-    handleKeyboardEvent(event:KeyboardEvent) {
-        switch (event.key) {
-            case 'Escape':
-            {
-                this.closeView();
-                break;
-            }
-            case 'ArrowLeft':
-            {
-                this.viewPrevItem();
-                break;
-            }
-            case 'ArrowRight':
-            {
-                this.viewNextItem(true);
-                break;
+    handleKeyboardEvent = (event:KeyboardEvent) => {
+        if (this.activeItem) {
+            switch (event.key) {
+                case 'Escape':
+                    return this.closeItem();
+                case 'ArrowLeft':
+                    return this.viewPrevItem();
+                case 'ArrowRight':
+                    return this.viewNextItem(true);
             }
         }
-    }
+    };
 
-    viewItem(item:GalleryItem) {
+    processCallback = (callback:any, args?:any[]) => {
+        return typeof callback === 'function' ? Promise.resolve(callback(...args)) : Promise.reject(new Error);
+    };
+
+    setActiveItem = (item:any, index:number) => {
         this.activeItem = item;
-        this.items.forEach((item, index) => {
-            if (item.id == this.activeItem.id) {
-                this.activeItemIndex = index;
+        this.activeItemIndex = index;
+    };
+
+    getActiveItem = () => this.activeItem;
+
+    setItems = (items:Array<any>) => this.items = items;
+
+    getItems = () => this.items;
+
+    viewItemById = (id:string) => {
+        this.items.some((item:any, index:number) => {
+            if (item.id == id) {
+                this.viewItem(item);
+                return true;
+            } else if (index === this.items.length - 1) {
+                this.processCallback(this.loadMoreCallback)
+                    .then((items:Array<any>) => {
+                        this.setItems(items);
+                        this.viewItemById(id);
+                    })
+                    .catch((error:any) => {
+                        //
+                    });
             }
         });
-        if (typeof(this.openViewCallback) === 'function') {
-            this.openViewCallback(this.activeItem);
-        }
-    }
+    };
 
-    viewPrevItem() {
-        var prevItemIndex = this.activeItemIndex - 1;
+    viewItem = (item:any) => {
+        let id = item.id;
+        this.items.some((item:any, index:number) => {
+            if (item.id == id) {
+                this.setActiveItem(item, index);
+                this.processCallback(this.openItemCallback, [this.activeItem]);
+                return true;
+            }
+        });
+    };
+
+    viewPrevItem = () => {
+        let prevItemIndex = this.activeItemIndex - 1;
         if (this.items[prevItemIndex]) {
             this.viewItem(this.items[prevItemIndex]);
         }
-    }
+    };
 
-    viewNextItem(load:any) {
-        if (load === undefined) load = true;
-        var nextItemIndex = this.activeItemIndex + 1;
+    viewNextItem = (loadMoreIfNotExist:boolean) => {
+        let nextItemIndex = this.activeItemIndex + 1;
         if (this.items[nextItemIndex]) {
             this.viewItem(this.items[nextItemIndex]);
-        } else if (load) {
-            if (typeof(this.loadMoreCallback) === 'function') {
-                this.loadMoreCallback().then((items:any) => {
-                    this.items = items;
+        } else if (loadMoreIfNotExist) {
+            this.processCallback(this.loadMoreCallback)
+                .then((items:Array<any>) => {
+                    this.setItems(items);
                     this.viewNextItem(false);
+                })
+                .catch((error:any) => {
+                    //
                 });
-            }
         }
-    }
+    };
 
-    closeView() {
-        this.activeItem = null;
-        this.activeItemIndex = null;
-        if (typeof(this.closeViewCallback) === 'function') {
-            this.closeViewCallback();
-        }
-    }
+    closeItem = () => {
+        this.processCallback(this.closeItemCallback, [this.activeItem]);
+        this.setActiveItem(null, null);
+    };
 
-    editItem() {
-        this.editItemCallback(this.activeItem);
-    }
+    editItem = () => this.processCallback(this.editItemCallback, [this.activeItem]);
 
-    deleteItem() {
-        this.deleteItemCallback(this.activeItem);
-    }
+    deleteItem = () => this.processCallback(this.deleteItemCallback, [this.activeItem]);
 }

@@ -1,118 +1,101 @@
 import {Injectable, Inject} from '@angular/core';
 import {Http, Headers, Response, URLSearchParams} from '@angular/http';
-import {Observable} from 'rxjs/Observable';
 import 'rxjs/Rx';
 import {ApiErrorHandler} from './api-error-handler';
 import {EnvService} from '../env';
-import {AuthUserProviderService} from '../auth/auth-user-provider.service';
+import {AuthProviderService} from '../auth/auth-provider.service';
 
 @Injectable()
 export class ApiService {
-    apiUrl:string;
+    url:string;
     debug:boolean;
-    headers:Headers;
-    searchParams:URLSearchParams;
-    body:any;
 
-    constructor(@Inject(EnvService) protected envService:EnvService,
-                @Inject(Http) protected http:Http,
-                @Inject(ApiErrorHandler) protected errorHandler:ApiErrorHandler,
-                @Inject(AuthUserProviderService) protected authUserProviderService:AuthUserProviderService) {
-        this.apiUrl = this.envService.get('apiUrl');
+    constructor(@Inject(EnvService) public envService:EnvService,
+                @Inject(Http) public http:Http,
+                @Inject(ApiErrorHandler) public errorHandler:ApiErrorHandler,
+                @Inject(AuthProviderService) public authProviderService:AuthProviderService) {
+        this.url = this.envService.get('apiUrl');
         this.debug = this.envService.get('debug');
     }
 
-    get(url:string, options?:any) {
+    get = (url:string, options?:any) => {
         return this.http
             .get(this.getAbsoluteUrl(url), this.initializeOptions(options))
-            .map(this.extractData.bind(this))
-            .catch(this.handleError.bind(this));
-    }
+            .map(this.extractResponseData)
+            .catch(this.errorHandler.handleResponse);
+    };
 
-    post(url:string, body?:any, options?:any) {
+    post = (url:string, body?:any, options?:any) => {
         return this.http
             .post(this.getAbsoluteUrl(url), this.initializeBody(body), this.initializeOptions(options))
-            .map(this.extractData.bind(this))
-            .catch(this.handleError.bind(this));
-    }
+            .map(this.extractResponseData)
+            .catch(this.errorHandler.handleResponse);
+    };
 
-    put(url:string, body?:any, options?:any) {
+    put = (url:string, body?:any, options?:any) => {
         return this.http
             .put(this.getAbsoluteUrl(url), this.initializeBody(body), this.initializeOptions(options))
-            .map(this.extractData.bind(this))
-            .catch(this.handleError.bind(this));
-    }
+            .map(this.extractResponseData)
+            .catch(this.errorHandler.handleResponse);
+    };
 
-    delete(url:string, options?:any) {
+    delete = (url:string, options?:any) => {
         return this.http
             .delete(this.getAbsoluteUrl(url), this.initializeOptions(options))
-            .map(this.extractData.bind(this))
-            .catch(this.handleError.bind(this));
-    }
+            .map(this.extractResponseData)
+            .catch(this.errorHandler.handleResponse);
+    };
 
-    protected initializeOptions(options?:any) {
+    protected initializeOptions = (options?:any) => {
         options = options || {};
         return {
             headers: this.initializeHeaders(options.headers),
             search: this.initializeSearchParams(options.params),
         };
-    }
+    };
 
-    protected initializeHeaders(headers?:any) {
-        this.headers = this.getDefaultHeaders();
+    protected initializeHeaders = (headers?:any):Headers => {
+        let initializedHeaders = this.getDefaultHeaders();
         headers = headers || {};
         for (var name in headers) {
             if (headers.hasOwnProperty(name)) {
-                this.headers.append(name, headers[name]);
+                initializedHeaders.append(name, headers[name]);
             }
         }
-        return this.headers;
-    }
+        return initializedHeaders;
+    };
 
-    protected getDefaultHeaders() {
-        let headers = new Headers;
-        headers.append('Accept', 'application/json');
-        if (this.authUserProviderService.hasAuth()) {
-            headers.append('Authorization', 'Bearer ' + this.authUserProviderService.getAuthApiToken());
+    protected getDefaultHeaders = ():Headers => {
+        let defaultHeaders = new Headers;
+        defaultHeaders.append('Accept', 'application/json');
+        if (this.authProviderService.hasAuth()) {
+            defaultHeaders.append('Authorization', 'Bearer ' + this.authProviderService.getAuthApiToken());
         }
-        return headers;
-    }
+        return defaultHeaders;
+    };
 
-    protected initializeSearchParams(searchParams?:any) {
-        this.searchParams = this.getDefaultSearchParams();
+    protected initializeSearchParams = (searchParams?:any):URLSearchParams => {
+        let initializedSearchParams = this.getDefaultSearchParams();
         searchParams = searchParams || {};
         for (var name in searchParams) {
             if (searchParams.hasOwnProperty(name)) {
-                this.searchParams.set(name, searchParams[name]);
+                initializedSearchParams.set(name, searchParams[name]);
             }
         }
-        return this.searchParams;
-    }
+        return initializedSearchParams;
+    };
 
-    protected getDefaultSearchParams() {
-        let searchParams = new URLSearchParams;
+    protected getDefaultSearchParams = ():URLSearchParams => {
+        let defaultSearchParams = new URLSearchParams;
         if (this.debug) {
-            searchParams.set('XDEBUG_SESSION_START', 'START');
+            defaultSearchParams.set('XDEBUG_SESSION_START', 'START');
         }
-        return searchParams;
-    }
+        return defaultSearchParams;
+    };
 
-    protected initializeBody(body?:any) {
-        this.body = body || {};
-        return this.body;
-    }
+    protected initializeBody = (body?:any) => body || {};
 
-    protected getAbsoluteUrl(relativeUrl:string) {
-        return this.apiUrl + relativeUrl;
-    }
+    protected getAbsoluteUrl = (relativeUrl:string):string => this.url + relativeUrl;
 
-    protected extractData(response:Response) {
-        let body = response.json();
-        return body.data || {};
-    }
-
-    protected handleError(error:any) {
-        this.errorHandler.handle(error);
-        return Observable.throw(error.message);
-    }
+    protected extractResponseData = (response:Response) => response.json().data || {};
 }
