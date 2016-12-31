@@ -18,7 +18,7 @@ export class GalleryGridComponent {
     elementSizeCheckInterval:any = null;
     elementProperties:any = {width: 0, height: 0};
 
-    constructor(@Inject(ElementRef) protected elementRef:ElementRef) {
+    constructor(@Inject(ElementRef) private elementRef:ElementRef) {
         this.gridLastRow = new GridRow;
     }
 

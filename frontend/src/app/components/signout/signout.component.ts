@@ -8,21 +8,21 @@ import {User} from '../../../shared/models';
     template: '',
 })
 export class SignOutComponent {
-    protected navigatorService:NavigatorService;
+    private navigator:NavigatorService;
 
-    constructor(@Inject(AuthService) protected authService:AuthService,
-                @Inject(NavigatorServiceProvider) protected navigatorServiceProvider:NavigatorServiceProvider) {
-        this.navigatorService = this.navigatorServiceProvider.getInstance();
+    constructor(@Inject(AuthService) private auth:AuthService,
+                @Inject(NavigatorServiceProvider) navigatorProvider:NavigatorServiceProvider) {
+        this.navigator = navigatorProvider.getInstance();
     }
 
     ngOnInit() {
-        this.authService
+        this.auth
             .signOut()
             .then((user:User) => {
-                this.navigatorService.navigate(['/signin']);
+                this.navigator.navigate(['/signin']);
             })
             .catch((error:any) => {
-                this.navigatorService.navigate(['/signin']);
+                this.navigator.navigate(['/signin']);
             });
     }
 }

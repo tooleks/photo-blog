@@ -2,7 +2,7 @@ import {Component, Inject} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {TitleService} from '../../../shared/services/title';
 import {AuthProviderService} from '../../../shared/services/auth';
-import {PhotoDataProviderService} from '../../services/photo-data-provider.service';
+import {PhotoDataProviderService} from '../../services/photo-data-provider';
 import {Photo, UploadedPhoto} from '../../../shared/models';
 import {NotificatorService} from '../../../shared/services/notificator/notificator.service';
 import {LockProcessService, LockProcessServiceProvider} from '../../../shared/services/lock-process';

@@ -6,7 +6,7 @@ import {NavigatorService, NavigatorServiceProvider} from '../../../shared/servic
 import {PagerService, PagerServiceProvider} from '../../../shared/services/pager';
 import {AuthProviderService} from '../../../shared/services/auth';
 import {Photo} from '../../../shared/models';
-import {PhotoDataProviderService} from '../../services/photo-data-provider.service';
+import {PhotoDataProviderService} from '../../services/photo-data-provider';
 
 @Component({
     selector: 'photos',

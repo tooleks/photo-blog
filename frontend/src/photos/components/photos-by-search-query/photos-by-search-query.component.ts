@@ -5,7 +5,7 @@ import {LockProcessService, LockProcessServiceProvider} from '../../../shared/se
 import {NavigatorService, NavigatorServiceProvider} from '../../../shared/services/navigator';
 import {PagerService, PagerServiceProvider} from '../../../shared/services/pager';
 import {AuthProviderService} from '../../../shared/services/auth';
-import {PhotoDataProviderService} from '../../services/photo-data-provider.service';
+import {PhotoDataProviderService} from '../../services/photo-data-provider';
 import {Photo} from '../../../shared/models';
 
 @Component({
