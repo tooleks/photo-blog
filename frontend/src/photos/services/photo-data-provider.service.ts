@@ -3,39 +3,39 @@ import {ApiService} from '../../shared/services/api/api.service';
 
 @Injectable()
 export class PhotoDataProviderService {
-    constructor(@Inject(ApiService) protected apiService:ApiService) {
+    constructor(@Inject(ApiService) protected api:ApiService) {
     }
 
-    create(attributes:any) {
-        return this.apiService.post('/photo', attributes).toPromise();
+    create(attributes:any):Promise<any> {
+        return this.api.post('/photo', attributes).toPromise();
     }
 
-    upload(file:FileList) {
+    upload(file:FileList):Promise<any> {
         let form = new FormData;
         form.append('file', file);
-        return this.apiService.post('/uploaded_photo', form).toPromise();
+        return this.api.post('/uploaded_photo', form).toPromise();
     }
 
-    updateById(id:number, attributes:any) {
-        return this.apiService.put('/photo/' + id, attributes).toPromise();
+    updateById(id:number, attributes:any):Promise<any> {
+        return this.api.put('/photo/' + id, attributes).toPromise();
     }
 
-    uploadById(id:number, file:FileList) {
+    uploadById(id:number, file:FileList):Promise<any> {
         let form = new FormData;
         form.append('file', file);
-        return this.apiService.post('/uploaded_photo/' + id, form).toPromise();
+        return this.api.post('/uploaded_photo/' + id, form).toPromise();
     }
 
     deleteById(id:number):Promise<any> {
-        return this.apiService.delete('/photo/' + id).toPromise();
+        return this.api.delete('/photo/' + id).toPromise();
     }
 
-    getById(id:number) {
-        return this.apiService.get('/photo/' + id).toPromise();
+    getById(id:number):Promise<any> {
+        return this.api.get('/photo/' + id).toPromise();
     }
 
-    getAll(take:number, skip:number) {
-        return this.apiService.get('/photo', {
+    getAll(take:number, skip:number):Promise<any> {
+        return this.api.get('/photo', {
             params: {
                 take: take,
                 skip: skip,
@@ -43,8 +43,8 @@ export class PhotoDataProviderService {
         }).toPromise();
     }
 
-    getByTag(take:number, skip:number, tag:string) {
-        return this.apiService.get('/photo', {
+    getByTag(take:number, skip:number, tag:string):Promise<any> {
+        return this.api.get('/photo', {
             params: {
                 take: take,
                 skip: skip,
@@ -53,8 +53,8 @@ export class PhotoDataProviderService {
         }).toPromise();
     }
 
-    getBySearchQuery(take:number, skip:number, query:string) {
-        return this.apiService.get('/photo', {
+    getBySearchQuery(take:number, skip:number, query:string):Promise<any> {
+        return this.api.get('/photo', {
             params: {
                 take: take,
                 skip: skip,

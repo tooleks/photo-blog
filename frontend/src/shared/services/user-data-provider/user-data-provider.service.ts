@@ -4,17 +4,17 @@ import {Auth, User} from '../../models';
 
 @Injectable()
 export class UserDataProviderService {
-    constructor(@Inject(ApiService) private apiService:ApiService) {
+    constructor(@Inject(ApiService) private api:ApiService) {
     }
 
     getById = (id:number):Promise<User> => {
-        return this.apiService
+        return this.api
             .get('/user/' + id)
             .toPromise();
     };
 
     getAuthByCredentials = (email:string, password:string):Promise<Auth> => {
-        return this.apiService
+        return this.api
             .post('/token', {email: email, password: password})
             .toPromise();
     };
