@@ -30,18 +30,20 @@ export class PhotoFormComponent {
 
     ngOnInit() {
         this.title.setTitle('Add Photo');
-        
+
         this.photo = new Photo;
 
         this.route.params
             .map((params) => params['id'])
             .subscribe((id:number) => {
-                if (id) {
-                    this.photoDataProvider.getById(id).then((photo:Photo) => {
-                        this.title.setTitle('Edit Photo');
-                        this.photo.setAttributes(photo);
-                    });
+                if (!id) {
+                    return;
                 }
+
+                this.photoDataProvider.getById(id).then((photo:Photo) => {
+                    this.title.setTitle('Edit Photo');
+                    this.photo.setAttributes(photo);
+                });
             });
     }
 
