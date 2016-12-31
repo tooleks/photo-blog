@@ -6,10 +6,10 @@
         <gallery *ngIf="!isEmpty()"
                  [items]="getLoadedPhotos()"
                  [defaultActiveItemId]="queryParams['show']"
-                 [loadMoreCallback]="loadMorePhotos"
-                 [openItemCallback]="onShowPhoto"
-                 [closeItemCallback]="onHidePhoto"
-                 [editItemCallback]="authProvider.isAuthenticated() ? onEditPhoto : false"></gallery>
+                 [onLoadMoreCallback]="loadMorePhotos"
+                 [onOpenItemCallback]="onShowPhoto"
+                 [onCloseItemCallback]="onHidePhoto"
+                 [onEditItemCallback]="authProvider.isAuthenticated() ? onEditPhoto : false"></gallery>
     </div>
 </div>
 <div *ngIf="!isEmpty()"
