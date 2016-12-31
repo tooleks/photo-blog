@@ -1,27 +1,28 @@
 import {Injectable, Inject} from '@angular/core';
 import {AuthProviderService} from './auth-provider.service';
-import {UserService} from '../user/user.service';
-import {AuthModel, UserModel} from '../../models';
+import {UserDataProviderService} from '../user';
+import {Auth, User} from '../../models';
 
 @Injectable()
 export class AuthService {
-    constructor(@Inject(UserService) protected userService:UserService,
-                @Inject(AuthProviderService) protected authProviderService:AuthProviderService) {
+    constructor(@Inject(UserDataProviderService) private userDataProvider:UserDataProviderService,
+                @Inject(AuthProviderService) private authProvider:AuthProviderService) {
     }
 
-    signIn = (email:string, password:string):Promise<UserModel> => {
-        return this.userService.getAuthByCredentials(email, password)
-            .then(this.authProviderService.setAuth)
-            .then((auth:AuthModel):Promise<UserModel> => this.userService.getById(auth.user_id))
-            .then(this.authProviderService.setUser);
+    signIn = (email:string, password:string):Promise<User> => {
+        return this.userDataProvider
+            .getAuthByCredentials(email, password)
+            .then(this.authProvider.setAuth)
+            .then((auth:Auth):Promise<User> => this.userDataProvider.getById(auth.user_id))
+            .then(this.authProvider.setUser);
     };
 
-    signOut = ():Promise<UserModel> => {
+    signOut = ():Promise<User> => {
         return new Promise((resolve, reject) => {
-            if (this.authProviderService.isAuthenticated()) {
-                let user:UserModel = this.authProviderService.getUser();
-                this.authProviderService.setAuth(null);
-                this.authProviderService.setUser(null);
+            if (this.authProvider.isAuthenticated()) {
+                let user:User = this.authProvider.getUser();
+                this.authProvider.setAuth(null);
+                this.authProvider.setUser(null);
                 resolve(user);
             } else {
                 reject();

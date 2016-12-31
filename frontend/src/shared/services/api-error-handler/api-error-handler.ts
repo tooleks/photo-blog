@@ -7,12 +7,12 @@ import {NavigatorService, NavigatorServiceProvider} from '../navigator';
 
 @Injectable()
 export class ApiErrorHandler extends BaseApiErrorHandler {
-    protected navigatorService:NavigatorService;
+    private navigator:NavigatorService;
 
-    constructor(@Inject(NotificatorService) protected notificator:NotificatorService,
-                @Inject(NavigatorServiceProvider) protected navigatorServiceProvider:NavigatorServiceProvider) {
+    constructor(@Inject(NotificatorService) private notificator:NotificatorService,
+                @Inject(NavigatorServiceProvider) private navigatorProvider:NavigatorServiceProvider) {
         super();
-        this.navigatorService = navigatorServiceProvider.getInstance();
+        this.navigator = navigatorProvider.getInstance();
     }
 
     handleResponse = (response:Response) => {
@@ -20,7 +20,7 @@ export class ApiErrorHandler extends BaseApiErrorHandler {
 
         switch (response.status) {
             case 0:
-                this.handleHttpError(response, body);
+                this.handleUnknownError(response, body);
                 break;
             case 401:
                 this.handleUnauthorizedError(response, body);
@@ -36,19 +36,19 @@ export class ApiErrorHandler extends BaseApiErrorHandler {
         return Observable.throw(new Error(body.message));
     };
 
-    protected handleUnknownError = (response:any, body:any) => {
+    private handleUnknownError = (response:any, body:any) => {
         this.notificator.error(body.message, 'Unknown Error');
     };
 
-    protected handleUnauthorizedError = (response:any, body:any) => {
-        this.navigatorService.navigate(['/signout']);
+    private handleUnauthorizedError = (response:any, body:any) => {
+        this.navigator.navigate(['/signout']);
     };
 
-    protected handleHttpError = (response:any, body:any) => {
+    private handleHttpError = (response:any, body:any) => {
         this.notificator.error(body.message, response.status + ' Error');
     };
 
-    protected handleValidationErrors = (response:any, body:any) => {
+    private handleValidationErrors = (response:any, body:any) => {
         body.errors = body.errors || {};
         for (var property in body.errors) {
             if (body.errors.hasOwnProperty(property)) {

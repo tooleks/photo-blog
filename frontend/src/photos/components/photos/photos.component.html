@@ -1,27 +1,23 @@
 <div class="row">
     <div class="col-sm-12">
-        <div *ngIf="isEmpty()"
-             class="widget p-sm text-center">
+        <div *ngIf="isEmpty()" class="widget p-sm text-center">
             <h2 class="m-xs">{{ 'No photos found.' }}</h2>
         </div>
         <gallery *ngIf="!isEmpty()"
-                 [items]="getPhotos()"
+                 [items]="getLoadedPhotos()"
                  [defaultActiveItemId]="queryParams['show']"
-                 [loadMoreCallback]="loadMore"
+                 [loadMoreCallback]="loadMorePhotos"
                  [openItemCallback]="onShowPhoto"
                  [closeItemCallback]="onHidePhoto"
-                 [editItemCallback]="authUserProvider.isAuthenticated() ? navigateToEditPhoto : false"></gallery>
+                 [editItemCallback]="authProvider.isAuthenticated() ? onEditPhoto : false"></gallery>
     </div>
 </div>
 <div *ngIf="!isEmpty()"
      class="load-more-container text-center">
     <button *ngIf="!isLoading()"
-            (click)="loadMore()"
+            (click)="loadMorePhotos()"
             class="btn btn-primary text-uppercase">
         {{ 'Load more' }}
     </button>
-    <div *ngIf="isLoading()"
-         class="text-uppercase">
-        <i class="fa fa-circle-o-notch fa-spin fa-2x"></i>
-    </div>
+    <loader [loading]="isLoading()"></loader>
 </div>

@@ -1,11 +1,11 @@
 import {Component, Inject} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {TitleService} from '../../../shared/services/title';
-import {PhotoService} from '../../services/photo.service';
-import {PhotoModel} from '../../models/photo-model';
-import {UploadedPhotoModel} from '../../models/uploaded-photo-model';
+import {AuthProviderService} from '../../../shared/services/auth';
+import {PhotoDataProviderService} from '../../services/photo-data-provider.service';
+import {Photo, UploadedPhoto} from '../../../shared/models';
 import {NotificatorService} from '../../../shared/services/notificator/notificator.service';
-import {SyncProcessService, SyncProcessServiceProvider} from '../../../shared/services/sync-process';
+import {LockProcessService, LockProcessServiceProvider} from '../../../shared/services/lock-process';
 import {NavigatorService, NavigatorServiceProvider} from '../../../shared/services/navigator';
 
 @Component({
@@ -13,94 +13,98 @@ import {NavigatorService, NavigatorServiceProvider} from '../../../shared/servic
     template: require('./photo-form.component.html'),
 })
 export class PhotoFormComponent {
-    protected photo:PhotoModel;
-    protected syncProcessService:SyncProcessService;
-    protected navigatorService:NavigatorService;
+    private photo:Photo;
+    private lockProcess:LockProcessService;
+    private navigator:NavigatorService;
 
-    constructor(@Inject(ActivatedRoute) protected route:ActivatedRoute,
-                @Inject(TitleService) protected titleService:TitleService,
-                @Inject(PhotoService) protected photoService:PhotoService,
-                @Inject(NotificatorService) protected notificatorService:NotificatorService,
-                @Inject(SyncProcessServiceProvider) protected syncProcessServiceProvider:SyncProcessServiceProvider,
-                @Inject(NavigatorServiceProvider) protected navigatorServiceProvider:NavigatorServiceProvider) {
-        this.syncProcessService = this.syncProcessServiceProvider.getInstance();
-        this.navigatorService = this.navigatorServiceProvider.getInstance();
+    constructor(@Inject(ActivatedRoute) private route:ActivatedRoute,
+                @Inject(TitleService) private title:TitleService,
+                @Inject(AuthProviderService) private authProvider:AuthProviderService,
+                @Inject(PhotoDataProviderService) private photoDataProvider:PhotoDataProviderService,
+                @Inject(NotificatorService) private notificator:NotificatorService,
+                @Inject(NavigatorServiceProvider) navigatorServiceProvider:NavigatorServiceProvider,
+                @Inject(LockProcessServiceProvider) lockProcessServiceProvider:LockProcessServiceProvider) {
+        this.lockProcess = lockProcessServiceProvider.getInstance();
+        this.navigator = navigatorServiceProvider.getInstance();
     }
 
     ngOnInit() {
-        this.photo = new PhotoModel;
-
-        this.titleService.setTitle('Add Photo');
+        this.title.setTitle('Add Photo');
+        
+        this.photo = new Photo;
 
         this.route.params
             .map((params) => params['id'])
             .subscribe((id:number) => {
-                if (!id) {
-                    return;
+                if (id) {
+                    this.photoDataProvider.getById(id).then((photo:Photo) => {
+                        this.title.setTitle('Edit Photo');
+                        this.photo.setAttributes(photo);
+                    });
                 }
-
-                this.titleService.setTitle('Edit Photo');
-
-                this.photoService
-                    .getById(id)
-                    .then((photo:PhotoModel) => this.photo.setAttributes(photo));
             });
     }
 
-    protected processSavePhoto = () => {
+    private processSavePhoto = () => {
         let saver = this.photo.id
-            ? this.photoService.updateById(this.photo.id, this.photo)
-            : this.photoService.create(this.photo);
+            ? this.photoDataProvider.updateById(this.photo.id, this.photo)
+            : this.photoDataProvider.create(this.photo);
 
-        return saver.then((photo:PhotoModel) => {
+        return saver.then((photo:Photo) => {
             this.photo.setAttributes(photo);
             return photo;
         });
     };
 
     save = () => {
-        return this.syncProcessService
+        return this.lockProcess
             .process(this.processSavePhoto)
             .then((result:any) => {
-                this.notificatorService.success('Photo was successfully saved.');
-                this.navigatorService.navigate(['/photos']);
+                this.notificator.success('Photo was successfully saved.');
+                this.navigator.navigate(['/photos']);
                 return result;
             });
     };
 
-    protected processUploadPhoto = (file:FileList) => {
+    private processUploadPhoto = (file:FileList) => {
         let uploader = this.photo.id
-            ? this.photoService.uploadById(this.photo.id, file)
-            : this.photoService.upload(file);
+            ? this.photoDataProvider.uploadById(this.photo.id, file)
+            : this.photoDataProvider.upload(file);
 
-        return uploader.then((uploadedPhoto:UploadedPhotoModel) => {
+        return uploader.then((uploadedPhoto:UploadedPhoto) => {
             this.photo.setUploadedAttributes(uploadedPhoto);
             return uploadedPhoto;
         });
     };
 
     upload = (file:FileList) => {
-        return this.syncProcessService
-            .process(() => this.processUploadPhoto(file))
+        return this.lockProcess
+            .process(this.processUploadPhoto, [file])
             .then((result:any) => {
-                this.notificatorService.success('File was successfully uploaded.');
+                this.notificator.success('File was successfully uploaded.');
                 return result;
             });
     };
 
-    protected processDeletePhoto = () => this.photoService.deleteById(this.photo.id);
+    private processDeletePhoto = () => {
+        let deleter:Promise<any> = this.photo.id
+            ? this.photoDataProvider.deleteById(this.photo.id)
+            : Promise.reject(new Error('You can\'n delete unsaved photo.'));
+
+        return deleter;
+    };
 
     deletePhoto = () => {
-        if (!this.photo.id) {
-            return Promise.reject(new Error('Invalid photo id.'));
-        }
-
-        return this.syncProcessService
+        return this.lockProcess
             .process(this.processDeletePhoto)
             .then((result:any) => {
-                this.notificatorService.success('Photo was successfully deleted.');
-                this.navigatorService.navigate(['/photos']);
+                this.notificator.success('Photo was successfully deleted.');
+                this.navigator.navigate(['/photos']);
                 return result;
             });
+    };
+
+    isLoading = ():boolean => {
+        return this.lockProcess.isProcessing();
     };
 }

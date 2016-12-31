@@ -4,20 +4,22 @@ import {EnvService} from '../env';
 
 @Injectable()
 export class TitleService {
-    protected pathSeparator = ' / ';
+    private pathSeparator = ' / ';
 
-    constructor(@Inject(EnvService) protected envService:EnvService,
-                @Inject(Title) protected title:Title) {
+    constructor(@Inject(EnvService) private env:EnvService,
+                @Inject(Title) private title:Title) {
     }
 
     setTitle = (newTitle:any):void => {
         this.title.setTitle(this.buildTitle(newTitle));
     };
 
-    getTitle = ():string => this.title.getTitle();
+    getTitle = ():string => {
+        return this.title.getTitle();
+    };
 
-    protected buildTitle = (newTitle:any) => {
-        let titlePieces = [this.envService.get('appName')];
+    private buildTitle = (newTitle:any):string => {
+        let titlePieces = [this.env.get('appName')];
 
         if (!newTitle) {
             return titlePieces.reverse().join(this.pathSeparator);
