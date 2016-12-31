@@ -9,7 +9,7 @@ import {GridRow} from './grid-row';
 export class GalleryGridComponent {
     @Input() rowHeight:number = 0;
     @Input() rowWidth:number = 0;
-    @Input() clickGridItemCallback:any;
+    @Input() onClickGridItemCallback:any;
     @Input() galleryItems:Array<any> = [];
     @Input() updateInterval:number;
 
@@ -64,5 +64,7 @@ export class GalleryGridComponent {
         this.gridItems = gridItems;
     };
 
-    getGridItems = ():Array<any> => this.gridItems;
+    getGridItems = ():Array<any> => {
+        return this.gridItems;
+    };
 }

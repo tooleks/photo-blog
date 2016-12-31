@@ -19,15 +19,15 @@
                class="gl-action gl-next"><i class="fa fa-arrow-right"></i></a>
         </div>
         <div class="gl-navbar">
-            <a *ngIf="closeItemCallback"
+            <a *ngIf="onCloseItemCallback"
                (click)="closeItem()"
                title="{{ 'Close' }}"
                class="gl-action gl-right"><i class="fa fa-close"></i></a>
-            <a *ngIf="editItemCallback"
+            <a *ngIf="onEditItemCallback"
                (click)="editItem()"
                title="{{ 'Edit' }}"
                class="gl-action gl-left"><i class="fa fa-pencil"></i></a>
-            <a *ngIf="deleteItemCallback"
+            <a *ngIf="onDeleteItemCallback"
                (click)="deleteItem()"
                title="{{ 'Delete' }}"
                class="gl-action gl-left"><i class="fa fa-trash"></i></a>
@@ -38,5 +38,5 @@
         [updateInterval]="250"
         [rowHeight]="250"
         [galleryItems]="getItems()"
-        [clickGridItemCallback]="viewItem"
+        [onClickGridItemCallback]="viewItem"
 ></gallery-grid>

@@ -8,11 +8,11 @@ import {Component, Input, HostListener, SimpleChanges} from '@angular/core';
 export class GalleryComponent {
     @Input() items:Array<any> = [];
     @Input() defaultActiveItemId:string;
-    @Input() loadMoreCallback:any;
-    @Input() openItemCallback:any;
-    @Input() closeItemCallback:any;
-    @Input() editItemCallback:any;
-    @Input() deleteItemCallback:any;
+    @Input() onLoadMoreCallback:any;
+    @Input() onOpenItemCallback:any;
+    @Input() onCloseItemCallback:any;
+    @Input() onEditItemCallback:any;
+    @Input() onDeleteItemCallback:any;
 
     activeItem:any;
     activeItemIndex:number;
@@ -47,19 +47,25 @@ export class GalleryComponent {
         this.activeItemIndex = index;
     };
 
-    getActiveItem = () => this.activeItem;
+    getActiveItem = ():any => {
+        return this.activeItem;
+    };
 
-    setItems = (items:Array<any>) => this.items = items;
+    setItems = (items:Array<any>):void => {
+        this.items = items;
+    };
 
-    getItems = () => this.items;
+    getItems = ():Array<any> => {
+        return this.items;
+    };
 
-    viewItemById = (id:string) => {
+    viewItemById = (id:string):void => {
         this.items.some((item:any, index:number) => {
             if (item.id == id) {
                 this.viewItem(item);
                 return true;
             } else if (index === this.items.length - 1) {
-                this.processCallback(this.loadMoreCallback)
+                this.processCallback(this.onLoadMoreCallback)
                     .then((items:Array<any>) => {
                         this.setItems(items);
                         this.viewItemById(id);
@@ -71,30 +77,30 @@ export class GalleryComponent {
         });
     };
 
-    viewItem = (item:any) => {
+    viewItem = (item:any):void => {
         let id = item.id;
         this.items.some((item:any, index:number) => {
             if (item.id == id) {
                 this.setActiveItem(item, index);
-                this.processCallback(this.openItemCallback, [this.activeItem]);
+                this.processCallback(this.onOpenItemCallback, [this.activeItem]);
                 return true;
             }
         });
     };
 
-    viewPrevItem = () => {
+    viewPrevItem = ():void => {
         let prevItemIndex = this.activeItemIndex - 1;
         if (this.items[prevItemIndex]) {
             this.viewItem(this.items[prevItemIndex]);
         }
     };
 
-    viewNextItem = (loadMoreIfNotExist:boolean) => {
+    viewNextItem = (loadMoreIfNotExist:boolean):void => {
         let nextItemIndex = this.activeItemIndex + 1;
         if (this.items[nextItemIndex]) {
             this.viewItem(this.items[nextItemIndex]);
         } else if (loadMoreIfNotExist) {
-            this.processCallback(this.loadMoreCallback)
+            this.processCallback(this.onLoadMoreCallback)
                 .then((items:Array<any>) => {
                     this.setItems(items);
                     this.viewNextItem(false);
@@ -105,12 +111,16 @@ export class GalleryComponent {
         }
     };
 
-    closeItem = () => {
-        this.processCallback(this.closeItemCallback, [this.activeItem]);
+    closeItem = ():void => {
+        this.processCallback(this.onCloseItemCallback, [this.activeItem]);
         this.setActiveItem(null, null);
     };
 
-    editItem = () => this.processCallback(this.editItemCallback, [this.activeItem]);
+    editItem = ():void => {
+        this.processCallback(this.onEditItemCallback, [this.activeItem]);
+    };
 
-    deleteItem = () => this.processCallback(this.deleteItemCallback, [this.activeItem]);
+    deleteItem = ():void => {
+        this.processCallback(this.onDeleteItemCallback, [this.activeItem]);
+    };
 }

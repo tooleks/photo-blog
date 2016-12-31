@@ -9,13 +9,21 @@ export class GridRow {
         this.setMaxWidth(0);
     }
 
-    setMaxHeight = (maxHeight:number) => this.maxHeight = maxHeight;
+    setMaxHeight = (maxHeight:number):void => {
+        this.maxHeight = maxHeight;
+    };
 
-    getMaxHeight = ():number => this.maxHeight;
+    getMaxHeight = ():number => {
+        return this.maxHeight;
+    };
 
-    setMaxWidth = (maxWidth:number) => this.maxWidth = maxWidth;
+    setMaxWidth = (maxWidth:number):void => {
+        this.maxWidth = maxWidth;
+    };
 
-    getMaxWidth = ():number => this.maxWidth;
+    getMaxWidth = ():number => {
+        return this.maxWidth;
+    };
 
     appendItem = (item:any):Array<any> => {
         let scaledToMaxHeightItem = this.scaleItemToMaxHeight(item);
@@ -29,11 +37,13 @@ export class GridRow {
         return this.items;
     };
 
-    resetItems = () => {
+    resetItems = ():void => {
         this.items = [];
     };
 
-    getItems = ():Array<any> => this.items;
+    getItems = ():Array<any> => {
+        return this.items;
+    };
 
     private predictRowWidth = (newItem:any):number => {
         let width = newItem.thumbnails[1].width;
