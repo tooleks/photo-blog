@@ -14,7 +14,7 @@ import {NotificatorService} from './services/notificator';
 import {EnvService} from './services/env';
 import {AuthService, AuthProviderService} from './services/auth';
 import {LocalStorageService} from './services/local-storage';
-import {UserDataProviderService} from './services/user';
+import {UserDataProviderService} from './services/user-data-provider';
 import {FileSelectInputComponent} from './components/file-select-input/file-select-input.component';
 import {TagsSelectInputComponent} from './components/tags-select-input/tags-select-input.component';
 import {LoaderComponent} from './components/loader/loader.component';
