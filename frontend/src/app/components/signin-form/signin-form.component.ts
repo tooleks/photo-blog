@@ -11,27 +11,27 @@ import {User} from '../../../shared/models';
     template: require('./signin-form.component.html'),
 })
 export class SignInFormComponent {
-    protected navigatorService:NavigatorService;
-    protected form:SignInForm;
+    private navigator:NavigatorService;
+    private form:SignInForm;
 
-    constructor(@Inject(AuthService) protected authService:AuthService,
-                @Inject(TitleService) protected titleService:TitleService,
-                @Inject(NotificatorService) protected notificatorService:NotificatorService,
-                @Inject(NavigatorServiceProvider) protected navigatorServiceProvider:NavigatorServiceProvider) {
-        this.navigatorService = this.navigatorServiceProvider.getInstance();
+    constructor(@Inject(AuthService) private auth:AuthService,
+                @Inject(TitleService) private title:TitleService,
+                @Inject(NotificatorService) private notificator:NotificatorService,
+                @Inject(NavigatorServiceProvider) navigatorProvider:NavigatorServiceProvider) {
+        this.navigator = navigatorProvider.getInstance();
     }
 
     ngOnInit() {
-        this.titleService.setTitle('Sing In');
+        this.title.setTitle('Sing In');
         this.form = new SignInForm;
     }
 
-    signIn() {
-        this.authService
+    signIn = () => {
+        this.auth
             .signIn(this.form.email, this.form.password)
             .then((user:User) => {
-                this.notificatorService.success('Hello, ' + user.name + '!');
-                this.navigatorService.navigate(['/']);
+                this.notificator.success('Hello, ' + user.name + '!');
+                this.navigator.navigate(['/']);
             });
-    }
+    };
 }

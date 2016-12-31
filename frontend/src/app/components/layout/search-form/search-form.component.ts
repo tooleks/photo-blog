@@ -8,27 +8,25 @@ import 'rxjs/Rx';
     template: require('./search-form.component.html'),
 })
 export class SearchFormComponent {
-    protected navigatorService:NavigatorService;
-    protected query:string;
+    private query:string;
+    private navigator:NavigatorService;
 
-    constructor(@Inject(ActivatedRoute) protected route:ActivatedRoute,
-                @Inject(NavigatorServiceProvider) protected navigatorServiceProvider:NavigatorServiceProvider) {
-        this.navigatorService = this.navigatorServiceProvider.getInstance();
+    constructor(@Inject(ActivatedRoute) private route:ActivatedRoute,
+                @Inject(NavigatorServiceProvider) navigatorProvider:NavigatorServiceProvider) {
+        this.navigator = navigatorProvider.getInstance();
     }
 
     ngOnInit() {
         this.route.queryParams
             .map((params) => params['query'])
-            .subscribe((query:string) => {
-                this.query = query;
-            });
+            .subscribe((query:string) => this.query = query);
     }
 
     search = () => {
         if (this.query.length) {
-            this.navigatorService.navigate(['photos/search'], {queryParams: {query: this.query}});
+            this.navigator.navigate(['photos/search'], {queryParams: {query: this.query}});
         } else {
-            this.navigatorService.navigate(['']);
+            this.navigator.navigate(['']);
         }
     };
 }

@@ -5,7 +5,7 @@ import {LockProcessService, LockProcessServiceProvider} from '../../../shared/se
 import {NavigatorService, NavigatorServiceProvider} from '../../../shared/services/navigator';
 import {PagerService, PagerServiceProvider} from '../../../shared/services/pager';
 import {AuthProviderService} from '../../../shared/services/auth';
-import {PhotoDataProviderService} from '../../services/photo-data-provider.service';
+import {PhotoDataProviderService} from '../../services/photo-data-provider';
 import {Photo} from '../../../shared/models';
 
 @Component({
@@ -13,11 +13,11 @@ import {Photo} from '../../../shared/models';
     template: require('./photos-by-tag.component.html'),
 })
 export class PhotosByTagComponent {
-    protected loaded:boolean;
-    protected queryParams:Object = {};
-    protected pager:PagerService;
-    protected lockProcess:LockProcessService;
-    protected navigator:NavigatorService;
+    private loaded:boolean;
+    private queryParams:Object = {};
+    private pager:PagerService;
+    private lockProcess:LockProcessService;
+    private navigator:NavigatorService;
 
     constructor(@Inject(ActivatedRoute) private route:ActivatedRoute,
                 @Inject(TitleService) private title:TitleService,
