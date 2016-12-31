@@ -11,15 +11,21 @@ export class FileSelectInputComponent {
     constructor(@Inject(ElementRef) protected element:ElementRef) {
     }
 
+    private processCallback = (callback:any, args?:any[]) => {
+        return typeof callback === 'function' ? Promise.resolve(callback(...args)) : Promise.reject(new Error);
+    };
+
     onChange() {
         if (this.isFile()) {
-            if (typeof(this.onChangeCallback) === 'function') {
-                this.onChangeCallback(this.getFile());
-            }
+            this.processCallback(this.onChangeCallback, [this.getFile()]);
         }
     }
 
-    getFile = () => this.element.nativeElement.firstElementChild.files[0];
+    getFile = ():FileList => {
+        return this.element.nativeElement.firstElementChild.files[0];
+    };
 
-    isFile = () => this.element.nativeElement.firstElementChild.files.length > 0;
+    isFile = ():boolean => {
+        return this.element.nativeElement.firstElementChild.files.length > 0;
+    };
 }
