@@ -6,8 +6,8 @@ import {Tag} from './tag';
     template: require('./tags-select-input.component.html'),
 })
 export class TagsSelectInputComponent {
-    @Input() tags:Tag[];
-    @Output() tagsChange:EventEmitter<Tag[]> = new EventEmitter<Tag[]>();
+    @Input() tags:Array<Tag>;
+    @Output() tagsChange:EventEmitter<Array<Tag>> = new EventEmitter<Array<Tag>>();
     items:string[] = [];
 
     ngOnChanges(changes:any) {
@@ -24,7 +24,7 @@ export class TagsSelectInputComponent {
     };
 
     onRemove = (item:string) => {
-        let tags:Tag[] = [];
+        let tags:Array<Tag> = [];
         this.tags.forEach((tag:Tag) => {
             if (tag.text != item) {
                 tags.push(tag);
@@ -34,5 +34,7 @@ export class TagsSelectInputComponent {
         this.tagsChange.emit(this.tags);
     };
 
-    transform = (item:string) => item.toLowerCase();
+    transform = (item:string) => {
+        return item.toLowerCase();
+    };
 }

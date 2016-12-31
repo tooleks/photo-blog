@@ -1,96 +1,94 @@
 import {Component, Inject} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {TitleService} from '../../../shared/services/title';
-import {SyncProcessService, SyncProcessServiceProvider} from '../../../shared/services/sync-process';
+import {LockProcessService, LockProcessServiceProvider} from '../../../shared/services/lock-process';
 import {NavigatorService, NavigatorServiceProvider} from '../../../shared/services/navigator';
 import {PagerService, PagerServiceProvider} from '../../../shared/services/pager';
 import {AuthProviderService} from '../../../shared/services/auth';
-import {PhotoService} from '../../services/photo.service';
-import {PhotoModel} from '../../models/photo-model';
+import {Photo} from '../../../shared/models';
+import {PhotoDataProviderService} from '../../services/photo-data-provider.service';
 
 @Component({
     selector: 'photos',
     template: require('./photos.component.html'),
 })
 export class PhotosComponent {
-    protected empty:boolean;
-    protected queryParams:any = {};
-    protected pagerService:PagerService;
-    protected syncProcessService:SyncProcessService;
-    protected navigatorService:NavigatorService;
+    private loaded:boolean = false;
+    private queryParams:Object = {};
+    private pager:PagerService;
+    private lockProcess:LockProcessService;
+    private navigator:NavigatorService;
 
-    constructor(@Inject(ActivatedRoute) protected route:ActivatedRoute,
-                @Inject(TitleService) protected titleService:TitleService,
-                @Inject(AuthProviderService) protected authUserProvider:AuthProviderService,
-                @Inject(PagerServiceProvider) protected pagerServiceProvider:PagerServiceProvider,
-                @Inject(SyncProcessServiceProvider) protected syncProcessServiceProvider:SyncProcessServiceProvider,
-                @Inject(NavigatorServiceProvider) protected navigatorServiceProvider:NavigatorServiceProvider,
-                @Inject(PhotoService) protected photoService:PhotoService) {
-        this.navigatorService = this.navigatorServiceProvider.getInstance();
-        this.pagerService = this.pagerServiceProvider.getInstance();
-        this.syncProcessService = this.syncProcessServiceProvider.getInstance();
+    constructor(@Inject(ActivatedRoute) private route:ActivatedRoute,
+                @Inject(TitleService) private title:TitleService,
+                @Inject(AuthProviderService) private authProvider:AuthProviderService,
+                @Inject(PhotoDataProviderService) private photoDataProvider:PhotoDataProviderService,
+                @Inject(NavigatorServiceProvider) navigatorProvider:NavigatorServiceProvider,
+                @Inject(PagerServiceProvider) pagerProvider:PagerServiceProvider,
+                @Inject(LockProcessServiceProvider) lockProcessProvider:LockProcessServiceProvider) {
+        this.navigator = navigatorProvider.getInstance();
+        this.pager = pagerProvider.getInstance();
+        this.lockProcess = lockProcessProvider.getInstance();
     }
 
     ngOnInit() {
-        this.titleService.setTitle('All Photos');
+        this.title.setTitle('All Photos');
 
         this.route.queryParams
             .map((queryParams) => queryParams['page'])
-            .subscribe((page:string) => {
-                this.pagerService.setPage(Number(page));
-            });
+            .subscribe((page:number) => this.pager.setPage(page));
 
         this.route.queryParams
             .map((queryParams) => queryParams['show'])
-            .subscribe((show:string) => {
-                this.queryParams.show = Number(show);
-            });
+            .subscribe((show:number) => this.queryParams['show'] = show);
 
-        this.load(this.pagerService.getLimitForPage(this.pagerService.getPage()), this.pagerService.getOffset())
-            .then((photos:PhotoModel[]) => {
-                this.empty = photos.length === 0;
-            });
+        this.loadPhotos(this.pager.calculateLimitForPage(this.pager.getPage()), this.pager.getOffset());
     }
 
-    protected loadPhotos = (take:number, skip:number) => {
-        return this.photoService
+    private processLoadPhotos = (take:number, skip:number):Promise<Array<Photo>> => {
+        return this.photoDataProvider
             .getAll(take, skip)
-            .then((photos:PhotoModel[]) => this.pagerService.appendItems(photos));
-    };
-
-    protected getPhotos = () => this.pagerService.getItems();
-
-    load = (take:number, skip:number) => {
-        return this.syncProcessService
-            .process(this.loadPhotos, [take, skip])
-            .then((result:any) => {
-                this.setPageNumber();
-                return result;
+            .then((photos:Array<Photo>) => this.pager.appendItems(photos))
+            .then((photos:Array<Photo>) => {
+                this.loaded = true;
+                return photos;
             });
     };
 
-    loadMore = () => this.load(this.pagerService.getLimit(), this.pagerService.getOffset());
-
-    setPageNumber = () => {
-        let page = this.pagerService.getPage();
-        if (page > 1) {
-            this.navigatorService.setQueryParam('page', page);
-        }
+    private loadPhotos = (take:number, skip:number):Promise<Array<Photo>> => {
+        return this.lockProcess
+            .process(this.processLoadPhotos, [take, skip])
+            .then((photos:Array<Photo>) => {
+                this.navigator.setQueryParam('page', this.pager.getPage());
+                return photos;
+            });
     };
 
-    isEmpty = ():boolean => !this.syncProcessService.isProcessing() && this.empty === true;
-
-    isLoading = ():boolean => this.syncProcessService.isProcessing();
-
-    onShowPhoto = (photo:PhotoModel) => {
-        this.navigatorService.setQueryParam('show', photo.id);
+    getLoadedPhotos = ():Array<Photo> => {
+        return this.pager.getItems();
     };
 
-    onHidePhoto = () => {
-        this.navigatorService.unsetQueryParam('show');
+    loadMorePhotos = ():Promise<Array<Photo>> => {
+        return this.loadPhotos(this.pager.getLimit(), this.pager.getOffset());
     };
 
-    navigateToEditPhoto = (photo:PhotoModel) => {
-        this.navigatorService.navigate(['photo/edit', photo.id]);
+    isLoading = ():boolean => {
+        return this.lockProcess.isProcessing();
+    };
+
+    isEmpty = ():boolean => {
+        return !this.pager.getItems().length && !this.lockProcess.isProcessing() && !this.loaded;
+    };
+
+    onShowPhoto = (photo:Photo):void => {
+        this.navigator.setQueryParam('show', photo.id);
+    };
+
+    onHidePhoto = (photo:Photo):void => {
+        this.navigator.unsetQueryParam('show');
+    };
+
+    onEditPhoto = (photo:Photo):void => {
+        this.navigator.navigate(['photo/edit', photo.id]);
     };
 }

@@ -12,5 +12,7 @@ export class LockerService {
         this.locked = false;
     };
 
-    isLocked = ():boolean => this.locked === true;
+    isLocked = ():boolean => {
+        return this.locked === true;
+    };
 }

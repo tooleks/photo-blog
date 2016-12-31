@@ -7,16 +7,17 @@ import {PagerServiceProvider} from './services/pager';
 import {ApiService, ApiErrorHandler as BaseApiErrorHandler} from './services/api';
 import {ApiErrorHandler} from './services/api-error-handler';
 import {LockerServiceProvider} from './services/locker';
-import {SyncProcessServiceProvider} from './services/sync-process';
+import {LockProcessServiceProvider} from './services/lock-process';
 import {NavigatorServiceProvider} from './services/navigator';
 import {TitleService} from './services/title';
 import {NotificatorService} from './services/notificator';
 import {EnvService} from './services/env';
 import {AuthService, AuthProviderService} from './services/auth';
+import {LocalStorageService} from './services/local-storage';
+import {UserDataProviderService} from './services/user';
 import {FileSelectInputComponent} from './components/file-select-input/file-select-input.component';
 import {TagsSelectInputComponent} from './components/tags-select-input/tags-select-input.component';
-import {LocalStorageService} from './services/local-storage/local-storage.service';
-import {UserService} from './services/user';
+import {LoaderComponent} from './components/loader/loader.component';
 
 @NgModule({
     imports: [
@@ -29,6 +30,7 @@ import {UserService} from './services/user';
         GalleryGridComponent,
         FileSelectInputComponent,
         TagsSelectInputComponent,
+        LoaderComponent,
     ],
     exports: [
         CommonModule,
@@ -37,18 +39,19 @@ import {UserService} from './services/user';
         GalleryGridComponent,
         FileSelectInputComponent,
         TagsSelectInputComponent,
+        LoaderComponent,
     ],
     providers: [
         TitleService,
         NotificatorService,
         AuthService,
         AuthProviderService,
-        UserService,
+        UserDataProviderService,
         ApiService,
         ApiErrorHandler,
         {provide: BaseApiErrorHandler, useClass: ApiErrorHandler},
         LockerServiceProvider,
-        SyncProcessServiceProvider,
+        LockProcessServiceProvider,
         NavigatorServiceProvider,
         PagerServiceProvider,
         EnvService,

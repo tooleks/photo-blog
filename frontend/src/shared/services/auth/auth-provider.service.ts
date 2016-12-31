@@ -1,34 +1,44 @@
 import {Injectable, Inject} from '@angular/core';
 import {LocalStorageService} from '../local-storage/local-storage.service';
-import {AuthModel, UserModel} from '../../models';
+import {Auth, User} from '../../models';
 
 @Injectable()
 export class AuthProviderService {
-    constructor(@Inject(LocalStorageService) protected localStorageService:LocalStorageService) {
+    constructor(@Inject(LocalStorageService) private localStorage:LocalStorageService) {
     }
 
-    setAuth = (auth:AuthModel):AuthModel => {
-        this.localStorageService.set('auth', auth);
+    setAuth = (auth:Auth):Auth => {
+        this.localStorage.set('auth', auth);
         return auth;
     };
 
-    getAuth = () => this.localStorageService.get('auth');
+    getAuth = ():Auth => {
+        return this.localStorage.get('auth');
+    };
 
-    hasAuth = () => this.getAuth() !== null;
+    hasAuth = ():boolean => {
+        return this.getAuth() !== null;
+    };
 
-    getAuthApiToken = () => {
+    getAuthApiToken = ():string => {
         let auth = this.getAuth();
         return auth ? auth.api_token : null;
     };
 
-    setUser = (user:UserModel):UserModel => {
-        this.localStorageService.set('user', user);
+    setUser = (user:User):User => {
+        this.localStorage.set('user', user);
         return user;
     };
 
-    getUser = () => this.localStorageService.get('user');
+    getUser = ():User => {
+        return this.localStorage.get('user');
+    };
 
-    hasUser = () => this.getUser() !== null;
+    hasUser = ():boolean => {
+        return this.getUser() !== null;
+    };
 
-    isAuthenticated = () => this.hasAuth() && this.hasUser();
+    isAuthenticated = ():boolean => {
+        return this.hasAuth() && this.hasUser();
+    };
 }

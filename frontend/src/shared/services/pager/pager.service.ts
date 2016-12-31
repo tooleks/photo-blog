@@ -2,10 +2,10 @@ import {Injectable} from '@angular/core';
 
 @Injectable()
 export class PagerService {
-    protected limit:number;
-    protected offset:number;
-    protected page:number;
-    protected items:Array<any>;
+    private limit:number;
+    private offset:number;
+    private page:number;
+    private items:Array<any>;
 
     constructor(limit?:number, offset?:number) {
         this.reset(limit, offset);
@@ -18,39 +18,47 @@ export class PagerService {
         this.items = [];
     };
 
-    appendItems = (items:Array<any>) => {
+    appendItems = (items:Array<any>):Array<any> => {
         this.items = this.items.concat(items);
-        this.offset = this.getItemsCount();
+        this.offset = this.items.length;
         this.setPage(this.calculatePage());
-        return Promise.resolve(this.items);
+        return this.items;
     };
 
-    prependItems = (items:Array<any>) => {
+    prependItems = (items:Array<any>):Array<any> => {
         this.items = items.concat(this.items);
-        this.offset = this.getItemsCount();
+        this.offset = this.items.length;
         this.setPage(this.calculatePage());
-        return Promise.resolve(this.items);
+        return this.items;
     };
 
-    getLimitForPage = (page:number):number => {
+    calculateLimitForPage = (page:number):number => {
         return page !== undefined ? this.limit * Math.abs(Math.ceil(page)) : this.limit;
     };
 
-    getLimit = ():number => this.limit;
+    getLimit = ():number => {
+        return this.limit;
+    };
 
-    getOffset = ():number => this.offset;
+    getOffset = ():number => {
+        return this.offset;
+    };
 
-    getPage = ():number => this.page;
+    getPage = ():number => {
+        return this.page;
+    };
 
-    setPage = (page:number) => {
+    setPage = (page:number):void => {
         if (page > 1) {
             this.page = page;
         }
     };
 
-    getItems = ():Array<any> => this.items;
+    getItems = ():Array<any> => {
+        return this.items
+    };
 
-    protected calculatePage = ():number => Math.ceil(this.items.length / this.limit);
-
-    protected getItemsCount = ():number => this.items.length;
+    private calculatePage = ():number => {
+        return Math.ceil(this.items.length / this.limit);
+    };
 }

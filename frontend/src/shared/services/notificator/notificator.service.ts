@@ -3,7 +3,7 @@ import {ToastsManager} from 'ng2-toastr/ng2-toastr';
 
 @Injectable()
 export class NotificatorService {
-    constructor(@Inject(ToastsManager) protected toastsManager:ToastsManager) {
+    constructor(@Inject(ToastsManager) private toastsManager:ToastsManager) {
     }
 
     error = (message:string, title?:string) => {

@@ -1,5 +1,5 @@
 <div class="ibox float-e-margins">
-    <div class="ibox-title"><h5>{{ photo.absolute_url ? 'Edit Photo' : 'Add Photo' }}</h5></div>
+    <div class="ibox-title"><h5>{{ photo.id ? 'Edit Photo' : 'Add Photo' }}</h5></div>
     <div class="ibox-content">
         <div class="row">
             <div class="col-md-4 col-md-push-8">
@@ -10,7 +10,8 @@
                                 <span class="corner"></span>
                                 <div class="image">
                                     <a [href]="photo.absolute_url" target="_blank" title="photo.description">
-                                        <img [src]="photo.thumbnails[0].absolute_url" [alt]="photo.description"
+                                        <img [src]="photo.thumbnails[0].absolute_url"
+                                             [alt]="photo.description"
                                              class="img-responsive">
                                     </a>
                                 </div>
@@ -21,11 +22,11 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="form-group">
-                            <label class="btn btn-info btn-file" [class.disabled]="syncProcessService.isProcessing()">
+                            <label class="btn btn-info btn-file" [class.disabled]="isLoading()">
                                 <i class="fa fa-upload"></i>
                                 {{ 'Upload File' }}
                                 <file-select-input [onChangeCallback]="upload"
-                                                   [disabled]="syncProcessService.isProcessing()">
+                                                   [disabled]="isLoading()">
                                 </file-select-input>
                             </label>
                         </div>
@@ -49,10 +50,15 @@
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">
                         <div class="col-sm-4 col-sm-offset-2">
-                            <button class="btn btn-primary" (click)="save()" [disabled]="syncProcessService.isProcessing()">
+                            <button (click)="save()"
+                                    [disabled]="isLoading()"
+                                    class="btn btn-primary">
                                 {{ 'Save' }}
                             </button>
-                            <button class="btn btn-danger" *ngIf="photo.id" (click)="deletePhoto()">
+                            <button *ngIf="photo.id"
+                                    (click)="deletePhoto()"
+                                    [disabled]="isLoading()"
+                                    class="btn btn-danger">
                                 {{ 'Delete' }}
                             </button>
                         </div>

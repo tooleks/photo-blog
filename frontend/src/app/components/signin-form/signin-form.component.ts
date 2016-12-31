@@ -4,7 +4,7 @@ import {AuthService} from '../../../shared/services/auth/auth.service';
 import {TitleService} from '../../../shared/services/title/title.service';
 import {NavigatorService, NavigatorServiceProvider} from '../../../shared/services/navigator';
 import {NotificatorService} from '../../../shared/services/notificator';
-import {UserModel} from '../../../shared/models/user-model';
+import {User} from '../../../shared/models';
 
 @Component({
     selector: 'signin-form',
@@ -29,7 +29,7 @@ export class SignInFormComponent {
     signIn() {
         this.authService
             .signIn(this.form.email, this.form.password)
-            .then((user:UserModel) => {
+            .then((user:User) => {
                 this.notificatorService.success('Hello, ' + user.name + '!');
                 this.navigatorService.navigate(['/']);
             });
