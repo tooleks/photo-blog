@@ -93,9 +93,15 @@ export class ApiService {
         return defaultSearchParams;
     };
 
-    private initializeBody = (body?:any) => body || {};
+    private initializeBody = (body?:any) => {
+        return body || {};
+    };
 
-    private getAbsoluteUrl = (relativeUrl:string):string => this.url + relativeUrl;
+    private getAbsoluteUrl = (relativeUrl:string):string => {
+        return this.url + relativeUrl;
+    };
 
-    private extractResponseData = (response:Response) => response.json().data || {};
+    private extractResponseData = (response:Response) => {
+        return response.json().data || {};
+    };
 }

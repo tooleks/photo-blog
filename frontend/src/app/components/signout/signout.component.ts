@@ -1,5 +1,5 @@
 import {Component, Inject} from '@angular/core';
-import {AuthService} from '../../../shared/services/auth/auth.service';
+import {AuthService} from '../../../shared/services/auth';
 import {NavigatorService, NavigatorServiceProvider} from '../../../shared/services/navigator';
 import {User} from '../../../shared/models';
 

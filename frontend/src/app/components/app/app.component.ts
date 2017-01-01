@@ -1,7 +1,7 @@
 import {Component, Inject} from '@angular/core';
 import {AuthProviderService} from '../../../shared/services/auth';
 import {EnvService} from '../../../shared/services/env';
-import {TitleService} from '../../../shared/services/title/title.service';
+import {TitleService} from '../../../shared/services/title';
 
 import '../../../../public/app/css/style.css';
 import '../../../../public/app/css/overrides.css';

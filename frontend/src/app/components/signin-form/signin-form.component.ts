@@ -1,7 +1,7 @@
 import {Component, Inject} from '@angular/core';
 import {SignInForm} from './signin-form';
-import {AuthService} from '../../../shared/services/auth/auth.service';
-import {TitleService} from '../../../shared/services/title/title.service';
+import {AuthService} from '../../../shared/services/auth';
+import {TitleService} from '../../../shared/services/title';
 import {NavigatorService, NavigatorServiceProvider} from '../../../shared/services/navigator';
 import {NotificatorService} from '../../../shared/services/notificator';
 import {User} from '../../../shared/models';
