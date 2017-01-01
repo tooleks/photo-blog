@@ -55,16 +55,16 @@ export class GridRow {
 
     private scaleItemToMaxHeight = (item:any):any => {
         let scaleRate = item.thumbnails[1].height * 100 / this.maxHeight;
-        item.thumbnails[1].height = this.maxHeight;
-        item.thumbnails[1].width = item.thumbnails[1].width * 100 / scaleRate;
+        item.thumbnails[1].height = Math.floor(this.maxHeight);
+        item.thumbnails[1].width = Math.floor(item.thumbnails[1].width * 100 / scaleRate);
         return item;
     };
 
     private scaleItemsToMaxWidth = (width:number):Array<any> => {
         let scaleRate = width * 100 / this.maxWidth;
         for (let index = 0; index < this.items.length; index++) {
-            this.items[index].thumbnails[1].height = this.items[index].thumbnails[1].height * 100 / scaleRate;
-            this.items[index].thumbnails[1].width = this.items[index].thumbnails[1].width * 100 / scaleRate;
+            this.items[index].thumbnails[1].height = Math.floor(this.items[index].thumbnails[1].height * 100 / scaleRate);
+            this.items[index].thumbnails[1].width = Math.floor(this.items[index].thumbnails[1].width * 100 / scaleRate);
         }
         return this.items;
     };
