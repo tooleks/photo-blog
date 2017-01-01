@@ -6,7 +6,7 @@
         <div class="row border-bottom">
             <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
                 <div class="navbar-header">
-                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary"><i class="fa fa-bars"> </i></a>
+                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary"><i class="fa fa-bars" aria-hidden="true"></i></a>
                     <search-form></search-form>
                 </div>
                 <ul class="nav navbar-top-links navbar-right">
@@ -15,18 +15,18 @@
                     </li>
                     <li class="dropdown" *ngIf="authProvider.isAuthenticated()">
                         <a class="dropdown-toggle count-info" data-toggle="dropdown" aria-expanded="true">
-                            <i class="fa fa-user"></i> {{ authProvider.getUser().name }}
+                            <i class="fa fa-user" aria-hidden="true"></i> {{ authProvider.getUser().name }}
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a [routerLink]="['photo/add']" routerLinkActive="active"><i class="fa fa-plus"></i> Add
+                            <li><a [routerLink]="['photo/add']" routerLinkActive="active"><i class="fa fa-plus" aria-hidden="true"></i> Add
                                 Photo</a></li>
-                            <li><a [routerLink]="['signout']" routerLinkActive="active"><i class="fa fa-sign-out"></i>
+                            <li><a [routerLink]="['signout']" routerLinkActive="active"><i class="fa fa-sign-out" aria-hidden="true"></i>
                                 Sign Out</a></li>
                         </ul>
                     </li>
                     <li *ngIf="!authProvider.isAuthenticated()"><a [routerLink]="['signin']"
                                                                       routerLinkActive="active"><i
-                            class="fa fa-sign-in"> </i> Sign In</a></li>
+                            class="fa fa-sign-in" aria-hidden="true"></i> Sign In</a></li>
                 </ul>
             </nav>
         </div>

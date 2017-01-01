@@ -1,10 +1,10 @@
 <div class="sidebar-collapse">
     <ul id="side-menu" class="nav metismenu">
         <li class="nav-header"></li>
-        <li><a [routerLink]="['photo/add']" routerLinkActive="active" *ngIf="authProvider.isAuthenticated()"><i class="fa fa-plus"> </i><span class="nav-label">Add Photo</span></a></li>
-        <li><a [routerLink]="['photos']" routerLinkActive="active"><i class="fa fa fa-th-large"> </i><span class="nav-label">All Photos</span></a></li>
+        <li><a [routerLink]="['photo/add']" routerLinkActive="active" *ngIf="authProvider.isAuthenticated()"><i class="fa fa-plus" aria-hidden="true"></i><span class="nav-label">Add Photo</span></a></li>
+        <li><a [routerLink]="['photos']" routerLinkActive="active"><i class="fa fa fa-th-large" aria-hidden="true"></i><span class="nav-label">All Photos</span></a></li>
         <li class="active">
-            <a><i class="fa fa-tags"> </i><span class="nav-label">Tags</span></a>
+            <a><i class="fa fa-tags" aria-hidden="true"></i><span class="nav-label">Tags</span></a>
             <ul class="nav nav-second-level collapse">
                 <li><a [routerLink]="['photos/tag', 'sky']" routerLinkActive="active">#sky</a></li>
                 <li><a [routerLink]="['photos/tag', 'water']" routerLinkActive="active">#water</a></li>
