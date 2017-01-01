@@ -4,7 +4,7 @@ import {TitleService} from '../../../shared/services/title';
 import {AuthProviderService} from '../../../shared/services/auth';
 import {PhotoDataProviderService} from '../../services/photo-data-provider';
 import {Photo, UploadedPhoto} from '../../../shared/models';
-import {NotificatorService} from '../../../shared/services/notificator/notificator.service';
+import {NotificatorService} from '../../../shared/services/notificator';
 import {LockProcessService, LockProcessServiceProvider} from '../../../shared/services/lock-process';
 import {NavigatorService, NavigatorServiceProvider} from '../../../shared/services/navigator';
 

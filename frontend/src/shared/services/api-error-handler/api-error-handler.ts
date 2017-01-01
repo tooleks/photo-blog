@@ -1,7 +1,7 @@
 import {Injectable, Inject} from '@angular/core';
 import {Response} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
-import {ApiErrorHandler as BaseApiErrorHandler} from '../api/api-error-handler';
+import {ApiErrorHandler as BaseApiErrorHandler} from '../api';
 import {NotificatorService} from '../notificator';
 import {NavigatorService, NavigatorServiceProvider} from '../navigator';
 
@@ -36,19 +36,19 @@ export class ApiErrorHandler extends BaseApiErrorHandler {
         return Observable.throw(new Error(body.message));
     };
 
-    private handleUnknownError = (response:any, body:any) => {
+    private handleUnknownError = (response:any, body:any):void => {
         this.notificator.error(body.message, 'Unknown Error');
     };
 
-    private handleUnauthorizedError = (response:any, body:any) => {
+    private handleUnauthorizedError = (response:any, body:any):void => {
         this.navigator.navigate(['/signout']);
     };
 
-    private handleHttpError = (response:any, body:any) => {
+    private handleHttpError = (response:any, body:any):void => {
         this.notificator.error(body.message, response.status + ' Error');
     };
 
-    private handleValidationErrors = (response:any, body:any) => {
+    private handleValidationErrors = (response:any, body:any):void => {
         body.errors = body.errors || {};
         for (var property in body.errors) {
             if (body.errors.hasOwnProperty(property)) {
