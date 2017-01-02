@@ -1,10 +1,10 @@
 <form role="search" class="navbar-form-custom">
     <div class="form-group">
-        <input type="text"
-               class="form-control"
-               [(ngModel)]="query"
-               name="query"
+        <input [(ngModel)]="query"
                (keyup.enter)="search()"
+               class="form-control"
+               type="text"
+               name="query"
                placeholder="Search for something...">
     </div>
 </form>

@@ -7,13 +7,21 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Email</label>
                         <div class="col-sm-10">
-                            <input type="email" class="form-control" [(ngModel)]="form.email" name="email">
+                            <input [(ngModel)]="form.email"
+                                   (keyup.enter)="signIn()"
+                                   type="email"
+                                   class="form-control"
+                                   name="email">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Password</label>
                         <div class="col-sm-10">
-                            <input type="password" class="form-control" [(ngModel)]="form.password" name="password">
+                            <input [(ngModel)]="form.password"
+                                   (keyup.enter)="signIn()"
+                                   type="password"
+                                   class="form-control"
+                                   name="password">
                         </div>
                     </div>
                     <div class="hr-line-dashed"></div>
