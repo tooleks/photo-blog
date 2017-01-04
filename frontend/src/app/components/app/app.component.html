@@ -4,7 +4,7 @@
         <div class="row border-bottom">
             <nav class="visible-xs navbar navbar-static-top" style="margin-bottom: 0">
                 <div class="navbar-header">
-                    <a (click)="sideBarComponent.toggle()" class="visible-xs minimalize-styl-2 btn btn-primary">
+                    <a (click)="sideBarComponent.toggleSideBar()" class="visible-xs minimalize-styl-2 btn btn-primary">
                         <i class="fa fa-bars" aria-hidden="true"></i>
                     </a>
                 </div>
@@ -21,7 +21,7 @@
         </div>
         <div class="footer">
             <div>
-                Copyright &copy; <strong>{{ env.get('appName') }}</strong> 2016
+                Copyright &copy; <strong>{{ env.get('appName') }}</strong> {{ getCurrentYear() }}
             </div>
         </div>
     </div>

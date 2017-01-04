@@ -1,3 +1,4 @@
+button,
 a {
     outline: 0 !important;
 }
@@ -6,6 +7,12 @@ a {
     min-width: 320px !important;
     max-width: 2000px !important;
     margin: 0 auto !important;
+}
+
+@media (min-width: 768px) {
+    #page-wrapper {
+        margin: 0 0 0 220px !important;
+    }
 }
 
 .file-box .file .icon,

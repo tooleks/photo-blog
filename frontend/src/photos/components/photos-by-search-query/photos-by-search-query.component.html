@@ -6,9 +6,9 @@
                     <input #inputSearch
                            [(ngModel)]="queryParams['query']"
                            name="query"
+                           type="search"
                            (keyup.enter)="searchPhotos()"
                            placeholder="{{ 'Type any word then press enter' }}"
-                           type="text"
                            class="form-control">
                     <span class="input-group-btn">
                         <button (click)="searchPhotos()" type="button" class="btn btn-primary">

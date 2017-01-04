@@ -23,4 +23,8 @@ export class AppComponent {
     ngOnInit() {
         this.title.setTitle();
     }
+
+    private getCurrentYear = () => {
+        return (new Date).getFullYear();
+    };
 }
