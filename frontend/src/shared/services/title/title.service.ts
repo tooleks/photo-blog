@@ -10,7 +10,8 @@ export class TitleService {
                 @Inject(Title) private title:Title) {
     }
 
-    setTitle = (newTitle:any):void => {
+    setTitle = (newTitle?:any):void => {
+        newTitle = newTitle || [];
         this.title.setTitle(this.buildTitle(newTitle));
     };
 

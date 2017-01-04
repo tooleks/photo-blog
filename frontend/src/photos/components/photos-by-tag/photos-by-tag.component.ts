@@ -43,16 +43,9 @@ export class PhotosByTagComponent {
         this.route.params
             .map((params) => params['tag'])
             .subscribe((tag:string) => {
-                if (this.queryParams['tag'] === tag) {
-                    return;
-                }
-
                 this.queryParams['tag'] = tag;
-
                 this.title.setTitle(['Photos', '#' + tag]);
-
                 this.pager.reset();
-
                 this.loadPhotos(this.pager.calculateLimitForPage(this.pager.getPage()),
                     this.pager.getOffset(), this.queryParams['tag']);
             });

@@ -6,10 +6,9 @@ import {AppComponent} from './components/app/app.component';
 import {AppRouting, AppRoutingProviders} from './app.routing';
 import {SharedModule} from '../shared/shared.module';
 import {PhotosModule} from '../photos/photos.module';
+import {SideBarComponent} from './components/layout/sidebar/sidebar.component';
 import {SignInFormComponent} from './components/signin-form/signin-form.component';
 import {SignOutComponent} from './components/signout/signout.component';
-import {SideBarComponent} from './components/layout/sidebar/sidebar.component';
-import {SearchFormComponent} from './components/layout/search-form/search-form.component';
 
 @NgModule({
     imports: [
@@ -24,7 +23,6 @@ import {SearchFormComponent} from './components/layout/search-form/search-form.c
     declarations: [
         AppComponent,
         SideBarComponent,
-        SearchFormComponent,
         SignInFormComponent,
         SignOutComponent,
     ],

@@ -1,5 +1,3 @@
-/* Start: File Input */
-
 .btn-file {
     position: relative;
     overflow: hidden;
@@ -20,8 +18,6 @@
     cursor: inherit;
     display: block;
 }
-
-/* End: File Input */
 
 .load-more-container {
     margin: 20px 0;

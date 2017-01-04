@@ -1,9 +1,11 @@
-/* Start: Layout */
+a {
+    outline: 0 !important;
+}
 
 #wrapper {
-    min-width: 320px;
-    max-width: 2000px;
-    margin: 0 auto;
+    min-width: 320px !important;
+    max-width: 2000px !important;
+    margin: 0 auto !important;
 }
 
 .file-box .file .icon,
@@ -11,44 +13,10 @@
     height: auto !important;
 }
 
-/* End: Layout */
-
-/* Start: Tag Input */
-
-tag-input * {
-    font-size: 14px !important;
-    letter-spacing: normal !important;
+.nav > li.active {
+    border: none !important;
 }
 
-tag-input .tag {
-    height: 34px !important;
-    line-height: 34px !important;
-    border-radius: 0 !important;
-    background-color: #18a689 !important;
-    border: 1px solid #18a689 !important;
+.navbar {
+    min-height: 60px !important;
 }
-
-tag-input .tag:not(.tag--readonly),
-tag-input .tag:not(.tag--readonly) path {
-    color: #fff !important;
-    fill: #fff !important;
-}
-
-tag-input .default .tag:not(.tag--readonly):focus {
-    background-color: #ed5565 !important;
-    border-color: #ed5565 !important;
-}
-
-tag-input .tag-input {
-    border: 1px solid #e5e6e7 !important;
-}
-
-tag-input .tag-input--focused {
-    border-color: #1ab394 !important;
-}
-
-tag-input .tag-input__text-input {
-    box-shadow: none;
-}
-
-/* End: Tag Input */

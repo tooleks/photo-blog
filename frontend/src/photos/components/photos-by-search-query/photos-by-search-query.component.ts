@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, ViewChildren, SimpleChanges} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {TitleService} from '../../../shared/services/title';
 import {LockProcessService, LockProcessServiceProvider} from '../../../shared/services/lock-process';
@@ -13,8 +13,10 @@ import {Photo} from '../../../shared/models';
     template: require('./photos-by-search-query.component.html'),
 })
 export class PhotosBySearchQueryComponent {
+    @ViewChildren('inputSearch') inputSearchComponent:any;
+
     private loaded:boolean;
-    private queryParams:Object = {};
+    private queryParams:Object = {query: ''};
     private pager:PagerService;
     private lockProcess:LockProcessService;
     private navigator:NavigatorService;
@@ -32,6 +34,8 @@ export class PhotosBySearchQueryComponent {
     }
 
     ngOnInit() {
+        this.title.setTitle(['Search Photos']);
+
         this.route.queryParams
             .map((queryParams) => queryParams['page'])
             .subscribe((page:number) => this.pager.setPage(page));
@@ -43,19 +47,19 @@ export class PhotosBySearchQueryComponent {
         this.route.queryParams
             .map((queryParams) => queryParams['query'])
             .subscribe((query:string) => {
-                if (this.queryParams['query'] === query) {
+                if (!query) {
                     return;
                 }
-
                 this.queryParams['query'] = query;
-
-                this.title.setTitle(['Photos', query]);
-
+                this.title.setTitle(['Photos', this.queryParams['query']]);
                 this.pager.reset();
-
                 this.loadPhotos(this.pager.calculateLimitForPage(this.pager.getPage()),
                     this.pager.getOffset(), this.queryParams['query']);
             });
+    }
+
+    ngAfterViewInit() {
+        this.inputSearchComponent.first.nativeElement.focus();
     }
 
     private processLoadPhotos = (take:number, skip:number, query:string):Promise<Array<Photo>> => {
@@ -79,6 +83,12 @@ export class PhotosBySearchQueryComponent {
 
     loadMorePhotos = ():Promise<Array<Photo>> => {
         return this.loadPhotos(this.pager.getLimit(), this.pager.getOffset(), this.queryParams['query']);
+    };
+
+    searchPhotos = () => {
+        if (this.queryParams['query'].length) {
+            this.navigator.navigate(['photos/search'], {queryParams: {query: this.queryParams['query']}});
+        }
     };
 
     isEmpty = ():boolean => {

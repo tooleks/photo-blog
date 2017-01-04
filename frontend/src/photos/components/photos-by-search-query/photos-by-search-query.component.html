@@ -1,5 +1,27 @@
 <div class="row">
     <div class="col-sm-12">
+        <form>
+            <div class="form-group">
+                <div class="input-group">
+                    <input #inputSearch
+                           [(ngModel)]="queryParams['query']"
+                           name="query"
+                           (keyup.enter)="searchPhotos()"
+                           placeholder="{{ 'Type any word then press enter' }}"
+                           type="text"
+                           class="form-control">
+                    <span class="input-group-btn">
+                        <button (click)="searchPhotos()" type="button" class="btn btn-primary">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
         <div *ngIf="isEmpty()" class="widget p-sm text-center">
             <h2 class="m-xs">{{ 'No photos found.' }}</h2>
         </div>
@@ -12,11 +34,8 @@
                  [onEditItemCallback]="authProvider.isAuthenticated() ? onEditPhoto : false"></gallery>
     </div>
 </div>
-<div *ngIf="!isEmpty()"
-     class="load-more-container text-center">
-    <button *ngIf="!isLoading()"
-            (click)="loadMorePhotos()"
-            class="btn btn-primary text-uppercase">
+<div *ngIf="!isEmpty()" class="load-more-container text-center">
+    <button *ngIf="!isLoading()" (click)="loadMorePhotos()" class="btn btn-primary text-uppercase">
         {{ 'Load more' }}
     </button>
     <loader [loading]="isLoading()"></loader>
