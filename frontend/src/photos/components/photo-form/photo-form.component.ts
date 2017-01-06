@@ -15,8 +15,8 @@ import {NavigatorService, NavigatorServiceProvider} from '../../../shared/servic
 })
 export class PhotoFormComponent {
     private photo:Photo;
-    private lockProcess:LockProcessService;
     private navigator:NavigatorService;
+    private lockProcess:LockProcessService;
 
     constructor(@Inject(ActivatedRoute) private route:ActivatedRoute,
                 @Inject(TitleService) private title:TitleService,
@@ -26,8 +26,8 @@ export class PhotoFormComponent {
                 @Inject(NotificatorService) private notificator:NotificatorService,
                 @Inject(NavigatorServiceProvider) navigatorServiceProvider:NavigatorServiceProvider,
                 @Inject(LockProcessServiceProvider) lockProcessServiceProvider:LockProcessServiceProvider) {
-        this.lockProcess = lockProcessServiceProvider.getInstance();
         this.navigator = navigatorServiceProvider.getInstance();
+        this.lockProcess = lockProcessServiceProvider.getInstance();
     }
 
     ngOnInit() {

@@ -27,7 +27,7 @@
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">
                         <div class="col-sm-4 col-sm-offset-2">
-                            <button class="btn btn-primary" (click)="signIn()">Sign In</button>
+                            <button (click)="signIn()" [disabled]="isLoading()" class="btn btn-primary">Sign In</button>
                         </div>
                     </div>
                 </div>

@@ -33,7 +33,7 @@
                  [onCloseItemCallback]="onHidePhoto"
                  [onEditItemCallback]="authProvider.isAuthenticated() ? onEditPhoto : false"
                  infinite-scroll
-                 [infiniteScrollDistance]="2"
+                 [infiniteScrollDistance]="3"
                  [infiniteScrollThrottle]="500"
                  (scrolled)="loadMorePhotos()"
         ></gallery>
