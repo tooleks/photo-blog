@@ -1,4 +1,5 @@
 import {Component, Input, Inject, ElementRef} from '@angular/core';
+import {CallbackHandlerService} from '../../services/callback-handler';
 
 @Component({
     selector: 'file-select-input',
@@ -8,16 +9,13 @@ export class FileSelectInputComponent {
     @Input() disabled:boolean;
     @Input() onChangeCallback:any;
 
-    constructor(@Inject(ElementRef) private element:ElementRef) {
+    constructor(@Inject(ElementRef) private element:ElementRef,
+                @Inject(CallbackHandlerService) private callbackHandler:CallbackHandlerService) {
     }
-
-    private processCallback = (callback:any, args?:any[]) => {
-        return typeof callback === 'function' ? Promise.resolve(callback(...args)) : Promise.reject(new Error);
-    };
 
     onChange() {
         if (this.isFile()) {
-            this.processCallback(this.onChangeCallback, [this.getFile()]);
+            this.callbackHandler.resolveCallback(this.onChangeCallback, [this.getFile()]);
         }
     }
 

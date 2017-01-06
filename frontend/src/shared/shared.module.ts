@@ -16,6 +16,7 @@ import {EnvService} from './services/env';
 import {AuthService, AuthProviderService} from './services/auth';
 import {LocalStorageService} from './services/local-storage';
 import {UserDataProviderService} from './services/user-data-provider';
+import {CallbackHandlerService} from './services/callback-handler';
 import {FileSelectInputComponent} from './components/file-select-input/file-select-input.component';
 import {TagsSelectInputComponent} from './components/tags-select-input/tags-select-input.component';
 import {SpinnerComponent} from './components/spinner/spinner.component';
@@ -58,6 +59,7 @@ import {SpinnerComponent} from './components/spinner/spinner.component';
         ScrollerService,
         EnvService,
         LocalStorageService,
+        CallbackHandlerService,
     ],
 })
 export class SharedModule {
