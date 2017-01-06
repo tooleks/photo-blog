@@ -1,6 +1,7 @@
 import {Component, Inject} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {TitleService} from '../../../shared/services/title';
+import {ScrollerService} from '../../../shared/services/scroller';
 import {AuthProviderService} from '../../../shared/services/auth';
 import {PhotoDataProviderService} from '../../services/photo-data-provider';
 import {Photo, UploadedPhoto} from '../../../shared/models';
@@ -19,6 +20,7 @@ export class PhotoFormComponent {
 
     constructor(@Inject(ActivatedRoute) private route:ActivatedRoute,
                 @Inject(TitleService) private title:TitleService,
+                @Inject(ScrollerService) private scroller:ScrollerService,
                 @Inject(AuthProviderService) private authProvider:AuthProviderService,
                 @Inject(PhotoDataProviderService) private photoDataProvider:PhotoDataProviderService,
                 @Inject(NotificatorService) private notificator:NotificatorService,
@@ -29,6 +31,8 @@ export class PhotoFormComponent {
     }
 
     ngOnInit() {
+        this.scroller.scrollToTop();
+
         this.title.setTitle('Add Photo');
 
         this.photo = new Photo;

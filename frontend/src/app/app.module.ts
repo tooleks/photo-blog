@@ -26,8 +26,7 @@ import {SignOutComponent} from './components/signout/signout.component';
         SignInFormComponent,
         SignOutComponent,
     ],
-    exports: [
-    ],
+    exports: [],
     providers: [
         AppRoutingProviders,
     ],

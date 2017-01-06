@@ -1,6 +1,7 @@
 import {Component, Inject, ViewChildren, SimpleChanges} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {TitleService} from '../../../shared/services/title';
+import {ScrollerService} from '../../../shared/services/scroller';
 import {LockProcessService, LockProcessServiceProvider} from '../../../shared/services/lock-process';
 import {NavigatorService, NavigatorServiceProvider} from '../../../shared/services/navigator';
 import {PagerService, PagerServiceProvider} from '../../../shared/services/pager';
@@ -23,6 +24,7 @@ export class PhotosBySearchQueryComponent {
 
     constructor(@Inject(ActivatedRoute) private route:ActivatedRoute,
                 @Inject(TitleService) private title:TitleService,
+                @Inject(ScrollerService) private scroller:ScrollerService,
                 @Inject(AuthProviderService) private authProvider:AuthProviderService,
                 @Inject(PhotoDataProviderService) private photoDataProvider:PhotoDataProviderService,
                 @Inject(NavigatorServiceProvider) navigatorProvider:NavigatorServiceProvider,
@@ -34,6 +36,8 @@ export class PhotosBySearchQueryComponent {
     }
 
     ngOnInit() {
+        this.scroller.scrollToTop();
+
         this.title.setTitle(['Search Photos']);
 
         this.route.queryParams

@@ -1,5 +1,6 @@
-<div class="sidebar" [@slideInOut]="sideBarState">
+<div class="sidebar" [@slideInOut]="sideBarAnimationState">
     <ul class="">
+        <li><span></span></li>
         <li *ngIf="authProvider.isAuthenticated()">
             <a [routerLink]="['photo/add']"
                (click)="toggleSideBar()"
@@ -64,8 +65,8 @@
         </li>
     </ul>
 </div>
-<div (click)="toggleSideBar()" [@appearInOut]="sideBarState" class="sidebar-backdrop">
-    <button [@appearInOut]="sideBarState"
+<div (click)="toggleSideBar()" [@appearInOut]="sideBarAnimationState" class="sidebar-backdrop">
+    <button [@appearInOut]="sideBarAnimationState"
             type="button"
             title="{{ 'Close' }}"
             class="btn-close">

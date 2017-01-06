@@ -38,5 +38,5 @@
     <button *ngIf="!isLoading()" (click)="loadMorePhotos()" class="btn btn-primary text-uppercase">
         {{ 'Load more' }}
     </button>
-    <loader [loading]="isLoading()"></loader>
+    <spinner [active]="isLoading()"></spinner>
 </div>

@@ -8,22 +8,24 @@ import {AuthProviderService} from '../../../../shared/services/auth';
     animations: [
         trigger('slideInOut', [
             state('in', style({
-                transform: 'translate3d(0, 0, 0)'
+                'transform': 'translate3d(0, 0, 0)',
+                'box-shadow': '1px 0 3px rgba(0, 0, 0, 0.25)'
             })),
             state('out', style({
-                transform: 'translate3d(-230px, 0, 0)'
+                'transform': 'translate3d(-220px, 0, 0)',
+                'box-shadow': 'none'
             })),
             transition('in => out', animate('300ms ease-in-out')),
             transition('out => in', animate('300ms ease-in-out'))
         ]),
         trigger('appearInOut', [
             state('in', style({
-                display: 'block',
-                opacity: '0.85'
+                'display': 'block',
+                'opacity': '0.85'
             })),
             state('out', style({
-                display: 'none',
-                opacity: '0'
+                'display': 'none',
+                'opacity': '0'
             })),
             transition('in => out', animate('300ms ease-in-out')),
             transition('out => in', animate('300ms ease-in-out'))
@@ -32,7 +34,7 @@ import {AuthProviderService} from '../../../../shared/services/auth';
 })
 export class SideBarComponent {
     private windowInnerWidth:number;
-    private sideBarState:string;
+    private sideBarAnimationState:string;
 
     constructor(@Inject(AuthProviderService) private authProvider:AuthProviderService) {
         this.windowInnerWidth = window.innerWidth;
@@ -54,14 +56,14 @@ export class SideBarComponent {
     };
 
     showSideBar = () => {
-        this.sideBarState = 'in';
+        this.sideBarAnimationState = 'in';
     };
 
     hideSideBar = () => {
-        this.sideBarState = 'out';
+        this.sideBarAnimationState = 'out';
     };
 
     isVisibleSidebar = () => {
-        return this.sideBarState === 'in';
+        return this.sideBarAnimationState === 'in';
     };
 }

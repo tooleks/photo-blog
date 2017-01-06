@@ -14,8 +14,11 @@ export class GalleryComponent {
     @Input() onEditItemCallback:any;
     @Input() onDeleteItemCallback:any;
 
-    activeItem:any;
-    activeItemIndex:number;
+    private activeItem:{index:number, value:any, url:string, description:string, loaded:boolean};
+
+    ngOnInit() {
+        this.resetActiveItem();
+    }
 
     ngOnChanges(changes:SimpleChanges) {
         if (this.defaultActiveItemId && this.items.length) {
@@ -25,8 +28,8 @@ export class GalleryComponent {
     };
 
     @HostListener('document:keydown', ['$event'])
-    handleKeyboardEvent = (event:KeyboardEvent) => {
-        if (this.activeItem) {
+    onDocumentKeyDown = (event:KeyboardEvent) => {
+        if (this.activeItem.value) {
             switch (event.key) {
                 case 'Escape':
                     return this.closeItem();
@@ -42,9 +45,24 @@ export class GalleryComponent {
         return typeof callback === 'function' ? Promise.resolve(callback(...args)) : Promise.reject(new Error);
     };
 
-    setActiveItem = (item:any, index:number) => {
-        this.activeItem = item;
-        this.activeItemIndex = index;
+    setActiveItem = (item:any, index:number):Promise<any> => {
+        this.activeItem.loaded = false;
+        return new Promise((resolve, reject) => {
+            let image = new Image;
+            image.onload = () => {
+                this.activeItem.index = index;
+                this.activeItem.value = item;
+                this.activeItem.url = item.thumbnails[0].absolute_url;
+                this.activeItem.description = item.description;
+                this.activeItem.loaded = true;
+                resolve();
+            };
+            image.src = item.thumbnails[0].absolute_url;
+        });
+    };
+
+    resetActiveItem = ():void => {
+        this.activeItem = {index: null, value: null, url: null, description: null, loaded: false};
     };
 
     getActiveItem = ():any => {
@@ -67,11 +85,10 @@ export class GalleryComponent {
             } else if (index === this.items.length - 1) {
                 this.processCallback(this.onLoadMoreCallback)
                     .then((items:Array<any>) => {
-                        this.setItems(items);
-                        this.viewItemById(id);
-                    })
-                    .catch((error:any) => {
-                        //
+                        if (items.length > this.items.length) {
+                            this.setItems(items);
+                            this.viewItemById(id);
+                        }
                     });
             }
         });
@@ -81,46 +98,44 @@ export class GalleryComponent {
         let id = item.id;
         this.items.some((item:any, index:number) => {
             if (item.id == id) {
-                this.setActiveItem(item, index);
-                this.processCallback(this.onOpenItemCallback, [this.activeItem]);
+                this.setActiveItem(item, index).then(() => this.processCallback(this.onOpenItemCallback, [this.activeItem.value]));
                 return true;
             }
         });
     };
 
     viewPrevItem = ():void => {
-        let prevItemIndex = this.activeItemIndex - 1;
+        let prevItemIndex = this.activeItem.index - 1;
         if (this.items[prevItemIndex]) {
             this.viewItem(this.items[prevItemIndex]);
         }
     };
 
     viewNextItem = (loadMoreIfNotExist:boolean):void => {
-        let nextItemIndex = this.activeItemIndex + 1;
+        let nextItemIndex = this.activeItem.index + 1;
         if (this.items[nextItemIndex]) {
             this.viewItem(this.items[nextItemIndex]);
         } else if (loadMoreIfNotExist) {
             this.processCallback(this.onLoadMoreCallback)
                 .then((items:Array<any>) => {
-                    this.setItems(items);
-                    this.viewNextItem(false);
-                })
-                .catch((error:any) => {
-                    //
+                    if (items.length > this.items.length) {
+                        this.setItems(items);
+                        this.viewNextItem(false);
+                    }
                 });
         }
     };
 
     closeItem = ():void => {
-        this.processCallback(this.onCloseItemCallback, [this.activeItem]);
-        this.setActiveItem(null, null);
+        this.processCallback(this.onCloseItemCallback, [this.activeItem.value]);
+        this.resetActiveItem();
     };
 
     editItem = ():void => {
-        this.processCallback(this.onEditItemCallback, [this.activeItem]);
+        this.processCallback(this.onEditItemCallback, [this.activeItem.value]);
     };
 
     deleteItem = ():void => {
-        this.processCallback(this.onDeleteItemCallback, [this.activeItem]);
+        this.processCallback(this.onDeleteItemCallback, [this.activeItem.value]);
     };
 }
