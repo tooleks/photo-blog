@@ -1,4 +1,5 @@
 import {NgModule} from '@angular/core';
+import {InfiniteScrollModule} from 'angular2-infinite-scroll';
 import {SharedModule} from '../shared/shared.module';
 import {PhotosComponent} from './components/photos/photos.component';
 import {PhotoDataProviderService} from './services/photo-data-provider';
@@ -9,6 +10,7 @@ import {PhotosRouting, PhotosRoutingProviders} from './photos.routing';
 
 @NgModule({
     imports: [
+        InfiniteScrollModule,
         SharedModule,
         PhotosRouting,
     ],

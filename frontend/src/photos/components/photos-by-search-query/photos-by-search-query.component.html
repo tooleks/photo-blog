@@ -31,7 +31,12 @@
                  [onLoadMoreCallback]="loadMorePhotos"
                  [onOpenItemCallback]="onShowPhoto"
                  [onCloseItemCallback]="onHidePhoto"
-                 [onEditItemCallback]="authProvider.isAuthenticated() ? onEditPhoto : false"></gallery>
+                 [onEditItemCallback]="authProvider.isAuthenticated() ? onEditPhoto : false"
+                 infinite-scroll
+                 [infiniteScrollDistance]="2"
+                 [infiniteScrollThrottle]="500"
+                 (scrolled)="loadMorePhotos()"
+        ></gallery>
     </div>
 </div>
 <div *ngIf="!isEmpty()" class="load-more-container text-center">
