@@ -11,11 +11,11 @@ export class FileSelectInputComponent {
     constructor(@Inject(ElementRef) private elementRef:ElementRef) {
     }
 
-    private onChange() {
+    private onChange = () => {
         if (this.isFile()) {
             this.afterSelect.emit(this.getFile());
         }
-    }
+    };
 
     private getFile = ():File => {
         return this.elementRef.nativeElement.firstElementChild.files[0];
