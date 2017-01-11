@@ -1,4 +1,4 @@
-import {Component, Input, Inject, ElementRef} from '@angular/core';
+import {Component, Input, Output, Inject, ElementRef, EventEmitter} from '@angular/core';
 import {CallbackHandlerService} from '../../services/callback-handler';
 
 @Component({
@@ -7,23 +7,22 @@ import {CallbackHandlerService} from '../../services/callback-handler';
 })
 export class FileSelectInputComponent {
     @Input() disabled:boolean;
-    @Input() onChangeCallback:any;
+    @Output() afterSelect:EventEmitter<File> = new EventEmitter<File>();
 
-    constructor(@Inject(ElementRef) private element:ElementRef,
-                @Inject(CallbackHandlerService) private callbackHandler:CallbackHandlerService) {
+    constructor(@Inject(ElementRef) private elementRef:ElementRef) {
     }
 
-    onChange() {
+    private onChange() {
         if (this.isFile()) {
-            this.callbackHandler.resolveCallback(this.onChangeCallback, [this.getFile()]);
+            this.afterSelect.emit(this.getFile());
         }
     }
 
-    getFile = ():FileList => {
-        return this.element.nativeElement.firstElementChild.files[0];
+    private getFile = ():File => {
+        return this.elementRef.nativeElement.firstElementChild.files[0];
     };
 
-    isFile = ():boolean => {
-        return this.element.nativeElement.firstElementChild.files.length > 0;
+    private isFile = ():boolean => {
+        return this.elementRef.nativeElement.firstElementChild.files.length > 0;
     };
 }
