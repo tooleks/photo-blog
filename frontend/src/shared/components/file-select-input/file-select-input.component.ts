@@ -1,5 +1,4 @@
 import {Component, Input, Output, Inject, ElementRef, EventEmitter} from '@angular/core';
-import {CallbackHandlerService} from '../../services/callback-handler';
 
 @Component({
     selector: 'file-select-input',
