@@ -1,4 +1,4 @@
-import {Component, Input, Inject, ElementRef} from '@angular/core';
+import {Component, Input, Output, Inject, ElementRef, EventEmitter} from '@angular/core';
 
 @Component({
     selector: 'file-select-input',
@@ -6,26 +6,22 @@ import {Component, Input, Inject, ElementRef} from '@angular/core';
 })
 export class FileSelectInputComponent {
     @Input() disabled:boolean;
-    @Input() onChangeCallback:any;
+    @Output() afterSelect:EventEmitter<File> = new EventEmitter<File>();
 
-    constructor(@Inject(ElementRef) private element:ElementRef) {
+    constructor(@Inject(ElementRef) private elementRef:ElementRef) {
     }
 
-    private processCallback = (callback:any, args?:any[]) => {
-        return typeof callback === 'function' ? Promise.resolve(callback(...args)) : Promise.reject(new Error);
-    };
-
-    onChange() {
+    private onChange = () => {
         if (this.isFile()) {
-            this.processCallback(this.onChangeCallback, [this.getFile()]);
+            this.afterSelect.emit(this.getFile());
         }
-    }
-
-    getFile = ():FileList => {
-        return this.element.nativeElement.firstElementChild.files[0];
     };
 
-    isFile = ():boolean => {
-        return this.element.nativeElement.firstElementChild.files.length > 0;
+    private getFile = ():File => {
+        return this.elementRef.nativeElement.firstElementChild.files[0];
+    };
+
+    private isFile = ():boolean => {
+        return this.elementRef.nativeElement.firstElementChild.files.length > 0;
     };
 }

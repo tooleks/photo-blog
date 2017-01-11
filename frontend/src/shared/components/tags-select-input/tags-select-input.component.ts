@@ -1,18 +1,18 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core';
-import {Tag} from './tag';
+import {Component, Input, Output, EventEmitter, SimpleChanges} from '@angular/core';
 
 @Component({
     selector: 'tags-select-input',
     template: require('./tags-select-input.component.html'),
+    styles: [require('./tags-select-input.component.css').toString()]
 })
 export class TagsSelectInputComponent {
-    @Input() tags:Array<Tag>;
-    @Output() tagsChange:EventEmitter<Array<Tag>> = new EventEmitter<Array<Tag>>();
-    items:string[] = [];
+    @Input() tags:Array<any>;
+    @Output() tagsChange:EventEmitter<Array<any>> = new EventEmitter<Array<any>>();
+    items:Array<string> = [];
 
-    ngOnChanges(changes:any) {
+    ngOnChanges(changes:SimpleChanges) {
         if (!this.items.length && changes['tags']) {
-            this.tags.forEach((tag:Tag) => {
+            this.tags.forEach((tag:any) => {
                 this.items.push(tag.text);
             });
         }
@@ -24,8 +24,8 @@ export class TagsSelectInputComponent {
     };
 
     onRemove = (item:string) => {
-        let tags:Array<Tag> = [];
-        this.tags.forEach((tag:Tag) => {
+        let tags:Array<any> = [];
+        this.tags.forEach((tag:any) => {
             if (tag.text != item) {
                 tags.push(tag);
             }

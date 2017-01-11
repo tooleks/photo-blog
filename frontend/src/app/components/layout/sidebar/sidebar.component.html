@@ -1,15 +1,75 @@
-<div class="sidebar-collapse">
-    <ul id="side-menu" class="nav metismenu">
-        <li class="nav-header"></li>
-        <li><a [routerLink]="['photo/add']" routerLinkActive="active" *ngIf="authProvider.isAuthenticated()"><i class="fa fa-plus"> </i><span class="nav-label">Add Photo</span></a></li>
-        <li><a [routerLink]="['photos']" routerLinkActive="active"><i class="fa fa fa-th-large"> </i><span class="nav-label">All Photos</span></a></li>
-        <li class="active">
-            <a><i class="fa fa-tags"> </i><span class="nav-label">Tags</span></a>
-            <ul class="nav nav-second-level collapse">
-                <li><a [routerLink]="['photos/tag', 'sky']" routerLinkActive="active">#sky</a></li>
-                <li><a [routerLink]="['photos/tag', 'water']" routerLinkActive="active">#water</a></li>
-                <li><a [routerLink]="['photos/tag', 'portrait']" routerLinkActive="active">#portrait</a></li>
+<div class="sidebar" [@slideInOut]="sideBarAnimationState">
+    <ul class="">
+        <li><span></span></li>
+        <li *ngIf="authProvider.isAuthenticated()">
+            <a [routerLink]="['photo/add']"
+               (click)="toggleSideBar()"
+               routerLinkActive="active"
+               [routerLinkActiveOptions]="{ exact: true }">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+                <span class="nav-label">{{ 'Add Photo' }}</span>
+            </a>
+        </li>
+        <li>
+            <a [routerLink]="['photos']"
+               (click)="toggleSideBar()"
+               routerLinkActive="active"
+               [routerLinkActiveOptions]="{ exact: true }">
+                <i class="fa fa-th-large" aria-hidden="true"></i>
+                <span class="nav-label">{{ 'All Photos' }}</span>
+            </a>
+        </li>
+        <li>
+            <a [routerLink]="['photos/search']"
+               (click)="toggleSideBar()"
+               routerLinkActive="active"
+               [routerLinkActiveOptions]="{ exact: true }">
+                <i class="fa fa-search" aria-hidden="true"></i>
+                <span class="nav-label">{{ 'Search' }}</span>
+            </a>
+        </li>
+        <li class="second-level">
+            <span>
+                <i class="fa fa-tags" aria-hidden="true"></i>
+                <span class="nav-label">{{ 'Tags' }}</span>
+            </span>
+            <ul>
+                <li>
+                    <a [routerLink]="['photos/tag', 'sky']"
+                       (click)="toggleSideBar()"
+                       routerLinkActive="active"
+                       [routerLinkActiveOptions]="{ exact: true }">{{ '#sky' }}</a>
+                </li>
+                <li>
+                    <a [routerLink]="['photos/tag', 'water']"
+                       (click)="toggleSideBar()"
+                       routerLinkActive="active"
+                       [routerLinkActiveOptions]="{ exact: true }">{{ '#water' }}</a>
+                </li>
+                <li>
+                    <a [routerLink]="['photos/tag', 'portrait']"
+                       (click)="toggleSideBar()"
+                       routerLinkActive="active"
+                       [routerLinkActiveOptions]="{ exact: true }">{{ '#portrait' }}</a>
+                </li>
             </ul>
         </li>
+        <li *ngIf="authProvider.isAuthenticated()">
+            <a [routerLink]="['signout']"
+               (click)="toggleSideBar()"
+               routerLinkActive="active"
+               [routerLinkActiveOptions]="{ exact: true }">
+                <i class="fa fa-sign-out" aria-hidden="true"></i>
+                <span class="nav-label">{{ 'Sign Out' }}</span>
+            </a>
+        </li>
     </ul>
+</div>
+<div (click)="toggleSideBar()" [@appearInOut]="sideBarAnimationState" class="sidebar-backdrop">
+    <button [@appearInOut]="sideBarAnimationState"
+            type="button"
+            title="{{ 'Close' }}"
+            class="btn-close">
+        <i class="fa fa-close" aria-hidden="true"></i>
+    </button>
 </div>

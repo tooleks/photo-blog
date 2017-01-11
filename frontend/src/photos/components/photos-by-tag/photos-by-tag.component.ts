@@ -1,6 +1,7 @@
 import {Component, Inject} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {TitleService} from '../../../shared/services/title';
+import {ScrollerService} from '../../../shared/services/scroller';
 import {LockProcessService, LockProcessServiceProvider} from '../../../shared/services/lock-process';
 import {NavigatorService, NavigatorServiceProvider} from '../../../shared/services/navigator';
 import {PagerService, PagerServiceProvider} from '../../../shared/services/pager';
@@ -21,6 +22,7 @@ export class PhotosByTagComponent {
 
     constructor(@Inject(ActivatedRoute) private route:ActivatedRoute,
                 @Inject(TitleService) private title:TitleService,
+                @Inject(ScrollerService) private scroller:ScrollerService,
                 @Inject(AuthProviderService) private authProvider:AuthProviderService,
                 @Inject(PhotoDataProviderService) private photoDataProvider:PhotoDataProviderService,
                 @Inject(NavigatorServiceProvider) navigatorProvider:NavigatorServiceProvider,
@@ -32,6 +34,8 @@ export class PhotosByTagComponent {
     }
 
     ngOnInit() {
+        this.scroller.scrollToTop();
+        
         this.route.queryParams
             .map((queryParams) => queryParams['page'])
             .subscribe((page:number) => this.pager.setPage(page));
@@ -43,16 +47,9 @@ export class PhotosByTagComponent {
         this.route.params
             .map((params) => params['tag'])
             .subscribe((tag:string) => {
-                if (this.queryParams['tag'] === tag) {
-                    return;
-                }
-
                 this.queryParams['tag'] = tag;
-
                 this.title.setTitle(['Photos', '#' + tag]);
-
                 this.pager.reset();
-
                 this.loadPhotos(this.pager.calculateLimitForPage(this.pager.getPage()),
                     this.pager.getOffset(), this.queryParams['tag']);
             });

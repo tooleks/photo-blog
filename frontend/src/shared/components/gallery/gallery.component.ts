@@ -1,4 +1,5 @@
-import {Component, Input, HostListener, SimpleChanges} from '@angular/core';
+import {Component, Input, HostListener, SimpleChanges, Inject} from '@angular/core';
+import {CallbackHandlerService} from '../../services/callback-handler';
 
 @Component({
     selector: 'gallery',
@@ -14,19 +15,24 @@ export class GalleryComponent {
     @Input() onEditItemCallback:any;
     @Input() onDeleteItemCallback:any;
 
-    activeItem:any;
-    activeItemIndex:number;
+    private activeItem:{index:number, value:any, url:string, description:string, loaded:boolean};
+
+    constructor(@Inject(CallbackHandlerService) private callbackHandler:CallbackHandlerService) {
+    }
+
+    ngOnInit() {
+        this.resetActiveItem();
+    }
 
     ngOnChanges(changes:SimpleChanges) {
         if (this.defaultActiveItemId && this.items.length) {
             this.viewItemById(this.defaultActiveItemId);
-            this.defaultActiveItemId = null;
         }
     };
 
     @HostListener('document:keydown', ['$event'])
-    handleKeyboardEvent = (event:KeyboardEvent) => {
-        if (this.activeItem) {
+    onDocumentKeyDown = (event:KeyboardEvent) => {
+        if (this.activeItem.value) {
             switch (event.key) {
                 case 'Escape':
                     return this.closeItem();
@@ -38,13 +44,24 @@ export class GalleryComponent {
         }
     };
 
-    processCallback = (callback:any, args?:any[]) => {
-        return typeof callback === 'function' ? Promise.resolve(callback(...args)) : Promise.reject(new Error);
+    setActiveItem = (item:any, index:number):Promise<any> => {
+        return new Promise((resolve, reject) => {
+            let image = new Image;
+            image.onload = () => {
+                this.activeItem.index = index;
+                this.activeItem.value = item;
+                this.activeItem.url = item.thumbnails[0].absolute_url;
+                this.activeItem.description = item.description;
+                this.activeItem.loaded = true;
+                resolve();
+            };
+            this.activeItem.loaded = false;
+            image.src = item.thumbnails[0].absolute_url;
+        });
     };
 
-    setActiveItem = (item:any, index:number) => {
-        this.activeItem = item;
-        this.activeItemIndex = index;
+    resetActiveItem = ():void => {
+        this.activeItem = {index: null, value: null, url: null, description: null, loaded: false};
     };
 
     getActiveItem = ():any => {
@@ -60,67 +77,64 @@ export class GalleryComponent {
     };
 
     viewItemById = (id:string):void => {
-        this.items.some((item:any, index:number) => {
-            if (item.id == id) {
-                this.viewItem(item);
-                return true;
+        for (let index = 0; index < this.items.length; index++) {
+            if (this.items[index].id == id) {
+                this.setActiveItem(this.items[index], index).then(() => this.callbackHandler.resolveCallback(this.onOpenItemCallback, [this.activeItem.value]));
+                break;
             } else if (index === this.items.length - 1) {
-                this.processCallback(this.onLoadMoreCallback)
+                this.callbackHandler.resolveCallback(this.onLoadMoreCallback)
                     .then((items:Array<any>) => {
-                        this.setItems(items);
-                        this.viewItemById(id);
-                    })
-                    .catch((error:any) => {
-                        //
+                        if (items.length > this.items.length) {
+                            this.setItems(items);
+                            this.viewItemById(id);
+                        }
                     });
             }
-        });
+        }
     };
 
     viewItem = (item:any):void => {
         let id = item.id;
-        this.items.some((item:any, index:number) => {
-            if (item.id == id) {
-                this.setActiveItem(item, index);
-                this.processCallback(this.onOpenItemCallback, [this.activeItem]);
-                return true;
+        for (let index = 0; index < this.items.length; index++) {
+            if (this.items[index].id == id) {
+                this.setActiveItem(this.items[index], index).then(() => this.callbackHandler.resolveCallback(this.onOpenItemCallback, [this.activeItem.value]));
+                break;
             }
-        });
+        }
     };
 
     viewPrevItem = ():void => {
-        let prevItemIndex = this.activeItemIndex - 1;
+        let prevItemIndex = this.activeItem.index - 1;
         if (this.items[prevItemIndex]) {
             this.viewItem(this.items[prevItemIndex]);
         }
     };
 
     viewNextItem = (loadMoreIfNotExist:boolean):void => {
-        let nextItemIndex = this.activeItemIndex + 1;
+        let nextItemIndex = this.activeItem.index + 1;
         if (this.items[nextItemIndex]) {
             this.viewItem(this.items[nextItemIndex]);
         } else if (loadMoreIfNotExist) {
-            this.processCallback(this.onLoadMoreCallback)
+            this.callbackHandler.resolveCallback(this.onLoadMoreCallback)
                 .then((items:Array<any>) => {
-                    this.setItems(items);
-                    this.viewNextItem(false);
-                })
-                .catch((error:any) => {
-                    //
+                    if (items.length > this.items.length) {
+                        this.setItems(items);
+                        this.viewNextItem(false);
+                    }
                 });
         }
     };
 
     closeItem = ():void => {
-        this.processCallback(this.onCloseItemCallback, [this.activeItem]);
-        this.setActiveItem(null, null);
+        this.callbackHandler.resolveCallback(this.onCloseItemCallback, [this.activeItem.value]);
+        this.resetActiveItem();
     };
 
     editItem = ():void => {
-        this.processCallback(this.onEditItemCallback, [this.activeItem]);
+        this.callbackHandler.resolveCallback(this.onEditItemCallback, [this.activeItem.value]);
     };
 
     deleteItem = ():void => {
-        this.processCallback(this.onDeleteItemCallback, [this.activeItem]);
+        this.callbackHandler.resolveCallback(this.onDeleteItemCallback, [this.activeItem.value]);
     };
 }
