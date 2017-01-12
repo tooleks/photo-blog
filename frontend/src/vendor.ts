@@ -15,4 +15,3 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 import '../public/theme/font-awesome/css/font-awesome.css';
 import '../public/theme/css/style.css';
-import '../public/theme/css/awesome-bootstrap-checkbox.css';
