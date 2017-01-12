@@ -7,7 +7,7 @@
     overflow-x: hidden;
     overflow-y: auto;
     background: #2f4050;
-    z-index: 1500;
+    z-index: 5000;
 }
 
 .sidebar ul {
@@ -73,7 +73,7 @@
     width: 100%;
     height: 100%;
     background: black;
-    z-index: 1480;
+    z-index: 4990;
 }
 
 .sidebar-backdrop .btn-close {

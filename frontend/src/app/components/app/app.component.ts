@@ -13,8 +13,6 @@ import '../../../../public/app/css/overrides.css';
     styles: [require('./app.component.css').toString()],
 })
 export class AppComponent {
-    @ViewChild('sideBar') private sideBarComponent:SideBarComponent;
-
     constructor(@Inject(EnvService) private env:EnvService,
                 @Inject(TitleService) private title:TitleService,
                 @Inject(AuthProviderService) private authProvider:AuthProviderService) {

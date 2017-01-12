@@ -2,13 +2,15 @@
 <div id="wrapper">
     <div id="page-wrapper" class="gray-bg">
         <div class="row border-bottom">
-            <nav class="visible-xs navbar navbar-static-top" style="margin-bottom: 0">
+            <div class="navbar navbar-fixed-top visible-xs" style="margin-bottom: 0">
                 <div class="navbar-header">
-                    <a (click)="sideBarComponent.toggle()" class="visible-xs minimalize-styl-2 btn btn-primary">
+                    <button (click)="sideBar.toggle()"
+                            type="button"
+                            class="minimalize-styl-2 btn btn-primary">
                         <i class="fa fa-bars" aria-hidden="true"></i>
-                    </a>
+                    </button>
                 </div>
-            </nav>
+            </div>
         </div>
         <div class="row">
             <div class="col-sm-12">
