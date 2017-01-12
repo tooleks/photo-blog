@@ -5,5 +5,5 @@ import {Component, Input} from '@angular/core';
     template: require('./spinner.component.html'),
 })
 export class SpinnerComponent {
-    @Input() active:boolean;
+    @Input() isSpinning:boolean = false;
 }

@@ -33,37 +33,34 @@ import {AuthProviderService} from '../../../../shared/services/auth';
     ],
 })
 export class SideBarComponent {
-    private windowInnerWidth:number;
-    private sideBarAnimationState:string;
+    private animationState:string;
 
     constructor(@Inject(AuthProviderService) private authProvider:AuthProviderService) {
-        this.windowInnerWidth = window.innerWidth;
-        this.windowInnerWidth > 767 ? this.showSideBar() : this.hideSideBar();
+        window.innerWidth > 767 ? this.show() : this.hide();
     }
 
     @HostListener('window:resize', ['$event'])
     onWindowResize(event:any) {
-        this.windowInnerWidth = window.innerWidth;
-        if (this.windowInnerWidth > 767) {
-            this.showSideBar();
+        if (window.innerWidth > 767) {
+            this.show();
         }
     }
 
-    toggleSideBar = () => {
-        if (this.windowInnerWidth <= 767) {
-            this.isVisibleSidebar() ? this.hideSideBar() : this.showSideBar();
+    toggle = () => {
+        if (!(window.innerWidth > 767)) {
+            this.isVisible() ? this.hide() : this.show();
         }
     };
 
-    showSideBar = () => {
-        this.sideBarAnimationState = 'in';
+    show = () => {
+        this.animationState = 'in';
     };
 
-    hideSideBar = () => {
-        this.sideBarAnimationState = 'out';
+    hide = () => {
+        this.animationState = 'out';
     };
 
-    isVisibleSidebar = () => {
-        return this.sideBarAnimationState === 'in';
+    isVisible = () => {
+        return this.animationState === 'in';
     };
 }
