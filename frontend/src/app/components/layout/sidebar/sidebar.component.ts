@@ -15,8 +15,8 @@ import {AuthProviderService} from '../../../../shared/services/auth';
                 'transform': 'translate3d(-220px, 0, 0)',
                 'box-shadow': 'none'
             })),
-            transition('in => out', animate('300ms ease-in-out')),
-            transition('out => in', animate('300ms ease-in-out'))
+            transition('in => out', animate('200ms ease-in-out')),
+            transition('out => in', animate('200ms ease-in-out'))
         ]),
         trigger('appearInOut', [
             state('in', style({
@@ -27,8 +27,8 @@ import {AuthProviderService} from '../../../../shared/services/auth';
                 'display': 'none',
                 'opacity': '0'
             })),
-            transition('in => out', animate('300ms ease-in-out')),
-            transition('out => in', animate('300ms ease-in-out'))
+            transition('in => out', animate('200ms ease-in-out')),
+            transition('out => in', animate('200ms ease-in-out'))
         ]),
     ],
 })
