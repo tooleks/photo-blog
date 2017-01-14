@@ -1,11 +1,16 @@
 import {Component, Inject} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {TitleService} from '../../../shared/services/title';
-import {ScrollerService} from '../../../shared/services/scroller';
-import {LockProcessService, LockProcessServiceProvider} from '../../../shared/services/lock-process';
-import {NavigatorService, NavigatorServiceProvider} from '../../../shared/services/navigator';
-import {PagerService, PagerServiceProvider} from '../../../shared/services/pager';
-import {AuthProviderService} from '../../../shared/services/auth';
+import {
+    TitleService,
+    ScrollerService,
+    AuthProviderService,
+    NavigatorServiceProvider,
+    NavigatorService,
+    PagerServiceProvider,
+    PagerService,
+    LockProcessServiceProvider,
+    LockProcessService,
+} from '../../../shared/services';
 import {Photo} from '../../../shared/models';
 import {PhotoDataProviderService} from '../../services/photo-data-provider';
 

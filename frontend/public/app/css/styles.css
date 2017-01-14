@@ -1,3 +1,8 @@
+button,
+a {
+    outline: 0 !important;
+}
+
 .btn-file {
     position: relative;
     overflow: hidden;

@@ -65,11 +65,4 @@
         </li>
     </ul>
 </div>
-<div (click)="toggle()" [@appearInOut]="animationState" class="sidebar-backdrop">
-    <button [@appearInOut]="animationState"
-            type="button"
-            title="{{ 'Close' }}"
-            class="btn-close">
-        <i class="fa fa-close" aria-hidden="true"></i>
-    </button>
-</div>
+<div (click)="toggle()" [@appearInOut]="animationState" class="sidebar-backdrop"></div>

@@ -1,7 +1,6 @@
 import {ModuleWithProviders} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
-import {SignInFormComponent} from './components/signin-form/signin-form.component';
-import {SignOutComponent} from './components/signout/signout.component';
+import {SignInFormComponent, SignOutComponent} from './components';
 
 const AppRoutes:Routes = [
     {

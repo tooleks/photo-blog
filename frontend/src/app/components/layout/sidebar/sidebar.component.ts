@@ -1,5 +1,5 @@
 import {Component, Inject, HostListener, trigger, state, style, transition, animate} from '@angular/core';
-import {AuthProviderService} from '../../../../shared/services/auth';
+import {AuthProviderService} from '../../../../shared/services';
 
 @Component({
     selector: 'sidebar',
