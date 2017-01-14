@@ -1,9 +1,6 @@
 import {ModuleWithProviders} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
-import {PhotoFormComponent} from './components/photo-form/photo-form.component';
-import {PhotosComponent} from './components/photos/photos.component';
-import {PhotosByTagComponent} from './components/photos-by-tag/photos-by-tag.component';
-import {PhotosBySearchQueryComponent} from './components/photos-by-search-query/photos-by-search-query.component';
+import {PhotoFormComponent, PhotosComponent, PhotosByTagComponent, PhotosBySearchQueryComponent} from './components';
 
 const PhotosRoutes:Routes = [
     {

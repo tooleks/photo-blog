@@ -1,11 +1,15 @@
 import {Component, Inject} from '@angular/core';
 import {SignInForm} from './signin-form';
-import {AuthService} from '../../../shared/services/auth';
-import {TitleService} from '../../../shared/services/title';
-import {ScrollerService} from '../../../shared/services/scroller';
-import {LockProcessService, LockProcessServiceProvider} from '../../../shared/services/lock-process';
-import {NavigatorService, NavigatorServiceProvider} from '../../../shared/services/navigator';
-import {NotificatorService} from '../../../shared/services/notificator';
+import {
+    AuthService,
+    TitleService,
+    ScrollerService,
+    LockProcessServiceProvider,
+    LockProcessService,
+    NotificatorService,
+    NavigatorServiceProvider,
+    NavigatorService,
+} from '../../../shared/services';
 import {User} from '../../../shared/models';
 
 @Component({

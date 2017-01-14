@@ -1,11 +1,7 @@
-import {Component, Inject, ViewChild} from '@angular/core';
-import {AuthProviderService} from '../../../shared/services/auth';
-import {EnvService} from '../../../shared/services/env';
-import {TitleService} from '../../../shared/services/title';
-import {SideBarComponent} from '../layout/sidebar/sidebar.component';
+import {Component, Inject} from '@angular/core';
+import {EnvService, TitleService, AuthProviderService} from '../../../shared/services';
 
 import '../../../../public/app/css/styles.css';
-import '../../../../public/app/css/overrides.css';
 
 @Component({
     selector: 'app',

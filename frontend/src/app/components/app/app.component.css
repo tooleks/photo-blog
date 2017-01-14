@@ -1,0 +1,20 @@
+#wrapper {
+    min-width: 320px !important;
+    margin: 0 auto !important;
+}
+
+#page-wrapper {
+    margin-top: 60px !important;
+}
+
+@media (min-width: 768px) {
+    #page-wrapper {
+        margin-top: 0 !important;
+        margin-left: 220px !important;
+    }
+}
+
+.file-box .file .icon,
+.file-box .file .image {
+    height: auto !important;
+}

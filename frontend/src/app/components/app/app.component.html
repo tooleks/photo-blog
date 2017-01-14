@@ -1,17 +1,7 @@
-<sidebar #sideBar></sidebar>
 <div id="wrapper">
+    <sidebar #sideBar></sidebar>
+    <topbar (onNavClick)="sideBar.toggle()"></topbar>
     <div id="page-wrapper" class="gray-bg">
-        <div class="row border-bottom">
-            <div class="navbar navbar-fixed-top visible-xs" style="margin-bottom: 0">
-                <div class="navbar-header">
-                    <button (click)="sideBar.toggle()"
-                            type="button"
-                            class="minimalize-styl-2 btn btn-primary">
-                        <i class="fa fa-bars" aria-hidden="true"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
         <div class="row">
             <div class="col-sm-12">
                 <div class="wrapper wrapper-content">
