@@ -6,14 +6,14 @@ import {Component, Input, Output, Inject, ElementRef, EventEmitter} from '@angul
 })
 export class FileSelectInputComponent {
     @Input() disabled:boolean;
-    @Output() afterSelect:EventEmitter<File> = new EventEmitter<File>();
+    @Output() onSelect:EventEmitter<File> = new EventEmitter<File>();
 
     constructor(@Inject(ElementRef) private elementRef:ElementRef) {
     }
 
     private onChange = () => {
         if (this.isFile()) {
-            this.afterSelect.emit(this.getFile());
+            this.onSelect.emit(this.getFile());
         }
     };
 

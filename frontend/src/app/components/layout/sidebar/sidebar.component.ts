@@ -1,5 +1,5 @@
 import {Component, Inject, HostListener, trigger, state, style, transition, animate} from '@angular/core';
-import {AuthProviderService} from '../../../../shared/services';
+import {AuthProviderService, EnvService} from '../../../../shared/services';
 
 @Component({
     selector: 'sidebar',
@@ -35,7 +35,8 @@ import {AuthProviderService} from '../../../../shared/services';
 export class SideBarComponent {
     private animationState:string;
 
-    constructor(@Inject(AuthProviderService) private authProvider:AuthProviderService) {
+    constructor(@Inject(AuthProviderService) private authProvider:AuthProviderService,
+                @Inject(EnvService) private env:EnvService) {
         window.innerWidth > 767 ? this.show() : this.hide();
     }
 

@@ -1,53 +1,58 @@
-<div class="sidebar" [@slideInOut]="animationState">
-    <ul class="">
-        <li><span></span></li>
+<div class="sb-container" [@slideInOut]="animationState">
+    <ul>
+        <li>
+            <span>
+                <i class="fa fa-camera-retro" aria-hidden="true"></i>
+                <span>{{ env.get('appName') }}</span>
+            </span>
+        </li>
         <li *ngIf="authProvider.isAuthenticated()">
-            <a [routerLink]="['photo/add']"
+            <a [routerLink]="['/photo/add']"
                (click)="toggle()"
                routerLinkActive="active"
                [routerLinkActiveOptions]="{ exact: true }">
                 <i class="fa fa-plus" aria-hidden="true"></i>
-                <span class="nav-label">{{ 'Add Photo' }}</span>
+                <span>{{ 'Add Photo' }}</span>
             </a>
         </li>
         <li>
-            <a [routerLink]="['photos']"
+            <a [routerLink]="['/photos']"
                (click)="toggle()"
                routerLinkActive="active"
                [routerLinkActiveOptions]="{ exact: true }">
                 <i class="fa fa-th-large" aria-hidden="true"></i>
-                <span class="nav-label">{{ 'All Photos' }}</span>
+                <span>{{ 'All Photos' }}</span>
             </a>
         </li>
         <li>
-            <a [routerLink]="['photos/search']"
+            <a [routerLink]="['/photos/search']"
                (click)="toggle()"
                routerLinkActive="active"
                [routerLinkActiveOptions]="{ exact: true }">
                 <i class="fa fa-search" aria-hidden="true"></i>
-                <span class="nav-label">{{ 'Search' }}</span>
+                <span>{{ 'Search' }}</span>
             </a>
         </li>
-        <li class="second-level">
+        <li class="sb-second-level">
             <span>
                 <i class="fa fa-tags" aria-hidden="true"></i>
-                <span class="nav-label">{{ 'Tags' }}</span>
+                <span>{{ 'Tags' }}</span>
             </span>
             <ul>
                 <li>
-                    <a [routerLink]="['photos/tag', 'sky']"
+                    <a [routerLink]="['/photos/tag', 'sky']"
                        (click)="toggle()"
                        routerLinkActive="active"
                        [routerLinkActiveOptions]="{ exact: true }">{{ '#sky' }}</a>
                 </li>
                 <li>
-                    <a [routerLink]="['photos/tag', 'water']"
+                    <a [routerLink]="['/photos/tag', 'water']"
                        (click)="toggle()"
                        routerLinkActive="active"
                        [routerLinkActiveOptions]="{ exact: true }">{{ '#water' }}</a>
                 </li>
                 <li>
-                    <a [routerLink]="['photos/tag', 'portrait']"
+                    <a [routerLink]="['/photos/tag', 'portrait']"
                        (click)="toggle()"
                        routerLinkActive="active"
                        [routerLinkActiveOptions]="{ exact: true }">{{ '#portrait' }}</a>
@@ -55,14 +60,14 @@
             </ul>
         </li>
         <li *ngIf="authProvider.isAuthenticated()">
-            <a [routerLink]="['signout']"
+            <a [routerLink]="['/signout']"
                (click)="toggle()"
                routerLinkActive="active"
                [routerLinkActiveOptions]="{ exact: true }">
                 <i class="fa fa-sign-out" aria-hidden="true"></i>
-                <span class="nav-label">{{ 'Sign Out' }}</span>
+                <span>{{ 'Sign Out' }}</span>
             </a>
         </li>
     </ul>
 </div>
-<div (click)="toggle()" [@appearInOut]="animationState" class="sidebar-backdrop"></div>
+<div (click)="toggle()" [@appearInOut]="animationState" class="sb-backdrop"></div>

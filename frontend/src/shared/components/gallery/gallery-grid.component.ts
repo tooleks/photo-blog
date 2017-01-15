@@ -1,5 +1,4 @@
-import {Component, Input, Inject, HostListener, ElementRef, SimpleChanges, ViewChild} from '@angular/core';
-import {GridRow} from './grid-row';
+import {Component, Input, Output, Inject, ElementRef, SimpleChanges, EventEmitter} from '@angular/core';
 
 @Component({
     selector: 'gallery-grid',
@@ -9,27 +8,31 @@ import {GridRow} from './grid-row';
 export class GalleryGridComponent {
     @Input() rowHeight:number = 0;
     @Input() rowWidth:number = 0;
-    @Input() onClickGridItemCallback:any;
     @Input() galleryItems:Array<any> = [];
     @Input() updateInterval:number;
+    @Output() onClickGridItem:EventEmitter<any> = new EventEmitter<any>();
 
-    gridLastRow:GridRow;
-    gridItems:Array<any> = [];
-    elementSizeCheckInterval:any = null;
-    elementProperties:any = {width: 0, height: 0};
+    private elementRefProperties:{width:number, height:number} = {width: 0, height: 0};
+    private elementSizeCheckInterval:any = null;
+    private rowMaxWidth:number;
+    private rowMaxHeight:number;
+    private rowItems:Array<any> = [];
+    private gridItems:Array<any> = [];
 
     constructor(@Inject(ElementRef) private elementRef:ElementRef) {
-        this.gridLastRow = new GridRow;
+        this.resetRow();
+        this.setRowMaxHeight(0);
+        this.setRowMaxWidth(0);
     }
 
     ngOnChanges(changes:SimpleChanges) {
         if (changes['rowHeight']) {
-            this.gridLastRow.setMaxHeight(changes['rowHeight'].currentValue);
+            this.setRowMaxHeight(changes['rowHeight'].currentValue);
             this.setGridItems(this.galleryItems);
         }
 
         if (changes['galleryItems'] && changes['galleryItems'].currentValue.length) {
-            this.gridLastRow.setMaxWidth(this.elementRef.nativeElement.offsetWidth);
+            this.setRowMaxWidth(this.elementRef.nativeElement.offsetWidth);
             this.setGridItems(changes['galleryItems'].currentValue);
         }
     }
@@ -38,9 +41,9 @@ export class GalleryGridComponent {
         this.elementSizeCheckInterval = setInterval(() => {
             let height = this.elementRef.nativeElement.offsetHeight;
             let width = this.elementRef.nativeElement.offsetWidth;
-            if ((height !== this.elementProperties.height) || (width !== this.elementProperties.width)) {
-                this.elementProperties = {width: width, height: height};
-                this.gridLastRow.setMaxWidth(this.elementRef.nativeElement.offsetWidth);
+            if ((height !== this.elementRefProperties.height) || (width !== this.elementRefProperties.width)) {
+                this.elementRefProperties = {width: width, height: height};
+                this.setRowMaxWidth(this.elementRef.nativeElement.offsetWidth);
                 this.setGridItems(this.galleryItems);
             }
         }, this.updateInterval);
@@ -53,18 +56,83 @@ export class GalleryGridComponent {
     }
 
     setGridItems = (items:Array<any>) => {
-        this.gridLastRow.resetItems();
+        this.resetRow();
         let gridItems:Array<any> = [];
-        for (let index = 0; index < items.length; index++) {
-            let rowItems = this.gridLastRow.appendItem(items[index]);
-            if (!this.gridLastRow.getItems().length || index == items.length - 1) {
-                gridItems = gridItems.concat(rowItems);
-            }
-        }
+        items.forEach((item:any, index:number) => {
+            this.pushItemToRow(item);
+            gridItems = gridItems.concat(this.releaseRowItems(index == items.length - 1));
+        });
         this.gridItems = gridItems;
     };
 
     getGridItems = ():Array<any> => {
         return this.gridItems;
+    };
+
+    private setRowMaxWidth = (rowMaxWidth:number):void => {
+        this.rowMaxWidth = rowMaxWidth;
+    };
+
+    private getRowMaxWidth = ():number => {
+        return this.rowMaxWidth;
+    };
+
+    private setRowMaxHeight = (rowMaxHeight:number):void => {
+        this.rowMaxHeight = rowMaxHeight;
+    };
+
+    private getRowMaxHeight = ():number => {
+        return this.rowMaxHeight;
+    };
+
+    private pushItemToRow = (newItem:any):number => {
+        let scaledToMaxHeightItem = this.scaleItemToMaxHeight(newItem);
+        this.rowWidth = this.predictRowWidth(scaledToMaxHeightItem);
+        return this.rowItems.push(scaledToMaxHeightItem);
+    };
+
+    private releaseRowItems = (force:boolean = false):Array<any> => {
+        let items = [];
+        if (this.rowWidth > this.rowMaxWidth) {
+            items = this.scaleRowItemsToMaxWidth();
+        }
+        if (force && !items.length) {
+            items = this.getRowItems();
+        }
+        if (items.length) {
+            this.resetRow();
+        }
+        return items;
+    };
+
+    private resetRow = ():void => {
+        this.rowWidth = 0;
+        this.rowItems = [];
+    };
+
+    private getRowItems = ():Array<any> => {
+        return this.rowItems;
+    };
+
+    private predictRowWidth = (newItem:any):number => {
+        let width = newItem.thumbnails[1].width;
+        this.rowItems.forEach((item:any) => width += item.thumbnails[1].width);
+        return width;
+    };
+
+    private scaleItemToMaxHeight = (item:any):any => {
+        let scaleRate = item.thumbnails[1].height * 100 / this.rowMaxHeight;
+        item.thumbnails[1].width = Math.floor(item.thumbnails[1].width * 100 / scaleRate);
+        item.thumbnails[1].height = Math.floor(this.rowMaxHeight);
+        return item;
+    };
+
+    private scaleRowItemsToMaxWidth = ():Array<any> => {
+        let scaleRate = this.rowWidth * 100 / this.rowMaxWidth;
+        return this.rowItems.map((item:any) => {
+            item.thumbnails[1].width = Math.floor(item.thumbnails[1].width * 100 / scaleRate);
+            item.thumbnails[1].height = Math.floor(item.thumbnails[1].height * 100 / scaleRate);
+            return item;
+        });
     };
 }
