@@ -1,5 +1,5 @@
 <a *ngFor="let item of getGridItems()"
-   (click)="onClickGridItemCallback(item)"
+   (click)="onClickGridItem.emit(item)"
    [style.width]="item.thumbnails[1].width"
    [style.height]="item.thumbnails[1].height"
    class="gl-grid-item-container">

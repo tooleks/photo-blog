@@ -1,4 +1,4 @@
-.sidebar {
+:host .sb-container {
     position: fixed;
     top: 0;
     left: 0;
@@ -10,29 +10,29 @@
     z-index: 5000;
 }
 
-.sidebar ul {
+:host .sb-container ul {
     display: block;
     list-style: outside none none;
     margin: 0;
     padding: 0;
 }
 
-.sidebar li > span {
+:host .sb-container li > span {
     cursor: default;
 }
 
-.sidebar > ul > li:first-child > span,
-.sidebar > ul > li:first-child > a {
+:host .sb-container > ul > li:first-child > span,
+:host .sb-container > ul > li:first-child > a {
     border-top: none;
 }
 
-.sidebar > ul > li:last-child > span,
-.sidebar > ul > li:last-child > a {
+:host .sb-container > ul > li:last-child > span,
+:host .sb-container > ul > li:last-child > a {
     border-bottom: none;
 }
 
-.sidebar li > span,
-.sidebar li > a {
+:host .sb-container li > span,
+:host .sb-container li > a {
     display: block;
     width: 100%;
     height: 40px;
@@ -44,30 +44,36 @@
     border-top: 1px solid #344555;
 }
 
-.sidebar li > a.active,
-.sidebar li > a:hover,
-.sidebar li > a:focus {
+:host .sb-container li > span {
+    color: #8993a4;
+}
+
+:host .sb-container li > a.active,
+:host .sb-container li > a:hover,
+:host .sb-container li > a:focus {
     text-decoration: none;
     color: #fff;
 }
 
-.sidebar li > a:hover {
+:host .sb-container li > a:hover {
     background-color: #293846;
 }
 
-.sidebar li > a > i {
+:host .sb-container li > span > i,
+:host .sb-container li > a > i {
     margin-right: 6px;
 }
 
-.sidebar li.second-level {
+:host .sb-container li.sb-second-level {
     border-left: 1px solid #a7b1c2;
 }
 
-.sidebar li.second-level li > a {
+:host .sb-container li.sb-second-level li > span,
+:host .sb-container li.sb-second-level li > a {
     padding-left: 38px;
 }
 
-.sidebar-backdrop {
+:host .sb-backdrop {
     display: block;
     position: fixed;
     width: 100%;
@@ -76,27 +82,8 @@
     z-index: 4990;
 }
 
-.sidebar-backdrop .btn-close {
-    position: fixed;
-    top: 0;
-    right: 0;
-    display: block;
-    padding: 16px 20px 16px;
-    border: none;
-    background-color: rgba(0, 0, 0, 0.45);
-    color: #999;
-    cursor: pointer;
-    font-size: 18px;
-    transition: transform 0.35s cubic-bezier(0, 0, 0.25, 1) 0s, opacity 0.35s cubic-bezier(0, 0, 0.25, 1) 0s, color 0.2s linear;
-}
-
-.sidebar-backdrop .btn-close:hover,
-.sidebar-backdrop .btn-close:focus {
-    color: #fff;
-}
-
 @media (min-width: 768px) {
-    .sidebar-backdrop {
+    :host .sb-backdrop {
         display: none !important;
     }
 }

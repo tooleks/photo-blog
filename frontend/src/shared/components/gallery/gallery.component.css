@@ -52,6 +52,7 @@ gallery .gl-action {
     color: #999;
     cursor: pointer;
     font-size: 18px;
+    border: none;
     transition: transform 0.35s cubic-bezier(0, 0, 0.25, 1) 0s, opacity 0.35s cubic-bezier(0, 0, 0.25, 1) 0s, color 0.2s linear;
 }
 
@@ -89,4 +90,10 @@ gallery .gl-navbar .gl-right {
 
 gallery .gl-navbar .gl-left {
     float: left;
+}
+
+gallery .gl-spinner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
 }

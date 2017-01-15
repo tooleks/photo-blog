@@ -5,11 +5,11 @@
         </div>
         <gallery *ngIf="!isEmpty()"
                  [items]="getLoadedPhotos()"
-                 [defaultActiveItemId]="queryParams['show']"
+                 [defaultOpenedItemId]="queryParams['show']"
                  [onLoadMoreCallback]="loadMorePhotos"
-                 [onOpenItemCallback]="onShowPhoto"
-                 [onCloseItemCallback]="onHidePhoto"
-                 [onEditItemCallback]="authProvider.isAuthenticated() ? onEditPhoto : false"
+                 (onOpenItem)="onShowPhoto($event)"
+                 (onCloseItem)="onHidePhoto($event)"
+                 (onEditItem)="authProvider.isAuthenticated() ? onEditPhoto($event) : false"
                  infinite-scroll
                  [infiniteScrollDistance]="3"
                  [infiniteScrollThrottle]="500"
