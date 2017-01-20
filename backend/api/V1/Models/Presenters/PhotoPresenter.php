@@ -23,6 +23,14 @@ class PhotoPresenter extends ModelPresenter
     /**
      * @inheritdoc
      */
+    public function getOriginalModel() : Photo
+    {
+        return parent::getOriginalModel();
+    }
+
+    /**
+     * @inheritdoc
+     */
     protected function getAttributesMap() : array
     {
         return [

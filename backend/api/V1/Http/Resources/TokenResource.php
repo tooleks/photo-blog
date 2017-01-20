@@ -2,21 +2,21 @@
 
 namespace Api\V1\Http\Resources;
 
+use Exception;
+use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Contracts\Hashing\Hasher;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Core\Validator\Validator;
 use App\Models\DB\User;
 use Api\V1\Core\Resource\Contracts\Resource;
 use Api\V1\Models\Presenters\TokenPresenter;
-use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Contracts\Hashing\Hasher;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Mockery\CountValidator\Exception;
 
 /**
  * Class Token
  *
  * The class provides CRUD for user tokens.
  *
- * @property User userModel
+ * @property User user
  * @property Guard guard
  * @property Hasher hasher
  * @package Api\V1\Http\Resourcess
@@ -25,18 +25,18 @@ class TokenResource implements Resource
 {
     use Validator;
 
-    const VALIDATION_CREATE = 'create';
+    const VALIDATION_CREATE = 'validation.create';
 
     /**
      * Token constructor.
      *
-     * @param User $userModel
+     * @param User $user
      * @param Guard $guard
      * @param Hasher $hasher
      */
-    public function __construct(User $userModel, Guard $guard, Hasher $hasher)
+    public function __construct(User $user, Guard $guard, Hasher $hasher)
     {
-        $this->userModel = $userModel;
+        $this->user = $user;
         $this->guard = $guard;
         $this->hasher = $hasher;
     }
@@ -48,19 +48,8 @@ class TokenResource implements Resource
     {
         return [
             static::VALIDATION_CREATE => [
-                'email' => [
-                    'required',
-                    'filled',
-                    'email',
-                    'min:1',
-                    'max:255',
-                ],
-                'password' => [
-                    'required',
-                    'filled',
-                    'min:1',
-                    'max:255',
-                ],
+                'email' => ['required', 'filled', 'email', 'min:1', 'max:255'],
+                'password' => ['required', 'filled', 'min:1', 'max:255'],
             ],
         ];
     }
@@ -89,11 +78,9 @@ class TokenResource implements Resource
      */
     public function create(array $attributes) : TokenPresenter
     {
-        /** @var User $user */
-
         $this->validate($attributes, static::VALIDATION_CREATE);
 
-        $user = $this->userModel->whereEmail($attributes['email'])->first();
+        $user = $this->user->whereEmail($attributes['email'])->first();
 
         if ($user === null) {
             throw new ModelNotFoundException('User not found.');
@@ -103,8 +90,7 @@ class TokenResource implements Resource
             throw new ModelNotFoundException('Invalid user password.');
         }
 
-        $user->generateApiToken();
-        $user->saveOrFail();
+        $user->generateApiToken()->saveOrFail();
 
         $this->guard->setUser($user);
 

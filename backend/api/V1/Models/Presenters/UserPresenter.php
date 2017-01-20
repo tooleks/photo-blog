@@ -25,6 +25,14 @@ class UserPresenter extends ModelPresenter
     /**
      * @inheritdoc
      */
+    public function getOriginalModel() : User
+    {
+        return parent::getOriginalModel();
+    }
+
+    /**
+     * @inheritdoc
+     */
     protected function getAttributesMap() : array
     {
         return [

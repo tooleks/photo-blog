@@ -56,41 +56,49 @@ class User extends Authenticatable
      *
      * @param string $passwordHash
      *
-     * @return void
+     * @return $this
      */
     public function setPasswordHash(string $passwordHash)
     {
         $this->password = $passwordHash;
+
+        return $this;
     }
 
     /**
      * Generate unique api token.
      *
-     * @return void
+     * @return $this
      */
     public function generateApiToken()
     {
         $this->api_token = str_random(64);
+
+        return $this;
     }
 
     /**
      * Set customer role.
      *
-     * @return void
+     * @return $this
      */
     public function setCustomerRole()
     {
         $this->role_id = Role::customer()->first()->id;
+
+        return $this;
     }
 
     /**
      * Set administrator role.
      *
-     * @return void
+     * @return $this
      */
     public function setAdministratorRole()
     {
         $this->role_id = Role::administrator()->first()->id;
+
+        return $this;
     }
 
     /**

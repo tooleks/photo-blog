@@ -2,22 +2,22 @@
 
 namespace Api\V1\Http\Resources;
 
+use Throwable;
+use Illuminate\Database\ConnectionInterface;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Api\V1\Models\Presenters\PhotoCollectionPresenter;
 use App\Core\Validator\Validator;
 use App\Models\DB\Photo;
 use Api\V1\Core\Resource\Contracts\Resource;
 use Api\V1\Models\Presenters\PhotoPresenter;
-use Illuminate\Database\ConnectionInterface;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Throwable;
 
 /**
  * Class PhotoResource
  *
  * The class provides CRUD for photos that are uploaded and published.
  *
- * @property ConnectionInterface connection
- * @property Photo $photoModel
+ * @property ConnectionInterface db
+ * @property Photo $photo
  * @property UploadedPhotoResource uploadedPhotoResource
  * @package Api\V1\Http\Resources
  */
@@ -25,20 +25,20 @@ class PhotoResource implements Resource
 {
     use Validator;
 
-    const VALIDATION_CREATE = 'create';
-    const VALIDATION_UPDATE = 'update';
-    const VALIDATION_GET_COLLECTION = 'get.collection';
+    const VALIDATION_CREATE = 'validation.create';
+    const VALIDATION_UPDATE = 'validation.update';
+    const VALIDATION_GET_COLLECTION = 'validation.get.collection';
 
     /**
      * PhotoResource constructor.
-     * @param ConnectionInterface $connection
-     * @param Photo $photoModel
+     * @param ConnectionInterface $db
+     * @param Photo $photo
      * @param UploadedPhotoResource $uploadedPhotoResource
      */
-    public function __construct(ConnectionInterface $connection, Photo $photoModel, UploadedPhotoResource $uploadedPhotoResource)
+    public function __construct(ConnectionInterface $db, Photo $photo, UploadedPhotoResource $uploadedPhotoResource)
     {
-        $this->connection = $connection;
-        $this->photoModel = $photoModel;
+        $this->db = $db;
+        $this->photo = $photo;
         $this->uploadedPhotoResource = $uploadedPhotoResource;
     }
 
@@ -49,76 +49,21 @@ class PhotoResource implements Resource
     {
         return [
             static::VALIDATION_CREATE => [
-                'uploaded_photo_id' => [
-                    'required',
-                    'filled',
-                    'integer',
-                ],
-                'description' => [
-                    'required',
-                    'filled',
-                    'string',
-                    'min:1',
-                    'max:65535',
-                ],
-                'tags' => [
-                    'required',
-                    'filled',
-                    'array',
-                ],
-                'tags.*.text' => [
-                    'required',
-                    'filled',
-                    'string',
-                    'min:1',
-                    'max:255',
-                ],
+                'uploaded_photo_id' => ['required', 'filled', 'integer'],
+                'description' => ['required', 'filled', 'string', 'min:1', 'max:65535'],
+                'tags' => ['required', 'filled', 'array'],
+                'tags.*.text' => ['required', 'filled', 'string', 'min:1', 'max:255'],
             ],
             static::VALIDATION_UPDATE => [
-                'description' => [
-                    'required',
-                    'filled',
-                    'string',
-                    'min:1',
-                    'max:65535',
-                ],
-                'tags' => [
-                    'required',
-                    'filled',
-                    'array',
-                ],
-                'tags.*.text' => [
-                    'required',
-                    'filled',
-                    'string',
-                    'min:1',
-                    'max:255',
-                ],
+                'description' => ['required', 'filled', 'string', 'min:1', 'max:65535'],
+                'tags' => ['required', 'filled', 'array'],
+                'tags.*.text' => ['required', 'filled', 'string', 'min:1', 'max:255'],
             ],
             static::VALIDATION_GET_COLLECTION => [
-                'take' => [
-                    'required',
-                    'filled',
-                    'integer',
-                    'min:1',
-                    'max:100',
-                ],
-                'skip' => [
-                    'required',
-                    'filled',
-                    'integer',
-                    'min:0',
-                ],
-                'query' => [
-                    'filled',
-                    'string',
-                    'min:1',
-                ],
-                'tag' => [
-                    'filled',
-                    'string',
-                    'min:1',
-                ],
+                'take' => ['required', 'filled', 'integer', 'min:1', 'max:100'],
+                'skip' => ['required', 'filled', 'integer', 'min:0'],
+                'query' => ['filled', 'string', 'min:1'],
+                'tag' => ['filled', 'string', 'min:1'],
             ],
         ];
     }
@@ -131,7 +76,7 @@ class PhotoResource implements Resource
      */
     public function getById($id) : PhotoPresenter
     {
-        $photo = $this->photoModel
+        $photo = $this->photo
             ->withThumbnails()
             ->withTags()
             ->whereIsUploaded()
@@ -158,7 +103,7 @@ class PhotoResource implements Resource
     {
         $parameters = $this->validate(['take' => $take, 'skip' => $skip] + $parameters, static::VALIDATION_GET_COLLECTION);
 
-        $this->photoModel = $this->photoModel
+        $this->photo = $this->photo
             ->distinct()
             ->withThumbnails()
             ->withTags()
@@ -169,12 +114,12 @@ class PhotoResource implements Resource
             ->orderByCreatedAt('desc');
 
         if (isset($parameters['query'])) {
-            $this->photoModel = $this->photoModel->whereSearchQuery($parameters['query']);
+            $this->photo = $this->photo->whereSearchQuery($parameters['query']);
         } elseif (isset($parameters['tag'])) {
-            $this->photoModel = $this->photoModel->whereTag($parameters['tag']);
+            $this->photo = $this->photo->whereTag($parameters['tag']);
         }
 
-        $photos = $this->photoModel->get();
+        $photos = $this->photo->get();
 
         return new PhotoCollectionPresenter($photos);
     }
@@ -188,28 +133,25 @@ class PhotoResource implements Resource
      */
     public function create(array $attributes) : PhotoPresenter
     {
-        /** @var Photo $photo */
-
         $attributes = $this->validate($attributes, static::VALIDATION_CREATE);
 
         $photo = $this->uploadedPhotoResource->getById($attributes['uploaded_photo_id'])->getOriginalModel();
 
-        $photo->is_published = true;
-        $photo->fill($attributes);
+        $photo->fill(['is_published' => true] + $attributes);
 
         try {
-            $this->connection->beginTransaction();
-            $photo->saveOrFail();
+            $this->db->beginTransaction();
+            $photo->save();
             $photo->tags()->delete();
             $photo->tags()->detach();
             $photo->tags()->createMany($attributes['tags']);
-            $this->connection->commit();
+            $this->db->commit();
         } catch (Throwable $e) {
-            $this->connection->rollBack();
+            $this->db->rollBack();
             throw $e;
         }
 
-        return $this->getById($photo->id);
+        return new PhotoPresenter($photo);
     }
 
     /**
@@ -222,31 +164,27 @@ class PhotoResource implements Resource
      */
     public function update($photoPresenter, array $attributes) : PhotoPresenter
     {
-        /** @var Photo $photo */
-
         $attributes = $this->validate($attributes, static::VALIDATION_UPDATE);
 
-        $photo = $photoPresenter->getOriginalModel();
-
-        $photo->fill($attributes);
+        $photo = $photoPresenter->getOriginalModel()->fill($attributes);
 
         try {
-            $this->connection->beginTransaction();
-            $photo->saveOrFail();
+            $this->db->beginTransaction();
+            $photo->save();
             $photo->tags()->delete();
             $photo->tags()->detach();
-            $photo->tags()->createMany($attributes['tags']);
-            $this->connection->commit();
+            $photo->tags = $photo->tags()->createMany($attributes['tags']);
+            $this->db->commit();
         } catch (Throwable $e) {
-            $this->connection->rollBack();
+            $this->db->rollBack();
             throw $e;
         }
 
-        return $this->getById($photo->id);
+        return new PhotoPresenter($photo);
     }
 
     /**
-     * Delete a resource
+     * Delete a resource.
      *
      * @param PhotoPresenter $photoPresenter
      * @return int
@@ -254,12 +192,6 @@ class PhotoResource implements Resource
      */
     public function delete($photoPresenter) : int
     {
-        /** @var Photo $photo */
-
-        $photo = $photoPresenter->getOriginalModel();
-
-        $result = $photo->delete();
-
-        return (int)$result;
+        return (int)$photoPresenter->getOriginalModel()->delete();
     }
 }

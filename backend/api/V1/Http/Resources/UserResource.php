@@ -2,21 +2,19 @@
 
 namespace Api\V1\Http\Resources;
 
+use Exception;
+use Illuminate\Contracts\Hashing\Hasher;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\Rule;
 use App\Core\Validator\Validator;
 use App\Models\DB\User;
 use Api\V1\Core\Resource\Contracts\Resource;
 use Api\V1\Models\Presenters\UserPresenter;
-use Illuminate\Contracts\Hashing\Hasher;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Validation\Rule;
-use Exception;
 
 /**
  * Class UserResource
  *
- * The class provides CRUD for users.
- *
- * @property User userModel
+ * @property User user
  * @property Hasher hasher
  * @package Api\V1\Http\Resources
  */
@@ -24,8 +22,8 @@ class UserResource implements Resource
 {
     use Validator;
 
-    const VALIDATION_CREATE = 'create';
-    const VALIDATION_UPDATE = 'update';
+    const VALIDATION_CREATE = 'validation.create';
+    const VALIDATION_UPDATE = 'validation.update';
 
     /**
      * @var array
@@ -34,12 +32,12 @@ class UserResource implements Resource
 
     /**
      * UserResource constructor.
-     * @param User $userModel
+     * @param User $user
      * @param Hasher $hasher
      */
-    public function __construct(User $userModel, Hasher $hasher)
+    public function __construct(User $user, Hasher $hasher)
     {
-        $this->userModel = $userModel;
+        $this->user = $user;
         $this->hasher = $hasher;
     }
 
@@ -50,37 +48,12 @@ class UserResource implements Resource
     {
         return [
             static::VALIDATION_CREATE => [
-                'name' => [
-                    'required',
-                    'filled',
-                    'string',
-                    'min:1',
-                    'max:255',
-                ],
-                'email' => [
-                    'required',
-                    'filled',
-                    'string',
-                    'email',
-                    'unique:users',
-                    'min:1',
-                    'max:255',
-                ],
-                'password' => [
-                    'required',
-                    'filled',
-                    'string',
-                    'min:1',
-                    'max:255',
-                ],
+                'name' => ['required', 'filled', 'string', 'min:1', 'max:255'],
+                'email' => ['required', 'filled', 'string', 'email', 'unique:users', 'min:1', 'max:255'],
+                'password' => ['required', 'filled', 'string', 'min:1', 'max:255'],
             ],
             static::VALIDATION_UPDATE => [
-                'name' => [
-                    'filled',
-                    'string',
-                    'min:1',
-                    'max:255',
-                ],
+                'name' => ['filled', 'string', 'min:1', 'max:255'],
                 'email' => [
                     'filled',
                     'string',
@@ -89,12 +62,7 @@ class UserResource implements Resource
                     'min:1',
                     'max:255',
                 ],
-                'password' => [
-                    'filled',
-                    'string',
-                    'min:1',
-                    'max:255',
-                ],
+                'password' => ['filled', 'string', 'min:1', 'max:255'],
             ],
         ];
     }
@@ -107,7 +75,7 @@ class UserResource implements Resource
      */
     public function getById($id) : UserPresenter
     {
-        $user = $this->userModel
+        $user = $this->user
             ->whereId($id)
             ->first();
 
@@ -136,15 +104,15 @@ class UserResource implements Resource
     {
         $attributes = $this->validate($attributes, static::VALIDATION_CREATE);
 
-        $user = $this->userModel->newInstance();
+        $user = $this->user->newInstance($attributes);
 
-        $user->setPasswordHash($this->hasher->make($attributes['password']));
-        $user->generateApiToken();
-        $user->setCustomerRole();
+        $user->setPasswordHash($this->hasher->make($attributes['password']))
+            ->generateApiToken()
+            ->setCustomerRole();
 
-        $user->saveOrFail($attributes);
+        $user->saveOrFail();
 
-        return $this->getById($user->id);
+        return new UserPresenter($user);
     }
 
     /**
@@ -152,17 +120,15 @@ class UserResource implements Resource
      *
      * @param UserPresenter $userPresenter
      * @param array $attributes
-     * @return mixed
+     * @return UserPresenter
      */
     public function update($userPresenter, array $attributes) : UserPresenter
     {
-        /** @var User $user */
-
         $this->validationAttributes['email'] = $userPresenter->email;
 
         $attributes = $this->validate($attributes, static::VALIDATION_UPDATE);
 
-        $user = $userPresenter->getOriginalModel();
+        $user = $userPresenter->getOriginalModel()->fill($attributes);
 
         if (isset($attributes['password'])) {
             $user->setPasswordHash($this->hasher->make($attributes['password']));
@@ -170,23 +136,17 @@ class UserResource implements Resource
 
         $user->saveOrFail();
 
-        return $this->getById($user->id);
+        return new UserPresenter($user);
     }
 
     /**
-     * Delete a resource
+     * Delete a resource.
      *
      * @param UserPresenter $userPresenter
      * @return int
      */
     public function delete($userPresenter) : int
     {
-        /** @var User $photo */
-
-        $user = $userPresenter->getOriginalModel();
-
-        $result = $user->delete();
-
-        return (int)$result;
+        return (int)$userPresenter->getOriginalModel()->delete();
     }
 }
