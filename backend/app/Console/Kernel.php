@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Console\Commands\ConfigApp;
 use App\Console\Commands\CreateAdministratorUser;
+use App\Console\Commands\CreateApiDocumentation;
 use App\Console\Commands\DeleteNotPublishedPhotosOlderThanWeek;
 use App\Console\Commands\DeleteUnusedDirectoriesWithinPhotoStorage;
 use App\Console\Commands\CreateRoles;
@@ -20,6 +21,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         ConfigApp::class,
         CreateAdministratorUser::class,
+        CreateApiDocumentation::class,
         DeleteNotPublishedPhotosOlderThanWeek::class,
         DeleteUnusedDirectoriesWithinPhotoStorage::class,
         CreateRoles::class,
