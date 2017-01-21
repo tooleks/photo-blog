@@ -104,7 +104,8 @@ class UploadedPhotoResource implements Resource
     {
         $attributes = $this->validate($attributes, static::VALIDATION_CREATE);
 
-        $photo = $this->photo->newInstance(['is_published' => false] + $attributes);
+        $photo = $this->photo->newInstance($attributes);
+        $photo->setIsPublishedAttribute(false);
 
         try {
             $this->db->beginTransaction();
