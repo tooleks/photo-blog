@@ -17,7 +17,7 @@ use Closure;
 class DeletePhotoDirectory
 {
     /**
-     * PhotoDirectoryCleaner constructor.
+     * DeletePhotoDirectory constructor.
      *
      * @param Filesystem $fs
      */

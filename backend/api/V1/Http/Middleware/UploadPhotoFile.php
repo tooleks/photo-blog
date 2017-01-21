@@ -19,7 +19,7 @@ class UploadPhotoFile
     use Validator;
 
     /**
-     * PhotoFileUploader constructor.
+     * UploadPhotoFile constructor.
      *
      * @param Filesystem $fs
      */

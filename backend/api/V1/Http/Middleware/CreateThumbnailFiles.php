@@ -21,7 +21,7 @@ class CreateThumbnailFiles
     use Validator;
 
     /**
-     * PhotoFileUploader constructor.
+     * CreateThumbnailFiles constructor.
      *
      * @param Filesystem $fs
      * @param ThumbnailsGeneratorContract $thumbnailsGenerator
