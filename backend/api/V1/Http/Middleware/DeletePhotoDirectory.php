@@ -36,13 +36,7 @@ class DeletePhotoDirectory
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        /** @var Photo $photo */
-
-        if (isset($request->uploadedPhoto)) {
-            $photo = $request->uploadedPhoto->getOriginalModel();
-        } elseif (isset($request->photo)) {
-            $photo = $request->photo->getOriginalModel();
-        } else {
+        if (!isset($request->photo)) {
             return $next($request);
         }
 
@@ -51,7 +45,7 @@ class DeletePhotoDirectory
         $response = $next($request);
 
         if ($response->status() === 200) {
-            $this->fs->deleteDirectory($photo->directory_path);
+            $this->fs->deleteDirectory($request->photo->directory_path);
         }
 
         return $response;

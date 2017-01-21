@@ -37,10 +37,6 @@ class RouteServiceProvider extends ServiceProvider
             return $this->app->make(UserResource::class)->getById($id);
         });
 
-        Route::bind('uploadedPhoto', function (int $id) {
-            return $this->app->make(UploadedPhotoResource::class)->getById($id);
-        });
-
         Route::bind('photo', function (int $id) {
             return $this->app->make(PhotoResource::class)->getById($id);
         });
