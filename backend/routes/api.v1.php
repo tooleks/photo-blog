@@ -24,7 +24,7 @@ Route::group(['prefix' => 'user'], function () {
 
     Route::post('/', [
         'uses' => 'UserController@create',
-        'middleware' => ['can:create,' . \Api\V1\Models\Presenters\UserPresenter::class],
+        'middleware' => ['can:create,' . \App\Models\DB\User::class],
     ]);
 
     Route::get('/{user}', [
@@ -49,23 +49,23 @@ Route::group(['prefix' => 'uploaded_photo'], function () {
     Route::post('/', [
         'uses' => 'UploadedPhotoController@create',
         'middleware' => [
-            'can:create,' . \Api\V1\Models\Presenters\UploadedPhotoPresenter::class,
+            'can:create,' . \App\Models\DB\Photo::class,
             \Api\V1\Http\Middleware\AppendUserId::class,
         ],
     ]);
 
-    Route::get('/{uploadedPhoto}', [
+    Route::get('/{photo}', [
         'uses' => 'UploadedPhotoController@get',
     ]);
 
-    Route::post('/{uploadedPhoto}', [
+    Route::post('/{photo}', [
         'uses' => 'UploadedPhotoController@update',
-        'middleware' => ['can:update,uploadedPhoto'],
+        'middleware' => ['can:update,photo'],
     ]);
 
-    Route::delete('/{uploadedPhoto}', [
+    Route::delete('/{photo}', [
         'uses' => 'UploadedPhotoController@delete',
-        'middleware' => ['can:delete,uploadedPhoto'],
+        'middleware' => ['can:delete,photo'],
     ]);
 
 });
@@ -74,7 +74,7 @@ Route::group(['prefix' => 'photo'], function () {
 
     Route::post('/', [
         'uses' => 'PhotoController@create',
-        'middleware' => ['can:create,' . \Api\V1\Models\Presenters\PhotoPresenter::class],
+        'middleware' => ['can:create,' . \App\Models\DB\Photo::class],
     ]);
 
     Route::get('/', [

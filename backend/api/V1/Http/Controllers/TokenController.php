@@ -28,5 +28,16 @@ class TokenController extends ResourceController
      *          "api_token": "user_api_token_string"
      *      }
      *  }
+     *
+     * @inheritdoc
      */
+    public function create()
+    {
+        $user = $this->resource->create($this->request->all());
+
+        // Set auth for further actions.
+        $this->guard->setUser($user);
+
+        return $this->present($user);
+    }
 }

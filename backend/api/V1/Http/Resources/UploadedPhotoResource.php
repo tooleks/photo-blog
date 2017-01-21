@@ -2,14 +2,13 @@
 
 namespace Api\V1\Http\Resources;
 
-use Exception;
-use Throwable;
-use Illuminate\Database\ConnectionInterface;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Core\Validator\Validator;
 use App\Models\DB\Photo;
 use Api\V1\Core\Resource\Contracts\Resource;
-use Api\V1\Models\Presenters\UploadedPhotoPresenter;
+use Illuminate\Database\ConnectionInterface;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Exception;
+use Throwable;
 
 /**
  * Class UploadedPhotoResource
@@ -69,9 +68,9 @@ class UploadedPhotoResource implements Resource
      * Get a resource by unique ID.
      *
      * @param int $id
-     * @return UploadedPhotoPresenter
+     * @return Photo
      */
-    public function getById($id) : UploadedPhotoPresenter
+    public function getById($id) : Photo
     {
         $photo = $this->photo
             ->withThumbnails()
@@ -83,7 +82,7 @@ class UploadedPhotoResource implements Resource
             throw new ModelNotFoundException('Uploaded photo not found.');
         };
 
-        return new UploadedPhotoPresenter($photo);
+        return $photo;
     }
 
     /**
@@ -98,10 +97,10 @@ class UploadedPhotoResource implements Resource
      * Create a resource.
      *
      * @param array $attributes
-     * @return UploadedPhotoPresenter
+     * @return Photo
      * @throws Throwable
      */
-    public function create(array $attributes) : UploadedPhotoPresenter
+    public function create(array $attributes) : Photo
     {
         $attributes = $this->validate($attributes, static::VALIDATION_CREATE);
 
@@ -119,22 +118,22 @@ class UploadedPhotoResource implements Resource
             throw $e;
         }
 
-        return new UploadedPhotoPresenter($photo);
+        return $photo;
     }
 
     /**
      * Update a resource.
      *
-     * @param UploadedPhotoPresenter $uploadedPhotoPresenter
+     * @param Photo $photo
      * @param array $attributes
-     * @return UploadedPhotoPresenter
+     * @return Photo
      * @throws Throwable
      */
-    public function update($uploadedPhotoPresenter, array $attributes) : UploadedPhotoPresenter
+    public function update($photo, array $attributes) : Photo
     {
         $attributes = $this->validate($attributes, static::VALIDATION_UPDATE);
 
-        $photo = $uploadedPhotoPresenter->getOriginalModel()->fill($attributes);
+        $photo = $photo->fill($attributes);
 
         try {
             $this->db->beginTransaction();
@@ -148,17 +147,17 @@ class UploadedPhotoResource implements Resource
             throw $e;
         }
 
-        return new UploadedPhotoPresenter($photo);
+        return $photo;
     }
 
     /**
      * Delete a resource.
      *
-     * @param UploadedPhotoPresenter $uploadedPhotoPresenter
+     * @param Photo $photo
      * @return int
      */
-    public function delete($uploadedPhotoPresenter) : int
+    public function delete($photo) : int
     {
-        return (int)$uploadedPhotoPresenter->getOriginalModel()->delete();
+        return (int)$photo->delete();
     }
 }

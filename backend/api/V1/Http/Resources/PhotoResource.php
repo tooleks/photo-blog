@@ -2,14 +2,13 @@
 
 namespace Api\V1\Http\Resources;
 
-use Throwable;
-use Illuminate\Database\ConnectionInterface;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Api\V1\Models\Presenters\PhotoCollectionPresenter;
 use App\Core\Validator\Validator;
 use App\Models\DB\Photo;
 use Api\V1\Core\Resource\Contracts\Resource;
-use Api\V1\Models\Presenters\PhotoPresenter;
+use Illuminate\Database\ConnectionInterface;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Collection;
+use Throwable;
 
 /**
  * Class PhotoResource
@@ -73,9 +72,9 @@ class PhotoResource implements Resource
      * Get a resource by unique ID.
      *
      * @param int $id
-     * @return PhotoPresenter
+     * @return Photo
      */
-    public function getById($id) : PhotoPresenter
+    public function getById($id) : Photo
     {
         $photo = $this->photo
             ->withThumbnails()
@@ -89,7 +88,7 @@ class PhotoResource implements Resource
             throw new ModelNotFoundException('Photo not found.');
         };
 
-        return new PhotoPresenter($photo);
+        return $photo;
     }
 
     /**
@@ -98,9 +97,9 @@ class PhotoResource implements Resource
      * @param int $take
      * @param int $skip
      * @param array $parameters
-     * @return PhotoCollectionPresenter
+     * @return Collection
      */
-    public function getCollection($take, $skip, array $parameters) : PhotoCollectionPresenter
+    public function getCollection($take, $skip, array $parameters) : Collection
     {
         $parameters = $this->validate(['take' => $take, 'skip' => $skip] + $parameters, static::VALIDATION_GET_COLLECTION);
 
@@ -122,21 +121,21 @@ class PhotoResource implements Resource
 
         $photos = $this->photo->get();
 
-        return new PhotoCollectionPresenter($photos);
+        return $photos;
     }
 
     /**
      * Create a resource.
      *
      * @param array $attributes
-     * @return PhotoPresenter
+     * @return Photo
      * @throws Throwable
      */
-    public function create(array $attributes) : PhotoPresenter
+    public function create(array $attributes) : Photo
     {
         $attributes = $this->validate($attributes, static::VALIDATION_CREATE);
 
-        $photo = $this->uploadedPhotoResource->getById($attributes['uploaded_photo_id'])->getOriginalModel();
+        $photo = $this->uploadedPhotoResource->getById($attributes['uploaded_photo_id']);
 
         $photo->fill(['is_published' => true] + $attributes);
 
@@ -152,22 +151,22 @@ class PhotoResource implements Resource
             throw $e;
         }
 
-        return new PhotoPresenter($photo);
+        return $photo;
     }
 
     /**
      * Update a resource.
      *
-     * @param PhotoPresenter $photoPresenter
+     * @param Photo $photo
      * @param array $attributes
-     * @return PhotoPresenter
+     * @return Photo
      * @throws Throwable
      */
-    public function update($photoPresenter, array $attributes) : PhotoPresenter
+    public function update($photo, array $attributes) : Photo
     {
         $attributes = $this->validate($attributes, static::VALIDATION_UPDATE);
 
-        $photo = $photoPresenter->getOriginalModel()->fill($attributes);
+        $photo = $photo->fill($attributes);
 
         try {
             $this->db->beginTransaction();
@@ -181,18 +180,18 @@ class PhotoResource implements Resource
             throw $e;
         }
 
-        return new PhotoPresenter($photo);
+        return $photo;
     }
 
     /**
      * Delete a resource.
      *
-     * @param PhotoPresenter $photoPresenter
+     * @param Photo $photo
      * @return int
      * @throws Throwable
      */
-    public function delete($photoPresenter) : int
+    public function delete($photo) : int
     {
-        return (int)$photoPresenter->getOriginalModel()->delete();
+        return (int)$photo->delete();
     }
 }

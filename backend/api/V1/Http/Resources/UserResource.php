@@ -2,14 +2,13 @@
 
 namespace Api\V1\Http\Resources;
 
-use Exception;
-use Illuminate\Contracts\Hashing\Hasher;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Validation\Rule;
 use App\Core\Validator\Validator;
 use App\Models\DB\User;
 use Api\V1\Core\Resource\Contracts\Resource;
-use Api\V1\Models\Presenters\UserPresenter;
+use Illuminate\Contracts\Hashing\Hasher;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\Rule;
+use Exception;
 
 /**
  * Class UserResource
@@ -72,9 +71,9 @@ class UserResource implements Resource
      * Get a resource by unique ID.
      *
      * @param int $id
-     * @return UserPresenter
+     * @return User
      */
-    public function getById($id) : UserPresenter
+    public function getById($id) : User
     {
         $user = $this->user
             ->whereId($id)
@@ -84,7 +83,7 @@ class UserResource implements Resource
             throw new ModelNotFoundException('User not found.');
         };
 
-        return new UserPresenter($user);
+        return $user;
     }
 
     /**
@@ -99,9 +98,9 @@ class UserResource implements Resource
      * Create a resource.
      *
      * @param array $attributes
-     * @return UserPresenter
+     * @return User
      */
-    public function create(array $attributes) : UserPresenter
+    public function create(array $attributes) : User
     {
         $attributes = $this->validate($attributes, static::VALIDATION_CREATE);
 
@@ -113,23 +112,23 @@ class UserResource implements Resource
 
         $user->saveOrFail();
 
-        return new UserPresenter($user);
+        return $user;
     }
 
     /**
      * Update a resource.
      *
-     * @param UserPresenter $userPresenter
+     * @param User $user
      * @param array $attributes
-     * @return UserPresenter
+     * @return User
      */
-    public function update($userPresenter, array $attributes) : UserPresenter
+    public function update($user, array $attributes) : User
     {
-        $this->validationAttributes['email'] = $userPresenter->email;
+        $this->validationAttributes['email'] = $user->email;
 
         $attributes = $this->validate($attributes, static::VALIDATION_UPDATE);
 
-        $user = $userPresenter->getOriginalModel()->fill($attributes);
+        $user = $user->fill($attributes);
 
         if (isset($attributes['password'])) {
             $user->setPasswordHash($this->hasher->make($attributes['password']));
@@ -137,17 +136,17 @@ class UserResource implements Resource
 
         $user->saveOrFail();
 
-        return new UserPresenter($user);
+        return $user;
     }
 
     /**
      * Delete a resource.
      *
-     * @param UserPresenter $userPresenter
+     * @param User $user
      * @return int
      */
-    public function delete($userPresenter) : int
+    public function delete($user) : int
     {
-        return (int)$userPresenter->getOriginalModel()->delete();
+        return (int)$user->delete();
     }
 }

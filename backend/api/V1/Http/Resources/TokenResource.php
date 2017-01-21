@@ -2,22 +2,17 @@
 
 namespace Api\V1\Http\Resources;
 
-use Exception;
-use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Contracts\Hashing\Hasher;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Core\Validator\Validator;
 use App\Models\DB\User;
 use Api\V1\Core\Resource\Contracts\Resource;
-use Api\V1\Models\Presenters\TokenPresenter;
+use Illuminate\Contracts\Hashing\Hasher;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Exception;
 
 /**
  * Class Token
  *
- * The class provides CRUD for user tokens.
- *
  * @property User user
- * @property Guard guard
  * @property Hasher hasher
  * @package Api\V1\Http\Resourcess
  */
@@ -31,13 +26,11 @@ class TokenResource implements Resource
      * TokenResource constructor.
      *
      * @param User $user
-     * @param Guard $guard
      * @param Hasher $hasher
      */
-    public function __construct(User $user, Guard $guard, Hasher $hasher)
+    public function __construct(User $user, Hasher $hasher)
     {
         $this->user = $user;
-        $this->guard = $guard;
         $this->hasher = $hasher;
     }
 
@@ -74,9 +67,9 @@ class TokenResource implements Resource
      * Create a resource.
      *
      * @param array $attributes
-     * @return TokenPresenter
+     * @return User
      */
-    public function create(array $attributes) : TokenPresenter
+    public function create(array $attributes) : User
     {
         $this->validate($attributes, static::VALIDATION_CREATE);
 
@@ -92,9 +85,7 @@ class TokenResource implements Resource
 
         $user->generateApiToken()->saveOrFail();
 
-        $this->guard->setUser($user);
-
-        return new TokenPresenter($user);
+        return $user;
     }
 
     /**

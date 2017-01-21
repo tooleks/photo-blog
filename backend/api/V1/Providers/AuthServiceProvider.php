@@ -2,14 +2,17 @@
 
 namespace Api\V1\Providers;
 
-use Api\V1\Models\Presenters\PhotoPresenter;
-use Api\V1\Models\Presenters\UploadedPhotoPresenter;
-use Api\V1\Models\Presenters\UserPresenter;
 use Api\V1\Policies\PhotoPolicy;
-use Api\V1\Policies\UploadedPhotoPolicy;
 use Api\V1\Policies\UserPolicy;
+use App\Models\DB\Photo;
+use App\Models\DB\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
+/**
+ * Class AuthServiceProvider
+ *
+ * @package Api\V1\Providers
+ */
 class AuthServiceProvider extends ServiceProvider
 {
     /**
@@ -18,9 +21,8 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        UserPresenter::class => UserPolicy::class,
-        UploadedPhotoPresenter::class => UploadedPhotoPolicy::class,
-        PhotoPresenter::class => PhotoPolicy::class,
+        User::class => UserPolicy::class,
+        Photo::class => PhotoPolicy::class,
     ];
 
     /**

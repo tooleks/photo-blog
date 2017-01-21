@@ -1,10 +1,11 @@
 <?php
 
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Validation\ValidationException;
+
 use Api\V1\Http\Resources\UserResource;
 use Api\V1\Http\Resources\TokenResource;
-use Api\V1\Models\Presenters\TokenPresenter;
+use App\Models\DB\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\ValidationException;
 
 /**
  * Class TokenResourceTest
@@ -18,12 +19,12 @@ class TokenResourceTest extends TestCase
 
         $attributes = ['name' => 'test', 'email' => 'test@test.test', 'password' => 'test_password'];
 
-        $userPresenter = $userResource->create($attributes);
-        $tokenPresenter = $tokenResource->create($attributes);
+        $user = $userResource->create($attributes);
+        $userFromTokenResource = $tokenResource->create($attributes);
 
-        $this->assertInstanceOf(TokenPresenter::class, $tokenPresenter, 'It should be an instance of TokenPresenter.');
-        $this->assertEquals(strlen($tokenPresenter->api_token), 64, 'It should be 64 character length token.');
-        $this->assertNotEquals($userPresenter->getOriginalModel()->api_token, $tokenPresenter->api_token, 'It should be a new token.');
+        $this->assertInstanceOf(User::class, $userFromTokenResource, 'It should be an instance of User.');
+        $this->assertEquals(strlen($userFromTokenResource->api_token), 64, 'It should be 64 character length token.');
+        $this->assertNotEquals($user->api_token, $userFromTokenResource->api_token, 'It should be a new token.');
     }
 
     public function testCreateTokenWithEmptyAttributes()

@@ -1,11 +1,10 @@
 <?php
 
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Validation\ValidationException;
 use Api\V1\Http\Resources\UserResource;
-use Api\V1\Models\Presenters\UserPresenter;
 use App\Models\DB\Role;
 use App\Models\DB\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\ValidationException;
 
 /**
  * Class UserResourceTest
@@ -18,12 +17,12 @@ class UserResourceTest extends TestCase
 
         $attributes = factory(User::class)->make()->toArray();
 
-        $userPresenter = $userResource->create($attributes);
+        $user = $userResource->create($attributes);
 
-        $this->assertInstanceOf(UserPresenter::class, $userPresenter, 'It should be an instance of UserPresenter.');
-        $this->assertEquals($userPresenter->name, $attributes['name'], 'It should be the same names.');
-        $this->assertEquals($userPresenter->email, $attributes['email'], 'It should be the same emails.');
-        $this->assertEquals($userPresenter->role->name, Role::customer()->first()->name, 'It should be the same role names.');
+        $this->assertInstanceOf(User::class, $user, 'It should be an instance of User.');
+        $this->assertEquals($user->name, $attributes['name'], 'It should be the same names.');
+        $this->assertEquals($user->email, $attributes['email'], 'It should be the same emails.');
+        $this->assertEquals($user->role->name, Role::customer()->first()->name, 'It should be the same role names.');
     }
 
     public function testCreateUserWithEmptyAttributes()
@@ -69,16 +68,16 @@ class UserResourceTest extends TestCase
 
         $attributes = factory(User::class)->make()->toArray();
 
-        $userPresenter = $userResource->create($attributes);
-        $userPresenter = $userResource->update($userPresenter, ['name' => 'updated_name']);
+        $user = $userResource->create($attributes);
+        $user = $userResource->update($user, ['name' => 'updated_name']);
 
-        $this->assertInstanceOf(UserPresenter::class, $userPresenter, 'It should be an instance of UserPresenter.');
-        $this->assertEquals($userPresenter->email, $attributes['email'], 'It should be the same emails.');
+        $this->assertInstanceOf(User::class, $user, 'It should be an instance of User.');
+        $this->assertEquals($user->email, $attributes['email'], 'It should be the same emails.');
 
-        $userPresenter = $userResource->update($userPresenter, ['email' => 'updated_email@test.test']);
+        $user = $userResource->update($user, ['email' => 'updated_email@test.test']);
 
-        $this->assertEquals($userPresenter->name, 'updated_name', 'It should be the same names.');
-        $this->assertEquals($userPresenter->email, 'updated_email@test.test', 'It should be the same emails.');
+        $this->assertEquals($user->name, 'updated_name', 'It should be the same names.');
+        $this->assertEquals($user->email, 'updated_email@test.test', 'It should be the same emails.');
     }
 
     public function testUpdateUserWithDuplicatedEmailAttribute()
@@ -88,13 +87,13 @@ class UserResourceTest extends TestCase
         $firstUserAttributes = factory(User::class)->make()->toArray();
         $secondUserAttributes = factory(User::class)->make()->toArray();
 
-        $firstUserPresenter = $userResource->create($firstUserAttributes);
-        $secondUserPresenter = $userResource->create($secondUserAttributes);
+        $firstUser = $userResource->create($firstUserAttributes);
+        $secondUser = $userResource->create($secondUserAttributes);
 
         $this->expectException(ValidationException::class);
 
         try {
-            $userResource->update($secondUserPresenter, $firstUserAttributes);
+            $userResource->update($secondUser, $firstUserAttributes);
         } catch (ValidationException $e) {
             $errors = $e->validator->errors()->messages();
             throw $e;
@@ -109,16 +108,16 @@ class UserResourceTest extends TestCase
 
         $attributes = factory(User::class)->make()->toArray();
 
-        $userPresenterCreated = $userResource->create($attributes);
-        $userPresenterFound = $userResource->getById($userPresenterCreated->id);
+        $userCreated = $userResource->create($attributes);
+        $userFound = $userResource->getById($userCreated->id);
 
-        $this->assertInstanceOf(UserPresenter::class, $userPresenterFound, 'It should be an instance of UserPresenter.');
-        $this->assertEquals($userPresenterCreated->id, $userPresenterFound->id, 'It should be the same ids.');
-        $this->assertEquals($userPresenterCreated->name, $userPresenterFound->name, 'It should be the same names.');
-        $this->assertEquals($userPresenterCreated->email, $userPresenterFound->email, 'It should be the same emails.');
-        $this->assertEquals($userPresenterCreated->created_at, $userPresenterFound->created_at, 'It should be the same dates.');
-        $this->assertEquals($userPresenterCreated->updated_at, $userPresenterFound->updated_at, 'It should be the same dates.');
-        $this->assertEquals($userPresenterCreated->role, $userPresenterFound->role, 'It should be the same roles.');
+        $this->assertInstanceOf(User::class, $userFound, 'It should be an instance of User.');
+        $this->assertEquals($userCreated->id, $userFound->id, 'It should be the same ids.');
+        $this->assertEquals($userCreated->name, $userFound->name, 'It should be the same names.');
+        $this->assertEquals($userCreated->email, $userFound->email, 'It should be the same emails.');
+        $this->assertEquals($userCreated->created_at, $userFound->created_at, 'It should be the same dates.');
+        $this->assertEquals($userCreated->updated_at, $userFound->updated_at, 'It should be the same dates.');
+        $this->assertEquals($userCreated->role, $userFound->role, 'It should be the same roles.');
     }
 
     public function testDeleteUser()
@@ -127,9 +126,9 @@ class UserResourceTest extends TestCase
 
         $attributes = factory(User::class)->make()->toArray();
 
-        $userPresenter = $userResource->create($attributes);
+        $user = $userResource->create($attributes);
 
-        $count = $userResource->delete($userPresenter);
+        $count = $userResource->delete($user);
 
         $this->assertEquals($count, 1, 'It should be equal "1".');
     }
@@ -140,11 +139,11 @@ class UserResourceTest extends TestCase
 
         $attributes = factory(User::class)->make()->toArray();
 
-        $userPresenter = $userResource->create($attributes);
-        $userResource->delete($userPresenter);
+        $user = $userResource->create($attributes);
+        $userResource->delete($user);
 
         $this->expectException(ModelNotFoundException::class);
 
-        $userResource->getById($userPresenter->id);
+        $userResource->getById($user->id);
     }
 }

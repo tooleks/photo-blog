@@ -5,9 +5,14 @@ namespace Api\V1\Providers;
 use Api\V1\Http\Resources\PhotoResource;
 use Api\V1\Http\Resources\UploadedPhotoResource;
 use Api\V1\Http\Resources\UserResource;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Route;
 
+/**
+ * Class RouteServiceProvider
+ *
+ * @package Api\V1\Providers
+ */
 class RouteServiceProvider extends ServiceProvider
 {
     /**
