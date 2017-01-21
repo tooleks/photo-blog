@@ -40,7 +40,7 @@ class UserResourceTest extends TestCase
         $this->assertArrayHasKey('password', $errors ?? [], 'It should include a password property error.');
     }
 
-    public function testCreateUserWithDuplicatesEmailAttribute()
+    public function testCreateUserWithDuplicatedEmailAttribute()
     {
         $userResource = $this->createUserResource();
 
