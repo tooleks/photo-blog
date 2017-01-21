@@ -10,6 +10,7 @@ use Closure;
 
 /**
  * Class DeletePhotoDirectory
+ *
  * @property Filesystem $fs
  * @package Api\V1\Http\Middleware
  */

@@ -8,6 +8,7 @@ use Closure;
 
 /**
  * Class AppendCurrentUserId
+ *
  * @property Guard guard
  * @package Api\V1\Http\Middleware
  */

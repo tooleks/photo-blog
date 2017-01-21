@@ -6,6 +6,7 @@ use Tooleks\Laravel\Presenter\CollectionPresenter;
 
 /**
  * Class PhotoCollectionPresenter
+ *
  * @package Api\V1\Models\Presenters
  */
 class PhotoCollectionPresenter extends CollectionPresenter

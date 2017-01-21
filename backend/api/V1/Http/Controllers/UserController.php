@@ -6,6 +6,7 @@ use Api\V1\Http\Resources\UserResource;
 
 /**
  * Class UserController
+ *
  * @see UserResource
  * @package Api\V1\Http\Controllers
  */

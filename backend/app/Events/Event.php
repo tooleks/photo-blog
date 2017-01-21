@@ -11,6 +11,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 /**
  * Class Event
+ *
  * @package App\Events
  */
 class Event

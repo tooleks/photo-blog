@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 
 /**
  * Class PhotoController
+ *
  * @see PhotoResource
  * @package Api\V1\Http\Controllers
  */

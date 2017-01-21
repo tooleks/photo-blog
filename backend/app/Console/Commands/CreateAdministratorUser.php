@@ -9,6 +9,7 @@ use Illuminate\Contracts\Hashing\Hasher;
 
 /**
  * Class CreateAdministratorUser
+ *
  * @property Hasher hasher
  * @property User userModel
  * @package App\Console\Commands

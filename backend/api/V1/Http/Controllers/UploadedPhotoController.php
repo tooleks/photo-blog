@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 
 /**
  * Class UploadedPhotoController
+ *
  * @see UploadedPhotoResource
  * @package Api\V1\Http\Controllers
  */

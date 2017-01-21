@@ -11,6 +11,7 @@ use Closure;
 
 /**
  * Class CreateThumbnailFiles
+ *
  * @property Filesystem fs
  * @property ThumbnailsGeneratorContract thumbnailsGenerator
  * @package Api\V1\Http\Middleware

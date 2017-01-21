@@ -6,6 +6,7 @@ use Tooleks\Laravel\Presenter\CollectionPresenter;
 
 /**
  * Class TagCollectionPresenter
+ *
  * @package Api\V1\Models\Presenters
  */
 class TagCollectionPresenter extends CollectionPresenter

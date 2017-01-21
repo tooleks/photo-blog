@@ -10,6 +10,7 @@ use Closure;
 
 /**
  * Class UploadPhotoFile
+ *
  * @property Filesystem fs
  * @package Api\V1\Http\Middleware
  */

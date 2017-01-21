@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Role
+ *
  * @property string name
  * @method static Role administrator()
  * @method static Role customer()

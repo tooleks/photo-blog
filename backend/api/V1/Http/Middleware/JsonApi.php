@@ -9,6 +9,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
  * Class JsonApi
+ *
  * @package Api\V1\Http\Middleware
  */
 class JsonApi

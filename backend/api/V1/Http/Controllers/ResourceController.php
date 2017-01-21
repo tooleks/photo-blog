@@ -10,6 +10,7 @@ use Illuminate\Support\Collection;
 
 /**
  * Class ResourceController
+ *
  * @property Request request
  * @property Guard guard
  * @property Resource resource

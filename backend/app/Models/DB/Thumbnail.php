@@ -5,7 +5,8 @@ namespace App\Models\DB;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Thumbnail.
+ * Class Thumbnail
+ *
  * @property int id
  * @property string path
  * @property string relative_url

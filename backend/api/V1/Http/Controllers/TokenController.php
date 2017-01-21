@@ -6,6 +6,7 @@ use Api\V1\Http\Resources\TokenResource;
 
 /**
  * Class TokenController
+ *
  * @see TokenResource
  * @package Api\V1\Http\Controllers
  */

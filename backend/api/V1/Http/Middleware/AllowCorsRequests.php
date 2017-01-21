@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class AllowCorsRequests
+ *
  * @package Api\V1\Http\Middleware
  */
 class AllowCorsRequests

@@ -7,6 +7,7 @@ use Tooleks\Laravel\Presenter\ModelPresenter;
 
 /**
  * Class UserPresenter
+ *
  * @property int id
  * @property string name
  * @property string email

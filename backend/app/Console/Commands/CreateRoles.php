@@ -7,6 +7,7 @@ use Illuminate\Console\Command;
 
 /**
  * Class CreateRoles
+ *
  * @property Role roleModel
  * @package App\Console\Commands
  */

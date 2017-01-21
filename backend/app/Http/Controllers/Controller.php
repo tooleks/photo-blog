@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 
 /**
  * Class Controller
+ *
  * @property Request request
  * @property Guard guard
  * @package App\Http\Controllers

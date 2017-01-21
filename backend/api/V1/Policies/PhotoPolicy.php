@@ -8,6 +8,7 @@ use App\Models\DB\Photo;
 
 /**
  * Class PhotoPolicy
+ *
  * @package Api\V1\Policies
  */
 class PhotoPolicy

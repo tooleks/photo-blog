@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Class DeleteUnusedDirectoriesWithinPhotoStorage
+ *
  * @property Photo photoModel
  * @property Filesystem fs
  * @package App\Console\Commands

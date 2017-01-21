@@ -11,6 +11,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Class ThrottleRequests
+ *
  * @package Api\V1\Http\Middleware
  */
 class ThrottleRequests extends CoreThrottleRequests

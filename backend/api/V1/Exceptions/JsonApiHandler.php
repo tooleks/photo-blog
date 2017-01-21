@@ -15,6 +15,7 @@ use Symfony\Component\Debug\Exception\FlattenException;
 
 /**
  * Class JsonApiHandler
+ *
  * @package Api\V1\Exceptions
  */
 class JsonApiHandler extends ExceptionHandler
