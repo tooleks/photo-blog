@@ -22,6 +22,20 @@ class UserResourceTest extends TestCase
         return $this->app->make(UserResource::class);
     }
 
+    public function testCreateUser()
+    {
+        $userResource = $this->createUserResource();
+
+        $attributes = factory(User::class)->make()->toArray();
+
+        $userPresenter = $userResource->create($attributes);
+
+        $this->assertInstanceOf(UserPresenter::class, $userPresenter, 'It should be a instance of UserPresenter.');
+        $this->assertEquals($userPresenter->name, $attributes['name'], 'It should be the same names.');
+        $this->assertEquals($userPresenter->email, $attributes['email'], 'It should be the same emails.');
+        $this->assertEquals($userPresenter->role->name, Role::customer()->first()->name, 'It should be the same role names.');
+    }
+
     public function testCreateUserWithEmptyAttributes()
     {
         $userResource = $this->createUserResource();
@@ -59,20 +73,6 @@ class UserResourceTest extends TestCase
         $this->assertArrayHasKey('email', $errors ?? [], 'It should include an email property error.');
     }
 
-    public function testCreateUser()
-    {
-        $userResource = $this->createUserResource();
-
-        $attributes = factory(User::class)->make()->toArray();
-
-        $userPresenter = $userResource->create($attributes);
-
-        $this->assertInstanceOf(UserPresenter::class, $userPresenter, 'It should be a instance of UserPresenter.');
-        $this->assertEquals($userPresenter->name, $attributes['name'], 'It should be the same names.');
-        $this->assertEquals($userPresenter->email, $attributes['email'], 'It should be the same emails.');
-        $this->assertEquals($userPresenter->role->name, Role::customer()->first()->name, 'It should be the same role names.');
-    }
-
     public function testUpdateUser()
     {
         $userResource = $this->createUserResource();
@@ -89,6 +89,28 @@ class UserResourceTest extends TestCase
 
         $this->assertEquals($userPresenter->name, 'test_updated', 'It should be the same names.');
         $this->assertEquals($userPresenter->email, 'test_updated@test.test', 'It should be the same emails.');
+    }
+
+    public function testUpdateUserWithDuplicatedEmailAttribute()
+    {
+        $userResource = $this->createUserResource();
+
+        $firstUserAttributes = factory(User::class)->make()->toArray();
+        $secondUserAttributes = factory(User::class)->make()->toArray();
+
+        $firstUserPresenter = $userResource->create($firstUserAttributes);
+        $secondUserPresenter = $userResource->create($secondUserAttributes);
+
+        $this->expectException(ValidationException::class);
+
+        try {
+            $userResource->update($secondUserPresenter, $firstUserAttributes);
+        } catch (ValidationException $e) {
+            $errors = $e->validator->errors()->messages();
+            throw $e;
+        }
+
+        $this->assertArrayHasKey('email', $errors ?? [], 'It should include an email property error.');
     }
 
     public function testGetUserById()
