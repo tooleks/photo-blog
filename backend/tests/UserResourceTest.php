@@ -22,7 +22,7 @@ class UserResourceTest extends TestCase
         return $this->app->make(UserResource::class);
     }
 
-    public function testCreateUserEmptyValidationErrors()
+    public function testCreateUserWithEmptyAttributes()
     {
         $userResource = $this->createUserResource();
 
@@ -40,7 +40,7 @@ class UserResourceTest extends TestCase
         $this->assertArrayHasKey('password', $errors ?? [], 'It should include a password property error.');
     }
 
-    public function testCreateUserUniqueEmailValidationError()
+    public function testCreateUserWithDuplicatesEmailAttribute()
     {
         $userResource = $this->createUserResource();
 
@@ -87,7 +87,6 @@ class UserResourceTest extends TestCase
 
         $userPresenter = $userResource->update($userPresenter, ['email' => 'test_updated@test.test']);
 
-        $this->assertInstanceOf(UserPresenter::class, $userPresenter, 'It should be a instance of UserPresenter.');
         $this->assertEquals($userPresenter->name, 'test_updated', 'It should be the same names.');
         $this->assertEquals($userPresenter->email, 'test_updated@test.test', 'It should be the same emails.');
     }
@@ -98,17 +97,16 @@ class UserResourceTest extends TestCase
 
         $attributes = factory(User::class)->make()->toArray();
 
-        $userPresenterCreated = $userResource->create(factory(User::class)->make()->toArray());
-        $userPresenterGotById = $userResource->getById($userPresenterCreated->id);
+        $userPresenterCreated = $userResource->create($attributes);
+        $userPresenterFound = $userResource->getById($userPresenterCreated->id);
 
-        $this->assertInstanceOf(UserPresenter::class, $userPresenterCreated, 'It should be a instance of UserPresenter.');
-        $this->assertInstanceOf(UserPresenter::class, $userPresenterGotById, 'It should be a instance of UserPresenter.');
-        $this->assertEquals($userPresenterCreated->id, $userPresenterGotById->id, 'It should be the same ids.');
-        $this->assertEquals($userPresenterCreated->name, $userPresenterGotById->name, 'It should be the same names.');
-        $this->assertEquals($userPresenterCreated->email, $userPresenterGotById->email, 'It should be the same emails.');
-        $this->assertEquals($userPresenterCreated->created_at, $userPresenterGotById->created_at, 'It should be the same dates.');
-        $this->assertEquals($userPresenterCreated->updated_at, $userPresenterGotById->updated_at, 'It should be the same dates.');
-        $this->assertEquals($userPresenterCreated->role, $userPresenterGotById->role, 'It should be the same roles.');
+        $this->assertInstanceOf(UserPresenter::class, $userPresenterFound, 'It should be a instance of UserPresenter.');
+        $this->assertEquals($userPresenterCreated->id, $userPresenterFound->id, 'It should be the same ids.');
+        $this->assertEquals($userPresenterCreated->name, $userPresenterFound->name, 'It should be the same names.');
+        $this->assertEquals($userPresenterCreated->email, $userPresenterFound->email, 'It should be the same emails.');
+        $this->assertEquals($userPresenterCreated->created_at, $userPresenterFound->created_at, 'It should be the same dates.');
+        $this->assertEquals($userPresenterCreated->updated_at, $userPresenterFound->updated_at, 'It should be the same dates.');
+        $this->assertEquals($userPresenterCreated->role, $userPresenterFound->role, 'It should be the same roles.');
     }
 
     public function testDeleteUser()
@@ -121,8 +119,18 @@ class UserResourceTest extends TestCase
 
         $count = $userResource->delete($userPresenter);
 
-        $this->assertInstanceOf(UserPresenter::class, $userPresenter, 'It should be a instance of UserPresenter.');
         $this->assertEquals($count, 1, 'It should be equal "1".');
+    }
+
+    public function testDeleteNotExistingUser()
+    {
+        $userResource = $this->createUserResource();
+
+        $attributes = factory(User::class)->make()->toArray();
+
+        $userPresenter = $userResource->create($attributes);
+        $userResource->delete($userPresenter);
+
         $this->expectException(ModelNotFoundException::class);
 
         $userResource->getById($userPresenter->id);
