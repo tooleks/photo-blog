@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use Closure;
 
 /**
- * Class AppendCurrentUserId
+ * Class AppendCurrentUserId.
+ *
  * @property Guard guard
  * @package Api\V1\Http\Middleware
  */

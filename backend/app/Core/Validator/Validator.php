@@ -2,7 +2,7 @@
 
 namespace App\Core\Validator;
 
-use Illuminate\Support\Facades\Validator as ValidatorFacade;
+use Illuminate\Support\Facades\Validator as ValidatorFactory;
 use Illuminate\Validation\ValidationException;
 
 /**
@@ -33,7 +33,7 @@ trait Validator
     {
         $rules = $this->getValidationRules()[$scenario] ?? [];
 
-        $validator = ValidatorFacade::make($attributes, $rules);
+        $validator = ValidatorFactory::make($attributes, $rules);
 
         if ($validator->fails()) {
             throw new ValidationException($validator);

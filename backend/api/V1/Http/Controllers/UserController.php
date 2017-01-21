@@ -5,7 +5,8 @@ namespace Api\V1\Http\Controllers;
 use Api\V1\Http\Resources\UserResource;
 
 /**
- * Class UserController
+ * Class UserController.
+ *
  * @see UserResource
  * @package Api\V1\Http\Controllers
  */

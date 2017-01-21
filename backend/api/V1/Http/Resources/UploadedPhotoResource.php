@@ -5,38 +5,35 @@ namespace Api\V1\Http\Resources;
 use App\Core\Validator\Validator;
 use App\Models\DB\Photo;
 use Api\V1\Core\Resource\Contracts\Resource;
-use Api\V1\Models\Presenters\UploadedPhotoPresenter;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Exception;
 use Throwable;
 
 /**
- * Class UploadedPhoto
+ * Class UploadedPhotoResource.
  *
- * The class provides CRUD for photos that are uploaded.
- *
- * @property ConnectionInterface connection
- * @property Photo $photoModel
+ * @property ConnectionInterface db
+ * @property Photo $photo
  * @package Api\V1\Http\Resources
  */
 class UploadedPhotoResource implements Resource
 {
     use Validator;
 
-    const VALIDATION_CREATE = 'create';
-    const VALIDATION_UPDATE = 'update';
+    const VALIDATION_CREATE = 'validation.create';
+    const VALIDATION_UPDATE = 'validation.update';
 
     /**
-     * UploadedPhoto constructor.
+     * UploadedPhotoResource constructor.
      *
-     * @param ConnectionInterface $connection
-     * @param Photo $photoModel
+     * @param ConnectionInterface $db
+     * @param Photo $photo
      */
-    public function __construct(ConnectionInterface $connection, Photo $photoModel)
+    public function __construct(ConnectionInterface $db, Photo $photo)
     {
-        $this->connection = $connection;
-        $this->photoModel = $photoModel;
+        $this->db = $db;
+        $this->photo = $photo;
     }
 
     /**
@@ -46,99 +43,23 @@ class UploadedPhotoResource implements Resource
     {
         return [
             static::VALIDATION_CREATE => [
-                'user_id' => [
-                    'required',
-                    'filled',
-                    'integer',
-                ],
-                'path' => [
-                    'required',
-                    'filled',
-                    'string',
-                    'min:1',
-                    'max:255',
-                ],
-                'relative_url' => [
-                    'required',
-                    'filled',
-                    'string',
-                    'min:1',
-                    'max:255',
-                ],
-                'thumbnails' => [
-                    'required',
-                    'filled',
-                    'array',
-                ],
-                'thumbnails.*.width' => [
-                    'required',
-                    'filled',
-                    'int',
-                ],
-                'thumbnails.*.height' => [
-                    'required',
-                    'filled',
-                    'int',
-                ],
-                'thumbnails.*.path' => [
-                    'required',
-                    'filled',
-                    'string',
-                    'min:1',
-                    'max:255',
-                ],
-                'thumbnails.*.relative_url' => [
-                    'required',
-                    'filled',
-                    'string',
-                    'min:1',
-                    'max:255',
-                ],
+                'user_id' => ['required', 'filled', 'integer'],
+                'path' => ['required', 'filled', 'string', 'min:1', 'max:255'],
+                'relative_url' => ['required', 'filled', 'string', 'min:1', 'max:255'],
+                'thumbnails' => ['required', 'filled', 'array'],
+                'thumbnails.*.width' => ['required', 'filled', 'int'],
+                'thumbnails.*.height' => ['required', 'filled', 'int'],
+                'thumbnails.*.path' => ['required', 'filled', 'string', 'min:1', 'max:255'],
+                'thumbnails.*.relative_url' => ['required', 'filled', 'string', 'min:1', 'max:255'],
             ],
             static::VALIDATION_UPDATE => [
-                'path' => [
-                    'required',
-                    'filled',
-                    'string',
-                    'min:1',
-                    'max:255',
-                ],
-                'relative_url' => [
-                    'required',
-                    'filled',
-                    'string',
-                    'min:1',
-                    'max:255',
-                ],
-                'thumbnails' => [
-                    'required',
-                    'filled',
-                    'array',
-                ],
-                'thumbnails.*.width' => [
-                    'required',
-                    'filled',
-                    'int',
-                ],
-                'thumbnails.*.height' => [
-                    'required',
-                    'filled',
-                    'int',
-                ],
-                'thumbnails.*.path' => [
-                    'required',
-                    'filled',
-                    'string',
-                    'min:1',
-                    'max:255',
-                ],
-                'thumbnails.*.relative_url' => [
-                    'required',
-                    'filled',
-                    'string',
-                    'min:1',
-                    'max:255',
-                ],
+                'path' => ['required', 'filled', 'string', 'min:1', 'max:255'],
+                'relative_url' => ['required', 'filled', 'string', 'min:1', 'max:255'],
+                'thumbnails' => ['required', 'filled', 'array'],
+                'thumbnails.*.width' => ['required', 'filled', 'int'],
+                'thumbnails.*.height' => ['required', 'filled', 'int'],
+                'thumbnails.*.path' => ['required', 'filled', 'string', 'min:1', 'max:255'],
+                'thumbnails.*.relative_url' => ['required', 'filled', 'string', 'min:1', 'max:255'],
             ],
         ];
     }
@@ -147,11 +68,11 @@ class UploadedPhotoResource implements Resource
      * Get a resource by unique ID.
      *
      * @param int $id
-     * @return UploadedPhotoPresenter
+     * @return Photo
      */
-    public function getById($id) : UploadedPhotoPresenter
+    public function getById($id) : Photo
     {
-        $photo = $this->photoModel
+        $photo = $this->photo
             ->withThumbnails()
             ->whereIsUploaded()
             ->whereId($id)
@@ -161,7 +82,7 @@ class UploadedPhotoResource implements Resource
             throw new ModelNotFoundException('Uploaded photo not found.');
         };
 
-        return new UploadedPhotoPresenter($photo);
+        return $photo;
     }
 
     /**
@@ -176,80 +97,67 @@ class UploadedPhotoResource implements Resource
      * Create a resource.
      *
      * @param array $attributes
-     * @return UploadedPhotoPresenter
+     * @return Photo
      * @throws Throwable
      */
-    public function create(array $attributes) : UploadedPhotoPresenter
+    public function create(array $attributes) : Photo
     {
         $attributes = $this->validate($attributes, static::VALIDATION_CREATE);
 
-        $photo = $this->photoModel->create();
-
-        $photo->is_published = false;
-        $photo->fill($attributes);
+        $photo = $this->photo->newInstance(['is_published' => false] + $attributes);
 
         try {
-            $this->connection->beginTransaction();
-            $photo->saveOrFail();
+            $this->db->beginTransaction();
+            $photo->save();
             $photo->thumbnails()->delete();
             $photo->thumbnails()->detach();
             $photo->thumbnails()->createMany($attributes['thumbnails']);
-            $this->connection->commit();
+            $this->db->commit();
         } catch (Throwable $e) {
-            $this->connection->rollBack();
+            $this->db->rollBack();
             throw $e;
         }
 
-        return $this->getById($photo->id);
+        return $photo;
     }
 
     /**
      * Update a resource.
      *
-     * @param UploadedPhotoPresenter $uploadedPhotoPresenter
+     * @param Photo $photo
      * @param array $attributes
-     * @return UploadedPhotoPresenter
+     * @return Photo
      * @throws Throwable
      */
-    public function update($uploadedPhotoPresenter, array $attributes) : UploadedPhotoPresenter
+    public function update($photo, array $attributes) : Photo
     {
-        /** @var Photo $photo */
-
         $attributes = $this->validate($attributes, static::VALIDATION_UPDATE);
 
-        $photo = $uploadedPhotoPresenter->getOriginalModel();
-
-        $photo->fill($attributes);
+        $photo = $photo->fill($attributes);
 
         try {
-            $this->connection->beginTransaction();
-            $photo->saveOrFail();
+            $this->db->beginTransaction();
+            $photo->save();
             $photo->thumbnails()->delete();
             $photo->thumbnails()->detach();
-            $photo->thumbnails()->createMany($attributes['thumbnails']);
-            $this->connection->commit();
+            $photo->thumbnails = $photo->thumbnails()->createMany($attributes['thumbnails']);
+            $this->db->commit();
         } catch (Throwable $e) {
-            $this->connection->rollBack();
+            $this->db->rollBack();
             throw $e;
         }
 
-        return $this->getById($photo->id);
+        return $photo;
     }
 
     /**
      * Delete a resource.
      *
-     * @param UploadedPhotoPresenter $uploadedPhotoPresenter
+     * @param Photo $photo
      * @return int
      */
-    public function delete($uploadedPhotoPresenter) : int
+    public function delete($photo) : int
     {
-        /** @var Photo $photo */
-
-        $photo = $uploadedPhotoPresenter->getOriginalModel();
-
-        $result = $photo->delete();
-
-        return (int)$result;
+        return (int)$photo->delete();
     }
 }

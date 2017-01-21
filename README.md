@@ -31,17 +31,16 @@ Add the following line to your crontab to setup scheduler (replace `/path/to/art
 
 #### REST API Documentation
 
-Run the following commands (within the `./backend` directory) to install development dependencies:
+Run the following command (within the `./backend` directory) to install development dependencies:
 
 ```
-npm install
-npm install -g gulp api-doc
+npm install -g api-doc
 ```
 
 Run the following command (within the `./backend` directory) to generate REST API documentation:
 
 ```
-gulp generate-api-doc
+php artisan create:api_documentation
 ```
 
 This command will create `./docs/api/dist` directory. Open the `./docs/api/dist/index.html` file in your favorite web browser to show the REST API documentation.

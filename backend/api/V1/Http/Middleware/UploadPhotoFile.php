@@ -9,7 +9,8 @@ use League\Flysystem\FileNotFoundException;
 use Closure;
 
 /**
- * Class UploadPhotoFile
+ * Class UploadPhotoFile.
+ *
  * @property Filesystem fs
  * @package Api\V1\Http\Middleware
  */

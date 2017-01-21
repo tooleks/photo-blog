@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Thumbnail.
+ *
  * @property int id
  * @property string path
  * @property string relative_url

@@ -2,12 +2,13 @@
 
 namespace Api\V1\Policies;
 
-use App\Models\DB\User;
-use Api\V1\Models\Presenters\PhotoPresenter;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use App\Models\DB\User;
+use App\Models\DB\Photo;
 
 /**
- * Class PhotoPolicy
+ * Class PhotoPolicy.
+ *
  * @package Api\V1\Policies
  */
 class PhotoPolicy
@@ -43,12 +44,12 @@ class PhotoPolicy
      * Determine whether the user can update the photo.
      *
      * @param User $authUser
-     * @param PhotoPresenter $photoPresenter
+     * @param Photo $photo
      * @return bool
      */
-    public function update(User $authUser, PhotoPresenter $photoPresenter)
+    public function update(User $authUser, Photo $photo)
     {
-        if ($authUser->id === $photoPresenter->user_id) {
+        if ($authUser->id === $photo->user_id) {
             return true;
         }
 
@@ -59,12 +60,12 @@ class PhotoPolicy
      * Determine whether the user can delete the photo.
      *
      * @param User $authUser
-     * @param PhotoPresenter $photoPresenter
+     * @param Photo $photo
      * @return bool
      */
-    public function delete(User $authUser, PhotoPresenter $photoPresenter)
+    public function delete(User $authUser, Photo $photo)
     {
-        if ($authUser->id === $photoPresenter->user_id) {
+        if ($authUser->id === $photo->user_id) {
             return true;
         }
 

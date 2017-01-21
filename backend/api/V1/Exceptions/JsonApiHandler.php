@@ -14,7 +14,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Debug\Exception\FlattenException;
 
 /**
- * Class JsonApiHandler
+ * Class JsonApiHandler.
+ *
  * @package Api\V1\Exceptions
  */
 class JsonApiHandler extends ExceptionHandler

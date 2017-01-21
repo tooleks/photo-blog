@@ -44,7 +44,7 @@ interface Resource
     public function update($resource, array $attributes);
 
     /**
-     * Delete a resource
+     * Delete a resource.
      *
      * @param mixed $resource
      * @return int

@@ -9,7 +9,8 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 
 /**
- * Class PhotoController
+ * Class PhotoController.
+ *
  * @see PhotoResource
  * @package Api\V1\Http\Controllers
  */
@@ -18,9 +19,9 @@ class PhotoController extends ResourceController
     /**
      * @inheritdoc
      */
-    public function __construct(Request $request, Guard $guard, Resource $resource)
+    public function __construct(Request $request, Guard $guard, Resource $resource, $presenter)
     {
-        parent::__construct($request, $guard, $resource);
+        parent::__construct($request, $guard, $resource, $presenter);
 
         $this->middleware(DeletePhotoDirectory::class, ['only' => ['delete']]);
     }

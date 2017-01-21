@@ -6,7 +6,8 @@ use App\Models\DB\Role;
 use Illuminate\Console\Command;
 
 /**
- * Class CreateRoles
+ * Class CreateRoles.
+ *
  * @property Role roleModel
  * @package App\Console\Commands
  */

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Tag.
+ *
  * @property int id
  * @property string text
  * @property Collection photos

@@ -5,7 +5,8 @@ namespace Api\V1\Models\Presenters;
 use Tooleks\Laravel\Presenter\CollectionPresenter;
 
 /**
- * Class TagCollectionPresenter
+ * Class TagCollectionPresenter.
+ *
  * @package Api\V1\Models\Presenters
  */
 class TagCollectionPresenter extends CollectionPresenter

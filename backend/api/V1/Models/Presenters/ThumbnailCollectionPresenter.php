@@ -5,7 +5,8 @@ namespace Api\V1\Models\Presenters;
 use Tooleks\Laravel\Presenter\CollectionPresenter;
 
 /**
- * Class ThumbnailCollectionPresenter
+ * Class ThumbnailCollectionPresenter.
+ *
  * @package Api\V1\Models\Presenters
  */
 class ThumbnailCollectionPresenter extends CollectionPresenter

@@ -6,10 +6,14 @@ use App\Models\DB\User;
 use Tooleks\Laravel\Presenter\ModelPresenter;
 
 /**
- * Class UserPresenter
- * @property User entity
+ * Class UserPresenter.
+ *
  * @property int id
+ * @property string name
  * @property string email
+ * @property string created_at
+ * @property string updated_at
+ * @property RolePresenter role
  * @package Api\V1\Models\Presenters
  */
 class UserPresenter extends ModelPresenter

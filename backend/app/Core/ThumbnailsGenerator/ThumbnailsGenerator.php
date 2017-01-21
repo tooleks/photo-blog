@@ -11,6 +11,7 @@ use Imagine\Imagick\Imagine;
 
 /**
  * Class ThumbnailsGenerator.
+ *
  * @property Filesystem fs
  * @property array config
  * @package App\Core\ThumbnailsGenerator

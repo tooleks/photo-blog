@@ -8,7 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
- * Class JsonApi
+ * Class JsonApi.
+ *
  * @package Api\V1\Http\Middleware
  */
 class JsonApi

@@ -8,7 +8,8 @@ use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\Filesystem;
 
 /**
- * Class DeleteNotPublishedPhotosOlderThanWeek
+ * Class DeleteNotPublishedPhotosOlderThanWeek.
+ *
  * @property Photo photoModel
  * @property Filesystem fs
  * @package App\Console\Commands

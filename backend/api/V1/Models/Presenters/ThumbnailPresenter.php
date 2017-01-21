@@ -6,7 +6,8 @@ use App\Models\DB\Thumbnail;
 use Tooleks\Laravel\Presenter\ModelPresenter;
 
 /**
- * Class TokenPresenter
+ * Class TokenPresenter.
+ *
  * @property Thumbnail originalModel
  * @package Api\V1\Models\Presenters
  */

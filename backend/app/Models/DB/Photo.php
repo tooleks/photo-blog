@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Photo.
+ *
  * @property int id
  * @property int user_id
  * @property string description

@@ -10,7 +10,8 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 
 /**
- * Class Controller
+ * Class Controller.
+ *
  * @property Request request
  * @property Guard guard
  * @package App\Http\Controllers

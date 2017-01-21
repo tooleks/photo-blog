@@ -11,7 +11,8 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 
 /**
- * Class UploadedPhotoController
+ * Class UploadedPhotoController.
+ *
  * @see UploadedPhotoResource
  * @package Api\V1\Http\Controllers
  */
@@ -20,9 +21,9 @@ class UploadedPhotoController extends ResourceController
     /**
      * @inheritdoc
      */
-    public function __construct(Request $request, Guard $guard, Resource $resource)
+    public function __construct(Request $request, Guard $guard, Resource $resource, $presenter)
     {
-        parent::__construct($request, $guard, $resource);
+        parent::__construct($request, $guard, $resource, $presenter);
 
         $this->middleware(UploadPhotoFile::class, ['only' => ['create', 'update']]);
         $this->middleware(CreateThumbnailFiles::class, ['only' => ['create', 'update']]);

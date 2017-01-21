@@ -6,7 +6,8 @@ use App\Models\DB\Role;
 use Tooleks\Laravel\Presenter\ModelPresenter;
 
 /**
- * Class RolePresenter
+ * Class RolePresenter.
+ *
  * @property Role originalModel
  * @package Api\V1\Models\Presenters
  */
