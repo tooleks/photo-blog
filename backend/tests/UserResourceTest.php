@@ -20,7 +20,7 @@ class UserResourceTest extends TestCase
 
         $userPresenter = $userResource->create($attributes);
 
-        $this->assertInstanceOf(UserPresenter::class, $userPresenter, 'It should be a instance of UserPresenter.');
+        $this->assertInstanceOf(UserPresenter::class, $userPresenter, 'It should be an instance of UserPresenter.');
         $this->assertEquals($userPresenter->name, $attributes['name'], 'It should be the same names.');
         $this->assertEquals($userPresenter->email, $attributes['email'], 'It should be the same emails.');
         $this->assertEquals($userPresenter->role->name, Role::customer()->first()->name, 'It should be the same role names.');
@@ -72,7 +72,7 @@ class UserResourceTest extends TestCase
         $userPresenter = $userResource->create($attributes);
         $userPresenter = $userResource->update($userPresenter, ['name' => 'updated_name']);
 
-        $this->assertInstanceOf(UserPresenter::class, $userPresenter, 'It should be a instance of UserPresenter.');
+        $this->assertInstanceOf(UserPresenter::class, $userPresenter, 'It should be an instance of UserPresenter.');
         $this->assertEquals($userPresenter->email, $attributes['email'], 'It should be the same emails.');
 
         $userPresenter = $userResource->update($userPresenter, ['email' => 'updated_email@test.test']);
@@ -112,7 +112,7 @@ class UserResourceTest extends TestCase
         $userPresenterCreated = $userResource->create($attributes);
         $userPresenterFound = $userResource->getById($userPresenterCreated->id);
 
-        $this->assertInstanceOf(UserPresenter::class, $userPresenterFound, 'It should be a instance of UserPresenter.');
+        $this->assertInstanceOf(UserPresenter::class, $userPresenterFound, 'It should be an instance of UserPresenter.');
         $this->assertEquals($userPresenterCreated->id, $userPresenterFound->id, 'It should be the same ids.');
         $this->assertEquals($userPresenterCreated->name, $userPresenterFound->name, 'It should be the same names.');
         $this->assertEquals($userPresenterCreated->email, $userPresenterFound->email, 'It should be the same emails.');
