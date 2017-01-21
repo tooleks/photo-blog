@@ -137,7 +137,8 @@ class PhotoResource implements Resource
 
         $photo = $this->uploadedPhotoResource->getById($attributes['uploaded_photo_id']);
 
-        $photo->fill(['is_published' => true] + $attributes);
+        $photo->fill($attributes);
+        $photo->setIsPublishedAttribute(true);
 
         try {
             $this->db->beginTransaction();
