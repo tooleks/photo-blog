@@ -26,7 +26,7 @@ class UploadedPhotoResource implements Resource
     const VALIDATION_UPDATE = 'validation.update';
 
     /**
-     * UploadedPhotoPresenter constructor.
+     * UploadedPhotoResource constructor.
      *
      * @param ConnectionInterface $db
      * @param Photo $photo

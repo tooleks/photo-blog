@@ -31,6 +31,7 @@ class PhotoResource implements Resource
 
     /**
      * PhotoResource constructor.
+     *
      * @param ConnectionInterface $db
      * @param Photo $photo
      * @param UploadedPhotoResource $uploadedPhotoResource

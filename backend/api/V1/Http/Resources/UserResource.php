@@ -32,6 +32,7 @@ class UserResource implements Resource
 
     /**
      * UserResource constructor.
+     *
      * @param User $user
      * @param Hasher $hasher
      */

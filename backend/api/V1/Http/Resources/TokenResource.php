@@ -28,7 +28,7 @@ class TokenResource implements Resource
     const VALIDATION_CREATE = 'validation.create';
 
     /**
-     * Token constructor.
+     * TokenResource constructor.
      *
      * @param User $user
      * @param Guard $guard
