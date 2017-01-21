@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Closure;
 
 /**
- * Class AppendCurrentUserId.
+ * Class AppendUserId.
  *
  * @property Guard guard
  * @package Api\V1\Http\Middleware
@@ -15,7 +15,7 @@ use Closure;
 class AppendUserId
 {
     /**
-     * UserIdAppender constructor.
+     * AppendUserId constructor.
      *
      * @param Guard $guard
      */
