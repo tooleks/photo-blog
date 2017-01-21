@@ -9,7 +9,7 @@ use App\Models\DB\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 /**
- * Class AuthServiceProvider
+ * Class AuthServiceProvider.
  *
  * @package Api\V1\Providers
  */

@@ -9,7 +9,7 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Support\Facades\Route;
 
 /**
- * Class RouteServiceProvider
+ * Class RouteServiceProvider.
  *
  * @package Api\V1\Providers
  */

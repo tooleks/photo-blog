@@ -8,7 +8,7 @@ use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
- * Class DeleteUnusedDirectoriesWithinPhotoStorage
+ * Class DeleteUnusedDirectoriesWithinPhotoStorage.
  *
  * @property Photo photoModel
  * @property Filesystem fs

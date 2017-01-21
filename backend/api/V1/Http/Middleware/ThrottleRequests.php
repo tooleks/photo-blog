@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
- * Class ThrottleRequests
+ * Class ThrottleRequests.
  *
  * @package Api\V1\Http\Middleware
  */

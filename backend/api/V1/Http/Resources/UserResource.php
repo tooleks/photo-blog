@@ -11,7 +11,7 @@ use Illuminate\Validation\Rule;
 use Exception;
 
 /**
- * Class UserResource
+ * Class UserResource.
  *
  * @property User user
  * @property Hasher hasher

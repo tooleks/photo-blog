@@ -6,7 +6,7 @@ use App\Models\DB\User;
 use Tooleks\Laravel\Presenter\ModelPresenter;
 
 /**
- * Class UserPresenter
+ * Class UserPresenter.
  *
  * @property int id
  * @property string name

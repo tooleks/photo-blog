@@ -10,7 +10,7 @@ use League\Flysystem\FileNotFoundException;
 use Closure;
 
 /**
- * Class CreateThumbnailFiles
+ * Class CreateThumbnailFiles.
  *
  * @property Filesystem fs
  * @property ThumbnailsGeneratorContract thumbnailsGenerator

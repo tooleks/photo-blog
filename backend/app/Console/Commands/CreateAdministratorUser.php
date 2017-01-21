@@ -8,7 +8,7 @@ use Illuminate\Console\Command;
 use Illuminate\Contracts\Hashing\Hasher;
 
 /**
- * Class CreateAdministratorUser
+ * Class CreateAdministratorUser.
  *
  * @property Hasher hasher
  * @property User userModel

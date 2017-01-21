@@ -9,7 +9,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Collection;
 
 /**
- * Class ResourceController
+ * Class ResourceController.
  *
  * @property Request request
  * @property Guard guard

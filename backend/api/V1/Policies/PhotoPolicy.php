@@ -7,7 +7,7 @@ use App\Models\DB\User;
 use App\Models\DB\Photo;
 
 /**
- * Class PhotoPolicy
+ * Class PhotoPolicy.
  *
  * @package Api\V1\Policies
  */

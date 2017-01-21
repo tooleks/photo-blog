@@ -9,7 +9,7 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 
 /**
- * Class PhotoController
+ * Class PhotoController.
  *
  * @see PhotoResource
  * @package Api\V1\Http\Controllers

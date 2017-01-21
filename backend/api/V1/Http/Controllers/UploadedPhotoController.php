@@ -11,7 +11,7 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 
 /**
- * Class UploadedPhotoController
+ * Class UploadedPhotoController.
  *
  * @see UploadedPhotoResource
  * @package Api\V1\Http\Controllers

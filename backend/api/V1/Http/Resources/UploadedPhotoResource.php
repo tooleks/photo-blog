@@ -11,7 +11,7 @@ use Exception;
 use Throwable;
 
 /**
- * Class UploadedPhotoResource
+ * Class UploadedPhotoResource.
  *
  * @property ConnectionInterface db
  * @property Photo $photo

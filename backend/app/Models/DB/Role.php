@@ -6,7 +6,7 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Role
+ * Class Role.
  *
  * @property string name
  * @method static Role administrator()

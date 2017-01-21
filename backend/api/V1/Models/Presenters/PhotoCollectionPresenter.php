@@ -5,7 +5,7 @@ namespace Api\V1\Models\Presenters;
 use Tooleks\Laravel\Presenter\CollectionPresenter;
 
 /**
- * Class PhotoCollectionPresenter
+ * Class PhotoCollectionPresenter.
  *
  * @package Api\V1\Models\Presenters
  */

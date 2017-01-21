@@ -6,7 +6,7 @@ use App\Models\DB\Tag;
 use Tooleks\Laravel\Presenter\ModelPresenter;
 
 /**
- * Class TagPresenter
+ * Class TagPresenter.
  *
  * @property Tag originalModel
  * @package Api\V1\Models\Presenters

@@ -10,7 +10,7 @@ use Imagine\Image\ImageInterface;
 use Imagine\Imagick\Imagine;
 
 /**
- * Class ThumbnailsGenerator
+ * Class ThumbnailsGenerator.
  *
  * @property Filesystem fs
  * @property array config

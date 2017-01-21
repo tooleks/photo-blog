@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Exception;
 
 /**
- * Class Token
+ * Class Token.
  *
  * @property User user
  * @property Hasher hasher

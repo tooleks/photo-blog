@@ -6,7 +6,7 @@ use App\Models\DB\User;
 use Tooleks\Laravel\Presenter\ModelPresenter;
 
 /**
- * Class TokenPresenter
+ * Class TokenPresenter.
  *
  * @property User originalModel
  * @package Api\V1\Models\Presenters

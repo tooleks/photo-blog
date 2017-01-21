@@ -19,7 +19,7 @@ use Api\V1\Models\Presenters\UserPresenter;
 use Illuminate\Support\ServiceProvider;
 
 /**
- * Class ApiServiceProvider
+ * Class ApiServiceProvider.
  *
  * @package Api\V1\Providers
  */

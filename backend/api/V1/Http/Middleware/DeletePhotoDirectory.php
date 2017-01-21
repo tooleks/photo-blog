@@ -9,7 +9,7 @@ use Illuminate\Contracts\Filesystem\Filesystem;
 use Closure;
 
 /**
- * Class DeletePhotoDirectory
+ * Class DeletePhotoDirectory.
  *
  * @property Filesystem $fs
  * @package Api\V1\Http\Middleware

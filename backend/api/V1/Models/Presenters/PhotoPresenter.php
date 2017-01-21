@@ -6,7 +6,7 @@ use App\Models\DB\Photo;
 use Tooleks\Laravel\Presenter\ModelPresenter;
 
 /**
- * Class PhotoPresenter
+ * Class PhotoPresenter.
  *
  * @property Photo originalModel
  * @package Api\V1\Models\Presenters

@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
 use Throwable;
 
 /**
- * Class PhotoResource
+ * Class PhotoResource.
  *
  * The class provides CRUD for photos that are uploaded and published.
  *
