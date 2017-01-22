@@ -14,7 +14,7 @@ use Illuminate\Support\Collection;
  * @property Request request
  * @property Guard guard
  * @property Resource resource
- * @property mixed $presenter
+ * @property string presenterClass
  * @package Api\V1\Http\Controllers
  */
 abstract class ResourceController extends Controller
@@ -25,29 +25,31 @@ abstract class ResourceController extends Controller
      * @param Request $request
      * @param Guard $guard
      * @param Resource $resource
-     * @param mixed $presenter
+     * @param string $presenterClass
      */
-    public function __construct(Request $request, Guard $guard, Resource $resource, $presenter)
+    public function __construct(Request $request, Guard $guard, Resource $resource, $presenterClass)
     {
         $this->request = $request;
         $this->guard = $guard;
         $this->resource = $resource;
-        $this->presenter = $presenter;
+        $this->presenterClass = $presenterClass;
     }
 
     /**
      * Present a resource.
      *
-     * @param mixed $resource
+     * @param mixed $value
      * @return mixed
      */
-    protected function present($resource)
+    protected function present($value)
     {
-        $presenterClass = $resource instanceof Collection
-            ? $this->presenter->pluralClass
-            : $this->presenter->singularClass;
+        if ($value instanceof Collection) {
+            return $value->map(function ($item) {
+                return new $this->presenterClass($item);
+            });
+        }
 
-        return new $presenterClass($resource);
+        return new $this->presenterClass($value);
     }
 
     /**
@@ -68,13 +70,13 @@ abstract class ResourceController extends Controller
      */
     public function getCollection()
     {
-        $collection = $this->resource->getCollection(
+        $resources = $this->resource->getCollection(
             $this->request->query->get('take', 10),
             $this->request->query->get('skip', 0),
             $this->request->all()
         );
 
-        return $this->present($collection);
+        return $this->present($resources);
     }
 
     /**

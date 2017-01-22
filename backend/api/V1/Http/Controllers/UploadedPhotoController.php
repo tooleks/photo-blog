@@ -21,9 +21,9 @@ class UploadedPhotoController extends ResourceController
     /**
      * @inheritdoc
      */
-    public function __construct(Request $request, Guard $guard, Resource $resource, $presenter)
+    public function __construct(Request $request, Guard $guard, Resource $resource, $presenterClass)
     {
-        parent::__construct($request, $guard, $resource, $presenter);
+        parent::__construct($request, $guard, $resource, $presenterClass);
 
         $this->middleware(UploadPhotoFile::class, ['only' => ['create', 'update']]);
         $this->middleware(CreateThumbnailFiles::class, ['only' => ['create', 'update']]);

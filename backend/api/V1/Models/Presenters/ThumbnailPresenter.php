@@ -27,6 +27,7 @@ class ThumbnailPresenter extends ModelPresenter
     protected function getAttributesMap() : array
     {
         return [
+            // 'model_presenter_attribute_name' => 'original_model_attribute_name'
             'absolute_url' => 'absolute_url',
             'width' => 'width',
             'height' => 'height',

@@ -27,6 +27,7 @@ class TokenPresenter extends ModelPresenter
     protected function getAttributesMap() : array
     {
         return [
+            // 'model_presenter_attribute_name' => 'original_model_attribute_name'
             'user_id' => 'id',
             'api_token' => 'api_token',
         ];
