@@ -61,11 +61,8 @@ class ApiServiceProvider extends ServiceProvider
 
         $this->app
             ->when(TokenController::class)
-            ->needs('$presenter')
-            ->give(new class () {
-                public $singularClass = TokenPresenter::class;
-                public $pluralClass = null;
-            });
+            ->needs('$presenterClass')
+            ->give(TokenPresenter::class);
     }
 
     /**
@@ -82,11 +79,8 @@ class ApiServiceProvider extends ServiceProvider
 
         $this->app
             ->when(UserController::class)
-            ->needs('$presenter')
-            ->give(new class () {
-                public $singularClass = UserPresenter::class;
-                public $pluralClass = null;
-            });
+            ->needs('$presenterClass')
+            ->give(UserPresenter::class);
     }
 
     /**
@@ -103,11 +97,8 @@ class ApiServiceProvider extends ServiceProvider
 
         $this->app
             ->when(UploadedPhotoController::class)
-            ->needs('$presenter')
-            ->give(new class () {
-                public $singularClass = UploadedPhotoPresenter::class;
-                public $pluralClass = null;
-            });
+            ->needs('$presenterClass')
+            ->give(UploadedPhotoPresenter::class);
     }
 
     /**
@@ -124,10 +115,7 @@ class ApiServiceProvider extends ServiceProvider
 
         $this->app
             ->when(PhotoController::class)
-            ->needs('$presenter')
-            ->give(new class () {
-                public $singularClass = PhotoPresenter::class;
-                public $pluralClass = PhotoCollectionPresenter::class;
-            });
+            ->needs('$presenterClass')
+            ->give(PhotoPresenter::class);
     }
 }

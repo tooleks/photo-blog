@@ -3,6 +3,7 @@
 namespace Api\V1\Models\Presenters;
 
 use App\Models\DB\Photo;
+use Illuminate\Support\Collection;
 use Tooleks\Laravel\Presenter\ModelPresenter;
 
 /**
@@ -27,6 +28,7 @@ class PhotoPresenter extends ModelPresenter
     protected function getAttributesMap() : array
     {
         return [
+            // 'model_presenter_attribute_name' => 'original_model_attribute_name'
             'id' => 'id',
             'user_id' => 'user_id',
             'absolute_url' => 'absolute_url',
@@ -63,18 +65,22 @@ class PhotoPresenter extends ModelPresenter
     }
 
     /**
-     * @return ThumbnailCollectionPresenter
+     * @return Collection
      */
     public function getThumbnailsAttribute()
     {
-        return new ThumbnailCollectionPresenter($this->originalModel->thumbnails);
+        return $this->originalModel->thumbnails->map(function ($item) {
+            return new ThumbnailPresenter($item);
+        });
     }
 
     /**
-     * @return TagCollectionPresenter
+     * @return Collection
      */
     public function getTagsAttribute()
     {
-        return new TagCollectionPresenter($this->originalModel->tags);
+        return $this->originalModel->tags->map(function ($item) {
+            return new TagPresenter($item);
+        });
     }
 }

@@ -27,6 +27,7 @@ class RolePresenter extends ModelPresenter
     protected function getAttributesMap() : array
     {
         return [
+            // 'model_presenter_attribute_name' => 'original_model_attribute_name'
             'name' => 'name',
         ];
     }
