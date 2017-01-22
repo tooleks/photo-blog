@@ -14,7 +14,7 @@ use Illuminate\Support\Collection;
  * @property Request request
  * @property Guard guard
  * @property Resource resource
- * @property object $presenter
+ * @property mixed $presenter
  * @package Api\V1\Http\Controllers
  */
 abstract class ResourceController extends Controller
@@ -25,7 +25,7 @@ abstract class ResourceController extends Controller
      * @param Request $request
      * @param Guard $guard
      * @param Resource $resource
-     * @param object $presenter
+     * @param mixed $presenter
      */
     public function __construct(Request $request, Guard $guard, Resource $resource, $presenter)
     {
@@ -44,8 +44,8 @@ abstract class ResourceController extends Controller
     protected function present($resource)
     {
         $presenterClass = $resource instanceof Collection
-            ? $this->presenter->collectionClass
-            : $this->presenter->modelClass;
+            ? $this->presenter->pluralClass
+            : $this->presenter->singularClass;
 
         return new $presenterClass($resource);
     }
