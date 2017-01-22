@@ -1,6 +1,5 @@
 <?php
 
-
 use Api\V1\Http\Resources\UserResource;
 use Api\V1\Http\Resources\TokenResource;
 use App\Models\DB\User;
@@ -15,11 +14,13 @@ class TokenResourceTest extends TestCase
     public function testCreateToken()
     {
         $userResource = $this->app->make(UserResource::class);
+
         $tokenResource = $this->app->make(TokenResource::class);
 
         $attributes = ['name' => 'test', 'email' => 'test@test.test', 'password' => 'test_password'];
 
         $user = $userResource->create($attributes);
+
         $userFromTokenResource = $tokenResource->create($attributes);
 
         $this->assertInstanceOf(User::class, $userFromTokenResource, 'It should be an instance of User.');
@@ -40,8 +41,8 @@ class TokenResourceTest extends TestCase
             throw $e;
         }
 
-        $this->assertArrayHasKey('name', $errors ?? [], 'It should include a name property error.');
-        $this->assertArrayHasKey('password', $errors ?? [], 'It should include an password property error.');
+        $this->assertArrayHasKey('name', $errors ?? [], 'It should include a name error.');
+        $this->assertArrayHasKey('password', $errors ?? [], 'It should include an password error.');
     }
 
     public function testCreateTokenForNotExistingUser()
