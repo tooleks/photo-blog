@@ -63,8 +63,8 @@ class ApiServiceProvider extends ServiceProvider
             ->when(TokenController::class)
             ->needs('$presenter')
             ->give(new class () {
-                public $modelClass = TokenPresenter::class;
-                public $collectionClass = null;
+                public $singularClass = TokenPresenter::class;
+                public $pluralClass = null;
             });
     }
 
@@ -84,8 +84,8 @@ class ApiServiceProvider extends ServiceProvider
             ->when(UserController::class)
             ->needs('$presenter')
             ->give(new class () {
-                public $modelClass = UserPresenter::class;
-                public $collectionClass = null;
+                public $singularClass = UserPresenter::class;
+                public $pluralClass = null;
             });
     }
 
@@ -105,8 +105,8 @@ class ApiServiceProvider extends ServiceProvider
             ->when(UploadedPhotoController::class)
             ->needs('$presenter')
             ->give(new class () {
-                public $modelClass = UploadedPhotoPresenter::class;
-                public $collectionClass = null;
+                public $singularClass = UploadedPhotoPresenter::class;
+                public $pluralClass = null;
             });
     }
 
@@ -126,8 +126,8 @@ class ApiServiceProvider extends ServiceProvider
             ->when(PhotoController::class)
             ->needs('$presenter')
             ->give(new class () {
-                public $modelClass = PhotoPresenter::class;
-                public $collectionClass = PhotoCollectionPresenter::class;
+                public $singularClass = PhotoPresenter::class;
+                public $pluralClass = PhotoCollectionPresenter::class;
             });
     }
 }
