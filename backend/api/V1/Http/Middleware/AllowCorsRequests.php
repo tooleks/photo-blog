@@ -23,8 +23,6 @@ class AllowCorsRequests
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        /** @var Response $response */
-
         $response = $next($request);
 
         return $this->addHeaders($response);

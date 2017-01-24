@@ -1,10 +1,10 @@
-## Photo Blog Application based on Laravel 5.3 and Angular 2.0
+## Photo Blog Application based on Laravel 5 and Angular 2
 
 ### Backend
 
 #### Development Configuration
 
-Apache 2.4, MySQL 5.7, Node.js 4.2, PHP 7.0, Laravel 5.3.
+Apache 2.4, MySQL 5.7, Node.js 4.2, PHP 7.0, Laravel 5.4.
 
 #### Installation
 

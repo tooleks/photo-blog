@@ -16,6 +16,8 @@ class Kernel extends HttpKernel
     protected $middleware = [
         \Api\V1\Http\Middleware\AllowCorsRequests::class,
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
+        \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
+        \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
     ];
 
     /**
@@ -26,7 +28,7 @@ class Kernel extends HttpKernel
     protected $middlewareGroups = [
         'api.v1' => [
             'json_api',
-            'throttle:60,1',
+            'throttle:60,1', // Allow 60 requests per minute.
             'bindings',
         ],
     ];

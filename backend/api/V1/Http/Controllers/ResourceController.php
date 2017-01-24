@@ -27,7 +27,7 @@ abstract class ResourceController extends Controller
      * @param Resource $resource
      * @param string $presenterClass
      */
-    public function __construct(Request $request, Guard $guard, Resource $resource, $presenterClass)
+    public function __construct(Request $request, Guard $guard, Resource $resource, string $presenterClass)
     {
         $this->request = $request;
         $this->guard = $guard;
