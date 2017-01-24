@@ -21,7 +21,7 @@ class UploadedPhotoController extends ResourceController
     /**
      * @inheritdoc
      */
-    public function __construct(Request $request, Guard $guard, Resource $resource, $presenterClass)
+    public function __construct(Request $request, Guard $guard, Resource $resource, string $presenterClass)
     {
         parent::__construct($request, $guard, $resource, $presenterClass);
 

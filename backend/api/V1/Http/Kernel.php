@@ -16,6 +16,8 @@ class Kernel extends HttpKernel
     protected $middleware = [
         \Api\V1\Http\Middleware\AllowCorsRequests::class,
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
+        \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
+        \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
     ];
 
     /**
