@@ -10,6 +10,12 @@ use Tooleks\Laravel\Presenter\ModelPresenter;
  * Class UploadedPhotoPresenter.
  *
  * @property Photo originalModel
+ * @property int id
+ * @property int user_id
+ * @property string absolute_url
+ * @property string created_at
+ * @property string updated_at
+ * @property Collection thumbnails
  * @package Api\V1\Models\Presenters
  */
 class UploadedPhotoPresenter extends ModelPresenter

@@ -2,9 +2,7 @@
 
 namespace Api\V1\Http\Middleware;
 
-use App\Models\DB\Photo;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Closure;
 
@@ -36,12 +34,6 @@ class DeletePhotoDirectory
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if (!isset($request->photo)) {
-            return $next($request);
-        }
-
-        /** @var Response $response */
-
         $response = $next($request);
 
         if ($response->status() === 200) {

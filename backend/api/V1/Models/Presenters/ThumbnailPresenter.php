@@ -9,6 +9,9 @@ use Tooleks\Laravel\Presenter\ModelPresenter;
  * Class TokenPresenter.
  *
  * @property Thumbnail originalModel
+ * @property string absolute_url
+ * @property int width
+ * @property int height
  * @package Api\V1\Models\Presenters
  */
 class ThumbnailPresenter extends ModelPresenter

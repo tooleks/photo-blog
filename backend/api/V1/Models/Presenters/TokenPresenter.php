@@ -9,6 +9,8 @@ use Tooleks\Laravel\Presenter\ModelPresenter;
  * Class TokenPresenter.
  *
  * @property User originalModel
+ * @property int user_id
+ * @property string api_token
  * @package Api\V1\Models\Presenters
  */
 class TokenPresenter extends ModelPresenter

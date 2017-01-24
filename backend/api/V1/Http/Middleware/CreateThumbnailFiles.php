@@ -39,16 +39,8 @@ class CreateThumbnailFiles
     {
         return [
             'default' => [
-                'path' => [
-                    'required',
-                    'filled',
-                    'string',
-                ],
-                'relative_url' => [
-                    'required',
-                    'filled',
-                    'string',
-                ],
+                'path' => ['required', 'filled', 'string'],
+                'relative_url' => ['required', 'filled', 'string'],
             ],
         ];
     }

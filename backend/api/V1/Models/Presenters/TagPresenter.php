@@ -9,6 +9,7 @@ use Tooleks\Laravel\Presenter\ModelPresenter;
  * Class TagPresenter.
  *
  * @property Tag originalModel
+ * @property string text
  * @package Api\V1\Models\Presenters
  */
 class TagPresenter extends ModelPresenter

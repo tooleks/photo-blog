@@ -26,7 +26,7 @@ class Kernel extends HttpKernel
     protected $middlewareGroups = [
         'api.v1' => [
             'json_api',
-            'throttle:60,1',
+            'throttle:60,1', // Allow 60 requests per minute.
             'bindings',
         ],
     ];

@@ -9,6 +9,7 @@ use Tooleks\Laravel\Presenter\ModelPresenter;
  * Class RolePresenter.
  *
  * @property Role originalModel
+ * @property string name
  * @package Api\V1\Models\Presenters
  */
 class RolePresenter extends ModelPresenter
