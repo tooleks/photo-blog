@@ -13,6 +13,7 @@ import {
 } from '../../../shared/services';
 import {Photo} from '../../../shared/models';
 import {PhotoDataProviderService} from '../../services';
+import {PhotoGalleryMapper} from '../../data-mappers';
 
 @Component({
     selector: 'photos',
@@ -88,6 +89,10 @@ export class PhotosBySearchQueryComponent {
 
     getLoadedPhotos = ():Array<Photo> => {
         return this.pager.getItems();
+    };
+
+    getLoadedPhotosForGallery = ():Array<any> => {
+        return this.getLoadedPhotos().map((photo:Photo) => new PhotoGalleryMapper(photo));
     };
 
     loadMorePhotos = ():Promise<Array<Photo>> => {

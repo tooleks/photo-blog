@@ -4,7 +4,7 @@
             <h2 class="m-xs">{{ 'No photos found.' }}</h2>
         </div>
         <gallery *ngIf="!isEmpty()"
-                 [items]="getLoadedPhotos()"
+                 [items]="getLoadedPhotosForGallery()"
                  [defaultOpenedItemId]="queryParams['show']"
                  [onLoadMoreCallback]="loadMorePhotos"
                  (onOpenItem)="onShowPhoto($event)"
