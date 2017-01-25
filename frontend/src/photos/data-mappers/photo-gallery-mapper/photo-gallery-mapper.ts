@@ -4,7 +4,10 @@ export class PhotoGalleryMapper {
     id:number;
     description:string;
     url:string;
-    thumbnails:{medium:{width:number, height:number, url:string}, small:{width:number, height:number, url:string}};
+    thumbnails:{
+        medium:{width:number, height:number, url:string},
+        small:{width:number, height:number, url:string},
+    };
 
     constructor(photo:Photo) {
         this.id = photo.id;
