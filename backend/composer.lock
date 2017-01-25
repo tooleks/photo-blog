@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e59677638a73209cd1be7f9bb7f7343b",
+    "hash": "bbe2afd36c7c6976de71e2e242822b97",
     "content-hash": "c113d29d67d58fe5d531b064accaba60",
     "packages": [
         {
@@ -175,16 +175,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v5.4.0",
+            "version": "v5.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "7212b1e9620c36bf806e444f6931cf5f379c68ff"
+                "reference": "d3a9258137225964bbc9999d89a1913e34f2d99d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/7212b1e9620c36bf806e444f6931cf5f379c68ff",
-                "reference": "7212b1e9620c36bf806e444f6931cf5f379c68ff",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/d3a9258137225964bbc9999d89a1913e34f2d99d",
+                "reference": "d3a9258137225964bbc9999d89a1913e34f2d99d",
                 "shasum": ""
             },
             "require": {
@@ -300,7 +300,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2017-01-24 15:59:31"
+            "time": "2017-01-25 13:16:27"
         },
         {
             "name": "league/flysystem",
@@ -1567,16 +1567,16 @@
         },
         {
             "name": "tooleks/laravel-presenter",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tooleks/laravel-presenter.git",
-                "reference": "95a425e3e48545f175470428d2df9bace1fb7dec"
+                "reference": "3cd39c58722ed02cd67b40a504d8d242cb4ddc09"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tooleks/laravel-presenter/zipball/aecf69a7161b5a3512f68bf6b1f3c9c045e486be",
-                "reference": "95a425e3e48545f175470428d2df9bace1fb7dec",
+                "url": "https://api.github.com/repos/tooleks/laravel-presenter/zipball/3cd39c58722ed02cd67b40a504d8d242cb4ddc09",
+                "reference": "3cd39c58722ed02cd67b40a504d8d242cb4ddc09",
                 "shasum": ""
             },
             "require": {
@@ -1612,10 +1612,9 @@
                 "model",
                 "php",
                 "presenter",
-                "representation",
-                "view"
+                "representation"
             ],
-            "time": "2016-12-08 11:36:28"
+            "time": "2017-01-25 15:48:15"
         },
         {
             "name": "vlucas/phpdotenv",
