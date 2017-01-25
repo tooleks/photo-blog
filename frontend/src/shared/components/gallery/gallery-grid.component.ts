@@ -115,23 +115,23 @@ export class GalleryGridComponent {
     };
 
     private predictRowWidth = (newItem:any):number => {
-        let width = newItem.thumbnails[1].width;
-        this.rowItems.forEach((item:any) => width += item.thumbnails[1].width);
+        let width = newItem.thumbnails.small.width;
+        this.rowItems.forEach((item:any) => width += item.thumbnails.small.width);
         return width;
     };
 
     private scaleItemToMaxHeight = (item:any):any => {
-        let scaleRate = item.thumbnails[1].height * 100 / this.rowMaxHeight;
-        item.thumbnails[1].width = Math.floor(item.thumbnails[1].width * 100 / scaleRate);
-        item.thumbnails[1].height = Math.floor(this.rowMaxHeight);
+        let scaleRate = item.thumbnails.small.height * 100 / this.rowMaxHeight;
+        item.thumbnails.small.width = Math.floor(item.thumbnails.small.width * 100 / scaleRate);
+        item.thumbnails.small.height = Math.floor(this.rowMaxHeight);
         return item;
     };
 
     private scaleRowItemsToMaxWidth = ():Array<any> => {
         let scaleRate = this.rowWidth * 100 / this.rowMaxWidth;
         return this.rowItems.map((item:any) => {
-            item.thumbnails[1].width = Math.floor(item.thumbnails[1].width * 100 / scaleRate);
-            item.thumbnails[1].height = Math.floor(item.thumbnails[1].height * 100 / scaleRate);
+            item.thumbnails.small.width = Math.floor(item.thumbnails.small.width * 100 / scaleRate);
+            item.thumbnails.small.height = Math.floor(item.thumbnails.small.height * 100 / scaleRate);
             return item;
         });
     };

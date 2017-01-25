@@ -24,5 +24,7 @@ export class NavigatorService {
         return this.navigate([], {queryParams: this.queryParams});
     };
 
-    navigate = (route:any = [], extras:any = {}):Promise<boolean> => this.router.navigate(route, extras);
+    navigate = (route:any = [], extras:any = {}):Promise<boolean> => {
+        return this.router.navigate(route, extras);
+    };
 }
