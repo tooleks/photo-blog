@@ -27,3 +27,8 @@ a {
 .load-more-container {
     margin: 20px 0;
 }
+
+.file .icon,
+.file .image {
+    height: auto;
+}
