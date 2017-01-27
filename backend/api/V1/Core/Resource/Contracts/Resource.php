@@ -3,7 +3,8 @@
 namespace Api\V1\Core\Resource\Contracts;
 
 /**
- * Interface Resource
+ * Interface Resource.
+ *
  * @package Api\V1\Core\Resource\Contracts
  */
 interface Resource

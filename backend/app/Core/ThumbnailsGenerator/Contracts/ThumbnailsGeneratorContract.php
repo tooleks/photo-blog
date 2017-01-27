@@ -3,7 +3,8 @@
 namespace App\Core\ThumbnailsGenerator\Contracts;
 
 /**
- * Interface ThumbnailServiceContract
+ * Interface ThumbnailServiceContract.
+ *
  * @package App\Core\ThumbnailsGenerator\Contracts
  */
 interface ThumbnailsGeneratorContract

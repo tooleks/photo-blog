@@ -77,6 +77,7 @@ class PhotoResource implements Resource
     public function getById($id) : Photo
     {
         $photo = $this->photo
+            ->withExif()
             ->withThumbnails()
             ->withTags()
             ->whereIsUploaded()

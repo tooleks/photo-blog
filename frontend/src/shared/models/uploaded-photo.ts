@@ -1,3 +1,4 @@
+import {Exif} from './exif';
 import {Thumbnail} from './thumbnail';
 
 export class UploadedPhoto {
@@ -6,5 +7,6 @@ export class UploadedPhoto {
     absolute_url:string;
     created_at:string;
     updated_at:string;
+    exif:Exif = new Exif;
     thumbnails:Thumbnail[] = [];
 }

@@ -37,11 +37,20 @@ class UploadedPhotoPresenter extends ModelPresenter
             // 'model_presenter_attribute_name' => 'original_model_attribute_name'
             'id' => 'id',
             'user_id' => 'user_id',
-            'absolute_url' => 'absolute_url',
-            'created_at' => 'created_at',
-            'updated_at' => 'updated_at',
-            'thumbnails' => 'thumbnails',
+            'absolute_url' => null,
+            'created_at' => null,
+            'updated_at' => null,
+            'exif' => null,
+            'thumbnails' => null,
         ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getAbsoluteUrlAttribute()
+    {
+        return $this->originalModel->relative_url ? url(config('app.url')) . $this->originalModel->relative_url : '';
     }
 
     /**
@@ -61,11 +70,11 @@ class UploadedPhotoPresenter extends ModelPresenter
     }
 
     /**
-     * @return string
+     * @return ExifPresenter
      */
-    public function getAbsoluteUrlAttribute()
+    public function getExifAttribute()
     {
-        return $this->originalModel->relative_url ? url(config('app.url')) . $this->originalModel->relative_url : '';
+        return new ExifPresenter($this->originalModel->exif);
     }
 
     /**
@@ -73,7 +82,7 @@ class UploadedPhotoPresenter extends ModelPresenter
      */
     public function getThumbnailsAttribute()
     {
-        return $this->originalModel->thumbnails->map(function ($item) {
+        return collect($this->originalModel->thumbnails)->map(function ($item) {
             return new ThumbnailPresenter($item);
         });
     }

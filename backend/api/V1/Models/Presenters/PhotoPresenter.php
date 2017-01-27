@@ -38,13 +38,22 @@ class PhotoPresenter extends ModelPresenter
             // 'model_presenter_attribute_name' => 'original_model_attribute_name'
             'id' => 'id',
             'user_id' => 'user_id',
-            'absolute_url' => 'absolute_url',
+            'absolute_url' => null,
             'description' => 'description',
-            'created_at' => 'created_at',
-            'updated_at' => 'updated_at',
-            'thumbnails' => 'thumbnails',
-            'tags' => 'tags',
+            'created_at' => null,
+            'updated_at' => null,
+            'exif' => null,
+            'tags' => null,
+            'thumbnails' => null,
         ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getAbsoluteUrlAttribute()
+    {
+        return $this->originalModel->relative_url ? url(config('app.url')) . $this->originalModel->relative_url : '';
     }
 
     /**
@@ -64,21 +73,11 @@ class PhotoPresenter extends ModelPresenter
     }
 
     /**
-     * @return string
+     * @return ExifPresenter
      */
-    public function getAbsoluteUrlAttribute()
+    public function getExifAttribute()
     {
-        return $this->originalModel->relative_url ? url(config('app.url')) . $this->originalModel->relative_url : '';
-    }
-
-    /**
-     * @return Collection
-     */
-    public function getThumbnailsAttribute()
-    {
-        return $this->originalModel->thumbnails->map(function ($item) {
-            return new ThumbnailPresenter($item);
-        });
+        return new ExifPresenter($this->originalModel->exif);
     }
 
     /**
@@ -86,8 +85,18 @@ class PhotoPresenter extends ModelPresenter
      */
     public function getTagsAttribute()
     {
-        return $this->originalModel->tags->map(function ($item) {
+        return collect($this->originalModel->tags)->map(function ($item) {
             return new TagPresenter($item);
+        });
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getThumbnailsAttribute()
+    {
+        return collect($this->originalModel->thumbnails)->map(function ($item) {
+            return new ThumbnailPresenter($item);
         });
     }
 }

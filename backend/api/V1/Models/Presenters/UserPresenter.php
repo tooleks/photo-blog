@@ -37,9 +37,9 @@ class UserPresenter extends ModelPresenter
             'id' => 'id',
             'name' => 'name',
             'email' => 'email',
-            'created_at' => 'created_at',
-            'updated_at' => 'updated_at',
-            'role' => 'role',
+            'created_at' => null,
+            'updated_at' => null,
+            'role' => null,
         ];
     }
 

@@ -31,7 +31,7 @@ class ThumbnailPresenter extends ModelPresenter
     {
         return [
             // 'model_presenter_attribute_name' => 'original_model_attribute_name'
-            'absolute_url' => 'absolute_url',
+            'absolute_url' => null,
             'width' => 'width',
             'height' => 'height',
         ];

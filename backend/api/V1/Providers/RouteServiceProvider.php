@@ -34,11 +34,11 @@ class RouteServiceProvider extends ServiceProvider
         parent::boot();
 
         Route::bind('user', function (int $id) {
-            return $this->app->make(UserResource::class)->getById($id);
+            return $this->getModelBindingMap()[Route::currentRouteName()]($id);
         });
 
         Route::bind('photo', function (int $id) {
-            return $this->app->make(PhotoResource::class)->getById($id);
+            return $this->getModelBindingMap()[Route::currentRouteName()]($id);
         });
     }
 
@@ -55,5 +55,34 @@ class RouteServiceProvider extends ServiceProvider
         ], function ($router) {
             require base_path('routes/api.v1.php');
         });
+    }
+
+    /**
+     * Get model binding map.
+     *
+     * @return array
+     */
+    protected function getModelBindingMap()
+    {
+        return [
+            'update_uploaded_photo' => function ($id) {
+                return $this->app->make(UploadedPhotoResource::class)->getById($id);
+            },
+            'get_uploaded_photo' => function ($id) {
+                return $this->app->make(UploadedPhotoResource::class)->getById($id);
+            },
+            'update_photo' => function ($id) {
+                return $this->app->make(PhotoResource::class)->getById($id);
+            },
+            'get_photo' => function ($id) {
+                return $this->app->make(PhotoResource::class)->getById($id);
+            },
+            'update_user' => function ($id) {
+                return $this->app->make(UserResource::class)->getById($id);
+            },
+            'get_user' => function ($id) {
+                return $this->app->make(UserResource::class)->getById($id);
+            },
+        ];
     }
 }

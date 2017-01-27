@@ -46,6 +46,7 @@ class UploadedPhotoResource implements Resource
                 'user_id' => ['required', 'filled', 'integer'],
                 'path' => ['required', 'filled', 'string', 'min:1', 'max:255'],
                 'relative_url' => ['required', 'filled', 'string', 'min:1', 'max:255'],
+                'exif' => ['required', 'filled', 'array'],
                 'thumbnails' => ['required', 'filled', 'array'],
                 'thumbnails.*.width' => ['required', 'filled', 'int'],
                 'thumbnails.*.height' => ['required', 'filled', 'int'],
@@ -55,6 +56,7 @@ class UploadedPhotoResource implements Resource
             static::VALIDATION_UPDATE => [
                 'path' => ['required', 'filled', 'string', 'min:1', 'max:255'],
                 'relative_url' => ['required', 'filled', 'string', 'min:1', 'max:255'],
+                'exif' => ['required', 'filled', 'array'],
                 'thumbnails' => ['required', 'filled', 'array'],
                 'thumbnails.*.width' => ['required', 'filled', 'int'],
                 'thumbnails.*.height' => ['required', 'filled', 'int'],
@@ -73,6 +75,7 @@ class UploadedPhotoResource implements Resource
     public function getById($id) : Photo
     {
         $photo = $this->photo
+            ->withExif()
             ->withThumbnails()
             ->whereIsUploaded()
             ->whereId($id)
@@ -110,6 +113,8 @@ class UploadedPhotoResource implements Resource
         try {
             $this->db->beginTransaction();
             $photo->save();
+            $photo->exif()->delete();
+            $photo->exif()->create(['data' => $attributes['exif']]);
             $photo->thumbnails()->delete();
             $photo->thumbnails()->detach();
             $photo->thumbnails()->createMany($attributes['thumbnails']);
@@ -139,6 +144,8 @@ class UploadedPhotoResource implements Resource
         try {
             $this->db->beginTransaction();
             $photo->save();
+            $photo->exif()->delete();
+            $photo->exif()->create(['data' => $attributes['exif']]);
             $photo->thumbnails()->delete();
             $photo->thumbnails()->detach();
             $photo->thumbnails = $photo->thumbnails()->createMany($attributes['thumbnails']);
