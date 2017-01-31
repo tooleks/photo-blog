@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\V1\Http\Resources;
+namespace Api\V1\Resources;
 
 use App\Core\Validator\Validator;
 use App\Models\DB\User;
@@ -14,7 +14,7 @@ use Exception;
  *
  * @property User user
  * @property Hasher hasher
- * @package Api\V1\Http\Resourcess
+ * @package Api\V1\Resourcess
  */
 class TokenResource implements Resource
 {

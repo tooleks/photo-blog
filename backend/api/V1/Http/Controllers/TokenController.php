@@ -2,7 +2,7 @@
 
 namespace Api\V1\Http\Controllers;
 
-use Api\V1\Http\Resources\TokenResource;
+use Api\V1\Resources\TokenResource;
 
 /**
  * Class TokenController.

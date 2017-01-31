@@ -2,34 +2,24 @@
 
 namespace Api\V1\Models\Presenters;
 
-use App\Models\DB\User;
-use Tooleks\Laravel\Presenter\ModelPresenter;
+use Tooleks\Laravel\Presenter\Presenter;
 
 /**
  * Class TokenPresenter.
  *
- * @property User originalModel
  * @property int user_id
  * @property string api_token
  * @package Api\V1\Models\Presenters
  */
-class TokenPresenter extends ModelPresenter
+class TokenPresenter extends Presenter
 {
-    /**
-     * @inheritdoc
-     */
-    protected function getOriginalModelClass() : string
-    {
-        return User::class;
-    }
-
     /**
      * @inheritdoc
      */
     protected function getAttributesMap() : array
     {
         return [
-            // 'model_presenter_attribute_name' => 'original_model_attribute_name'
+            // 'presenter_attribute_name' => 'presentee_attribute_name'
             'user_id' => 'id',
             'api_token' => 'api_token',
         ];

@@ -4,7 +4,7 @@ namespace Api\V1\Http\Controllers;
 
 use Api\V1\Core\Resource\Contracts\Resource;
 use Api\V1\Http\Middleware\DeletePhotoDirectory;
-use Api\V1\Http\Resources\PhotoResource;
+use Api\V1\Resources\PhotoResource;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 

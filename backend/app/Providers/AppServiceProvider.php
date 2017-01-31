@@ -6,6 +6,7 @@ use App\Core\ExifFetcher\Contracts\ExifFetcherContract;
 use App\Core\ExifFetcher\ExifFetcher;
 use App\Core\ThumbnailsGenerator\Contracts\ThumbnailsGeneratorContract;
 use App\Core\ThumbnailsGenerator\ThumbnailsGenerator;
+use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider

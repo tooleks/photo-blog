@@ -3,6 +3,7 @@
 namespace Api\V1\Http\Middleware;
 
 use App\Core\ExifFetcher\Contracts\ExifFetcherContract;
+use App\Core\Validator\Validator;
 use Illuminate\Http\Request;
 use Closure;
 
@@ -14,6 +15,8 @@ use Closure;
  */
 class FetchExifData
 {
+    use Validator;
+
     /**
      * FetchExifData constructor.
      *
@@ -22,6 +25,18 @@ class FetchExifData
     public function __construct(ExifFetcherContract $exifFetcher)
     {
         $this->exifFetcher = $exifFetcher;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function getValidationRules() : array
+    {
+        return [
+            'default' => [
+                'file' => ['required', 'filled', 'file', 'image'],
+            ],
+        ];
     }
 
     /**
@@ -34,11 +49,14 @@ class FetchExifData
      */
     public function handle($request, Closure $next, $guard = null)
     {
+        $this->validate($request->all(), 'default');
+
         $exif = $this->exifFetcher->fetch($request->file('file')->getPathname());
 
+        // Replace the temporary file name with the original one.
         $exif['FileName'] = $request->file('file')->getClientOriginalName();
 
-        $request->merge(['exif' => $exif]);
+        $request->merge(['exif' => ['data' => $exif]]);
 
         return $next($request);
     }

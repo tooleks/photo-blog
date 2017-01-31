@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\V1\Http\Resources;
+namespace Api\V1\Resources;
 
 use App\Core\Validator\Validator;
 use App\Models\DB\Photo;
@@ -15,7 +15,7 @@ use Throwable;
  *
  * @property ConnectionInterface db
  * @property Photo $photo
- * @package Api\V1\Http\Resources
+ * @package Api\V1\Resources
  */
 class UploadedPhotoResource implements Resource
 {
@@ -113,10 +113,7 @@ class UploadedPhotoResource implements Resource
         try {
             $this->db->beginTransaction();
             $photo->save();
-            $photo->exif()->delete();
-            $photo->exif()->create(['data' => $attributes['exif']]);
-            $photo->thumbnails()->delete();
-            $photo->thumbnails()->detach();
+            $photo->exif()->create($attributes['exif']);
             $photo->thumbnails()->createMany($attributes['thumbnails']);
             $this->db->commit();
         } catch (Throwable $e) {
@@ -145,7 +142,7 @@ class UploadedPhotoResource implements Resource
             $this->db->beginTransaction();
             $photo->save();
             $photo->exif()->delete();
-            $photo->exif()->create(['data' => $attributes['exif']]);
+            $photo->exif()->create($attributes['exif']);
             $photo->thumbnails()->delete();
             $photo->thumbnails()->detach();
             $photo->thumbnails = $photo->thumbnails()->createMany($attributes['thumbnails']);

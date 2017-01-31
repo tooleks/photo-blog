@@ -15,17 +15,24 @@
                                     </a>
                                 </div>
                                 <div class="file-name">
-                                    <small>{{ 'Manufacturer:' }} {{ photo.exif.manufacturer }}</small>
-                                    <br>
-                                    <small>{{ 'Model:' }} {{ photo.exif.model }}</small>
-                                    <br>
-                                    <small>{{ 'Exposure Time:' }} {{ photo.exif.exposure }}</small>
-                                    <br>
-                                    <small>{{ 'Aperture:' }} {{ photo.exif.aperture }}</small>
-                                    <br>
-                                    <small>{{ 'ISO:' }} {{ photo.exif.iso }}</small>
-                                    <br>
-                                    <small>{{ 'Taken On:' }} {{ photo.exif.taken_at }}</small>
+                                    <div *ngIf="photo.exif.taken_at">
+                                        <small>{{ 'Taken On:' }} {{ photo.exif.taken_at }}</small>
+                                    </div>
+                                    <div *ngIf="photo.exif.manufacturer">
+                                        <small>{{ 'Manufacturer:' }} {{ photo.exif.manufacturer }}</small>
+                                    </div>
+                                    <div *ngIf="photo.exif.model">
+                                        <small>{{ 'Model:' }} {{ photo.exif.model }}</small>
+                                    </div>
+                                    <div *ngIf="photo.exif.exposure_time">
+                                        <small>{{ 'Exposure Time:' }} {{ photo.exif.exposure_time }}</small>
+                                    </div>
+                                    <div *ngIf="photo.exif.aperture">
+                                        <small>{{ 'Aperture:' }} {{ photo.exif.aperture }}</small>
+                                    </div>
+                                    <div *ngIf="photo.exif.iso">
+                                        <small>{{ 'ISO:' }} {{ photo.exif.iso }}</small>
+                                    </div>
                                 </div>
                             </div>
                         </div>

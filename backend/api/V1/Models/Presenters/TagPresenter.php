@@ -2,33 +2,23 @@
 
 namespace Api\V1\Models\Presenters;
 
-use App\Models\DB\Tag;
-use Tooleks\Laravel\Presenter\ModelPresenter;
+use Tooleks\Laravel\Presenter\Presenter;
 
 /**
  * Class TagPresenter.
  *
- * @property Tag originalModel
  * @property string text
  * @package Api\V1\Models\Presenters
  */
-class TagPresenter extends ModelPresenter
+class TagPresenter extends Presenter
 {
-    /**
-     * @inheritdoc
-     */
-    protected function getOriginalModelClass() : string
-    {
-        return Tag::class;
-    }
-
     /**
      * @inheritdoc
      */
     protected function getAttributesMap() : array
     {
         return [
-            // 'model_presenter_attribute_name' => 'original_model_attribute_name'
+            // 'presenter_attribute_name' => 'presentee_attribute_name'
             'text' => 'text',
         ];
     }

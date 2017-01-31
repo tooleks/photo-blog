@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "bbe2afd36c7c6976de71e2e242822b97",
-    "content-hash": "c113d29d67d58fe5d531b064accaba60",
+    "hash": "278cf07541d470dc921a1bdc15599303",
+    "content-hash": "b0b987c108003b724d8c31af174123d0",
     "packages": [
         {
             "name": "doctrine/inflector",
@@ -1567,24 +1567,26 @@
         },
         {
             "name": "tooleks/laravel-presenter",
-            "version": "1.0.1",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tooleks/laravel-presenter.git",
-                "reference": "3cd39c58722ed02cd67b40a504d8d242cb4ddc09"
+                "reference": "cd53d63e2dd0df7fc5ef9d7355370d4bb0b27497"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tooleks/laravel-presenter/zipball/3cd39c58722ed02cd67b40a504d8d242cb4ddc09",
-                "reference": "3cd39c58722ed02cd67b40a504d8d242cb4ddc09",
+                "url": "https://api.github.com/repos/tooleks/laravel-presenter/zipball/cd53d63e2dd0df7fc5ef9d7355370d4bb0b27497",
+                "reference": "cd53d63e2dd0df7fc5ef9d7355370d4bb0b27497",
                 "shasum": ""
             },
             "require": {
-                "laravel/framework": "~5.0",
-                "php": "~7.0"
+                "illuminate/contracts": "^5.2",
+                "illuminate/support": "^5.2",
+                "php": "^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~5.5"
+                "laravel/framework": "^5.2",
+                "phpunit/phpunit": "^5.5"
             },
             "type": "library",
             "autoload": {
@@ -1614,7 +1616,7 @@
                 "presenter",
                 "representation"
             ],
-            "time": "2017-01-25 15:48:15"
+            "time": "2017-01-31 12:19:47"
         },
         {
             "name": "vlucas/phpdotenv",

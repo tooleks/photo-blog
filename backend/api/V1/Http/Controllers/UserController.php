@@ -2,7 +2,7 @@
 
 namespace Api\V1\Http\Controllers;
 
-use Api\V1\Http\Resources\UserResource;
+use Api\V1\Resources\UserResource;
 
 /**
  * Class UserController.

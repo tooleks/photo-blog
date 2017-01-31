@@ -11,7 +11,7 @@
                            placeholder="{{ 'Type any word then press enter' }}"
                            class="form-control">
                     <span class="input-group-btn">
-                        <button (click)="searchPhotos()" type="button" class="btn btn-primary">
+                        <button (click)="searchPhotos()" type="button" class="btn btn-primary" title="{{ 'Search' }}">
                             <i class="fa fa-search" aria-hidden="true"></i>
                         </button>
                     </span>
@@ -40,8 +40,5 @@
     </div>
 </div>
 <div *ngIf="!isEmpty()" class="load-more-container text-center">
-    <button *ngIf="!isLoading()" (click)="loadMorePhotos()" class="btn btn-primary text-uppercase">
-        {{ 'Load more' }}
-    </button>
     <spinner [isSpinning]="isLoading()"></spinner>
 </div>

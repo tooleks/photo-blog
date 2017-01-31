@@ -2,14 +2,12 @@
 
 namespace Api\V1\Models\Presenters;
 
-use App\Models\DB\Photo;
 use Illuminate\Support\Collection;
-use Tooleks\Laravel\Presenter\ModelPresenter;
+use Tooleks\Laravel\Presenter\Presenter;
 
 /**
  * Class UploadedPhotoPresenter.
  *
- * @property Photo originalModel
  * @property int id
  * @property int user_id
  * @property string absolute_url
@@ -18,23 +16,15 @@ use Tooleks\Laravel\Presenter\ModelPresenter;
  * @property Collection thumbnails
  * @package Api\V1\Models\Presenters
  */
-class UploadedPhotoPresenter extends ModelPresenter
+class UploadedPhotoPresenter extends Presenter
 {
-    /**
-     * @inheritdoc
-     */
-    protected function getOriginalModelClass() : string
-    {
-        return Photo::class;
-    }
-
     /**
      * @inheritdoc
      */
     protected function getAttributesMap() : array
     {
         return [
-            // 'model_presenter_attribute_name' => 'original_model_attribute_name'
+            // 'presenter_attribute_name' => 'presentee_attribute_name'
             'id' => 'id',
             'user_id' => 'user_id',
             'absolute_url' => null,
@@ -50,7 +40,7 @@ class UploadedPhotoPresenter extends ModelPresenter
      */
     public function getAbsoluteUrlAttribute()
     {
-        return $this->originalModel->relative_url ? url(config('app.url')) . $this->originalModel->relative_url : '';
+        return $this->getPresenteeAttribute('relative_url') ? url(config('app.url')) . $this->getPresenteeAttribute('relative_url') : '';
     }
 
     /**
@@ -58,7 +48,7 @@ class UploadedPhotoPresenter extends ModelPresenter
      */
     public function getCreatedAtAttribute()
     {
-        return (string)$this->originalModel->created_at ?? null;
+        return (string)$this->getPresenteeAttribute('created_at') ?? null;
     }
 
     /**
@@ -66,7 +56,7 @@ class UploadedPhotoPresenter extends ModelPresenter
      */
     public function getUpdatedAtAttribute()
     {
-        return (string)$this->originalModel->updated_at ?? null;
+        return (string)$this->getPresenteeAttribute('updated_at') ?? null;
     }
 
     /**
@@ -74,7 +64,7 @@ class UploadedPhotoPresenter extends ModelPresenter
      */
     public function getExifAttribute()
     {
-        return new ExifPresenter($this->originalModel->exif);
+        return new ExifPresenter($this->getPresenteeAttribute('exif'));
     }
 
     /**
@@ -82,8 +72,6 @@ class UploadedPhotoPresenter extends ModelPresenter
      */
     public function getThumbnailsAttribute()
     {
-        return collect($this->originalModel->thumbnails)->map(function ($item) {
-            return new ThumbnailPresenter($item);
-        });
+        return collect($this->getPresenteeAttribute('thumbnails'))->present(ThumbnailPresenter::class);
     }
 }

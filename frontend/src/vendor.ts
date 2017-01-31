@@ -7,9 +7,6 @@ import '@angular/router';
 
 import 'rxjs';
 
-import 'ng2-toastr/bundles/ng2-toastr.min.css';
-import 'ng2-toastr/ng2-toastr';
-
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 

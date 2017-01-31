@@ -10,18 +10,18 @@ use League\Flysystem\FileNotFoundException;
 use Closure;
 
 /**
- * Class CreateThumbnailFiles.
+ * Class GenerateThumbnails.
  *
  * @property Filesystem fs
  * @property ThumbnailsGeneratorContract thumbnailsGenerator
  * @package Api\V1\Http\Middleware
  */
-class CreateThumbnailFiles
+class GenerateThumbnails
 {
     use Validator;
 
     /**
-     * CreateThumbnailFiles constructor.
+     * GenerateThumbnails constructor.
      *
      * @param Filesystem $fs
      * @param ThumbnailsGeneratorContract $thumbnailsGenerator

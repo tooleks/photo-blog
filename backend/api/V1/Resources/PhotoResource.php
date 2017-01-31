@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\V1\Http\Resources;
+namespace Api\V1\Resources;
 
 use App\Core\Validator\Validator;
 use App\Models\DB\Photo;
@@ -18,7 +18,7 @@ use Throwable;
  * @property ConnectionInterface db
  * @property Photo $photo
  * @property UploadedPhotoResource uploadedPhotoResource
- * @package Api\V1\Http\Resources
+ * @package Api\V1\Resources
  */
 class PhotoResource implements Resource
 {
@@ -106,8 +106,9 @@ class PhotoResource implements Resource
 
         $this->photo = $this->photo
             ->distinct()
-            ->withThumbnails()
+            ->withExif()
             ->withTags()
+            ->withThumbnails()
             ->whereIsUploaded()
             ->whereIsPublished(true)
             ->take($parameters['take'])

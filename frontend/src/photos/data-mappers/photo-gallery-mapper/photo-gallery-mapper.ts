@@ -4,15 +4,32 @@ export class PhotoGalleryMapper {
     id:number;
     description:string;
     url:string;
+    exif:{
+        manufacturer:string,
+        model:string,
+        exposure_time:string,
+        aperture:string,
+        iso:number,
+        taken_at:string,
+    };
     thumbnails:{
-        medium:{width:number, height:number, url:string},
-        small:{width:number, height:number, url:string},
+        medium:{
+            width:number,
+            height:number,
+            url:string,
+        },
+        small:{
+            width:number,
+            height:number,
+            url:string,
+        },
     };
 
     constructor(photo:Photo) {
         this.id = photo.id;
         this.description = photo.description;
         this.url = photo.absolute_url;
+        this.exif = photo.exif;
         this.thumbnails = {
             medium: {
                 width: photo.thumbnails[0].width,
