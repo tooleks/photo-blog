@@ -29,7 +29,9 @@ class PhotoPresenter extends Presenter
             'id' => 'id',
             'user_id' => 'user_id',
             'absolute_url' => function () {
-                return $this->getPresenteeAttribute('relative_url') ? url(config('app.url')) . $this->getPresenteeAttribute('relative_url') : '';
+                return $this->getPresenteeAttribute('relative_url')
+                    ? url(config('app.url')) . $this->getPresenteeAttribute('relative_url')
+                    : '';
             },
             'description' => 'description',
             'created_at' => function () {
