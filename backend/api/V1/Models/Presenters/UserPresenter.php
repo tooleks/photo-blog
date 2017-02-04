@@ -27,25 +27,13 @@ class UserPresenter extends Presenter
             'id' => 'id',
             'name' => 'name',
             'email' => 'email',
-            'created_at' => null,
-            'updated_at' => null,
+            'created_at' => function () {
+                return (string)$this->getPresenteeAttribute('created_at') ?? null;
+            },
+            'updated_at' => function () {
+                return (string)$this->getPresenteeAttribute('updated_at') ?? null;
+            },
             'role' => 'role.name',
         ];
-    }
-
-    /**
-     * @return string
-     */
-    public function getCreatedAtAttribute()
-    {
-        return (string)$this->getPresenteeAttribute('created_at') ?? null;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUpdatedAtAttribute()
-    {
-        return (string)$this->getPresenteeAttribute('updated_at') ?? null;
     }
 }

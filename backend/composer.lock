@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "278cf07541d470dc921a1bdc15599303",
-    "content-hash": "b0b987c108003b724d8c31af174123d0",
+    "hash": "bbe2afd36c7c6976de71e2e242822b97",
+    "content-hash": "c113d29d67d58fe5d531b064accaba60",
     "packages": [
         {
             "name": "doctrine/inflector",
@@ -1567,16 +1567,16 @@
         },
         {
             "name": "tooleks/laravel-presenter",
-            "version": "2.0.0",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tooleks/laravel-presenter.git",
-                "reference": "cd53d63e2dd0df7fc5ef9d7355370d4bb0b27497"
+                "reference": "6607c45f1ee67b0cb66c5d087f37b7cd0bf72643"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tooleks/laravel-presenter/zipball/cd53d63e2dd0df7fc5ef9d7355370d4bb0b27497",
-                "reference": "cd53d63e2dd0df7fc5ef9d7355370d4bb0b27497",
+                "url": "https://api.github.com/repos/tooleks/laravel-presenter/zipball/6607c45f1ee67b0cb66c5d087f37b7cd0bf72643",
+                "reference": "6607c45f1ee67b0cb66c5d087f37b7cd0bf72643",
                 "shasum": ""
             },
             "require": {
@@ -1616,7 +1616,7 @@
                 "presenter",
                 "representation"
             ],
-            "time": "2017-01-31 12:19:47"
+            "time": "2017-02-04 10:41:52"
         },
         {
             "name": "vlucas/phpdotenv",
