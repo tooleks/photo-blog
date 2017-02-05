@@ -38,18 +38,12 @@ abstract class ResourceController extends Controller
     /**
      * Present a resource.
      *
-     * @param mixed $value
+     * @param mixed $result
      * @return mixed
      */
-    protected function present($value)
+    protected function present($result)
     {
-        if ($value instanceof Collection) {
-            return $value->map(function ($item) {
-                return new $this->presenterClass($item);
-            });
-        }
-
-        return new $this->presenterClass($value);
+        return $result instanceof Collection ? $result->present($this->presenterClass) : new $this->presenterClass($result);
     }
 
     /**

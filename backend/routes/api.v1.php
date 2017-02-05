@@ -28,7 +28,7 @@ Route::group(['prefix' => 'token'], function () {
         'middleware' => [
             'throttle:7,1', // Allow 7 requests per minute.
         ],
-    ]);
+    ])->name('create_token');
 
 });
 
@@ -44,28 +44,28 @@ Route::group(['prefix' => 'user'], function () {
         'middleware' => [
             'can:create,' . User::class,
         ],
-    ]);
+    ])->name('create_user');
 
     Route::get('/{user}', [
         'uses' => 'UserController@get',
         'middleware' => [
             'can:get,user',
         ],
-    ]);
+    ])->name('get_user');
 
     Route::put('/{user}', [
         'uses' => 'UserController@update',
         'middleware' => [
             'can:update,user',
         ],
-    ]);
+    ])->name('update_user');
 
     Route::delete('/{user}', [
         'uses' => 'UserController@update',
         'middleware' => [
             'can:delete,user',
         ],
-    ]);
+    ])->name('delete_user');
 
 });
 
@@ -82,25 +82,25 @@ Route::group(['prefix' => 'uploaded_photo'], function () {
             'can:create,' . Photo::class,
             AppendUserId::class,
         ],
-    ]);
+    ])->name('create_uploaded_photo');
 
     Route::get('/{photo}', [
         'uses' => 'UploadedPhotoController@get',
-    ]);
+    ])->name('get_uploaded_photo');
 
     Route::post('/{photo}', [
         'uses' => 'UploadedPhotoController@update',
         'middleware' => [
             'can:update,photo',
         ],
-    ]);
+    ])->name('update_uploaded_photo');
 
     Route::delete('/{photo}', [
         'uses' => 'UploadedPhotoController@delete',
         'middleware' => [
             'can:delete,photo',
         ],
-    ]);
+    ])->name('delete_uploaded_photo');
 
 });
 
@@ -116,28 +116,28 @@ Route::group(['prefix' => 'photo'], function () {
         'middleware' => [
             'can:create,' . Photo::class,
         ],
-    ]);
+    ])->name('create_photo');
 
     Route::get('/', [
         'uses' => 'PhotoController@getCollection',
-    ]);
+    ])->name('get_photos');
 
     Route::get('/{photo}', [
         'uses' => 'PhotoController@get',
-    ]);
+    ])->name('get_photo');
 
     Route::put('/{photo}', [
         'uses' => 'PhotoController@update',
         'middleware' => [
             'can:update,photo',
         ],
-    ]);
+    ])->name('update_photo');
 
     Route::delete('/{photo}', [
         'uses' => 'PhotoController@delete',
         'middleware' => [
             'can:delete,photo',
         ],
-    ]);
+    ])->name('delete_photo');
 
 });

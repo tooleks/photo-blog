@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\V1\Http\Resources;
+namespace Api\V1\Resources;
 
 use App\Core\Validator\Validator;
 use App\Models\DB\Photo;
@@ -15,7 +15,7 @@ use Throwable;
  *
  * @property ConnectionInterface db
  * @property Photo $photo
- * @package Api\V1\Http\Resources
+ * @package Api\V1\Resources
  */
 class UploadedPhotoResource implements Resource
 {
@@ -46,6 +46,7 @@ class UploadedPhotoResource implements Resource
                 'user_id' => ['required', 'filled', 'integer'],
                 'path' => ['required', 'filled', 'string', 'min:1', 'max:255'],
                 'relative_url' => ['required', 'filled', 'string', 'min:1', 'max:255'],
+                'exif' => ['required', 'filled', 'array'],
                 'thumbnails' => ['required', 'filled', 'array'],
                 'thumbnails.*.width' => ['required', 'filled', 'int'],
                 'thumbnails.*.height' => ['required', 'filled', 'int'],
@@ -55,6 +56,7 @@ class UploadedPhotoResource implements Resource
             static::VALIDATION_UPDATE => [
                 'path' => ['required', 'filled', 'string', 'min:1', 'max:255'],
                 'relative_url' => ['required', 'filled', 'string', 'min:1', 'max:255'],
+                'exif' => ['required', 'filled', 'array'],
                 'thumbnails' => ['required', 'filled', 'array'],
                 'thumbnails.*.width' => ['required', 'filled', 'int'],
                 'thumbnails.*.height' => ['required', 'filled', 'int'],
@@ -73,6 +75,7 @@ class UploadedPhotoResource implements Resource
     public function getById($id) : Photo
     {
         $photo = $this->photo
+            ->withExif()
             ->withThumbnails()
             ->whereIsUploaded()
             ->whereId($id)
@@ -110,8 +113,7 @@ class UploadedPhotoResource implements Resource
         try {
             $this->db->beginTransaction();
             $photo->save();
-            $photo->thumbnails()->delete();
-            $photo->thumbnails()->detach();
+            $photo->exif()->create($attributes['exif']);
             $photo->thumbnails()->createMany($attributes['thumbnails']);
             $this->db->commit();
         } catch (Throwable $e) {
@@ -139,6 +141,8 @@ class UploadedPhotoResource implements Resource
         try {
             $this->db->beginTransaction();
             $photo->save();
+            $photo->exif()->delete();
+            $photo->exif()->create($attributes['exif']);
             $photo->thumbnails()->delete();
             $photo->thumbnails()->detach();
             $photo->thumbnails = $photo->thumbnails()->createMany($attributes['thumbnails']);

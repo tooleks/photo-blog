@@ -1,0 +1,8 @@
+photo-form .file-box {
+    width: auto;
+}
+
+photo-form .file .icon,
+photo-form .file .image {
+    height: auto;
+}

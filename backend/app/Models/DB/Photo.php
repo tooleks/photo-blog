@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon created_at
  * @property Carbon updated_at
  * @property string directory_path
+ * @property Exif $exif
  * @property Collection $tags
  * @property Collection $thumbnails
  * @method static Photo whereIsUploaded()
@@ -27,8 +28,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Photo whereTag(string $tag)
  * @method static Photo whereId(int $id)
  * @method static Photo orderByCreatedAt($direction)
- * @method static Photo withThumbnails()
+ * @method static Photo withExif()
  * @method static Photo withTags()
+ * @method static Photo withThumbnails()
  * @package App\Models\DB
  */
 class Photo extends Model
@@ -102,6 +104,14 @@ class Photo extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function exif()
+    {
+        return $this->hasOne(Exif::class);
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function tags()
@@ -114,7 +124,7 @@ class Photo extends Model
      */
     public function thumbnails()
     {
-        return $this->belongsToMany(Thumbnail::class, 'photo_thumbnails');
+        return $this->belongsToMany(Thumbnail::class, 'photo_thumbnails')->orderBy('width')->orderBy('height');
     }
 
     /**
@@ -193,18 +203,18 @@ class Photo extends Model
     }
 
     /**
-     * Scope a query to include thumbnails.
+     * Scope a query to include exif relation.
      *
      * @param Builder $query
      * @return Builder
      */
-    public function scopeWithThumbnails($query)
+    public function scopeWithExif($query)
     {
-        return $query->with('thumbnails');
+        return $query->with('exif');
     }
 
     /**
-     * Scope a query to include tags.
+     * Scope a query to include tags relation.
      *
      * @param Builder $query
      * @return Builder
@@ -212,5 +222,16 @@ class Photo extends Model
     public function scopeWithTags($query)
     {
         return $query->with('tags');
+    }
+
+    /**
+     * Scope a query to include thumbnails relation.
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeWithThumbnails($query)
+    {
+        return $query->with('thumbnails');
     }
 }

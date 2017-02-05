@@ -4,7 +4,7 @@ namespace Api\V1\Http\Controllers;
 
 use Api\V1\Core\Resource\Contracts\Resource;
 use Api\V1\Http\Middleware\DeletePhotoDirectory;
-use Api\V1\Http\Resources\PhotoResource;
+use Api\V1\Resources\PhotoResource;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 
@@ -47,11 +47,24 @@ class PhotoController extends ResourceController
      *          "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
      *          "created_at": "2016-10-24 12:24:33",
      *          "updated_at": "2016-10-24 14:38:05",
+     *          "exif": {
+     *              "manufacturer": "Manufacturer Name",
+     *              "model": "Model Number",
+     *              "exposure_time": "1/160",
+     *              "aperture": "f/11.0",
+     *              "iso": 200,
+     *              "taken_at": "2016-10-24 12:24:33"
+     *          },
      *          "thumbnails": [
-     *              {
-     *                  "absolute_url": "http://path/to/photo/thumbnail/file"
+     *              "medium": {
+     *                  "absolute_url": "http://path/to/photo/thumbnail/medium_file"
      *                  "width": 500,
      *                  "height": 500
+     *              },
+     *              "large": {
+     *                  "absolute_url": "http://path/to/photo/thumbnail/large_file"
+     *                  "width": 1000,
+     *                  "height": 1000
      *              }
      *          ],
      *          "tags": [
@@ -83,11 +96,24 @@ class PhotoController extends ResourceController
      *          "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
      *          "created_at": "2016-10-24 12:24:33",
      *          "updated_at": "2016-10-24 14:38:05",
+     *          "exif": {
+     *              "manufacturer": "Manufacturer Name",
+     *              "model": "Model Number",
+     *              "exposure_time": "1/160",
+     *              "aperture": "f/11.0",
+     *              "iso": 200,
+     *              "taken_at": "2016-10-24 12:24:33"
+     *          },
      *          "thumbnails": [
-     *              {
-     *                  "absolute_url": "http://path/to/photo/thumbnail/file"
+     *              "medium": {
+     *                  "absolute_url": "http://path/to/photo/thumbnail/medium_file"
      *                  "width": 500,
      *                  "height": 500
+     *              },
+     *              "large": {
+     *                  "absolute_url": "http://path/to/photo/thumbnail/large_file"
+     *                  "width": 1000,
+     *                  "height": 1000
      *              }
      *          ],
      *          "tags": [
@@ -121,11 +147,24 @@ class PhotoController extends ResourceController
      *              "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
      *              "created_at": "2016-10-24 12:24:33",
      *              "updated_at": "2016-10-24 14:38:05",
+     *              "exif": {
+     *                  "manufacturer": "Manufacturer Name",
+     *                  "model": "Model Number",
+     *                  "exposure_time": "1/160",
+     *                  "aperture": "f/11.0",
+     *                  "iso": 200,
+     *                  "taken_at": "2016-10-24 12:24:33"
+     *              },
      *              "thumbnails": [
-     *                  {
-     *                      "absolute_url": "http://path/to/photo/thumbnail/file"
+     *                  "medium": {
+     *                      "absolute_url": "http://path/to/photo/thumbnail/medium_file"
      *                      "width": 500,
      *                      "height": 500
+     *                  },
+     *                  "large": {
+     *                      "absolute_url": "http://path/to/photo/thumbnail/large_file"
+     *                      "width": 1000,
+     *                      "height": 1000
      *                  }
      *              ],
      *              "tags": [
@@ -162,11 +201,24 @@ class PhotoController extends ResourceController
      *          "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
      *          "created_at": "2016-10-24 12:24:33",
      *          "updated_at": "2016-10-24 14:38:05",
+     *          "exif": {
+     *              "manufacturer": "Manufacturer Name",
+     *              "model": "Model Number",
+     *              "exposure_time": "1/160",
+     *              "aperture": "f/11.0",
+     *              "iso": 200,
+     *              "taken_at": "2016-10-24 12:24:33"
+     *          },
      *          "thumbnails": [
-     *              {
-     *                  "absolute_url": "http://path/to/photo/thumbnail/file"
+     *              "medium": {
+     *                  "absolute_url": "http://path/to/photo/thumbnail/medium_file"
      *                  "width": 500,
      *                  "height": 500
+     *              },
+     *              "large": {
+     *                  "absolute_url": "http://path/to/photo/thumbnail/large_file"
+     *                  "width": 1000,
+     *                  "height": 1000
      *              }
      *          ],
      *          "tags": [

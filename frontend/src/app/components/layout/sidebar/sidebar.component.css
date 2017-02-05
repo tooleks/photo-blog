@@ -1,4 +1,4 @@
-:host .sb-container {
+:host .sb {
     position: fixed;
     top: 0;
     left: 0;
@@ -10,33 +10,33 @@
     z-index: 5000;
 }
 
-:host .sb-container span {
+:host .sb span {
     cursor: default;
 }
 
-:host .sb-container ul {
+:host .sb ul {
     display: block;
     list-style: outside none none;
     margin: 0;
     padding: 0;
 }
 
-:host .sb-container > ul {
+:host .sb > ul {
     margin-top: 20px;
 }
 
-:host .sb-container > ul > li:first-child > span,
-:host .sb-container > ul > li:first-child > a {
+:host .sb > ul > li:first-child > span,
+:host .sb > ul > li:first-child > a {
     border-top: none;
 }
 
-:host .sb-container > ul > li:last-child > span,
-:host .sb-container > ul > li:last-child > a {
+:host .sb > ul > li:last-child > span,
+:host .sb > ul > li:last-child > a {
     border-bottom: none;
 }
 
-:host .sb-container li > span,
-:host .sb-container li > a {
+:host .sb li > span,
+:host .sb li > a {
     display: block;
     width: 100%;
     height: 40px;
@@ -48,37 +48,37 @@
     border-top: 1px solid #344555;
 }
 
-:host .sb-container li > span {
+:host .sb li > span {
     color: #8993a4;
 }
 
-:host .sb-container li > a.active,
-:host .sb-container li > a:hover,
-:host .sb-container li > a:focus {
+:host .sb li > a.active,
+:host .sb li > a:hover,
+:host .sb li > a:focus {
     text-decoration: none;
 }
 
-:host .sb-container li > a.active,
-:host .sb-container li > a:hover,
-:host .sb-container li > a:focus:not(.sb-brand) {
+:host .sb li > a.active,
+:host .sb li > a:hover,
+:host .sb li > a:focus:not(.sb-brand) {
     color: #fff;
 }
 
-:host .sb-container li > a:hover {
+:host .sb li > a:hover {
     background-color: #293846;
 }
 
-:host .sb-container li > span > i,
-:host .sb-container li > a > i {
+:host .sb li > span > i,
+:host .sb li > a > i {
     margin-right: 6px;
 }
 
-:host .sb-container li.sb-second-level {
+:host .sb li.sb-second-level {
     border-left: 1px solid #a7b1c2;
 }
 
-:host .sb-container li.sb-second-level li > span,
-:host .sb-container li.sb-second-level li > a {
+:host .sb li.sb-second-level li > span,
+:host .sb li.sb-second-level li > a {
     padding-left: 38px;
 }
 

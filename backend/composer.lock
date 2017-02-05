@@ -1567,24 +1567,26 @@
         },
         {
             "name": "tooleks/laravel-presenter",
-            "version": "1.0.1",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tooleks/laravel-presenter.git",
-                "reference": "3cd39c58722ed02cd67b40a504d8d242cb4ddc09"
+                "reference": "6607c45f1ee67b0cb66c5d087f37b7cd0bf72643"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tooleks/laravel-presenter/zipball/3cd39c58722ed02cd67b40a504d8d242cb4ddc09",
-                "reference": "3cd39c58722ed02cd67b40a504d8d242cb4ddc09",
+                "url": "https://api.github.com/repos/tooleks/laravel-presenter/zipball/6607c45f1ee67b0cb66c5d087f37b7cd0bf72643",
+                "reference": "6607c45f1ee67b0cb66c5d087f37b7cd0bf72643",
                 "shasum": ""
             },
             "require": {
-                "laravel/framework": "~5.0",
-                "php": "~7.0"
+                "illuminate/contracts": "^5.2",
+                "illuminate/support": "^5.2",
+                "php": "^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~5.5"
+                "laravel/framework": "^5.2",
+                "phpunit/phpunit": "^5.5"
             },
             "type": "library",
             "autoload": {
@@ -1614,7 +1616,7 @@
                 "presenter",
                 "representation"
             ],
-            "time": "2017-01-25 15:48:15"
+            "time": "2017-02-04 10:41:52"
         },
         {
             "name": "vlucas/phpdotenv",

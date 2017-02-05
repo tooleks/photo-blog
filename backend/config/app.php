@@ -166,6 +166,7 @@ return [
         /*
          * Package Service Providers...
          */
+        Tooleks\Laravel\Presenter\Providers\PresenterProvider::class,
 
         /*
          * Application Service Providers...
