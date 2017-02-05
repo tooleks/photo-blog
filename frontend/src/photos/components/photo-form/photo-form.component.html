@@ -9,7 +9,7 @@
                                 <span class="corner"></span>
                                 <div class="image">
                                     <a [href]="photo.absolute_url" target="_blank" title="photo.description">
-                                        <img [src]="photo.thumbnails[0].absolute_url"
+                                        <img [src]="photo.thumbnails.medium.absolute_url"
                                              [alt]="photo.description"
                                              class="img-responsive">
                                     </a>
