@@ -24,25 +24,28 @@ class UploadedPhotoPresenter extends Presenter
     protected function getAttributesMap() : array
     {
         return [
-            // 'presenter_attribute_name' => 'presentee_attribute_name'
             'id' => 'id',
             'user_id' => 'user_id',
             'absolute_url' => function () {
                 return $this->getPresenteeAttribute('relative_url')
                     ? url(config('app.url')) . $this->getPresenteeAttribute('relative_url')
-                    : '';
+                    : null;
             },
-            'created_at' => function () {
-                return (string)$this->getPresenteeAttribute('created_at') ?? null;
+            'created_at' => function () : string {
+                return $this->getPresenteeAttribute('created_at') ?? null;
             },
-            'updated_at' => function () {
-                return (string)$this->getPresenteeAttribute('updated_at') ?? null;
+            'updated_at' => function () : string {
+                return $this->getPresenteeAttribute('updated_at') ?? null;
             },
             'exif' => function () {
                 return new ExifPresenter($this->getPresenteeAttribute('exif'));
             },
             'thumbnails' => function () {
-                return collect($this->getPresenteeAttribute('thumbnails'))->present(ThumbnailPresenter::class);
+                $thumbnails = collect($this->getPresenteeAttribute('thumbnails'));
+                return [
+                    'medium' => new ThumbnailPresenter($thumbnails->get(0, [])),
+                    'large' => new ThumbnailPresenter($thumbnails->get(1, [])),
+                ];
             },
         ];
     }

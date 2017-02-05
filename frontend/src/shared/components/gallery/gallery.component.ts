@@ -60,7 +60,7 @@ export class GalleryComponent {
                 resolve();
             };
             this.openedItemIsLoaded = false;
-            image.src = item.thumbnails.medium.url;
+            image.src = item.thumbnails.large.absolute_url;
         }).then(() => this.onOpenItem.emit(this.openedItem));
     };
 

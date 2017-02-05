@@ -23,15 +23,14 @@ class UserPresenter extends Presenter
     protected function getAttributesMap() : array
     {
         return [
-            // 'presenter_attribute_name' => 'presentee_attribute_name'
             'id' => 'id',
             'name' => 'name',
             'email' => 'email',
-            'created_at' => function () {
-                return (string)$this->getPresenteeAttribute('created_at') ?? null;
+            'created_at' => function () : string {
+                return $this->getPresenteeAttribute('created_at') ?? null;
             },
-            'updated_at' => function () {
-                return (string)$this->getPresenteeAttribute('updated_at') ?? null;
+            'updated_at' => function () : string {
+                return $this->getPresenteeAttribute('updated_at') ?? null;
             },
             'role' => 'role.name',
         ];

@@ -18,7 +18,6 @@ class TagPresenter extends Presenter
     protected function getAttributesMap() : array
     {
         return [
-            // 'presenter_attribute_name' => 'presentee_attribute_name'
             'text' => 'text',
         ];
     }

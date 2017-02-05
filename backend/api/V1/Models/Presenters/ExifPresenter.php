@@ -2,6 +2,7 @@
 
 namespace Api\V1\Models\Presenters;
 
+use Carbon\Carbon;
 use Tooleks\Laravel\Presenter\Presenter;
 
 /**
@@ -17,13 +18,17 @@ class ExifPresenter extends Presenter
     protected function getAttributesMap() : array
     {
         return [
-            // 'presenter_attribute_name' => 'presentee_attribute_name'
             'manufacturer' => 'data.Make',
             'model' => 'data.Model',
-            'exposure_time' => 'data.ExposureTime',
+            'exposure_time' => function () : string {
+                list($numerator, $denominator) = explode('/', $this->getPresenteeAttribute('data.ExposureTime'));
+                return '1/' . $denominator / $numerator;
+            },
             'aperture' => 'data.COMPUTED.ApertureFNumber',
             'iso' => 'data.ISOSpeedRatings',
-            'taken_at' => 'data.DateTime',
+            'taken_at' => function () : string {
+                return new Carbon($this->getPresenteeAttribute('data.DateTime'));
+            },
         ];
     }
 }

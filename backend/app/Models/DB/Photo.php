@@ -124,7 +124,7 @@ class Photo extends Model
      */
     public function thumbnails()
     {
-        return $this->belongsToMany(Thumbnail::class, 'photo_thumbnails');
+        return $this->belongsToMany(Thumbnail::class, 'photo_thumbnails')->orderBy('width')->orderBy('height');
     }
 
     /**

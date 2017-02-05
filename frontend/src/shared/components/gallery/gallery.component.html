@@ -5,7 +5,7 @@
         <div class="gl-view">
             <div *ngIf="openedItemIsLoaded" class="gl-img-container">
                 <img (click)="viewNextItem(true)"
-                     [src]="openedItem.thumbnails.medium.url"
+                     [src]="openedItem.thumbnails.large.absolute_url"
                      [alt]="openedItem.description"
                      [title]="openedItem.description"
                      class="gl-img">
