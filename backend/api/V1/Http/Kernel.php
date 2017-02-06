@@ -30,7 +30,6 @@ class Kernel extends HttpKernel
             'json_api',
             'bindings',
         ],
-        'web' => [],
     ];
 
     /**
