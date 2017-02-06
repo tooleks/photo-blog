@@ -41,6 +41,12 @@ $app->singleton(
     Api\V1\Exceptions\JsonApiHandler::class
 );
 
+$app->register(Api\V1\Providers\ApiServiceProvider::class);
+
+$app->register(Api\V1\Providers\AuthServiceProvider::class);
+
+$app->register(Api\V1\Providers\RouteServiceProvider::class);
+
 /*
 |--------------------------------------------------------------------------
 | Return The Application
