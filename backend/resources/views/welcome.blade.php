@@ -69,8 +69,8 @@
                 </div>
 
                 <div class="links">
-                    <a href="https://github.com/tooleks/photo-blog" target="_blank">GitHub Repository</a>
-                    <a href="#" target="_blank">API Documentation</a>
+                    <a href="<?= config('main.repository.url') ?>" target="_blank">GitHub Repository</a>
+                    <a href="<?= config('main.documentation.api.url') ?>" target="_blank">API Documentation</a>
                 </div>
             </div>
         </div>
