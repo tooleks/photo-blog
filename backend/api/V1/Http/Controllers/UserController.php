@@ -31,11 +31,7 @@ class UserController extends ResourceController
      *          "email": "username@mail.address",
      *          "created_at": "2016-10-24 12:24:33",
      *          "updated_at": "2016-10-24 14:38:05",
-     *          "role": [
-     *              {
-     *                  "name": "Customer"
-     *              }
-     *          ]
+     *          "role": "Customer"
      *      }
      *  }
      */
@@ -56,11 +52,7 @@ class UserController extends ResourceController
      *          "email": "username@mail.address",
      *          "created_at": "2016-10-24 12:24:33",
      *          "updated_at": "2016-10-24 14:38:05",
-     *          "role": [
-     *              {
-     *                  "name": "Customer"
-     *              }
-     *          ]
+     *          "role": "Customer"
      *      }
      *  }
      */
@@ -85,11 +77,7 @@ class UserController extends ResourceController
      *          "email": "username@mail.address",
      *          "created_at": "2016-10-24 12:24:33",
      *          "updated_at": "2016-10-24 14:38:05",
-     *          "role": [
-     *              {
-     *                  "name": "Customer"
-     *              }
-     *          ]
+     *          "role": "Customer"
      *      }
      *  }
      */
