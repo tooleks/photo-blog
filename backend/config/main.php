@@ -2,6 +2,16 @@
 
 return [
 
+    'repository' => [
+        'url' => 'https://github.com/tooleks/photo-blog',
+    ],
+
+    'documentation' => [
+        'api' => [
+            'url' => env('API_DOCUMENTATION_URL'),
+        ],
+    ],
+
     'storage' => [
         'photos' => 'public/photos',
     ],
