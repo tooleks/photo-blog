@@ -28,7 +28,7 @@ class ExifPresenter extends Presenter
                 }
                 return $exposureTime ?? null;
             },
-            'aperture' => 'data.COMPUTED.ApertureFNumberd',
+            'aperture' => 'data.COMPUTED.ApertureFNumber',
             'iso' => 'data.ISOSpeedRatings',
             'taken_at' => function () : string {
                 return new Carbon($this->getPresenteeAttribute('data.DateTime'));
