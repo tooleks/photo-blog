@@ -17,7 +17,7 @@ use App\Models\DB\User;
 
 Route::get('/', function () {
     return [
-        'name' => sprintf('%s API', config('app.name')),
+        'name' => config('app.name'),
         'version' => '1.0.0',
     ];
 });
