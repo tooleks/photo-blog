@@ -32,6 +32,7 @@
                  (onOpenItem)="onShowPhoto($event)"
                  (onCloseItem)="onHidePhoto($event)"
                  (onEditItem)="authProvider.isAuthenticated() ? onEditPhoto($event) : false"
+                 [showEditButton]="authProvider.isAuthenticated()"
                  infinite-scroll
                  [infiniteScrollDistance]="3"
                  [infiniteScrollThrottle]="500"
