@@ -26,7 +26,7 @@ Route::group(['prefix' => 'token'], function () {
     Route::post('/', [
         'uses' => 'TokenController@create',
         'middleware' => [
-            'throttle:7,1', // Allow 7 requests per minute.
+            'throttle:20,1', // Allow 20 requests per minute.
         ],
     ])->name('create_token');
 
