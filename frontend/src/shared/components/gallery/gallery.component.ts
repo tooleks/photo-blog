@@ -51,15 +51,19 @@ export class GalleryComponent {
     };
 
     setOpenedItem = (item:any, index:number):Promise<any> => {
-        return new Promise((resolve, reject) => {
+        this.openedItem = item;
+        this.openedItemIndex = index;
+        return new Promise((resolve) => {
             let image = new Image;
+            let loaded = false;
             image.onload = () => {
-                this.openedItem = item;
-                this.openedItemIndex = index;
+                loaded = true;
                 this.openedItemIsLoaded = true;
                 resolve();
             };
-            this.openedItemIsLoaded = false;
+            setTimeout(() => {
+                if (!loaded) this.openedItemIsLoaded = false;
+            }, 400);
             image.src = item.thumbnails.large.absolute_url;
         }).then(() => this.onOpenItem.emit(this.openedItem));
     };
@@ -84,7 +88,7 @@ export class GalleryComponent {
 
     viewItemById = (id:string):void => {
         this.items.some((item:any, index:number) => {
-            if (item.id == id) {
+            if (item.id == id && index != this.openedItemIndex) {
                 this.setOpenedItem(item, index);
                 return true;
             } else if (index === this.items.length - 1) {
@@ -101,7 +105,7 @@ export class GalleryComponent {
     viewItem = (item:any):void => {
         let id = item.id;
         this.items.some((item:any, index:number) => {
-            if (item.id == id) {
+            if (item.id == id && index != this.openedItemIndex) {
                 this.setOpenedItem(this.items[index], index);
                 return true;
             }

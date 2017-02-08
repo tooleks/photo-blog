@@ -1,7 +1,7 @@
 <div *ngIf="openedItem">
     <div class="gl-backdrop"></div>
     <div class="gl-container">
-        <spinner [isSpinning]="true" class="gl-spinner"></spinner>
+        <spinner [visible]="!openedItemIsLoaded" class="gl-spinner"></spinner>
         <div class="gl-view">
             <div *ngIf="openedItemIsLoaded" class="gl-img-container">
                 <img (click)="viewNextItem(true)"
