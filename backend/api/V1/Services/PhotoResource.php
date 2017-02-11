@@ -12,15 +12,15 @@ use Throwable;
 use Tooleks\Laravel\Presenter\Presenter;
 
 /**
- * Class PhotoService.
+ * Class PhotoResource.
  *
  * @property ConnectionInterface db
  * @property Photo $photo
- * @property UploadedPhotoService uploadedPhotoService
+ * @property UploadedPhotoResource uploadedPhotoResource
  * @property string presenterClass
  * @package Api\V1\Services
  */
-class PhotoService implements Resource
+class PhotoResource implements Resource
 {
     use Validator;
 
@@ -29,18 +29,23 @@ class PhotoService implements Resource
     const VALIDATION_GET_COLLECTION = 'validation.get.collection';
 
     /**
-     * PhotoService constructor.
+     * PhotoResource constructor.
      *
      * @param ConnectionInterface $db
      * @param Photo $photo
-     * @param UploadedPhotoService $uploadedPhotoService
+     * @param UploadedPhotoResource $uploadedPhotoResource
      * @param string $presenterClass
      */
-    public function __construct(ConnectionInterface $db, Photo $photo, UploadedPhotoService $uploadedPhotoService, string $presenterClass)
+    public function __construct(
+        ConnectionInterface $db,
+        Photo $photo,
+        UploadedPhotoResource $uploadedPhotoResource,
+        string $presenterClass
+    )
     {
         $this->db = $db;
         $this->photo = $photo;
-        $this->uploadedPhotoService = $uploadedPhotoService;
+        $this->uploadedPhotoResource = $uploadedPhotoResource;
         $this->presenterClass = $presenterClass;
     }
 
@@ -139,7 +144,7 @@ class PhotoService implements Resource
     {
         $attributes = $this->validate($attributes, static::VALIDATION_CREATE);
 
-        $photo = $this->uploadedPhotoService->getById($attributes['uploaded_photo_id'])->getPresentee();
+        $photo = $this->uploadedPhotoResource->getById($attributes['uploaded_photo_id'])->getPresentee();
 
         $photo->fill($attributes);
 

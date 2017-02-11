@@ -11,21 +11,21 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Tooleks\Laravel\Presenter\Presenter;
 
 /**
- * Class TokenService.
+ * Class TokenResource.
  *
  * @property User user
  * @property Hasher hasher
  * @property string presenterClass
- * @package Api\V1\Servicess
+ * @package Api\V1\Services
  */
-class TokenService implements Resource
+class TokenResource implements Resource
 {
     use Validator;
 
     const VALIDATION_CREATE = 'validation.create';
 
     /**
-     * TokenService constructor.
+     * TokenResource constructor.
      *
      * @param User $user
      * @param Hasher $hasher

@@ -19,7 +19,7 @@ use Tooleks\Laravel\Presenter\Presenter;
  * @property string presenterClass
  * @package Api\V1\Services
  */
-class UserService implements Resource
+class UserResource implements Resource
 {
     use Validator;
 

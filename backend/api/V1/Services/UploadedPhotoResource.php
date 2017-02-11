@@ -12,14 +12,14 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Tooleks\Laravel\Presenter\Presenter;
 
 /**
- * Class UploadedPhotoService.
+ * Class UploadedPhotoResource.
  *
  * @property ConnectionInterface db
  * @property Photo $photo
  * @property string presenterClass
  * @package Api\V1\Services
  */
-class UploadedPhotoService implements Resource
+class UploadedPhotoResource implements Resource
 {
     use Validator;
 
@@ -27,7 +27,7 @@ class UploadedPhotoService implements Resource
     const VALIDATION_UPDATE = 'validation.update';
 
     /**
-     * UploadedPhotoService constructor.
+     * UploadedPhotoResource constructor.
      *
      * @param ConnectionInterface $db
      * @param Photo $photo

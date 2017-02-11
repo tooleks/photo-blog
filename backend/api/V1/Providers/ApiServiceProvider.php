@@ -7,10 +7,10 @@ use Api\V1\Http\Controllers\PhotoController;
 use Api\V1\Http\Controllers\TokenController;
 use Api\V1\Http\Controllers\UploadedPhotoController;
 use Api\V1\Http\Controllers\UserController;
-use Api\V1\Services\PhotoService;
-use Api\V1\Services\TokenService;
-use Api\V1\Services\UploadedPhotoService;
-use Api\V1\Services\UserService;
+use Api\V1\Services\PhotoResource;
+use Api\V1\Services\TokenResource;
+use Api\V1\Services\UploadedPhotoResource;
+use Api\V1\Services\UserResource;
 use Api\V1\Models\Presenters\PhotoPresenter;
 use Api\V1\Models\Presenters\TokenPresenter;
 use Api\V1\Models\Presenters\UploadedPhotoPresenter;
@@ -56,10 +56,10 @@ class ApiServiceProvider extends ServiceProvider
         $this->app
             ->when(TokenController::class)
             ->needs(Resource::class)
-            ->give(TokenService::class);
+            ->give(TokenResource::class);
 
         $this->app
-            ->when(TokenService::class)
+            ->when(TokenResource::class)
             ->needs('$presenterClass')
             ->give(TokenPresenter::class);
     }
@@ -74,10 +74,10 @@ class ApiServiceProvider extends ServiceProvider
         $this->app
             ->when(UserController::class)
             ->needs(Resource::class)
-            ->give(UserService::class);
+            ->give(UserResource::class);
 
         $this->app
-            ->when(UserService::class)
+            ->when(UserResource::class)
             ->needs('$presenterClass')
             ->give(UserPresenter::class);
     }
@@ -92,10 +92,10 @@ class ApiServiceProvider extends ServiceProvider
         $this->app
             ->when(UploadedPhotoController::class)
             ->needs(Resource::class)
-            ->give(UploadedPhotoService::class);
+            ->give(UploadedPhotoResource::class);
 
         $this->app
-            ->when(UploadedPhotoService::class)
+            ->when(UploadedPhotoResource::class)
             ->needs('$presenterClass')
             ->give(UploadedPhotoPresenter::class);
     }
@@ -110,10 +110,10 @@ class ApiServiceProvider extends ServiceProvider
         $this->app
             ->when(PhotoController::class)
             ->needs(Resource::class)
-            ->give(PhotoService::class);
+            ->give(PhotoResource::class);
 
         $this->app
-            ->when(PhotoService::class)
+            ->when(PhotoResource::class)
             ->needs('$presenterClass')
             ->give(PhotoPresenter::class);
     }

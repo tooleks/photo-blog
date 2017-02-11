@@ -2,9 +2,9 @@
 
 namespace Api\V1\Providers;
 
-use Api\V1\Services\PhotoService;
-use Api\V1\Services\UploadedPhotoService;
-use Api\V1\Services\UserService;
+use Api\V1\Services\PhotoResource;
+use Api\V1\Services\UploadedPhotoResource;
+use Api\V1\Services\UserResource;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
 
