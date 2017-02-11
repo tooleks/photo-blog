@@ -112,7 +112,6 @@ class PhotoResource implements Resource
         $parameters = $this->validate(['take' => $take, 'skip' => $skip] + $parameters, static::VALIDATION_GET_COLLECTION);
 
         $this->photo = $this->photo
-            ->distinct()
             ->withExif()
             ->withTags()
             ->withThumbnails()
