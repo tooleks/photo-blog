@@ -121,9 +121,11 @@ class PhotoResource implements Resource
             ->skip($parameters['skip'])
             ->orderByCreatedAt('desc');
 
-        if (isset($parameters['query'])) {
+        if (array_key_exists('query', $parameters)) {
             $this->photo = $this->photo->whereSearchQuery($parameters['query']);
-        } elseif (isset($parameters['tag'])) {
+        }
+
+        if (array_key_exists('tag', $parameters)) {
             $this->photo = $this->photo->whereTag($parameters['tag']);
         }
 
