@@ -2,13 +2,13 @@
 
 namespace Api\V1\Services;
 
+use Throwable;
 use App\Core\Validator\Validator;
 use App\Models\DB\Photo;
 use Api\V1\Core\Resource\Contracts\Resource;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
-use Throwable;
 use Tooleks\Laravel\Presenter\Presenter;
 
 /**
