@@ -2,12 +2,10 @@
 
 namespace Api\V1\Http\Controllers;
 
-use Api\V1\Resources\TokenResource;
-
 /**
  * Class TokenController.
  *
- * @see TokenResource
+ * @see \Api\V1\Services\TokenService
  * @package Api\V1\Http\Controllers
  */
 class TokenController extends ResourceController
@@ -34,11 +32,13 @@ class TokenController extends ResourceController
      */
     public function create()
     {
-        $user = $this->resource->create($this->request->all());
+        $token = $this->resource->create($this->request->all());
+
+        $user = $token->getPresentee();
 
         // Set auth for further actions.
         $this->guard->setUser($user);
 
-        return $this->present($user);
+        return $token;
     }
 }

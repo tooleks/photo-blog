@@ -36,19 +36,19 @@ interface Resource
     public function create(array $attributes);
 
     /**
-     * Update a resource.
+     * Update a resource by unique ID.
      *
      * @param mixed $resource
      * @param array $attributes
      * @return mixed
      */
-    public function update($resource, array $attributes);
+    public function updateById($resource, array $attributes);
 
     /**
-     * Delete a resource.
+     * Delete a resource by unique ID.
      *
      * @param mixed $resource
      * @return int
      */
-    public function delete($resource);
+    public function deleteById($resource);
 }

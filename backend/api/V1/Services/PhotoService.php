@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\V1\Resources;
+namespace Api\V1\Services;
 
 use App\Core\Validator\Validator;
 use App\Models\DB\Photo;
@@ -9,18 +9,18 @@ use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 use Throwable;
+use Tooleks\Laravel\Presenter\Presenter;
 
 /**
- * Class PhotoResource.
- *
- * The class provides CRUD for photos that are uploaded and published.
+ * Class PhotoService.
  *
  * @property ConnectionInterface db
  * @property Photo $photo
- * @property UploadedPhotoResource uploadedPhotoResource
- * @package Api\V1\Resources
+ * @property UploadedPhotoService uploadedPhotoService
+ * @property string presenterClass
+ * @package Api\V1\Services
  */
-class PhotoResource implements Resource
+class PhotoService implements Resource
 {
     use Validator;
 
@@ -29,17 +29,19 @@ class PhotoResource implements Resource
     const VALIDATION_GET_COLLECTION = 'validation.get.collection';
 
     /**
-     * PhotoResource constructor.
+     * PhotoService constructor.
      *
      * @param ConnectionInterface $db
      * @param Photo $photo
-     * @param UploadedPhotoResource $uploadedPhotoResource
+     * @param UploadedPhotoService $uploadedPhotoService
+     * @param string $presenterClass
      */
-    public function __construct(ConnectionInterface $db, Photo $photo, UploadedPhotoResource $uploadedPhotoResource)
+    public function __construct(ConnectionInterface $db, Photo $photo, UploadedPhotoService $uploadedPhotoService, string $presenterClass)
     {
         $this->db = $db;
         $this->photo = $photo;
-        $this->uploadedPhotoResource = $uploadedPhotoResource;
+        $this->uploadedPhotoService = $uploadedPhotoService;
+        $this->presenterClass = $presenterClass;
     }
 
     /**
@@ -72,9 +74,9 @@ class PhotoResource implements Resource
      * Get a resource by unique ID.
      *
      * @param int $id
-     * @return Photo
+     * @return Presenter
      */
-    public function getById($id) : Photo
+    public function getById($id) : Presenter
     {
         $photo = $this->photo
             ->withExif()
@@ -85,11 +87,11 @@ class PhotoResource implements Resource
             ->whereId($id)
             ->first();
 
-        if ($photo === null) {
+        if (is_null($photo)) {
             throw new ModelNotFoundException('Photo not found.');
         };
 
-        return $photo;
+        return new $this->presenterClass($photo);
     }
 
     /**
@@ -123,23 +125,24 @@ class PhotoResource implements Resource
 
         $photos = $this->photo->get();
 
-        return $photos;
+        return $photos->present($this->presenterClass);
     }
 
     /**
      * Create a resource.
      *
      * @param array $attributes
-     * @return Photo
+     * @return Presenter
      * @throws Throwable
      */
-    public function create(array $attributes) : Photo
+    public function create(array $attributes) : Presenter
     {
         $attributes = $this->validate($attributes, static::VALIDATION_CREATE);
 
-        $photo = $this->uploadedPhotoResource->getById($attributes['uploaded_photo_id']);
+        $photo = $this->uploadedPhotoService->getById($attributes['uploaded_photo_id'])->getPresentee();
 
         $photo->fill($attributes);
+
         $photo->setIsPublishedAttribute(true);
 
         try {
@@ -147,27 +150,29 @@ class PhotoResource implements Resource
             $photo->save();
             $photo->tags()->delete();
             $photo->tags()->detach();
-            $photo->tags()->createMany($attributes['tags']);
+            $photo->tags = collect($photo->tags()->createMany($attributes['tags']));
             $this->db->commit();
         } catch (Throwable $e) {
             $this->db->rollBack();
             throw $e;
         }
 
-        return $photo;
+        return new $this->presenterClass($photo);
     }
 
     /**
      * Update a resource.
      *
-     * @param Photo $photo
+     * @param int $id
      * @param array $attributes
-     * @return Photo
+     * @return Presenter
      * @throws Throwable
      */
-    public function update($photo, array $attributes) : Photo
+    public function updateById($id, array $attributes) : Presenter
     {
         $attributes = $this->validate($attributes, static::VALIDATION_UPDATE);
+
+        $photo = $this->getById($id)->getPresentee()->fill($attributes);
 
         $photo = $photo->fill($attributes);
 
@@ -176,25 +181,24 @@ class PhotoResource implements Resource
             $photo->save();
             $photo->tags()->delete();
             $photo->tags()->detach();
-            $photo->tags = $photo->tags()->createMany($attributes['tags']);
+            $photo->tags = collect($photo->tags()->createMany($attributes['tags']));
             $this->db->commit();
         } catch (Throwable $e) {
             $this->db->rollBack();
             throw $e;
         }
 
-        return $photo;
+        return new $this->presenterClass($photo);
     }
 
     /**
      * Delete a resource.
      *
-     * @param Photo $photo
+     * @param int $id
      * @return int
-     * @throws Throwable
      */
-    public function delete($photo) : int
+    public function deleteById($id) : int
     {
-        return (int)$photo->delete();
+        return (int)$this->getById($id)->getPresentee()->delete();
     }
 }

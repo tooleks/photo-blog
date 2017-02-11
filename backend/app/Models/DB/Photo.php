@@ -185,6 +185,7 @@ class Photo extends Model
     {
         return $query
             ->select('photos.*')
+            ->distinct()
             ->join('photo_tags', 'photo_tags.photo_id', '=', 'photos.id')
             ->join('tags', 'tags.id', '=', 'photo_tags.tag_id')
             ->where('tags.text', 'like', "%$tag%");

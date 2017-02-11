@@ -2,36 +2,14 @@
 
 namespace Api\V1\Http\Controllers;
 
-use Api\V1\Core\Resource\Contracts\Resource;
-use Api\V1\Http\Middleware\DeletePhotoDirectory;
-use Api\V1\Http\Middleware\FetchExifData;
-use Api\V1\Http\Middleware\UploadPhotoFile;
-use Api\V1\Http\Middleware\GenerateThumbnails;
-use Api\V1\Resources\UploadedPhotoResource;
-use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Http\Request;
-
 /**
  * Class UploadedPhotoController.
  *
- * @see UploadedPhotoResource
+ * @see \Api\V1\Services\UploadedPhotoService
  * @package Api\V1\Http\Controllers
  */
 class UploadedPhotoController extends ResourceController
 {
-    /**
-     * @inheritdoc
-     */
-    public function __construct(Request $request, Guard $guard, Resource $resource, string $presenterClass)
-    {
-        parent::__construct($request, $guard, $resource, $presenterClass);
-
-        $this->middleware(FetchExifData::class, ['only' => ['create', 'update']]);
-        $this->middleware(UploadPhotoFile::class, ['only' => ['create', 'update']]);
-        $this->middleware(GenerateThumbnails::class, ['only' => ['create', 'update']]);
-        $this->middleware(DeletePhotoDirectory::class, ['only' => ['delete']]);
-    }
-
     /**
      * @apiVersion 1.0.0
      * @api {post} /v1/uploaded_photo Create

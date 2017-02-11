@@ -2,9 +2,9 @@
 
 namespace Api\V1\Providers;
 
-use Api\V1\Resources\PhotoResource;
-use Api\V1\Resources\UploadedPhotoResource;
-use Api\V1\Resources\UserResource;
+use Api\V1\Services\PhotoService;
+use Api\V1\Services\UploadedPhotoService;
+use Api\V1\Services\UserService;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
 
@@ -66,31 +66,31 @@ class RouteServiceProvider extends ServiceProvider
     {
         return [
             'update_uploaded_photo' => function ($id) {
-                return $this->app->make(UploadedPhotoResource::class)->getById($id);
+                return $this->app->make(UploadedPhotoService::class)->getById($id);
             },
             'get_uploaded_photo' => function ($id) {
-                return $this->app->make(UploadedPhotoResource::class)->getById($id);
+                return $this->app->make(UploadedPhotoService::class)->getById($id);
             },
             'delete_uploaded_photo' => function ($id) {
-                return $this->app->make(UploadedPhotoResource::class)->getById($id);
+                return $this->app->make(UploadedPhotoService::class)->getById($id);
             },
             'update_photo' => function ($id) {
-                return $this->app->make(PhotoResource::class)->getById($id);
+                return $this->app->make(PhotoService::class)->getById($id);
             },
             'get_photo' => function ($id) {
-                return $this->app->make(PhotoResource::class)->getById($id);
+                return $this->app->make(PhotoService::class)->getById($id);
             },
             'delete_photo' => function ($id) {
-                return $this->app->make(PhotoResource::class)->getById($id);
+                return $this->app->make(PhotoService::class)->getById($id);
             },
             'update_user' => function ($id) {
-                return $this->app->make(UserResource::class)->getById($id);
+                return $this->app->make(UserService::class)->getById($id);
             },
             'get_user' => function ($id) {
-                return $this->app->make(UserResource::class)->getById($id);
+                return $this->app->make(UserService::class)->getById($id);
             },
             'delete_user' => function ($id) {
-                return $this->app->make(UserResource::class)->getById($id);
+                return $this->app->make(UserService::class)->getById($id);
             },
         ];
     }
