@@ -167,7 +167,7 @@ class PhotoResource implements Resource
     }
 
     /**
-     * Update a resource.
+     * Update a resource by unique ID.
      *
      * @param int $id
      * @param array $attributes
@@ -198,7 +198,7 @@ class PhotoResource implements Resource
     }
 
     /**
-     * Delete a resource.
+     * Delete a resource by unique ID.
      *
      * @param int $id
      * @return int
