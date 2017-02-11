@@ -12,7 +12,7 @@ use Illuminate\Validation\Rule;
 use Tooleks\Laravel\Presenter\Presenter;
 
 /**
- * Class UserService.
+ * Class UserResource.
  *
  * @property User user
  * @property Hasher hasher
@@ -32,7 +32,7 @@ class UserResource implements Resource
     protected $validationAttributes = [];
 
     /**
-     * UserService constructor.
+     * UserResource constructor.
      *
      * @param User $user
      * @param Hasher $hasher
