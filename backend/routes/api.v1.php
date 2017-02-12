@@ -38,7 +38,6 @@ Route::get('/', function () {
 Route::group(['prefix' => 'token'], function () {
 
     Route::post('/')
-        ->name('token-create')
         ->uses('TokenController@create')
         ->middleware('throttle:20,1'); // Allow 20 requests per minute.
 
@@ -53,22 +52,18 @@ Route::group(['prefix' => 'user'], function () {
 
     Route::post('/')
         ->uses('UserController@create')
-        ->name('user-create')
         ->middleware('can:access-resource,' . User::class . ',');
 
     Route::get('/{id}')
-        ->name('user-get')
-        ->uses('UserController@get')
+        ->uses('UserController@getById')
         ->middleware('can:access-resource,' . User::class . ',id');
 
     Route::put('/{id}')
-        ->name('user-update')
-        ->uses('UserController@update')
+        ->uses('UserController@updateById')
         ->middleware('can:access-resource,' . User::class . ',id');
 
     Route::delete('/{id}')
-        ->name('user-delete')
-        ->uses('UserController@delete')
+        ->uses('UserController@deleteById')
         ->middleware('can:access-resource,' . User::class . ',id');
 
 });
@@ -81,7 +76,6 @@ Route::group(['prefix' => 'user'], function () {
 Route::group(['prefix' => 'uploaded_photo'], function () {
 
     Route::post('/')
-        ->name('uploaded-photo-create')
         ->uses('UploadedPhotoController@create')
         ->middleware('can:access-resource,' . Photo::class . ',')
         ->middleware(AppendUserId::class)
@@ -90,21 +84,18 @@ Route::group(['prefix' => 'uploaded_photo'], function () {
         ->middleware(GenerateThumbnails::class);
 
     Route::get('/{id}')
-        ->name('uploaded-photo-get')
-        ->uses('UploadedPhotoController@get')
+        ->uses('UploadedPhotoController@getById')
         ->middleware('can:access-resource,' . Photo::class . ',id');
 
     Route::post('/{id}')
-        ->name('uploaded-photo-update')
-        ->uses('UploadedPhotoController@update')
+        ->uses('UploadedPhotoController@updateById')
         ->middleware('can:access-resource,' . Photo::class . ',id')
         ->middleware(FetchExifData::class)
         ->middleware(UploadPhotoFile::class)
         ->middleware(GenerateThumbnails::class);
 
     Route::delete('/{id}')
-        ->name('uploaded-photo-delete')
-        ->uses('UploadedPhotoController@delete')
+        ->uses('UploadedPhotoController@deleteById')
         ->middleware('can:access-resource,' . Photo::class . ',id')
         ->middleware(DeletePhotoDirectory::class);
 
@@ -118,26 +109,21 @@ Route::group(['prefix' => 'uploaded_photo'], function () {
 Route::group(['prefix' => 'photo'], function () {
 
     Route::post('/')
-        ->name('photo-create')
         ->uses('PhotoController@create')
         ->middleware('can:access-resource,' . Photo::class . ',');
 
     Route::get('/')
-        ->name('photo-get-collection')
-        ->uses('PhotoController@getCollection');
-
-    Route::get('/{id}')
-        ->name('photo-get')
         ->uses('PhotoController@get');
 
+    Route::get('/{id}')
+        ->uses('PhotoController@getById');
+
     Route::put('/{id}')
-        ->name('photo-update')
-        ->uses('PhotoController@update')
+        ->uses('PhotoController@updateById')
         ->middleware('can:access-resource,' . Photo::class . ',');
 
     Route::delete('/{id}')
-        ->name('photo-delete')
-        ->uses('PhotoController@delete')
+        ->uses('PhotoController@deleteById')
         ->middleware('can:access-resource,' . Photo::class . ',');
 
 });

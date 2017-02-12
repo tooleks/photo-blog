@@ -18,14 +18,14 @@ interface Resource
     public function getById($id);
 
     /**
-     * Get resources collection by parameters.
+     * Get resources by parameters.
      *
      * @param int $take
      * @param int $skip
      * @param array $parameters
      * @return mixed
      */
-    public function getCollection($take, $skip, array $parameters);
+    public function get($take, $skip, array $parameters);
 
     /**
      * Create a resource.

@@ -32,24 +32,24 @@ abstract class ResourceController extends Controller
     }
 
     /**
-     * Get a resource.
+     * Get a resource by unique ID.
      *
      * @param mixed $id
      * @return mixed
      */
-    public function get($id)
+    public function getById($id)
     {
         return $this->resource->getById($id);
     }
 
     /**
-     * Get resources collection.
+     * Get resources.
      *
      * @return mixed
      */
-    public function getCollection()
+    public function get()
     {
-        return $this->resource->getCollection(
+        return $this->resource->get(
             $this->request->query->get('take', 10),
             $this->request->query->get('skip', 0),
             $this->request->all()
@@ -67,23 +67,23 @@ abstract class ResourceController extends Controller
     }
 
     /**
-     * Update a resource.
+     * Update a resource by unique ID.
      *
      * @param mixed $id
      * @return mixed
      */
-    public function update($id)
+    public function updateById($id)
     {
         return $this->resource->updateById($id, $this->request->all());
     }
 
     /**
-     * Delete a resource.
+     * Delete a resource by unique ID.
      *
      * @param mixed $id
      * @return mixed
      */
-    public function delete($id)
+    public function deleteById($id)
     {
         return $this->resource->deleteById($id);
     }

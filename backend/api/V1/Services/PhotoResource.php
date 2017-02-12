@@ -100,14 +100,14 @@ class PhotoResource implements Resource
     }
 
     /**
-     * Get resources collection by parameters.
+     * Get resources by parameters.
      *
      * @param int $take
      * @param int $skip
      * @param array $parameters
      * @return Collection
      */
-    public function getCollection($take, $skip, array $parameters) : Collection
+    public function get($take, $skip, array $parameters) : Collection
     {
         $parameters = $this->validate(['take' => $take, 'skip' => $skip] + $parameters, static::VALIDATION_GET_COLLECTION);
 

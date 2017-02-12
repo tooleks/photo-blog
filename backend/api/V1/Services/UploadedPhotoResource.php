@@ -95,7 +95,7 @@ class UploadedPhotoResource implements Resource
     /**
      * @inheritdoc
      */
-    public function getCollection($take, $skip, array $parameters)
+    public function get($take, $skip, array $parameters)
     {
         throw new Exception('Method not implemented.');
     }
