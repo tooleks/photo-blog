@@ -199,6 +199,6 @@ class PhotoResource implements Resource
      */
     public function deleteById($id) : int
     {
-        return (int)$this->getById($id)->getPresentee()->delete();
+        return $this->getById($id)->getPresentee()->delete();
     }
 }

@@ -151,6 +151,6 @@ class UserResource implements Resource
     {
         $user = $this->getById($id)->getPresentee();
 
-        return (int)$user->delete();
+        return $user->delete();
     }
 }
