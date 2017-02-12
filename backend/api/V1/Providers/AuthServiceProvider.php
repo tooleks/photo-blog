@@ -2,8 +2,7 @@
 
 namespace Api\V1\Providers;
 
-use App\Models\DB\User;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Api\V1\Policies\ResourcePolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -33,77 +32,11 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function registerGates()
     {
-        Gate::define('create-resource', function (User $authUser, $resourceClass) {
-            // If authenticated user is administrator allow access to resource.
-            if ($authUser->isAdministrator()) {
-                return true;
-            }
+        $resourcePolicy = new ResourcePolicy;
 
-            // Otherwise deny access to resource.
-            return false;
-        });
-
-        Gate::define('get-resource', function (User $authUser, $resourceClass, $resourceId) {
-            // If authenticated user is administrator allow access to resource.
-            if ($authUser->isAdministrator()) {
-                return true;
-            }
-
-            $resource = $resourceClass::select('user_id')->whereId($resourceId)->first();
-
-            if (is_null($resource)) {
-                throw new ModelNotFoundException(sprintf('%s not found.', class_basename($resourceClass)));
-            }
-
-            // If authenticated user is the resource owner allow access to resource.
-            if ($authUser->id == $resource->user_id) {
-                return true;
-            }
-
-            // Otherwise deny access to resource.
-            return false;
-        });
-
-        Gate::define('update-resource', function (User $authUser, $resourceClass, $resourceId) {
-            // If authenticated user is administrator allow access to resource.
-            if ($authUser->isAdministrator()) {
-                return true;
-            }
-
-            $resource = $resourceClass::select('user_id')->whereId($resourceId)->first();
-
-            if (is_null($resource)) {
-                throw new ModelNotFoundException(sprintf('%s not found.', class_basename($resourceClass)));
-            }
-
-            // If authenticated user is the resource owner allow access to resource.
-            if ($authUser->id == $resource->user_id) {
-                return true;
-            }
-
-            // Otherwise deny access to resource.
-            return false;
-        });
-
-        Gate::define('delete-resource', function (User $authUser, $resourceClass, $resourceId) {
-            // If authenticated user is administrator allow access to resource.
-            if ($authUser->isAdministrator()) {
-                return true;
-            }
-
-            $resource = $resourceClass::select('user_id')->whereId($resourceId)->first();
-
-            if (is_null($resource)) {
-                throw new ModelNotFoundException(sprintf('%s not found.', class_basename($resourceClass)));
-            }
-
-            // If authenticated user is the resource owner allow access to resource.
-            if ($authUser->id == $resource->user_id) {
-                return true;
-            }
-
-            // Otherwise deny access to resource.
-            return false;
-        });
+        Gate::define('create-resource', [$resourcePolicy, 'create']);
+        Gate::define('get-resource', [$resourcePolicy, 'get']);
+        Gate::define('update-resource', [$resourcePolicy, 'update']);
+        Gate::define('delete-resource', [$resourcePolicy, 'delete']);
     }
 }
