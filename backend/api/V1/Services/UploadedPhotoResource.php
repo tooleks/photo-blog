@@ -87,7 +87,7 @@ class UploadedPhotoResource implements Resource
 
         if (is_null($photo)) {
             throw new ModelNotFoundException('Uploaded photo not found.');
-        };
+        }
 
         return new $this->presenterClass($photo);
     }
@@ -111,9 +111,9 @@ class UploadedPhotoResource implements Resource
     {
         $attributes = $this->validate($attributes, static::VALIDATION_CREATE);
 
-        $photo = $this->photo->newInstance($attributes);
+        $photo = $this->photo->newInstance();
 
-        $photo->setIsPublishedAttribute(false);
+        $photo->fill($attributes)->setIsPublishedAttribute(false);
 
         try {
             $this->db->beginTransaction();
@@ -141,7 +141,9 @@ class UploadedPhotoResource implements Resource
     {
         $attributes = $this->validate($attributes, static::VALIDATION_UPDATE);
 
-        $photo = $this->getById($id)->getPresentee()->fill($attributes);
+        $photo = $this->getById($id)->getPresentee();
+
+        $photo->fill($attributes);
 
         try {
             $this->db->beginTransaction();

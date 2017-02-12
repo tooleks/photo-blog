@@ -94,7 +94,7 @@ class PhotoResource implements Resource
 
         if (is_null($photo)) {
             throw new ModelNotFoundException('Photo not found.');
-        };
+        }
 
         return new $this->presenterClass($photo);
     }
@@ -147,9 +147,7 @@ class PhotoResource implements Resource
 
         $photo = $this->uploadedPhotoResource->getById($attributes['uploaded_photo_id'])->getPresentee();
 
-        $photo->fill($attributes);
-
-        $photo->setIsPublishedAttribute(true);
+        $photo->fill($attributes)->setIsPublishedAttribute(true);
 
         try {
             $this->db->beginTransaction();
@@ -178,9 +176,9 @@ class PhotoResource implements Resource
     {
         $attributes = $this->validate($attributes, static::VALIDATION_UPDATE);
 
-        $photo = $this->getById($id)->getPresentee()->fill($attributes);
+        $photo = $this->getById($id)->getPresentee();
 
-        $photo = $photo->fill($attributes);
+        $photo->fill($attributes);
 
         try {
             $this->db->beginTransaction();

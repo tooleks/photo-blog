@@ -106,9 +106,10 @@ class UserResource implements Resource
     {
         $attributes = $this->validate($attributes, static::VALIDATION_CREATE);
 
-        $user = $this->user->newInstance($attributes);
+        $user = $this->user->newInstance();
 
-        $user->setPasswordHash($this->hasher->make($attributes['password']))
+        $user->fill($attributes)
+            ->setPasswordHash($this->hasher->make($attributes['password']))
             ->generateApiToken()
             ->setCustomerRole();
 
@@ -130,7 +131,9 @@ class UserResource implements Resource
 
         $attributes = $this->validate($attributes, static::VALIDATION_UPDATE);
 
-        $user = $this->getById($id)->getPresentee()->fill($attributes);
+        $user = $this->getById($id)->getPresentee();
+
+        $user->fill($attributes);
 
         if (array_key_exists('password', $attributes)) {
             $user->setPasswordHash($this->hasher->make($attributes['password']));

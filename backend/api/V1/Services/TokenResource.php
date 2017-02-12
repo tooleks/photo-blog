@@ -87,7 +87,9 @@ class TokenResource implements Resource
             throw new ModelNotFoundException('Invalid user password.');
         }
 
-        $user->generateApiToken()->saveOrFail();
+        $user->generateApiToken();
+
+        $user->saveOrFail();
 
         return new $this->presenterClass($user);
     }
