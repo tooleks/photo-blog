@@ -52,7 +52,7 @@ class AuthServiceProvider extends ServiceProvider
             $resource = $resourceClass::select('user_id')->whereId($resourceId)->first();
 
             if (is_null($resource)) {
-                throw new ModelNotFoundException('Resource not found.');
+                throw new ModelNotFoundException(sprintf('%s not found.', class_basename($resourceClass)));
             }
 
             // If authenticated user is the resource owner allow access to resource.
@@ -73,7 +73,7 @@ class AuthServiceProvider extends ServiceProvider
             $resource = $resourceClass::select('user_id')->whereId($resourceId)->first();
 
             if (is_null($resource)) {
-                throw new ModelNotFoundException('Resource not found.');
+                throw new ModelNotFoundException(sprintf('%s not found.', class_basename($resourceClass)));
             }
 
             // If authenticated user is the resource owner allow access to resource.
@@ -94,7 +94,7 @@ class AuthServiceProvider extends ServiceProvider
             $resource = $resourceClass::select('user_id')->whereId($resourceId)->first();
 
             if (is_null($resource)) {
-                throw new ModelNotFoundException('Resource not found.');
+                throw new ModelNotFoundException(sprintf('%s not found.', class_basename($resourceClass)));
             }
 
             // If authenticated user is the resource owner allow access to resource.

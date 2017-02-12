@@ -83,7 +83,7 @@ class UploadedPhotoResource implements Resource
             ->first();
 
         if (is_null($photo)) {
-            throw new ModelNotFoundException('Uploaded photo not found.');
+            throw new ModelNotFoundException('Photo not found.');
         }
 
         return new $this->presenterClass($photo);
