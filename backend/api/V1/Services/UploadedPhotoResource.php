@@ -24,7 +24,7 @@ class UploadedPhotoResource implements Resource
     use Validator;
 
     const VALIDATION_CREATE = 'validation.create';
-    const VALIDATION_UPDATE = 'validation.update';
+    const VALIDATION_UPDATE_BY_ID = 'validation.update_by_id';
 
     /**
      * UploadedPhotoResource constructor.
@@ -57,7 +57,7 @@ class UploadedPhotoResource implements Resource
                 'thumbnails.*.path' => ['required', 'filled', 'string', 'min:1', 'max:255'],
                 'thumbnails.*.relative_url' => ['required', 'filled', 'string', 'min:1', 'max:255'],
             ],
-            static::VALIDATION_UPDATE => [
+            static::VALIDATION_UPDATE_BY_ID => [
                 'path' => ['required', 'filled', 'string', 'min:1', 'max:255'],
                 'relative_url' => ['required', 'filled', 'string', 'min:1', 'max:255'],
                 'exif' => ['required', 'filled', 'array'],
@@ -139,7 +139,7 @@ class UploadedPhotoResource implements Resource
      */
     public function updateById($id, array $attributes) : Presenter
     {
-        $attributes = $this->validate($attributes, static::VALIDATION_UPDATE);
+        $attributes = $this->validate($attributes, static::VALIDATION_UPDATE_BY_ID);
 
         $photo = $this->getById($id)->getPresentee();
 

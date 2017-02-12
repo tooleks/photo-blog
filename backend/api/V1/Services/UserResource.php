@@ -24,7 +24,7 @@ class UserResource implements Resource
     use Validator;
 
     const VALIDATION_CREATE = 'validation.create';
-    const VALIDATION_UPDATE = 'validation.update';
+    const VALIDATION_UPDATE_BY_ID = 'validation.update_by_id';
 
     /**
      * @var array
@@ -56,7 +56,7 @@ class UserResource implements Resource
                 'email' => ['required', 'filled', 'string', 'email', 'unique:users', 'min:1', 'max:255'],
                 'password' => ['required', 'filled', 'string', 'min:1', 'max:255'],
             ],
-            static::VALIDATION_UPDATE => [
+            static::VALIDATION_UPDATE_BY_ID => [
                 'name' => ['filled', 'string', 'min:1', 'max:255'],
                 'email' => [
                     'filled',
@@ -129,7 +129,7 @@ class UserResource implements Resource
     {
         $this->validationAttributes['email'] = $user->email;
 
-        $attributes = $this->validate($attributes, static::VALIDATION_UPDATE);
+        $attributes = $this->validate($attributes, static::VALIDATION_UPDATE_BY_ID);
 
         $user = $this->getById($id)->getPresentee();
 
