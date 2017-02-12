@@ -1,37 +1,39 @@
 <?php
 
-namespace Api\V1\Resources;
+namespace Api\V1\Services;
 
+use Exception;
 use App\Core\Validator\Validator;
 use App\Models\DB\User;
 use Api\V1\Core\Resource\Contracts\Resource;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Exception;
+use Tooleks\Laravel\Presenter\Presenter;
 
 /**
  * Class TokenResource.
  *
  * @property User user
  * @property Hasher hasher
- * @package Api\V1\Resourcess
+ * @property string presenterClass
+ * @package Api\V1\Services
  */
 class TokenResource implements Resource
 {
     use Validator;
-
-    const VALIDATION_CREATE = 'validation.create';
 
     /**
      * TokenResource constructor.
      *
      * @param User $user
      * @param Hasher $hasher
+     * @param string $presenterClass
      */
-    public function __construct(User $user, Hasher $hasher)
+    public function __construct(User $user, Hasher $hasher, string $presenterClass)
     {
         $this->user = $user;
         $this->hasher = $hasher;
+        $this->presenterClass = $presenterClass;
     }
 
     /**
@@ -40,7 +42,7 @@ class TokenResource implements Resource
     protected function getValidationRules() : array
     {
         return [
-            static::VALIDATION_CREATE => [
+            'create' => [
                 'email' => ['required', 'filled', 'email', 'min:1', 'max:255'],
                 'password' => ['required', 'filled', 'min:1', 'max:255'],
             ],
@@ -58,7 +60,7 @@ class TokenResource implements Resource
     /**
      * @inheritdoc
      */
-    public function getCollection($take, $skip, array $parameters)
+    public function get($take, $skip, array $parameters)
     {
         throw new Exception('Method not implemented.');
     }
@@ -67,15 +69,15 @@ class TokenResource implements Resource
      * Create a resource.
      *
      * @param array $attributes
-     * @return User
+     * @return Presenter
      */
-    public function create(array $attributes) : User
+    public function create(array $attributes) : Presenter
     {
-        $this->validate($attributes, static::VALIDATION_CREATE);
+        $this->validate($attributes, __FUNCTION__);
 
         $user = $this->user->whereEmail($attributes['email'])->first();
 
-        if ($user === null) {
+        if (is_null($user)) {
             throw new ModelNotFoundException('User not found.');
         }
 
@@ -83,15 +85,17 @@ class TokenResource implements Resource
             throw new ModelNotFoundException('Invalid user password.');
         }
 
-        $user->generateApiToken()->saveOrFail();
+        $user->generateApiToken();
 
-        return $user;
+        $user->saveOrFail();
+
+        return new $this->presenterClass($user);
     }
 
     /**
      * @inheritdoc
      */
-    public function update($resource, array $attributes)
+    public function updateById($id, array $attributes)
     {
         throw new Exception('Method not implemented.');
     }
@@ -99,7 +103,7 @@ class TokenResource implements Resource
     /**
      * @inheritdoc
      */
-    public function delete($resource)
+    public function deleteById($id)
     {
         throw new Exception('Method not implemented.');
     }

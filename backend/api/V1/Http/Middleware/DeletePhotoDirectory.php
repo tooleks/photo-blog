@@ -37,7 +37,7 @@ class DeletePhotoDirectory
         $response = $next($request);
 
         if ($response->status() === 200) {
-            $this->fs->deleteDirectory($request->photo->directory_path);
+//            $this->fs->deleteDirectory($request->photo->directory_path);
         }
 
         return $response;

@@ -2,30 +2,14 @@
 
 namespace Api\V1\Http\Controllers;
 
-use Api\V1\Core\Resource\Contracts\Resource;
-use Api\V1\Http\Middleware\DeletePhotoDirectory;
-use Api\V1\Resources\PhotoResource;
-use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Http\Request;
-
 /**
  * Class PhotoController.
  *
- * @see PhotoResource
+ * @see \Api\V1\Services\PhotoService
  * @package Api\V1\Http\Controllers
  */
 class PhotoController extends ResourceController
 {
-    /**
-     * @inheritdoc
-     */
-    public function __construct(Request $request, Guard $guard, Resource $resource, string $presenterClass)
-    {
-        parent::__construct($request, $guard, $resource, $presenterClass);
-
-        $this->middleware(DeletePhotoDirectory::class, ['only' => ['delete']]);
-    }
-
     /**
      * @apiVersion 1.0.0
      * @api {post} /v1/photo Create

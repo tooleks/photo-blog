@@ -6,7 +6,6 @@ use Api\V1\Core\Resource\Contracts\Resource;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Collection;
 
 /**
  * Class ResourceController.
@@ -14,7 +13,6 @@ use Illuminate\Support\Collection;
  * @property Request request
  * @property Guard guard
  * @property Resource resource
- * @property string presenterClass
  * @package Api\V1\Http\Controllers
  */
 abstract class ResourceController extends Controller
@@ -25,52 +23,37 @@ abstract class ResourceController extends Controller
      * @param Request $request
      * @param Guard $guard
      * @param Resource $resource
-     * @param string $presenterClass
      */
-    public function __construct(Request $request, Guard $guard, Resource $resource, string $presenterClass)
+    public function __construct(Request $request, Guard $guard, Resource $resource)
     {
         $this->request = $request;
         $this->guard = $guard;
         $this->resource = $resource;
-        $this->presenterClass = $presenterClass;
     }
 
     /**
-     * Present a resource.
+     * Get a resource by unique ID.
      *
-     * @param mixed $result
+     * @param mixed $id
      * @return mixed
      */
-    protected function present($result)
+    public function getById($id)
     {
-        return $result instanceof Collection ? $result->present($this->presenterClass) : new $this->presenterClass($result);
+        return $this->resource->getById($id);
     }
 
     /**
-     * Get a resource.
-     *
-     * @param mixed $resource
-     * @return mixed
-     */
-    public function get($resource)
-    {
-        return $this->present($resource);
-    }
-
-    /**
-     * Get resources collection.
+     * Get resources.
      *
      * @return mixed
      */
-    public function getCollection()
+    public function get()
     {
-        $resources = $this->resource->getCollection(
+        return $this->resource->get(
             $this->request->query->get('take', 10),
             $this->request->query->get('skip', 0),
             $this->request->all()
         );
-
-        return $this->present($resources);
     }
 
     /**
@@ -80,32 +63,28 @@ abstract class ResourceController extends Controller
      */
     public function create()
     {
-        $resource = $this->resource->create($this->request->all());
-
-        return $this->present($resource);
+        return $this->resource->create($this->request->all());
     }
 
     /**
-     * Update a resource.
+     * Update a resource by unique ID.
      *
-     * @param mixed $resource
+     * @param mixed $id
      * @return mixed
      */
-    public function update($resource)
+    public function updateById($id)
     {
-        $resource = $this->resource->update($resource, $this->request->all());
-
-        return $this->present($resource);
+        return $this->resource->updateById($id, $this->request->all());
     }
 
     /**
-     * Delete a resource.
+     * Delete a resource by unique ID.
      *
-     * @param mixed $resource
+     * @param mixed $id
      * @return mixed
      */
-    public function delete($resource)
+    public function deleteById($id)
     {
-        return $this->resource->delete($resource);
+        return $this->resource->deleteById($id);
     }
 }

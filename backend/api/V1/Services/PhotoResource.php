@@ -1,32 +1,28 @@
 <?php
 
-namespace Api\V1\Resources;
+namespace Api\V1\Services;
 
+use Throwable;
 use App\Core\Validator\Validator;
 use App\Models\DB\Photo;
 use Api\V1\Core\Resource\Contracts\Resource;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
-use Throwable;
+use Tooleks\Laravel\Presenter\Presenter;
 
 /**
  * Class PhotoResource.
  *
- * The class provides CRUD for photos that are uploaded and published.
- *
  * @property ConnectionInterface db
  * @property Photo $photo
  * @property UploadedPhotoResource uploadedPhotoResource
- * @package Api\V1\Resources
+ * @property string presenterClass
+ * @package Api\V1\Services
  */
 class PhotoResource implements Resource
 {
     use Validator;
-
-    const VALIDATION_CREATE = 'validation.create';
-    const VALIDATION_UPDATE = 'validation.update';
-    const VALIDATION_GET_COLLECTION = 'validation.get.collection';
 
     /**
      * PhotoResource constructor.
@@ -34,12 +30,19 @@ class PhotoResource implements Resource
      * @param ConnectionInterface $db
      * @param Photo $photo
      * @param UploadedPhotoResource $uploadedPhotoResource
+     * @param string $presenterClass
      */
-    public function __construct(ConnectionInterface $db, Photo $photo, UploadedPhotoResource $uploadedPhotoResource)
+    public function __construct(
+        ConnectionInterface $db,
+        Photo $photo,
+        UploadedPhotoResource $uploadedPhotoResource,
+        string $presenterClass
+    )
     {
         $this->db = $db;
         $this->photo = $photo;
         $this->uploadedPhotoResource = $uploadedPhotoResource;
+        $this->presenterClass = $presenterClass;
     }
 
     /**
@@ -48,18 +51,18 @@ class PhotoResource implements Resource
     public function getValidationRules() : array
     {
         return [
-            static::VALIDATION_CREATE => [
+            'create' => [
                 'uploaded_photo_id' => ['required', 'filled', 'integer'],
                 'description' => ['required', 'filled', 'string', 'min:1', 'max:65535'],
                 'tags' => ['required', 'filled', 'array'],
                 'tags.*.text' => ['required', 'filled', 'string', 'min:1', 'max:255'],
             ],
-            static::VALIDATION_UPDATE => [
+            'updateById' => [
                 'description' => ['required', 'filled', 'string', 'min:1', 'max:65535'],
                 'tags' => ['required', 'filled', 'array'],
                 'tags.*.text' => ['required', 'filled', 'string', 'min:1', 'max:255'],
             ],
-            static::VALIDATION_GET_COLLECTION => [
+            'get' => [
                 'take' => ['required', 'filled', 'integer', 'min:1', 'max:100'],
                 'skip' => ['required', 'filled', 'integer', 'min:0'],
                 'query' => ['filled', 'string', 'min:1'],
@@ -72,9 +75,9 @@ class PhotoResource implements Resource
      * Get a resource by unique ID.
      *
      * @param int $id
-     * @return Photo
+     * @return Presenter
      */
-    public function getById($id) : Photo
+    public function getById($id) : Presenter
     {
         $photo = $this->photo
             ->withExif()
@@ -85,27 +88,26 @@ class PhotoResource implements Resource
             ->whereId($id)
             ->first();
 
-        if ($photo === null) {
+        if (is_null($photo)) {
             throw new ModelNotFoundException('Photo not found.');
-        };
+        }
 
-        return $photo;
+        return new $this->presenterClass($photo);
     }
 
     /**
-     * Get resources collection by parameters.
+     * Get resources by parameters.
      *
      * @param int $take
      * @param int $skip
      * @param array $parameters
      * @return Collection
      */
-    public function getCollection($take, $skip, array $parameters) : Collection
+    public function get($take, $skip, array $parameters) : Collection
     {
-        $parameters = $this->validate(['take' => $take, 'skip' => $skip] + $parameters, static::VALIDATION_GET_COLLECTION);
+        $parameters = $this->validate(['take' => $take, 'skip' => $skip] + $parameters, __FUNCTION__);
 
         $this->photo = $this->photo
-            ->distinct()
             ->withExif()
             ->withTags()
             ->withThumbnails()
@@ -115,86 +117,88 @@ class PhotoResource implements Resource
             ->skip($parameters['skip'])
             ->orderByCreatedAt('desc');
 
-        if (isset($parameters['query'])) {
+        if (array_key_exists('query', $parameters)) {
             $this->photo = $this->photo->whereSearchQuery($parameters['query']);
-        } elseif (isset($parameters['tag'])) {
+        }
+
+        if (array_key_exists('tag', $parameters)) {
             $this->photo = $this->photo->whereTag($parameters['tag']);
         }
 
         $photos = $this->photo->get();
 
-        return $photos;
+        return $photos->present($this->presenterClass);
     }
 
     /**
      * Create a resource.
      *
      * @param array $attributes
-     * @return Photo
+     * @return Presenter
      * @throws Throwable
      */
-    public function create(array $attributes) : Photo
+    public function create(array $attributes) : Presenter
     {
-        $attributes = $this->validate($attributes, static::VALIDATION_CREATE);
+        $attributes = $this->validate($attributes, __FUNCTION__);
 
-        $photo = $this->uploadedPhotoResource->getById($attributes['uploaded_photo_id']);
+        $photo = $this->uploadedPhotoResource->getById($attributes['uploaded_photo_id'])->getPresentee();
+
+        $photo->fill($attributes)->setIsPublishedAttribute(true);
+
+        try {
+            $this->db->beginTransaction();
+            $photo->save();
+            $photo->tags()->delete();
+            $photo->tags()->detach();
+            $photo->tags = collect($photo->tags()->createMany($attributes['tags']));
+            $this->db->commit();
+        } catch (Throwable $e) {
+            $this->db->rollBack();
+            throw $e;
+        }
+
+        return new $this->presenterClass($photo);
+    }
+
+    /**
+     * Update a resource by unique ID.
+     *
+     * @param int $id
+     * @param array $attributes
+     * @return Presenter
+     * @throws Throwable
+     */
+    public function updateById($id, array $attributes) : Presenter
+    {
+        $attributes = $this->validate($attributes, __FUNCTION__);
+
+        $photo = $this->getById($id)->getPresentee();
 
         $photo->fill($attributes);
-        $photo->setIsPublishedAttribute(true);
 
         try {
             $this->db->beginTransaction();
             $photo->save();
             $photo->tags()->delete();
             $photo->tags()->detach();
-            $photo->tags()->createMany($attributes['tags']);
+            $photo->tags = collect($photo->tags()->createMany($attributes['tags']));
             $this->db->commit();
         } catch (Throwable $e) {
             $this->db->rollBack();
             throw $e;
         }
 
-        return $photo;
+        return new $this->presenterClass($photo);
     }
 
     /**
-     * Update a resource.
+     * Delete a resource by unique ID.
      *
-     * @param Photo $photo
-     * @param array $attributes
-     * @return Photo
-     * @throws Throwable
-     */
-    public function update($photo, array $attributes) : Photo
-    {
-        $attributes = $this->validate($attributes, static::VALIDATION_UPDATE);
-
-        $photo = $photo->fill($attributes);
-
-        try {
-            $this->db->beginTransaction();
-            $photo->save();
-            $photo->tags()->delete();
-            $photo->tags()->detach();
-            $photo->tags = $photo->tags()->createMany($attributes['tags']);
-            $this->db->commit();
-        } catch (Throwable $e) {
-            $this->db->rollBack();
-            throw $e;
-        }
-
-        return $photo;
-    }
-
-    /**
-     * Delete a resource.
-     *
-     * @param Photo $photo
+     * @param int $id
      * @return int
-     * @throws Throwable
      */
-    public function delete($photo) : int
+    public function deleteById($id) : int
     {
-        return (int)$photo->delete();
+        return $this->getById($id)->getPresentee()->delete();
     }
 }

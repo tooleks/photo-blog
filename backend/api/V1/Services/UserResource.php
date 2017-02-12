@@ -1,28 +1,27 @@
 <?php
 
-namespace Api\V1\Resources;
+namespace Api\V1\Services;
 
+use Exception;
 use App\Core\Validator\Validator;
 use App\Models\DB\User;
 use Api\V1\Core\Resource\Contracts\Resource;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\Rule;
-use Exception;
+use Tooleks\Laravel\Presenter\Presenter;
 
 /**
  * Class UserResource.
  *
  * @property User user
  * @property Hasher hasher
- * @package Api\V1\Resources
+ * @property string presenterClass
+ * @package Api\V1\Services
  */
 class UserResource implements Resource
 {
     use Validator;
-
-    const VALIDATION_CREATE = 'validation.create';
-    const VALIDATION_UPDATE = 'validation.update';
 
     /**
      * @var array
@@ -34,11 +33,13 @@ class UserResource implements Resource
      *
      * @param User $user
      * @param Hasher $hasher
+     * @param string $presenterClass
      */
-    public function __construct(User $user, Hasher $hasher)
+    public function __construct(User $user, Hasher $hasher, string $presenterClass)
     {
         $this->user = $user;
         $this->hasher = $hasher;
+        $this->presenterClass = $presenterClass;
     }
 
     /**
@@ -47,12 +48,12 @@ class UserResource implements Resource
     protected function getValidationRules() : array
     {
         return [
-            static::VALIDATION_CREATE => [
+            'create' => [
                 'name' => ['required', 'filled', 'string', 'min:1', 'max:255'],
                 'email' => ['required', 'filled', 'string', 'email', 'unique:users', 'min:1', 'max:255'],
                 'password' => ['required', 'filled', 'string', 'min:1', 'max:255'],
             ],
-            static::VALIDATION_UPDATE => [
+            'updateById' => [
                 'name' => ['filled', 'string', 'min:1', 'max:255'],
                 'email' => [
                     'filled',
@@ -71,25 +72,23 @@ class UserResource implements Resource
      * Get a resource by unique ID.
      *
      * @param int $id
-     * @return User
+     * @return Presenter
      */
-    public function getById($id) : User
+    public function getById($id) : Presenter
     {
-        $user = $this->user
-            ->whereId($id)
-            ->first();
+        $user = $this->user->whereId($id)->first();
 
-        if ($user === null) {
+        if (is_null($user)) {
             throw new ModelNotFoundException('User not found.');
         };
 
-        return $user;
+        return new $this->presenterClass($user);
     }
 
     /**
      * @inheritdoc
      */
-    public function getCollection($take, $skip, array $parameters)
+    public function get($take, $skip, array $parameters)
     {
         throw new Exception('Method not implemented.');
     }
@@ -98,55 +97,60 @@ class UserResource implements Resource
      * Create a resource.
      *
      * @param array $attributes
-     * @return User
+     * @return Presenter
      */
-    public function create(array $attributes) : User
+    public function create(array $attributes) : Presenter
     {
-        $attributes = $this->validate($attributes, static::VALIDATION_CREATE);
+        $attributes = $this->validate($attributes, __FUNCTION__);
 
-        $user = $this->user->newInstance($attributes);
+        $user = $this->user->newInstance();
 
-        $user->setPasswordHash($this->hasher->make($attributes['password']))
+        $user->fill($attributes)
+            ->setPasswordHash($this->hasher->make($attributes['password']))
             ->generateApiToken()
             ->setCustomerRole();
 
         $user->saveOrFail();
 
-        return $user;
+        return new $this->presenterClass($user);
     }
 
     /**
-     * Update a resource.
+     * Update a resource by unique ID.
      *
-     * @param User $user
+     * @param int $id
      * @param array $attributes
-     * @return User
+     * @return Presenter
      */
-    public function update($user, array $attributes) : User
+    public function updateById($id, array $attributes) : Presenter
     {
+        $user = $this->getById($id)->getPresentee();
+
         $this->validationAttributes['email'] = $user->email;
 
-        $attributes = $this->validate($attributes, static::VALIDATION_UPDATE);
+        $attributes = $this->validate($attributes, __FUNCTION__);
 
-        $user = $user->fill($attributes);
+        $user->fill($attributes);
 
-        if (isset($attributes['password'])) {
+        if (array_key_exists('password', $attributes)) {
             $user->setPasswordHash($this->hasher->make($attributes['password']));
         }
 
         $user->saveOrFail();
 
-        return $user;
+        return new $this->presenterClass($user);
     }
 
     /**
-     * Delete a resource.
+     * Delete a resource by unique ID.
      *
-     * @param User $user
+     * @param int $id
      * @return int
      */
-    public function delete($user) : int
+    public function deleteById($id) : int
     {
-        return (int)$user->delete();
+        $user = $this->getById($id)->getPresentee();
+
+        return $user->delete();
     }
 }

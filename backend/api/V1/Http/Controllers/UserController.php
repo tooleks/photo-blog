@@ -2,12 +2,10 @@
 
 namespace Api\V1\Http\Controllers;
 
-use Api\V1\Resources\UserResource;
-
 /**
  * Class UserController.
  *
- * @see UserResource
+ * @see \Api\V1\Services\UserService
  * @package Api\V1\Http\Controllers
  */
 class UserController extends ResourceController

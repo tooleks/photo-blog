@@ -1,39 +1,40 @@
 <?php
 
-namespace Api\V1\Resources;
+namespace Api\V1\Services;
 
+use Exception;
+use Throwable;
 use App\Core\Validator\Validator;
 use App\Models\DB\Photo;
 use Api\V1\Core\Resource\Contracts\Resource;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Exception;
-use Throwable;
+use Tooleks\Laravel\Presenter\Presenter;
 
 /**
  * Class UploadedPhotoResource.
  *
  * @property ConnectionInterface db
  * @property Photo $photo
- * @package Api\V1\Resources
+ * @property string presenterClass
+ * @package Api\V1\Services
  */
 class UploadedPhotoResource implements Resource
 {
     use Validator;
-
-    const VALIDATION_CREATE = 'validation.create';
-    const VALIDATION_UPDATE = 'validation.update';
 
     /**
      * UploadedPhotoResource constructor.
      *
      * @param ConnectionInterface $db
      * @param Photo $photo
+     * @param string $presenterClass
      */
-    public function __construct(ConnectionInterface $db, Photo $photo)
+    public function __construct(ConnectionInterface $db, Photo $photo, string $presenterClass)
     {
         $this->db = $db;
         $this->photo = $photo;
+        $this->presenterClass = $presenterClass;
     }
 
     /**
@@ -42,7 +43,7 @@ class UploadedPhotoResource implements Resource
     protected function getValidationRules() : array
     {
         return [
-            static::VALIDATION_CREATE => [
+            'create' => [
                 'user_id' => ['required', 'filled', 'integer'],
                 'path' => ['required', 'filled', 'string', 'min:1', 'max:255'],
                 'relative_url' => ['required', 'filled', 'string', 'min:1', 'max:255'],
@@ -53,7 +54,7 @@ class UploadedPhotoResource implements Resource
                 'thumbnails.*.path' => ['required', 'filled', 'string', 'min:1', 'max:255'],
                 'thumbnails.*.relative_url' => ['required', 'filled', 'string', 'min:1', 'max:255'],
             ],
-            static::VALIDATION_UPDATE => [
+            'updateById' => [
                 'path' => ['required', 'filled', 'string', 'min:1', 'max:255'],
                 'relative_url' => ['required', 'filled', 'string', 'min:1', 'max:255'],
                 'exif' => ['required', 'filled', 'array'],
@@ -70,9 +71,9 @@ class UploadedPhotoResource implements Resource
      * Get a resource by unique ID.
      *
      * @param int $id
-     * @return Photo
+     * @return Presenter
      */
-    public function getById($id) : Photo
+    public function getById($id) : Presenter
     {
         $photo = $this->photo
             ->withExif()
@@ -81,17 +82,17 @@ class UploadedPhotoResource implements Resource
             ->whereId($id)
             ->first();
 
-        if ($photo === null) {
-            throw new ModelNotFoundException('Uploaded photo not found.');
-        };
+        if (is_null($photo)) {
+            throw new ModelNotFoundException('Photo not found.');
+        }
 
-        return $photo;
+        return new $this->presenterClass($photo);
     }
 
     /**
      * @inheritdoc
      */
-    public function getCollection($take, $skip, array $parameters)
+    public function get($take, $skip, array $parameters)
     {
         throw new Exception('Method not implemented.');
     }
@@ -100,43 +101,46 @@ class UploadedPhotoResource implements Resource
      * Create a resource.
      *
      * @param array $attributes
-     * @return Photo
+     * @return Presenter
      * @throws Throwable
      */
-    public function create(array $attributes) : Photo
+    public function create(array $attributes) : Presenter
     {
-        $attributes = $this->validate($attributes, static::VALIDATION_CREATE);
+        $attributes = $this->validate($attributes, __FUNCTION__);
 
-        $photo = $this->photo->newInstance($attributes);
-        $photo->setIsPublishedAttribute(false);
+        $photo = $this->photo->newInstance();
+
+        $photo->fill($attributes)->setIsPublishedAttribute(false);
 
         try {
             $this->db->beginTransaction();
             $photo->save();
             $photo->exif()->create($attributes['exif']);
-            $photo->thumbnails()->createMany($attributes['thumbnails']);
+            $photo->thumbnails = collect($photo->thumbnails()->createMany($attributes['thumbnails']));
             $this->db->commit();
         } catch (Throwable $e) {
             $this->db->rollBack();
             throw $e;
         }
 
-        return $photo;
+        return new $this->presenterClass($photo);
     }
 
     /**
-     * Update a resource.
+     * Update a resource by unique ID.
      *
-     * @param Photo $photo
+     * @param int $id
      * @param array $attributes
-     * @return Photo
+     * @return Presenter
      * @throws Throwable
      */
-    public function update($photo, array $attributes) : Photo
+    public function updateById($id, array $attributes) : Presenter
     {
-        $attributes = $this->validate($attributes, static::VALIDATION_UPDATE);
+        $attributes = $this->validate($attributes, __FUNCTION__);
 
-        $photo = $photo->fill($attributes);
+        $photo = $this->getById($id)->getPresentee();
+
+        $photo->fill($attributes);
 
         try {
             $this->db->beginTransaction();
@@ -145,24 +149,24 @@ class UploadedPhotoResource implements Resource
             $photo->exif()->create($attributes['exif']);
             $photo->thumbnails()->delete();
             $photo->thumbnails()->detach();
-            $photo->thumbnails = $photo->thumbnails()->createMany($attributes['thumbnails']);
+            $photo->thumbnails = collect($photo->thumbnails()->createMany($attributes['thumbnails']));
             $this->db->commit();
         } catch (Throwable $e) {
             $this->db->rollBack();
             throw $e;
         }
 
-        return $photo;
+        return new $this->presenterClass($photo);
     }
 
     /**
-     * Delete a resource.
+     * Delete a resource by unique ID.
      *
-     * @param Photo $photo
+     * @param int $id
      * @return int
      */
-    public function delete($photo) : int
+    public function deleteById($id) : int
     {
-        return (int)$photo->delete();
+        return $this->getById($id)->getPresentee()->delete();
     }
 }

@@ -20,13 +20,13 @@ class ExifPresenter extends Presenter
         return [
             'manufacturer' => 'data.Make',
             'model' => 'data.Model',
-            'exposure_time' => function () : string {
-                if ($this->getPresenteeAttribute('data.ExposureTime')) {
-                    list($numerator, $denominator) = explode('/', $this->getPresenteeAttribute('data.ExposureTime'));
-                    return '1/' . $denominator / $numerator;
-                } else {
-                    return null;
+            'exposure_time' => function () {
+                $exposureTime = $this->getPresenteeAttribute('data.ExposureTime');
+                if ($exposureTime) {
+                    list($numerator, $denominator) = explode('/', $exposureTime);
+                    $exposureTime = '1/' . $denominator / $numerator;
                 }
+                return $exposureTime ?? null;
             },
             'aperture' => 'data.COMPUTED.ApertureFNumber',
             'iso' => 'data.ISOSpeedRatings',

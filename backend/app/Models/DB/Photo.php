@@ -77,20 +77,26 @@ class Photo extends Model
      * Setter for the 'is_published' attribute.
      *
      * @param bool $isPublished
+     * @return $this
      */
     public function setIsPublishedAttribute($isPublished)
     {
         $this->attributes['is_published'] = (bool)$isPublished;
+
+        return $this;
     }
 
     /**
      * Setter for the 'description' attribute.
      *
      * @param string $value
+     * @return $this
      */
     public function setDescriptionAttribute($value)
     {
         $this->attributes['description'] = trim($value);
+
+        return $this;
     }
 
     /**
@@ -165,6 +171,7 @@ class Photo extends Model
     {
         return $query
             ->select('photos.*')
+            ->distinct()
             ->join('photo_tags', 'photo_tags.photo_id', '=', 'photos.id')
             ->join('tags', 'tags.id', '=', 'photo_tags.tag_id')
             ->where(function ($query) use ($searchQuery) {
@@ -185,6 +192,7 @@ class Photo extends Model
     {
         return $query
             ->select('photos.*')
+            ->distinct()
             ->join('photo_tags', 'photo_tags.photo_id', '=', 'photos.id')
             ->join('tags', 'tags.id', '=', 'photo_tags.tag_id')
             ->where('tags.text', 'like', "%$tag%");

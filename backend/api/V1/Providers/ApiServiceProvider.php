@@ -7,10 +7,10 @@ use Api\V1\Http\Controllers\PhotoController;
 use Api\V1\Http\Controllers\TokenController;
 use Api\V1\Http\Controllers\UploadedPhotoController;
 use Api\V1\Http\Controllers\UserController;
-use Api\V1\Resources\PhotoResource;
-use Api\V1\Resources\TokenResource;
-use Api\V1\Resources\UploadedPhotoResource;
-use Api\V1\Resources\UserResource;
+use Api\V1\Services\PhotoResource;
+use Api\V1\Services\TokenResource;
+use Api\V1\Services\UploadedPhotoResource;
+use Api\V1\Services\UserResource;
 use Api\V1\Models\Presenters\PhotoPresenter;
 use Api\V1\Models\Presenters\TokenPresenter;
 use Api\V1\Models\Presenters\UploadedPhotoPresenter;
@@ -59,7 +59,7 @@ class ApiServiceProvider extends ServiceProvider
             ->give(TokenResource::class);
 
         $this->app
-            ->when(TokenController::class)
+            ->when(TokenResource::class)
             ->needs('$presenterClass')
             ->give(TokenPresenter::class);
     }
@@ -77,7 +77,7 @@ class ApiServiceProvider extends ServiceProvider
             ->give(UserResource::class);
 
         $this->app
-            ->when(UserController::class)
+            ->when(UserResource::class)
             ->needs('$presenterClass')
             ->give(UserPresenter::class);
     }
@@ -95,7 +95,7 @@ class ApiServiceProvider extends ServiceProvider
             ->give(UploadedPhotoResource::class);
 
         $this->app
-            ->when(UploadedPhotoController::class)
+            ->when(UploadedPhotoResource::class)
             ->needs('$presenterClass')
             ->give(UploadedPhotoPresenter::class);
     }
@@ -113,7 +113,7 @@ class ApiServiceProvider extends ServiceProvider
             ->give(PhotoResource::class);
 
         $this->app
-            ->when(PhotoController::class)
+            ->when(PhotoResource::class)
             ->needs('$presenterClass')
             ->give(PhotoPresenter::class);
     }

@@ -18,14 +18,14 @@ interface Resource
     public function getById($id);
 
     /**
-     * Get resources collection by parameters.
+     * Get resources by parameters.
      *
      * @param int $take
      * @param int $skip
      * @param array $parameters
      * @return mixed
      */
-    public function getCollection($take, $skip, array $parameters);
+    public function get($take, $skip, array $parameters);
 
     /**
      * Create a resource.
@@ -36,19 +36,19 @@ interface Resource
     public function create(array $attributes);
 
     /**
-     * Update a resource.
+     * Update a resource by unique ID.
      *
      * @param mixed $resource
      * @param array $attributes
      * @return mixed
      */
-    public function update($resource, array $attributes);
+    public function updateById($resource, array $attributes);
 
     /**
-     * Delete a resource.
+     * Delete a resource by unique ID.
      *
      * @param mixed $resource
      * @return int
      */
-    public function delete($resource);
+    public function deleteById($resource);
 }

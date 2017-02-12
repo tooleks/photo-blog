@@ -2,9 +2,9 @@
 
 namespace Api\V1\Providers;
 
-use Api\V1\Resources\PhotoResource;
-use Api\V1\Resources\UploadedPhotoResource;
-use Api\V1\Resources\UserResource;
+use Api\V1\Services\PhotoResource;
+use Api\V1\Services\UploadedPhotoResource;
+use Api\V1\Services\UserResource;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
 
@@ -25,24 +25,6 @@ class RouteServiceProvider extends ServiceProvider
     protected $namespace = 'Api\V1\Http\Controllers';
 
     /**
-     * Define your route model bindings, pattern filters, etc.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        parent::boot();
-
-        Route::bind('user', function (int $id) {
-            return $this->getModelBindingMap()[Route::currentRouteName()]($id);
-        });
-
-        Route::bind('photo', function (int $id) {
-            return $this->getModelBindingMap()[Route::currentRouteName()]($id);
-        });
-    }
-
-    /**
      * Define the routes for the application.
      *
      * @return void
@@ -55,43 +37,5 @@ class RouteServiceProvider extends ServiceProvider
         ], function ($router) {
             require base_path('routes/api.v1.php');
         });
-    }
-
-    /**
-     * Get model binding map.
-     *
-     * @return array
-     */
-    protected function getModelBindingMap()
-    {
-        return [
-            'update_uploaded_photo' => function ($id) {
-                return $this->app->make(UploadedPhotoResource::class)->getById($id);
-            },
-            'get_uploaded_photo' => function ($id) {
-                return $this->app->make(UploadedPhotoResource::class)->getById($id);
-            },
-            'delete_uploaded_photo' => function ($id) {
-                return $this->app->make(UploadedPhotoResource::class)->getById($id);
-            },
-            'update_photo' => function ($id) {
-                return $this->app->make(PhotoResource::class)->getById($id);
-            },
-            'get_photo' => function ($id) {
-                return $this->app->make(PhotoResource::class)->getById($id);
-            },
-            'delete_photo' => function ($id) {
-                return $this->app->make(PhotoResource::class)->getById($id);
-            },
-            'update_user' => function ($id) {
-                return $this->app->make(UserResource::class)->getById($id);
-            },
-            'get_user' => function ($id) {
-                return $this->app->make(UserResource::class)->getById($id);
-            },
-            'delete_user' => function ($id) {
-                return $this->app->make(UserResource::class)->getById($id);
-            },
-        ];
     }
 }

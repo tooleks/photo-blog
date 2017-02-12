@@ -2,11 +2,9 @@
 
 namespace Api\V1\Providers;
 
-use Api\V1\Policies\PhotoPolicy;
-use Api\V1\Policies\UserPolicy;
-use App\Models\DB\Photo;
-use App\Models\DB\User;
+use Api\V1\Policies\ResourcePolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 
 /**
  * Class AuthServiceProvider.
@@ -16,16 +14,6 @@ use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvid
 class AuthServiceProvider extends ServiceProvider
 {
     /**
-     * The policy mappings for the application.
-     *
-     * @var array
-     */
-    protected $policies = [
-        User::class => UserPolicy::class,
-        Photo::class => PhotoPolicy::class,
-    ];
-
-    /**
      * Register any authentication / authorization services.
      *
      * @return void
@@ -33,5 +21,22 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
+
+        $this->registerGates();
+    }
+
+    /**
+     * Register the application's gates.
+     *
+     * @return void
+     */
+    public function registerGates()
+    {
+        $resourcePolicy = new ResourcePolicy;
+
+        Gate::define('create-resource', [$resourcePolicy, 'create']);
+        Gate::define('get-resource', [$resourcePolicy, 'get']);
+        Gate::define('update-resource', [$resourcePolicy, 'update']);
+        Gate::define('delete-resource', [$resourcePolicy, 'delete']);
     }
 }
