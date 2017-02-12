@@ -52,19 +52,19 @@ Route::group(['prefix' => 'user'], function () {
 
     Route::post('/')
         ->uses('UserController@create')
-        ->middleware('can:access-resource,' . User::class . ',');
+        ->middleware('can:create-resource,' . User::class);
 
     Route::get('/{id}')
         ->uses('UserController@getById')
-        ->middleware('can:access-resource,' . User::class . ',id');
+        ->middleware('can:get-resource,' . User::class . ',id');
 
     Route::put('/{id}')
         ->uses('UserController@updateById')
-        ->middleware('can:access-resource,' . User::class . ',id');
+        ->middleware('can:update-resource,' . User::class . ',id');
 
     Route::delete('/{id}')
         ->uses('UserController@deleteById')
-        ->middleware('can:access-resource,' . User::class . ',id');
+        ->middleware('can:delete-resource,' . User::class . ',id');
 
 });
 
@@ -77,7 +77,7 @@ Route::group(['prefix' => 'uploaded_photo'], function () {
 
     Route::post('/')
         ->uses('UploadedPhotoController@create')
-        ->middleware('can:access-resource,' . Photo::class . ',')
+        ->middleware('can:create-resource,' . Photo::class)
         ->middleware(AppendUserId::class)
         ->middleware(FetchExifData::class)
         ->middleware(UploadPhotoFile::class)
@@ -85,18 +85,18 @@ Route::group(['prefix' => 'uploaded_photo'], function () {
 
     Route::get('/{id}')
         ->uses('UploadedPhotoController@getById')
-        ->middleware('can:access-resource,' . Photo::class . ',id');
+        ->middleware('can:get-resource,' . Photo::class . ',id');
 
     Route::post('/{id}')
         ->uses('UploadedPhotoController@updateById')
-        ->middleware('can:access-resource,' . Photo::class . ',id')
+        ->middleware('can:update-resource,' . Photo::class . ',id')
         ->middleware(FetchExifData::class)
         ->middleware(UploadPhotoFile::class)
         ->middleware(GenerateThumbnails::class);
 
     Route::delete('/{id}')
         ->uses('UploadedPhotoController@deleteById')
-        ->middleware('can:access-resource,' . Photo::class . ',id')
+        ->middleware('can:delete-resource,' . Photo::class . ',id')
         ->middleware(DeletePhotoDirectory::class);
 
 });
@@ -110,7 +110,7 @@ Route::group(['prefix' => 'photo'], function () {
 
     Route::post('/')
         ->uses('PhotoController@create')
-        ->middleware('can:access-resource,' . Photo::class . ',');
+        ->middleware('can:create-resource,' . Photo::class);
 
     Route::get('/')
         ->uses('PhotoController@get');
@@ -120,10 +120,10 @@ Route::group(['prefix' => 'photo'], function () {
 
     Route::put('/{id}')
         ->uses('PhotoController@updateById')
-        ->middleware('can:access-resource,' . Photo::class . ',');
+        ->middleware('can:update-resource,' . Photo::class . ',id');
 
     Route::delete('/{id}')
         ->uses('PhotoController@deleteById')
-        ->middleware('can:access-resource,' . Photo::class . ',');
+        ->middleware('can:delete-resource,' . Photo::class . ',id');
 
 });

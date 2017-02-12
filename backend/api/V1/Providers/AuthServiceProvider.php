@@ -33,7 +33,59 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function registerGates()
     {
-        Gate::define('access-resource', function (User $authUser, $resourceClass, $resourceId) {
+        Gate::define('create-resource', function (User $authUser, $resourceClass) {
+            // If authenticated user is administrator allow access to resource.
+            if ($authUser->isAdministrator()) {
+                return true;
+            }
+
+            // Otherwise deny access to resource.
+            return false;
+        });
+
+        Gate::define('get-resource', function (User $authUser, $resourceClass, $resourceId) {
+            // If authenticated user is administrator allow access to resource.
+            if ($authUser->isAdministrator()) {
+                return true;
+            }
+
+            $resource = $resourceClass::select('user_id')->whereId($resourceId)->first();
+
+            if (is_null($resource)) {
+                throw new ModelNotFoundException('Resource not found.');
+            }
+
+            // If authenticated user is the resource owner allow access to resource.
+            if ($authUser->id == $resource->user_id) {
+                return true;
+            }
+
+            // Otherwise deny access to resource.
+            return false;
+        });
+
+        Gate::define('update-resource', function (User $authUser, $resourceClass, $resourceId) {
+            // If authenticated user is administrator allow access to resource.
+            if ($authUser->isAdministrator()) {
+                return true;
+            }
+
+            $resource = $resourceClass::select('user_id')->whereId($resourceId)->first();
+
+            if (is_null($resource)) {
+                throw new ModelNotFoundException('Resource not found.');
+            }
+
+            // If authenticated user is the resource owner allow access to resource.
+            if ($authUser->id == $resource->user_id) {
+                return true;
+            }
+
+            // Otherwise deny access to resource.
+            return false;
+        });
+
+        Gate::define('delete-resource', function (User $authUser, $resourceClass, $resourceId) {
             // If authenticated user is administrator allow access to resource.
             if ($authUser->isAdministrator()) {
                 return true;
