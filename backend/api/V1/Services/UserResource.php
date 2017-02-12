@@ -23,9 +23,6 @@ class UserResource implements Resource
 {
     use Validator;
 
-    const VALIDATION_CREATE = 'validation.create';
-    const VALIDATION_UPDATE_BY_ID = 'validation.update_by_id';
-
     /**
      * @var array
      */
@@ -51,12 +48,12 @@ class UserResource implements Resource
     protected function getValidationRules() : array
     {
         return [
-            static::VALIDATION_CREATE => [
+            'create' => [
                 'name' => ['required', 'filled', 'string', 'min:1', 'max:255'],
                 'email' => ['required', 'filled', 'string', 'email', 'unique:users', 'min:1', 'max:255'],
                 'password' => ['required', 'filled', 'string', 'min:1', 'max:255'],
             ],
-            static::VALIDATION_UPDATE_BY_ID => [
+            'updateById' => [
                 'name' => ['filled', 'string', 'min:1', 'max:255'],
                 'email' => [
                     'filled',
@@ -104,7 +101,7 @@ class UserResource implements Resource
      */
     public function create(array $attributes) : Presenter
     {
-        $attributes = $this->validate($attributes, static::VALIDATION_CREATE);
+        $attributes = $this->validate($attributes, __FUNCTION__);
 
         $user = $this->user->newInstance();
 
@@ -127,11 +124,11 @@ class UserResource implements Resource
      */
     public function updateById($id, array $attributes) : Presenter
     {
+        $user = $this->getById($id)->getPresentee();
+
         $this->validationAttributes['email'] = $user->email;
 
-        $attributes = $this->validate($attributes, static::VALIDATION_UPDATE_BY_ID);
-
-        $user = $this->getById($id)->getPresentee();
+        $attributes = $this->validate($attributes, __FUNCTION__);
 
         $user->fill($attributes);
 

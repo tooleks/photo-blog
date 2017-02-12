@@ -22,8 +22,6 @@ class TokenResource implements Resource
 {
     use Validator;
 
-    const VALIDATION_CREATE = 'validation.create';
-
     /**
      * TokenResource constructor.
      *
@@ -44,7 +42,7 @@ class TokenResource implements Resource
     protected function getValidationRules() : array
     {
         return [
-            static::VALIDATION_CREATE => [
+            'create' => [
                 'email' => ['required', 'filled', 'email', 'min:1', 'max:255'],
                 'password' => ['required', 'filled', 'min:1', 'max:255'],
             ],
@@ -75,7 +73,7 @@ class TokenResource implements Resource
      */
     public function create(array $attributes) : Presenter
     {
-        $this->validate($attributes, static::VALIDATION_CREATE);
+        $this->validate($attributes, __FUNCTION__);
 
         $user = $this->user->whereEmail($attributes['email'])->first();
 

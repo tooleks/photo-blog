@@ -24,10 +24,6 @@ class PhotoResource implements Resource
 {
     use Validator;
 
-    const VALIDATION_CREATE = 'validation.create';
-    const VALIDATION_UPDATE_BY_ID = 'validation.update_by_id';
-    const VALIDATION_GET = 'validation.get';
-
     /**
      * PhotoResource constructor.
      *
@@ -55,18 +51,18 @@ class PhotoResource implements Resource
     public function getValidationRules() : array
     {
         return [
-            static::VALIDATION_CREATE => [
+            'create' => [
                 'uploaded_photo_id' => ['required', 'filled', 'integer'],
                 'description' => ['required', 'filled', 'string', 'min:1', 'max:65535'],
                 'tags' => ['required', 'filled', 'array'],
                 'tags.*.text' => ['required', 'filled', 'string', 'min:1', 'max:255'],
             ],
-            static::VALIDATION_UPDATE_BY_ID => [
+            'updateById' => [
                 'description' => ['required', 'filled', 'string', 'min:1', 'max:65535'],
                 'tags' => ['required', 'filled', 'array'],
                 'tags.*.text' => ['required', 'filled', 'string', 'min:1', 'max:255'],
             ],
-            static::VALIDATION_GET => [
+            'get' => [
                 'take' => ['required', 'filled', 'integer', 'min:1', 'max:100'],
                 'skip' => ['required', 'filled', 'integer', 'min:0'],
                 'query' => ['filled', 'string', 'min:1'],
@@ -109,7 +105,7 @@ class PhotoResource implements Resource
      */
     public function get($take, $skip, array $parameters) : Collection
     {
-        $parameters = $this->validate(['take' => $take, 'skip' => $skip] + $parameters, static::VALIDATION_GET);
+        $parameters = $this->validate(['take' => $take, 'skip' => $skip] + $parameters, __FUNCTION__);
 
         $this->photo = $this->photo
             ->withExif()
@@ -143,7 +139,7 @@ class PhotoResource implements Resource
      */
     public function create(array $attributes) : Presenter
     {
-        $attributes = $this->validate($attributes, static::VALIDATION_CREATE);
+        $attributes = $this->validate($attributes, __FUNCTION__);
 
         $photo = $this->uploadedPhotoResource->getById($attributes['uploaded_photo_id'])->getPresentee();
 
@@ -174,7 +170,7 @@ class PhotoResource implements Resource
      */
     public function updateById($id, array $attributes) : Presenter
     {
-        $attributes = $this->validate($attributes, static::VALIDATION_UPDATE_BY_ID);
+        $attributes = $this->validate($attributes, __FUNCTION__);
 
         $photo = $this->getById($id)->getPresentee();
 

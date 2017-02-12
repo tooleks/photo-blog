@@ -23,9 +23,6 @@ class UploadedPhotoResource implements Resource
 {
     use Validator;
 
-    const VALIDATION_CREATE = 'validation.create';
-    const VALIDATION_UPDATE_BY_ID = 'validation.update_by_id';
-
     /**
      * UploadedPhotoResource constructor.
      *
@@ -46,7 +43,7 @@ class UploadedPhotoResource implements Resource
     protected function getValidationRules() : array
     {
         return [
-            static::VALIDATION_CREATE => [
+            'create' => [
                 'user_id' => ['required', 'filled', 'integer'],
                 'path' => ['required', 'filled', 'string', 'min:1', 'max:255'],
                 'relative_url' => ['required', 'filled', 'string', 'min:1', 'max:255'],
@@ -57,7 +54,7 @@ class UploadedPhotoResource implements Resource
                 'thumbnails.*.path' => ['required', 'filled', 'string', 'min:1', 'max:255'],
                 'thumbnails.*.relative_url' => ['required', 'filled', 'string', 'min:1', 'max:255'],
             ],
-            static::VALIDATION_UPDATE_BY_ID => [
+            'updateById' => [
                 'path' => ['required', 'filled', 'string', 'min:1', 'max:255'],
                 'relative_url' => ['required', 'filled', 'string', 'min:1', 'max:255'],
                 'exif' => ['required', 'filled', 'array'],
@@ -109,7 +106,7 @@ class UploadedPhotoResource implements Resource
      */
     public function create(array $attributes) : Presenter
     {
-        $attributes = $this->validate($attributes, static::VALIDATION_CREATE);
+        $attributes = $this->validate($attributes, __FUNCTION__);
 
         $photo = $this->photo->newInstance();
 
@@ -139,7 +136,7 @@ class UploadedPhotoResource implements Resource
      */
     public function updateById($id, array $attributes) : Presenter
     {
-        $attributes = $this->validate($attributes, static::VALIDATION_UPDATE_BY_ID);
+        $attributes = $this->validate($attributes, __FUNCTION__);
 
         $photo = $this->getById($id)->getPresentee();
 
