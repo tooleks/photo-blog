@@ -37,7 +37,7 @@ class CreateApiDocumentation extends Command
      */
     public function handle()
     {
-        $process = new Process('apidoc -i ./api/ -o ../docs/api/dist');
+        $process = new Process('apidoc -i ./src/api/ -o ../docs/api/dist');
         $process->run();
 
         if (!$process->isSuccessful()) {
