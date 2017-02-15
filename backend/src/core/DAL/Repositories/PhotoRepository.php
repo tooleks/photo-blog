@@ -63,7 +63,7 @@ class PhotoRepository implements PhotoRepositoryContract
         $photo = Photo::whereIsUploaded()->find($id);
 
         if (is_null($photo)) {
-            throw new ModelNotFoundException('Uploaded photo not found.');
+            throw new ModelNotFoundException('Photo not found.');
         }
 
         return $photo;
