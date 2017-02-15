@@ -22,12 +22,16 @@ class Exif extends Model
     /**
      * @inheritdoc
      */
-    protected $casts = ['data' => 'array'];
+    protected $casts = [
+        'data' => 'array',
+    ];
 
     /**
      * @inheritdoc
      */
-    protected $fillable = ['data'];
+    protected $fillable = [
+        'data',
+    ];
 
     /**
      * @inheritdoc

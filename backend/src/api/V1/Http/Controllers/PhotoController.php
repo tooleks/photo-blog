@@ -5,20 +5,20 @@ namespace Api\V1\Http\Controllers;
 use Api\V1\Http\Requests\CreateUploadedPhoto;
 use Api\V1\Http\Requests\UpdateUploadedPhoto;
 use Core\DAL\Models\Photo;
-use Core\DAL\Repositories\PhotoRepository;
+use Core\DAL\Repositories\Photo\PhotoRepository;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 
 /**
- * Class UploadedPhotoController.
+ * Class PhotoController.
  *
  * @property PhotoRepository photoRepository
  * @package Api\V1\Http\Controllers
  */
-class UploadedPhotoController extends ResourceController
+class PhotoController extends ResourceController
 {
     /**
-     * UploadedPhotoController constructor.
+     * PhotoController constructor.
      *
      * @param Request $request
      * @param Guard $guard
@@ -89,7 +89,7 @@ class UploadedPhotoController extends ResourceController
 
         $photo->setIsPublishedAttribute(false);
 
-        $this->photoRepository->saveUploadedPhoto($photo, $request->all());
+        $this->photoRepository->save($photo, $request->all(), ['exif', 'thumbnails']);
 
         return $photo;
     }
@@ -194,7 +194,7 @@ class UploadedPhotoController extends ResourceController
      */
     public function update(UpdateUploadedPhoto $request, $photo) : Photo
     {
-        $this->photoRepository->saveUploadedPhoto($photo, $request->all());
+        $this->photoRepository->save($photo, $request->all(), ['exif', 'thumbnails']);
 
         return $photo;
     }
@@ -220,6 +220,6 @@ class UploadedPhotoController extends ResourceController
      */
     public function delete($photo) : int
     {
-        return $this->photoRepository->deletePhoto($photo);
+        return $this->photoRepository->delete($photo);
     }
 }

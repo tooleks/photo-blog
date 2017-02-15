@@ -14,7 +14,6 @@ use Tooleks\Laravel\Presenter\Presenter;
  * @property string created_at
  * @property string updated_at
  * @property Collection thumbnails
- * @property Collection tags
  * @package Api\V1\Presenters
  */
 class PhotoPresenter extends Presenter
@@ -32,7 +31,6 @@ class PhotoPresenter extends Presenter
                     ? url(config('app.url')) . $this->getPresenteeAttribute('relative_url')
                     : null;
             },
-            'description' => 'description',
             'created_at' => function () : string {
                 return $this->getPresenteeAttribute('created_at') ?? null;
             },
@@ -48,10 +46,6 @@ class PhotoPresenter extends Presenter
                     'medium' => new ThumbnailPresenter($thumbnails->get(0, [])),
                     'large' => new ThumbnailPresenter($thumbnails->get(1, [])),
                 ];
-            },
-            'tags' => function () {
-                $tags = collect($this->getPresenteeAttribute('tags'));
-                return $tags->present(TagPresenter::class);
             },
         ];
     }

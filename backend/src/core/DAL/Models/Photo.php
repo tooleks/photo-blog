@@ -96,12 +96,12 @@ class Photo extends Model
     /**
      * Setter for the 'description' attribute.
      *
-     * @param string $value
+     * @param string $description
      * @return $this
      */
-    public function setDescriptionAttribute($value)
+    public function setDescriptionAttribute($description)
     {
-        $this->attributes['description'] = trim($value);
+        $this->attributes['description'] = trim($description);
 
         return $this;
     }
@@ -148,7 +148,7 @@ class Photo extends Model
     /**
      * Getter for the 'directory_path' virtual attribute.
      *
-     * @return bool
+     * @return string|null
      */
     public function getDirectoryPathAttribute()
     {
@@ -187,11 +187,7 @@ class Photo extends Model
      */
     public function scopeWhereIsUploaded($queryBuilder)
     {
-        return $queryBuilder->orWhere(function ($queryBuilder) {
-            $queryBuilder
-                ->whereNotNull('photos.path')
-                ->whereNotNull('photos.relative_url');
-        });
+        return $queryBuilder->whereNotNull('photos.path')->whereNotNull('photos.relative_url');
     }
 
     /**

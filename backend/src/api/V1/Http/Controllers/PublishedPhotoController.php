@@ -2,15 +2,21 @@
 
 namespace Api\V1\Http\Controllers;
 
-use Throwable;
 use Api\V1\Http\Requests\CreatePhoto;
 use Api\V1\Http\Requests\FindPhoto;
 use Api\V1\Http\Requests\UpdatePhoto;
 use Core\DAL\Models\Photo;
-use Core\DAL\Repositories\Contracts\PhotoRepository;
+use Core\DAL\Repositories\Photo\Criterias\IsPublished;
+use Core\DAL\Repositories\Photo\Criterias\WhereSearchQuery;
+use Core\DAL\Repositories\Photo\Criterias\WhereTag;
+use Core\DAL\Repositories\Photo\PhotoRepository;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Lib\Repositories\Criterias\OrderBy;
+use Lib\Repositories\Criterias\Skip;
+use Lib\Repositories\Criterias\Take;
+use Throwable;
 
 /**
  * Class PublishedPhotoController.
@@ -101,11 +107,11 @@ class PublishedPhotoController extends ResourceController
      */
     public function create(CreatePhoto $request) : Photo
     {
-        $photo = $this->photoRepository->getUploadedPhotoById($request->get('uploaded_photo_id'));
+        $photo = $this->photoRepository->getById($request->get('photo_id'));
 
         $photo->setIsPublishedAttribute(true);
 
-        $this->photoRepository->savePublishedPhoto($photo, $request->all());
+        $this->photoRepository->save($photo, $request->all(), ['tags']);
 
         return $photo;
     }
@@ -228,12 +234,14 @@ class PublishedPhotoController extends ResourceController
      */
     public function find(FindPhoto $request) : Collection
     {
-        $photos = $this->photoRepository->findPublishedPhotos(
-            $request->get('take'),
-            $request->get('skip'),
-            $request->get('query'),
-            $request->get('tag')
-        );
+        $photos = $this->photoRepository
+            ->pushCriteria(new IsPublished)
+            ->pushCriteria($request->has('tag') ? new WhereTag($request->get('tag')) : null)
+            ->pushCriteria($request->has('query') ? new WhereSearchQuery($request->get('query')) : null)
+            ->pushCriteria(new Skip($request->get('skip', 0)))
+            ->pushCriteria(new Take($request->get('take', 10)))
+            ->pushCriteria(new OrderBy('created_at', 'desc'))
+            ->getAll();
 
         return $photos;
     }
@@ -300,7 +308,7 @@ class PublishedPhotoController extends ResourceController
      */
     public function update(UpdatePhoto $request, $photo) : Photo
     {
-        $this->photoRepository->savePublishedPhoto($photo, $request->all());
+        $this->photoRepository->save($photo, $request->all(), ['tags']);
 
         return $photo;
     }
@@ -326,6 +334,6 @@ class PublishedPhotoController extends ResourceController
      */
     public function delete($photo) : int
     {
-        return $this->photoRepository->deletePhoto($photo);
+        return $this->photoRepository->delete($photo);
     }
 }

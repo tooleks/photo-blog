@@ -4,6 +4,11 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * Class AppServiceProvider.
+ *
+ * @package App\Providers
+ */
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -28,16 +33,7 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(
             \Lib\ExifFetcher\Contracts\ExifFetcher::class,
-            \Lib\ExifFetcher\ExifFetcher::class);
-
-        $this->app->bind(
-            \Core\DAL\Repositories\Contracts\PhotoRepository::class,
-            \Core\DAL\Repositories\PhotoRepository::class
-        );
-
-        $this->app->bind(
-            \Core\DAL\Repositories\Contracts\UserRepository::class,
-            \Core\DAL\Repositories\UserRepository::class
+            \Lib\ExifFetcher\ExifFetcher::class
         );
     }
 }

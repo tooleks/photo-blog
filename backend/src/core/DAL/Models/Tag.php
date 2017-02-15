@@ -18,7 +18,9 @@ class Tag extends Model
     /**
      * @inheritdoc
      */
-    protected $fillable = ['text'];
+    protected $fillable = [
+        'text',
+    ];
 
     /**
      * @inheritdoc
@@ -28,11 +30,14 @@ class Tag extends Model
     /**
      * Setter for the 'text' attribute.
      *
-     * @param string $value
+     * @param string $text
+     * @return $this
      */
-    public function setTextAttribute($value)
+    public function setTextAttribute($text)
     {
-        $this->attributes['text'] = strtolower($value);
+        $this->attributes['text'] = strtolower($text);
+
+        return $this;
     }
 
     /**

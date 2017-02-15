@@ -29,7 +29,7 @@ class CreatePhoto extends FormRequest
     public function rules()
     {
         return [
-            'uploaded_photo_id' => ['required', 'filled', 'integer'],
+            'photo_id' => ['required', 'filled', 'integer'],
             'description' => ['required', 'filled', 'string', 'min:1', 'max:65535'],
             'tags' => ['required', 'filled', 'array'],
             'tags.*.text' => ['required', 'filled', 'string', 'min:1', 'max:255'],
