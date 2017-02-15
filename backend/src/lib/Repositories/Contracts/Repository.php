@@ -17,6 +17,14 @@ interface Repository
     public function getModelClass() : string;
 
     /**
+     * Relations that will be loaded.
+     *
+     * @param array $relations
+     * @return $this
+     */
+    public function withRelations(array $relations);
+
+    /**
      * Push search query criteria.
      *
      * @param Criteria|null $criteria

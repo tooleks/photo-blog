@@ -121,6 +121,18 @@ abstract class Repository implements RepositoryContract
     /**
      * @inheritdoc
      */
+    public function withRelations(array $relations)
+    {
+        foreach ($relations as $relationName) {
+            $this->query = $this->query->with($relationName);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function pushCriteria($criteria)
     {
         if ($criteria instanceof Criteria) {
