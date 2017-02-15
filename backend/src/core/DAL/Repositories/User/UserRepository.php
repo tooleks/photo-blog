@@ -82,6 +82,10 @@ class UserRepository extends Repository
             throw new ValidationException($validator);
         }
 
+        if ($model->getOriginal('password') !== $model->password) {
+            $model->password = $this->hasher->make($model->password);
+        }
+
         parent::save($model, $attributes, $relations);
     }
 }
