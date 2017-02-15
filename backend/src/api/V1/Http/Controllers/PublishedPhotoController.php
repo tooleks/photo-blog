@@ -48,9 +48,9 @@ class PublishedPhotoController extends ResourceController
 
     /**
      * @apiVersion 1.0.0
-     * @api {post} /v1/photo Create
+     * @api {post} /v1/published_photos Create
      * @apiName Create
-     * @apiGroup Photo
+     * @apiGroup Published Photos
      * @apiHeader {String} Accept application/json
      * @apiHeader {String} Content-type application/json
      * @apiParam {Integer{1..N}} uploaded_photo_id Unique resource ID.
@@ -118,9 +118,9 @@ class PublishedPhotoController extends ResourceController
 
     /**
      * @apiVersion 1.0.0
-     * @api {get} /v1/photo/:id Get
+     * @api {get} /v1/published_photos/:id Get
      * @apiName Get
-     * @apiGroup Photo
+     * @apiGroup Published Photos
      * @apiHeader {String} Accept application/json
      * @apiParam {Integer{1..N}} :id Unique resource ID.
      * @apiSuccessExample {json} Success-Response:
@@ -177,9 +177,9 @@ class PublishedPhotoController extends ResourceController
 
     /**
      * @apiVersion 1.0.0
-     * @api {get} /v1/photo Get Collection
-     * @apiName Get Collection
-     * @apiGroup Photo
+     * @api {get} /v1/published_photos Find
+     * @apiName Find
+     * @apiGroup Published Photos
      * @apiHeader {String} Accept application/json
      * @apiParam {Integer{1..100}} take
      * @apiParam {Integer{0..N}} skip
@@ -248,9 +248,9 @@ class PublishedPhotoController extends ResourceController
 
     /**
      * @apiVersion 1.0.0
-     * @api {put} /v1/photo/:id Update
+     * @api {put} /v1/published_photos/:id Update
      * @apiName Update
-     * @apiGroup Photo
+     * @apiGroup Published Photos
      * @apiHeader {String} Accept application/json
      * @apiHeader {String} Content-type application/json
      * @apiParam {Integer{1..N}} :id Unique resource ID.
@@ -315,9 +315,9 @@ class PublishedPhotoController extends ResourceController
 
     /**
      * @apiVersion 1.0.0
-     * @api {delete} /v1/photo/:id Delete
+     * @api {delete} /v1/published_photos/:id Delete
      * @apiName Delete
-     * @apiGroup Photo
+     * @apiGroup Published Photos
      * @apiHeader {String} Accept application/json
      * @apiParam {Integer{1..N}} :id Unique resource ID.
      * @apiSuccessExample {json} Success-Response:

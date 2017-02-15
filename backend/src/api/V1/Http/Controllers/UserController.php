@@ -39,9 +39,9 @@ class UserController extends ResourceController
 
     /**
      * @apiVersion 1.0.0
-     * @api {post} /v1/user Create
+     * @api {post} /v1/users Create
      * @apiName Create
-     * @apiGroup User
+     * @apiGroup Users
      * @apiHeader {String} Accept application/json
      * @apiHeader {String} Content-type application/json
      * @apiParam {String{1..255}} name User name.
@@ -81,9 +81,9 @@ class UserController extends ResourceController
 
     /**
      * @apiVersion 1.0.0
-     * @api {get} /v1/user/:id Get
+     * @api {get} /v1/users/:id Get
      * @apiName Get
-     * @apiGroup User
+     * @apiGroup Users
      * @apiHeader {String} Accept application/json
      * @apiParam {Integer{1..N}} :id Unique resource ID.
      * @apiSuccessExample {json} Success-Response:
@@ -112,9 +112,9 @@ class UserController extends ResourceController
 
     /**
      * @apiVersion 1.0.0
-     * @api {put} /v1/user/:id Update
+     * @api {put} /v1/users/:id Update
      * @apiName Update
-     * @apiGroup User
+     * @apiGroup Users
      * @apiHeader {String} Accept application/json
      * @apiHeader {String} Content-type application/json
      * @apiParam {Integer{1..N}} :id Unique resource ID.
@@ -154,9 +154,9 @@ class UserController extends ResourceController
 
     /**
      * @apiVersion 1.0.0
-     * @api {delete} /v1/user/:id Delete
+     * @api {delete} /v1/users/:id Delete
      * @apiName Delete
-     * @apiGroup User
+     * @apiGroup Users
      * @apiHeader {String} Accept application/json
      * @apiParam {Integer{1..N}} :id Unique resource ID.
      * @apiSuccessExample {json} Success-Response:

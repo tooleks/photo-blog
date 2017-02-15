@@ -48,9 +48,9 @@ class DeleteNotPublishedPhotosOlderThanWeek extends Command
      */
     public function handle()
     {
-        Photo::withTags()
-            ->withThumbnails()
-            ->whereIsPublished(false)
+        Photo::with('tags')
+            ->with('thumbnails')
+            ->where('is_published', false)
             ->where('updated_at', '<', (new Carbon())->addWeek('-1'))
             ->chunk(500, function ($photos) {
                 foreach ($photos as $photo) {
