@@ -39,9 +39,9 @@ class PhotoController extends ResourceController
 
     /**
      * @apiVersion 1.0.0
-     * @api {post} /v1/uploaded_photo Create
+     * @api {post} /v1/photos Create
      * @apiName Create
-     * @apiGroup Uploaded Photo
+     * @apiGroup Photos
      * @apiHeader {String} Accept application/json
      * @apiHeader {String} Content-type multipart/form-data
      * @apiParam {File{1KB..20MB}=JPEG,PNG} file Photo file.
@@ -96,9 +96,9 @@ class PhotoController extends ResourceController
 
     /**
      * @apiVersion 1.0.0
-     * @api {get} /v1/uploaded_photo/:id Get
+     * @api {get} /v1/photos/:id Get
      * @apiName Get
-     * @apiGroup Uploaded Photo
+     * @apiGroup Photos
      * @apiHeader {String} Accept application/json
      * @apiParam {Integer{1..N}} :id Unique resource ID.
      * @apiSuccessExample {json} Success-Response:
@@ -146,9 +146,9 @@ class PhotoController extends ResourceController
 
     /**
      * @apiVersion 1.0.0
-     * @api {post} /v1/uploaded_photo/:id Update
+     * @api {post} /v1/photos/:id Update
      * @apiName Update
-     * @apiGroup Uploaded Photo
+     * @apiGroup Photos
      * @apiHeader {String} Accept application/json
      * @apiHeader {String} Content-type multipart/form-data
      * @apiParam {Integer{1..N}} :id Unique resource ID.
@@ -201,9 +201,9 @@ class PhotoController extends ResourceController
 
     /**
      * @apiVersion 1.0.0
-     * @api {delete} /v1/uploaded_photo/:id Delete
+     * @api {delete} /v1/photos/:id Delete
      * @apiName Delete
-     * @apiGroup Uploaded Photo
+     * @apiGroup Photos
      * @apiHeader {String} Accept application/json
      * @apiParam {Integer{1..N}} :id Unique resource ID.
      * @apiSuccessExample {json} Success-Response:
