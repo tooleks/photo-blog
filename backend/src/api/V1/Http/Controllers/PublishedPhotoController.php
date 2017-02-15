@@ -177,8 +177,8 @@ class PublishedPhotoController extends ResourceController
 
     /**
      * @apiVersion 1.0.0
-     * @api {get} /v1/published_photos Get Collection
-     * @apiName Get Collection
+     * @api {get} /v1/published_photos Find
+     * @apiName Find
      * @apiGroup Published Photos
      * @apiHeader {String} Accept application/json
      * @apiParam {Integer{1..100}} take
