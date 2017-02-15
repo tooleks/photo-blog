@@ -31,22 +31,22 @@ class Role extends Model
     /**
      * Scope a query to only include 'Administrator' role name.
      *
-     * @param Builder $query
+     * @param Builder $queryBuilder
      * @return Builder
      */
-    public function scopeAdministrator($query)
+    public function scopeAdministrator($queryBuilder)
     {
-        return $query->where('name', static::NAME_ADMINISTRATOR);
+        return $queryBuilder->where('name', static::NAME_ADMINISTRATOR);
     }
 
     /**
      * Scope a query to only include 'Customer' role name.
      *
-     * @param Builder $query
+     * @param Builder $queryBuilder
      * @return Builder
      */
-    public function scopeCustomer($query)
+    public function scopeCustomer($queryBuilder)
     {
-        return $query->where('name', static::NAME_CUSTOMER);
+        return $queryBuilder->where('name', static::NAME_CUSTOMER);
     }
 }
