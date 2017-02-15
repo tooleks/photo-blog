@@ -74,21 +74,21 @@ class PhotoRepository implements PhotoRepositoryContract
      */
     public function findPublishedPhotos(int $take, int $skip, $searchQuery = null, $tag = null) : Collection
     {
-        $query = Photo::whereIsUploaded()
+        $queryBuilder = Photo::whereIsUploaded()
             ->whereIsPublished(true)
             ->take($take)
             ->skip($skip)
             ->orderBy('created_at', 'desc');
 
         if (!is_null($searchQuery)) {
-            $query = $query->whereSearchQuery($searchQuery);
+            $queryBuilder = $queryBuilder->whereSearchQuery($searchQuery);
         }
 
         if (!is_null($tag)) {
-            $query = $query->whereTag($tag);
+            $queryBuilder = $queryBuilder->whereTag($tag);
         }
 
-        $photos = $query->get();
+        $photos = $queryBuilder->get();
 
         return $photos;
     }

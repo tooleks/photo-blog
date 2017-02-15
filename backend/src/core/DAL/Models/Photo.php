@@ -182,13 +182,13 @@ class Photo extends Model
     /**
      * Scope a query to include only photos that have 'path' and 'relative_url' attributes.
      *
-     * @param Builder $query
+     * @param Builder $queryBuilder
      * @return Builder
      */
-    public function scopeWhereIsUploaded($query)
+    public function scopeWhereIsUploaded($queryBuilder)
     {
-        return $query->orWhere(function ($query) {
-            $query
+        return $queryBuilder->orWhere(function ($queryBuilder) {
+            $queryBuilder
                 ->whereNotNull('photos.path')
                 ->whereNotNull('photos.relative_url');
         });
@@ -197,13 +197,13 @@ class Photo extends Model
     /**
      * Scope a query to include only published photos.
      *
-     * @param Builder $query
+     * @param Builder $queryBuilder
      * @param bool $isPublished
      * @return Builder
      */
-    public function scopeWhereIsPublished($query, $isPublished)
+    public function scopeWhereIsPublished($queryBuilder, $isPublished)
     {
-        return $query->where('photos.is_published', $isPublished);
+        return $queryBuilder->where('photos.is_published', $isPublished);
     }
 
     /**
