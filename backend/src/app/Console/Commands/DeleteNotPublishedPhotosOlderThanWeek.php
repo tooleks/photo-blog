@@ -10,7 +10,6 @@ use Illuminate\Contracts\Filesystem\Filesystem;
 /**
  * Class DeleteNotPublishedPhotosOlderThanWeek.
  *
- * @property Photo photoModel
  * @property Filesystem fileSystem
  * @package App\Console\Commands
  */
@@ -33,14 +32,12 @@ class DeleteNotPublishedPhotosOlderThanWeek extends Command
     /**
      * Create a new command instance.
      *
-     * @param Photo $photoModel
      * @param Filesystem $fileSystem
      */
-    public function __construct(Photo $photoModel, Filesystem $fileSystem)
+    public function __construct(Filesystem $fileSystem)
     {
         parent::__construct();
 
-        $this->photoModel = $photoModel;
         $this->fileSystem = $fileSystem;
     }
 
@@ -51,8 +48,7 @@ class DeleteNotPublishedPhotosOlderThanWeek extends Command
      */
     public function handle()
     {
-        $this->photoModel
-            ->withTags()
+        Photo::withTags()
             ->withThumbnails()
             ->whereIsPublished(false)
             ->where('updated_at', '<', (new Carbon())->addWeek('-1'))
