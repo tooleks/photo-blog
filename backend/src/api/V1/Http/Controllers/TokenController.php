@@ -4,7 +4,7 @@ namespace Api\V1\Http\Controllers;
 
 use Api\V1\Http\Requests\CreateToken;
 use Core\DAL\Models\User;
-use Core\DAL\Repositories\Contracts\UserRepository;
+use Core\DAL\Repositories\User\UserRepository;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 
@@ -62,11 +62,11 @@ class TokenController extends ResourceController
      */
     public function create(CreateToken $request) : User
     {
-        $user = $this->userRepository->getUserByCredentials($request->get('email'), $request->get('password'));
+        $user = $this->userRepository->getByCredentials($request->get('email'), $request->get('password'));
 
         $user->generateApiToken();
 
-        $this->userRepository->saveUser($user);
+        $this->userRepository->save($user);
 
         $this->guard->setUser($user);
 

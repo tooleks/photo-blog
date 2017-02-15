@@ -5,7 +5,7 @@ namespace Api\V1\Http\Controllers;
 use Api\V1\Http\Requests\CreateUser;
 use Api\V1\Http\Requests\UpdateUser;
 use Core\DAL\Models\User;
-use Core\DAL\Repositories\Contracts\UserRepository;
+use Core\DAL\Repositories\User\UserRepository;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 
@@ -74,7 +74,7 @@ class UserController extends ResourceController
             ->generateApiToken()
             ->setCustomerRole();
 
-        $this->userRepository->saveUser($user, $request->all());
+        $this->userRepository->save($user, $request->all());
 
         return $user;
     }
@@ -147,7 +147,7 @@ class UserController extends ResourceController
             $user->setPassword($request->get('password'));
         }
 
-        $this->userRepository->saveUser($user, $request->all());
+        $this->userRepository->save($user, $request->all());
 
         return $user;
     }
@@ -173,6 +173,6 @@ class UserController extends ResourceController
      */
     public function delete($user) : int
     {
-        return $this->userRepository->deleteUser($user);
+        return $this->userRepository->delete($user);
     }
 }

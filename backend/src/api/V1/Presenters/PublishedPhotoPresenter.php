@@ -6,7 +6,7 @@ use Illuminate\Support\Collection;
 use Tooleks\Laravel\Presenter\Presenter;
 
 /**
- * Class UploadedPhotoPresenter.
+ * Class PublishedPhotoPresenter.
  *
  * @property int id
  * @property int user_id
@@ -14,9 +14,10 @@ use Tooleks\Laravel\Presenter\Presenter;
  * @property string created_at
  * @property string updated_at
  * @property Collection thumbnails
+ * @property Collection tags
  * @package Api\V1\Presenters
  */
-class UploadedPhotoPresenter extends Presenter
+class PublishedPhotoPresenter extends Presenter
 {
     /**
      * @inheritdoc
@@ -31,6 +32,7 @@ class UploadedPhotoPresenter extends Presenter
                     ? url(config('app.url')) . $this->getPresenteeAttribute('relative_url')
                     : null;
             },
+            'description' => 'description',
             'created_at' => function () : string {
                 return $this->getPresenteeAttribute('created_at') ?? null;
             },
@@ -46,6 +48,10 @@ class UploadedPhotoPresenter extends Presenter
                     'medium' => new ThumbnailPresenter($thumbnails->get(0, [])),
                     'large' => new ThumbnailPresenter($thumbnails->get(1, [])),
                 ];
+            },
+            'tags' => function () {
+                $tags = collect($this->getPresenteeAttribute('tags'));
+                return $tags->present(TagPresenter::class);
             },
         ];
     }

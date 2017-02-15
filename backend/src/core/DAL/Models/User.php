@@ -38,7 +38,9 @@ class User extends Authenticatable
     /**
      * @inheritdoc
      */
-    protected $with = ['role'];
+    protected $with = [
+        'role',
+    ];
 
     /**
      * @inheritdoc

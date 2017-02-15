@@ -5,13 +5,13 @@ namespace Api\V1\Providers;
 use Api\V1\Http\Controllers\{
     PublishedPhotoController,
     TokenController,
-    UploadedPhotoController,
+    PhotoController,
     UserController
 };
 use Api\V1\Presenters\{
-    PhotoPresenter,
+    PublishedPhotoPresenter,
     TokenPresenter,
-    UploadedPhotoPresenter,
+    PhotoPresenter,
     UserPresenter
 };
 use Illuminate\Support\ServiceProvider;
@@ -50,13 +50,13 @@ class ApiServiceProvider extends ServiceProvider
             ->give(UserPresenter::class);
 
         $this->app
-            ->when(UploadedPhotoController::class)
+            ->when(PhotoController::class)
             ->needs('$presenterClass')
-            ->give(UploadedPhotoPresenter::class);
+            ->give(PhotoPresenter::class);
 
         $this->app
             ->when(PublishedPhotoController::class)
             ->needs('$presenterClass')
-            ->give(PhotoPresenter::class);
+            ->give(PublishedPhotoPresenter::class);
     }
 }

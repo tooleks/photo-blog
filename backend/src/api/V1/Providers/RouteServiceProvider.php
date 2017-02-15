@@ -2,8 +2,7 @@
 
 namespace Api\V1\Providers;
 
-use Core\DAL\Models\Photo;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Core\DAL\Repositories\Photo\Criterias\IsPublished;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
 
@@ -56,15 +55,19 @@ class RouteServiceProvider extends ServiceProvider
     public function registerModelBindings()
     {
         Route::bind('published_photo', function ($id) {
-            return $this->app->make(\Core\DAL\Repositories\Contracts\PhotoRepository::class)->getPublishedPhotoById($id);
+            return $this->app->make(\Core\DAL\Repositories\Photo\PhotoRepository::class)
+                ->pushCriteria(new IsPublished)
+                ->getById($id);
         });
 
-        Route::bind('uploaded_photo', function ($id) {
-            return $this->app->make(\Core\DAL\Repositories\Contracts\PhotoRepository::class)->getUploadedPhotoById($id);
+        Route::bind('photo', function ($id) {
+            return $this->app->make(\Core\DAL\Repositories\Photo\PhotoRepository::class)
+                ->getById($id);
         });
 
         Route::bind('user', function ($id) {
-            return $this->app->make(\Core\DAL\Repositories\Contracts\UserRepository::class)->getUserById($id);
+            return $this->app->make(\Core\DAL\Repositories\User\UserRepository::class)
+                ->getById($id);
         });
     }
 }

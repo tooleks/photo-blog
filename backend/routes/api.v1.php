@@ -48,7 +48,7 @@ Route::group(['prefix' => 'token'], function () {
 | User Resource Routes
 |--------------------------------------------------------------------------
 */
-Route::group(['prefix' => 'user'], function () {
+Route::group(['prefix' => 'users'], function () {
 
     Route::post('/')
         ->uses('UserController@create')
@@ -73,30 +73,30 @@ Route::group(['prefix' => 'user'], function () {
 | Uploaded Photo Resource Routes
 |--------------------------------------------------------------------------
 */
-Route::group(['prefix' => 'uploaded_photo'], function () {
+Route::group(['prefix' => 'photos'], function () {
 
     Route::post('/')
-        ->uses('UploadedPhotoController@create')
+        ->uses('PhotoController@create')
         ->middleware('can:create-resource,' . Photo::class)
         ->middleware(AppendUserId::class)
         ->middleware(FetchExifData::class)
         ->middleware(UploadPhotoFile::class)
         ->middleware(GenerateThumbnails::class);
 
-    Route::get('/{uploaded_photo}')
-        ->uses('UploadedPhotoController@get')
-        ->middleware('can:get-resource,uploaded_photo');
+    Route::get('/{photo}')
+        ->uses('PhotoController@get')
+        ->middleware('can:get-resource,photo');
 
-    Route::post('/{uploaded_photo}')
-        ->uses('UploadedPhotoController@update')
-        ->middleware('can:update-resource,uploaded_photo')
+    Route::post('/{photo}')
+        ->uses('PhotoController@update')
+        ->middleware('can:update-resource,photo')
         ->middleware(FetchExifData::class)
         ->middleware(UploadPhotoFile::class)
         ->middleware(GenerateThumbnails::class);
 
-    Route::delete('/{uploaded_photo}')
-        ->uses('UploadedPhotoController@delete')
-        ->middleware('can:delete-resource,uploaded_photo')
+    Route::delete('/{photo}')
+        ->uses('PhotoController@delete')
+        ->middleware('can:delete-resource,photo')
         ->middleware(DeletePhotoDirectory::class);
 
 });
@@ -106,7 +106,7 @@ Route::group(['prefix' => 'uploaded_photo'], function () {
 | Photo Resource Routes
 |--------------------------------------------------------------------------
 */
-Route::group(['prefix' => 'photo'], function () {
+Route::group(['prefix' => 'published_photos'], function () {
 
     Route::post('/')
         ->uses('PublishedPhotoController@create')
@@ -120,10 +120,10 @@ Route::group(['prefix' => 'photo'], function () {
 
     Route::put('/{published_photo}')
         ->uses('PublishedPhotoController@update')
-        ->middleware('can:update-resource,photo');
+        ->middleware('can:update-resource,published_photo');
 
     Route::delete('/{published_photo}')
         ->uses('PublishedPhotoController@delete')
-        ->middleware('can:delete-resource,photo');
+        ->middleware('can:delete-resource,published_photo');
 
 });
