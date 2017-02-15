@@ -51,10 +51,9 @@ interface Repository
      *
      * @param mixed $model
      * @param array $attributes
-     * @param array $relations
      * @return mixed
      */
-    public function save($model, array $attributes = [], array $relations = []);
+    public function save($model, array $attributes = []);
 
     /**
      * Delete model.

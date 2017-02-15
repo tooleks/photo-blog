@@ -68,7 +68,7 @@ class UserRepository extends Repository
     /**
      * @inheritdoc
      */
-    public function save($model, array $attributes = [], array $relations = [])
+    public function save($model, array $attributes = [])
     {
         $this->assertModel($model);
 
