@@ -32,13 +32,11 @@ $factory->define(\Core\DAL\Models\Photo::class, function (Faker\Generator $faker
     ];
 });
 
-
 $factory->define(\Core\DAL\Models\Tag::class, function (Faker\Generator $faker) {
     return [
         'text' => $faker->word,
     ];
 });
-
 
 $factory->define(\Core\DAL\Models\Thumbnail::class, function (Faker\Generator $faker) {
     return [
