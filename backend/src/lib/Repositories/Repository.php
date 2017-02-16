@@ -225,7 +225,7 @@ abstract class Repository implements RepositoryContract
     /**
      * @inheritdoc
      */
-    public function save($model, array $attributes = [], array $relationNames = [])
+    public function save($model, array $attributes = [], array $relations = [])
     {
         $this->assertModel($model);
 
@@ -234,7 +234,7 @@ abstract class Repository implements RepositoryContract
         try {
             $this->dbConnection->beginTransaction();
             $model->save();
-            $this->saveModelRelations($model, $attributes, $relationNames);
+            $this->saveModelRelations($model, $attributes, $relations);
             $this->dbConnection->commit();
         } catch (Throwable $e) {
             $this->dbConnection->rollBack();
@@ -247,12 +247,12 @@ abstract class Repository implements RepositoryContract
      *
      * @param mixed $model
      * @param array $attributes
-     * @param array $relationNames
+     * @param array $relations
      * @return void
      */
-    protected function saveModelRelations($model, array $attributes, array $relationNames)
+    protected function saveModelRelations($model, array $attributes, array $relations)
     {
-        foreach ($relationNames as $relationName) {
+        foreach ($relations as $relationName) {
             if (method_exists($model, $relationName)) {
                 $relation = $model->{$relationName}();
                 if ($relation instanceof BelongsToMany || $relation instanceof HasMany) {

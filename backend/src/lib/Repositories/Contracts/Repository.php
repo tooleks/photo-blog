@@ -66,10 +66,10 @@ interface Repository
      *
      * @param mixed $model
      * @param array $attributes
-     * @param array $relationNames
+     * @param array $relations
      * @return mixed
      */
-    public function save($model, array $attributes = [], array $relationNames = []);
+    public function save($model, array $attributes = [], array $relations = []);
 
     /**
      * Delete model.
