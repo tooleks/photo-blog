@@ -37,9 +37,21 @@ class DeletePhotoDirectory
         $response = $next($request);
 
         if ($response->status() === 200) {
-//            $this->fileSystem->deleteDirectory($request->photo->directory_path);
+            $this->deletePhotoDirectory($request->photo->directory_path ?? $request->published_photo->directory_path ?? null);
         }
 
         return $response;
+    }
+
+    /**
+     * Delete photo directory.
+     *
+     * @param string|null $directoryPath
+     */
+    public function deletePhotoDirectory($directoryPath)
+    {
+        if (!is_null($directoryPath)) {
+            $this->fileSystem->deleteDirectory($directoryPath);
+        }
     }
 }
