@@ -5,14 +5,14 @@ namespace Api\V1\Http\Controllers;
 use Api\V1\Http\Requests\CreateUser;
 use Api\V1\Http\Requests\UpdateUser;
 use Core\DAL\Models\User;
-use Core\DAL\Repositories\User\UserRepository;
+use Core\DAL\DataService\User\Contracts\UserDataService;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 
 /**
  * Class UserController.
  *
- * @property UserRepository userRepository
+ * @property UserDataService userDataService
  * @package Api\V1\Http\Controllers
  */
 class UserController extends ResourceController
@@ -23,18 +23,18 @@ class UserController extends ResourceController
      * @param Request $request
      * @param Guard $guard
      * @param string $presenterClass
-     * @param UserRepository $userRepository
+     * @param UserDataService $userDataService
      */
     public function __construct(
         Request $request,
         Guard $guard,
         string $presenterClass,
-        UserRepository $userRepository
+        UserDataService $userDataService
     )
     {
         parent::__construct($request, $guard, $presenterClass);
 
-        $this->userRepository = $userRepository;
+        $this->userDataService = $userDataService;
     }
 
     /**
@@ -74,7 +74,7 @@ class UserController extends ResourceController
             ->generateApiToken()
             ->setCustomerRole();
 
-        $this->userRepository->save($user, $request->all());
+        $this->userDataService->save($user, $request->all());
 
         return $user;
     }
@@ -147,7 +147,7 @@ class UserController extends ResourceController
             $user->setPassword($request->get('password'));
         }
 
-        $this->userRepository->save($user, $request->all());
+        $this->userDataService->save($user, $request->all());
 
         return $user;
     }
@@ -173,6 +173,6 @@ class UserController extends ResourceController
      */
     public function delete($user) : int
     {
-        return $this->userRepository->delete($user);
+        return $this->userDataService->delete($user);
     }
 }

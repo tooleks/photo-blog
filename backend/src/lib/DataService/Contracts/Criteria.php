@@ -1,11 +1,11 @@
 <?php
 
-namespace Lib\Repositories\Contracts;
+namespace Lib\DataService\Contracts;
 
 /**
  * Interface Criteria.
  *
- * @package Lib\Repositories\Contracts
+ * @package Lib\DataService\Contracts
  */
 interface Criteria
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Lib\Repositories;
+namespace Lib\DataService;
 
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -8,21 +8,19 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
-use Lib\Repositories\Contracts\Criteria;
-use Lib\Repositories\Contracts\Repository as RepositoryContract;
-use Lib\Repositories\Exceptions\RepositoryException;
-use Lib\Repositories\Exceptions\RepositoryNotFoundException;
+use Lib\DataService\Contracts\Criteria;
+use Lib\DataService\Contracts\DataService as DataServiceContract;
+use Lib\DataService\Exceptions\DataServiceException;
+use Lib\DataService\Exceptions\DataServiceNotFoundException;
 use Throwable;
 
 /**
- * Class Repository.
- *
- * Something that looks like repository. =)
+ * Class DataService.
  *
  * @property ConnectionInterface dbConnection
- * @package Lib\Repositories
+ * @package Lib\DataService
  */
-abstract class Repository implements RepositoryContract
+abstract class DataService implements DataServiceContract
 {
     /**
      * Model class instance.
@@ -39,14 +37,14 @@ abstract class Repository implements RepositoryContract
     protected $query;
 
     /**
-     * Search query criterias.
+     * Query criterias.
      *
      * @var array
      */
     protected $criterias;
 
     /**
-     * Repository constructor.
+     * DataService constructor.
      *
      * @param ConnectionInterface $dbConnection
      */
@@ -62,7 +60,7 @@ abstract class Repository implements RepositoryContract
      *
      * @return void
      */
-    protected function resetModel()
+    private function resetModel()
     {
         $modelClass = $this->getModelClass();
 
@@ -74,23 +72,23 @@ abstract class Repository implements RepositoryContract
      *
      * @return void
      */
-    protected function resetQuery()
+    private function resetQuery()
     {
         $this->query = $this->model->newQuery();
     }
 
     /**
-     * Reset search query criterias.
+     * Reset query criterias.
      *
      * @return void
      */
-    protected function resetCriterias()
+    private function resetCriterias()
     {
         $this->criterias = [];
     }
 
     /**
-     * Reset repository to initial state.
+     * Reset data service to initial state.
      *
      * @return void
      */
@@ -107,7 +105,7 @@ abstract class Repository implements RepositoryContract
     abstract public function getModelClass() : string;
 
     /**
-     * Apply search criterias to the model query class instance.
+     * Apply query criterias to the model query class instance.
      *
      * @return void
      */
@@ -154,7 +152,7 @@ abstract class Repository implements RepositoryContract
         $this->reset();
 
         if (is_null($model)) {
-            throw new RepositoryNotFoundException(sprintf('%s not found.', class_basename($this->getModelClass())));
+            throw new DataServiceNotFoundException(sprintf('%s not found.', class_basename($this->getModelClass())));
         }
 
         return $model;
@@ -172,7 +170,7 @@ abstract class Repository implements RepositoryContract
         $this->reset();
 
         if (is_null($model)) {
-            throw new RepositoryNotFoundException(sprintf('%s not found.', class_basename($this->getModelClass())));
+            throw new DataServiceNotFoundException(sprintf('%s not found.', class_basename($this->getModelClass())));
         }
 
         return $model;
@@ -210,7 +208,7 @@ abstract class Repository implements RepositoryContract
      * Assert model.
      *
      * @param mixed $model
-     * @throws RepositoryException
+     * @throws DataServiceException
      * @return void
      */
     protected function assertModel($model)
@@ -218,14 +216,14 @@ abstract class Repository implements RepositoryContract
         $modelClass = $this->getModelClass();
 
         if (!($model instanceof $modelClass)) {
-            throw new RepositoryException(sprintf('Model must be a %s type.', $modelClass));
+            throw new DataServiceException(sprintf('Model must be a %s type.', $modelClass));
         }
     }
 
     /**
      * @inheritdoc
      */
-    public function save($model, array $attributes = [], array $relationNames = [])
+    public function save($model, array $attributes = [], array $relations = [])
     {
         $this->assertModel($model);
 
@@ -234,7 +232,7 @@ abstract class Repository implements RepositoryContract
         try {
             $this->dbConnection->beginTransaction();
             $model->save();
-            $this->saveModelRelations($model, $attributes, $relationNames);
+            $this->saveModelRelations($model, $attributes, $relations);
             $this->dbConnection->commit();
         } catch (Throwable $e) {
             $this->dbConnection->rollBack();
@@ -247,12 +245,12 @@ abstract class Repository implements RepositoryContract
      *
      * @param mixed $model
      * @param array $attributes
-     * @param array $relationNames
+     * @param array $relations
      * @return void
      */
-    protected function saveModelRelations($model, array $attributes, array $relationNames)
+    protected function saveModelRelations($model, array $attributes, array $relations)
     {
-        foreach ($relationNames as $relationName) {
+        foreach ($relations as $relationName) {
             if (method_exists($model, $relationName)) {
                 $relation = $model->{$relationName}();
                 if ($relation instanceof BelongsToMany || $relation instanceof HasMany) {

@@ -1,13 +1,13 @@
 <?php
 
-namespace Lib\Repositories\Contracts;
+namespace Lib\DataService\Contracts;
 
 /**
- * Interface Repository.
+ * Interface DataService.
  *
- * @package Lib\Repositories\Contracts
+ * @package Lib\DataService\Contracts
  */
-interface Repository
+interface DataService
 {
     /**
      * Get model class.
@@ -25,7 +25,7 @@ interface Repository
     public function withRelations(array $relations);
 
     /**
-     * Push search query criteria.
+     * Push query criteria.
      *
      * @param Criteria|null $criteria
      * @return $this
@@ -66,10 +66,10 @@ interface Repository
      *
      * @param mixed $model
      * @param array $attributes
-     * @param array $relationNames
+     * @param array $relations
      * @return mixed
      */
-    public function save($model, array $attributes = [], array $relationNames = []);
+    public function save($model, array $attributes = [], array $relations = []);
 
     /**
      * Delete model.

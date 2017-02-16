@@ -1,25 +1,26 @@
 <?php
 
-namespace Core\DAL\Repositories\User;
+namespace Core\DAL\DataService\User;
 
+use Core\DAL\DataService\User\Contracts\UserDataService as UserDataServiceContract;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Facades\Validator as ValidatorFactory;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
-use Lib\Repositories\Exceptions\RepositoryNotFoundException;
-use Lib\Repositories\Repository;
+use Lib\DataService\Exceptions\DataServiceNotFoundException;
+use Lib\DataService\DataService;
 
 /**
- * Class UserRepository.
+ * Class UserDataService.
  *
  * @property Hasher hasher
- * @package Core\DAL\Repositories
+ * @package Core\DAL\DataService
  */
-class UserRepository extends Repository
+class UserDataService extends DataService implements UserDataServiceContract
 {
     /**
-     * UserRepository constructor.
+     * UserDataService constructor.
      *
      * @param ConnectionInterface $dbConnection
      * @param Hasher $hasher
@@ -40,11 +41,7 @@ class UserRepository extends Repository
     }
 
     /**
-     * Get user by credentials.
-     *
-     * @param string $email
-     * @param string $password
-     * @return mixed
+     * @inheritdoc
      */
     public function getByCredentials(string $email, string $password)
     {
@@ -55,11 +52,11 @@ class UserRepository extends Repository
         $this->reset();
 
         if (is_null($model)) {
-            throw new RepositoryNotFoundException(sprintf('%s not found.', class_basename($this->getModelClass())));
+            throw new DataServiceNotFoundException(sprintf('%s not found.', class_basename($this->getModelClass())));
         }
 
         if (!$this->hasher->check($password, $model->password)) {
-            throw new RepositoryNotFoundException('Invalid user password.');
+            throw new DataServiceNotFoundException('Invalid user password.');
         }
 
         return $model;
@@ -68,7 +65,7 @@ class UserRepository extends Repository
     /**
      * @inheritdoc
      */
-    public function save($model, array $attributes = [], array $relationNames = [])
+    public function save($model, array $attributes = [], array $relations = [])
     {
         $this->assertModel($model);
 
@@ -86,6 +83,6 @@ class UserRepository extends Repository
             $model->password = $this->hasher->make($model->password);
         }
 
-        parent::save($model, $attributes, $relationNames);
+        parent::save($model, $attributes, $relations);
     }
 }
