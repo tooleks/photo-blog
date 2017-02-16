@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Validation\ValidationException;
-use Lib\Repositories\Exceptions\RepositoryNotFoundException;
+use Lib\DataService\Exceptions\DataServiceNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Debug\Exception\FlattenException;
@@ -30,7 +30,7 @@ class JsonApiHandler extends ExceptionHandler
         \Illuminate\Database\Eloquent\ModelNotFoundException::class,
         \Illuminate\Session\TokenMismatchException::class,
         \Illuminate\Validation\ValidationException::class,
-        \Lib\Repositories\Exceptions\RepositoryNotFoundException::class,
+        \Lib\DataService\Exceptions\DataServiceNotFoundException::class,
     ];
 
     /**
@@ -46,7 +46,7 @@ class JsonApiHandler extends ExceptionHandler
      */
     protected function prepareException(Exception $e)
     {
-        if ($e instanceof ModelNotFoundException || $e instanceof RepositoryNotFoundException) {
+        if ($e instanceof ModelNotFoundException || $e instanceof DataServiceNotFoundException) {
             $e = new NotFoundHttpException($e->getMessage(), $e);
         } elseif ($e instanceof AuthenticationException) {
             $e = new HttpException(401, $e->getMessage());

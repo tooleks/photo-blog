@@ -1,14 +1,14 @@
 <?php
 
-namespace Core\DAL\Repositories\Photo\Criterias;
+namespace Core\DAL\DataService\Photo\Criterias;
 
-use Lib\Repositories\Contracts\Criteria;
+use Lib\DataService\Contracts\Criteria;
 
 /**
  * Class IsPublished.
  *
  * @property bool isPublished
- * @package Core\DAL\Repositories\Photo\Criterias
+ * @package Core\DAL\DataService\Photo\Criterias
  */
 class IsPublished implements Criteria
 {

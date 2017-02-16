@@ -1,13 +1,13 @@
 <?php
 
-namespace Lib\Repositories\Contracts;
+namespace Lib\DataService\Contracts;
 
 /**
- * Interface Repository.
+ * Interface DataService.
  *
- * @package Lib\Repositories\Contracts
+ * @package Lib\DataService\Contracts
  */
-interface Repository
+interface DataService
 {
     /**
      * Get model class.

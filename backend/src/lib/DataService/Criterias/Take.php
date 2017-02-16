@@ -1,14 +1,14 @@
 <?php
 
-namespace Lib\Repositories\Criterias;
+namespace Lib\DataService\Criterias;
 
-use Lib\Repositories\Contracts\Criteria;
+use Lib\DataService\Contracts\Criteria;
 
 /**
  * Class Take.
  *
  * @property int take
- * @package Lib\Repositories\Criterias
+ * @package Lib\DataService\Criterias
  */
 class Take implements Criteria
 {

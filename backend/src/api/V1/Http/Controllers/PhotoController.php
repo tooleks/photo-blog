@@ -5,14 +5,14 @@ namespace Api\V1\Http\Controllers;
 use Api\V1\Http\Requests\CreateUploadedPhoto;
 use Api\V1\Http\Requests\UpdateUploadedPhoto;
 use Core\DAL\Models\Photo;
-use Core\DAL\Repositories\Photo\PhotoRepository;
+use Core\DAL\DataService\Photo\PhotoDataService;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 
 /**
  * Class PhotoController.
  *
- * @property PhotoRepository photoRepository
+ * @property PhotoDataService photoDataService
  * @package Api\V1\Http\Controllers
  */
 class PhotoController extends ResourceController
@@ -23,18 +23,18 @@ class PhotoController extends ResourceController
      * @param Request $request
      * @param Guard $guard
      * @param string $presenterClass
-     * @param PhotoRepository $photoRepository
+     * @param PhotoDataService $photoDataService
      */
     public function __construct(
         Request $request,
         Guard $guard,
         string $presenterClass,
-        PhotoRepository $photoRepository
+        PhotoDataService $photoDataService
     )
     {
         parent::__construct($request, $guard, $presenterClass);
 
-        $this->photoRepository = $photoRepository;
+        $this->photoDataService = $photoDataService;
     }
 
     /**
@@ -89,7 +89,7 @@ class PhotoController extends ResourceController
 
         $photo->setIsPublishedAttribute(false);
 
-        $this->photoRepository->save($photo, $request->all(), ['exif', 'thumbnails']);
+        $this->photoDataService->save($photo, $request->all(), ['exif', 'thumbnails']);
 
         return $photo;
     }
@@ -194,7 +194,7 @@ class PhotoController extends ResourceController
      */
     public function update(UpdateUploadedPhoto $request, $photo) : Photo
     {
-        $this->photoRepository->save($photo, $request->all(), ['exif', 'thumbnails']);
+        $this->photoDataService->save($photo, $request->all(), ['exif', 'thumbnails']);
 
         return $photo;
     }
@@ -220,6 +220,6 @@ class PhotoController extends ResourceController
      */
     public function delete($photo) : int
     {
-        return $this->photoRepository->delete($photo);
+        return $this->photoDataService->delete($photo);
     }
 }

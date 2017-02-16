@@ -1,6 +1,6 @@
 <?php
 
-namespace Lib\Repositories;
+namespace Lib\DataService;
 
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -8,21 +8,19 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
-use Lib\Repositories\Contracts\Criteria;
-use Lib\Repositories\Contracts\Repository as RepositoryContract;
-use Lib\Repositories\Exceptions\RepositoryException;
-use Lib\Repositories\Exceptions\RepositoryNotFoundException;
+use Lib\DataService\Contracts\Criteria;
+use Lib\DataService\Contracts\DataService as DataServiceContract;
+use Lib\DataService\Exceptions\DataServiceException;
+use Lib\DataService\Exceptions\DataServiceNotFoundException;
 use Throwable;
 
 /**
- * Class Repository.
- *
- * Something that looks like repository. =)
+ * Class DataService.
  *
  * @property ConnectionInterface dbConnection
- * @package Lib\Repositories
+ * @package Lib\DataService
  */
-abstract class Repository implements RepositoryContract
+abstract class DataService implements DataServiceContract
 {
     /**
      * Model class instance.
@@ -46,7 +44,7 @@ abstract class Repository implements RepositoryContract
     protected $criterias;
 
     /**
-     * Repository constructor.
+     * DataService constructor.
      *
      * @param ConnectionInterface $dbConnection
      */
@@ -154,7 +152,7 @@ abstract class Repository implements RepositoryContract
         $this->reset();
 
         if (is_null($model)) {
-            throw new RepositoryNotFoundException(sprintf('%s not found.', class_basename($this->getModelClass())));
+            throw new DataServiceNotFoundException(sprintf('%s not found.', class_basename($this->getModelClass())));
         }
 
         return $model;
@@ -172,7 +170,7 @@ abstract class Repository implements RepositoryContract
         $this->reset();
 
         if (is_null($model)) {
-            throw new RepositoryNotFoundException(sprintf('%s not found.', class_basename($this->getModelClass())));
+            throw new DataServiceNotFoundException(sprintf('%s not found.', class_basename($this->getModelClass())));
         }
 
         return $model;
@@ -210,7 +208,7 @@ abstract class Repository implements RepositoryContract
      * Assert model.
      *
      * @param mixed $model
-     * @throws RepositoryException
+     * @throws DataServiceException
      * @return void
      */
     protected function assertModel($model)
@@ -218,7 +216,7 @@ abstract class Repository implements RepositoryContract
         $modelClass = $this->getModelClass();
 
         if (!($model instanceof $modelClass)) {
-            throw new RepositoryException(sprintf('Model must be a %s type.', $modelClass));
+            throw new DataServiceException(sprintf('Model must be a %s type.', $modelClass));
         }
     }
 

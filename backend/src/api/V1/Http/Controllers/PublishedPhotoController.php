@@ -6,22 +6,22 @@ use Api\V1\Http\Requests\CreatePhoto;
 use Api\V1\Http\Requests\FindPhoto;
 use Api\V1\Http\Requests\UpdatePhoto;
 use Core\DAL\Models\Photo;
-use Core\DAL\Repositories\Photo\Criterias\IsPublished;
-use Core\DAL\Repositories\Photo\Criterias\WhereSearchQuery;
-use Core\DAL\Repositories\Photo\Criterias\WhereTag;
-use Core\DAL\Repositories\Photo\PhotoRepository;
+use Core\DAL\DataService\Photo\Criterias\IsPublished;
+use Core\DAL\DataService\Photo\Criterias\WhereSearchQuery;
+use Core\DAL\DataService\Photo\Criterias\WhereTag;
+use Core\DAL\DataService\Photo\PhotoDataService;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Lib\Repositories\Criterias\OrderBy;
-use Lib\Repositories\Criterias\Skip;
-use Lib\Repositories\Criterias\Take;
+use Lib\DataService\Criterias\OrderBy;
+use Lib\DataService\Criterias\Skip;
+use Lib\DataService\Criterias\Take;
 use Throwable;
 
 /**
  * Class PublishedPhotoController.
  *
- * @property PhotoRepository photoRepository
+ * @property PhotoDataService photoDataService
  * @package Api\V1\Http\Controllers
  */
 class PublishedPhotoController extends ResourceController
@@ -32,18 +32,18 @@ class PublishedPhotoController extends ResourceController
      * @param Request $request
      * @param Guard $guard
      * @param string $presenterClass
-     * @param PhotoRepository $photoRepository
+     * @param PhotoDataService $photoDataService
      */
     public function __construct(
         Request $request,
         Guard $guard,
         string $presenterClass,
-        PhotoRepository $photoRepository
+        PhotoDataService $photoDataService
     )
     {
         parent::__construct($request, $guard, $presenterClass);
 
-        $this->photoRepository = $photoRepository;
+        $this->photoDataService = $photoDataService;
     }
 
     /**
@@ -107,13 +107,13 @@ class PublishedPhotoController extends ResourceController
      */
     public function create(CreatePhoto $request) : Photo
     {
-        $photo = $this->photoRepository
+        $photo = $this->photoDataService
             ->pushCriteria(new IsPublished(false))
             ->getById($request->get('photo_id'));
 
         $photo->setIsPublishedAttribute(true);
 
-        $this->photoRepository->save($photo, $request->all(), ['tags']);
+        $this->photoDataService->save($photo, $request->all(), ['tags']);
 
         return $photo;
     }
@@ -236,7 +236,7 @@ class PublishedPhotoController extends ResourceController
      */
     public function find(FindPhoto $request) : Collection
     {
-        $photos = $this->photoRepository
+        $photos = $this->photoDataService
             ->pushCriteria(new IsPublished(true))
             ->pushCriteria($request->has('tag') ? new WhereTag($request->get('tag')) : null)
             ->pushCriteria($request->has('query') ? new WhereSearchQuery($request->get('query')) : null)
@@ -310,7 +310,7 @@ class PublishedPhotoController extends ResourceController
      */
     public function update(UpdatePhoto $request, $photo) : Photo
     {
-        $this->photoRepository->save($photo, $request->all(), ['tags']);
+        $this->photoDataService->save($photo, $request->all(), ['tags']);
 
         return $photo;
     }
@@ -336,6 +336,6 @@ class PublishedPhotoController extends ResourceController
      */
     public function delete($photo) : int
     {
-        return $this->photoRepository->delete($photo);
+        return $this->photoDataService->delete($photo);
     }
 }
