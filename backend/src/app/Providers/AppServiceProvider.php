@@ -35,5 +35,15 @@ class AppServiceProvider extends ServiceProvider
             \Lib\ExifFetcher\Contracts\ExifFetcher::class,
             \Lib\ExifFetcher\ExifFetcher::class
         );
+
+        $this->app->bind(
+            \Core\DAL\DataService\User\Contracts\UserDataService::class,
+            \Core\DAL\DataService\User\UserDataService::class
+        );
+
+        $this->app->bind(
+            \Core\DAL\DataService\Photo\Contracts\PhotoDataService::class,
+            \Core\DAL\DataService\Photo\PhotoDataService::class
+        );
     }
 }

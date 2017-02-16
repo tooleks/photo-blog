@@ -2,6 +2,7 @@
 
 namespace Core\DAL\DataService\User;
 
+use Core\DAL\DataService\User\Contracts\UserDataService as UserDataServiceContract;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Facades\Validator as ValidatorFactory;
@@ -16,7 +17,7 @@ use Lib\DataService\DataService;
  * @property Hasher hasher
  * @package Core\DAL\DataService
  */
-class UserDataService extends DataService
+class UserDataService extends DataService implements UserDataServiceContract
 {
     /**
      * UserDataService constructor.
@@ -40,11 +41,7 @@ class UserDataService extends DataService
     }
 
     /**
-     * Get user by credentials.
-     *
-     * @param string $email
-     * @param string $password
-     * @return mixed
+     * @inheritdoc
      */
     public function getByCredentials(string $email, string $password)
     {

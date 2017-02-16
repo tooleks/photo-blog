@@ -37,7 +37,7 @@ abstract class DataService implements DataServiceContract
     protected $query;
 
     /**
-     * Search query criterias.
+     * Query criterias.
      *
      * @var array
      */
@@ -60,7 +60,7 @@ abstract class DataService implements DataServiceContract
      *
      * @return void
      */
-    protected function resetModel()
+    private function resetModel()
     {
         $modelClass = $this->getModelClass();
 
@@ -72,23 +72,23 @@ abstract class DataService implements DataServiceContract
      *
      * @return void
      */
-    protected function resetQuery()
+    private function resetQuery()
     {
         $this->query = $this->model->newQuery();
     }
 
     /**
-     * Reset search query criterias.
+     * Reset query criterias.
      *
      * @return void
      */
-    protected function resetCriterias()
+    private function resetCriterias()
     {
         $this->criterias = [];
     }
 
     /**
-     * Reset repository to initial state.
+     * Reset data service to initial state.
      *
      * @return void
      */
@@ -105,7 +105,7 @@ abstract class DataService implements DataServiceContract
     abstract public function getModelClass() : string;
 
     /**
-     * Apply search criterias to the model query class instance.
+     * Apply query criterias to the model query class instance.
      *
      * @return void
      */

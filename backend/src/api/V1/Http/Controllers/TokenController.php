@@ -4,7 +4,7 @@ namespace Api\V1\Http\Controllers;
 
 use Api\V1\Http\Requests\CreateToken;
 use Core\DAL\Models\User;
-use Core\DAL\DataService\User\UserDataService;
+use Core\DAL\DataService\User\Contracts\UserDataService;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 

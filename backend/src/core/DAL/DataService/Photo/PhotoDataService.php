@@ -2,6 +2,7 @@
 
 namespace Core\DAL\DataService\Photo;
 
+use Core\DAL\DataService\Photo\Contracts\PhotoDataService as PhotoDataServiceContract;
 use Lib\DataService\DataService;
 
 /**
@@ -9,7 +10,7 @@ use Lib\DataService\DataService;
  *
  * @package Core\DAL\DataService
  */
-class PhotoDataService extends DataService
+class PhotoDataService extends DataService implements PhotoDataServiceContract
 {
     /**
      * @inheritdoc

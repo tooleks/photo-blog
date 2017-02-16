@@ -25,7 +25,7 @@ interface DataService
     public function withRelations(array $relations);
 
     /**
-     * Push search query criteria.
+     * Push query criteria.
      *
      * @param Criteria|null $criteria
      * @return $this

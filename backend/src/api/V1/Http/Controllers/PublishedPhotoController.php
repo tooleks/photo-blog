@@ -9,7 +9,7 @@ use Core\DAL\Models\Photo;
 use Core\DAL\DataService\Photo\Criterias\IsPublished;
 use Core\DAL\DataService\Photo\Criterias\WhereSearchQuery;
 use Core\DAL\DataService\Photo\Criterias\WhereTag;
-use Core\DAL\DataService\Photo\PhotoDataService;
+use Core\DAL\DataService\Photo\Contracts\PhotoDataService;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
