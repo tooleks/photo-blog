@@ -55,18 +55,21 @@ class RouteServiceProvider extends ServiceProvider
     public function registerModelBindings()
     {
         Route::bind('published_photo', function ($id) {
-            return $this->app->make(\Core\DAL\DataService\Photo\PhotoDataService::class)
+            return $this->app
+                ->make(\Core\DAL\DataService\Photo\Contracts\PhotoDataService::class)
                 ->applyCriteria(new IsPublished(true))
                 ->getById($id);
         });
 
         Route::bind('photo', function ($id) {
-            return $this->app->make(\Core\DAL\DataService\Photo\PhotoDataService::class)
+            return $this->app
+                ->make(\Core\DAL\DataService\Photo\Contracts\PhotoDataService::class)
                 ->getById($id);
         });
 
         Route::bind('user', function ($id) {
-            return $this->app->make(\Core\DAL\DataService\User\UserDataService::class)
+            return $this->app
+                ->make(\Core\DAL\DataService\User\Contracts\UserDataService::class)
                 ->getById($id);
         });
     }
