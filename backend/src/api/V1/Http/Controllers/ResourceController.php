@@ -56,12 +56,12 @@ abstract class ResourceController extends Controller
             return $resource->present($this->presenterClass);
         }
 
-        // If resource is arrayable, present it with a presenter class.
-        if ($resource instanceof Arrayable) {
+        // If resource is an object or an array, present it with a presenter class.
+        if (is_object($resource) || is_array($resource)) {
             return new $this->presenterClass($resource);
         }
 
-        // Otherwise, return resource as it.
+        // Otherwise, return resource "as it".
         return $resource;
     }
 
