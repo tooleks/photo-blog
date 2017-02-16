@@ -59,8 +59,9 @@ class UserController extends ResourceController
      *          "role": "Customer"
      *      }
      *  }
-     *
-     *
+     */
+
+    /**
      * Create a user.
      *
      * @param CreateUser $request
@@ -98,8 +99,9 @@ class UserController extends ResourceController
      *          "role": "Customer"
      *      }
      *  }
-     *
-     *
+     */
+
+    /**
      * Get a user.
      *
      * @param User $user
@@ -133,8 +135,9 @@ class UserController extends ResourceController
      *          "role": "Customer"
      *      }
      *  }
-     *
-     *
+     */
+
+    /**
      * Update a user.
      *
      * @param UpdateUser $request
@@ -164,8 +167,9 @@ class UserController extends ResourceController
      *      "status": true,
      *      "data": 1
      *  }
-     *
-     *
+     */
+
+    /**
      * Delete a user.
      *
      * @param User $user
