@@ -124,6 +124,7 @@ Route::group(['prefix' => 'published_photos'], function () {
 
     Route::delete('/{published_photo}')
         ->uses('PublishedPhotoController@delete')
-        ->middleware('can:delete-resource,published_photo');
+        ->middleware('can:delete-resource,published_photo')
+        ->middleware(DeletePhotoDirectory::class);
 
 });
