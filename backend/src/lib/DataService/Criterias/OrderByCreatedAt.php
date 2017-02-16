@@ -5,23 +5,20 @@ namespace Lib\DataService\Criterias;
 use Lib\DataService\Contracts\Criteria;
 
 /**
- * Class OrderBy.
+ * Class OrderByCreatedAt.
  *
- * @property string field
  * @property string direction
  * @package Lib\DataService\Criterias
  */
-class OrderBy implements Criteria
+class OrderByCreatedAt implements Criteria
 {
     /**
-     * OrderBy constructor.
+     * OrderByCreatedAt constructor.
      *
-     * @param string $field
      * @param string $direction
      */
-    public function __construct(string $field, string $direction)
+    public function __construct(string $direction)
     {
-        $this->field = $field;
         $this->direction = $direction;
     }
 
@@ -30,6 +27,6 @@ class OrderBy implements Criteria
      */
     public function apply($query)
     {
-        return $query->orderBy($this->field, $this->direction);
+        return $query->orderBy('created_at', $this->direction);
     }
 }

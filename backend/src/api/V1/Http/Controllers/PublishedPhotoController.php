@@ -13,7 +13,7 @@ use Core\DAL\DataService\Photo\Contracts\PhotoDataService;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Lib\DataService\Criterias\OrderBy;
+use Lib\DataService\Criterias\OrderByCreatedAt;
 use Lib\DataService\Criterias\Skip;
 use Lib\DataService\Criterias\Take;
 use Throwable;
@@ -242,7 +242,7 @@ class PublishedPhotoController extends ResourceController
             ->pushCriteria($request->has('query') ? new WhereSearchQuery($request->get('query')) : null)
             ->pushCriteria(new Skip($request->get('skip', 0)))
             ->pushCriteria(new Take($request->get('take', 10)))
-            ->pushCriteria(new OrderBy('created_at', 'desc'))
+            ->pushCriteria(new OrderByCreatedAt('desc'))
             ->get();
 
         return $photos;
