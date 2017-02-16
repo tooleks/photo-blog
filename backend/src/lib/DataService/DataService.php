@@ -255,12 +255,12 @@ abstract class DataService implements DataServiceContract
         foreach ($relations as $relationName) {
             if (method_exists($model, $relationName)) {
                 $relation = $model->{$relationName}();
-                if ($relation instanceof BelongsToMany || $relation instanceof HasMany) {
+                if ($relation instanceof HasMany || $relation instanceof BelongsToMany) {
                     $model->{$relationName}()->delete();
                     $model->{$relationName}()->detach();
                     $relationRecords = $model->{$relationName}()->createMany($attributes[$relationName] ?? []);
                     $model->{$relationName} = new Collection($relationRecords);
-                } elseif ($relation instanceof BelongsTo || $relation instanceof HasOne) {
+                } elseif ($relation instanceof HasOne) {
                     $model->{$relationName}()->delete();
                     $relationRecord = $model->{$relationName}()->create($attributes[$relationName] ?? []);
                     $model->{$relationName} = $relationRecord;
