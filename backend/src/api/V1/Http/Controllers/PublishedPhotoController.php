@@ -241,7 +241,7 @@ class PublishedPhotoController extends ResourceController
             ->pushCriteria(new Skip($request->get('skip', 0)))
             ->pushCriteria(new Take($request->get('take', 10)))
             ->pushCriteria(new OrderBy('created_at', 'desc'))
-            ->getAll();
+            ->get();
 
         return $photos;
     }

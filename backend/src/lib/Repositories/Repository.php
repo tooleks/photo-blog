@@ -181,7 +181,7 @@ abstract class Repository implements RepositoryContract
     /**
      * @inheritdoc
      */
-    public function getAll()
+    public function get()
     {
         $this->applyCriterias();
 
@@ -190,6 +190,20 @@ abstract class Repository implements RepositoryContract
         $this->reset();
 
         return $models;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function count() : int
+    {
+        $this->applyCriterias();
+
+        $count = $this->query->count();
+
+        $this->reset();
+
+        return $count;
     }
 
     /**
