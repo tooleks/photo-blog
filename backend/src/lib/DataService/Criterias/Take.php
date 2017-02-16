@@ -27,6 +27,6 @@ class Take implements Criteria
      */
     public function apply($query)
     {
-        return $query->take($this->take);
+        $query->take($this->take);
     }
 }

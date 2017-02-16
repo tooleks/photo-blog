@@ -25,12 +25,12 @@ interface DataService
     public function withRelations(array $relations);
 
     /**
-     * Push query criteria.
+     * Apply query criteria.
      *
      * @param Criteria|null $criteria
      * @return $this
      */
-    public function pushCriteria($criteria);
+    public function applyCriteria($criteria);
 
     /**
      * Get model by unique ID.

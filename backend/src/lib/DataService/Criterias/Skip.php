@@ -27,6 +27,6 @@ class Skip implements Criteria
      */
     public function apply($query)
     {
-        return $query->skip($this->skip);
+        $query->skip($this->skip);
     }
 }

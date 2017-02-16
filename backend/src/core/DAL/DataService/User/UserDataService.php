@@ -45,8 +45,6 @@ class UserDataService extends DataService implements UserDataServiceContract
      */
     public function getByCredentials(string $email, string $password)
     {
-        $this->applyCriterias();
-
         $model = $this->query->where('email', $email)->first();
 
         $this->reset();

@@ -27,7 +27,7 @@ class WhereTag implements Criteria
      */
     public function apply($query)
     {
-        return $query->select('photos.*')
+        $query->select('photos.*')
             ->join('photo_tags AS wtc_photo_tags', 'wtc_photo_tags.photo_id', '=', 'photos.id')
             ->join('tags AS wtc_tags', 'wtc_tags.id', '=', 'wtc_photo_tags.tag_id')
             ->where('wtc_tags.text', 'like', "%{$this->tag}%")
