@@ -53,8 +53,9 @@ class TokenController extends ResourceController
      *          "api_token": "user_api_token_string"
      *      }
      *  }
-     *
-     *
+     */
+
+    /**
      * Create a token.
      *
      * @param CreateToken $request

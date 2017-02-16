@@ -97,8 +97,9 @@ class PublishedPhotoController extends ResourceController
      *          ]
      *      }
      *  }
-     *
-     *
+     */
+
+    /**
      * Create a photo.
      *
      * @param CreatePhoto $request
@@ -165,8 +166,9 @@ class PublishedPhotoController extends ResourceController
      *          ]
      *      }
      *  }
-     *
-     *
+     */
+
+    /**
      * Get a photo.
      *
      * @param Photo $photo
@@ -227,8 +229,9 @@ class PublishedPhotoController extends ResourceController
      *          }
      *      ]
      *  }
-     *
-     *
+     */
+
+    /**
      * Find photos.
      *
      * @param FindPhoto $request
@@ -299,8 +302,9 @@ class PublishedPhotoController extends ResourceController
      *          ]
      *      }
      *  }
-     *
-     *
+     */
+
+    /**
      * Update a photo.
      *
      * @param UpdatePhoto $request
@@ -327,8 +331,9 @@ class PublishedPhotoController extends ResourceController
      *      "status": true,
      *      "data": 1
      *  }
-     *
-     *
+     */
+
+    /**
      * Delete a photo.
      *
      * @param Photo $photo

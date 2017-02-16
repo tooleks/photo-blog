@@ -76,8 +76,9 @@ class PhotoController extends ResourceController
      *          ]
      *      }
      *  }
-     *
-     *
+     */
+
+    /**
      * Create a photo.
      *
      * @param CreateUploadedPhoto $request
@@ -132,8 +133,9 @@ class PhotoController extends ResourceController
      *          ]
      *      }
      *  }
-     *
-     *
+     */
+
+    /**
      * Get a photo.
      *
      * @param Photo $photo
@@ -183,9 +185,10 @@ class PhotoController extends ResourceController
      *              }
      *          ]
      *      }
-     *  }
      *
-     *
+     */
+
+    /**
      * Update a photo.
      *
      * @param UpdateUploadedPhoto $request
@@ -211,8 +214,9 @@ class PhotoController extends ResourceController
      *      "status": true,
      *      "data": 1
      *  }
-     *
-     *
+     */
+
+    /**
      * Delete a photo.
      *
      * @param Photo $photo
