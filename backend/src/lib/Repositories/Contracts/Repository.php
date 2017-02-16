@@ -48,11 +48,18 @@ interface Repository
     public function getFirst();
 
     /**
-     * Get all models.
+     * Get models.
      *
      * @return mixed
      */
-    public function getAll();
+    public function get();
+
+    /**
+     * Count models.
+     *
+     * @return mixed
+     */
+    public function count() : int;
 
     /**
      * Save model.
