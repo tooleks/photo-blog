@@ -62,7 +62,7 @@ abstract class DataService implements DataServiceContract
      *
      * @return void
      */
-    private function resetModel()
+    protected function resetModel()
     {
         $modelClass = $this->getModelClass();
 
@@ -74,7 +74,7 @@ abstract class DataService implements DataServiceContract
      *
      * @return void
      */
-    private function resetQuery()
+    protected function resetQuery()
     {
         $this->query = $this->model->newQuery();
     }
@@ -84,7 +84,7 @@ abstract class DataService implements DataServiceContract
      *
      * @return void
      */
-    private function resetCriterias()
+    protected function resetCriterias()
     {
         $this->criterias = [];
     }
