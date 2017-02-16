@@ -197,6 +197,7 @@ abstract class Repository implements RepositoryContract
      *
      * @param mixed $model
      * @throws RepositoryException
+     * @return void
      */
     protected function assertModel($model)
     {
@@ -233,6 +234,7 @@ abstract class Repository implements RepositoryContract
      * @param mixed $model
      * @param array $attributes
      * @param array $relationNames
+     * @return void
      */
     protected function saveModelRelations($model, array $attributes, array $relationNames)
     {
