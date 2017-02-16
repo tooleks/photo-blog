@@ -53,7 +53,7 @@ class PublishedPhotoController extends ResourceController
      * @apiGroup Published Photos
      * @apiHeader {String} Accept application/json
      * @apiHeader {String} Content-type application/json
-     * @apiParam {Integer{1..N}} uploaded_photo_id Unique resource ID.
+     * @apiParam {Integer{1..N}} photo_id Unique resource ID.
      * @apiParam {Integer{1..65535}} description Description.
      * @apiParam {Object[]} tags Tags collection.
      * @apiParam {String{1..255}} tags.text Tag text.
