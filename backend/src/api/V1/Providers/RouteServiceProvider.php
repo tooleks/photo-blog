@@ -56,7 +56,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::bind('published_photo', function ($id) {
             return $this->app->make(\Core\DAL\DataService\Photo\PhotoDataService::class)
-                ->pushCriteria(new IsPublished)
+                ->applyCriteria(new IsPublished(true))
                 ->getById($id);
         });
 
