@@ -6,11 +6,11 @@ use RuntimeException;
 use Lib\DataService\Contracts\DataServiceException as DataServiceExceptionContract;
 
 /**
- * Class DataServiceNotFoundException.
+ * Class DataServiceSavingException.
  *
  * @package Lib\DataService\Exceptions
  */
-class DataServiceNotFoundException extends RuntimeException implements DataServiceExceptionContract
+class DataServiceSavingException extends RuntimeException implements DataServiceExceptionContract
 {
 
 }

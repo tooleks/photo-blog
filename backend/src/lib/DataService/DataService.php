@@ -10,8 +10,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 use Lib\DataService\Contracts\Criteria;
 use Lib\DataService\Contracts\DataService as DataServiceContract;
+use Lib\DataService\Exceptions\DataServiceDeletingException;
 use Lib\DataService\Exceptions\DataServiceException;
 use Lib\DataService\Exceptions\DataServiceNotFoundException;
+use Lib\DataService\Exceptions\DataServiceSavingException;
 use Throwable;
 
 /**
@@ -236,7 +238,7 @@ abstract class DataService implements DataServiceContract
             $this->dbConnection->commit();
         } catch (Throwable $e) {
             $this->dbConnection->rollBack();
-            throw $e;
+            throw new DataServiceSavingException($e->getMessage());
         }
     }
 
@@ -274,6 +276,12 @@ abstract class DataService implements DataServiceContract
     {
         $this->assertModel($model);
 
-        return $model->delete();
+        try {
+            $count = $model->delete();
+        } catch (Throwable $e) {
+            throw new DataServiceDeletingException($e->getMessage());
+        }
+
+        return $count;
     }
 }
