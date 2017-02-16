@@ -27,7 +27,7 @@ class WhereSearchQuery implements Criteria
      */
     public function apply($query)
     {
-        return $query->select('photos.*')
+        $query->select('photos.*')
             ->join('photo_tags AS wsqc_photo_tags', 'wsqc_photo_tags.photo_id', '=', 'photos.id')
             ->join('tags AS wsqc_tags', 'wsqc_tags.id', '=', 'wsqc_photo_tags.tag_id')
             ->where(function ($query) {

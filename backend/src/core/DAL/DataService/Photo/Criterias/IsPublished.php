@@ -27,6 +27,6 @@ class IsPublished implements Criteria
      */
     public function apply($query)
     {
-        return $query->where('photos.is_published', $this->isPublished);
+        $query->where('photos.is_published', $this->isPublished);
     }
 }

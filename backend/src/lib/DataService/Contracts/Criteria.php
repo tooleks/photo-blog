@@ -13,7 +13,7 @@ interface Criteria
      * Apply search query criteria.
      *
      * @param mixed $query
-     * @return mixed
+     * @return void
      */
     public function apply($query);
 }

@@ -3,7 +3,7 @@
 namespace Lib\DataService;
 
 use Illuminate\Database\ConnectionInterface;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -39,13 +39,6 @@ abstract class DataService implements DataServiceContract
     protected $query;
 
     /**
-     * Query criterias.
-     *
-     * @var array
-     */
-    protected $criterias;
-
-    /**
      * DataService constructor.
      *
      * @param ConnectionInterface $dbConnection
@@ -61,12 +54,21 @@ abstract class DataService implements DataServiceContract
      * Reset model class instance.
      *
      * @return void
+     * @throws DataServiceException
      */
     protected function resetModel()
     {
         $modelClass = $this->getModelClass();
 
+        if (!class_exists($modelClass)) {
+            throw new DataServiceException(sprintf('The %s class does not exist.', $modelClass));
+        }
+
         $this->model = new $modelClass;
+
+        if (!($this->model instanceof Model)) {
+            throw new DataServiceException(sprintf('The model must be inherited from the %s class.', Model::class));
+        }
     }
 
     /**
@@ -80,16 +82,6 @@ abstract class DataService implements DataServiceContract
     }
 
     /**
-     * Reset query criterias.
-     *
-     * @return void
-     */
-    protected function resetCriterias()
-    {
-        $this->criterias = [];
-    }
-
-    /**
      * Reset data service to initial state.
      *
      * @return void
@@ -98,25 +90,12 @@ abstract class DataService implements DataServiceContract
     {
         $this->resetModel();
         $this->resetQuery();
-        $this->resetCriterias();
     }
 
     /**
      * @inheritdoc
      */
     abstract public function getModelClass() : string;
-
-    /**
-     * Apply query criterias to the model query class instance.
-     *
-     * @return void
-     */
-    protected function applyCriterias()
-    {
-        foreach ($this->criterias as $criteria) {
-            $this->query = $criteria->apply($this->query);
-        }
-    }
 
     /**
      * @inheritdoc
@@ -133,10 +112,10 @@ abstract class DataService implements DataServiceContract
     /**
      * @inheritdoc
      */
-    public function pushCriteria($criteria)
+    public function applyCriteria($criteria)
     {
         if ($criteria instanceof Criteria) {
-            array_push($this->criterias, $criteria);
+            $criteria->apply($this->query);
         }
 
         return $this;
@@ -147,8 +126,6 @@ abstract class DataService implements DataServiceContract
      */
     public function getById($id)
     {
-        $this->applyCriterias();
-
         $model = $this->query->find($id);
 
         $this->reset();
@@ -165,8 +142,6 @@ abstract class DataService implements DataServiceContract
      */
     public function getFirst()
     {
-        $this->applyCriterias();
-
         $model = $this->query->first();
 
         $this->reset();
@@ -183,8 +158,6 @@ abstract class DataService implements DataServiceContract
      */
     public function get()
     {
-        $this->applyCriterias();
-
         $models = $this->query->get();
 
         $this->reset();
@@ -197,8 +170,6 @@ abstract class DataService implements DataServiceContract
      */
     public function count() : int
     {
-        $this->applyCriterias();
-
         $count = $this->query->count();
 
         $this->reset();
@@ -210,15 +181,15 @@ abstract class DataService implements DataServiceContract
      * Assert model.
      *
      * @param mixed $model
-     * @throws DataServiceException
      * @return void
+     * @throws DataServiceException
      */
     protected function assertModel($model)
     {
         $modelClass = $this->getModelClass();
 
         if (!($model instanceof $modelClass)) {
-            throw new DataServiceException(sprintf('Model must be a %s type.', $modelClass));
+            throw new DataServiceException(sprintf('The model must be an instance of the %s class.', $modelClass));
         }
     }
 

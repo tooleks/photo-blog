@@ -109,7 +109,7 @@ class PublishedPhotoController extends ResourceController
     public function create(CreatePhoto $request) : Photo
     {
         $photo = $this->photoDataService
-            ->pushCriteria(new IsPublished(false))
+            ->applyCriteria(new IsPublished(false))
             ->getById($request->get('photo_id'));
 
         $photo->setIsPublishedAttribute(true);
@@ -240,12 +240,12 @@ class PublishedPhotoController extends ResourceController
     public function find(FindPhoto $request) : Collection
     {
         $photos = $this->photoDataService
-            ->pushCriteria(new IsPublished(true))
-            ->pushCriteria($request->has('tag') ? new WhereTag($request->get('tag')) : null)
-            ->pushCriteria($request->has('query') ? new WhereSearchQuery($request->get('query')) : null)
-            ->pushCriteria(new Skip($request->get('skip', 0)))
-            ->pushCriteria(new Take($request->get('take', 10)))
-            ->pushCriteria(new OrderByCreatedAt('desc'))
+            ->applyCriteria(new IsPublished(true))
+            ->applyCriteria($request->has('tag') ? new WhereTag($request->get('tag')) : null)
+            ->applyCriteria($request->has('query') ? new WhereSearchQuery($request->get('query')) : null)
+            ->applyCriteria(new Skip($request->get('skip', 0)))
+            ->applyCriteria(new Take($request->get('take', 10)))
+            ->applyCriteria(new OrderByCreatedAt('desc'))
             ->get();
 
         return $photos;

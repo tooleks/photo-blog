@@ -27,6 +27,6 @@ class OrderByCreatedAt implements Criteria
      */
     public function apply($query)
     {
-        return $query->orderBy('created_at', $this->direction);
+        $query->orderBy('created_at', $this->direction);
     }
 }
