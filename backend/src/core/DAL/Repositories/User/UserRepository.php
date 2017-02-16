@@ -68,7 +68,7 @@ class UserRepository extends Repository
     /**
      * @inheritdoc
      */
-    public function save($model, array $attributes = [])
+    public function save($model, array $attributes = [], array $relationNames = [])
     {
         $this->assertModel($model);
 
@@ -86,6 +86,6 @@ class UserRepository extends Repository
             $model->password = $this->hasher->make($model->password);
         }
 
-        parent::save($model, $attributes, $relations);
+        parent::save($model, $attributes, $relationNames);
     }
 }
