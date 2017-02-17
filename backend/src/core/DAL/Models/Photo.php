@@ -58,6 +58,7 @@ class Photo extends Model
         parent::boot();
 
         static::deleting(function (Photo $photo) {
+            $photo->exif()->delete();
             $photo->thumbnails()->delete();
             $photo->thumbnails()->detach();
             $photo->tags()->delete();
