@@ -2,8 +2,8 @@
 
 namespace Core\Providers;
 
-use Core\DAL\DataService\Photo\Events\PhotoDataServiceSubscriber;
-use Core\DAL\DataService\User\Events\UserDataServiceSubscriber;
+use Core\DAL\DataServices\Photo\Events\PhotoDataServiceSubscriber;
+use Core\DAL\DataServices\User\Events\UserDataServiceSubscriber;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 /**

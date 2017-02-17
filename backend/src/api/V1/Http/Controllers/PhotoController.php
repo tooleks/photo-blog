@@ -5,7 +5,7 @@ namespace Api\V1\Http\Controllers;
 use Api\V1\Http\Requests\CreateUploadedPhoto;
 use Api\V1\Http\Requests\UpdateUploadedPhoto;
 use Core\DAL\Models\Photo;
-use Core\DAL\DataService\Photo\Contracts\PhotoDataService;
+use Core\DAL\DataServices\Photo\Contracts\PhotoDataService;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\DAL\DataService\User\Events;
+namespace Core\DAL\DataServices\User\Events;
 
 use Core\DAL\Models\User;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -13,7 +13,7 @@ use Illuminate\Validation\ValidationException;
  * Class UserDataServiceSubscriber.
  *
  * @property Hasher hasher
- * @package Core\DAL\DataService\User\Events
+ * @package Core\DAL\DataServices\User\Events
  */
 class UserDataServiceSubscriber
 {

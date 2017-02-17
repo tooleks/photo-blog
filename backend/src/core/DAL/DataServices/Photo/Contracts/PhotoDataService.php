@@ -1,13 +1,13 @@
 <?php
 
-namespace Core\DAL\DataService\Photo\Contracts;
+namespace Core\DAL\DataServices\Photo\Contracts;
 
 use Lib\DataService\Contracts\DataService;
 
 /**
  * Interface PhotoDataService.
  *
- * @package Core\DAL\DataService\Photo\Contracts
+ * @package Core\DAL\DataServices\Photo\Contracts
  */
 interface PhotoDataService extends DataService
 {
