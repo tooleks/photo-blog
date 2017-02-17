@@ -237,7 +237,6 @@ abstract class DataService implements DataServiceContract
             $this->dbConnection->commit();
         } catch (Throwable $e) {
             $this->dbConnection->rollBack();
-
             throw new DataServiceDeletingException($e->getMessage());
         }
 
