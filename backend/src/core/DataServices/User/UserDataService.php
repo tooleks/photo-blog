@@ -56,7 +56,7 @@ class UserDataService extends DataService implements UserDataServiceContract
             throw new DataServiceNotFoundException('Invalid user password.');
         }
 
-        $this->dispatchEvent('afterGetByCredentials', ['query' => $this->query, 'model' => $model, 'options' => $options]);
+        $this->dispatchEvent('afterGetByCredentials', ['model' => $model, 'options' => $options]);
 
         $this->reset();
 

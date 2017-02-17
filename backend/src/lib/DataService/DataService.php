@@ -143,8 +143,10 @@ abstract class DataService implements DataServiceContract
     public function getById($id, array $options = [])
     {
         $this->dispatchEvent('beforeGetById', ['query' => $this->query, 'options' => $options]);
+
         $model = $this->query->find($id);
-        $this->dispatchEvent('afterGetById', ['query' => $this->query, 'model' => $model, 'options' => $options]);
+
+        $this->dispatchEvent('afterGetById', ['model' => $model, 'options' => $options]);
 
         $this->reset();
 
@@ -161,8 +163,10 @@ abstract class DataService implements DataServiceContract
     public function getFirst(array $options = [])
     {
         $this->dispatchEvent('afterGetFirst', ['query' => $this->query, 'options' => $options]);
+
         $model = $this->query->first();
-        $this->dispatchEvent('afterGetFirst', ['query' => $this->query, 'model' => $model, 'options' => $options]);
+
+        $this->dispatchEvent('afterGetFirst', ['model' => $model, 'options' => $options]);
 
         $this->reset();
 
@@ -179,8 +183,10 @@ abstract class DataService implements DataServiceContract
     public function get(array $options = [])
     {
         $this->dispatchEvent('beforeGet', ['query' => $this->query, 'options' => $options]);
+
         $models = $this->query->get();
-        $this->dispatchEvent('afterGet', ['query' => $this->query, 'models' => $models, 'options' => $options]);
+
+        $this->dispatchEvent('afterGet', ['models' => $models, 'options' => $options]);
 
         $this->reset();
 
@@ -193,8 +199,10 @@ abstract class DataService implements DataServiceContract
     public function count(array $options = []) : int
     {
         $this->dispatchEvent('beforeCount', ['query' => $this->query, 'options' => $options]);
+
         $count = $this->query->count();
-        $this->dispatchEvent('afterCount', ['query' => $this->query, 'count' => $count, 'options' => $options]);
+
+        $this->dispatchEvent('afterCount', ['count' => $count, 'options' => $options]);
 
         $this->reset();
 
@@ -211,14 +219,23 @@ abstract class DataService implements DataServiceContract
         $model->fill($attributes);
 
         try {
+
             $this->dbConnection->beginTransaction();
+
             $this->dispatchEvent('beforeSave', ['model' => $model, 'attributes' => $attributes, 'options' => $options]);
+
             $model->save();
+
             $this->dispatchEvent('afterSave', ['model' => $model, 'attributes' => $attributes, 'options' => $options]);
+
             $this->dbConnection->commit();
+
         } catch (Throwable $e) {
+
             $this->dbConnection->rollBack();
+
             throw new DataServiceSavingException($e->getMessage());
+
         }
     }
 
@@ -230,14 +247,23 @@ abstract class DataService implements DataServiceContract
         $this->assertModel($model);
 
         try {
+
             $this->dbConnection->beginTransaction();
+
             $this->dispatchEvent('beforeDelete', ['model' => $model, 'options' => $options]);
+
             $deleted = $model->delete();
+
             $this->dispatchEvent('afterDelete', ['model' => $model, 'deleted' => $deleted, 'options' => $options]);
+
             $this->dbConnection->commit();
+
         } catch (Throwable $e) {
+
             $this->dbConnection->rollBack();
+
             throw new DataServiceDeletingException($e->getMessage());
+
         }
 
         return $deleted;
