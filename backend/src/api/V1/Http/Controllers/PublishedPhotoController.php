@@ -114,7 +114,7 @@ class PublishedPhotoController extends ResourceController
 
         $photo->setIsPublishedAttribute(true);
 
-        $this->photoDataService->save($photo, $request->all(), ['tags']);
+        $this->photoDataService->save($photo, $request->all());
 
         return $photo;
     }
@@ -314,7 +314,7 @@ class PublishedPhotoController extends ResourceController
      */
     public function update(UpdatePhoto $request, $photo) : Photo
     {
-        $this->photoDataService->save($photo, $request->all(), ['tags']);
+        $this->photoDataService->save($photo, $request->all());
 
         return $photo;
     }
