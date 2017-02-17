@@ -61,28 +61,4 @@ class UserDataService extends DataService implements UserDataServiceContract
 
         return $model;
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function save($model, array $attributes = [], array $options = [])
-    {
-        $this->assertModel($model);
-
-        $validator = ValidatorFactory::make(['email' => $model->email], [
-            'email' => $model->exists
-                ? Rule::unique('users')->ignore($model->getOriginal('email'), 'email')
-                : Rule::unique('users'),
-        ]);
-
-        if ($validator->fails()) {
-            throw new ValidationException($validator);
-        }
-
-        if ($model->getOriginal('password') !== $model->password) {
-            $model->password = $this->hasher->make($model->password);
-        }
-
-        parent::save($model, $attributes, $options);
-    }
 }
