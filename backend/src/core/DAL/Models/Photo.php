@@ -52,31 +52,6 @@ class Photo extends Model
     ];
 
     /**
-     * @inheritdoc
-     */
-    protected $with = [
-        'exif',
-        'thumbnails',
-        'tags',
-    ];
-
-    /**
-     * @inheritdoc
-     */
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::deleting(function (Photo $photo) {
-            $photo->exif()->delete();
-            $photo->thumbnails()->delete();
-            $photo->thumbnails()->detach();
-            $photo->tags()->delete();
-            $photo->tags()->detach();
-        });
-    }
-
-    /**
      * Setter for the 'is_published' attribute.
      *
      * @param bool $isPublished

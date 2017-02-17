@@ -2,12 +2,9 @@
 
 namespace Lib\DataService;
 
-use Illuminate\Database\ConnectionInterface;
+use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Database\ConnectionInterface as Connection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Support\Collection;
 use Lib\DataService\Contracts\Criteria;
 use Lib\DataService\Contracts\DataService as DataServiceContract;
 use Lib\DataService\Exceptions\DataServiceDeletingException;
@@ -19,7 +16,8 @@ use Throwable;
 /**
  * Class DataService.
  *
- * @property ConnectionInterface dbConnection
+ * @property Connection dbConnection
+ * @property Dispatcher events
  * @package Lib\DataService
  */
 abstract class DataService implements DataServiceContract
@@ -41,11 +39,13 @@ abstract class DataService implements DataServiceContract
     /**
      * DataService constructor.
      *
-     * @param ConnectionInterface $dbConnection
+     * @param Connection $dbConnection
+     * @param Dispatcher $events
      */
-    public function __construct(ConnectionInterface $dbConnection)
+    public function __construct(Connection $dbConnection, Dispatcher $events)
     {
         $this->dbConnection = $dbConnection;
+        $this->events = $events;
 
         $this->reset();
     }
@@ -91,91 +91,6 @@ abstract class DataService implements DataServiceContract
     }
 
     /**
-     * @inheritdoc
-     */
-    abstract public function getModelClass() : string;
-
-    /**
-     * @inheritdoc
-     */
-    public function withRelations(array $relations)
-    {
-        foreach ($relations as $relationName) {
-            $this->query = $this->query->with($relationName);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function applyCriteria($criteria)
-    {
-        if ($criteria instanceof Criteria) {
-            $criteria->apply($this->query);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getById($id)
-    {
-        $model = $this->query->find($id);
-
-        $this->reset();
-
-        if (is_null($model)) {
-            throw new DataServiceNotFoundException(sprintf('%s not found.', class_basename($this->getModelClass())));
-        }
-
-        return $model;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getFirst()
-    {
-        $model = $this->query->first();
-
-        $this->reset();
-
-        if (is_null($model)) {
-            throw new DataServiceNotFoundException(sprintf('%s not found.', class_basename($this->getModelClass())));
-        }
-
-        return $model;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function get()
-    {
-        $models = $this->query->get();
-
-        $this->reset();
-
-        return $models;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function count() : int
-    {
-        $count = $this->query->count();
-
-        $this->reset();
-
-        return $count;
-    }
-
-    /**
      * Assert model.
      *
      * @param mixed $model
@@ -192,9 +107,104 @@ abstract class DataService implements DataServiceContract
     }
 
     /**
+     * Dispatch an event.
+     *
+     * @param string $eventName
+     * @param array $payload
+     * @return void
+     */
+    protected function dispatchEvent(string $eventName, array $payload = [])
+    {
+        $event = implode('.', ['events', lcfirst(class_basename(static::class)), $eventName]);
+
+        $this->events->dispatch($event, $payload);
+    }
+
+    /**
      * @inheritdoc
      */
-    public function save($model, array $attributes = [], array $relations = [])
+    abstract public function getModelClass() : string;
+
+    /**
+     * @inheritdoc
+     */
+    public function applyCriteria($criteria)
+    {
+        if ($criteria instanceof Criteria) {
+            $criteria->apply($this->query);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getById($id, array $options = [])
+    {
+        $this->dispatchEvent('beforeGetById', ['query' => $this->query, 'options' => $options]);
+        $model = $this->query->find($id);
+        $this->dispatchEvent('afterGetById', ['query' => $this->query, 'models' => $model, 'options' => $options]);
+
+        $this->reset();
+
+        if (is_null($model)) {
+            throw new DataServiceNotFoundException(sprintf('%s not found.', class_basename($this->getModelClass())));
+        }
+
+        return $model;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getFirst(array $options = [])
+    {
+        $this->dispatchEvent('afterGetFirst', ['query' => $this->query, 'options' => $options]);
+        $model = $this->query->first();
+        $this->dispatchEvent('afterGetFirst', ['query' => $this->query, 'models' => $model, 'options' => $options]);
+
+        $this->reset();
+
+        if (is_null($model)) {
+            throw new DataServiceNotFoundException(sprintf('%s not found.', class_basename($this->getModelClass())));
+        }
+
+        return $model;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function get(array $options = [])
+    {
+        $this->dispatchEvent('beforeGet', ['query' => $this->query, 'options' => $options]);
+        $models = $this->query->get();
+        $this->dispatchEvent('afterGet', ['query' => $this->query, 'models' => $models, 'options' => $options]);
+
+        $this->reset();
+
+        return $models;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function count(array $options = []) : int
+    {
+        $this->dispatchEvent('beforeCount', ['query' => $this->query, 'options' => $options]);
+        $count = $this->query->count();
+        $this->dispatchEvent('afterCount', ['query' => $this->query, 'count' => $count, 'options' => $options]);
+
+        $this->reset();
+
+        return $count;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function save($model, array $attributes = [], array $options = [])
     {
         $this->assertModel($model);
 
@@ -202,8 +212,9 @@ abstract class DataService implements DataServiceContract
 
         try {
             $this->dbConnection->beginTransaction();
+            $this->dispatchEvent('beforeSave', ['model' => $model, 'attributes' => $attributes, 'options' => $options]);
             $model->save();
-            $this->saveModelRelations($model, $attributes, $relations);
+            $this->dispatchEvent('afterSave', ['model' => $model, 'attributes' => $attributes, 'options' => $options]);
             $this->dbConnection->commit();
         } catch (Throwable $e) {
             $this->dbConnection->rollBack();
@@ -212,45 +223,24 @@ abstract class DataService implements DataServiceContract
     }
 
     /**
-     * Save model relations.
-     *
-     * @param mixed $model
-     * @param array $attributes
-     * @param array $relations
-     * @return void
-     */
-    protected function saveModelRelations($model, array $attributes, array $relations)
-    {
-        foreach ($relations as $relationName) {
-            if (method_exists($model, $relationName)) {
-                $relation = $model->{$relationName}();
-                if ($relation instanceof HasMany || $relation instanceof BelongsToMany) {
-                    $model->{$relationName}()->delete();
-                    $model->{$relationName}()->detach();
-                    $relationRecords = $model->{$relationName}()->createMany($attributes[$relationName] ?? []);
-                    $model->{$relationName} = new Collection($relationRecords);
-                } elseif ($relation instanceof HasOne) {
-                    $model->{$relationName}()->delete();
-                    $relationRecord = $model->{$relationName}()->create($attributes[$relationName] ?? []);
-                    $model->{$relationName} = $relationRecord;
-                }
-            }
-        }
-    }
-
-    /**
      * @inheritdoc
      */
-    public function delete($model) : bool
+    public function delete($model, array $options = []) : bool
     {
         $this->assertModel($model);
 
         try {
-            $count = $model->delete();
+            $this->dbConnection->beginTransaction();
+            $this->dispatchEvent('beforeDelete', ['model' => $model, 'options' => $options]);
+            $deleted = $model->delete();
+            $this->dispatchEvent('afterDelete', ['model' => $model, 'deleted' => $deleted, 'options' => $options]);
+            $this->dbConnection->commit();
         } catch (Throwable $e) {
+            $this->dbConnection->rollBack();
+
             throw new DataServiceDeletingException($e->getMessage());
         }
 
-        return $count;
+        return $deleted;
     }
 }

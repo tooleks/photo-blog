@@ -3,8 +3,9 @@
 namespace Core\DAL\DataService\User;
 
 use Core\DAL\DataService\User\Contracts\UserDataService as UserDataServiceContract;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Hashing\Hasher;
-use Illuminate\Database\ConnectionInterface;
+use Illuminate\Database\ConnectionInterface as Connection;
 use Illuminate\Support\Facades\Validator as ValidatorFactory;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -22,12 +23,13 @@ class UserDataService extends DataService implements UserDataServiceContract
     /**
      * UserDataService constructor.
      *
-     * @param ConnectionInterface $dbConnection
+     * @param Connection $dbConnection
+     * @param Dispatcher $events
      * @param Hasher $hasher
      */
-    public function __construct(ConnectionInterface $dbConnection, Hasher $hasher)
+    public function __construct(Connection $dbConnection, Dispatcher $events, Hasher $hasher)
     {
-        parent::__construct($dbConnection);
+        parent::__construct($dbConnection, $events);
 
         $this->hasher = $hasher;
     }
@@ -63,7 +65,7 @@ class UserDataService extends DataService implements UserDataServiceContract
     /**
      * @inheritdoc
      */
-    public function save($model, array $attributes = [], array $relations = [])
+    public function save($model, array $attributes = [], array $options = [])
     {
         $this->assertModel($model);
 
@@ -81,6 +83,6 @@ class UserDataService extends DataService implements UserDataServiceContract
             $model->password = $this->hasher->make($model->password);
         }
 
-        parent::save($model, $attributes, $relations);
+        parent::save($model, $attributes, $options);
     }
 }
