@@ -48,8 +48,6 @@ class UserDataService extends DataService implements UserDataServiceContract
 
         $model = $this->query->where('email', $email)->first();
 
-        $this->reset();
-
         if (is_null($model)) {
             throw new DataServiceNotFoundException(sprintf('%s not found.', class_basename($this->getModelClass())));
         }
@@ -59,6 +57,8 @@ class UserDataService extends DataService implements UserDataServiceContract
         }
 
         $this->dispatchEvent('afterGetByCredentials', ['query' => $this->query, 'model' => $model, 'options' => $options]);
+
+        $this->reset();
 
         return $model;
     }
