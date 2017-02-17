@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\DAL\DataService\Photo\Criterias;
+namespace Core\DAL\DataServices\Photo\Criterias;
 
 use Lib\DataService\Contracts\Criteria;
 
@@ -8,7 +8,7 @@ use Lib\DataService\Contracts\Criteria;
  * Class WhereTag.
  *
  * @property string tag
- * @package Core\DAL\DataService\Photo\Criterias
+ * @package Core\DAL\DataServices\Photo\Criterias
  */
 class WhereTag implements Criteria
 {

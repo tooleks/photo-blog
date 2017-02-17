@@ -1,14 +1,14 @@
 <?php
 
-namespace Core\DAL\DataService\Photo;
+namespace Core\DAL\DataServices\Photo;
 
-use Core\DAL\DataService\Photo\Contracts\PhotoDataService as PhotoDataServiceContract;
+use Core\DAL\DataServices\Photo\Contracts\PhotoDataService as PhotoDataServiceContract;
 use Lib\DataService\DataService;
 
 /**
  * Class PhotoDataService.
  *
- * @package Core\DAL\DataService
+ * @package Core\DAL\DataServices
  */
 class PhotoDataService extends DataService implements PhotoDataServiceContract
 {

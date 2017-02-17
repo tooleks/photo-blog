@@ -37,13 +37,13 @@ class AppServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
-            \Core\DAL\DataService\User\Contracts\UserDataService::class,
-            \Core\DAL\DataService\User\UserDataService::class
+            \Core\DAL\DataServices\User\Contracts\UserDataService::class,
+            \Core\DAL\DataServices\User\UserDataService::class
         );
 
         $this->app->bind(
-            \Core\DAL\DataService\Photo\Contracts\PhotoDataService::class,
-            \Core\DAL\DataService\Photo\PhotoDataService::class
+            \Core\DAL\DataServices\Photo\Contracts\PhotoDataService::class,
+            \Core\DAL\DataServices\Photo\PhotoDataService::class
         );
     }
 }

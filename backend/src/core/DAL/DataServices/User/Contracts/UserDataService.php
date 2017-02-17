@@ -1,13 +1,13 @@
 <?php
 
-namespace Core\DAL\DataService\User\Contracts;
+namespace Core\DAL\DataServices\User\Contracts;
 
 use Lib\DataService\Contracts\DataService;
 
 /**
  * Interface UserDataService.
  *
- * @package Core\DAL\DataService\User\Contracts
+ * @package Core\DAL\DataServices\User\Contracts
  */
 interface UserDataService extends DataService
 {
