@@ -2,18 +2,6 @@
 
 namespace Api\V1\Providers;
 
-use Api\V1\Http\Controllers\{
-    PublishedPhotoController,
-    TokenController,
-    PhotoController,
-    UserController
-};
-use Api\V1\Presenters\{
-    PublishedPhotoPresenter,
-    TokenPresenter,
-    PhotoPresenter,
-    UserPresenter
-};
 use Illuminate\Support\ServiceProvider;
 
 /**
@@ -39,24 +27,39 @@ class ApiServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app
-            ->when(TokenController::class)
+        $this->app->when(\Api\V1\Http\Controllers\TokenController::class)
             ->needs('$presenterClass')
-            ->give(TokenPresenter::class);
+            ->give(\Api\V1\Presenters\TokenPresenter::class);
 
-        $this->app
-            ->when(UserController::class)
+        $this->app->when(\Api\V1\Http\Controllers\UserController::class)
             ->needs('$presenterClass')
-            ->give(UserPresenter::class);
+            ->give(\Api\V1\Presenters\UserPresenter::class);
 
-        $this->app
-            ->when(PhotoController::class)
+        $this->app->when(\Api\V1\Http\Controllers\PhotoController::class)
             ->needs('$presenterClass')
-            ->give(PhotoPresenter::class);
+            ->give(\Api\V1\Presenters\PhotoPresenter::class);
 
-        $this->app
-            ->when(PublishedPhotoController::class)
+        $this->app->when(\Api\V1\Http\Controllers\PublishedPhotoController::class)
             ->needs('$presenterClass')
-            ->give(PublishedPhotoPresenter::class);
+            ->give(\Api\V1\Presenters\PublishedPhotoPresenter::class);
+
+        $this->app->bind(
+            \Core\DAL\DataServices\User\Contracts\UserDataService::class,
+            \Core\DAL\DataServices\User\UserDataService::class
+        );
+
+        $this->app->bind(
+            \Core\DAL\DataServices\Photo\Contracts\PhotoDataService::class,
+            \Core\DAL\DataServices\Photo\PhotoDataService::class
+        );
+
+        $this->app->bind(\Lib\ThumbnailsGenerator\Contracts\ThumbnailsGenerator::class, function () {
+            return new \Lib\ThumbnailsGenerator\ThumbnailsGenerator($this->app->make('filesystem')->disk(), config('main.photo.thumbnails'));
+        });
+
+        $this->app->bind(
+            \Lib\ExifFetcher\Contracts\ExifFetcher::class,
+            \Lib\ExifFetcher\ExifFetcher::class
+        );
     }
 }
