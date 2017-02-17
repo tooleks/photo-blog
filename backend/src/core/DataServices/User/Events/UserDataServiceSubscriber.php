@@ -1,8 +1,8 @@
 <?php
 
-namespace Core\DAL\DataServices\User\Events;
+namespace Core\DataServices\User\Events;
 
-use Core\DAL\Models\User;
+use Core\Models\User;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Support\Facades\Validator as ValidatorFactory;
@@ -13,7 +13,7 @@ use Illuminate\Validation\ValidationException;
  * Class UserDataServiceSubscriber.
  *
  * @property Hasher hasher
- * @package Core\DAL\DataServices\User\Events
+ * @package Core\DataServices\User\Events
  */
 class UserDataServiceSubscriber
 {

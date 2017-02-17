@@ -2,7 +2,7 @@
 
 namespace Api\V1\Providers;
 
-use Core\DAL\DataServices\Photo\Criterias\IsPublished;
+use Core\DataServices\Photo\Criterias\IsPublished;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
 
@@ -56,20 +56,20 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::bind('published_photo', function ($id) {
             return $this->app
-                ->make(\Core\DAL\DataServices\Photo\Contracts\PhotoDataService::class)
+                ->make(\Core\DataServices\Photo\Contracts\PhotoDataService::class)
                 ->applyCriteria(new IsPublished(true))
                 ->getById($id);
         });
 
         Route::bind('photo', function ($id) {
             return $this->app
-                ->make(\Core\DAL\DataServices\Photo\Contracts\PhotoDataService::class)
+                ->make(\Core\DataServices\Photo\Contracts\PhotoDataService::class)
                 ->getById($id);
         });
 
         Route::bind('user', function ($id) {
             return $this->app
-                ->make(\Core\DAL\DataServices\User\Contracts\UserDataService::class)
+                ->make(\Core\DataServices\User\Contracts\UserDataService::class)
                 ->getById($id);
         });
     }

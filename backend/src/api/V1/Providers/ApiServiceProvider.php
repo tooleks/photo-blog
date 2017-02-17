@@ -44,13 +44,13 @@ class ApiServiceProvider extends ServiceProvider
             ->give(\Api\V1\Presenters\PublishedPhotoPresenter::class);
 
         $this->app->bind(
-            \Core\DAL\DataServices\User\Contracts\UserDataService::class,
-            \Core\DAL\DataServices\User\UserDataService::class
+            \Core\DataServices\User\Contracts\UserDataService::class,
+            \Core\DataServices\User\UserDataService::class
         );
 
         $this->app->bind(
-            \Core\DAL\DataServices\Photo\Contracts\PhotoDataService::class,
-            \Core\DAL\DataServices\Photo\PhotoDataService::class
+            \Core\DataServices\Photo\Contracts\PhotoDataService::class,
+            \Core\DataServices\Photo\PhotoDataService::class
         );
 
         $this->app->bind(\Lib\ThumbnailsGenerator\Contracts\ThumbnailsGenerator::class, function () {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\DAL\Models;
+namespace Core\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Exif $exif
  * @property Collection $tags
  * @property Collection $thumbnails
- * @package Core\DAL\Models
+ * @package Core\Models
  */
 class Photo extends Model
 {

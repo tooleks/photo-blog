@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\DAL\Models;
+namespace Core\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int id
  * @property int photo_id
  * @property string data
- * @package Core\DAL\Models
+ * @package Core\Models
  */
 class Exif extends Model
 {

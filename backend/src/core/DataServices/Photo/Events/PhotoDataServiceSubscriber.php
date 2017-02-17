@@ -1,15 +1,15 @@
 <?php
 
-namespace Core\DAL\DataServices\Photo\Events;
+namespace Core\DataServices\Photo\Events;
 
-use Core\DAL\Models\Photo;
+use Core\Models\Photo;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Collection;
 
 /**
  * Class PhotoDataServiceSubscriber.
  *
- * @package Core\DAL\DataServices\Photo\Events
+ * @package Core\DataServices\Photo\Events
  */
 class PhotoDataServiceSubscriber
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Core\DAL\DataServices\User;
+namespace Core\DataServices\User;
 
-use Core\DAL\DataServices\User\Contracts\UserDataService as UserDataServiceContract;
+use Core\DataServices\User\Contracts\UserDataService as UserDataServiceContract;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Database\ConnectionInterface as Connection;
@@ -13,7 +13,7 @@ use Lib\DataService\DataService;
  * Class UserDataService.
  *
  * @property Hasher hasher
- * @package Core\DAL\DataServices
+ * @package Core\DataServices
  */
 class UserDataService extends DataService implements UserDataServiceContract
 {
@@ -36,7 +36,7 @@ class UserDataService extends DataService implements UserDataServiceContract
      */
     public function getModelClass() : string
     {
-        return \Core\DAL\Models\User::class;
+        return \Core\Models\User::class;
     }
 
     /**
