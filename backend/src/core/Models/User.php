@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\DAL\Models;
+namespace Core\Models;
 
 use Carbon\Carbon;
 use Illuminate\Notifications\Notifiable;
@@ -21,7 +21,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property Role role
  * @method static User whereEmail($email)
  * @method static User whereId($id)
- * @package Core\DAL\Models
+ * @package Core\Models
  */
 class User extends Authenticatable
 {

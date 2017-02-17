@@ -7,7 +7,7 @@ use Api\V1\Http\Middleware\{
     GenerateThumbnails,
     UploadPhotoFile
 };
-use Core\DAL\Models\{
+use Core\Models\{
     Photo,
     User
 };

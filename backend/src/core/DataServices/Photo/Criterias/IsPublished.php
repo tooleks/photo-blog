@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\DAL\DataServices\Photo\Criterias;
+namespace Core\DataServices\Photo\Criterias;
 
 use Lib\DataService\Contracts\Criteria;
 
@@ -8,7 +8,7 @@ use Lib\DataService\Contracts\Criteria;
  * Class IsPublished.
  *
  * @property bool isPublished
- * @package Core\DAL\DataServices\Photo\Criterias
+ * @package Core\DataServices\Photo\Criterias
  */
 class IsPublished implements Criteria
 {

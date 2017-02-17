@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use Core\DAL\Models\Photo;
+use Core\Models\Photo;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\Filesystem;

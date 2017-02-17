@@ -30,7 +30,7 @@ return [
     ],
 
     'stripe' => [
-        'model' => Core\DAL\Models\User::class,
+        'model' => Core\Models\User::class,
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
     ],

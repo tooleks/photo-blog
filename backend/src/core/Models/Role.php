@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\DAL\Models;
+namespace Core\Models;
 
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string name
  * @method static Role administrator()
  * @method static Role customer()
- * @package Core\DAL\Models
+ * @package Core\Models
  */
 class Role extends Model
 {

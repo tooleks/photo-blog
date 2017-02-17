@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\DAL\Models;
+namespace Core\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string relative_url
  * @property string width
  * @property string height
- * @package Core\DAL\Models
+ * @package Core\Models
  */
 class Thumbnail extends Model
 {

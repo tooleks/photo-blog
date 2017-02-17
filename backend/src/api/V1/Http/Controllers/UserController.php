@@ -4,8 +4,8 @@ namespace Api\V1\Http\Controllers;
 
 use Api\V1\Http\Requests\CreateUser;
 use Api\V1\Http\Requests\UpdateUser;
-use Core\DAL\Models\User;
-use Core\DAL\DataServices\User\Contracts\UserDataService;
+use Core\Models\User;
+use Core\DataServices\User\Contracts\UserDataService;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 

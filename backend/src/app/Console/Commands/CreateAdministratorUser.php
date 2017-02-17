@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use Core\DAL\Models\User;
+use Core\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Hashing\Hasher;
 

@@ -1,14 +1,14 @@
 <?php
 
-namespace Core\DAL\DataServices\Photo;
+namespace Core\DataServices\Photo;
 
-use Core\DAL\DataServices\Photo\Contracts\PhotoDataService as PhotoDataServiceContract;
+use Core\DataServices\Photo\Contracts\PhotoDataService as PhotoDataServiceContract;
 use Lib\DataService\DataService;
 
 /**
  * Class PhotoDataService.
  *
- * @package Core\DAL\DataServices
+ * @package Core\DataServices
  */
 class PhotoDataService extends DataService implements PhotoDataServiceContract
 {
@@ -17,6 +17,6 @@ class PhotoDataService extends DataService implements PhotoDataServiceContract
      */
     public function getModelClass() : string
     {
-        return \Core\DAL\Models\Photo::class;
+        return \Core\Models\Photo::class;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\DAL\Models;
+namespace Core\Models;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int id
  * @property string text
  * @property Collection photos
- * @package Core\DAL\Models
+ * @package Core\Models
  */
 class Tag extends Model
 {
