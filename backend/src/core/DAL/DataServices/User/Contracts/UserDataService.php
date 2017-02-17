@@ -16,7 +16,8 @@ interface UserDataService extends DataService
      *
      * @param string $email
      * @param string $password
+     * @param array $options
      * @return mixed
      */
-    public function getByCredentials(string $email, string $password);
+    public function getByCredentials(string $email, string $password, array $options = []);
 }
