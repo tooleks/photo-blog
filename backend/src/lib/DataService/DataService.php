@@ -64,11 +64,11 @@ abstract class DataService implements DataServiceContract
             throw new DataServiceException(sprintf('The %s class does not exist.', $modelClass));
         }
 
-        $this->model = new $modelClass;
-
-        if (!($this->model instanceof Model)) {
+        if (!is_subclass_of($modelClass, Model::class)) {
             throw new DataServiceException(sprintf('The model must be inherited from the %s class.', Model::class));
         }
+
+        $this->model = new $modelClass;
     }
 
     /**
@@ -82,11 +82,9 @@ abstract class DataService implements DataServiceContract
     }
 
     /**
-     * Reset data service to initial state.
-     *
-     * @return void
+     * @inheritdoc
      */
-    protected function reset()
+    public function reset()
     {
         $this->resetModel();
         $this->resetQuery();
