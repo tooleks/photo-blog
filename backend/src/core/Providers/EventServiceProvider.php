@@ -3,6 +3,7 @@
 namespace Core\Providers;
 
 use Core\DAL\DataService\Photo\Events\PhotoDataServiceSubscriber;
+use Core\DAL\DataService\User\Events\UserDataServiceSubscriber;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 /**
@@ -24,6 +25,7 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $subscribe = [
         PhotoDataServiceSubscriber::class,
+        UserDataServiceSubscriber::class,
     ];
 
     /**
