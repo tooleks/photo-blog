@@ -144,7 +144,7 @@ abstract class DataService implements DataServiceContract
     {
         $this->dispatchEvent('beforeGetById', ['query' => $this->query, 'options' => $options]);
         $model = $this->query->find($id);
-        $this->dispatchEvent('afterGetById', ['query' => $this->query, 'models' => $model, 'options' => $options]);
+        $this->dispatchEvent('afterGetById', ['query' => $this->query, 'model' => $model, 'options' => $options]);
 
         $this->reset();
 
@@ -162,7 +162,7 @@ abstract class DataService implements DataServiceContract
     {
         $this->dispatchEvent('afterGetFirst', ['query' => $this->query, 'options' => $options]);
         $model = $this->query->first();
-        $this->dispatchEvent('afterGetFirst', ['query' => $this->query, 'models' => $model, 'options' => $options]);
+        $this->dispatchEvent('afterGetFirst', ['query' => $this->query, 'model' => $model, 'options' => $options]);
 
         $this->reset();
 
