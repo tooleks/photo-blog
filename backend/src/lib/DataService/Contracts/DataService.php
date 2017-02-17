@@ -24,14 +24,6 @@ interface DataService
     public function reset();
 
     /**
-     * Relations that will be loaded.
-     *
-     * @param array $relations
-     * @return $this
-     */
-    public function withRelations(array $relations);
-
-    /**
      * Apply query criteria.
      *
      * @param Criteria|null $criteria
@@ -43,46 +35,51 @@ interface DataService
      * Get model by unique ID.
      *
      * @param mixed $id
+     * @param array $options
      * @return mixed
      */
-    public function getById($id);
+    public function getById($id, array $options = []);
 
     /**
      * Get first model.
      *
+     * @param array $options
      * @return mixed
      */
-    public function getFirst();
+    public function getFirst(array $options = []);
 
     /**
      * Get models.
      *
+     * @param array $options
      * @return mixed
      */
-    public function get();
+    public function get(array $options = []);
 
     /**
      * Count models.
      *
+     * @param array $options
      * @return mixed
      */
-    public function count() : int;
+    public function count(array $options = []) : int;
 
     /**
      * Save model.
      *
      * @param mixed $model
      * @param array $attributes
-     * @param array $relations
+     * @param array $options
      * @return mixed
      */
-    public function save($model, array $attributes = [], array $relations = []);
+    public function save($model, array $attributes = [], array $options = []);
 
     /**
      * Delete model.
      *
      * @param mixed $model
+     * @param array $options
      * @return bool
      */
-    public function delete($model) : bool;
+    public function delete($model, array $options = []) : bool;
 }

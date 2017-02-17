@@ -169,6 +169,11 @@ return [
         Tooleks\Laravel\Presenter\Providers\PresenterProvider::class,
 
         /*
+         * Core Service Providers...
+         */
+        Core\Providers\EventServiceProvider::class,
+
+        /*
          * Application Service Providers...
          */
         App\Providers\AppServiceProvider::class,
