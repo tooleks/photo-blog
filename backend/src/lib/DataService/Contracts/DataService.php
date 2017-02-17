@@ -17,6 +17,13 @@ interface DataService
     public function getModelClass() : string;
 
     /**
+     * Reset data service to its initial state.
+     *
+     * @return void
+     */
+    public function reset();
+
+    /**
      * Relations that will be loaded.
      *
      * @param array $relations
