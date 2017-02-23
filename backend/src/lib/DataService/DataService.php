@@ -162,7 +162,7 @@ abstract class DataService implements DataServiceContract
      */
     public function getFirst(array $options = [])
     {
-        $this->dispatchEvent('afterGetFirst', $this->query, $options);
+        $this->dispatchEvent('beforeGetFirst', $this->query, $options);
 
         $model = $this->query->first();
 
