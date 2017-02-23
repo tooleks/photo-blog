@@ -20,7 +20,7 @@ class PhotoDataServiceSubscriber
      *
      * @param Dispatcher $events
      */
-    public function subscribe($events)
+    public function subscribe(Dispatcher $events)
     {
         $events->listen(
             PhotoDataService::class . '@beforeGetById',
