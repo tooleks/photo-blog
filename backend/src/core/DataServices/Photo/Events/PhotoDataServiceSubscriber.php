@@ -2,6 +2,7 @@
 
 namespace Core\DataServices\Photo\Events;
 
+use Core\DataServices\Photo\PhotoDataService;
 use Core\Models\Photo;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Collection;
@@ -20,10 +21,25 @@ class PhotoDataServiceSubscriber
      */
     public function subscribe($events)
     {
-        $events->listen('events.photoDataService.beforeGetById', static::class . '@onBeforeGet');
-        $events->listen('events.photoDataService.beforeGetFirst', static::class . '@onBeforeGet');
-        $events->listen('events.photoDataService.beforeGet', static::class . '@onBeforeGet');
-        $events->listen('events.photoDataService.afterSave', static::class . '@onAfterSave');
+        $events->listen(
+            PhotoDataService::class . '@beforeGetById',
+            static::class . '@onBeforeGet'
+        );
+
+        $events->listen(
+            PhotoDataService::class . '@beforeGetFirst',
+            static::class . '@onBeforeGet'
+        );
+
+        $events->listen(
+            PhotoDataService::class . '@beforeGet',
+            static::class . '@onBeforeGet'
+        );
+
+        $events->listen(
+            PhotoDataService::class . '@afterSave',
+            static::class . '@onAfterSave'
+        );
     }
 
     /**
