@@ -5,6 +5,7 @@ namespace Core\DataServices\Photo\Events;
 use Core\DataServices\Photo\PhotoDataService;
 use Core\Models\Photo;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 /**
@@ -49,7 +50,7 @@ class PhotoDataServiceSubscriber
      * @param array $options
      * @return void
      */
-    public function onBeforeGet($query, array $options)
+    public function onBeforeGet(Builder $query, array $options)
     {
         $query->with('exif');
 
@@ -66,7 +67,7 @@ class PhotoDataServiceSubscriber
      * @param array $options
      * @return void
      */
-    public function onAfterSave($photo, array $attributes = [], array $options = [])
+    public function onAfterSave(Photo $photo, array $attributes = [], array $options = [])
     {
         if (array_key_exists('exif', $attributes)) {
             $photo->exif()->delete();

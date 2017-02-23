@@ -49,7 +49,7 @@ class UserDataServiceSubscriber
      * @param array $options
      * @throws ValidationException
      */
-    public function onBeforeSave($user, array $attributes = [], array $options = [])
+    public function onBeforeSave(User $user, array $attributes = [], array $options = [])
     {
         $validator = ValidatorFactory::make(['email' => $user->email], [
             'email' => $user->exists
