@@ -2,6 +2,7 @@
 
 namespace Core\DataServices\User\Events;
 
+use Core\DataServices\User\UserDataService;
 use Core\Models\User;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Hashing\Hasher;
@@ -34,7 +35,10 @@ class UserDataServiceSubscriber
      */
     public function subscribe($events)
     {
-        $events->listen('events.userDataService.beforeSave', static::class . '@onBeforeSave');
+        $events->listen(
+            UserDataService::class . '@beforeSave',
+            static::class . '@onBeforeSave'
+        );
     }
 
     /**

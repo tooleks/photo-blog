@@ -5,7 +5,6 @@ namespace Lib\DataService;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\ConnectionInterface as Connection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 use Lib\DataService\Contracts\Criteria;
 use Lib\DataService\Contracts\DataService as DataServiceContract;
 use Lib\DataService\Exceptions\DataServiceDeletingException;
@@ -110,15 +109,15 @@ abstract class DataService implements DataServiceContract
     /**
      * Dispatch an event.
      *
-     * @param string $name
+     * Dispatches events with name 'NameSpace\Path\To\DataService@eventName'.
+     *
+     * @param string $eventName
      * @param array $data
      * @return void
      */
-    protected function dispatchEvent(string $name, ...$data)
+    protected function dispatchEvent(string $eventName, ...$data)
     {
-        $event = implode('.', ['events', lcfirst(class_basename(static::class)), $name]);
-
-        $this->events->dispatch($event, $data);
+        $this->events->dispatch(static::class . '@' . $eventName, $data);
     }
 
     /**
