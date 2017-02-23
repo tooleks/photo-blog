@@ -33,7 +33,7 @@ class UserDataServiceSubscriber
      *
      * @param Dispatcher $events
      */
-    public function subscribe($events)
+    public function subscribe(Dispatcher $events)
     {
         $events->listen(
             UserDataService::class . '@beforeSave',
