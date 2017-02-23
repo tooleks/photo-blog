@@ -5,6 +5,7 @@ namespace Lib\DataService;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\ConnectionInterface as Connection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use Lib\DataService\Contracts\Criteria;
 use Lib\DataService\Contracts\DataService as DataServiceContract;
 use Lib\DataService\Exceptions\DataServiceDeletingException;
@@ -109,15 +110,15 @@ abstract class DataService implements DataServiceContract
     /**
      * Dispatch an event.
      *
-     * @param string $eventName
-     * @param array $payload
+     * @param string $name
+     * @param array $data
      * @return void
      */
-    protected function dispatchEvent(string $eventName, array $payload = [])
+    protected function dispatchEvent(string $name, ...$data)
     {
-        $event = implode('.', ['events', lcfirst(class_basename(static::class)), $eventName]);
+        $event = implode('.', ['events', lcfirst(class_basename(static::class)), $name]);
 
-        $this->events->dispatch($event, $payload);
+        $this->events->dispatch($event, $data);
     }
 
     /**
@@ -142,11 +143,11 @@ abstract class DataService implements DataServiceContract
      */
     public function getById($id, array $options = [])
     {
-        $this->dispatchEvent('beforeGetById', ['query' => $this->query, 'options' => $options]);
+        $this->dispatchEvent('beforeGetById', $this->query, $options);
 
         $model = $this->query->find($id);
 
-        $this->dispatchEvent('afterGetById', ['model' => $model, 'options' => $options]);
+        $this->dispatchEvent('afterGetById', $model, $options);
 
         $this->reset();
 
@@ -162,11 +163,11 @@ abstract class DataService implements DataServiceContract
      */
     public function getFirst(array $options = [])
     {
-        $this->dispatchEvent('afterGetFirst', ['query' => $this->query, 'options' => $options]);
+        $this->dispatchEvent('afterGetFirst', $this->query, $options);
 
         $model = $this->query->first();
 
-        $this->dispatchEvent('afterGetFirst', ['model' => $model, 'options' => $options]);
+        $this->dispatchEvent('afterGetFirst', $model, $options);
 
         $this->reset();
 
@@ -182,11 +183,11 @@ abstract class DataService implements DataServiceContract
      */
     public function get(array $options = [])
     {
-        $this->dispatchEvent('beforeGet', ['query' => $this->query, 'options' => $options]);
+        $this->dispatchEvent('beforeGet', $this->query, $options);
 
         $models = $this->query->get();
 
-        $this->dispatchEvent('afterGet', ['models' => $models, 'options' => $options]);
+        $this->dispatchEvent('afterGet', $models, $options);
 
         $this->reset();
 
@@ -198,11 +199,11 @@ abstract class DataService implements DataServiceContract
      */
     public function count(array $options = []) : int
     {
-        $this->dispatchEvent('beforeCount', ['query' => $this->query, 'options' => $options]);
+        $this->dispatchEvent('beforeCount', $this->query, $options);
 
         $count = $this->query->count();
 
-        $this->dispatchEvent('afterCount', ['count' => $count, 'options' => $options]);
+        $this->dispatchEvent('afterCount', $count, $options);
 
         $this->reset();
 
@@ -222,11 +223,11 @@ abstract class DataService implements DataServiceContract
 
             $this->dbConnection->beginTransaction();
 
-            $this->dispatchEvent('beforeSave', ['model' => $model, 'attributes' => $attributes, 'options' => $options]);
+            $this->dispatchEvent('beforeSave', $model, $attributes, $options);
 
             $model->save();
 
-            $this->dispatchEvent('afterSave', ['model' => $model, 'attributes' => $attributes, 'options' => $options]);
+            $this->dispatchEvent('afterSave', $model, $attributes, $options);
 
             $this->dbConnection->commit();
 
@@ -250,11 +251,11 @@ abstract class DataService implements DataServiceContract
 
             $this->dbConnection->beginTransaction();
 
-            $this->dispatchEvent('beforeDelete', ['model' => $model, 'options' => $options]);
+            $this->dispatchEvent('beforeDelete', $model, $options);
 
             $deleted = $model->delete();
 
-            $this->dispatchEvent('afterDelete', ['model' => $model, 'deleted' => $deleted, 'options' => $options]);
+            $this->dispatchEvent('afterDelete', $model, $deleted, $options);
 
             $this->dbConnection->commit();
 

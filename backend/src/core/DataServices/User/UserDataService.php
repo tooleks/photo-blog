@@ -44,7 +44,7 @@ class UserDataService extends DataService implements UserDataServiceContract
      */
     public function getByCredentials(string $email, string $password, array $options = [])
     {
-        $this->dispatchEvent('beforeGetByCredentials', ['query' => $this->query, 'options' => $options]);
+        $this->dispatchEvent('beforeGetByCredentials', $this->query, $options);
 
         $model = $this->query->where('email', $email)->first();
 
@@ -56,7 +56,7 @@ class UserDataService extends DataService implements UserDataServiceContract
             throw new DataServiceNotFoundException('Invalid user password.');
         }
 
-        $this->dispatchEvent('afterGetByCredentials', ['model' => $model, 'options' => $options]);
+        $this->dispatchEvent('afterGetByCredentials', $model, $options);
 
         $this->reset();
 
