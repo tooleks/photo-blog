@@ -62,3 +62,9 @@ Run the following command (within the `./frontend` directory) to start dev serve
 ```
 npm start
 ```
+
+Run the following command (within the `./frontend` directory) to build distribution (it will appear in the `./frontend/dist` directory).
+
+```
+npm run build
+```
