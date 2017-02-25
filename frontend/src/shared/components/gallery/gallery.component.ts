@@ -11,7 +11,7 @@ export class GalleryComponent {
     @ViewChild('galleryGridComponent') galleryGridComponent:GalleryGridComponent;
 
     @Input() items:Array<any> = [];
-    @Input() defaultOpenedItemId:string;
+    @Input() defaultItemId:string;
     @Input() onLoadMoreCallback:any;
     @Input() showCloseButton:boolean = true;
     @Input() showEditButton:boolean = true;
@@ -33,8 +33,10 @@ export class GalleryComponent {
     }
 
     ngOnChanges(changes:SimpleChanges) {
-        if (this.defaultOpenedItemId && changes['items']) {
-            this.viewItemById(this.defaultOpenedItemId);
+        // We will view default item only on the first load of items.
+        // This is a buggy piece of code. Be aware when making a changes.
+        if (this.defaultItemId && changes['items'] && !changes['items'].previousValue.length) {
+            this.viewItemById(this.defaultItemId);
         }
     };
 
@@ -98,9 +100,7 @@ export class GalleryComponent {
                 return true;
             } else if (index === this.items.length - 1) {
                 this.loadMoreItems().then((items:Array<any>) => {
-                    if (items.length > this.items.length) {
-                        this.viewItemById(id);
-                    }
+                    this.viewItemById(id);
                 });
             }
             return false;
@@ -131,9 +131,7 @@ export class GalleryComponent {
             this.viewItem(this.items[nextItemIndex]);
         } else if (loadMoreIfNotExist) {
             this.loadMoreItems().then((items:Array<any>) => {
-                if (items.length > this.items.length) {
-                    this.viewNextItem(false)
-                }
+                this.viewNextItem(false)
             });
         }
     };
@@ -142,9 +140,7 @@ export class GalleryComponent {
         return this.callbackHandler
             .resolveCallback(this.onLoadMoreCallback)
             .then((items:Array<any>) => {
-                if (items.length > this.items.length) {
-                    this.setItems(items);
-                }
+                this.setItems(items);
                 return items;
             });
     };

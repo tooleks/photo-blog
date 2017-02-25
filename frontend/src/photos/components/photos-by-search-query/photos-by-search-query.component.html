@@ -27,7 +27,7 @@
         </div>
         <gallery #galleryComponent
                  [items]="getLoadedPhotos()"
-                 [defaultOpenedItemId]="queryParams['show']"
+                 [defaultItemId]="queryParams['show']"
                  [onLoadMoreCallback]="loadMorePhotos"
                  (onOpenItem)="onShowPhoto($event)"
                  (onCloseItem)="onHidePhoto($event)"
