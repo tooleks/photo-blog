@@ -24,6 +24,7 @@ export class PhotosBySearchQueryComponent {
 
     private loaded:boolean;
     private queryParams:Object = {query: ''};
+    private query:string = null;
     private pager:PagerService;
     private lockProcess:LockProcessService;
     private navigator:NavigatorService;
@@ -57,15 +58,15 @@ export class PhotosBySearchQueryComponent {
 
     ngAfterViewInit() {
         this.inputSearchComponent.first.nativeElement.focus();
-        
+
         this.route.queryParams
             .map((queryParams) => queryParams['query'])
             .subscribe((query:string) => {
-                if (!query) {
+                if (!query || query == this.query) {
                     return;
                 }
                 this.galleryComponent.reset();
-                this.queryParams['query'] = query;
+                this.queryParams['query'] = this.query = query;
                 this.title.setTitle(['Photos', this.queryParams['query']]);
                 this.pager.reset();
                 this.loadPhotos(this.pager.calculateLimitForPage(this.pager.getPage()),

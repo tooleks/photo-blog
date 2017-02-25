@@ -33,7 +33,7 @@ export class GalleryComponent {
     }
 
     ngOnChanges(changes:SimpleChanges) {
-        // We will view default item only on the first load of items.
+        // We will view default item only on the fresh load of items.
         // This is a buggy piece of code. Be aware when making a changes.
         if (this.defaultItemId && changes['items'] && !changes['items'].previousValue.length) {
             this.viewItemById(this.defaultItemId);
