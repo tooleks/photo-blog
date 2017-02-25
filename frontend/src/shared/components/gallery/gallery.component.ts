@@ -30,9 +30,8 @@ export class GalleryComponent {
     }
 
     ngOnChanges(changes:SimpleChanges) {
-        if (this.defaultOpenedItemId && this.items.length) {
+        if (this.defaultOpenedItemId && changes['items']) {
             this.viewItemById(this.defaultOpenedItemId);
-            this.defaultOpenedItemId = null;
         }
     };
 
@@ -61,9 +60,7 @@ export class GalleryComponent {
                 this.openedItemIsLoaded = true;
                 resolve();
             };
-            setTimeout(() => {
-                if (!loaded) this.openedItemIsLoaded = false;
-            }, 400);
+            setTimeout(() => (this.openedItemIsLoaded = loaded), 400);
             image.src = item.thumbnails.large.absolute_url;
         }).then(() => this.onOpenItem.emit(this.openedItem));
     };
