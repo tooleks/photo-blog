@@ -90,7 +90,7 @@ class PhotoController extends ResourceController
 
         $photo->setIsPublishedAttribute(false);
 
-        $this->photoDataService->save($photo, $request->all());
+        $this->photoDataService->save($photo, $request->all(), ['exif', 'thumbnails']);
 
         return $photo;
     }
@@ -197,7 +197,7 @@ class PhotoController extends ResourceController
      */
     public function update(UpdateUploadedPhoto $request, $photo) : Photo
     {
-        $this->photoDataService->save($photo, $request->all());
+        $this->photoDataService->save($photo, $request->all(), ['exif', 'thumbnails']);
 
         return $photo;
     }
