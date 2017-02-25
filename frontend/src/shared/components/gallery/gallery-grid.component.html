@@ -1,11 +1,13 @@
-<a *ngFor="let item of getGridItems()"
-   (click)="onClickGridItemCallback(item)"
-   [style.width]="item.thumbnails[1].width"
-   [style.height]="item.thumbnails[1].height"
-   class="gl-grid-item-container">
-    <img [src]="item.thumbnails[1].absolute_url"
-         [width]="item.thumbnails[1].width"
-         [height]="item.thumbnails[1].height"
-         [alt]="item.description"
-         class="gl-grid-item">
-</a>
+<div *ngFor="let row of gridRowItems">
+    <a *ngFor="let item of row"
+       (click)="onClickGridItem.emit(item)"
+       [style.width]="item.thumbnails.medium.width"
+       [style.height]="item.thumbnails.medium.height"
+       class="gl-grid-item-container">
+        <img [src]="item.thumbnails.medium.absolute_url"
+             [width]="item.thumbnails.medium.width"
+             [height]="item.thumbnails.medium.height"
+             [alt]="item.description"
+             class="gl-grid-item">
+    </a>
+</div>

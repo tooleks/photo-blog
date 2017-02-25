@@ -1,5 +1,4 @@
-import {Component, Input, Inject, HostListener, ElementRef, SimpleChanges, ViewChild} from '@angular/core';
-import {GridRow} from './grid-row';
+import {Component, Input, Output, Inject, ElementRef, SimpleChanges, EventEmitter} from '@angular/core';
 
 @Component({
     selector: 'gallery-grid',
@@ -8,28 +7,31 @@ import {GridRow} from './grid-row';
 })
 export class GalleryGridComponent {
     @Input() rowHeight:number = 0;
-    @Input() rowWidth:number = 0;
-    @Input() onClickGridItemCallback:any;
     @Input() galleryItems:Array<any> = [];
     @Input() updateInterval:number;
+    @Output() onClickGridItem:EventEmitter<any> = new EventEmitter<any>();
 
-    gridLastRow:GridRow;
-    gridItems:Array<any> = [];
-    elementSizeCheckInterval:any = null;
-    elementProperties:any = {width: 0, height: 0};
+    private elementRefProperties:{width:number, height:number} = {width: 0, height: 0};
+    private elementSizeCheckInterval:any = null;
+    private rowWidth:number = 0;
+    private rowMaxWidth:number;
+    private rowMaxHeight:number;
+    private activeRowItems:Array<any> = [];
+    private gridRowItems:Array<any> = [];
 
     constructor(@Inject(ElementRef) private elementRef:ElementRef) {
-        this.gridLastRow = new GridRow;
+        this.resetRow();
+        this.rowMaxHeight = 0;
+        this.rowMaxWidth = 0;
     }
 
     ngOnChanges(changes:SimpleChanges) {
         if (changes['rowHeight']) {
-            this.gridLastRow.setMaxHeight(changes['rowHeight'].currentValue);
+            this.rowMaxHeight = changes['rowHeight'].currentValue;
             this.setGridItems(this.galleryItems);
         }
-
         if (changes['galleryItems'] && changes['galleryItems'].currentValue.length) {
-            this.gridLastRow.setMaxWidth(this.elementRef.nativeElement.offsetWidth);
+            this.rowMaxWidth = this.elementRef.nativeElement.offsetWidth;
             this.setGridItems(changes['galleryItems'].currentValue);
         }
     }
@@ -38,9 +40,10 @@ export class GalleryGridComponent {
         this.elementSizeCheckInterval = setInterval(() => {
             let height = this.elementRef.nativeElement.offsetHeight;
             let width = this.elementRef.nativeElement.offsetWidth;
-            if ((height !== this.elementProperties.height) || (width !== this.elementProperties.width)) {
-                this.elementProperties = {width: width, height: height};
-                this.gridLastRow.setMaxWidth(this.elementRef.nativeElement.offsetWidth);
+            if (width !== this.elementRefProperties.width) {
+                this.elementRefProperties = {width: width, height: height};
+                this.rowMaxWidth = this.elementRef.nativeElement.offsetWidth;
+                this.gridRowItems = [];
                 this.setGridItems(this.galleryItems);
             }
         }, this.updateInterval);
@@ -53,18 +56,78 @@ export class GalleryGridComponent {
     }
 
     setGridItems = (items:Array<any>) => {
-        this.gridLastRow.resetItems();
-        let gridItems:Array<any> = [];
-        for (let index = 0; index < items.length; index++) {
-            let rowItems = this.gridLastRow.appendItem(items[index]);
-            if (!this.gridLastRow.getItems().length || index == items.length - 1) {
-                gridItems = gridItems.concat(rowItems);
-            }
+        let newGridItems = this.getNewGridItems(items);
+        let itemsToProcess = this.gridRowItems.length ? this.gridRowItems.pop().concat(newGridItems) : newGridItems;
+        if (!itemsToProcess.length) {
+            return;
         }
-        this.gridItems = gridItems;
+        itemsToProcess.forEach((item:any, index:number) => {
+            this.pushItemToRow(item, this.rowMaxHeight);
+            let activeRowItems = this.releaseRowItems(index == itemsToProcess.length - 1);
+            if (activeRowItems.length) {
+                this.gridRowItems.push(activeRowItems);
+            }
+        });
     };
 
-    getGridItems = ():Array<any> => {
-        return this.gridItems;
+    private getNewGridItems = (items:Array<any>) => {
+        return items.filter((item:any) => {
+            return !this.existsInGrid(item.id);
+        });
+    };
+
+    private existsInGrid = (id:number) => {
+        if (!this.gridRowItems.length) {
+            return false;
+        }
+        let gridItems = [].concat.apply([], this.gridRowItems);
+        return gridItems.some((item:any) => item.id == id);
+    };
+
+    private pushItemToRow = (item:any, maxHeight:number):number => {
+        let scaledToMaxHeightItem = this.scaleItemToMaxHeight(item, maxHeight);
+        this.rowWidth = this.predictRowWidth(scaledToMaxHeightItem);
+        return this.activeRowItems.push(scaledToMaxHeightItem);
+    };
+
+    private releaseRowItems = (force:boolean = false):Array<any> => {
+        let items = [];
+        if (this.rowWidth > this.rowMaxWidth) {
+            items = this.scaleRowItemsToMaxWidth();
+        }
+        if (force && !items.length) {
+            items = this.activeRowItems;
+        }
+        if (items.length) {
+            this.resetRow();
+        }
+        return items;
+    };
+
+    private resetRow = ():void => {
+        this.rowWidth = 0;
+        this.activeRowItems = [];
+    };
+
+    private predictRowWidth = (item:any):number => {
+        let width = item.thumbnails.medium.width;
+        this.activeRowItems.forEach((item:any) => width += item.thumbnails.medium.width);
+        return width;
+    };
+
+    private scaleItemToMaxHeight = (item:any, maxHeight:number):any => {
+        let scaleRate = item.thumbnails.medium.height * 100 / maxHeight;
+        item.thumbnails.medium.width = Math.floor(item.thumbnails.medium.width * 100 / scaleRate);
+        item.thumbnails.medium.height = Math.floor(maxHeight);
+        return item;
+    };
+
+    private scaleRowItemsToMaxWidth = ():Array<any> => {
+        let scaleRate = this.rowWidth * 100 / this.rowMaxWidth;
+        return this.activeRowItems.map((item:any) => {
+            item.thumbnails.medium.width = Math.floor(item.thumbnails.medium.width * 100 / scaleRate);
+            item.thumbnails.medium.height = Math.floor(item.thumbnails.medium.height * 100 / scaleRate);
+            return item;
+        });
     };
 }

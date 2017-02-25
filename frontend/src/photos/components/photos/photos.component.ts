@@ -1,10 +1,16 @@
 import {Component, Inject} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {TitleService} from '../../../shared/services/title';
-import {LockProcessService, LockProcessServiceProvider} from '../../../shared/services/lock-process';
-import {NavigatorService, NavigatorServiceProvider} from '../../../shared/services/navigator';
-import {PagerService, PagerServiceProvider} from '../../../shared/services/pager';
-import {AuthProviderService} from '../../../shared/services/auth';
+import {
+    TitleService,
+    ScrollerService,
+    AuthProviderService,
+    NavigatorServiceProvider,
+    NavigatorService,
+    PagerServiceProvider,
+    PagerService,
+    LockProcessServiceProvider,
+    LockProcessService,
+} from '../../../shared/services';
 import {Photo} from '../../../shared/models';
 import {PhotoDataProviderService} from '../../services/photo-data-provider';
 
@@ -21,6 +27,7 @@ export class PhotosComponent {
 
     constructor(@Inject(ActivatedRoute) private route:ActivatedRoute,
                 @Inject(TitleService) private title:TitleService,
+                @Inject(ScrollerService) private scroller:ScrollerService,
                 @Inject(AuthProviderService) private authProvider:AuthProviderService,
                 @Inject(PhotoDataProviderService) private photoDataProvider:PhotoDataProviderService,
                 @Inject(NavigatorServiceProvider) navigatorProvider:NavigatorServiceProvider,
@@ -32,6 +39,8 @@ export class PhotosComponent {
     }
 
     ngOnInit() {
+        this.scroller.scrollToTop();
+
         this.title.setTitle('All Photos');
 
         this.route.queryParams

@@ -1,58 +1,18 @@
 <div id="wrapper">
-    <nav class="navbar-default navbar-static-side" role="navigation">
-        <sidebar></sidebar>
-    </nav>
+    <sidebar #sideBar></sidebar>
+    <topbar (onNavClick)="sideBar.toggle()"></topbar>
     <div id="page-wrapper" class="gray-bg">
-        <div class="row border-bottom">
-            <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
-                <div class="navbar-header">
-                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary"><i class="fa fa-bars"> </i></a>
-                    <search-form></search-form>
-                </div>
-                <ul class="nav navbar-top-links navbar-right">
-                    <li>
-                        <span class="m-r-sm text-muted welcome-message"></span>
-                    </li>
-                    <li class="dropdown" *ngIf="authProvider.isAuthenticated()">
-                        <a class="dropdown-toggle count-info" data-toggle="dropdown" aria-expanded="true">
-                            <i class="fa fa-user"></i> {{ authProvider.getUser().name }}
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a [routerLink]="['photo/add']" routerLinkActive="active"><i class="fa fa-plus"></i> Add
-                                Photo</a></li>
-                            <li><a [routerLink]="['signout']" routerLinkActive="active"><i class="fa fa-sign-out"></i>
-                                Sign Out</a></li>
-                        </ul>
-                    </li>
-                    <li *ngIf="!authProvider.isAuthenticated()"><a [routerLink]="['signin']"
-                                                                      routerLinkActive="active"><i
-                            class="fa fa-sign-in"> </i> Sign In</a></li>
-                </ul>
-            </nav>
-        </div>
-        <div *ngIf="false" class="row wrapper border-bottom white-bg page-heading">
-            <div class="col-lg-9">
-                <h2></h2>
-                <ol class="breadcrumb">
-                    <li>
-                        <a></a>
-                    </li>
-                </ol>
-            </div>
-        </div>
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-sm-12">
                 <div class="wrapper wrapper-content">
-                    <!-- Start: Router View -->
                     <router-outlet></router-outlet>
-                    <!-- End: Router View -->
                 </div>
             </div>
         </div>
         <div class="footer">
-            <div>
-                Copyright &copy; <strong>{{ env.get('appName') }}</strong> 2016
-            </div>
+            <span>
+                Copyright &copy; <strong>{{ env.get('appName') }}</strong> {{ getCurrentYear() }}
+            </span>
         </div>
     </div>
 </div>

@@ -1,14 +1,12 @@
 import {Component, Inject} from '@angular/core';
-import {AuthProviderService} from '../../../shared/services/auth';
-import {EnvService} from '../../../shared/services/env';
-import {TitleService} from '../../../shared/services/title';
+import {EnvService, TitleService, AuthProviderService} from '../../../shared/services';
 
-import '../../../../public/app/css/style.css';
-import '../../../../public/app/css/overrides.css';
+import '../../../../public/app/css/styles.css';
 
 @Component({
     selector: 'app',
     template: require('./app.component.html'),
+    styles: [require('./app.component.css').toString()],
 })
 export class AppComponent {
     constructor(@Inject(EnvService) private env:EnvService,
@@ -17,6 +15,10 @@ export class AppComponent {
     }
 
     ngOnInit() {
-        this.title.setTitle(this.env.get('appName'));
+        this.title.setTitle();
     }
+
+    private getCurrentYear = () => {
+        return (new Date).getFullYear();
+    };
 }

@@ -12,7 +12,7 @@ return [
     | any other location as required by the application or its packages.
     */
 
-    'name' => 'Photo Blog',
+    'name' => 'Photo Blog API',
 
     /*
     |--------------------------------------------------------------------------
@@ -166,22 +166,12 @@ return [
         /*
          * Package Service Providers...
          */
+        Tooleks\Laravel\Presenter\Providers\PresenterProvider::class,
 
         /*
-         * Application Service Providers...
+         * Core Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\BroadcastServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
-
-        /*
-         * API V1 Service Providers...
-         */
-        Api\V1\Providers\ApiServiceProvider::class,
-        Api\V1\Providers\AuthServiceProvider::class,
-        Api\V1\Providers\RouteServiceProvider::class,
+        Core\Providers\EventServiceProvider::class,
 
     ],
 

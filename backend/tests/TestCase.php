@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class TestCase.
+ */
 abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
 {
     /**
@@ -10,16 +13,33 @@ abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
     protected $baseUrl = 'http://localhost';
 
     /**
-     * Creates the application.
-     *
-     * @return \Illuminate\Foundation\Application
+     * @inheritdoc
      */
     public function createApplication()
     {
-        $app = require __DIR__.'/../bootstrap/app.php';
+        $app = require __DIR__ . '/../bootstrap/app.php';
 
         $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 
         return $app;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->artisan('migrate');
+        $this->artisan('create:roles');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown()
+    {
+        $this->artisan('migrate:rollback');
     }
 }

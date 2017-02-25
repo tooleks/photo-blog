@@ -1,50 +1,58 @@
 import {Component, Inject} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {TitleService} from '../../../shared/services/title';
-import {AuthProviderService} from '../../../shared/services/auth';
-import {PhotoDataProviderService} from '../../services/photo-data-provider';
+import {
+    TitleService,
+    ScrollerService,
+    AuthProviderService,
+    NotificatorService,
+    NavigatorServiceProvider,
+    NavigatorService,
+    LockProcessServiceProvider,
+    LockProcessService,
+} from '../../../shared/services';
 import {Photo, UploadedPhoto} from '../../../shared/models';
-import {NotificatorService} from '../../../shared/services/notificator';
-import {LockProcessService, LockProcessServiceProvider} from '../../../shared/services/lock-process';
-import {NavigatorService, NavigatorServiceProvider} from '../../../shared/services/navigator';
+import {PhotoDataProviderService} from '../../services'
 
 @Component({
     selector: 'photo-form',
     template: require('./photo-form.component.html'),
+    styles: [require('./photo-form.component.css').toString()],
 })
 export class PhotoFormComponent {
     private photo:Photo;
-    private lockProcess:LockProcessService;
     private navigator:NavigatorService;
+    private lockProcess:LockProcessService;
 
     constructor(@Inject(ActivatedRoute) private route:ActivatedRoute,
                 @Inject(TitleService) private title:TitleService,
+                @Inject(ScrollerService) private scroller:ScrollerService,
                 @Inject(AuthProviderService) private authProvider:AuthProviderService,
                 @Inject(PhotoDataProviderService) private photoDataProvider:PhotoDataProviderService,
                 @Inject(NotificatorService) private notificator:NotificatorService,
                 @Inject(NavigatorServiceProvider) navigatorServiceProvider:NavigatorServiceProvider,
                 @Inject(LockProcessServiceProvider) lockProcessServiceProvider:LockProcessServiceProvider) {
-        this.lockProcess = lockProcessServiceProvider.getInstance();
         this.navigator = navigatorServiceProvider.getInstance();
+        this.lockProcess = lockProcessServiceProvider.getInstance();
     }
 
     ngOnInit() {
+        this.scroller.scrollToTop();
+
         this.title.setTitle('Add Photo');
 
         this.photo = new Photo;
 
-        this.route.params
-            .map((params) => params['id'])
-            .subscribe((id:number) => {
-                if (!id) {
-                    return;
-                }
+        this.route.params.map((params) => params['id']).subscribe((id:number) => {
+            if (!id) {
+                return;
+            }
 
-                this.photoDataProvider.getById(id).then((photo:Photo) => {
-                    this.title.setTitle('Edit Photo');
-                    this.photo.setAttributes(photo);
-                });
+            this.photoDataProvider.getById(id).then((photo:Photo) => {
+                this.title.setTitle('Edit Photo');
+                this.photo = photo;
+                return photo;
             });
+        });
     }
 
     private processSavePhoto = () => {
@@ -53,19 +61,17 @@ export class PhotoFormComponent {
             : this.photoDataProvider.create(this.photo);
 
         return saver.then((photo:Photo) => {
-            this.photo.setAttributes(photo);
+            this.photo = photo;
             return photo;
         });
     };
 
     save = () => {
-        return this.lockProcess
-            .process(this.processSavePhoto)
-            .then((result:any) => {
-                this.notificator.success('Photo was successfully saved.');
-                this.navigator.navigate(['/photos']);
-                return result;
-            });
+        return this.lockProcess.process(this.processSavePhoto).then((result:any) => {
+            this.notificator.success('Photo was successfully saved.');
+            this.navigator.navigate(['/photos']);
+            return result;
+        });
     };
 
     private processUploadPhoto = (file:FileList) => {
@@ -74,18 +80,22 @@ export class PhotoFormComponent {
             : this.photoDataProvider.upload(file);
 
         return uploader.then((uploadedPhoto:UploadedPhoto) => {
-            this.photo.setUploadedAttributes(uploadedPhoto);
+            this.photo.uploaded_photo_id = uploadedPhoto.id;
+            this.photo.user_id = uploadedPhoto.user_id;
+            this.photo.absolute_url = uploadedPhoto.absolute_url;
+            this.photo.created_at = uploadedPhoto.absolute_url;
+            this.photo.updated_at = uploadedPhoto.absolute_url;
+            this.photo.thumbnails = uploadedPhoto.thumbnails;
+            this.photo.exif = uploadedPhoto.exif;
             return uploadedPhoto;
         });
     };
 
     upload = (file:FileList) => {
-        return this.lockProcess
-            .process(this.processUploadPhoto, [file])
-            .then((result:any) => {
-                this.notificator.success('File was successfully uploaded.');
-                return result;
-            });
+        return this.lockProcess.process(this.processUploadPhoto, [file]).then((result:any) => {
+            this.notificator.success('File was successfully uploaded.');
+            return result;
+        });
     };
 
     private processDeletePhoto = () => {
@@ -97,13 +107,11 @@ export class PhotoFormComponent {
     };
 
     deletePhoto = () => {
-        return this.lockProcess
-            .process(this.processDeletePhoto)
-            .then((result:any) => {
-                this.notificator.success('Photo was successfully deleted.');
-                this.navigator.navigate(['/photos']);
-                return result;
-            });
+        return this.lockProcess.process(this.processDeletePhoto).then((result:any) => {
+            this.notificator.success('Photo was successfully deleted.');
+            this.navigator.navigate(['/photos']);
+            return result;
+        });
     };
 
     isLoading = ():boolean => {

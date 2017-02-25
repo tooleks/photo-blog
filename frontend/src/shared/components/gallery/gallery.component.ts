@@ -1,4 +1,5 @@
-import {Component, Input, HostListener, SimpleChanges} from '@angular/core';
+import {Component, Input, Output, Inject, EventEmitter, HostListener, SimpleChanges} from '@angular/core';
+import {CallbackHandlerService} from '../../services';
 
 @Component({
     selector: 'gallery',
@@ -7,26 +8,36 @@ import {Component, Input, HostListener, SimpleChanges} from '@angular/core';
 })
 export class GalleryComponent {
     @Input() items:Array<any> = [];
-    @Input() defaultActiveItemId:string;
+    @Input() defaultOpenedItemId:string;
     @Input() onLoadMoreCallback:any;
-    @Input() onOpenItemCallback:any;
-    @Input() onCloseItemCallback:any;
-    @Input() onEditItemCallback:any;
-    @Input() onDeleteItemCallback:any;
+    @Input() showCloseButton:boolean = true;
+    @Input() showEditButton:boolean = true;
+    @Input() showDeleteButton:boolean = false;
+    @Output() onOpenItem:EventEmitter<any> = new EventEmitter<any>();
+    @Output() onCloseItem:EventEmitter<any> = new EventEmitter<any>();
+    @Output() onEditItem:EventEmitter<any> = new EventEmitter<any>();
+    @Output() onDeleteItem:EventEmitter<any> = new EventEmitter<any>();
 
-    activeItem:any;
-    activeItemIndex:number;
+    private openedItem:any;
+    private openedItemIndex:any;
+    private openedItemIsLoaded:boolean;
+
+    constructor(@Inject(CallbackHandlerService) private callbackHandler:CallbackHandlerService) {
+    }
+
+    ngOnInit() {
+        this.resetOpenedItem();
+    }
 
     ngOnChanges(changes:SimpleChanges) {
-        if (this.defaultActiveItemId && this.items.length) {
-            this.viewItemById(this.defaultActiveItemId);
-            this.defaultActiveItemId = null;
+        if (this.defaultOpenedItemId && changes['items']) {
+            this.viewItemById(this.defaultOpenedItemId);
         }
     };
 
     @HostListener('document:keydown', ['$event'])
-    handleKeyboardEvent = (event:KeyboardEvent) => {
-        if (this.activeItem) {
+    onDocumentKeyDown = (event:KeyboardEvent) => {
+        if (this.openedItem) {
             switch (event.key) {
                 case 'Escape':
                     return this.closeItem();
@@ -38,17 +49,30 @@ export class GalleryComponent {
         }
     };
 
-    processCallback = (callback:any, args?:any[]) => {
-        return typeof callback === 'function' ? Promise.resolve(callback(...args)) : Promise.reject(new Error);
+    setOpenedItem = (item:any, index:number):Promise<any> => {
+        this.openedItem = item;
+        this.openedItemIndex = index;
+        return new Promise((resolve) => {
+            let image = new Image;
+            let loaded = false;
+            image.onload = () => {
+                loaded = true;
+                this.openedItemIsLoaded = true;
+                resolve();
+            };
+            setTimeout(() => (this.openedItemIsLoaded = loaded), 400);
+            image.src = item.thumbnails.large.absolute_url;
+        }).then(() => this.onOpenItem.emit(this.openedItem));
     };
 
-    setActiveItem = (item:any, index:number) => {
-        this.activeItem = item;
-        this.activeItemIndex = index;
+    resetOpenedItem = ():void => {
+        this.openedItem = null;
+        this.openedItemIndex = null;
+        this.openedItemIsLoaded = false;
     };
 
-    getActiveItem = ():any => {
-        return this.activeItem;
+    getOpenedItem = ():any => {
+        return this.openedItem;
     };
 
     setItems = (items:Array<any>):void => {
@@ -61,66 +85,72 @@ export class GalleryComponent {
 
     viewItemById = (id:string):void => {
         this.items.some((item:any, index:number) => {
-            if (item.id == id) {
-                this.viewItem(item);
+            if (item.id == id && index != this.openedItemIndex) {
+                this.setOpenedItem(item, index);
                 return true;
             } else if (index === this.items.length - 1) {
-                this.processCallback(this.onLoadMoreCallback)
-                    .then((items:Array<any>) => {
-                        this.setItems(items);
+                this.loadMoreItems().then((items:Array<any>) => {
+                    if (items.length > this.items.length) {
                         this.viewItemById(id);
-                    })
-                    .catch((error:any) => {
-                        //
-                    });
+                    }
+                });
             }
+            return false;
         });
     };
 
     viewItem = (item:any):void => {
         let id = item.id;
         this.items.some((item:any, index:number) => {
-            if (item.id == id) {
-                this.setActiveItem(item, index);
-                this.processCallback(this.onOpenItemCallback, [this.activeItem]);
+            if (item.id == id && index != this.openedItemIndex) {
+                this.setOpenedItem(this.items[index], index);
                 return true;
             }
+            return false;
         });
     };
 
     viewPrevItem = ():void => {
-        let prevItemIndex = this.activeItemIndex - 1;
+        let prevItemIndex = this.openedItemIndex - 1;
         if (this.items[prevItemIndex]) {
             this.viewItem(this.items[prevItemIndex]);
         }
     };
 
     viewNextItem = (loadMoreIfNotExist:boolean):void => {
-        let nextItemIndex = this.activeItemIndex + 1;
+        let nextItemIndex = this.openedItemIndex + 1;
         if (this.items[nextItemIndex]) {
             this.viewItem(this.items[nextItemIndex]);
         } else if (loadMoreIfNotExist) {
-            this.processCallback(this.onLoadMoreCallback)
-                .then((items:Array<any>) => {
-                    this.setItems(items);
-                    this.viewNextItem(false);
-                })
-                .catch((error:any) => {
-                    //
-                });
+            this.loadMoreItems().then((items:Array<any>) => {
+                if (items.length > this.items.length) {
+                    this.viewNextItem(false)
+                }
+            });
         }
     };
 
+    loadMoreItems = ():Promise<Array<any>> => {
+        return this.callbackHandler
+            .resolveCallback(this.onLoadMoreCallback)
+            .then((items:Array<any>) => {
+                if (items.length > this.items.length) {
+                    this.setItems(items);
+                }
+                return items;
+            });
+    };
+
     closeItem = ():void => {
-        this.processCallback(this.onCloseItemCallback, [this.activeItem]);
-        this.setActiveItem(null, null);
+        this.onCloseItem.emit(this.openedItem);
+        this.resetOpenedItem();
     };
 
     editItem = ():void => {
-        this.processCallback(this.onEditItemCallback, [this.activeItem]);
+        this.onEditItem.emit(this.openedItem);
     };
 
     deleteItem = ():void => {
-        this.processCallback(this.onDeleteItemCallback, [this.activeItem]);
+        this.onDeleteItem.emit(this.openedItem);
     };
 }

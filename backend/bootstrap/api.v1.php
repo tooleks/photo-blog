@@ -12,7 +12,7 @@
 */
 
 $app = new Illuminate\Foundation\Application(
-    realpath(__DIR__.'/../')
+    realpath(__DIR__ . '/../')
 );
 
 /*
@@ -40,6 +40,12 @@ $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
     Api\V1\Exceptions\JsonApiHandler::class
 );
+
+$app->register(Api\V1\Providers\ApiServiceProvider::class);
+
+$app->register(Api\V1\Providers\AuthServiceProvider::class);
+
+$app->register(Api\V1\Providers\RouteServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------

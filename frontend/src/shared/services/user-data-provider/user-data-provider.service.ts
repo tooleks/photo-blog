@@ -9,7 +9,7 @@ export class UserDataProviderService {
 
     getById = (id:number):Promise<User> => {
         return this.api
-            .get('/user/' + id)
+            .get('/users/' + id)
             .toPromise();
     };
 

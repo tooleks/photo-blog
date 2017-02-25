@@ -1,36 +1,42 @@
-<div *ngIf="getActiveItem()">
+<div *ngIf="openedItem">
     <div class="gl-backdrop"></div>
     <div class="gl-container">
+        <spinner [visible]="!openedItemIsLoaded" class="gl-spinner"></spinner>
         <div class="gl-view">
-            <div class="gl-img-container">
+            <div *ngIf="openedItemIsLoaded" class="gl-img-container">
                 <img (click)="viewNextItem(true)"
-                     [src]="getActiveItem().thumbnails[0].absolute_url"
-                     [alt]="getActiveItem().description"
-                     [title]="getActiveItem().description"
+                     [src]="openedItem.thumbnails.large.absolute_url"
+                     [alt]="openedItem.description"
+                     [title]="openedItem.description"
                      class="gl-img">
             </div>
         </div>
         <div class="gl-actions">
-            <a (click)="viewPrevItem()"
-               title="{{ 'Previous' }}"
-               class="gl-action gl-prev"><i class="fa fa-arrow-left"></i></a>
-            <a (click)="viewNextItem(true)"
-               title="{{ 'Next' }}"
-               class="gl-action gl-next"><i class="fa fa-arrow-right"></i></a>
+            <button (click)="viewPrevItem()"
+                    title="{{ 'Previous' }}"
+                    type="button"
+                    class="gl-action gl-prev"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>
+            <button (click)="viewNextItem(true)"
+                    title="{{ 'Next' }}"
+                    type="button"
+                    class="gl-action gl-next"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>
         </div>
         <div class="gl-navbar">
-            <a *ngIf="onCloseItemCallback"
-               (click)="closeItem()"
-               title="{{ 'Close' }}"
-               class="gl-action gl-right"><i class="fa fa-close"></i></a>
-            <a *ngIf="onEditItemCallback"
-               (click)="editItem()"
-               title="{{ 'Edit' }}"
-               class="gl-action gl-left"><i class="fa fa-pencil"></i></a>
-            <a *ngIf="onDeleteItemCallback"
-               (click)="deleteItem()"
-               title="{{ 'Delete' }}"
-               class="gl-action gl-left"><i class="fa fa-trash"></i></a>
+            <button *ngIf="showCloseButton"
+                    (click)="closeItem()"
+                    title="{{ 'Close' }}"
+                    type="button"
+                    class="gl-action gl-right"><i class="fa fa-close" aria-hidden="true"></i></button>
+            <button *ngIf="showEditButton"
+                    (click)="editItem()"
+                    title="{{ 'Edit' }}"
+                    type="button"
+                    class="gl-action gl-left"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+            <button *ngIf="showDeleteButton"
+                    (click)="deleteItem()"
+                    title="{{ 'Delete' }}"
+                    type="button"
+                    class="gl-action gl-left"><i class="fa fa-trash" aria-hidden="true"></i></button>
         </div>
     </div>
 </div>
@@ -38,5 +44,4 @@
         [updateInterval]="250"
         [rowHeight]="250"
         [galleryItems]="getItems()"
-        [onClickGridItemCallback]="viewItem"
-></gallery-grid>
+        (onClickGridItem)="viewItem($event)"></gallery-grid>

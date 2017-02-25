@@ -1,23 +1,45 @@
 <div class="row">
     <div class="col-sm-12">
+        <form>
+            <div class="form-group">
+                <div class="input-group">
+                    <input #inputSearch
+                           [(ngModel)]="queryParams['query']"
+                           name="query"
+                           type="search"
+                           (keyup.enter)="searchPhotos()"
+                           placeholder="{{ 'Type any word then press enter' }}"
+                           class="form-control">
+                    <span class="input-group-btn">
+                        <button (click)="searchPhotos()" type="button" class="btn btn-primary" title="{{ 'Search' }}">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
         <div *ngIf="isEmpty()" class="widget p-sm text-center">
             <h2 class="m-xs">{{ 'No photos found.' }}</h2>
         </div>
         <gallery *ngIf="!isEmpty()"
                  [items]="getLoadedPhotos()"
-                 [defaultActiveItemId]="queryParams['show']"
+                 [defaultOpenedItemId]="queryParams['show']"
                  [onLoadMoreCallback]="loadMorePhotos"
-                 [onOpenItemCallback]="onShowPhoto"
-                 [onCloseItemCallback]="onHidePhoto"
-                 [onEditItemCallback]="authProvider.isAuthenticated() ? onEditPhoto : false"></gallery>
+                 (onOpenItem)="onShowPhoto($event)"
+                 (onCloseItem)="onHidePhoto($event)"
+                 (onEditItem)="authProvider.isAuthenticated() ? onEditPhoto($event) : false"
+                 [showEditButton]="authProvider.isAuthenticated()"
+                 infinite-scroll
+                 [infiniteScrollDistance]="3"
+                 [infiniteScrollThrottle]="500"
+                 (scrolled)="loadMorePhotos()"
+        ></gallery>
     </div>
 </div>
-<div *ngIf="!isEmpty()"
-     class="load-more-container text-center">
-    <button *ngIf="!isLoading()"
-            (click)="loadMorePhotos()"
-            class="btn btn-primary text-uppercase">
-        {{ 'Load more' }}
-    </button>
-    <loader [loading]="isLoading()"></loader>
+<div *ngIf="!isEmpty()" class="load-more-container text-center">
+    <spinner [visible]="isLoading()"></spinner>
 </div>

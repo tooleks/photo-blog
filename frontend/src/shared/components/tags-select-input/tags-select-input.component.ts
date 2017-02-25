@@ -1,40 +1,33 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core';
-import {Tag} from './tag';
+import {Component, Input, Output, EventEmitter, SimpleChanges} from '@angular/core';
 
 @Component({
     selector: 'tags-select-input',
     template: require('./tags-select-input.component.html'),
+    styles: [require('./tags-select-input.component.css').toString()]
 })
 export class TagsSelectInputComponent {
-    @Input() tags:Array<Tag>;
-    @Output() tagsChange:EventEmitter<Array<Tag>> = new EventEmitter<Array<Tag>>();
-    items:string[] = [];
+    @Input() tags:Array<any> = [];
+    @Output() tagsChange:EventEmitter<Array<any>> = new EventEmitter<Array<any>>();
 
-    ngOnChanges(changes:any) {
-        if (!this.items.length && changes['tags']) {
-            this.tags.forEach((tag:Tag) => {
-                this.items.push(tag.text);
-            });
+    items:Array<any> = [];
+
+    ngOnChanges(changes:SimpleChanges) {
+        if (changes['tags'] && !this.items.length) {
+            this.items = this.tags.map((tag:any) => tag.text);
         }
     }
 
-    onAdd = (item:string) => {
-        this.tags.push({text: item});
+    onAdd = (text:string) => {
+        this.tags.push({text: text});
         this.tagsChange.emit(this.tags);
     };
 
-    onRemove = (item:string) => {
-        let tags:Array<Tag> = [];
-        this.tags.forEach((tag:Tag) => {
-            if (tag.text != item) {
-                tags.push(tag);
-            }
-        });
-        this.tags = tags;
+    onRemove = (text:string) => {
+        this.tags = this.tags.filter((tag:any) => tag.text !== text);
         this.tagsChange.emit(this.tags);
     };
 
-    transform = (item:string) => {
-        return item.toLowerCase();
+    transform = (text:string) => {
+        return text.toLowerCase();
     };
 }

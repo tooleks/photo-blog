@@ -4,9 +4,8 @@ gallery .gl-backdrop {
     top: 0;
     width: 100%;
     height: 100%;
-    background: #000;
-    opacity: 0.95;
-    z-index: 100000;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 10000;
 }
 
 gallery .gl-container {
@@ -15,7 +14,7 @@ gallery .gl-container {
     top: 0;
     width: 100%;
     height: 100%;
-    z-index: 100010;
+    z-index: 10010;
     text-align: center;
 }
 
@@ -42,7 +41,6 @@ gallery .gl-img {
     left: 0;
     right: 0;
     margin: auto;
-    padding: 50px 0 50px 0;
     cursor: pointer;
 }
 
@@ -53,6 +51,7 @@ gallery .gl-action {
     color: #999;
     cursor: pointer;
     font-size: 18px;
+    border: none;
     transition: transform 0.35s cubic-bezier(0, 0, 0.25, 1) 0s, opacity 0.35s cubic-bezier(0, 0, 0.25, 1) 0s, color 0.2s linear;
 }
 
@@ -64,7 +63,7 @@ gallery .gl-actions .gl-action {
     position: absolute;
     top: 50%;
     margin-top: -10px;
-    z-index: 100020;
+    z-index: 10020;
 }
 
 gallery .gl-actions .gl-prev {
@@ -81,7 +80,7 @@ gallery .gl-navbar {
     left: 0;
     top: 0;
     overflow: auto;
-    z-index: 100030;
+    z-index: 10030;
 }
 
 gallery .gl-navbar .gl-right {
@@ -90,4 +89,10 @@ gallery .gl-navbar .gl-right {
 
 gallery .gl-navbar .gl-left {
     float: left;
+}
+
+gallery .gl-spinner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
 }
