@@ -7,17 +7,17 @@ import {Component, Input, Output, Inject, ElementRef, SimpleChanges, EventEmitte
 })
 export class GalleryGridComponent {
     @Input() rowHeight:number = 0;
-    @Input() rowWidth:number = 0;
     @Input() galleryItems:Array<any> = [];
     @Input() updateInterval:number;
     @Output() onClickGridItem:EventEmitter<any> = new EventEmitter<any>();
 
     private elementRefProperties:{width:number, height:number} = {width: 0, height: 0};
     private elementSizeCheckInterval:any = null;
+    private rowWidth:number = 0;
     private rowMaxWidth:number;
     private rowMaxHeight:number;
-    private rowItems:Array<any> = [];
-    private gridItems:Array<any> = [];
+    private activeRowItems:Array<any> = [];
+    private gridRowItems:Array<any> = [];
 
     constructor(@Inject(ElementRef) private elementRef:ElementRef) {
         this.resetRow();
@@ -44,6 +44,7 @@ export class GalleryGridComponent {
             if ((height !== this.elementRefProperties.height) || (width !== this.elementRefProperties.width)) {
                 this.elementRefProperties = {width: width, height: height};
                 this.setRowMaxWidth(this.elementRef.nativeElement.offsetWidth);
+                this.gridRowItems = [];
                 this.setGridItems(this.galleryItems);
             }
         }, this.updateInterval);
@@ -56,17 +57,32 @@ export class GalleryGridComponent {
     }
 
     setGridItems = (items:Array<any>) => {
-        this.resetRow();
-        let gridItems:Array<any> = [];
-        items.forEach((item:any, index:number) => {
+        let newGridItems = this.getNewGridItems(items);
+        let itemsToProcess = this.gridRowItems.length ? this.gridRowItems.pop().concat(newGridItems) : newGridItems;
+        if (!itemsToProcess.length) {
+            return;
+        }
+        itemsToProcess.forEach((item:any, index:number) => {
             this.pushItemToRow(item);
-            gridItems = gridItems.concat(this.releaseRowItems(index == items.length - 1));
+            let activeRowItems = this.releaseRowItems(index == itemsToProcess.length - 1);
+            if (activeRowItems.length) {
+                this.gridRowItems.push(activeRowItems);
+            }
         });
-        this.gridItems = gridItems;
     };
 
-    getGridItems = ():Array<any> => {
-        return this.gridItems;
+    private getNewGridItems = (items:Array<any>) => {
+        return items.filter((item:any) => {
+            return !this.existsInGrid(item.id);
+        });
+    };
+
+    private existsInGrid = (id:number) => {
+        if (!this.gridRowItems.length) {
+            return false;
+        }
+        let gridItems = [].concat.apply([], this.gridRowItems);
+        return gridItems.some((item:any) => item.id == id);
     };
 
     private setRowMaxWidth = (rowMaxWidth:number):void => {
@@ -88,7 +104,7 @@ export class GalleryGridComponent {
     private pushItemToRow = (newItem:any):number => {
         let scaledToMaxHeightItem = this.scaleItemToMaxHeight(newItem);
         this.rowWidth = this.predictRowWidth(scaledToMaxHeightItem);
-        return this.rowItems.push(scaledToMaxHeightItem);
+        return this.activeRowItems.push(scaledToMaxHeightItem);
     };
 
     private releaseRowItems = (force:boolean = false):Array<any> => {
@@ -107,16 +123,16 @@ export class GalleryGridComponent {
 
     private resetRow = ():void => {
         this.rowWidth = 0;
-        this.rowItems = [];
+        this.activeRowItems = [];
     };
 
     private getRowItems = ():Array<any> => {
-        return this.rowItems;
+        return this.activeRowItems;
     };
 
     private predictRowWidth = (newItem:any):number => {
         let width = newItem.thumbnails.medium.width;
-        this.rowItems.forEach((item:any) => width += item.thumbnails.medium.width);
+        this.activeRowItems.forEach((item:any) => width += item.thumbnails.medium.width);
         return width;
     };
 
@@ -129,7 +145,7 @@ export class GalleryGridComponent {
 
     private scaleRowItemsToMaxWidth = ():Array<any> => {
         let scaleRate = this.rowWidth * 100 / this.rowMaxWidth;
-        return this.rowItems.map((item:any) => {
+        return this.activeRowItems.map((item:any) => {
             item.thumbnails.medium.width = Math.floor(item.thumbnails.medium.width * 100 / scaleRate);
             item.thumbnails.medium.height = Math.floor(item.thumbnails.medium.height * 100 / scaleRate);
             return item;
