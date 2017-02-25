@@ -21,18 +21,17 @@ export class GalleryGridComponent {
 
     constructor(@Inject(ElementRef) private elementRef:ElementRef) {
         this.resetRow();
-        this.setRowMaxHeight(0);
-        this.setRowMaxWidth(0);
+        this.rowMaxHeight = 0;
+        this.rowMaxWidth = 0;
     }
 
     ngOnChanges(changes:SimpleChanges) {
         if (changes['rowHeight']) {
-            this.setRowMaxHeight(changes['rowHeight'].currentValue);
+            this.rowMaxHeight = changes['rowHeight'].currentValue;
             this.setGridItems(this.galleryItems);
         }
-
         if (changes['galleryItems'] && changes['galleryItems'].currentValue.length) {
-            this.setRowMaxWidth(this.elementRef.nativeElement.offsetWidth);
+            this.rowMaxWidth = this.elementRef.nativeElement.offsetWidth;
             this.setGridItems(changes['galleryItems'].currentValue);
         }
     }
@@ -41,9 +40,9 @@ export class GalleryGridComponent {
         this.elementSizeCheckInterval = setInterval(() => {
             let height = this.elementRef.nativeElement.offsetHeight;
             let width = this.elementRef.nativeElement.offsetWidth;
-            if ((height !== this.elementRefProperties.height) || (width !== this.elementRefProperties.width)) {
+            if (width !== this.elementRefProperties.width) {
                 this.elementRefProperties = {width: width, height: height};
-                this.setRowMaxWidth(this.elementRef.nativeElement.offsetWidth);
+                this.rowMaxWidth = this.elementRef.nativeElement.offsetWidth;
                 this.gridRowItems = [];
                 this.setGridItems(this.galleryItems);
             }
@@ -63,7 +62,7 @@ export class GalleryGridComponent {
             return;
         }
         itemsToProcess.forEach((item:any, index:number) => {
-            this.pushItemToRow(item);
+            this.pushItemToRow(item, this.rowMaxHeight);
             let activeRowItems = this.releaseRowItems(index == itemsToProcess.length - 1);
             if (activeRowItems.length) {
                 this.gridRowItems.push(activeRowItems);
@@ -85,24 +84,8 @@ export class GalleryGridComponent {
         return gridItems.some((item:any) => item.id == id);
     };
 
-    private setRowMaxWidth = (rowMaxWidth:number):void => {
-        this.rowMaxWidth = rowMaxWidth;
-    };
-
-    private getRowMaxWidth = ():number => {
-        return this.rowMaxWidth;
-    };
-
-    private setRowMaxHeight = (rowMaxHeight:number):void => {
-        this.rowMaxHeight = rowMaxHeight;
-    };
-
-    private getRowMaxHeight = ():number => {
-        return this.rowMaxHeight;
-    };
-
-    private pushItemToRow = (newItem:any):number => {
-        let scaledToMaxHeightItem = this.scaleItemToMaxHeight(newItem);
+    private pushItemToRow = (item:any, maxHeight:number):number => {
+        let scaledToMaxHeightItem = this.scaleItemToMaxHeight(item, maxHeight);
         this.rowWidth = this.predictRowWidth(scaledToMaxHeightItem);
         return this.activeRowItems.push(scaledToMaxHeightItem);
     };
@@ -113,7 +96,7 @@ export class GalleryGridComponent {
             items = this.scaleRowItemsToMaxWidth();
         }
         if (force && !items.length) {
-            items = this.getRowItems();
+            items = this.activeRowItems;
         }
         if (items.length) {
             this.resetRow();
@@ -126,20 +109,16 @@ export class GalleryGridComponent {
         this.activeRowItems = [];
     };
 
-    private getRowItems = ():Array<any> => {
-        return this.activeRowItems;
-    };
-
-    private predictRowWidth = (newItem:any):number => {
-        let width = newItem.thumbnails.medium.width;
+    private predictRowWidth = (item:any):number => {
+        let width = item.thumbnails.medium.width;
         this.activeRowItems.forEach((item:any) => width += item.thumbnails.medium.width);
         return width;
     };
 
-    private scaleItemToMaxHeight = (item:any):any => {
-        let scaleRate = item.thumbnails.medium.height * 100 / this.rowMaxHeight;
+    private scaleItemToMaxHeight = (item:any, maxHeight:number):any => {
+        let scaleRate = item.thumbnails.medium.height * 100 / maxHeight;
         item.thumbnails.medium.width = Math.floor(item.thumbnails.medium.width * 100 / scaleRate);
-        item.thumbnails.medium.height = Math.floor(this.rowMaxHeight);
+        item.thumbnails.medium.height = Math.floor(maxHeight);
         return item;
     };
 
