@@ -1,5 +1,6 @@
-import {Component, Input, Output, Inject, EventEmitter, HostListener, SimpleChanges} from '@angular/core';
+import {Component, Input, Output, Inject, EventEmitter, HostListener, SimpleChanges, ViewChild} from '@angular/core';
 import {CallbackHandlerService} from '../../services';
+import {GalleryGridComponent} from './gallery-grid.component';
 
 @Component({
     selector: 'gallery',
@@ -7,6 +8,8 @@ import {CallbackHandlerService} from '../../services';
     styles: [require('./gallery.component.css').toString()],
 })
 export class GalleryComponent {
+    @ViewChild('galleryGridComponent') galleryGridComponent:GalleryGridComponent;
+
     @Input() items:Array<any> = [];
     @Input() defaultOpenedItemId:string;
     @Input() onLoadMoreCallback:any;
@@ -47,6 +50,11 @@ export class GalleryComponent {
                     return this.viewNextItem(true);
             }
         }
+    };
+
+    reset = () => {
+        this.resetOpenedItem();
+        this.galleryGridComponent.resetGridRowItems();
     };
 
     setOpenedItem = (item:any, index:number):Promise<any> => {
