@@ -1,1 +1,0 @@
-The directory used as an entry point of the frontend application.
