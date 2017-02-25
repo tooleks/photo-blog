@@ -12,7 +12,7 @@ module.exports = {
     },
 
     resolve: {
-        extensions: ['', '.js', '.ts'],
+        extensions: ['.js', '.ts'],
         alias: {
             jquery: 'jquery/src/jquery'
         }
@@ -26,21 +26,21 @@ module.exports = {
             },
             {
                 test: /\.html$/,
-                loader: 'html'
+                loader: 'html-loader'
             },
             {
                 test: /\.(png|jpe?g|gif|ico)$/,
-                loader: 'file?name=assets/[name].[hash].[ext]'
+                loader: 'file-loader?name=assets/[name].[hash].[ext]'
             },
             {
                 test: /\.css$/,
                 exclude: helpers.root('src', 'app'),
-                loader: ExtractTextPlugin.extract('style', 'css?sourceMap')
+                loader: ExtractTextPlugin.extract({fallback: 'style-loader', use: 'css-loader'})
             },
             {
                 test: /\.css$/,
                 include: helpers.root('src', 'app'),
-                loader: 'raw'
+                loader: 'raw-loader'
             },
             {
                 test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
