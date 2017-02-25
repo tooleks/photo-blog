@@ -52,11 +52,7 @@ class PhotoDataServiceSubscriber
      */
     public function onBeforeGet(Builder $query, array $options)
     {
-        $query->with('exif');
-
-        $query->with('thumbnails');
-
-        $query->with('tags');
+        $query->with('exif', 'thumbnails', 'tags');
     }
 
     /**
@@ -69,20 +65,20 @@ class PhotoDataServiceSubscriber
      */
     public function onAfterSave(Photo $photo, array $attributes = [], array $options = [])
     {
-        if (array_key_exists('exif', $attributes)) {
+        if (in_array('exif', $options) && array_key_exists('exif', $attributes)) {
             $photo->exif()->delete();
             $exif = $photo->exif()->create($attributes['exif']);
             $photo->exif = $exif;
         }
 
-        if (array_key_exists('thumbnails', $attributes)) {
+        if (in_array('thumbnails', $options) && array_key_exists('thumbnails', $attributes)) {
             $photo->thumbnails()->delete();
             $photo->thumbnails()->detach();
-            $tags = $photo->thumbnails()->createMany($attributes['thumbnails']);
-            $photo->thumbnails = new Collection($tags);
+            $thumbnails = $photo->thumbnails()->createMany($attributes['thumbnails']);
+            $photo->thumbnails = new Collection($thumbnails);
         }
 
-        if (array_key_exists('tags', $attributes)) {
+        if (in_array('tags', $options) && array_key_exists('tags', $attributes)) {
             $photo->tags()->delete();
             $photo->tags()->detach();
             $tags = $photo->tags()->createMany($attributes['tags']);
