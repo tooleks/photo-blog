@@ -50,7 +50,9 @@ export class PhotosComponent {
         this.route.queryParams
             .map((queryParams) => queryParams['show'])
             .subscribe((show:number) => this.queryParams['show'] = show);
+    }
 
+    ngAfterViewInit() {
         this.loadPhotos(this.pager.calculateLimitForPage(this.pager.getPage()), this.pager.getOffset());
     }
 

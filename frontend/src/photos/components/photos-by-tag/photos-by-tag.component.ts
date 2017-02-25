@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {
     TitleService,
@@ -19,6 +19,8 @@ import {PhotoDataProviderService} from '../../services';
     template: require('./photos-by-tag.component.html'),
 })
 export class PhotosByTagComponent {
+    @ViewChild('galleryComponent') galleryComponent:any;
+
     private loaded:boolean;
     private queryParams:Object = {};
     private pager:PagerService;
@@ -48,10 +50,13 @@ export class PhotosByTagComponent {
         this.route.queryParams
             .map((queryParams) => queryParams['show'])
             .subscribe((show:number) => this.queryParams['show'] = show);
+    }
 
+    ngAfterViewInit() {
         this.route.params
             .map((params) => params['tag'])
             .subscribe((tag:string) => {
+                this.galleryComponent.reset();
                 this.queryParams['tag'] = tag;
                 this.title.setTitle(['Photos', '#' + tag]);
                 this.pager.reset();

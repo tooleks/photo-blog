@@ -3,9 +3,9 @@
         <div *ngIf="isEmpty()" class="widget p-sm text-center">
             <h2 class="m-xs">{{ 'No photos found.' }}</h2>
         </div>
-        <gallery *ngIf="!isEmpty()"
+        <gallery #galleryComponent
                  [items]="getLoadedPhotos()"
-                 [defaultOpenedItemId]="queryParams['show']"
+                 [defaultItemId]="queryParams['show']"
                  [onLoadMoreCallback]="loadMorePhotos"
                  (onOpenItem)="onShowPhoto($event)"
                  (onCloseItem)="onHidePhoto($event)"
@@ -18,6 +18,6 @@
         ></gallery>
     </div>
 </div>
-<div *ngIf="!isEmpty()" class="load-more-container text-center">
+<div class="load-more-container text-center">
     <spinner [visible]="isLoading()"></spinner>
 </div>

@@ -43,7 +43,7 @@ export class GalleryGridComponent {
             if (width !== this.elementRefProperties.width) {
                 this.elementRefProperties = {width: width, height: height};
                 this.rowMaxWidth = this.elementRef.nativeElement.offsetWidth;
-                this.gridRowItems = [];
+                this.resetGridRowItems();
                 this.setGridItems(this.galleryItems);
             }
         }, this.updateInterval);
@@ -54,6 +54,10 @@ export class GalleryGridComponent {
             clearInterval(this.elementSizeCheckInterval);
         }
     }
+
+    resetGridRowItems = () => {
+        this.gridRowItems = [];
+    };
 
     setGridItems = (items:Array<any>) => {
         let newGridItems = this.getNewGridItems(items);

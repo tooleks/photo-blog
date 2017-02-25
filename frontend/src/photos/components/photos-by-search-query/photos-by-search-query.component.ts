@@ -1,4 +1,4 @@
-import {Component, Inject, ViewChildren} from '@angular/core';
+import {Component, Inject, ViewChildren, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {
     TitleService,
@@ -20,9 +20,11 @@ import {PhotoDataProviderService} from '../../services';
 })
 export class PhotosBySearchQueryComponent {
     @ViewChildren('inputSearch') inputSearchComponent:any;
+    @ViewChild('galleryComponent') galleryComponent:any;
 
     private loaded:boolean;
     private queryParams:Object = {query: ''};
+    private query:string = null;
     private pager:PagerService;
     private lockProcess:LockProcessService;
     private navigator:NavigatorService;
@@ -52,23 +54,24 @@ export class PhotosBySearchQueryComponent {
         this.route.queryParams
             .map((queryParams) => queryParams['show'])
             .subscribe((show:number) => this.queryParams['show'] = show);
+    }
+
+    ngAfterViewInit() {
+        this.inputSearchComponent.first.nativeElement.focus();
 
         this.route.queryParams
             .map((queryParams) => queryParams['query'])
             .subscribe((query:string) => {
-                if (!query) {
+                if (!query || query == this.query) {
                     return;
                 }
-                this.queryParams['query'] = query;
+                this.galleryComponent.reset();
+                this.queryParams['query'] = this.query = query;
                 this.title.setTitle(['Photos', this.queryParams['query']]);
                 this.pager.reset();
                 this.loadPhotos(this.pager.calculateLimitForPage(this.pager.getPage()),
                     this.pager.getOffset(), this.queryParams['query']);
             });
-    }
-
-    ngAfterViewInit() {
-        this.inputSearchComponent.first.nativeElement.focus();
     }
 
     private processLoadPhotos = (take:number, skip:number, query:string):Promise<Array<Photo>> => {
