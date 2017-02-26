@@ -1,4 +1,4 @@
-<div id="wrapper" (swiperight)="sideBarComponent.show()" (swipeleft)="sideBarComponent.hide()">
+<div id="wrapper" (swiperight)="onSwipeRight($event)" (swipeleft)="onSwipeLeft($event)">
     <sidebar #sideBarComponent
              (onToggle)="onToggleSideBar($event)"
              (onShow)="onShowSideBar($event)"

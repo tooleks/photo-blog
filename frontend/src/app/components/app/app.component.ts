@@ -21,6 +21,24 @@ export class AppComponent {
         this.title.setTitle();
     }
 
+    private onSwipeLeft = (event:any) => {
+        // Prevent firing event on 'gallery' component swipeleft event, as it has an own handler.
+        if (event.target.className.search('gl-') === -1) {
+            return;
+        }
+
+        this.sideBarComponent.hide();
+    };
+
+    private onSwipeRight = (event:any) => {
+        // Prevent firing event on 'gallery' component swipeleft event, as it has an own handler.
+        if (event.target.className.search('gl-') === -1) {
+            return;
+        }
+
+        this.sideBarComponent.show();
+    };
+
     private onShowSideBar = (event:any) => {
         if (event.isSmallDevice) {
             this.scrollFreezer.freezeBackgroundScroll();
