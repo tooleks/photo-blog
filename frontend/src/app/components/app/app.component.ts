@@ -21,17 +21,17 @@ export class AppComponent {
         this.title.setTitle();
     }
 
-    private onShowSideBar = (event) => {
+    private onShowSideBar = (event:any) => {
         if (event.isSmallDevice) {
             this.scrollFreezer.freezeBackgroundScroll();
         }
     };
 
-    private onHideSideBar = (event) => {
+    private onHideSideBar = (event:any) => {
         this.scrollFreezer.unfreezeBackgroundScroll();
     };
 
-    private onToggleSideBar = (event) => {
+    private onToggleSideBar = (event:any) => {
         if (event.isVisible) {
             this.scrollFreezer.freezeBackgroundScroll();
         } else {
