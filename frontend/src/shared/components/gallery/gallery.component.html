@@ -8,6 +8,8 @@
                      [src]="openedItem.thumbnails.large.absolute_url"
                      [alt]="openedItem.description"
                      [title]="openedItem.description"
+                     (swipeleft)="viewPrevItem()"
+                     (swiperight)="viewNextItem(true)"
                      class="gl-img">
             </div>
         </div>

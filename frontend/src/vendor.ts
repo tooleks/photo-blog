@@ -10,5 +10,8 @@ import 'rxjs';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 
+import 'hammerjs';
+
 import '../public/theme/font-awesome/css/font-awesome.css';
 import '../public/theme/css/style.css';
+
