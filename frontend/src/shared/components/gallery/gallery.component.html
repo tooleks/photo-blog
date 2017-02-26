@@ -1,6 +1,9 @@
 <div *ngIf="openedItem">
     <div class="gl-backdrop"></div>
-    <div class="gl-container">
+    <div class="gl-container"
+         (swiperight)="viewPrevItem()"
+         (swipeleft)="viewNextItem(true)"
+         (swipetop)="closeItem()">
         <spinner [visible]="!openedItemIsLoaded" class="gl-spinner"></spinner>
         <div class="gl-view">
             <div *ngIf="openedItemIsLoaded" class="gl-img-container">
@@ -8,8 +11,6 @@
                      [src]="openedItem.thumbnails.large.absolute_url"
                      [alt]="openedItem.description"
                      [title]="openedItem.description"
-                     (swipeleft)="viewPrevItem()"
-                     (swiperight)="viewNextItem(true)"
                      class="gl-img">
             </div>
         </div>
@@ -43,7 +44,7 @@
     </div>
 </div>
 <gallery-grid #galleryGridComponent
-        [updateInterval]="250"
-        [rowHeight]="250"
-        [galleryItems]="getItems()"
-        (onClickGridItem)="viewItem($event)"></gallery-grid>
+              [updateInterval]="250"
+              [rowHeight]="250"
+              [galleryItems]="getItems()"
+              (onClickGridItem)="viewItem($event)"></gallery-grid>
