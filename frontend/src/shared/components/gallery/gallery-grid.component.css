@@ -3,11 +3,15 @@ gallery-grid {
     overflow: auto;
 }
 
-gallery-grid .gl-grid-item-container {
+gallery-grid .gl-grid-item-row {
     display: block;
     float: left;
 }
 
-gallery-grid .gl-grid-item {
+gallery-grid .gl-grid-cell {
     padding: 1px;
+}
+
+gallery-grid .gl-grid-item {
+    cursor: pointer;
 }
