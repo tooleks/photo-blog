@@ -1,4 +1,4 @@
-<div id="wrapper">
+<div id="wrapper" (swiperight)="sideBar.show()" (swipeleft)="sideBar.hide()">
     <sidebar #sideBar></sidebar>
     <topbar (onNavClick)="sideBar.toggle()"></topbar>
     <div id="page-wrapper" class="gray-bg">
