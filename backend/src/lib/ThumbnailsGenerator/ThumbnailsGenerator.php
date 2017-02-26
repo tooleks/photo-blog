@@ -5,7 +5,7 @@ namespace Lib\ThumbnailsGenerator;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Imagine\Image\Box;
 use Imagine\Image\ImageInterface;
-use Imagine\Imagick\Imagine;
+use Imagine\Gd\Imagine;
 use Lib\ThumbnailsGenerator\Contracts\ThumbnailsGenerator as ThumbnailsGeneratorContract;
 use Lib\ThumbnailsGenerator\Exceptions\ThumbnailException;
 
