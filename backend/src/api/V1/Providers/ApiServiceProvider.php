@@ -53,6 +53,11 @@ class ApiServiceProvider extends ServiceProvider
             \Core\DataServices\Photo\PhotoDataService::class
         );
 
+        $this->app->bind(
+            \Lib\AvgColorPicker\Contracts\AvgColorPicker::class,
+            \Lib\AvgColorPicker\AvgColorPicker::class
+        );
+
         $this->app->bind(\Lib\ThumbnailsGenerator\Contracts\ThumbnailsGenerator::class, function () {
             return new \Lib\ThumbnailsGenerator\ThumbnailsGenerator($this->app->make('filesystem')->disk(), config('main.photo.thumbnails'));
         });

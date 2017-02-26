@@ -52,6 +52,7 @@ class PhotoController extends ResourceController
      *          "id": 1,
      *          "user_id": 1,
      *          "absolute_url": "http://path/to/photo/file",
+     *          "avg_color": "#000000",
      *          "created_at": "2016-10-24 12:24:33",
      *          "updated_at": "2016-10-24 14:38:05",
      *          "exif": {
@@ -109,6 +110,7 @@ class PhotoController extends ResourceController
      *          "id": 1,
      *          "user_id": 1,
      *          "absolute_url": "http://path/to/photo/file",
+     *          "avg_color": "#000000",
      *          "created_at": "2016-10-24 12:24:33",
      *          "updated_at": "2016-10-24 14:38:05",
      *          "exif": {
@@ -162,6 +164,7 @@ class PhotoController extends ResourceController
      *          "id": 1,
      *          "user_id": 1,
      *          "absolute_url": "http://path/to/photo/file",
+     *          "avg_color": "#000000",
      *          "created_at": "2016-10-24 12:24:33",
      *          "updated_at": "2016-10-24 14:38:05",
      *          "exif": {
