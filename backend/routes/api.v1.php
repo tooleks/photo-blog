@@ -4,6 +4,7 @@ use Api\V1\Http\Middleware\{
     AppendUserId,
     DeletePhotoDirectory,
     FetchExifData,
+    GenerateAvgColor,
     GenerateThumbnails,
     UploadPhotoFile
 };
@@ -81,7 +82,8 @@ Route::group(['prefix' => 'photos'], function () {
         ->middleware(AppendUserId::class)
         ->middleware(FetchExifData::class)
         ->middleware(UploadPhotoFile::class)
-        ->middleware(GenerateThumbnails::class);
+        ->middleware(GenerateThumbnails::class)
+        ->middleware(GenerateAvgColor::class);
 
     Route::get('/{photo}')
         ->uses('PhotoController@get')
@@ -92,7 +94,8 @@ Route::group(['prefix' => 'photos'], function () {
         ->middleware('can:update-resource,photo')
         ->middleware(FetchExifData::class)
         ->middleware(UploadPhotoFile::class)
-        ->middleware(GenerateThumbnails::class);
+        ->middleware(GenerateThumbnails::class)
+        ->middleware(GenerateAvgColor::class);
 
     Route::delete('/{photo}')
         ->uses('PhotoController@delete')

@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string description
  * @property string path
  * @property string relative_url
+ * @property string avg_color
  * @property bool is_published
  * @property Carbon created_at
  * @property Carbon updated_at
@@ -45,9 +46,10 @@ class Photo extends Model
      */
     protected $fillable = [
         'user_id',
+        'description',
         'path',
         'relative_url',
-        'description',
+        'avg_color',
     ];
 
     /**

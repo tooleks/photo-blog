@@ -7,6 +7,7 @@ export class Photo {
     uploaded_photo_id:number;
     user_id:number;
     absolute_url:string;
+    avg_color:string;
     description:string;
     created_at:string;
     updated_at:string;

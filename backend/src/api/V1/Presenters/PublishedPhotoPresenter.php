@@ -32,6 +32,7 @@ class PublishedPhotoPresenter extends Presenter
                     ? url(config('app.url')) . $this->getPresenteeAttribute('relative_url')
                     : null;
             },
+            'avg_color' => 'avg_color',
             'description' => 'description',
             'created_at' => function () : string {
                 return $this->getPresenteeAttribute('created_at') ?? null;

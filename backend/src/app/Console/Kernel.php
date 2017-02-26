@@ -8,6 +8,7 @@ use App\Console\Commands\CreateApiDocumentation;
 use App\Console\Commands\DeleteNotPublishedPhotosOlderThanWeek;
 use App\Console\Commands\DeleteUnusedDirectoriesWithinPhotoStorage;
 use App\Console\Commands\CreateRoles;
+use App\Console\Commands\GeneratePhotoAvgColors;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -22,9 +23,10 @@ class Kernel extends ConsoleKernel
         ConfigApp::class,
         CreateAdministratorUser::class,
         CreateApiDocumentation::class,
+        CreateRoles::class,
         DeleteNotPublishedPhotosOlderThanWeek::class,
         DeleteUnusedDirectoriesWithinPhotoStorage::class,
-        CreateRoles::class,
+        GeneratePhotoAvgColors::class,
     ];
 
     /**
