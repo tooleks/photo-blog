@@ -1,5 +1,5 @@
 import {Component, Input, Output, Inject, EventEmitter, HostListener, SimpleChanges, ViewChild} from '@angular/core';
-import {CallbackHandlerService} from '../../services';
+import {CallbackHandlerService, ScrollFreezerService} from '../../services';
 import {GalleryGridComponent} from './gallery-grid.component';
 
 @Component({
@@ -25,7 +25,8 @@ export class GalleryComponent {
     private openedItemIndex:any;
     private openedItemIsLoaded:boolean;
 
-    constructor(@Inject(CallbackHandlerService) private callbackHandler:CallbackHandlerService) {
+    constructor(@Inject(CallbackHandlerService) private callbackHandler:CallbackHandlerService,
+                @Inject(ScrollFreezerService) private scrollFreezer:ScrollFreezerService) {
     }
 
     ngOnInit() {
@@ -60,6 +61,7 @@ export class GalleryComponent {
     };
 
     setOpenedItem = (item:any, index:number):Promise<any> => {
+        this.scrollFreezer.freezeBackgroundScroll();
         this.openedItem = item;
         this.openedItemIndex = index;
         return new Promise((resolve) => {
@@ -76,6 +78,7 @@ export class GalleryComponent {
     };
 
     resetOpenedItem = ():void => {
+        this.scrollFreezer.unfreezeBackgroundScroll();
         this.openedItem = null;
         this.openedItemIndex = null;
         this.openedItemIsLoaded = false;

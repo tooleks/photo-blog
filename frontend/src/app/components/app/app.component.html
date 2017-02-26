@@ -1,7 +1,10 @@
-<div id="wrapper" (swiperight)="showSideBar()" (swipeleft)="hideSideBar()">
-    <sidebar #sideBarComponent></sidebar>
+<div id="wrapper" (swiperight)="sideBarComponent.show()" (swipeleft)="sideBarComponent.hide()">
+    <sidebar #sideBarComponent
+             (onToggle)="onToggleSideBar($event)"
+             (onShow)="onShowSideBar($event)"
+             (onHide)="onHideSideBar($event)"></sidebar>
     <topbar (onNavClick)="sideBarComponent.toggle()"></topbar>
-    <div id="page-wrapper" class="gray-bg" [style.overflow]="pageOverflow">
+    <div id="page-wrapper" class="gray-bg" [style.overflow]="scrollFreezer.getBackgroundOverflow()">
         <div class="row">
             <div class="col-sm-12">
                 <div class="wrapper wrapper-content">

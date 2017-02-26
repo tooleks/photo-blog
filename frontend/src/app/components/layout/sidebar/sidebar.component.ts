@@ -1,4 +1,15 @@
-import {Component, Inject, HostListener, trigger, state, style, transition, animate} from '@angular/core';
+import {
+    Component,
+    Inject,
+    HostListener,
+    Output,
+    EventEmitter,
+    trigger,
+    state,
+    style,
+    transition,
+    animate
+} from '@angular/core';
 import {AuthProviderService, EnvService} from '../../../../shared/services';
 
 @Component({
@@ -33,35 +44,60 @@ import {AuthProviderService, EnvService} from '../../../../shared/services';
     ],
 })
 export class SideBarComponent {
+    @Output() onToggle:EventEmitter<any> = new EventEmitter<any>();
+    @Output() onShow:EventEmitter<any> = new EventEmitter<any>();
+    @Output() onHide:EventEmitter<any> = new EventEmitter<any>();
+
     private animationState:string;
 
     constructor(@Inject(AuthProviderService) private authProvider:AuthProviderService,
                 @Inject(EnvService) private env:EnvService) {
-        window.innerWidth > 767 ? this.show() : this.hide();
+        this.init();
     }
 
     @HostListener('window:resize', ['$event'])
     onWindowResize(event:any) {
-        if (window.innerWidth > 767) {
-            this.show();
-        }
+        this.init();
     }
 
-    toggle = () => {
-        if (!(window.innerWidth > 767)) {
-            this.isVisible() ? this.hide() : this.show();
-        }
+    init = () => {
+        this.isLargeDevice() ? this.show() : this.hide();
     };
 
     show = () => {
         this.animationState = 'in';
+        this.emitChange('onShow');
     };
 
     hide = () => {
-        this.animationState = 'out';
+        if (this.isSmallDevice()) {
+            this.animationState = 'out';
+            this.emitChange('onHide');
+        }
     };
 
-    isVisible = () => {
+    toggle = () => {
+        this.isVisible() ? this.hide() : this.show();
+        this.emitChange('onToggle');
+    };
+
+    isVisible = ():boolean => {
         return this.animationState === 'in';
+    };
+
+    isLargeDevice = ():boolean => {
+        return window.innerWidth > 767;
+    };
+
+    isSmallDevice = ():boolean => {
+        return !this.isLargeDevice();
+    };
+
+    emitChange = (event) => {
+        this[event].emit({
+            isVisible: this.isVisible(),
+            isSmallDevice: this.isSmallDevice(),
+            isLargeDevice: this.isLargeDevice(),
+        });
     };
 }
