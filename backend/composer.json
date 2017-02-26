@@ -6,6 +6,7 @@
     "type": "project",
     "require": {
         "php": "^7.0",
+        "ext-gd": "*",
         "laravel/framework": "5.4.*",
         "imagine/imagine": "^0.6.3",
         "tooleks/laravel-presenter": "^1.0"
