@@ -1,5 +1,5 @@
 import {Component, Inject, ViewChild} from '@angular/core';
-import {EnvService, TitleService, AuthProviderService} from '../../../shared/services';
+import {EnvService, TitleService, AuthProviderService, ScrollFreezerService} from '../../../shared/services';
 
 import '../../../../public/app/css/styles.css';
 
@@ -10,40 +10,33 @@ import '../../../../public/app/css/styles.css';
 })
 export class AppComponent {
     @ViewChild('sideBarComponent') sideBarComponent:any;
-    private pageOverflow = '';
 
     constructor(@Inject(EnvService) private env:EnvService,
                 @Inject(TitleService) private title:TitleService,
-                @Inject(AuthProviderService) private authProvider:AuthProviderService) {
+                @Inject(AuthProviderService) private authProvider:AuthProviderService,
+                @Inject(ScrollFreezerService) private scrollFreezer:ScrollFreezerService) {
     }
 
     ngOnInit() {
         this.title.setTitle();
     }
 
-    private showSideBar = () => {
-        this.sideBarComponent.show();
-        this.freezePageScroll();
+    private onShowSideBar = (event) => {
+        if (event.isSmallDevice) {
+            this.scrollFreezer.freezeBackgroundScroll();
+        }
     };
 
-    private hideSideBar = () => {
-        this.sideBarComponent.hide();
-        this.unfreezePageScroll();
-    };
-    
-    private toggleSideBar = () => {
-        this.sideBarComponent.isVisible() ? this.hideSideBar() : this.showSideBar();
+    private onHideSideBar = (event) => {
+        this.scrollFreezer.unfreezeBackgroundScroll();
     };
 
-    private freezePageScroll = () => {
-        let top = window.scrollY;
-        this.pageOverflow = 'hidden';
-        window.onscroll = () => window.scroll(0, top);
-    };
-
-    private unfreezePageScroll = () => {
-        this.pageOverflow = '';
-        window.onscroll = null;
+    private onToggleSideBar = (event) => {
+        if (event.isVisible) {
+            this.scrollFreezer.freezeBackgroundScroll();
+        } else {
+            this.scrollFreezer.unfreezeBackgroundScroll();
+        }
     };
 
     private getCurrentYear = () => {
