@@ -23,7 +23,7 @@ export class AppComponent {
 
     private onSwipeLeft = (event:any) => {
         // Prevent firing event on 'gallery' component swipeleft event, as it has an own handler.
-        if (event.target.className.search('gl-') === -1) {
+        if (event.target.className.search('gl-') !== -1) {
             return;
         }
 
@@ -32,7 +32,7 @@ export class AppComponent {
 
     private onSwipeRight = (event:any) => {
         // Prevent firing event on 'gallery' component swipeleft event, as it has an own handler.
-        if (event.target.className.search('gl-') === -1) {
+        if (event.target.className.search('gl-') !== -1) {
             return;
         }
 
