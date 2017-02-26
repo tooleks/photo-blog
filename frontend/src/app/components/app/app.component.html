@@ -1,7 +1,7 @@
-<div id="wrapper" (swiperight)="sideBar.show()" (swipeleft)="sideBar.hide()">
-    <sidebar #sideBar></sidebar>
-    <topbar (onNavClick)="sideBar.toggle()"></topbar>
-    <div id="page-wrapper" class="gray-bg">
+<div id="wrapper" (swiperight)="showSideBar()" (swipeleft)="hideSideBar()">
+    <sidebar #sideBarComponent></sidebar>
+    <topbar (onNavClick)="sideBarComponent.toggle()"></topbar>
+    <div id="page-wrapper" class="gray-bg" [style.overflow]="pageOverflow">
         <div class="row">
             <div class="col-sm-12">
                 <div class="wrapper wrapper-content">
