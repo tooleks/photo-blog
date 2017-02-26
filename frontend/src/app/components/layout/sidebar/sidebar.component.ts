@@ -93,7 +93,7 @@ export class SideBarComponent {
         return !this.isLargeDevice();
     };
 
-    emitChange = (event) => {
+    emitChange = (event:string) => {
         this[event].emit({
             isVisible: this.isVisible(),
             isSmallDevice: this.isSmallDevice(),
