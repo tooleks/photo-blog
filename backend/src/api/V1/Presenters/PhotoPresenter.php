@@ -28,7 +28,7 @@ class PhotoPresenter extends Presenter
             'user_id' => 'user_id',
             'absolute_url' => function () {
                 return $this->getPresenteeAttribute('relative_url')
-                    ? url(config('app.url')) . $this->getPresenteeAttribute('relative_url')
+                    ? url(config('main.storage.url')) . $this->getPresenteeAttribute('relative_url')
                     : null;
             },
             'avg_color' => 'avg_color',
