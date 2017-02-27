@@ -1,0 +1,19 @@
+server {
+
+    listen 80;
+
+    root /var/www/photo-blog/backend/public;
+    index index.html;
+
+    server_name storage.server.name;
+
+    location ~* \.(jpg|jpeg|gif|png|bmp|ico|pdf|flv|swf|exe|html|htm|txt|css|js) {
+        add_header Cache-Control public;
+        expires max;
+    }
+
+    location / {
+        deny all;
+    }
+
+}

@@ -1,0 +1,14 @@
+server {
+
+    listen 80;
+
+    root /var/www/photo-blog/frontend/dist;
+    index index.html;
+
+    server_name server.name;
+
+    location / {
+        try_files $uri $uri/ /index.html =404;
+    }
+
+}
