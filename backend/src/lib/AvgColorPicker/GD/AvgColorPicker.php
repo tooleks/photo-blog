@@ -28,7 +28,7 @@ class AvgColorPicker implements AvgColorPickerContract
     /**
      * @inheritdoc
      */
-    public function getAvgColorByImagePath(string $imagePath) : string
+    public function getImageAvgColorByPath(string $imagePath) : string
     {
         $avgRgb = [];
 
