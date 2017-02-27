@@ -29,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(
             \Lib\AvgColorPicker\Contracts\AvgColorPicker::class,
-            \Lib\AvgColorPicker\AvgColorPicker::class
+            \Lib\AvgColorPicker\GD\AvgColorPicker::class
         );
     }
 }
