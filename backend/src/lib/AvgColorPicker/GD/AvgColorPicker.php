@@ -32,8 +32,8 @@ class AvgColorPicker implements AvgColorPickerContract
     {
         $avgRgb = [];
 
-        $this->eachImagePixel($this->createImageResource($imagePath), function ($imageResource, $x, $y) use (&$avgRgb) {
-            $rgb = $this->getImageRbgForIndex($imageResource, $x, $y);
+        $this->eachImagePixel($this->createImageResource($imagePath), function ($imageResource, $xCoordinate, $yCoordinate) use (&$avgRgb) {
+            $rgb = $this->getImagePixelRgb($imageResource, $xCoordinate, $yCoordinate);
             $avgRgb = $avgRgb ? $this->calculateAvgRgb($avgRgb, $rgb) : $rgb;
         });
 
@@ -72,9 +72,9 @@ class AvgColorPicker implements AvgColorPickerContract
         $imageWidth = $this->getImageWidth($imageResource);
         $imageHeight = $this->getImageHeight($imageResource);
 
-        for ($x = 0; $x < $imageWidth; $x++) {
-            for ($y = 0; $y < $imageHeight; $y++) {
-                $callback($imageResource, $x, $y);
+        for ($xCoordinate = 0; $xCoordinate < $imageWidth; $xCoordinate++) {
+            for ($yCoordinate = 0; $yCoordinate < $imageHeight; $yCoordinate++) {
+                $callback($imageResource, $xCoordinate, $yCoordinate);
             }
         }
     }
@@ -102,16 +102,16 @@ class AvgColorPicker implements AvgColorPickerContract
     }
 
     /**
-     * Get image color for index in RGB format.
+     * Get image pixel color in RGB format.
      *
      * @param resource $imageResource
-     * @param int $x
-     * @param int $y
+     * @param int $xCoordinate
+     * @param int $yCoordinate
      * @return array
      */
-    private function getImageRbgForIndex($imageResource, int $x, int $y) : array
+    private function getImagePixelRgb($imageResource, int $xCoordinate, int $yCoordinate) : array
     {
-        $rgb = imagecolorsforindex($imageResource, imagecolorat($imageResource, $x, $y));
+        $rgb = imagecolorsforindex($imageResource, imagecolorat($imageResource, $xCoordinate, $yCoordinate));
 
         return array_values($rgb);
     }
