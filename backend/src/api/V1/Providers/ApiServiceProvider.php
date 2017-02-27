@@ -55,7 +55,7 @@ class ApiServiceProvider extends ServiceProvider
 
         $this->app->bind(
             \Lib\AvgColorPicker\Contracts\AvgColorPicker::class,
-            \Lib\AvgColorPicker\AvgColorPicker::class
+            \Lib\AvgColorPicker\GD\AvgColorPicker::class
         );
 
         $this->app->bind(\Lib\ThumbnailsGenerator\Contracts\ThumbnailsGenerator::class, function () {

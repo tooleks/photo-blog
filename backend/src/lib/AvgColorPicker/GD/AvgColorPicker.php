@@ -1,15 +1,16 @@
 <?php
 
-namespace Lib\AvgColorPicker;
+namespace Lib\AvgColorPicker\GD;
 
 use Closure;
+use Lib\AvgColorPicker\ColorConverter;
 use Lib\AvgColorPicker\Contracts\AvgColorPicker as AvgColorPickerContract;
 use RuntimeException;
 
 /**
  * Class AvgColorPicker.
  *
- * @package Lib\AvgColorPicker
+ * @package Lib\AvgColorPicker\GD
  */
 class AvgColorPicker implements AvgColorPickerContract
 {
@@ -31,30 +32,12 @@ class AvgColorPicker implements AvgColorPickerContract
     {
         $avgRgb = [];
 
-        $this->eachPixelInImage($this->createImageResource($imagePath), function ($imageResource, $x, $y) use (&$avgRgb) {
+        $this->eachImagePixel($this->createImageResource($imagePath), function ($imageResource, $x, $y) use (&$avgRgb) {
             $rgb = $this->getImageRbgForIndex($imageResource, $x, $y);
-            if (!$avgRgb) return $avgRgb = $rgb;
-            $avgRgb[0] = (int)(($avgRgb[0] + $rgb[0]) / 2); // RED
-            $avgRgb[1] = (int)(($avgRgb[1] + $rgb[1]) / 2); // GREEN
-            $avgRgb[2] = (int)(($avgRgb[2] + $rgb[2]) / 2); // BLUE
+            $avgRgb = $avgRgb ? $this->calculateAvgRgb($avgRgb, $rgb) : $rgb;
         });
 
         return (new ColorConverter)->rgb2hex($avgRgb);
-    }
-
-    /**
-     * Apply callback function on each pixel in the image.
-     *
-     * @param $imageResource
-     * @param Closure $callback
-     */
-    private function eachPixelInImage($imageResource, Closure $callback)
-    {
-        for ($x = 0; $x < $this->getImageWidth($imageResource); $x++) {
-            for ($y = 0; $y < $this->getImageHeight($imageResource); $y++) {
-                $callback($imageResource, $x, $y);
-            }
-        }
     }
 
     /**
@@ -75,6 +58,25 @@ class AvgColorPicker implements AvgColorPickerContract
         }
 
         return call_user_func($this->mimeTypesMap[$imageMimeType], $imagePath);
+    }
+
+    /**
+     * Apply callback function on each pixel in the image.
+     *
+     * @param $imageResource
+     * @param Closure $callback
+     * @return void
+     */
+    private function eachImagePixel($imageResource, Closure $callback)
+    {
+        $imageWidth = $this->getImageWidth($imageResource);
+        $imageHeight = $this->getImageHeight($imageResource);
+
+        for ($x = 0; $x < $imageWidth; $x++) {
+            for ($y = 0; $y < $imageHeight; $y++) {
+                $callback($imageResource, $x, $y);
+            }
+        }
     }
 
     /**
@@ -103,15 +105,32 @@ class AvgColorPicker implements AvgColorPickerContract
      * Get image color for index in RGB format.
      *
      * @param resource $imageResource
-     * @param int
+     * @param int $x
      * @param int $y
      * @return array
      */
     private function getImageRbgForIndex($imageResource, int $x, int $y) : array
     {
-        $index = imagecolorat($imageResource, $x, $y);
-        $rgb = imagecolorsforindex($imageResource, $index);
+        $rgb = imagecolorsforindex($imageResource, imagecolorat($imageResource, $x, $y));
 
         return array_values($rgb);
+    }
+
+    /**
+     * Calculate average color in RGB format.
+     *
+     * @param array $firstRgb
+     * @param array $secondRgb
+     * @return array
+     */
+    private function calculateAvgRgb(array $firstRgb, array $secondRgb) : array
+    {
+        $avgRgb = [];
+
+        $avgRgb[0] = (int)(($firstRgb[0] + $secondRgb[0]) / 2); // RED
+        $avgRgb[1] = (int)(($firstRgb[1] + $secondRgb[1]) / 2); // GREEN
+        $avgRgb[2] = (int)(($firstRgb[2] + $secondRgb[2]) / 2); // BLUE
+
+        return $avgRgb;
     }
 }
