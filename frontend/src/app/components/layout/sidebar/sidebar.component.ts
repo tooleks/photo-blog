@@ -10,7 +10,7 @@ import {
     transition,
     animate
 } from '@angular/core';
-import {AuthProviderService, EnvService} from '../../../../shared/services';
+import {ScreenDetectorService, AuthProviderService, EnvService} from '../../../../shared/services';
 
 @Component({
     selector: 'sidebar',
@@ -50,7 +50,8 @@ export class SideBarComponent {
 
     private animationState:string;
 
-    constructor(@Inject(AuthProviderService) private authProvider:AuthProviderService,
+    constructor(@Inject(ScreenDetectorService) private screenDetector:ScreenDetectorService,
+                @Inject(AuthProviderService) private authProvider:AuthProviderService,
                 @Inject(EnvService) private env:EnvService) {
         this.init();
     }
@@ -61,7 +62,7 @@ export class SideBarComponent {
     }
 
     init = () => {
-        this.isLargeDevice() ? this.show() : this.hide();
+        this.screenDetector.isLargeScreen() ? this.show() : this.hide();
     };
 
     show = () => {
@@ -70,10 +71,10 @@ export class SideBarComponent {
     };
 
     hide = () => {
-        if (this.isSmallDevice()) {
+        if (this.screenDetector.isSmallScreen()) {
             this.animationState = 'out';
-            this.emitChange('onHide');
         }
+        this.emitChange('onHide');
     };
 
     toggle = () => {
@@ -85,19 +86,11 @@ export class SideBarComponent {
         return this.animationState === 'in';
     };
 
-    isLargeDevice = ():boolean => {
-        return window.innerWidth > 767;
-    };
-
-    isSmallDevice = ():boolean => {
-        return !this.isLargeDevice();
-    };
-
     emitChange = (event:string) => {
         this[event].emit({
             isVisible: this.isVisible(),
-            isSmallDevice: this.isSmallDevice(),
-            isLargeDevice: this.isLargeDevice(),
+            isSmallDevice: this.screenDetector.isSmallScreen(),
+            isLargeDevice: this.screenDetector.isLargeScreen(),
         });
     };
 }

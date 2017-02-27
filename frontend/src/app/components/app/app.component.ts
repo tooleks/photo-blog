@@ -10,6 +10,7 @@ import '../../../../public/app/css/styles.css';
 })
 export class AppComponent {
     @ViewChild('sideBarComponent') sideBarComponent:any;
+    private pageWrapperStyles:{overflow:string} = {overflow: ''};
 
     constructor(@Inject(EnvService) private env:EnvService,
                 @Inject(TitleService) private title:TitleService,
@@ -42,19 +43,17 @@ export class AppComponent {
     private onShowSideBar = (event:any) => {
         if (event.isSmallDevice) {
             this.scrollFreezer.freezeBackgroundScroll();
+            this.pageWrapperStyles.overflow = 'hidden';
         }
     };
 
     private onHideSideBar = (event:any) => {
         this.scrollFreezer.unfreezeBackgroundScroll();
+        this.pageWrapperStyles.overflow = '';
     };
 
     private onToggleSideBar = (event:any) => {
-        if (event.isVisible) {
-            this.scrollFreezer.freezeBackgroundScroll();
-        } else {
-            this.scrollFreezer.unfreezeBackgroundScroll();
-        }
+        event.isVisible ? this.onShowSideBar(event) : this.onHideSideBar(event);
     };
 
     private getCurrentYear = () => {
