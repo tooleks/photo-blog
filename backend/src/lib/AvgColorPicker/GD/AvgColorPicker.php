@@ -69,36 +69,14 @@ class AvgColorPicker implements AvgColorPickerContract
      */
     private function eachImagePixel($imageResource, Closure $callback)
     {
-        $imageWidth = $this->getImageWidth($imageResource);
-        $imageHeight = $this->getImageHeight($imageResource);
+        $imageWidth = imagesx($imageResource);
+        $imageHeight = imagesy($imageResource);
 
         for ($xCoordinate = 0; $xCoordinate < $imageWidth; $xCoordinate++) {
             for ($yCoordinate = 0; $yCoordinate < $imageHeight; $yCoordinate++) {
                 $callback($imageResource, $xCoordinate, $yCoordinate);
             }
         }
-    }
-
-    /**
-     * Get image width.
-     *
-     * @param resource $imageResource
-     * @return int
-     */
-    private function getImageWidth($imageResource) : int
-    {
-        return imagesx($imageResource);
-    }
-
-    /**
-     * Get image height.
-     *
-     * @param resource $imageResource
-     * @return int
-     */
-    private function getImageHeight($imageResource) : int
-    {
-        return imagesy($imageResource);
     }
 
     /**
