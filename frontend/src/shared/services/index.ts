@@ -8,6 +8,7 @@ export * from './locker';
 export * from './navigator';
 export * from './notificator';
 export * from './pager';
+export * from './screen-detector';
 export * from './scroll-freezer';
 export * from './scroller';
 export * from './title';

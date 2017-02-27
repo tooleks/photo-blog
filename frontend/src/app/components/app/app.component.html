@@ -4,7 +4,7 @@
              (onShow)="onShowSideBar($event)"
              (onHide)="onHideSideBar($event)"></sidebar>
     <topbar (onNavClick)="sideBarComponent.toggle()"></topbar>
-    <div id="page-wrapper" class="gray-bg" [style.overflow]="scrollFreezer.getBackgroundOverflow()">
+    <div id="page-wrapper" class="gray-bg" [style.overflow]="pageWrapperStyles.overflow">
         <div class="row">
             <div class="col-sm-12">
                 <div class="wrapper wrapper-content">
