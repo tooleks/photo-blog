@@ -7,6 +7,8 @@ server {
     server_name web.server.name;
 
     location / {
+        add_header Cache-Control public;
+        expires 30d;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $remote_addr;
         proxy_set_header Host $host;
