@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use Core\Models\Photo;
 use Illuminate\Console\Command;
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Collection;
 use Lib\AvgColorPicker\Contracts\AvgColorPicker;
 
 /**

@@ -2,12 +2,11 @@
 
 namespace Lib\ThumbnailsGenerator;
 
+use Closure;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Imagine\Image\Box;
-use Imagine\Image\ImageInterface;
 use Imagine\Gd\Imagine;
 use Lib\ThumbnailsGenerator\Contracts\ThumbnailsGenerator as ThumbnailsGeneratorContract;
-use Lib\ThumbnailsGenerator\Exceptions\ThumbnailException;
 
 /**
  * Class ThumbnailsGenerator.
@@ -24,91 +23,70 @@ class ThumbnailsGenerator implements ThumbnailsGeneratorContract
     /**
      * ThumbnailsGenerator constructor.
      *
-     * @param Filesystem $fileSystem
      * @param array $config
      */
-    public function __construct(Filesystem $fileSystem, array $config)
+    public function __construct(array $config)
     {
-        $this->fileSystem = $fileSystem;
         $this->config = $config;
     }
 
     /**
      * @inheritdoc
      */
-    public function generateThumbnails(string $originalFilePath) : array
+    public function generateThumbnails(string $originalImageFilePath) : array
     {
-        $originalFileContent = $this->fileSystem->get($originalFilePath);
+        $metaData = [];
 
-        foreach ($this->config as $config) {
-            $thumbnailImage = $this->getThumbnailImage(
-                $originalFileContent,
-                $config['size']['width'],
-                $config['size']['height'],
-                $config['mode']
-            );
+        $originalImage = (new Imagine)->open($originalImageFilePath);
 
-            $thumbnailFilePath = $this->getThumbnailFilePath(
-                $originalFilePath,
-                $thumbnailImage->getSize()->getWidth(),
-                $thumbnailImage->getSize()->getHeight()
-            );
-
-            if (!$this->fileSystem->put($thumbnailFilePath, $thumbnailImage->get($this->getThumbnailExtension($originalFilePath)))) {
-                throw new ThumbnailException(sprintf('An error occurred while saving thumbnail file "%s".', $thumbnailFilePath));
-            }
-
+        $this->eachConfiguredThumbnail(function ($config) use ($originalImage, &$metaData) {
+            // Generate thumbnail image.
+            $thumbnailImage = $originalImage->thumbnail(new Box($config['size']['width'], $config['size']['height']),
+                $config['mode']);
+            // Generate thumbnail file path.
+            $thumbnailFilePath = $this->getThumbnailFilePath($originalImage->metadata()->get('filepath'),
+                $thumbnailImage->getSize()->getWidth(), $thumbnailImage->getSize()->getHeight());
+            // Save thumbnail file.
+            $thumbnailImage->save($thumbnailFilePath, ['quality' => $config['quality']]);
+            // Append thumbnail metadata.
             $metaData[] = [
+                'path' => $thumbnailFilePath,
                 'width' => $thumbnailImage->getSize()->getWidth(),
                 'height' => $thumbnailImage->getSize()->getHeight(),
-                'path' => $thumbnailFilePath,
-                'relative_url' => $this->fileSystem->url($thumbnailFilePath),
             ];
-        }
+        });
 
         return $metaData ?? [];
     }
 
     /**
-     * Get thumbnail image.
+     * Each configured thumbnail.
      *
-     * @param string $originalFileContent
-     * @param string $width
-     * @param string $height
-     * @param string $mode
-     * @return ImageInterface
+     * @param Closure $closure
      */
-    private function getThumbnailImage(string $originalFileContent, string $width, string $height, string $mode) : ImageInterface
+    private function eachConfiguredThumbnail(Closure $closure)
     {
-        return (new Imagine)->load($originalFileContent)->thumbnail(new Box($width, $height), $mode);
+        foreach ($this->config as $config) {
+            $closure($config);
+        }
     }
 
     /**
      * Get thumbnail file path.
      *
-     * @param string $originalFilePath
+     * @param string $originalImageFilePath
      * @param string $width
      * @param string $height
      * @return string
      */
-    private function getThumbnailFilePath(string $originalFilePath, string $width, string $height) : string
+    private function getThumbnailFilePath(string $originalImageFilePath, string $width, string $height) : string
     {
-        return sprintf('%s/%s_%sx%s.%s',
-            pathinfo($originalFilePath, PATHINFO_DIRNAME),
-            pathinfo($originalFilePath, PATHINFO_FILENAME),
-            $width,
-            $height,
-            pathinfo($originalFilePath, PATHINFO_EXTENSION));
-    }
-
-    /**
-     * Get thumbnail extension.
-     *
-     * @param string $originalFilePath
-     * @return string
-     */
-    private function getThumbnailExtension(string $originalFilePath) : string
-    {
-        return pathinfo($originalFilePath, PATHINFO_EXTENSION);
+        return sprintf(
+            '%s/%s_%sx%s.%s',
+            pathinfo($originalImageFilePath, PATHINFO_DIRNAME),     // Subdirectory.
+            pathinfo($originalImageFilePath, PATHINFO_FILENAME),    // File name.
+            $width,                                                 // Width suffix.
+            $height,                                                // Height suffix.
+            pathinfo($originalImageFilePath, PATHINFO_EXTENSION));  // Extension.
     }
 }

@@ -9,6 +9,7 @@ use App\Console\Commands\DeleteNotPublishedPhotosOlderThanWeek;
 use App\Console\Commands\DeleteUnusedDirectoriesWithinPhotoStorage;
 use App\Console\Commands\CreateRoles;
 use App\Console\Commands\GeneratePhotoAvgColors;
+use App\Console\Commands\GeneratePhotoThumbnails;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -27,6 +28,7 @@ class Kernel extends ConsoleKernel
         DeleteNotPublishedPhotosOlderThanWeek::class,
         DeleteUnusedDirectoriesWithinPhotoStorage::class,
         GeneratePhotoAvgColors::class,
+        GeneratePhotoThumbnails::class,
     ];
 
     /**
