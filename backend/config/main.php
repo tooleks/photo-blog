@@ -34,7 +34,7 @@ return [
             ],
             [
                 'mode' => 'inset',
-                'quality' => 75,        // percentage
+                'quality' => 65,        // percentage
                 'size' => [
                     'width' => 600,     // pixels
                     'height' => 600,    // pixels
