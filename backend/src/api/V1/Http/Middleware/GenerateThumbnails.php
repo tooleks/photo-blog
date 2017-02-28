@@ -13,6 +13,7 @@ use Lib\ThumbnailsGenerator\Contracts\ThumbnailsGenerator;
  * Class GenerateThumbnails.
  *
  * @property ThumbnailsGenerator thumbnailsGenerator
+ * @property Filesystem fileSystem
  * @package Api\V1\Http\Middleware
  */
 class GenerateThumbnails
@@ -23,10 +24,12 @@ class GenerateThumbnails
      * GenerateThumbnails constructor.
      *
      * @param ThumbnailsGenerator $thumbnailsGenerator
+     * @param Filesystem $fileSystem
      */
-    public function __construct(ThumbnailsGenerator $thumbnailsGenerator)
+    public function __construct(ThumbnailsGenerator $thumbnailsGenerator, Filesystem $fileSystem)
     {
         $this->thumbnailsGenerator = $thumbnailsGenerator;
+        $this->fileSystem = $fileSystem;
     }
 
     /**
@@ -55,7 +58,21 @@ class GenerateThumbnails
     {
         $this->validateRequest($request);
 
-        $request->merge(['thumbnails' => $this->thumbnailsGenerator->generateThumbnails($request->get('path'))]);
+        $absolutePhotoFilePath = storage_path('app') . '/' . $request->get('path');
+
+        $metaData = $this->thumbnailsGenerator->generateThumbnails($absolutePhotoFilePath);
+        
+        foreach ($metaData as $metaDataItem) {
+            $relativeThumbnailPath = str_replace(storage_path('app') . '/', '', $metaDataItem['path']);
+            $thumbnails[] = [
+                'path' => $relativeThumbnailPath,
+                'relative_url' => $this->fileSystem->url($relativeThumbnailPath),
+                'width' => $metaDataItem['width'],
+                'height' => $metaDataItem['height'],
+            ];
+        }
+
+        $request->merge(['thumbnails' => $thumbnails ?? []]);
 
         return $next($request);
     }

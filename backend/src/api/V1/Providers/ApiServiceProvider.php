@@ -59,7 +59,7 @@ class ApiServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(\Lib\ThumbnailsGenerator\Contracts\ThumbnailsGenerator::class, function () {
-            return new \Lib\ThumbnailsGenerator\ThumbnailsGenerator($this->app->make('filesystem')->disk(), config('main.photo.thumbnails'));
+            return new \Lib\ThumbnailsGenerator\ThumbnailsGenerator(config('main.photo.thumbnails'));
         });
 
         $this->app->bind(
