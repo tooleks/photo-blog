@@ -22,7 +22,7 @@ class ThumbnailPresenter extends Presenter
         return [
             'absolute_url' => function () {
                 return $this->getPresenteeAttribute('relative_url')
-                    ? url(config('app.url')) . $this->getPresenteeAttribute('relative_url')
+                    ? url(config('main.storage.url')) . $this->getPresenteeAttribute('relative_url')
                     : null;
             },
             'width' => 'width',

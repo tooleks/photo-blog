@@ -7,7 +7,7 @@ server {
 
     server_name storage.server.name;
 
-    location ~* \.(jpg|jpeg|gif|png|bmp|ico|pdf|flv|swf|exe|html|htm|txt|css|js) {
+    location ~* \.(jpg|jpeg|gif|png|bmp|ico) {
         add_header Cache-Control public;
         expires max;
     }
