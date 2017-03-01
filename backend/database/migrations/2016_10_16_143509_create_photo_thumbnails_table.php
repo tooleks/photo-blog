@@ -14,9 +14,9 @@ class CreatePhotoThumbnailsTable extends Migration
     public function up()
     {
         Schema::create('photo_thumbnails', function (Blueprint $table) {
-            $table->increments('id')->unsigned();
-            $table->integer('photo_id')->unsigned();
-            $table->integer('thumbnail_id')->unsigned();
+            $table->increments('id');
+            $table->unsignedInteger('photo_id');
+            $table->unsignedInteger('thumbnail_id');
         });
     }
 

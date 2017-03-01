@@ -14,7 +14,7 @@ class AddAvgColorColumnToPhotosTable extends Migration
     public function up()
     {
         Schema::table('photos', function (Blueprint $table) {
-            $table->string('avg_color', 7)->after('relative_url')->nullable();
+            $table->string('avg_color', 7)->after('relative_url')->default('');
         });
     }
 

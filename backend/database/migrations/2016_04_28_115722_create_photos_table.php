@@ -14,12 +14,12 @@ class CreatePhotosTable extends Migration
     public function up()
     {
         Schema::create('photos', function (Blueprint $table) {
-            $table->increments('id')->unsigned();
-            $table->integer('user_id')->nullable();
-            $table->text('description')->nullable();
-            $table->string('path')->nullable();
-            $table->string('relative_url')->nullable();
-            $table->boolean('is_published')->nullable();
+            $table->increments('id');
+            $table->unsignedInteger('user_id');
+            $table->text('description');
+            $table->string('path')->default('');
+            $table->string('relative_url')->default('');
+            $table->boolean('is_published')->default(false);
             $table->timestamps();
         });
     }

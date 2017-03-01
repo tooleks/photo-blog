@@ -33,7 +33,6 @@ class CreateRoles extends Command
      */
     public function handle()
     {
-        Role::truncate();
         Role::insert([
             ['name' => Role::NAME_ADMINISTRATOR],
             ['name' => Role::NAME_CUSTOMER],

@@ -14,11 +14,11 @@ class CreateThumbnailsTable extends Migration
     public function up()
     {
         Schema::create('thumbnails', function (Blueprint $table) {
-            $table->increments('id')->unsigned();
-            $table->string('path')->nullable();
-            $table->string('relative_url')->nullable();
-            $table->integer('width')->nullable();
-            $table->integer('height')->nullable();
+            $table->increments('id');
+            $table->string('path')->default('');
+            $table->string('relative_url')->default('');
+            $table->unsignedInteger('width')->default(0);
+            $table->unsignedInteger('height')->default(0);
         });
     }
 

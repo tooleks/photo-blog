@@ -14,9 +14,9 @@ class CreatePhotoTagsTable extends Migration
     public function up()
     {
         Schema::create('photo_tags', function (Blueprint $table) {
-            $table->increments('id')->unsigned();
-            $table->integer('photo_id')->unsigned();
-            $table->integer('tag_id')->unsigned();
+            $table->increments('id');
+            $table->unsignedInteger('photo_id');
+            $table->unsignedInteger('tag_id');
         });
     }
 
