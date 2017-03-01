@@ -4,9 +4,12 @@ namespace Lib\ThumbnailsGenerator;
 
 use Closure;
 use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Validator as ValidatorFactory;
+use Illuminate\Validation\Rule;
 use Imagine\Image\Box;
 use Imagine\Gd\Imagine;
 use Lib\ThumbnailsGenerator\Contracts\ThumbnailsGenerator as ThumbnailsGeneratorContract;
+use Lib\ThumbnailsGenerator\Exceptions\ThumbnailsGeneratorException;
 
 /**
  * Class ThumbnailsGenerator.
@@ -17,17 +20,54 @@ use Lib\ThumbnailsGenerator\Contracts\ThumbnailsGenerator as ThumbnailsGenerator
  */
 class ThumbnailsGenerator implements ThumbnailsGeneratorContract
 {
-    const THUMBNAIL_MODE_INSET = 'inset';
-    const THUMBNAIL_MODE_OUTBOUND = 'outbound';
-
     /**
      * ThumbnailsGenerator constructor.
+     *
+     * Example of initialization:
+     * $config = [
+     *     [
+     *         'mode' => 'inset',
+     *         'quality' => 100,    // percentage
+     *         'width' => 1500,     // pixels
+     *         'height' => 1500,    // pixels
+     *     ],
+     *     [
+     *         'mode' => 'outbound',
+     *         'quality' => 65,    // percentage
+     *         'width' => 600,     // pixels
+     *         'height' => 600,    // pixels
+     *     ],
+     * ];
+     * new ThumbnailsGenerator($config);
      *
      * @param array $config
      */
     public function __construct(array $config)
     {
+        $this->assertConfig($config);
+
         $this->config = $config;
+    }
+
+    /**
+     * Assert config.
+     *
+     * @param array $config
+     * @throws ThumbnailsGeneratorException
+     * @return void
+     */
+    private function assertConfig(array $config)
+    {
+        $validator = ValidatorFactory::make($config, [
+            '*.mode' => ['required', Rule::in(['inset', 'outbound'])],
+            '*.quality' => ['required', 'integer', 'min:0', 'max:100'],
+            '*.width' => ['required', 'integer', 'min:0'],
+            '*.height' => ['required', 'integer', 'min:0'],
+        ]);
+
+        if ($validator->fails()) {
+            throw new ThumbnailsGeneratorException(sprintf('Invalid configuration value while initializing "%s" class.', static::class));
+        }
     }
 
     /**
@@ -41,7 +81,7 @@ class ThumbnailsGenerator implements ThumbnailsGeneratorContract
 
         $this->eachConfiguredThumbnail(function ($config) use ($originalImage, &$metaData) {
             // Generate thumbnail image.
-            $thumbnailImage = $originalImage->thumbnail(new Box($config['size']['width'], $config['size']['height']),
+            $thumbnailImage = $originalImage->thumbnail(new Box($config['width'], $config['height']),
                 $config['mode']);
             // Generate thumbnail file path.
             $thumbnailFilePath = $this->getThumbnailFilePath($originalImage->metadata()->get('filepath'),

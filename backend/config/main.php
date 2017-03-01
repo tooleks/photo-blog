@@ -26,19 +26,15 @@ return [
         'thumbnails' => [
             [
                 'mode' => 'inset',
-                'quality' => 100,       // percentage
-                'size' => [
-                    'width' => 1500,    // pixels
-                    'height' => 1500,   // pixels
-                ],
+                'quality' => 100,    // percentage
+                'width' => 1500,     // pixels
+                'height' => 1500,    // pixels
             ],
             [
                 'mode' => 'inset',
-                'quality' => 65,        // percentage
-                'size' => [
-                    'width' => 600,     // pixels
-                    'height' => 600,    // pixels
-                ],
+                'quality' => 65,    // percentage
+                'width' => 600,     // pixels
+                'height' => 600,    // pixels
             ],
         ],
     ],
