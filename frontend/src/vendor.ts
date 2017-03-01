@@ -12,6 +12,6 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 import 'hammerjs';
 
-import '../public/theme/font-awesome/css/font-awesome.css';
-import '../public/theme/css/style.css';
+import '../assets/theme/font-awesome/css/font-awesome.css';
+import '../assets/theme/css/style.css';
 
