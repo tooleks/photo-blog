@@ -15,7 +15,7 @@ use Lib\ThumbnailsGenerator\Exceptions\ThumbnailsGeneratorException;
  * Class ThumbnailsGenerator.
  *
  * @property Filesystem fileSystem
- * @property array config
+ * @property array thumbnailsConfig
  * @package Lib\ThumbnailsGenerator
  */
 class ThumbnailsGenerator implements ThumbnailsGeneratorContract
@@ -24,7 +24,7 @@ class ThumbnailsGenerator implements ThumbnailsGeneratorContract
      * ThumbnailsGenerator constructor.
      *
      * Example of initialization:
-     * $config = [
+     * $thumbnailsConfig = [
      *     [
      *         'mode' => 'inset',
      *         'quality' => 100,    // percentage
@@ -38,25 +38,25 @@ class ThumbnailsGenerator implements ThumbnailsGeneratorContract
      *         'height' => 600,    // pixels
      *     ],
      * ];
-     * new ThumbnailsGenerator($config);
+     * new ThumbnailsGenerator($thumbnailsConfig);
      *
-     * @param array $config
+     * @param array $thumbnailsConfig
      */
-    public function __construct(array $config)
+    public function __construct(array $thumbnailsConfig)
     {
-        $this->assertConfig($config);
+        $this->assertThumbnailsConfig($thumbnailsConfig);
 
-        $this->config = $config;
+        $this->thumbnailsConfig = $thumbnailsConfig;
     }
 
     /**
-     * Assert config.
+     * Assert thumbnails config.
      *
      * @param array $config
      * @throws ThumbnailsGeneratorException
      * @return void
      */
-    private function assertConfig(array $config)
+    private function assertThumbnailsConfig(array $config)
     {
         $validator = ValidatorFactory::make($config, [
             '*.mode' => ['required', Rule::in(['inset', 'outbound'])],
@@ -79,13 +79,15 @@ class ThumbnailsGenerator implements ThumbnailsGeneratorContract
 
         $originalImage = (new Imagine)->open($originalImageFilePath);
 
-        $this->eachConfiguredThumbnail(function ($config) use ($originalImage, &$metaData) {
+        $this->eachThumbnailConfig(function ($config) use ($originalImage, &$metaData) {
             // Generate thumbnail image.
-            $thumbnailImage = $originalImage->thumbnail(new Box($config['width'], $config['height']),
-                $config['mode']);
+            $thumbnailImage = $originalImage->thumbnail(new Box($config['width'], $config['height']), $config['mode']);
             // Generate thumbnail file path.
-            $thumbnailFilePath = $this->getThumbnailFilePath($originalImage->metadata()->get('filepath'),
-                $thumbnailImage->getSize()->getWidth(), $thumbnailImage->getSize()->getHeight());
+            $thumbnailFilePath = $this->generateThumbnailFilePath(
+                $originalImage->metadata()->get('filepath'),
+                $thumbnailImage->getSize()->getWidth(),
+                $thumbnailImage->getSize()->getHeight()
+            );
             // Save thumbnail file.
             $thumbnailImage->save($thumbnailFilePath, ['quality' => $config['quality']]);
             // Append thumbnail metadata.
@@ -100,26 +102,26 @@ class ThumbnailsGenerator implements ThumbnailsGeneratorContract
     }
 
     /**
-     * Each configured thumbnail.
+     * Apply callback function on each thumbnail config.
      *
      * @param Closure $closure
      */
-    private function eachConfiguredThumbnail(Closure $closure)
+    private function eachThumbnailConfig(Closure $closure)
     {
-        foreach ($this->config as $config) {
+        foreach ($this->thumbnailsConfig as $config) {
             $closure($config);
         }
     }
 
     /**
-     * Get thumbnail file path.
+     * Generate thumbnail file path.
      *
      * @param string $originalImageFilePath
      * @param string $width
      * @param string $height
      * @return string
      */
-    private function getThumbnailFilePath(string $originalImageFilePath, string $width, string $height) : string
+    private function generateThumbnailFilePath(string $originalImageFilePath, string $width, string $height) : string
     {
         return sprintf(
             '%s/%s_%sx%s.%s',
