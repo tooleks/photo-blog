@@ -70,6 +70,7 @@ module.exports = {
             name: ['app', 'vendor', 'polyfills', 'env']
         }),
         new HtmlWebpackPlugin({
+            favicon: 'assets/favicon.ico',
             template: 'src/index.html'
         }),
         new webpack.ProvidePlugin({
