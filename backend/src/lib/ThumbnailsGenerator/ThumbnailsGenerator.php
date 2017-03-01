@@ -61,8 +61,8 @@ class ThumbnailsGenerator implements ThumbnailsGeneratorContract
         $validator = ValidatorFactory::make($config, [
             '*.mode' => ['required', Rule::in(['inset', 'outbound'])],
             '*.quality' => ['required', 'integer', 'min:0', 'max:100'],
-            '*.width' => ['required', 'integer', 'min:0'],
-            '*.height' => ['required', 'integer', 'min:0'],
+            '*.width' => ['required', 'integer', 'min:1'],
+            '*.height' => ['required', 'integer', 'min:1'],
         ]);
 
         if ($validator->fails()) {
@@ -98,7 +98,7 @@ class ThumbnailsGenerator implements ThumbnailsGeneratorContract
             ];
         });
 
-        return $metaData ?? [];
+        return $metaData;
     }
 
     /**
