@@ -17,6 +17,13 @@ class Exif extends Model
     /**
      * @inheritdoc
      */
+    protected $attributes = [
+        'data' => [],
+    ];
+
+    /**
+     * @inheritdoc
+     */
     protected $table = 'exif';
 
     /**

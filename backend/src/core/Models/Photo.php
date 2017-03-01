@@ -29,6 +29,13 @@ class Photo extends Model
     /**
      * @inheritdoc
      */
+    protected $attributes = [
+        'description' => '',
+    ];
+
+    /**
+     * @inheritdoc
+     */
     protected $casts = [
         'is_published' => 'boolean',
     ];
