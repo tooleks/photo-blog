@@ -3,11 +3,11 @@
 namespace Lib\ThumbnailsGenerator\Contracts;
 
 /**
- * Interface ThumbnailExceptionContract.
+ * Interface ThumbnailsGeneratorException.
  *
  * @package Lib\ThumbnailsGenerator\Contracts
  */
-interface ThumbnailExceptionContract
+interface ThumbnailsGeneratorException
 {
 
 }
