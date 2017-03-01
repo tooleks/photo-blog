@@ -1,12 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use Core\Models\Role;
 
-class CreateUserRolesTable extends Migration
+class CreateRolesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -17,11 +15,7 @@ class CreateUserRolesTable extends Migration
     {
         Schema::create('roles', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name')->nullable()->unique();
-        });
-
-        Schema::table('users', function ($table) {
-            $table->integer('role_id')->nullable()->after('id');
+            $table->string('name')->unique();
         });
     }
 
@@ -33,9 +27,5 @@ class CreateUserRolesTable extends Migration
     public function down()
     {
         Schema::drop('roles');
-
-        Schema::table('users', function ($table) {
-            $table->dropColumn('role_id');
-        });
     }
 }
