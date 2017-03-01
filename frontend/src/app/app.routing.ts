@@ -17,6 +17,10 @@ const AppRoutes:Routes = [
         component: SignOutComponent,
     },
     {
+        path: '404',
+        component: PageNotFoundComponent
+    },
+    {
         path: '**',
         component: PageNotFoundComponent
     }
