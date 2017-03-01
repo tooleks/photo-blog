@@ -11,7 +11,7 @@ import {
     LockProcessServiceProvider,
     LockProcessService,
 } from '../../../shared/services';
-import {Photo} from '../../../shared/models';
+import {PublishedPhoto} from '../../../shared/models';
 import {PhotoDataProviderService} from '../../services';
 
 @Component({
@@ -65,13 +65,13 @@ export class PhotosByTagComponent {
             });
     }
 
-    private processLoadPhotos = (take:number, skip:number, tag:string):Promise<Array<Photo>> => {
+    private processLoadPhotos = (take:number, skip:number, tag:string):Promise<Array<PublishedPhoto>> => {
         return this.photoDataProvider
             .getByTag(take, skip, tag)
-            .then((photos:Array<Photo>) => this.pager.appendItems(photos));
+            .then((photos:Array<PublishedPhoto>) => this.pager.appendItems(photos));
     };
 
-    private loadPhotos = (take:number, skip:number, tag:string):Promise<Array<Photo>> => {
+    private loadPhotos = (take:number, skip:number, tag:string):Promise<Array<PublishedPhoto>> => {
         return this.lockProcess
             .process(this.processLoadPhotos, [take, skip, tag])
             .then((result:any) => {
@@ -96,15 +96,15 @@ export class PhotosByTagComponent {
         return this.lockProcess.isProcessing();
     };
 
-    onShowPhoto = (photo:Photo):void => {
+    onShowPhoto = (photo:PublishedPhoto):void => {
         this.navigator.setQueryParam('show', photo.id);
     };
 
-    onHidePhoto = (photo:Photo):void => {
+    onHidePhoto = (photo:PublishedPhoto):void => {
         this.navigator.unsetQueryParam('show');
     };
 
-    onEditPhoto = (photo:Photo):void => {
+    onEditPhoto = (photo:PublishedPhoto):void => {
         this.navigator.navigate(['photo/edit', photo.id]);
     };
 }
