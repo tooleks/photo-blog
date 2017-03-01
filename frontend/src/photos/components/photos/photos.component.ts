@@ -11,7 +11,7 @@ import {
     LockProcessServiceProvider,
     LockProcessService,
 } from '../../../shared/services';
-import {Photo} from '../../../shared/models';
+import {PublishedPhoto} from '../../../shared/models';
 import {PhotoDataProviderService} from '../../services/photo-data-provider';
 
 @Component({
@@ -56,30 +56,30 @@ export class PhotosComponent {
         this.loadPhotos(this.pager.calculateLimitForPage(this.pager.getPage()), this.pager.getOffset());
     }
 
-    private processLoadPhotos = (take:number, skip:number):Promise<Array<Photo>> => {
+    private processLoadPhotos = (take:number, skip:number):Promise<Array<PublishedPhoto>> => {
         return this.photoDataProvider
             .getAll(take, skip)
-            .then((photos:Array<Photo>) => this.pager.appendItems(photos))
-            .then((photos:Array<Photo>) => {
+            .then((photos:Array<PublishedPhoto>) => this.pager.appendItems(photos))
+            .then((photos:Array<PublishedPhoto>) => {
                 this.loaded = true;
                 return photos;
             });
     };
 
-    private loadPhotos = (take:number, skip:number):Promise<Array<Photo>> => {
+    private loadPhotos = (take:number, skip:number):Promise<Array<PublishedPhoto>> => {
         return this.lockProcess
             .process(this.processLoadPhotos, [take, skip])
-            .then((photos:Array<Photo>) => {
+            .then((photos:Array<PublishedPhoto>) => {
                 this.navigator.setQueryParam('page', this.pager.getPage());
                 return photos;
             });
     };
 
-    getLoadedPhotos = ():Array<Photo> => {
+    getLoadedPhotos = ():Array<PublishedPhoto> => {
         return this.pager.getItems();
     };
 
-    loadMorePhotos = ():Promise<Array<Photo>> => {
+    loadMorePhotos = ():Promise<Array<PublishedPhoto>> => {
         return this.loadPhotos(this.pager.getLimit(), this.pager.getOffset());
     };
 
@@ -91,15 +91,15 @@ export class PhotosComponent {
         return !this.pager.getItems().length && !this.lockProcess.isProcessing() && !this.loaded;
     };
 
-    onShowPhoto = (photo:Photo):void => {
+    onShowPhoto = (photo:PublishedPhoto):void => {
         this.navigator.setQueryParam('show', photo.id);
     };
 
-    onHidePhoto = (photo:Photo):void => {
+    onHidePhoto = (photo:PublishedPhoto):void => {
         this.navigator.unsetQueryParam('show');
     };
 
-    onEditPhoto = (photo:Photo):void => {
+    onEditPhoto = (photo:PublishedPhoto):void => {
         this.navigator.navigate(['photo/edit', photo.id]);
     };
 }
