@@ -19,6 +19,7 @@ class CreatePhotosTable extends Migration
             $table->text('description');
             $table->string('path')->default('');
             $table->string('relative_url')->default('');
+            $table->string('avg_color', 7)->default('');
             $table->boolean('is_published')->default(false);
             $table->timestamps();
         });
