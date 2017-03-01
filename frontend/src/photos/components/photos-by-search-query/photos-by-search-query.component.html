@@ -40,6 +40,9 @@
         ></gallery>
     </div>
 </div>
-<div class="load-more-container text-center">
-    <spinner [visible]="isLoading()"></spinner>
+<div *ngIf="!isEmpty()" class="load-more-container text-center">
+    <button class="btn btn-primary" (click)="loadMorePhotos()" [disabled]="isLoading()">
+        <span *ngIf="!isLoading()">{{ 'Load More' }}</span>
+        <spinner *ngIf="isLoading()"></spinner>
+    </button>
 </div>
