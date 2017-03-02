@@ -4,7 +4,7 @@
          (swiperight)="viewPrevItem()"
          (swipeleft)="viewNextItem(true)"
          (swipeup)="closeItem()">
-        <spinner [visible]="!openedItemIsLoaded" [class]="'fa-2x'" class="gl-spinner"></spinner>
+        <i class="gl-spinner" [ngClass]="!openedItemIsLoaded ? 'fa fa-circle-o-notch fa-spin fa-2x' : ''" aria-hidden="true"></i>
         <div class="gl-view">
             <div *ngIf="openedItemIsLoaded" class="gl-img-container">
                 <img (click)="viewNextItem(true)"

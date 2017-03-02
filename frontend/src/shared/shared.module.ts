@@ -26,7 +26,6 @@ import {
     FileSelectInputComponent,
     GalleryComponent,
     GalleryGridComponent,
-    SpinnerComponent,
     TagsSelectInputComponent,
 } from './components';
 
@@ -40,7 +39,6 @@ import {
         FileSelectInputComponent,
         GalleryComponent,
         GalleryGridComponent,
-        SpinnerComponent,
         TagsSelectInputComponent,
     ],
     exports: [
@@ -49,7 +47,6 @@ import {
         FileSelectInputComponent,
         GalleryComponent,
         GalleryGridComponent,
-        SpinnerComponent,
         TagsSelectInputComponent,
     ],
     providers: [

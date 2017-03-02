@@ -42,8 +42,8 @@
                     <div class="col-sm-12">
                         <div class="form-group">
                             <label class="btn btn-info btn-file" [class.disabled]="isLoading()">
-                                <i class="fa fa-upload" aria-hidden="true"></i>
-                                {{ 'Upload File' }}
+                                <i class="fa fa-upload" [ngClass]="isLoading() ? 'fa fa-circle-o-notch fa-spin' : ''" aria-hidden="true"></i>
+                                <span>{{ !isLoading() ? 'Upload File' : 'Processing' }}</span>
                                 <file-select-input (onSelect)="upload($event)"
                                                    [disabled]="isLoading()">
                                 </file-select-input>
@@ -74,13 +74,15 @@
                             <button (click)="save()"
                                     [disabled]="isLoading()"
                                     class="btn btn-primary">
-                                {{ 'Save' }}
+                                <i [ngClass]="isLoading() ? 'fa fa-circle-o-notch fa-spin' : ''" aria-hidden="true"></i>
+                                <span>{{ !isLoading() ? 'Save' : 'Processing' }}</span>
                             </button>
                             <button *ngIf="photo.id"
                                     (click)="deletePhoto()"
                                     [disabled]="isLoading()"
                                     class="btn btn-danger">
-                                {{ 'Delete' }}
+                                <i [ngClass]="isLoading() ? 'fa fa-circle-o-notch fa-spin' : ''" aria-hidden="true"></i>
+                                <span>{{ !isLoading() ? 'Delete' : 'Processing' }}</span>
                             </button>
                         </div>
                     </div>

@@ -1,21 +1,13 @@
-<div id="wrapper" (swiperight)="onSwipeRight($event)" (swipeleft)="onSwipeLeft($event)">
+<div class="app-wrapper" (swiperight)="onSwipeRight($event)" (swipeleft)="onSwipeLeft($event)">
     <sidebar #sideBarComponent
              (onToggle)="onToggleSideBar($event)"
              (onShow)="onShowSideBar($event)"
              (onHide)="onHideSideBar($event)"></sidebar>
     <topbar (onNavClick)="sideBarComponent.toggle()"></topbar>
-    <div id="page-wrapper" class="gray-bg" [style.overflow]="pageWrapperStyles.overflow">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="wrapper wrapper-content">
-                    <router-outlet></router-outlet>
-                </div>
-            </div>
-        </div>
-        <div class="footer">
-            <span>
-                Copyright &copy; <strong>{{ env.get('appName') }}</strong> {{ getCurrentYear() }}
-            </span>
-        </div>
+    <div class="app-content" [style.overflow]="pageWrapperStyles.overflow">
+        <router-outlet></router-outlet>
+    </div>
+    <div class="app-footer">
+        <span class="app-footer-copyright">Copyright &copy; <strong>{{ env.get('appName') }}</strong> {{ getCurrentYear() }}</span>
     </div>
 </div>

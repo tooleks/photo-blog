@@ -1,20 +1,43 @@
-#wrapper {
-    min-width: 320px !important;
-    margin: 0 auto !important;
+:host .app-wrapper {
+    min-width: 320px;
+    min-height: 100%;
+    width: 100%;
+    position: relative;
+    margin: 0 auto;
+    overflow-x: hidden;
+    background-color: #f3f3f4;
 }
 
-#page-wrapper {
-    margin-top: 60px !important;
+:host .app-content {
+    margin-top: 60px;
+    margin-bottom: 40px;
+    padding: 20px;
 }
 
 @media (min-width: 768px) {
-    #page-wrapper {
-        margin-top: 0 !important;
-        margin-left: 220px !important;
+    :host .app-content {
+        margin-top: 0;
+        margin-left: 220px;
     }
 }
 
-.file-box .file .icon,
-.file-box .file .image {
-    height: auto !important;
+:host .app-footer {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 40px;
+    background: none repeat scroll 0 0 white;
+    border-top: 1px solid #e7eaec;
+}
+
+@media (min-width: 768px) {
+    :host .app-footer {
+        margin-left: 220px;
+    }
+}
+
+:host .app-footer-copyright {
+    padding: 0 20px;
+    line-height: 40px;
 }
