@@ -1,7 +1,7 @@
 import {Component, Inject, ViewChild} from '@angular/core';
 import {EnvService, TitleService, AuthProviderService, ScrollFreezerService} from '../../../shared/services';
 
-import '../../../../assets/app/css/styles.css';
+import '../../../../assets/app/css/overrides.css';
 
 @Component({
     selector: 'app',
