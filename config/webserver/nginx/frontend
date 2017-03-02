@@ -9,7 +9,7 @@ server {
 
     location / {
         add_header Cache-Control public;
-        expires 30d;
+        expires 1d;
         try_files $uri $uri/ /index.html =404;
     }
 
