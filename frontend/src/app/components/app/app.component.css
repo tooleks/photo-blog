@@ -4,19 +4,16 @@
     width: 100%;
     position: relative;
     margin: 0 auto;
-    overflow-x: hidden;
     background-color: #f3f3f4;
 }
 
 :host .app-content {
-    margin-top: 60px;
-    margin-bottom: 40px;
-    padding: 20px;
+    padding: 80px 20px 60px 20px;
 }
 
 @media (min-width: 768px) {
     :host .app-content {
-        margin-top: 0;
+        padding-top: 20px;
         margin-left: 220px;
     }
 }
