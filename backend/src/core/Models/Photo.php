@@ -72,13 +72,15 @@ class Photo extends Model
             // Delete related 'thumbnails' data.
             $thumbnails = $photo->thumbnails()->get();
             $photo->thumbnails()->detach();
-            foreach ($thumbnails as $thumbnail)
+            foreach ($thumbnails as $thumbnail) {
                 $thumbnail->delete();
+            }
             // Delete related 'tags' data.
             $tags = $photo->tags()->get();
             $photo->tags()->detach();
-            foreach ($tags as $tag)
+            foreach ($tags as $tag) {
                 $tag->delete();
+            }
         });
     }
 

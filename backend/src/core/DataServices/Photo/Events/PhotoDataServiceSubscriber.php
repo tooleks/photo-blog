@@ -76,8 +76,9 @@ class PhotoDataServiceSubscriber
         if (in_array('thumbnails', $options) && array_key_exists('thumbnails', $attributes)) {
             $thumbnails = $photo->thumbnails()->get();
             $photo->thumbnails()->detach();
-            foreach ($thumbnails as $thumbnail)
+            foreach ($thumbnails as $thumbnail) {
                 $thumbnail->delete();
+            }
             $thumbnails = $photo->thumbnails()->createMany($attributes['thumbnails']);
             $photo->thumbnails = new Collection($thumbnails);
         }
@@ -108,7 +109,7 @@ class PhotoDataServiceSubscriber
                 if ($count)
                     $tag->delete();
             });
-            // Store all tags into attribute.
+            // Store all tags into tags attribute.
             $photo->tags = (new Collection($newTags))->merge($existingTags ?? []);
         }
     }
