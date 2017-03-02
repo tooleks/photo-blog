@@ -72,15 +72,19 @@ class PhotoDataServiceSubscriber
         }
 
         if (in_array('thumbnails', $options) && array_key_exists('thumbnails', $attributes)) {
-            $photo->thumbnails()->delete();
+            $thumbnails = $photo->thumbnails()->get();
             $photo->thumbnails()->detach();
+            foreach ($thumbnails as $thumbnail)
+                $thumbnail->delete();
             $thumbnails = $photo->thumbnails()->createMany($attributes['thumbnails']);
             $photo->thumbnails = new Collection($thumbnails);
         }
 
         if (in_array('tags', $options) && array_key_exists('tags', $attributes)) {
-            $photo->tags()->delete();
+            $tags = $photo->tags()->get();
             $photo->tags()->detach();
+            foreach ($tags as $tag)
+                $tag->delete();
             $tags = $photo->tags()->createMany($attributes['tags']);
             $photo->tags = new Collection($tags);
         }
