@@ -10,10 +10,6 @@
     z-index: 5000;
 }
 
-:host .sb span {
-    cursor: default;
-}
-
 :host .sb ul {
     display: block;
     list-style: outside none none;
@@ -33,6 +29,10 @@
 :host .sb > ul > li:last-child > span,
 :host .sb > ul > li:last-child > a {
     border-bottom: none;
+}
+
+:host .sb li > span {
+    cursor: default;
 }
 
 :host .sb li > span,
