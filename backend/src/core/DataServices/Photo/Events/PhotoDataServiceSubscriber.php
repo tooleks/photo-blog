@@ -4,9 +4,11 @@ namespace Core\DataServices\Photo\Events;
 
 use Core\DataServices\Photo\PhotoDataService;
 use Core\Models\Photo;
+use Core\Models\Tag;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class PhotoDataServiceSubscriber.
@@ -81,12 +83,33 @@ class PhotoDataServiceSubscriber
         }
 
         if (in_array('tags', $options) && array_key_exists('tags', $attributes)) {
-            $tags = $photo->tags()->get();
+            // Get all associated tags.
+            $oldTags = $photo->tags()->get();
+            // Detach all associated tags.
             $photo->tags()->detach();
-            foreach ($tags as $tag)
-                $tag->delete();
-            $tags = $photo->tags()->createMany($attributes['tags']);
-            $photo->tags = new Collection($tags);
+            // Attach existing tags.
+            foreach ($attributes['tags'] as $key => $value) {
+                $tag = Tag::whereText($value['text'])->first();
+                if (!is_null($tag)) {
+                    $existingTags[] = $tag;
+                    $photo->tags()->attach($tag->id);
+                    unset($attributes['tags'][$key]);
+                }
+            }
+            // Create newly added tags.
+            $newTags = $photo->tags()->createMany($attributes['tags']);
+            // Delete unused tags.
+            $oldTags->map(function (Tag $tag) {
+                $count = DB::table('tags')
+                    ->leftJoin('photo_tags', 'photo_tags.tag_id', '=', 'tags.id')
+                    ->where('tags.id', '=', $tag->id)
+                    ->where('photo_tags.photo_id', '=', null)
+                    ->count();
+                if ($count)
+                    $tag->delete();
+            });
+            // Store all tags into attribute.
+            $photo->tags = (new Collection($newTags))->merge($existingTags ?? []);
         }
     }
 }
