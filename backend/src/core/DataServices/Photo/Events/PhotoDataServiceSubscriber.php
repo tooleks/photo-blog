@@ -118,14 +118,14 @@ class PhotoDataServiceSubscriber
 
         $thumbnails = $photo->thumbnails()->createMany($records);
 
+        $photo->thumbnails = new Collection($thumbnails);
+
         // Delete unused thumbnails.
         $this->dbConnection
             ->table('thumbnails')
             ->leftJoin('photo_thumbnails', 'photo_thumbnails.thumbnail_id', '=', 'thumbnails.id')
             ->whereNull('photo_thumbnails.photo_id')
             ->delete();
-
-        $photo->thumbnails = new Collection($thumbnails);
     }
 
     /**
@@ -150,13 +150,13 @@ class PhotoDataServiceSubscriber
 
         $newTags = $photo->tags()->createMany($records);
 
+        $photo->tags = (new Collection($newTags))->merge($existingTags ?? []);
+
         // Delete unused tags.
         $this->dbConnection
             ->table('tags')
             ->leftJoin('photo_tags', 'photo_tags.tag_id', '=', 'tags.id')
             ->whereNull('photo_tags.photo_id')
             ->delete();
-
-        $photo->tags = (new Collection($newTags))->merge($existingTags ?? []);
     }
 }
