@@ -110,11 +110,13 @@ class PhotoDataServiceSubscriber
      * Save photo thumbnails.
      *
      * @param Photo $photo
-     * @param array $attributes
+     * @param array $records
      */
-    private function savePhotoThumbnails(Photo $photo, array $attributes)
+    private function savePhotoThumbnails(Photo $photo, array $records)
     {
         $photo->thumbnails()->detach();
+
+        $thumbnails = $photo->thumbnails()->createMany($records);
 
         // Delete unused thumbnails.
         $this->dbConnection
@@ -123,8 +125,6 @@ class PhotoDataServiceSubscriber
             ->whereNull('photo_thumbnails.photo_id')
             ->delete();
 
-        $thumbnails = $photo->thumbnails()->createMany($attributes);
-
         $photo->thumbnails = new Collection($thumbnails);
     }
 
@@ -132,11 +132,23 @@ class PhotoDataServiceSubscriber
      * Save photo tags.
      *
      * @param Photo $photo
-     * @param array $attributes
+     * @param array $records
      */
-    private function savePhotoTags(Photo $photo, array $attributes)
+    private function savePhotoTags(Photo $photo, array $records)
     {
         $photo->tags()->detach();
+
+        // Attach existing tags.
+        foreach ($records as $key => $attributes) {
+            $tag = Tag::whereText($attributes['text'])->first();
+            if (!is_null($tag)) {
+                $existingTags[] = $tag;
+                $photo->tags()->attach($tag->id);
+                unset($records[$key]);
+            }
+        }
+
+        $newTags = $photo->tags()->createMany($records);
 
         // Delete unused tags.
         $this->dbConnection
@@ -144,18 +156,6 @@ class PhotoDataServiceSubscriber
             ->leftJoin('photo_tags', 'photo_tags.tag_id', '=', 'tags.id')
             ->whereNull('photo_tags.photo_id')
             ->delete();
-
-        // Attach existing tags.
-        foreach ($attributes as $key => $value) {
-            $tag = Tag::whereText($value['text'])->first();
-            if (!is_null($tag)) {
-                $existingTags[] = $tag;
-                $photo->tags()->attach($tag->id);
-                unset($attributes[$key]);
-            }
-        }
-
-        $newTags = $photo->tags()->createMany($attributes);
 
         $photo->tags = (new Collection($newTags))->merge($existingTags ?? []);
     }
