@@ -110,9 +110,9 @@ class PhotoDataServiceSubscriber
      * Save photo thumbnails.
      *
      * @param Photo $photo
-     * @param array $attributes
+     * @param array $records
      */
-    private function savePhotoThumbnails(Photo $photo, array $attributes)
+    private function savePhotoThumbnails(Photo $photo, array $records)
     {
         $photo->thumbnails()->detach();
 
@@ -123,7 +123,7 @@ class PhotoDataServiceSubscriber
             ->whereNull('photo_thumbnails.photo_id')
             ->delete();
 
-        $thumbnails = $photo->thumbnails()->createMany($attributes);
+        $thumbnails = $photo->thumbnails()->createMany($records);
 
         $photo->thumbnails = new Collection($thumbnails);
     }
@@ -132,9 +132,9 @@ class PhotoDataServiceSubscriber
      * Save photo tags.
      *
      * @param Photo $photo
-     * @param array $attributes
+     * @param array $records
      */
-    private function savePhotoTags(Photo $photo, array $attributes)
+    private function savePhotoTags(Photo $photo, array $records)
     {
         $photo->tags()->detach();
 
@@ -146,16 +146,16 @@ class PhotoDataServiceSubscriber
             ->delete();
 
         // Attach existing tags.
-        foreach ($attributes as $key => $value) {
-            $tag = Tag::whereText($value['text'])->first();
+        foreach ($records as $key => $attributes) {
+            $tag = Tag::whereText($attributes['text'])->first();
             if (!is_null($tag)) {
                 $existingTags[] = $tag;
                 $photo->tags()->attach($tag->id);
-                unset($attributes[$key]);
+                unset($records[$key]);
             }
         }
 
-        $newTags = $photo->tags()->createMany($attributes);
+        $newTags = $photo->tags()->createMany($records);
 
         $photo->tags = (new Collection($newTags))->merge($existingTags ?? []);
     }
