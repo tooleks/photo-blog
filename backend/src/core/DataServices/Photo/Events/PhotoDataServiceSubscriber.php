@@ -116,14 +116,14 @@ class PhotoDataServiceSubscriber
     {
         $photo->thumbnails()->detach();
 
+        $thumbnails = $photo->thumbnails()->createMany($records);
+
         // Delete unused thumbnails.
         $this->dbConnection
             ->table('thumbnails')
             ->leftJoin('photo_thumbnails', 'photo_thumbnails.thumbnail_id', '=', 'thumbnails.id')
             ->whereNull('photo_thumbnails.photo_id')
             ->delete();
-
-        $thumbnails = $photo->thumbnails()->createMany($records);
 
         $photo->thumbnails = new Collection($thumbnails);
     }
@@ -138,13 +138,6 @@ class PhotoDataServiceSubscriber
     {
         $photo->tags()->detach();
 
-        // Delete unused tags.
-        $this->dbConnection
-            ->table('tags')
-            ->leftJoin('photo_tags', 'photo_tags.tag_id', '=', 'tags.id')
-            ->whereNull('photo_tags.photo_id')
-            ->delete();
-
         // Attach existing tags.
         foreach ($records as $key => $attributes) {
             $tag = Tag::whereText($attributes['text'])->first();
@@ -156,6 +149,13 @@ class PhotoDataServiceSubscriber
         }
 
         $newTags = $photo->tags()->createMany($records);
+
+        // Delete unused tags.
+        $this->dbConnection
+            ->table('tags')
+            ->leftJoin('photo_tags', 'photo_tags.tag_id', '=', 'tags.id')
+            ->whereNull('photo_tags.photo_id')
+            ->delete();
 
         $photo->tags = (new Collection($newTags))->merge($existingTags ?? []);
     }
