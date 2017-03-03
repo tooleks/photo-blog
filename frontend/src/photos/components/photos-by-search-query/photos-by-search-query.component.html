@@ -42,7 +42,6 @@
 </div>
 <div *ngIf="!isEmpty()" class="text-center" style="margin-top: 20px;">
     <button class="btn btn-primary" (click)="loadMorePhotos()" [disabled]="isLoading()">
-        <i class="fa" [ngClass]="isLoading() ? 'fa-circle-o-notch fa-spin' : 'fa-camera-retro'" aria-hidden="true"></i>
-        <span>{{ !isLoading() ? 'Load More' : 'Loading' }}</span>
+        <span>{{ !isLoading() ? 'Load More' : 'Loading...' }}</span>
     </button>
 </div>
