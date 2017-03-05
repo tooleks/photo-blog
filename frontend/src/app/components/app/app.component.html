@@ -1,10 +1,11 @@
 <div class="app-wrapper" (swiperight)="onSwipeRight($event)" (swipeleft)="onSwipeLeft($event)">
     <sidebar #sideBarComponent
+             [tags]="sideBarComponentTags"
              (onToggle)="onToggleSideBar($event)"
              (onShow)="onShowSideBar($event)"
              (onHide)="onHideSideBar($event)"></sidebar>
     <topbar (onNavClick)="sideBarComponent.toggle()"></topbar>
-    <div class="app-content" [style.overflow]="pageWrapperStyles.overflow">
+    <div class="app-content" [ngStyle]="appContentStyles">
         <router-outlet></router-outlet>
     </div>
     <div class="app-footer">

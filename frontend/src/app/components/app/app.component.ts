@@ -1,5 +1,11 @@
 import {Component, Inject, ViewChild} from '@angular/core';
-import {EnvService, TitleService, AuthProviderService, ScrollFreezerService} from '../../../shared/services';
+import {
+    EnvService,
+    TitleService,
+    AuthProviderService,
+    ApiService,
+    ScrollFreezerService
+} from '../../../shared/services';
 
 import '../../../../assets/app/css/overrides.css';
 
@@ -10,17 +16,26 @@ import '../../../../assets/app/css/overrides.css';
 })
 export class AppComponent {
     @ViewChild('sideBarComponent') sideBarComponent:any;
-    private pageWrapperStyles:{overflow:string} = {overflow: ''};
+    private sideBarComponentTags:Array<any> = [];
+    private appContentStyles:{overflow:string} = {overflow: ''};
 
     constructor(@Inject(EnvService) private env:EnvService,
                 @Inject(TitleService) private title:TitleService,
                 @Inject(AuthProviderService) private authProvider:AuthProviderService,
+                @Inject(ApiService) private apiService:ApiService,
                 @Inject(ScrollFreezerService) private scrollFreezer:ScrollFreezerService) {
     }
 
     ngOnInit() {
         this.title.setTitle();
+        this.loadSideBarComponentTags();
     }
+
+    private loadSideBarComponentTags = () => {
+        this.apiService.get('/tags', {params: {take: 10, skip: 0}}).toPromise().then((tags:Array<any>) => {
+            this.sideBarComponentTags = tags;
+        });
+    };
 
     private onSwipeLeft = (event:any) => {
         // Prevent firing event on 'gallery' component swipeleft event, as it has an own handler.
@@ -43,13 +58,13 @@ export class AppComponent {
     private onShowSideBar = (event:any) => {
         if (event.isSmallDevice) {
             this.scrollFreezer.freezeBackgroundScroll();
-            this.pageWrapperStyles.overflow = 'hidden';
+            this.appContentStyles.overflow = 'hidden';
         }
     };
 
     private onHideSideBar = (event:any) => {
         this.scrollFreezer.unfreezeBackgroundScroll();
-        this.pageWrapperStyles.overflow = '';
+        this.appContentStyles.overflow = '';
     };
 
     private onToggleSideBar = (event:any) => {
