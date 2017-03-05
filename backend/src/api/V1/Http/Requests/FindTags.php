@@ -5,11 +5,11 @@ namespace Api\V1\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * Class FindPhoto.
+ * Class FindTags.
  *
  * @package Api\V1\Http\Requests
  */
-class FindPhoto extends FormRequest
+class FindTags extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -31,8 +31,6 @@ class FindPhoto extends FormRequest
         return [
             'take' => ['required', 'filled', 'integer', 'min:1', 'max:100'],
             'skip' => ['required', 'filled', 'integer', 'min:0'],
-            'query' => ['filled', 'string', 'min:1'],
-            'tag' => ['filled', 'string', 'min:1'],
         ];
     }
 }

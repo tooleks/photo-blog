@@ -46,38 +46,38 @@ Route::group(['prefix' => 'token'], function () {
 
 /*
 |--------------------------------------------------------------------------
-| User Resource Routes
+| Users Resource Routes
 |--------------------------------------------------------------------------
 */
 Route::group(['prefix' => 'users'], function () {
 
     Route::post('/')
-        ->uses('UserController@create')
+        ->uses('UsersController@create')
         ->middleware('can:create-resource,' . User::class);
 
     Route::get('/{user}')
-        ->uses('UserController@get')
+        ->uses('UsersController@get')
         ->middleware('can:get-resource,user');
 
     Route::put('/{user}')
-        ->uses('UserController@update')
+        ->uses('UsersController@update')
         ->middleware('can:update-resource,user');
 
     Route::delete('/{user}')
-        ->uses('UserController@delete')
+        ->uses('UsersController@delete')
         ->middleware('can:delete-resource,user');
 
 });
 
 /*
 |--------------------------------------------------------------------------
-| Uploaded Photo Resource Routes
+| Photos Resource Routes
 |--------------------------------------------------------------------------
 */
 Route::group(['prefix' => 'photos'], function () {
 
     Route::post('/')
-        ->uses('PhotoController@create')
+        ->uses('PhotosController@create')
         ->middleware('can:create-resource,' . Photo::class)
         ->middleware(AppendUserId::class)
         ->middleware(FetchExifData::class)
@@ -86,11 +86,11 @@ Route::group(['prefix' => 'photos'], function () {
         ->middleware(GenerateAvgColor::class);
 
     Route::get('/{photo}')
-        ->uses('PhotoController@get')
+        ->uses('PhotosController@get')
         ->middleware('can:get-resource,photo');
 
     Route::post('/{photo}')
-        ->uses('PhotoController@update')
+        ->uses('PhotosController@update')
         ->middleware('can:update-resource,photo')
         ->middleware(FetchExifData::class)
         ->middleware(UploadPhotoFile::class)
@@ -98,7 +98,7 @@ Route::group(['prefix' => 'photos'], function () {
         ->middleware(GenerateAvgColor::class);
 
     Route::delete('/{photo}')
-        ->uses('PhotoController@delete')
+        ->uses('PhotosController@delete')
         ->middleware('can:delete-resource,photo')
         ->middleware(DeletePhotoDirectory::class);
 
@@ -106,28 +106,40 @@ Route::group(['prefix' => 'photos'], function () {
 
 /*
 |--------------------------------------------------------------------------
-| Photo Resource Routes
+| Published Photos Resource Routes
 |--------------------------------------------------------------------------
 */
 Route::group(['prefix' => 'published_photos'], function () {
 
     Route::post('/')
-        ->uses('PublishedPhotoController@create')
+        ->uses('PublishedPhotosController@create')
         ->middleware('can:create-resource,' . Photo::class);
 
     Route::get('/')
-        ->uses('PublishedPhotoController@find');
+        ->uses('PublishedPhotosController@find');
 
     Route::get('/{published_photo}')
-        ->uses('PublishedPhotoController@get');
+        ->uses('PublishedPhotosController@get');
 
     Route::put('/{published_photo}')
-        ->uses('PublishedPhotoController@update')
+        ->uses('PublishedPhotosController@update')
         ->middleware('can:update-resource,published_photo');
 
     Route::delete('/{published_photo}')
-        ->uses('PublishedPhotoController@delete')
+        ->uses('PublishedPhotosController@delete')
         ->middleware('can:delete-resource,published_photo')
         ->middleware(DeletePhotoDirectory::class);
+
+});
+
+/*
+|--------------------------------------------------------------------------
+| Tags Resource Routes
+|--------------------------------------------------------------------------
+*/
+Route::group(['prefix' => 'tags'], function () {
+
+    Route::get('/')
+        ->uses('TagsController@find');
 
 });

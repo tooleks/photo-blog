@@ -171,6 +171,7 @@ return [
         /*
          * Core Service Providers...
          */
+        Core\Providers\CoreServiceProvider::class,
         Core\Providers\EventServiceProvider::class,
 
     ],
