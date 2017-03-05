@@ -2,6 +2,7 @@ import {
     Component,
     Inject,
     HostListener,
+    Input,
     Output,
     EventEmitter,
     trigger,
@@ -44,6 +45,7 @@ import {ScreenDetectorService, AuthProviderService, EnvService} from '../../../.
     ],
 })
 export class SideBarComponent {
+    @Input() tags:Array<any> = [];
     @Output() onToggle:EventEmitter<any> = new EventEmitter<any>();
     @Output() onShow:EventEmitter<any> = new EventEmitter<any>();
     @Output() onHide:EventEmitter<any> = new EventEmitter<any>();

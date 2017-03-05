@@ -10,15 +10,15 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 
 /**
- * Class UserController.
+ * Class UsersController.
  *
  * @property UserDataService userDataService
  * @package Api\V1\Http\Controllers
  */
-class UserController extends ResourceController
+class UsersController extends ResourceController
 {
     /**
-     * UserController constructor.
+     * UsersController constructor.
      *
      * @param Request $request
      * @param Guard $guard

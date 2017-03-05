@@ -35,29 +35,17 @@
                 <span>{{ 'Search' }}</span>
             </a>
         </li>
-        <li class="sb-second-level">
+        <li *ngIf="tags.length" class="sb-second-level">
             <span>
                 <i class="fa fa-tags" aria-hidden="true"></i>
                 <span>{{ 'Tags' }}</span>
             </span>
             <ul>
-                <li>
-                    <a [routerLink]="['/photos/tag', 'sky']"
+                <li *ngFor="let tag of tags">
+                    <a [routerLink]="['/photos/tag', tag.text]"
                        (click)="toggle()"
                        routerLinkActive="active"
-                       [routerLinkActiveOptions]="{ exact: true }">{{ '#sky' }}</a>
-                </li>
-                <li>
-                    <a [routerLink]="['/photos/tag', 'water']"
-                       (click)="toggle()"
-                       routerLinkActive="active"
-                       [routerLinkActiveOptions]="{ exact: true }">{{ '#water' }}</a>
-                </li>
-                <li>
-                    <a [routerLink]="['/photos/tag', 'portrait']"
-                       (click)="toggle()"
-                       routerLinkActive="active"
-                       [routerLinkActiveOptions]="{ exact: true }">{{ '#portrait' }}</a>
+                       [routerLinkActiveOptions]="{ exact: true }">{{ '#' + tag.text }}</a>
                 </li>
             </ul>
         </li>
