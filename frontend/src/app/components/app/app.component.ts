@@ -32,7 +32,7 @@ export class AppComponent {
     }
 
     private loadSideBarComponentTags = () => {
-        this.apiService.get('/tags', {params: {take: 10, skip: 0}}).toPromise().then((tags:Array<any>) => {
+        this.apiService.get('/tags', {params: {take: 7, skip: 0}}).toPromise().then((tags:Array<any>) => {
             this.sideBarComponentTags = tags;
         });
     };
