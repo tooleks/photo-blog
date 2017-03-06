@@ -10,10 +10,10 @@ namespace Lib\AvgColorPicker\Contracts;
 interface AvgColorPicker
 {
     /**
-     * Get image average color in HEX format of by its path.
+     * Get average hex color code of the image by its path.
      *
      * @param string $imagePath
      * @return string
      */
-    public function getImageAvgColorByPath(string $imagePath) : string;
+    public function getImageAvgHexColorByPath(string $imagePath) : string;
 }
