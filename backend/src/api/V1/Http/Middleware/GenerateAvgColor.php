@@ -36,7 +36,7 @@ class GenerateAvgColor
     {
         $thumbnailPath = storage_path('app') . '/' . $request->get('thumbnails')[1]['path'];
 
-        $avgColor = $this->avgColorPicker->getImageAvgColorByPath($thumbnailPath);
+        $avgColor = $this->avgColorPicker->getImageAvgHexColorByPath($thumbnailPath);
 
         $request->merge(['avg_color' => $avgColor]);
 

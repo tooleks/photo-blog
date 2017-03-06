@@ -53,7 +53,7 @@ class GeneratePhotoAvgColors extends Command
                 $this->comment(sprintf('Processing photo (ID:%s) ...', $photo->id));
                 $thumbnail = $photo->thumbnails->first();
                 if (is_null($thumbnail)) return $this->comment(sprintf('No thumbnails found for photo (ID:%s)', $photo->id));
-                $photo->avg_color = $this->avgColorPicker->getImageAvgColorByPath(storage_path('app') . '/' . $thumbnail->path);
+                $photo->avg_color = $this->avgColorPicker->getImageAvgHexColorByPath(storage_path('app') . '/' . $thumbnail->path);
                 $this->comment(sprintf('Average color: %s', $photo->avg_color));
                 $photo->save();
             });

@@ -28,13 +28,13 @@ class AvgColorPicker implements AvgColorPickerContract
     /**
      * @inheritdoc
      */
-    public function getImageAvgColorByPath(string $imagePath) : string
+    public function getImageAvgHexColorByPath(string $imagePath) : string
     {
         $avgRgb = [];
 
         $this->eachImagePixel($this->createImageResource($imagePath), function ($imageResource, $xCoordinate, $yCoordinate) use (&$avgRgb) {
-            $rgb = $this->getImagePixelRgb($imageResource, $xCoordinate, $yCoordinate);
-            $avgRgb = $avgRgb ? $this->calculateAvgRgb($avgRgb, $rgb) : $rgb;
+            $pixelRgb = $this->getImagePixelRgb($imageResource, $xCoordinate, $yCoordinate);
+            $avgRgb = $avgRgb ? $this->calculateAvgRgb($avgRgb, $pixelRgb) : $pixelRgb;
         });
 
         return (new ColorConverter)->rgb2hex($avgRgb);
