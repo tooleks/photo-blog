@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 <body style="margin: 0; padding: 0;">
-<p><a href="mailto:{{ $email }}">Email Us</a> from {{ $ip_address }}.</p>
+<p><a href="mailto:{{ $email }}">{{ $email }}</a> from {{ $ip_address }}.</p>
 <p>{{ $subject }}</p>
 <p>{{ $text }}</p>
 </body>

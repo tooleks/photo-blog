@@ -31,7 +31,7 @@ class ContactMessage extends Mailable
     {
         return $this
             ->replyTo($this->data['email'])
-            ->subject($this->data['subject'])
-            ->view('emails.contact-message', $this->data);
+            ->subject(config('app.name') . ' ' . trans('mails.contact-message.subject') . ' ' . $this->data['subject'])
+            ->view('mails.contact-message', $this->data);
     }
 }
