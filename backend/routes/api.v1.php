@@ -1,6 +1,7 @@
 <?php
 
 use Api\V1\Http\Middleware\{
+    AppendIpAddress,
     AppendUserId,
     DeletePhotoDirectory,
     FetchExifData,
@@ -141,5 +142,20 @@ Route::group(['prefix' => 'tags'], function () {
 
     Route::get('/')
         ->uses('TagsController@find');
+
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| Contact Us Resource Routes
+|--------------------------------------------------------------------------
+*/
+Route::group(['prefix' => 'contact_message'], function () {
+
+    Route::post('/')
+        ->uses('ContactMessageController@create')
+        ->middleware(AppendIpAddress::class)
+        ->middleware('throttle:1,1'); // Allow 1 requests per minute.;
 
 });

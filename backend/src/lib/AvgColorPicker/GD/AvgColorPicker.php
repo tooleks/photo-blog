@@ -15,29 +15,18 @@ use RuntimeException;
 class AvgColorPicker implements AvgColorPickerContract
 {
     /**
-     * MIME types map to image resource creation functions.
-     *
-     * @var array
-     */
-    private $mimeTypesMap = [
-        'image/png' => 'imagecreatefrompng',
-        'image/jpeg' => 'imagecreatefromjpeg',
-        'image/gif' => 'imagecreatefromgif',
-    ];
-
-    /**
      * @inheritdoc
      */
     public function getImageAvgHexColorByPath(string $imagePath) : string
     {
-        $avgRgb = [];
+        $avgRgbColor = [];
 
-        $this->eachImagePixel($this->createImageResource($imagePath), function ($imageResource, $xCoordinate, $yCoordinate) use (&$avgRgb) {
-            $pixelRgb = $this->getImagePixelRgb($imageResource, $xCoordinate, $yCoordinate);
-            $avgRgb = $avgRgb ? $this->calculateAvgRgb($avgRgb, $pixelRgb) : $pixelRgb;
+        $this->eachImagePixel($this->createImageResource($imagePath), function ($imageResource, $xCoordinate, $yCoordinate) use (&$avgRgbColor) {
+            $pixelRgbColor = $this->getImagePixelRgbColor($imageResource, $xCoordinate, $yCoordinate);
+            $avgRgbColor = $avgRgbColor ? $this->calculateAvgRgbColor($avgRgbColor, $pixelRgbColor) : $pixelRgbColor;
         });
 
-        return (new ColorConverter)->rgb2hex($avgRgb);
+        return (new ColorConverter)->rgb2hex($avgRgbColor);
     }
 
     /**
@@ -52,12 +41,19 @@ class AvgColorPicker implements AvgColorPickerContract
             throw new RuntimeException(sprintf('The "%s" file not exist.', $imagePath));
         }
 
+        $imageCreateFunctions = [
+            'image/png' => 'imagecreatefrompng',
+            'image/jpeg' => 'imagecreatefromjpeg',
+            'image/gif' => 'imagecreatefromgif',
+        ];
+
         $imageMimeType = mime_content_type($imagePath);
-        if (!array_key_exists($imageMimeType, $this->mimeTypesMap)) {
+
+        if (!array_key_exists($imageMimeType, $imageCreateFunctions)) {
             throw new RuntimeException(sprintf('The "%s" mime type not supported.', $imageMimeType));
         }
 
-        return call_user_func($this->mimeTypesMap[$imageMimeType], $imagePath);
+        return call_user_func($imageCreateFunctions[$imageMimeType], $imagePath);
     }
 
     /**
@@ -87,7 +83,7 @@ class AvgColorPicker implements AvgColorPickerContract
      * @param int $yCoordinate
      * @return array
      */
-    private function getImagePixelRgb($imageResource, int $xCoordinate, int $yCoordinate) : array
+    private function getImagePixelRgbColor($imageResource, int $xCoordinate, int $yCoordinate) : array
     {
         $rgb = imagecolorsforindex($imageResource, imagecolorat($imageResource, $xCoordinate, $yCoordinate));
 
@@ -101,7 +97,7 @@ class AvgColorPicker implements AvgColorPickerContract
      * @param array $secondRgb
      * @return array
      */
-    private function calculateAvgRgb(array $firstRgb, array $secondRgb) : array
+    private function calculateAvgRgbColor(array $firstRgb, array $secondRgb) : array
     {
         $avgRgb = [];
 
