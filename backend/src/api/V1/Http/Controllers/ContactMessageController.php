@@ -20,9 +20,9 @@ class ContactMessageController
      * @apiGroup Contact Message
      * @apiHeader {String} Accept application/json
      * @apiHeader {String} Content-Type application/json
-     * @apiParam {String{1..255}} email Message author email address to reply.
-     * @apiParam {String{1..255}} name Message author name.
-     * @apiParam {String{1..255}} subject Message subject.
+     * @apiParam {String{1..255}} email Author email address to reply.
+     * @apiParam {String{1..255}} name Author name.
+     * @apiParam {String{1..255}} subject Subject.
      * @apiParam {String{1..65535}} text Message text.
      * @apiSuccessExample {json} Success-Response:
      *  {
