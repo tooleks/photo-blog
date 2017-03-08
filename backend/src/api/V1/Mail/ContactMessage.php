@@ -30,6 +30,7 @@ class ContactMessage extends Mailable
     public function build()
     {
         return $this
+            ->to(config('mail.address.administrator'))
             ->replyTo($this->data['email'])
             ->subject(implode(' - ', [config('app.name'), trans('mails.contact-message.subject'), $this->data['subject']]))
             ->view('mails.contact-message', $this->data);
