@@ -4,6 +4,7 @@ namespace Api\V1\Http\Controllers;
 
 use Api\V1\Http\Requests\ContactMessage as ContactMessageRequest;
 use Api\V1\Mail\ContactMessage;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Mail;
 
 /**
@@ -11,7 +12,7 @@ use Illuminate\Support\Facades\Mail;
  *
  * @package Api\V1\Http\Controllers
  */
-class ContactMessageController
+class ContactMessageController extends Controller
 {
     /**
      * @apiVersion 1.0.0
