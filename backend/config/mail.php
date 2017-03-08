@@ -56,10 +56,9 @@ return [
     */
 
     'from' => [
-        'address' => 'hello@example.com',
-        'name' => 'Example',
+        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
+        'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
-
     /*
     |--------------------------------------------------------------------------
     | E-Mail Encryption Protocol
@@ -111,5 +110,16 @@ return [
     */
 
     'sendmail' => '/usr/sbin/sendmail -bs',
+
+    /*
+    |--------------------------------------------------------------------------
+    | E-mail Addresses
+    |--------------------------------------------------------------------------
+    |
+    */
+
+    'address' => [
+        'administrator' => env('MAIL_ADDRESS_ADMINISTRATOR', 'hello@example.com'),
+    ],
 
 ];
