@@ -4,16 +4,28 @@ namespace Api\V1\Http\Controllers;
 
 use Api\V1\Http\Requests\ContactMessage as ContactMessageRequest;
 use Api\V1\Mail\ContactMessage;
+use Illuminate\Contracts\Mail\Mailer;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Mail;
 
 /**
  * Class ContactUsController.
  *
+ * @property Mailer mailer
  * @package Api\V1\Http\Controllers
  */
 class ContactMessageController extends Controller
 {
+    /**
+     * ContactMessageController constructor.
+     *
+     * @param Mailer $mailer
+     */
+    public function __construct(Mailer $mailer)
+    {
+        $this->mailer = $mailer;
+    }
+
     /**
      * @apiVersion 1.0.0
      * @api {post} /v1/contact_message Create
@@ -36,10 +48,12 @@ class ContactMessageController extends Controller
      * Create a resource.
      *
      * @param ContactMessageRequest $request
-     * @return array
+     * @return Response
      */
     public function create(ContactMessageRequest $request)
     {
-        Mail::to(config('mail.address.administrator'))->send(new ContactMessage($request->all()));
+        $this->mailer->send(new ContactMessage($request->all()));
+
+        return new Response(null, 201);
     }
 }
