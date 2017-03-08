@@ -28,9 +28,7 @@ class ContactMessageController extends Controller
      * @apiSuccessExample {json} Success-Response:
      *  {
      *      "status": true,
-     *      "data": {
-     *          "sent": 1
-     *      }
+     *      "data": null
      *  }
      */
 
@@ -43,7 +41,5 @@ class ContactMessageController extends Controller
     public function create(ContactMessageRequest $request)
     {
         Mail::to(config('mail.address.administrator'))->send(new ContactMessage($request->all()));
-
-        return ['sent' => 1];
     }
 }
