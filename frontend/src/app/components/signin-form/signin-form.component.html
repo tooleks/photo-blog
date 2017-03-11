@@ -10,7 +10,8 @@
                                    (keyup.enter)="signIn()"
                                    type="email"
                                    class="form-control"
-                                   name="email">
+                                   name="email"
+                                   placeholder="{{ 'Your Email Address' }}">
                         </div>
                     </div>
                     <div class="form-group">
@@ -20,10 +21,10 @@
                                    (keyup.enter)="signIn()"
                                    type="password"
                                    class="form-control"
-                                   name="password">
+                                   name="password"
+                                   placeholder="{{ 'Your Password' }}">
                         </div>
                     </div>
-                    <div class="hr-line-dashed"></div>
                     <div class="form-group">
                         <div class="col-sm-4 col-sm-offset-2">
                             <button (click)="signIn()" [disabled]="isLoading()" class="btn btn-primary">{{ 'Sign In' }}</button>
