@@ -9,7 +9,7 @@ import {NoticesService} from '../../../common/notices';
 export class ApiErrorHandler extends BaseApiErrorHandler {
     private navigator:NavigatorService;
 
-    constructor(@Inject(NoticesService) private notificator:NoticesService,
+    constructor(@Inject(NoticesService) private notices:NoticesService,
                 @Inject(NavigatorServiceProvider) private navigatorProvider:NavigatorServiceProvider) {
         super();
         this.navigator = navigatorProvider.getInstance();
@@ -37,7 +37,7 @@ export class ApiErrorHandler extends BaseApiErrorHandler {
     };
 
     private handleUnknownError = (response:any, body:any):void => {
-        this.notificator.error(body.message, 'Unknown Error');
+        this.notices.error(body.message, 'Unknown Error');
     };
 
     private handleUnauthorizedError = (response:any, body:any):void => {
@@ -45,14 +45,14 @@ export class ApiErrorHandler extends BaseApiErrorHandler {
     };
 
     private handleHttpError = (response:any, body:any):void => {
-        this.notificator.error(body.message, response.status + ' Error');
+        this.notices.error(body.message, response.status + ' Error');
     };
 
     private handleValidationErrors = (response:any, body:any):void => {
         body.errors = body.errors || {};
         for (var property in body.errors) {
             if (body.errors.hasOwnProperty(property)) {
-                body.errors[property].forEach((message:string) => this.notificator.warning(message));
+                body.errors[property].forEach((message:string) => this.notices.warning(message));
             }
         }
     };

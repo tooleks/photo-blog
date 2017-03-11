@@ -28,7 +28,7 @@ export class PhotoFormComponent {
                 @Inject(ScrollerService) private scroller:ScrollerService,
                 @Inject(AuthProviderService) private authProvider:AuthProviderService,
                 @Inject(PhotoDataProviderService) private photoDataProvider:PhotoDataProviderService,
-                @Inject(NoticesService) private notificator:NoticesService,
+                @Inject(NoticesService) private notices:NoticesService,
                 @Inject(NavigatorServiceProvider) navigatorServiceProvider:NavigatorServiceProvider,
                 @Inject(LockProcessServiceProvider) lockProcessServiceProvider:LockProcessServiceProvider) {
         this.navigator = navigatorServiceProvider.getInstance();
@@ -68,7 +68,7 @@ export class PhotoFormComponent {
 
     save = () => {
         return this.lockProcess.process(this.processSavePhoto).then((result:any) => {
-            this.notificator.success('Photo was successfully saved.');
+            this.notices.success('Photo was successfully saved.');
             this.navigator.navigate(['/photos']);
             return result;
         });
@@ -93,7 +93,7 @@ export class PhotoFormComponent {
 
     upload = (file:FileList) => {
         return this.lockProcess.process(this.processUploadPhoto, [file]).then((result:any) => {
-            this.notificator.success('File was successfully uploaded.');
+            this.notices.success('File was successfully uploaded.');
             return result;
         });
     };
@@ -108,7 +108,7 @@ export class PhotoFormComponent {
 
     deletePhoto = () => {
         return this.lockProcess.process(this.processDeletePhoto).then((result:any) => {
-            this.notificator.success('Photo was successfully deleted.');
+            this.notices.success('Photo was successfully deleted.');
             this.navigator.navigate(['/photos']);
             return result;
         });

@@ -3,6 +3,8 @@ notices .notices-wrapper {
     position: fixed;
     top: 0;
     right: 0;
+    max-height: 100%;
+    overflow: hidden;
     z-index: 10000;
 }
 
