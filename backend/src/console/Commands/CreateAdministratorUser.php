@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Console\Commands;
 
 use Core\Models\User;
 use Illuminate\Console\Command;
@@ -10,7 +10,7 @@ use Illuminate\Contracts\Hashing\Hasher;
  * Class CreateAdministratorUser.
  *
  * @property Hasher hasher
- * @package App\Console\Commands
+ * @package Console\Commands
  */
 class CreateAdministratorUser extends Command
 {

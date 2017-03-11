@@ -5,7 +5,7 @@ namespace Api\V1\Mail;
 use Illuminate\Mail\Mailable;
 
 /**
- * Class ContactEmail.
+ * Class ContactMessage.
  *
  * @property array data
  * @package Api\V1\Mail
@@ -13,7 +13,7 @@ use Illuminate\Mail\Mailable;
 class ContactMessage extends Mailable
 {
     /**
-     * ContactUs constructor.
+     * ContactMessage constructor.
      *
      * @param array $data
      */
@@ -33,6 +33,6 @@ class ContactMessage extends Mailable
             ->to(config('mail.address.administrator'))
             ->replyTo($this->data['email'])
             ->subject(implode(' - ', [config('app.name'), trans('mails.contact-message.subject'), $this->data['subject']]))
-            ->view('mails.contact-message', $this->data);
+            ->view('api.v1.mails.contact-message', $this->data);
     }
 }

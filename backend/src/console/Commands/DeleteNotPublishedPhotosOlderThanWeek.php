@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Console\Commands;
 
 use Core\Models\Photo;
 use Carbon\Carbon;
@@ -11,7 +11,7 @@ use Illuminate\Contracts\Filesystem\Filesystem;
  * Class DeleteNotPublishedPhotosOlderThanWeek.
  *
  * @property Filesystem fileSystem
- * @package App\Console\Commands
+ * @package Console\Commands
  */
 class DeleteNotPublishedPhotosOlderThanWeek extends Command
 {

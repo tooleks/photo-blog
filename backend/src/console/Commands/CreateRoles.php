@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Console\Commands;
 
 use Core\Models\Role;
 use Illuminate\Console\Command;
@@ -8,7 +8,7 @@ use Illuminate\Console\Command;
 /**
  * Class CreateRoles.
  *
- * @package App\Console\Commands
+ * @package Console\Commands
  */
 class CreateRoles extends Command
 {
