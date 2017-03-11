@@ -97,7 +97,7 @@ return [
         'tags.*.text' => [
             'required' => 'The tags field is required.',
         ],
-        'uploaded_photo_id' => [
+        'photo_id' => [
             'required' => 'The file upload is required.',
         ],
     ],

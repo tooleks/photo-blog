@@ -2,14 +2,14 @@ import {Injectable, Inject} from '@angular/core';
 import {Response} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import {ApiErrorHandler as BaseApiErrorHandler} from '../api';
-import {NotificatorService} from '../notificator';
 import {NavigatorService, NavigatorServiceProvider} from '../navigator';
+import {NoticesService} from '../../../common/notices';
 
 @Injectable()
 export class ApiErrorHandler extends BaseApiErrorHandler {
     private navigator:NavigatorService;
 
-    constructor(@Inject(NotificatorService) private notificator:NotificatorService,
+    constructor(@Inject(NoticesService) private notificator:NoticesService,
                 @Inject(NavigatorServiceProvider) private navigatorProvider:NavigatorServiceProvider) {
         super();
         this.navigator = navigatorProvider.getInstance();

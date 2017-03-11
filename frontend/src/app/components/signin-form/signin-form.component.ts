@@ -6,11 +6,11 @@ import {
     ScrollerService,
     LockProcessServiceProvider,
     LockProcessService,
-    NotificatorService,
     NavigatorServiceProvider,
     NavigatorService,
 } from '../../../shared/services';
 import {User} from '../../../shared/models';
+import {NoticesService} from '../../../common/notices';
 
 @Component({
     selector: 'signin-form',
@@ -24,7 +24,7 @@ export class SignInFormComponent {
     constructor(@Inject(AuthService) private auth:AuthService,
                 @Inject(TitleService) private title:TitleService,
                 @Inject(ScrollerService) private scroller:ScrollerService,
-                @Inject(NotificatorService) private notificator:NotificatorService,
+                @Inject(NoticesService) private notificator:NoticesService,
                 @Inject(NavigatorServiceProvider) navigatorProvider:NavigatorServiceProvider,
                 @Inject(LockProcessServiceProvider) lockProcessServiceProvider:LockProcessServiceProvider) {
         this.navigator = navigatorProvider.getInstance();

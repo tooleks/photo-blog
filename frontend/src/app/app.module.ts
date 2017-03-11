@@ -12,6 +12,7 @@ import {
 import {AppRouting, AppRoutingProviders} from './app.routing';
 import {SharedModule} from '../shared/shared.module';
 import {PhotosModule} from '../photos/photos.module';
+import {NoticesModule} from '../common/notices'; 
 
 @NgModule({
     imports: [
@@ -21,6 +22,7 @@ import {PhotosModule} from '../photos/photos.module';
         AppRouting,
         SharedModule,
         PhotosModule,
+        NoticesModule,
     ],
     declarations: [
         AppComponent,
