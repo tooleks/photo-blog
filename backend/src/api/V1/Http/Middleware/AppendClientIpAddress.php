@@ -6,11 +6,11 @@ use Illuminate\Http\Request;
 use Closure;
 
 /**
- * Class AppendIpAddress.
+ * Class AppendClientIpAddress.
  *
  * @package Api\V1\Http\Middleware
  */
-class AppendIpAddress
+class AppendClientIpAddress
 {
     /**
      * Handle an incoming request.
@@ -21,7 +21,7 @@ class AppendIpAddress
      */
     public function handle($request, Closure $next)
     {
-        $request->merge(['ip_address' => $this->resolveClientIpAddress($request) ?? 'N/A']);
+        $request->merge(['client_ip_address' => $this->resolveClientIpAddress($request) ?? 'N/A']);
 
         return $next($request);
     }
