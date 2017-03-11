@@ -4,12 +4,14 @@ import {SharedModule} from '../shared/shared.module';
 import {PhotoFormComponent, PhotosComponent, PhotosBySearchQueryComponent, PhotosByTagComponent} from './components';
 import {PhotoDataProviderService} from './services';
 import {PhotosRouting, PhotosRoutingProviders} from './photos.routing';
+import {NoticesModule} from '../common/notices'; 
 
 @NgModule({
     imports: [
         InfiniteScrollModule,
         SharedModule,
         PhotosRouting,
+        NoticesModule,
     ],
     declarations: [
         PhotoFormComponent,

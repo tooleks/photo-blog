@@ -13,7 +13,6 @@ import {
     LockProcessServiceProvider,
     LockerServiceProvider,
     NavigatorServiceProvider,
-    NotificatorService,
     PagerServiceProvider,
     ScreenDetectorService,
     ScrollFreezerService,
@@ -28,12 +27,14 @@ import {
     GalleryGridComponent,
     TagsSelectInputComponent,
 } from './components';
+import {NoticesModule} from '../common/notices';
 
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
         TagInputModule,
+        NoticesModule,
     ],
     declarations: [
         FileSelectInputComponent,
@@ -60,7 +61,6 @@ import {
         LockProcessServiceProvider,
         LockerServiceProvider,
         NavigatorServiceProvider,
-        NotificatorService,
         PagerServiceProvider,
         ScreenDetectorService,
         ScrollFreezerService,

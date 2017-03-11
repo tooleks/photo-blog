@@ -4,7 +4,6 @@ import {
     TitleService,
     ScrollerService,
     AuthProviderService,
-    NotificatorService,
     NavigatorServiceProvider,
     NavigatorService,
     LockProcessServiceProvider,
@@ -12,6 +11,7 @@ import {
 } from '../../../shared/services';
 import {PublishedPhoto, Photo} from '../../../shared/models';
 import {PhotoDataProviderService} from '../../services'
+import {NoticesService} from '../../../common/notices';
 
 @Component({
     selector: 'photo-form',
@@ -28,7 +28,7 @@ export class PhotoFormComponent {
                 @Inject(ScrollerService) private scroller:ScrollerService,
                 @Inject(AuthProviderService) private authProvider:AuthProviderService,
                 @Inject(PhotoDataProviderService) private photoDataProvider:PhotoDataProviderService,
-                @Inject(NotificatorService) private notificator:NotificatorService,
+                @Inject(NoticesService) private notificator:NoticesService,
                 @Inject(NavigatorServiceProvider) navigatorServiceProvider:NavigatorServiceProvider,
                 @Inject(LockProcessServiceProvider) lockProcessServiceProvider:LockProcessServiceProvider) {
         this.navigator = navigatorServiceProvider.getInstance();
