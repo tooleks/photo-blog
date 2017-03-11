@@ -2,14 +2,15 @@
 
 namespace Console;
 
+use Console\Commands\ChangeUserPassword;
 use Console\Commands\ConfigApp;
 use Console\Commands\CreateAdministratorUser;
-use Console\Commands\GenerateRestApiDocumentation;
 use Console\Commands\DeleteNotPublishedPhotosOlderThanWeek;
 use Console\Commands\DeleteUnusedDirectoriesWithinPhotoStorage;
 use Console\Commands\CreateRoles;
 use Console\Commands\GeneratePhotoAvgColors;
 use Console\Commands\GeneratePhotoThumbnails;
+use Console\Commands\GenerateRestApiDocumentation;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -26,6 +27,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
+        ChangeUserPassword::class,
         ConfigApp::class,
         CreateAdministratorUser::class,
         CreateRoles::class,
