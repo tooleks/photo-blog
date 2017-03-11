@@ -156,6 +156,6 @@ Route::group(['prefix' => 'contact_message'], function () {
     Route::post('/')
         ->uses('ContactMessageController@create')
         ->middleware(AppendIpAddress::class)
-        ->middleware('throttle:1,1'); // Allow 1 requests per minute.;
+        ->middleware('throttle:5,1'); // Allow 5 requests per minute.;
 
 });
