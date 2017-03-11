@@ -5,7 +5,7 @@ server {
     root /var/www/photo-blog/docs/rest_api/dist;
     index index.html;
 
-    server_name api_documentation.server.name;
+    server_name rest_api_documentation.server.name;
 
     location / {
         try_files $uri $uri/ /index.html =404;
