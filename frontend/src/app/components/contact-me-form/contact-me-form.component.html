@@ -1,6 +1,13 @@
 <div class="ibox float-e-margins">
     <div class="ibox-content">
         <div class="row">
+            <div class="col-sm-12">
+                <div class="alert alert-success">
+                    {{ 'I am happy to answer any questions you have. Just send me a message in the form below.' }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-sm-8">
                 <div class="form-horizontal">
                     <div class="form-group">
@@ -10,7 +17,8 @@
                                    (keyup.enter)="send()"
                                    type="email"
                                    class="form-control"
-                                   name="email">
+                                   name="email"
+                                   placeholder="{{ 'Your Email Address' }}">
                         </div>
                     </div>
                     <div class="form-group">
@@ -20,7 +28,8 @@
                                    (keyup.enter)="send()"
                                    type="text"
                                    class="form-control"
-                                   name="email">
+                                   name="name"
+                                   placeholder="{{ 'Your Full Name' }}">
                         </div>
                     </div>
                     <div class="form-group">
@@ -30,7 +39,8 @@
                                    (keyup.enter)="send()"
                                    type="text"
                                    class="form-control"
-                                   name="password">
+                                   name="subject"
+                                   placeholder="{{ 'Subject Of Message' }}">
                         </div>
                     </div>
                     <div class="form-group">
@@ -39,11 +49,11 @@
                             <textarea [(ngModel)]="form.text"
                                       (keyup.enter)="send()"
                                       class="form-control"
-                                      name="password"
-                                      rows="6"></textarea>
+                                      name="text"
+                                      rows="6"
+                                      placeholder="{{ 'Message Text' }}"></textarea>
                         </div>
                     </div>
-                    <div class="hr-line-dashed"></div>
                     <div class="form-group">
                         <div class="col-sm-4 col-sm-offset-2">
                             <button (click)="send()" [disabled]="isLoading()" class="btn btn-primary">{{ 'Send' }}</button>
