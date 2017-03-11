@@ -24,7 +24,7 @@ export class SignInFormComponent {
     constructor(@Inject(AuthService) private auth:AuthService,
                 @Inject(TitleService) private title:TitleService,
                 @Inject(ScrollerService) private scroller:ScrollerService,
-                @Inject(NoticesService) private notificator:NoticesService,
+                @Inject(NoticesService) private notices:NoticesService,
                 @Inject(NavigatorServiceProvider) navigatorProvider:NavigatorServiceProvider,
                 @Inject(LockProcessServiceProvider) lockProcessServiceProvider:LockProcessServiceProvider) {
         this.navigator = navigatorProvider.getInstance();
@@ -41,7 +41,7 @@ export class SignInFormComponent {
         return this.lockProcess
             .process(this.auth.signIn, [this.form.email, this.form.password])
             .then((user:User) => {
-                this.notificator.success('Hello, ' + user.name + '!');
+                this.notices.success('Hello, ' + user.name + '!');
                 this.navigator.navigate(['/']);
                 return user;
             });

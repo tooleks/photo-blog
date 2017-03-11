@@ -23,7 +23,7 @@ export class ContactMeFormComponent {
     constructor(@Inject(ApiService) private api:ApiService,
                 @Inject(TitleService) private title:TitleService,
                 @Inject(ScrollerService) private scroller:ScrollerService,
-                @Inject(NoticesService) private notificator:NoticesService,
+                @Inject(NoticesService) private notices:NoticesService,
                 @Inject(NavigatorServiceProvider) navigatorProvider:NavigatorServiceProvider,
                 @Inject(LockProcessServiceProvider) lockProcessServiceProvider:LockProcessServiceProvider) {
         this.navigator = navigatorProvider.getInstance();
@@ -40,7 +40,7 @@ export class ContactMeFormComponent {
         return this.lockProcess
             .process(() => this.api.post('/contact_message', this.form).toPromise())
             .then((data:any) => {
-                this.notificator.success('Your message successfully sent.');
+                this.notices.success('Your message successfully sent.');
                 this.navigator.navigate(['/']);
                 return data;
             });
