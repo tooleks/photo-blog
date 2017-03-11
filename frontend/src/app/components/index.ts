@@ -1,4 +1,5 @@
 export * from './app/app.component';
+export * from './contact-me-form/contact-me-form.component';
 export * from './layout/sidebar/sidebar.component';
 export * from './layout/topbar/topbar.component';
 export * from './page-not-found/page-not-found.component';
