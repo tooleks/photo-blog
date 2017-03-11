@@ -9,13 +9,20 @@ notices .notices-wrapper {
 notices .notices-wrapper .notice {
     display: block;
     width: 300px;
-    margin: 6px 6px 0 0;
     padding: 10px;
     border: none;
     border-radius: 3px;
     box-shadow: 0 0 12px #999;
     opacity: 0.85;
     cursor: pointer;
+}
+
+notices .notices-wrapper .notice:first-child {
+    margin-top: 10px;
+}
+
+notices .notices-wrapper .notice {
+    margin: 6px 10px 0 0;
 }
 
 notices .notices-wrapper .notice:hover {
