@@ -1,34 +1,31 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Console\Commands;
 
 use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
-class CreateApiDocumentation extends Command
+/**
+ * Class GenerateRestApiDocumentation.
+ *
+ * @package Console\Commands
+ */
+class GenerateRestApiDocumentation extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'create:api_documentation';
+    protected $signature = 'generate:rest_api_documentation';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create API documentation';
-
-    /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
+    protected $description = 'Generate REST API documentation';
 
     /**
      * Execute the console command.
@@ -37,7 +34,7 @@ class CreateApiDocumentation extends Command
      */
     public function handle()
     {
-        $process = new Process('apidoc -i ./src/api/ -o ../docs/api/dist');
+        $process = new Process('apidoc -i ./src/api/ -o ../docs/rest_api/dist');
         $process->run();
 
         if (!$process->isSuccessful()) {

@@ -54,6 +54,6 @@ class ContactMessageController extends Controller
     {
         $this->mailer->send(new ContactMessage($request->all()));
 
-        return new Response(null, 201);
+        return new Response(null, Response::HTTP_CREATED);
     }
 }

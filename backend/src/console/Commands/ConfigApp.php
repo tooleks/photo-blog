@@ -1,9 +1,14 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Console\Commands;
 
 use Illuminate\Console\Command;
 
+/**
+ * Class ConfigApp.
+ *
+ * @package Console\Commands
+ */
 class ConfigApp extends Command
 {
     /**

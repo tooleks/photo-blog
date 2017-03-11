@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Console\Commands;
 
 use Core\Models\Photo;
 use Core\Models\Thumbnail;
@@ -14,7 +14,7 @@ use Lib\ThumbnailsGenerator\Contracts\ThumbnailsGenerator;
  *
  * @property Filesystem fileSystem
  * @property ThumbnailsGenerator thumbnailsGenerator
- * @package App\Console\Commands
+ * @package Console\Commands
  */
 class GeneratePhotoThumbnails extends Command
 {

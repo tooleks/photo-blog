@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Console\Commands;
 
 use Core\Models\Photo;
 use Illuminate\Console\Command;
@@ -11,7 +11,7 @@ use Lib\AvgColorPicker\Contracts\AvgColorPicker;
  * Class GeneratePhotoAvgColors.
  *
  * @property AvgColorPicker avgColorPicker
- * @package App\Console\Commands
+ * @package Console\Commands
  */
 class GeneratePhotoAvgColors extends Command
 {

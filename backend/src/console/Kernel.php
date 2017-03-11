@@ -1,18 +1,23 @@
 <?php
 
-namespace App\Console;
+namespace Console;
 
-use App\Console\Commands\ConfigApp;
-use App\Console\Commands\CreateAdministratorUser;
-use App\Console\Commands\CreateApiDocumentation;
-use App\Console\Commands\DeleteNotPublishedPhotosOlderThanWeek;
-use App\Console\Commands\DeleteUnusedDirectoriesWithinPhotoStorage;
-use App\Console\Commands\CreateRoles;
-use App\Console\Commands\GeneratePhotoAvgColors;
-use App\Console\Commands\GeneratePhotoThumbnails;
+use Console\Commands\ConfigApp;
+use Console\Commands\CreateAdministratorUser;
+use Console\Commands\GenerateRestApiDocumentation;
+use Console\Commands\DeleteNotPublishedPhotosOlderThanWeek;
+use Console\Commands\DeleteUnusedDirectoriesWithinPhotoStorage;
+use Console\Commands\CreateRoles;
+use Console\Commands\GeneratePhotoAvgColors;
+use Console\Commands\GeneratePhotoThumbnails;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
+/**
+ * Class Kernel.
+ *
+ * @package Console
+ */
 class Kernel extends ConsoleKernel
 {
     /**
@@ -23,12 +28,12 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         ConfigApp::class,
         CreateAdministratorUser::class,
-        CreateApiDocumentation::class,
         CreateRoles::class,
         DeleteNotPublishedPhotosOlderThanWeek::class,
         DeleteUnusedDirectoriesWithinPhotoStorage::class,
         GeneratePhotoAvgColors::class,
         GeneratePhotoThumbnails::class,
+        GenerateRestApiDocumentation::class,
     ];
 
     /**

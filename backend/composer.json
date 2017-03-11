@@ -26,6 +26,7 @@
         "psr-4": {
             "Api\\": "src/api/",
             "App\\": "src/app/",
+            "Console\\": "src/console/",
             "Core\\": "src/core/",
             "Lib\\": "src/lib/"
         }
