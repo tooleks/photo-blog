@@ -1,7 +1,7 @@
 <?php
 
 use Api\V1\Http\Middleware\{
-    AppendIpAddress,
+    AppendClientIpAddress,
     AppendUserId,
     DeletePhotoDirectory,
     FetchExifData,
@@ -155,7 +155,7 @@ Route::group(['prefix' => 'contact_message'], function () {
 
     Route::post('/')
         ->uses('ContactMessageController@create')
-        ->middleware(AppendIpAddress::class)
+        ->middleware(AppendClientIpAddress::class)
         ->middleware('throttle:5,1'); // Allow 5 requests per minute.;
 
 });
