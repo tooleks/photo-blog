@@ -10,6 +10,12 @@
         <router-outlet></router-outlet>
     </div>
     <div class="app-footer">
-        <span class="app-footer-copyright">Copyright &copy; <strong>{{ env.get('appName') }}</strong> {{ getCurrentYear() }}</span>
+        <span class="app-footer-item">&copy;
+            {{ getCurrentYear() }} <strong>{{ env.get('appName') }}</strong></span>
+        <span class="app-footer-item">
+             <a [routerLink]="['/contact-me']"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }">{{ 'Contact Me' }}</a>
+        </span>
     </div>
 </div>

@@ -34,7 +34,15 @@
     }
 }
 
-:host .app-footer-copyright {
-    padding: 0 20px;
+:host .app-footer-item {
+    padding-right: 5px;
     line-height: 40px;
+}
+
+:host .app-footer-item:first-child {
+    padding-left: 20px;
+}
+
+:host .app-footer-item:last-child {
+    padding-right: 20px;
 }
