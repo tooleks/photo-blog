@@ -13,6 +13,21 @@ use Closure;
 class AppendClientIpAddress
 {
     /**
+     * Possible server options from which client IP can be retrieved ordered by priority.
+     *
+     * @var array
+     */
+    private $clientIpServerOptions = [
+        'HTTP_CLIENT_IP',
+        'HTTP_X_FORWARDED_FOR',
+        'HTTP_X_FORWARDED',
+        'HTTP_X_CLUSTER_CLIENT_IP',
+        'HTTP_FORWARDED_FOR',
+        'HTTP_FORWARDED',
+        'REMOTE_ADDR',
+    ];
+
+    /**
      * Handle an incoming request.
      *
      * @param Request $request
@@ -21,37 +36,26 @@ class AppendClientIpAddress
      */
     public function handle($request, Closure $next)
     {
-        $request->merge(['client_ip_address' => $this->resolveClientIpAddress($request) ?? 'N/A']);
+        $request->merge(['client_ip_address' => $this->resolveClientIpAddress($request)]);
 
         return $next($request);
     }
 
     /**
-     * Resolve client IP address from request.
+     * Resolve a client IP address from an incoming request.
      *
      * @param $request
-     * @return null|string
+     * @return string|null
      */
     private function resolveClientIpAddress($request)
     {
-        $ip = null;
-
-        if ($request->server->has('HTTP_CLIENT_IP')) {
-            $ip = $request->server->get('HTTP_CLIENT_IP');
-        } elseif ($request->server->has('HTTP_X_FORWARDED_FOR')) {
-            $ip = $request->server->get('HTTP_X_FORWARDED_FOR');
-        } elseif ($request->server->has('HTTP_X_FORWARDED')) {
-            $ip = $request->server->get('HTTP_X_FORWARDED');
-        } elseif ($request->server->has('HTTP_X_CLUSTER_CLIENT_IP')) {
-            $ip = $request->server->get('HTTP_X_CLUSTER_CLIENT_IP');
-        } elseif ($request->server->has('HTTP_FORWARDED_FOR')) {
-            $ip = $request->server->get('HTTP_FORWARDED_FOR');
-        } elseif ($request->server->has('HTTP_FORWARDED')) {
-            $ip = $request->server->get('HTTP_FORWARDED');
-        } elseif ($request->server->has('REMOTE_ADDR')) {
-            $ip = $request->server->get('REMOTE_ADDR');
+        foreach ($this->clientIpServerOptions as $option) {
+            if ($request->server->get($option)) {
+                $ip = $request->server->get($option);
+                break;
+            }
         }
 
-        return $ip;
+        return $ip ?? null;
     }
 }
