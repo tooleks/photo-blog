@@ -5,15 +5,15 @@ namespace Core\DataServices\Photo\Criterias;
 use Lib\DataService\Contracts\Criteria;
 
 /**
- * Class HasTagText.
+ * Class HasTagWithText.
  *
  * @property string tagText
  * @package Core\DataServices\Photo\Criterias
  */
-class HasTagText implements Criteria
+class HasTagWithText implements Criteria
 {
     /**
-     * HasTagText constructor.
+     * HasTagWithText constructor.
      *
      * @param string $tagText
      */
