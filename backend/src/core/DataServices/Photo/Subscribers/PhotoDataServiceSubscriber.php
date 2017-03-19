@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\DataServices\Photo\Events;
+namespace Core\DataServices\Photo\Subscribers;
 
 use Core\DataServices\Photo\PhotoDataService;
 use Core\Models\Photo;
@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Collection;
  * Class PhotoDataServiceSubscriber.
  *
  * @property ConnectionInterface dbConnection
- * @package Core\DataServices\Photo\Events
+ * @package Core\DataServices\Photo\Subscribers
  */
 class PhotoDataServiceSubscriber
 {
@@ -78,15 +78,19 @@ class PhotoDataServiceSubscriber
      */
     public function onAfterSave(Photo $photo, array $attributes = [], array $options = [])
     {
-        if (in_array('exif', $options) && array_key_exists('exif', $attributes)) {
+        if (!array_key_exists('save', $options)) {
+            return;
+        }
+
+        if (in_array('exif', $options['save']) && array_key_exists('exif', $attributes)) {
             $this->savePhotoExif($photo, $attributes['exif']);
         }
 
-        if (in_array('thumbnails', $options) && array_key_exists('thumbnails', $attributes)) {
+        if (in_array('thumbnails', $options['save']) && array_key_exists('thumbnails', $attributes)) {
             $this->savePhotoThumbnails($photo, $attributes['thumbnails']);
         }
 
-        if (in_array('tags', $options) && array_key_exists('tags', $attributes)) {
+        if (in_array('tags', $options['save']) && array_key_exists('tags', $attributes)) {
             $this->savePhotoTags($photo, $attributes['tags']);
         }
     }

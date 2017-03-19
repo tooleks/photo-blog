@@ -7,8 +7,8 @@ use Api\V1\Http\Requests\FindPhotos;
 use Api\V1\Http\Requests\UpdatePhoto;
 use Core\Models\Photo;
 use Core\DataServices\Photo\Criterias\IsPublished;
-use Core\DataServices\Photo\Criterias\Search;
-use Core\DataServices\Photo\Criterias\HasTagText;
+use Core\DataServices\Photo\Criterias\HasSearchPhrase;
+use Core\DataServices\Photo\Criterias\HasTagWithText;
 use Core\DataServices\Photo\Contracts\PhotoDataService;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
@@ -115,7 +115,7 @@ class PublishedPhotosController extends ResourceController
 
         $photo->setIsPublishedAttribute(true);
 
-        $this->photoDataService->save($photo, $request->all(), ['tags']);
+        $this->photoDataService->save($photo, $request->all(), ['save' => ['tags']]);
 
         return $photo;
     }
@@ -244,8 +244,8 @@ class PublishedPhotosController extends ResourceController
     {
         $photos = $this->photoDataService
             ->applyCriteria(new IsPublished(true))
-            ->applyCriteriaWhen($request->has('tag'), new HasTagText($request->get('tag')))
-            ->applyCriteriaWhen($request->has('query'), new Search($request->get('query')))
+            ->applyCriteriaWhen($request->has('tag'), new HasTagWithText($request->get('tag')))
+            ->applyCriteriaWhen($request->has('query'), new HasSearchPhrase($request->get('query')))
             ->applyCriteria(new Skip($request->get('skip', 0)))
             ->applyCriteria(new Take($request->get('take', 10)))
             ->applyCriteria((new SortByCreatedAt)->desc())
@@ -318,7 +318,7 @@ class PublishedPhotosController extends ResourceController
      */
     public function update(UpdatePhoto $request, $photo) : Photo
     {
-        $this->photoDataService->save($photo, $request->all(), ['tags']);
+        $this->photoDataService->save($photo, $request->all(), ['save' => ['tags']]);
 
         return $photo;
     }
