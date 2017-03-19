@@ -128,11 +128,9 @@ abstract class DataService implements DataServiceContract
     /**
      * @inheritdoc
      */
-    public function applyCriteria($criteria)
+    public function applyCriteria(Criteria $criteria)
     {
-        if ($criteria instanceof Criteria) {
-            $criteria->apply($this->query);
-        }
+        $criteria->apply($this->query);
 
         return $this;
     }
@@ -140,7 +138,7 @@ abstract class DataService implements DataServiceContract
     /**
      * @inheritdoc
      */
-    public function applyCriteriaWhen(bool $value, $criteria)
+    public function applyCriteriaWhen(bool $value, Criteria $criteria)
     {
         if ($value) {
             $this->applyCriteria($criteria);

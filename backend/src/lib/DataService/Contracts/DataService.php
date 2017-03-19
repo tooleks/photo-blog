@@ -26,19 +26,19 @@ interface DataService
     /**
      * Apply query criteria.
      *
-     * @param Criteria|null $criteria
+     * @param Criteria $criteria
      * @return $this
      */
-    public function applyCriteria($criteria);
+    public function applyCriteria(Criteria $criteria);
 
     /**
      * Apply query criteria if the given "value" is true.
      *
      * @param bool $value
-     * @param Criteria|null $criteria
+     * @param Criteria $criteria
      * @return $this
      */
-    public function applyCriteriaWhen(bool $value, $criteria);
+    public function applyCriteriaWhen(bool $value, Criteria $criteria);
 
     /**
      * Get model by unique ID.
