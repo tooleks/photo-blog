@@ -140,6 +140,18 @@ abstract class DataService implements DataServiceContract
     /**
      * @inheritdoc
      */
+    public function applyCriteriaWhen(bool $value, $criteria)
+    {
+        if ($value) {
+            $this->applyCriteria($criteria);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getById($id, array $options = [])
     {
         $this->dispatchEvent('beforeGetById', $this->query, $options);

@@ -32,6 +32,15 @@ interface DataService
     public function applyCriteria($criteria);
 
     /**
+     * Apply query criteria if the given "value" is true.
+     *
+     * @param bool $value
+     * @param Criteria|null $criteria
+     * @return $this
+     */
+    public function applyCriteriaWhen(bool $value, $criteria);
+
+    /**
      * Get model by unique ID.
      *
      * @param mixed $id

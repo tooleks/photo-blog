@@ -7,8 +7,8 @@ use Api\V1\Http\Requests\FindPhotos;
 use Api\V1\Http\Requests\UpdatePhoto;
 use Core\Models\Photo;
 use Core\DataServices\Photo\Criterias\IsPublished;
-use Core\DataServices\Photo\Criterias\WhereSearchQuery;
-use Core\DataServices\Photo\Criterias\WhereTag;
+use Core\DataServices\Photo\Criterias\Search;
+use Core\DataServices\Photo\Criterias\HasTagText;
 use Core\DataServices\Photo\Contracts\PhotoDataService;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
@@ -244,8 +244,8 @@ class PublishedPhotosController extends ResourceController
     {
         $photos = $this->photoDataService
             ->applyCriteria(new IsPublished(true))
-            ->applyCriteria($request->has('tag') ? new WhereTag($request->get('tag')) : null)
-            ->applyCriteria($request->has('query') ? new WhereSearchQuery($request->get('query')) : null)
+            ->applyCriteriaWhen($request->has('tag'), new HasTagText($request->get('tag')))
+            ->applyCriteriaWhen($request->has('query'), new Search($request->get('query')))
             ->applyCriteria(new Skip($request->get('skip', 0)))
             ->applyCriteria(new Take($request->get('take', 10)))
             ->applyCriteria((new SortByCreatedAt)->desc())
