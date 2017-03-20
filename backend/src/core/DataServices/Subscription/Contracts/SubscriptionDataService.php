@@ -11,5 +11,12 @@ use Lib\DataService\Contracts\DataService;
  */
 interface SubscriptionDataService extends DataService
 {
-
+    /**
+     * Get model by token.
+     *
+     * @param string $token
+     * @param array $options
+     * @return mixed
+     */
+    public function getByToken($token, array $options = []);
 }

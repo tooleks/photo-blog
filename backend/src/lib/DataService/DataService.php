@@ -156,13 +156,13 @@ abstract class DataService implements DataServiceContract
 
         $model = $this->query->find($id);
 
-        $this->dispatchEvent('afterGetById', $model, $options);
-
-        $this->reset();
-
         if (is_null($model)) {
             throw new DataServiceNotFoundException(sprintf('%s not found.', class_basename($this->getModelClass())));
         }
+
+        $this->dispatchEvent('afterGetById', $model, $options);
+
+        $this->reset();
 
         return $model;
     }
@@ -176,13 +176,13 @@ abstract class DataService implements DataServiceContract
 
         $model = $this->query->first();
 
-        $this->dispatchEvent('afterGetFirst', $model, $options);
-
-        $this->reset();
-
         if (is_null($model)) {
             throw new DataServiceNotFoundException(sprintf('%s not found.', class_basename($this->getModelClass())));
         }
+
+        $this->dispatchEvent('afterGetFirst', $model, $options);
+
+        $this->reset();
 
         return $model;
     }

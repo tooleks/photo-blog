@@ -169,4 +169,7 @@ Route::group(['prefix' => 'subscriptions'], function () {
     Route::post('/')
         ->uses('SubscriptionController@create');
 
+    Route::delete('/{subscription}')
+        ->uses('SubscriptionController@delete');
+
 });
