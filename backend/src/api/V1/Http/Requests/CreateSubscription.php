@@ -32,4 +32,14 @@ class CreateSubscription extends FormRequest
             'email' => ['required', 'filled', 'string', 'email', 'unique:subscriptions', 'min:1', 'max:255'],
         ];
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function messages()
+    {
+        return [
+            'email.unique' => trans('validation.model.subscription.email.unique'),
+        ];
+    }
 }
