@@ -8,6 +8,12 @@ use Tooleks\Laravel\Presenter\Presenter;
 /**
  * Class ExifPresenter.
  *
+ * @property string manufacturer
+ * @property string model
+ * @property string exposure_time
+ * @property string aperture
+ * @property string iso
+ * @property string taken_at
  * @package Api\V1\Presenters
  */
 class ExifPresenter extends Presenter
