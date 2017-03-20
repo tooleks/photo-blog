@@ -69,7 +69,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Generate unique api token.
+     * Generate API token.
      *
      * @return $this
      */

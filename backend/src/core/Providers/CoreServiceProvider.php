@@ -33,6 +33,11 @@ class CoreServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
+            \Core\DataServices\Subscription\Contracts\SubscriptionDataService::class,
+            \Core\DataServices\Subscription\SubscriptionDataService::class
+        );
+
+        $this->app->bind(
             \Core\DataServices\Tag\Contracts\TagDataService::class,
             \Core\DataServices\Tag\TagDataService::class
         );

@@ -2,7 +2,6 @@
 
 namespace Api\V1\Http\Controllers;
 
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -40,7 +39,11 @@ abstract class ResourceController extends Controller
     {
         $response = parent::callAction($method, $parameters);
 
-        return new Response($this->present($response), $this->getStatusCode($method));
+        if ($response instanceof Response) {
+            return $response->setStatusCode($this->getStatusCode());
+        }
+
+        return new Response($this->present($response), $this->getStatusCode());
     }
 
     /**
@@ -66,15 +69,14 @@ abstract class ResourceController extends Controller
     }
 
     /**
-     * Get status code for method.
+     * Get status code for request method.
      *
-     * @param string $method
      * @return int
      */
-    protected function getStatusCode(string $method)
+    protected function getStatusCode()
     {
-        switch ($method) {
-            case 'create':
+        switch ($this->request->getMethod()) {
+            case Request::METHOD_POST:
                 return Response::HTTP_CREATED;
             default:
                 return Response::HTTP_OK;

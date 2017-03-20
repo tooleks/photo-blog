@@ -115,4 +115,19 @@ return [
 
     'attributes' => [],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Custom Model Validation Attributes
+    |--------------------------------------------------------------------------
+    |
+    */
+
+    'model' => [
+        'subscription' => [
+            'email' => [
+                'unique' => 'This email address is already added for receiving updates.',
+            ],
+        ],
+    ],
+
 ];

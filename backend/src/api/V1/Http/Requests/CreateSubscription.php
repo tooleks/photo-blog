@@ -3,14 +3,13 @@
 namespace Api\V1\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 /**
- * Class UpdateUser.
+ * Class CreateSubscription.
  *
  * @package Api\V1\Http\Requests
  */
-class UpdateUser extends FormRequest
+class CreateSubscription extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -30,16 +29,17 @@ class UpdateUser extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['filled', 'string', 'min:1', 'max:255'],
-            'email' => [
-                'filled',
-                'string',
-                'email',
-                Rule::unique('users')->ignore($this->route()->parameter('user')->id),
-                'min:1',
-                'max:255',
-            ],
-            'password' => ['filled', 'string', 'min:1', 'max:255'],
+            'email' => ['required', 'filled', 'string', 'email', 'unique:subscriptions', 'min:1', 'max:255'],
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function messages()
+    {
+        return [
+            'email.unique' => trans('validation.model.subscription.email.unique'),
         ];
     }
 }
