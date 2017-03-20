@@ -5,8 +5,8 @@ namespace Api\V1\Http\Controllers;
 use Api\V1\Http\Requests\CreateSubscription;
 use Core\DataServices\Subscription\Contracts\SubscriptionDataService;
 use Core\Models\Subscription;
-use Illuminate\Http\Response;
-use Illuminate\Routing\Controller;
+use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Http\Request;
 
 /**
  * Class SubscriptionController.
@@ -14,15 +14,25 @@ use Illuminate\Routing\Controller;
  * @property SubscriptionDataService subscriptionDataService
  * @package Api\V1\Http\Controllers
  */
-class SubscriptionController extends Controller
+class SubscriptionController extends ResourceController
 {
     /**
      * SubscriptionController constructor.
      *
+     * @param Request $request
+     * @param Guard $guard
+     * @param string $presenterClass
      * @param SubscriptionDataService $subscriptionDataService
      */
-    public function __construct(SubscriptionDataService $subscriptionDataService)
+    public function __construct(
+        Request $request,
+        Guard $guard,
+        string $presenterClass,
+        SubscriptionDataService $subscriptionDataService
+    )
     {
+        parent::__construct($request, $guard, $presenterClass);
+
         $this->subscriptionDataService = $subscriptionDataService;
     }
 
@@ -37,7 +47,10 @@ class SubscriptionController extends Controller
      * @apiSuccessExample {json} Success-Response:
      *  {
      *      "status": true,
-     *      "data": null
+     *      "data": {
+     *          "email": "username@mail.address",
+     *          "token": "subscription_token_string"
+     *      }
      *  }
      */
 
@@ -45,9 +58,9 @@ class SubscriptionController extends Controller
      * Create a resource.
      *
      * @param CreateSubscription $request
-     * @return Response
+     * @return Subscription
      */
-    public function create(CreateSubscription $request)
+    public function create(CreateSubscription $request) : Subscription
     {
         $subscription = new Subscription;
 
@@ -55,7 +68,7 @@ class SubscriptionController extends Controller
 
         $this->subscriptionDataService->save($subscription, $request->all());
 
-        return new Response(null, Response::HTTP_CREATED);
+        return $subscription;
     }
 
     /**
