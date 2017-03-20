@@ -145,17 +145,28 @@ Route::group(['prefix' => 'tags'], function () {
 
 });
 
-
 /*
 |--------------------------------------------------------------------------
-| Contact Us Resource Routes
+| Contact Message Resource Routes
 |--------------------------------------------------------------------------
 */
-Route::group(['prefix' => 'contact_message'], function () {
+Route::group(['prefix' => 'contact_messages'], function () {
 
     Route::post('/')
         ->uses('ContactMessageController@create')
         ->middleware(AppendClientIpAddress::class)
-        ->middleware('throttle:5,1'); // Allow 5 requests per minute.;
+        ->middleware('throttle:5,1'); // Allow 5 requests per minute.
+
+});
+
+/*
+|--------------------------------------------------------------------------
+| Subscription Resource Routes
+|--------------------------------------------------------------------------
+*/
+Route::group(['prefix' => 'subscriptions'], function () {
+
+    Route::post('/')
+        ->uses('SubscriptionController@create');
 
 });

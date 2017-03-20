@@ -9,7 +9,7 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 
 /**
- * Class ContactUsController.
+ * Class ContactMessageController.
  *
  * @property Mailer mailer
  * @package Api\V1\Http\Controllers

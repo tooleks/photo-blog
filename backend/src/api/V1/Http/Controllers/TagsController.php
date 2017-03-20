@@ -53,13 +53,10 @@ class TagsController extends ResourceController
      *              "text": "nature"
      *          },
      *          {
-     *              "text": "city"
+     *              "text": "animals"
      *          },
      *          {
-     *              "text": "sky"
-     *          },
-     *          {
-     *              "text": "water"
+     *              "text": "architecture"
      *          }
      *      ]
      *  }

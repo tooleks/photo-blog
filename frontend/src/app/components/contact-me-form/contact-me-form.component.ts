@@ -38,7 +38,7 @@ export class ContactMeFormComponent {
 
     send = () => {
         return this.lockProcess
-            .process(() => this.api.post('/contact_message', this.form).toPromise())
+            .process(() => this.api.post('/contact_messages', this.form).toPromise())
             .then((data:any) => {
                 this.notices.success('Your message successfully sent.');
                 this.navigator.navigate(['/']);
