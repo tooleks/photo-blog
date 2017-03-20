@@ -3,6 +3,7 @@
 namespace Api\V1\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 /**
  * Class UpdateUser.
@@ -34,6 +35,7 @@ class UpdateUser extends FormRequest
                 'filled',
                 'string',
                 'email',
+                Rule::unique('users')->ignore($this->route()->parameter('user')->id),
                 'min:1',
                 'max:255',
             ],
