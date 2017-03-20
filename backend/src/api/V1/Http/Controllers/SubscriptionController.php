@@ -55,7 +55,7 @@ class SubscriptionController extends ResourceController
      */
 
     /**
-     * Create a resource.
+     * Create a subscription.
      *
      * @param CreateSubscription $request
      * @return Subscription
@@ -86,7 +86,7 @@ class SubscriptionController extends ResourceController
      */
 
     /**
-     * Delete a resource.
+     * Delete a subscription.
      *
      * @param Subscription $subscription
      * @return int
