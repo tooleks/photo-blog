@@ -3,13 +3,14 @@
 namespace Core\DataServices\Tag\Criterias;
 
 use Lib\DataService\Contracts\Criteria;
+use Lib\DataService\Criterias\Templates\SortBy;
 
 /**
- * Class OrderByPhotosCountDesc.
+ * Class SortByPhotosCount.
  *
  * @package Core\DataServices\Tag\Criterias
  */
-class OrderByPhotosCountDesc implements Criteria
+class SortByPhotosCount extends SortBy implements Criteria
 {
     /**
      * @inheritdoc
@@ -20,6 +21,6 @@ class OrderByPhotosCountDesc implements Criteria
             ->selectRaw('tags.*, COUNT(photo_tags.tag_id) AS count')
             ->leftJoin('photo_tags', 'photo_tags.tag_id', '=', 'tags.id')
             ->groupBy('tags.id')
-            ->orderBy('count', 'desc');
+            ->orderBy('count', $this->order);
     }
 }

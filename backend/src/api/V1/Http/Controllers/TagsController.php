@@ -4,7 +4,7 @@ namespace Api\V1\Http\Controllers;
 
 use Api\V1\Http\Requests\FindTags;
 use Core\DataServices\Tag\Contracts\TagDataService;
-use Core\DataServices\Tag\Criterias\OrderByPhotosCountDesc;
+use Core\DataServices\Tag\Criterias\SortByPhotosCount;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -76,7 +76,7 @@ class TagsController extends ResourceController
         $tags = $this->tagDataService
             ->applyCriteria(new Skip($request->get('skip', 0)))
             ->applyCriteria(new Take($request->get('take', 10)))
-            ->applyCriteria(new OrderByPhotosCountDesc)
+            ->applyCriteria((new SortByPhotosCount)->desc())
             ->get();
 
         return $tags;
