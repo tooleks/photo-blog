@@ -2,7 +2,6 @@
 
 namespace Api\V1\Http\Controllers;
 
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
