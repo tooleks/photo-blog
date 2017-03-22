@@ -9,14 +9,14 @@ import {
     NavigatorService,
 } from '../../../shared/services';
 import {NoticesService} from '../../../common/notices';
-import {ContactMeForm} from './contact-me-form';
+import {SubscriptionForm} from './subscription-form';
 
 @Component({
-    selector: 'contact-me-form',
-    template: require('./contact-me-form.component.html'),
+    selector: 'subscription',
+    template: require('./subscription.component.html'),
 })
-export class ContactMeFormComponent {
-    private form:ContactMeForm;
+export class SubscriptionComponent {
+    private form:SubscriptionForm;
     private navigator:NavigatorService;
     private lockProcess:LockProcessService;
 
@@ -32,15 +32,15 @@ export class ContactMeFormComponent {
 
     ngOnInit() {
         this.scroller.scrollToTop();
-        this.title.setTitle('Contact Me');
-        this.form = new ContactMeForm;
+        this.title.setTitle('Subscription');
+        this.form = new SubscriptionForm;
     }
 
-    send = () => {
+    subscribe = () => {
         return this.lockProcess
-            .process(() => this.api.post('/contact_messages', this.form).toPromise())
+            .process(() => this.api.post('/subscriptions', this.form).toPromise())
             .then((data:any) => {
-                this.notices.success('Your message successfully sent.');
+                this.notices.success('You have successfully subscribed to the website updates.');
                 this.navigator.navigate(['/']);
                 return data;
             });

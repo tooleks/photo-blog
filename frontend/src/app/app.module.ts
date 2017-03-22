@@ -7,9 +7,10 @@ import {
     ContactMeFormComponent,
     PageNotFoundComponent,
     SideBarComponent,
+    TopBarComponent,
     SignInFormComponent,
     SignOutComponent,
-    TopBarComponent,
+    SubscriptionComponent,
 } from './components';
 import {AppRouting, AppRoutingProviders} from './app.routing';
 import {SharedModule} from '../shared/shared.module';
@@ -32,9 +33,10 @@ import {NoticesModule} from '../common/notices';
         ContactMeFormComponent,
         PageNotFoundComponent,
         SideBarComponent,
+        TopBarComponent,
         SignInFormComponent,
         SignOutComponent,
-        TopBarComponent,
+        SubscriptionComponent,
     ],
     exports: [],
     providers: [

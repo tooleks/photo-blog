@@ -12,15 +12,20 @@
     <div class="app-footer">
         <span class="app-footer-item">&copy;
             {{ getCurrentYear() }} <strong>{{ env.get('appName') }}</strong></span>
-        <span class="app-footer-item">
+        <span class="app-footer-item app-desktop-screen">
              <a [routerLink]="['/contact-me']"
                 routerLinkActive="active"
                 [routerLinkActiveOptions]="{ exact: true }">{{ 'Contact Me' }}</a>
         </span>
-        <span class="app-footer-item">
+        <span class="app-footer-item app-desktop-screen">
              <a [routerLink]="['/about-me']"
                 routerLinkActive="active"
                 [routerLinkActiveOptions]="{ exact: true }">{{ 'About Me' }}</a>
+        </span>
+        <span class="app-footer-item app-desktop-screen">
+             <a [routerLink]="['/subscription']"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }">{{ 'Subscription' }}</a>
         </span>
     </div>
 </div>

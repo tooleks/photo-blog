@@ -125,7 +125,7 @@ return [
     'model' => [
         'subscription' => [
             'email' => [
-                'unique' => 'This email address is already added for receiving updates.',
+                'unique' => 'This email address is already subscribed for receiving the website updates.',
             ],
         ],
     ],
