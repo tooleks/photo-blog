@@ -37,7 +37,7 @@ export class ApiErrorHandler extends BaseApiErrorHandler {
     };
 
     private handleUnknownError = (response:any, body:any):void => {
-        this.notices.error(body.message, 'Unknown Error');
+        this.notices.error(body.message, 'Remote server connection error. Please try again later.');
     };
 
     private handleUnauthorizedError = (response:any, body:any):void => {
