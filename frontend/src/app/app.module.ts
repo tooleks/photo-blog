@@ -2,6 +2,7 @@ import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {HttpModule, JsonpModule} from '@angular/http';
 import {
+    AboutMeComponent,
     AppComponent,
     ContactMeFormComponent,
     PageNotFoundComponent,
@@ -26,6 +27,7 @@ import {NoticesModule} from '../common/notices';
         NoticesModule,
     ],
     declarations: [
+        AboutMeComponent,
         AppComponent,
         ContactMeFormComponent,
         PageNotFoundComponent,

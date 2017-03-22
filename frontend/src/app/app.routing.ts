@@ -1,6 +1,6 @@
 import {ModuleWithProviders} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
-import {ContactMeFormComponent, SignInFormComponent, SignOutComponent, PageNotFoundComponent} from './components';
+import {AboutMeComponent, ContactMeFormComponent, SignInFormComponent, SignOutComponent, PageNotFoundComponent} from './components';
 
 const AppRoutes:Routes = [
     {
@@ -15,6 +15,10 @@ const AppRoutes:Routes = [
     {
         path: 'signout',
         component: SignOutComponent,
+    },
+    {
+        path: 'about-me',
+        component: AboutMeComponent,
     },
     {
         path: 'contact-me',

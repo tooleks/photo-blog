@@ -91,7 +91,7 @@ class SubscriptionController extends ResourceController
      * @param Subscription $subscription
      * @return int
      */
-    public function delete($subscription) : int
+    public function delete(Subscription $subscription) : int
     {
         return $this->subscriptionDataService->delete($subscription);
     }

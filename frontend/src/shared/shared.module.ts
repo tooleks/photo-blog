@@ -27,6 +27,7 @@ import {
     GalleryGridComponent,
     TagsSelectInputComponent,
 } from './components';
+import {SafeHtmlPipe} from './pipes';
 import {NoticesModule} from '../common/notices';
 
 @NgModule({
@@ -41,6 +42,7 @@ import {NoticesModule} from '../common/notices';
         GalleryComponent,
         GalleryGridComponent,
         TagsSelectInputComponent,
+        SafeHtmlPipe,
     ],
     exports: [
         CommonModule,
@@ -49,6 +51,7 @@ import {NoticesModule} from '../common/notices';
         GalleryComponent,
         GalleryGridComponent,
         TagsSelectInputComponent,
+        SafeHtmlPipe,
     ],
     providers: [
         ApiService,
