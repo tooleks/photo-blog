@@ -11,6 +11,6 @@ export class AboutMeComponent {
     }
 
     getContent = () => {
-        return this.env.get('aboutPageContent');
+        return this.env.get('aboutMePageContent');
     };
 }

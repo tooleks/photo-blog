@@ -44,19 +44,49 @@ class GeneratePhotoAvgColors extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      */
     public function handle()
     {
-        Photo::with('thumbnails')->chunk(500, function (Collection $photos) {
-            $photos->map(function (Photo $photo) {
-                $this->comment(sprintf('Processing photo (ID:%s) ...', $photo->id));
-                $thumbnail = $photo->thumbnails->first();
-                if (is_null($thumbnail)) return $this->comment(sprintf('No thumbnails found for photo (ID:%s)', $photo->id));
-                $photo->avg_color = $this->avgColorPicker->getImageAvgHexColorByPath(storage_path('app') . '/' . $thumbnail->path);
-                $this->comment(sprintf('Average color: %s', $photo->avg_color));
-                $photo->save();
-            });
+        $this->eachPhoto([$this, 'generatePhotoAvgColor']);
+    }
+
+    /**
+     * Apply callback function on each photo in database.
+     *
+     * @param callable $callback
+     * @return void
+     */
+    public function eachPhoto(callable $callback)
+    {
+        Photo::with('thumbnails')->chunk(100, function (Collection $photos) use ($callback) {
+            $photos->map($callback);
         });
+    }
+
+    /**
+     * Generate photo average color.
+     *
+     * @param Photo $photo
+     * @return void
+     */
+    public function generatePhotoAvgColor(Photo $photo)
+    {
+        $this->comment(sprintf('Processing photo with ID %s ...', $photo->id));
+
+        $thumbnail = $photo->thumbnails->first();
+
+        if (is_null($thumbnail)) {
+            $this->comment(sprintf('No thumbnails found for photo with ID:%s.', $photo->id));
+            return;
+        }
+
+        $absoluteThumbnailPath = storage_path('app') . '/' . $thumbnail->path;
+
+        $photo->avg_color = $this->avgColorPicker->getImageAvgHexColorByPath($absoluteThumbnailPath);
+
+        $this->comment(sprintf('Average color %s.', $photo->avg_color));
+
+        $photo->saveOrFail();
     }
 }

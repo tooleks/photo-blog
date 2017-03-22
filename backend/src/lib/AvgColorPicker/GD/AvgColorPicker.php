@@ -2,7 +2,6 @@
 
 namespace Lib\AvgColorPicker\GD;
 
-use Closure;
 use Lib\AvgColorPicker\ColorConverter;
 use Lib\AvgColorPicker\Contracts\AvgColorPicker as AvgColorPickerContract;
 use RuntimeException;
@@ -60,10 +59,10 @@ class AvgColorPicker implements AvgColorPickerContract
      * Apply callback function on each pixel in the image.
      *
      * @param $imageResource
-     * @param Closure $callback
+     * @param callable $callback
      * @return void
      */
-    private function eachImagePixel($imageResource, Closure $callback)
+    private function eachImagePixel($imageResource, callable $callback)
     {
         $imageWidth = imagesx($imageResource);
         $imageHeight = imagesy($imageResource);

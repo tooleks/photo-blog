@@ -19,6 +19,7 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middleware = [
+        \Api\V1\Http\Middleware\AddCorsHeaders::class,
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
