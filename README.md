@@ -4,7 +4,7 @@
 
 #### Development Configuration
 
-NGINX 1.10, Apache 2.4, MySQL 5.7, PHP 7.0 (ext-openssl, ext-pdo, ext-mbstring, ext-tokenizer, ext-xml, ext-gd), Laravel 5.4, Node.js 4.2, Angular 2.2.
+NGINX 1.10, MySQL 5.7, PHP 7.0 (ext-openssl, ext-pdo, ext-mbstring, ext-tokenizer, ext-xml, ext-gd), Laravel 5.4, Node.js 4.2, Angular 2.2.
 
 #### Installation
 
