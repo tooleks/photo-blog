@@ -1,6 +1,13 @@
 import {ModuleWithProviders} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
-import {AboutMeComponent, ContactMeFormComponent, SignInFormComponent, SignOutComponent, PageNotFoundComponent} from './components';
+import {
+    AboutMeComponent,
+    ContactMeFormComponent,
+    PageNotFoundComponent,
+    SignInFormComponent,
+    SignOutComponent,
+    SubscriptionComponent,
+} from './components';
 
 const AppRoutes:Routes = [
     {
@@ -23,6 +30,10 @@ const AppRoutes:Routes = [
     {
         path: 'contact-me',
         component: ContactMeFormComponent,
+    },
+    {
+        path: 'subscription',
+        component: SubscriptionComponent,
     },
     {
         path: '404',

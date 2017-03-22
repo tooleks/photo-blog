@@ -46,3 +46,13 @@
 :host .app-footer-item:last-child {
     padding-right: 20px;
 }
+
+:host .app-desktop-screen {
+    display: none;
+}
+
+@media (min-width: 468px) {
+    :host .app-desktop-screen {
+        display: initial;
+    }
+}
