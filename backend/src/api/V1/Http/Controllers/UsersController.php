@@ -48,6 +48,7 @@ class UsersController extends ResourceController
      * @apiParam {String{1..255}} email User email address.
      * @apiParam {String{1..255}} password User password.
      * @apiSuccessExample {json} Success-Response:
+     *  HTTP/1.1 201 Created
      *  {
      *      "status": true,
      *      "data": {
@@ -88,6 +89,7 @@ class UsersController extends ResourceController
      * @apiHeader {String} Accept application/json
      * @apiParam {Integer{1..N}} :id Unique resource ID.
      * @apiSuccessExample {json} Success-Response:
+     *  HTTP/1.1 20O OK
      *  {
      *      "status": true,
      *      "data": {
@@ -124,6 +126,7 @@ class UsersController extends ResourceController
      * @apiParam {String{1..255}} email User email address.
      * @apiParam {String{1..255}} password User password.
      * @apiSuccessExample {json} Success-Response:
+     *  HTTP/1.1 20O OK
      *  {
      *      "status": true,
      *      "data": {
@@ -163,20 +166,17 @@ class UsersController extends ResourceController
      * @apiHeader {String} Accept application/json
      * @apiParam {Integer{1..N}} :id Unique resource ID.
      * @apiSuccessExample {json} Success-Response:
-     *  {
-     *      "status": true,
-     *      "data": 1
-     *  }
+     *  HTTP/1.1 204 No Content
      */
 
     /**
      * Delete a user.
      *
      * @param User $user
-     * @return int
+     * @return void
      */
-    public function delete($user) : int
+    public function delete($user)
     {
-        return $this->userDataService->delete($user);
+        $this->userDataService->delete($user);
     }
 }

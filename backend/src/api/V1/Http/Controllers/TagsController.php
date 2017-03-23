@@ -46,6 +46,7 @@ class TagsController extends ResourceController
      * @apiGroup Tags
      * @apiHeader {String} Accept application/json
      * @apiSuccessExample {json} Success-Response:
+     *  HTTP/1.1 200 OK
      *  {
      *      "status": true,
      *      "data": [

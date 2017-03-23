@@ -38,6 +38,7 @@ class ContactMessageController extends Controller
      * @apiParam {String{1..255}} subject Subject.
      * @apiParam {String{1..65535}} text Message text.
      * @apiSuccessExample {json} Success-Response:
+     *  HTTP/1.1 201 Created
      *  {
      *      "status": true,
      *      "data": null

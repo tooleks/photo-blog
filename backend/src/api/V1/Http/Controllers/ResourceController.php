@@ -78,6 +78,8 @@ abstract class ResourceController extends Controller
         switch ($this->request->getMethod()) {
             case Request::METHOD_POST:
                 return Response::HTTP_CREATED;
+            case Request::METHOD_DELETE:
+                return Response::HTTP_NO_CONTENT;
             default:
                 return Response::HTTP_OK;
         }
