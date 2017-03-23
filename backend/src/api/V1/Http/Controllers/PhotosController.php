@@ -46,6 +46,7 @@ class PhotosController extends ResourceController
      * @apiHeader {String} Content-type multipart/form-data
      * @apiParam {File{1KB..20MB}=JPEG,PNG} file Photo file.
      * @apiSuccessExample {json} Success-Response:
+     *  HTTP/1.1 201 Created
      *  {
      *      "status": true,
      *      "data": {
@@ -104,6 +105,7 @@ class PhotosController extends ResourceController
      * @apiHeader {String} Accept application/json
      * @apiParam {Integer{1..N}} :id Unique resource ID.
      * @apiSuccessExample {json} Success-Response:
+     *  HTTP/1.1 200 OK
      *  {
      *      "status": true,
      *      "data": {
@@ -158,6 +160,7 @@ class PhotosController extends ResourceController
      * @apiParam {Integer{1..N}} :id Unique resource ID.
      * @apiParam {File{1KB..20MB}=JPEG,PNG} file Photo file.
      * @apiSuccessExample {json} Success-Response:
+     *  HTTP/1.1 200 OK
      *  {
      *      "status": true,
      *      "data": {
@@ -213,20 +216,17 @@ class PhotosController extends ResourceController
      * @apiHeader {String} Accept application/json
      * @apiParam {Integer{1..N}} :id Unique resource ID.
      * @apiSuccessExample {json} Success-Response:
-     *  {
-     *      "status": true,
-     *      "data": 1
-     *  }
+     *  HTTP/1.1 204 No Content
      */
 
     /**
      * Delete a photo.
      *
      * @param Photo $photo
-     * @return int
+     * @return void
      */
-    public function delete($photo) : int
+    public function delete($photo)
     {
-        return $this->photoDataService->delete($photo);
+        $this->photoDataService->delete($photo);
     }
 }

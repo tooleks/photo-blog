@@ -45,6 +45,7 @@ class SubscriptionController extends ResourceController
      * @apiHeader {String} Content-Type application/json
      * @apiParam {String{1..255}} email Subscriber email address.
      * @apiSuccessExample {json} Success-Response:
+     *  HTTP/1.1 201 Created
      *  {
      *      "status": true,
      *      "data": {
@@ -79,20 +80,17 @@ class SubscriptionController extends ResourceController
      * @apiHeader {String} Accept application/json
      * @apiParam {String{1..255}} :token Subscription token.
      * @apiSuccessExample {json} Success-Response:
-     *  {
-     *      "status": true,
-     *      "data": 1
-     *  }
+     *  HTTP/1.1 204 No Content
      */
 
     /**
      * Delete a subscription.
      *
      * @param Subscription $subscription
-     * @return int
+     * @return void
      */
-    public function delete(Subscription $subscription) : int
+    public function delete(Subscription $subscription)
     {
-        return $this->subscriptionDataService->delete($subscription);
+        $this->subscriptionDataService->delete($subscription);
     }
 }

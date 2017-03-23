@@ -58,6 +58,7 @@ class PublishedPhotosController extends ResourceController
      * @apiParam {Object[]} tags Tags collection.
      * @apiParam {String{1..255}} tags.text Tag text.
      * @apiSuccessExample {json} Success-Response:
+     *  HTTP/1.1 201 Created
      *  {
      *      "status": true,
      *      "data": {
@@ -128,6 +129,7 @@ class PublishedPhotosController extends ResourceController
      * @apiHeader {String} Accept application/json
      * @apiParam {Integer{1..N}} :id Unique resource ID.
      * @apiSuccessExample {json} Success-Response:
+     *  HTTP/1.1 200 OK
      *  {
      *      "status": true,
      *      "data": {
@@ -190,6 +192,7 @@ class PublishedPhotosController extends ResourceController
      * @apiParam {Integer{1..100}} take
      * @apiParam {Integer{0..N}} skip
      * @apiSuccessExample {json} Success-Response:
+     *  HTTP/1.1 200 OK
      *  {
      *      "status": true,
      *      "data": [
@@ -266,6 +269,7 @@ class PublishedPhotosController extends ResourceController
      * @apiParam {Object[]} tags Tags collection.
      * @apiParam {String{1..255}} tags.text Tag text.
      * @apiSuccessExample {json} Success-Response:
+     *  HTTP/1.1 200 OK
      *  {
      *      "status": true,
      *      "data": {
@@ -331,20 +335,17 @@ class PublishedPhotosController extends ResourceController
      * @apiHeader {String} Accept application/json
      * @apiParam {Integer{1..N}} :id Unique resource ID.
      * @apiSuccessExample {json} Success-Response:
-     *  {
-     *      "status": true,
-     *      "data": 1
-     *  }
+     *  HTTP/1.1 204 No Content
      */
 
     /**
      * Delete a photo.
      *
      * @param Photo $photo
-     * @return int
+     * @return void
      */
-    public function delete($photo) : int
+    public function delete($photo)
     {
-        return $this->photoDataService->delete($photo);
+        $this->photoDataService->delete($photo);
     }
 }

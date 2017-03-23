@@ -5,7 +5,7 @@ namespace Api\V1\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Class JsonApi.
@@ -24,9 +24,7 @@ class JsonApi
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if (!$request->wantsJson()) {
-            throw new BadRequestHttpException(trans('errors.http.400'));
-        }
+        $this->assertRequest($request);
 
         $response = $next($request);
 
@@ -34,7 +32,19 @@ class JsonApi
     }
 
     /**
-     * Create a JSON API response.
+     * Assert a request.
+     *
+     * @param Request $request
+     */
+    protected function assertRequest(Request $request)
+    {
+        if (!$request->wantsJson()) {
+            throw new HttpException(406, trans('errors.http.406'));
+        }
+    }
+
+    /**
+     * Create a response.
      *
      * @param Response $response
      * @return Response
