@@ -9,15 +9,15 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 
 /**
- * Class ContactMessageController.
+ * Class ContactMessagesController.
  *
  * @property Mailer mailer
  * @package Api\V1\Http\Controllers
  */
-class ContactMessageController extends Controller
+class ContactMessagesController extends Controller
 {
     /**
-     * ContactMessageController constructor.
+     * ContactMessagesController constructor.
      *
      * @param Mailer $mailer
      */

@@ -9,12 +9,12 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 
 /**
- * Class SubscriptionController.
+ * Class SubscriptionsController.
  *
  * @property SubscriptionDataService subscriptionDataService
  * @package Api\V1\Http\Controllers
  */
-class SubscriptionController extends ResourceController
+class SubscriptionsController extends ResourceController
 {
     /**
      * SubscriptionController constructor.

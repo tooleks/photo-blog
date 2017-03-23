@@ -153,7 +153,7 @@ Route::group(['prefix' => 'tags'], function () {
 Route::group(['prefix' => 'contact_messages'], function () {
 
     Route::post('/')
-        ->uses('ContactMessageController@create')
+        ->uses('ContactMessagesController@create')
         ->middleware(AppendClientIpAddress::class)
         ->middleware('throttle:5,1'); // Allow 5 requests per minute.
 
@@ -167,9 +167,9 @@ Route::group(['prefix' => 'contact_messages'], function () {
 Route::group(['prefix' => 'subscriptions'], function () {
 
     Route::post('/')
-        ->uses('SubscriptionController@create');
+        ->uses('SubscriptionsController@create');
 
     Route::delete('/{subscription}')
-        ->uses('SubscriptionController@delete');
+        ->uses('SubscriptionsController@delete');
 
 });
