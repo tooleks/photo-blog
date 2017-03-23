@@ -40,7 +40,7 @@ abstract class ResourceController extends Controller
         $response = parent::callAction($method, $parameters);
 
         if ($response instanceof Response) {
-            return $response->setStatusCode($this->getStatusCode());
+            return $response;
         }
 
         return new Response($this->present($response), $this->getStatusCode());
