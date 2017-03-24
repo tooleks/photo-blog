@@ -29,7 +29,7 @@ class CreateSubscription extends FormRequest
     public function rules()
     {
         return [
-            'email' => ['required', 'filled', 'string', 'email', 'unique:subscriptions', 'min:1', 'max:255'],
+            'email' => ['required', 'string', 'email', 'unique:subscriptions', 'min:1', 'max:255'],
         ];
     }
 

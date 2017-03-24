@@ -29,9 +29,9 @@ class UpdatePhoto extends FormRequest
     public function rules()
     {
         return [
-            'description' => ['required', 'filled', 'string', 'min:1', 'max:65535'],
-            'tags' => ['required', 'filled', 'array'],
-            'tags.*.text' => ['required', 'filled', 'string', 'min:1', 'max:255'],
+            'description' => ['required', 'string', 'min:1', 'max:65535'],
+            'tags' => ['required', 'array'],
+            'tags.*.text' => ['required', 'string', 'min:1', 'max:255'],
         ];
     }
 }

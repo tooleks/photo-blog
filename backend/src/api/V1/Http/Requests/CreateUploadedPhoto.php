@@ -29,14 +29,14 @@ class CreateUploadedPhoto extends FormRequest
     public function rules()
     {
         return [
-            'path' => ['required', 'filled', 'string', 'min:1', 'max:255'],
-            'relative_url' => ['required', 'filled', 'string', 'min:1', 'max:255'],
-            'exif' => ['required', 'filled', 'array'],
-            'thumbnails' => ['required', 'filled', 'array'],
-            'thumbnails.*.width' => ['required', 'filled', 'int', 'min:1'],
-            'thumbnails.*.height' => ['required', 'filled', 'int', 'min:1'],
-            'thumbnails.*.path' => ['required', 'filled', 'string', 'min:1', 'max:255'],
-            'thumbnails.*.relative_url' => ['required', 'filled', 'string', 'min:1', 'max:255'],
+            'path' => ['required', 'string', 'min:1', 'max:255'],
+            'relative_url' => ['required', 'string', 'min:1', 'max:255'],
+            'exif' => ['required', 'array'],
+            'thumbnails' => ['required', 'array'],
+            'thumbnails.*.width' => ['required', 'int', 'min:1'],
+            'thumbnails.*.height' => ['required', 'int', 'min:1'],
+            'thumbnails.*.path' => ['required', 'string', 'min:1', 'max:255'],
+            'thumbnails.*.relative_url' => ['required', 'string', 'min:1', 'max:255'],
         ];
     }
 }

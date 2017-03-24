@@ -29,10 +29,10 @@ class ContactMessage extends FormRequest
     public function rules()
     {
         return [
-            'email' => ['required', 'filled', 'email', 'min:1', 'max:255'],
-            'name' => ['required', 'filled', 'string', 'min:1', 'max:255'],
-            'subject' => ['required', 'filled', 'string', 'min:1', 'max:255'],
-            'text' => ['required', 'filled', 'string', 'min:1', 'max:65535'],
+            'email' => ['required', 'email', 'min:1', 'max:255'],
+            'name' => ['required', 'string', 'min:1', 'max:255'],
+            'subject' => ['required', 'string', 'min:1', 'max:255'],
+            'text' => ['required', 'string', 'min:1', 'max:65535'],
         ];
     }
 }
