@@ -65,7 +65,7 @@ class SaveUploadedPhotoFile
 
         $filePath = $request->file('file')->store($directoryPath);
 
-        if (!$filePath === false) {
+        if ($filePath === false) {
             throw new Exception(sprintf('File "%s" saving error.', $filePath));
         }
 
