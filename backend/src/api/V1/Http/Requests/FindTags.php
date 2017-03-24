@@ -29,8 +29,8 @@ class FindTags extends FormRequest
     public function rules()
     {
         return [
-            'take' => ['required', 'filled', 'integer', 'min:1', 'max:100'],
-            'skip' => ['required', 'filled', 'integer', 'min:0'],
+            'page' => ['filled', 'integer', 'min:1'],
+            'per_page' => ['filled', 'integer', 'min:1', 'max:100'],
         ];
     }
 }

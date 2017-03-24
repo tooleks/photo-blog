@@ -5,6 +5,7 @@ namespace Api\V1\Http\Controllers;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Collection;
 
@@ -47,25 +48,31 @@ abstract class ResourceController extends Controller
     }
 
     /**
-     * Present a resource.
+     * Present a response.
      *
-     * @param mixed $resource
+     * @param mixed $response
      * @return mixed
      */
-    protected function present($resource)
+    protected function present($response)
     {
-        // If resource is the collection, present each item with a presenter class via present macros.
-        if ($resource instanceof Collection) {
-            return $resource->present($this->presenterClass);
+        // If response is the paginator, present each item in the collection with a presenter class via present macros.
+        if ($response instanceof AbstractPaginator) {
+            $items = $response->getCollection()->present($this->presenterClass);
+            return $response->setCollection($items);
         }
 
-        // If resource is an object or an array, present it with a presenter class.
-        if (is_object($resource) || is_array($resource)) {
-            return new $this->presenterClass($resource);
+        // If response is the collection, present each item with a presenter class via present macros.
+        if ($response instanceof Collection) {
+            return $response->present($this->presenterClass);
         }
 
-        // Otherwise, return resource "as it".
-        return $resource;
+        // If response is an object or an array, present it with a presenter class.
+        if (is_object($response) || is_array($response)) {
+            return new $this->presenterClass($response);
+        }
+
+        // Otherwise, return response "as it".
+        return $response;
     }
 
     /**

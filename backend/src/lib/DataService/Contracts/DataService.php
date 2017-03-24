@@ -66,6 +66,16 @@ interface DataService
     public function get(array $options = []);
 
     /**
+     * Get paginated models.
+     *
+     * @param int $page
+     * @param int $perPage
+     * @param array $options
+     * @return mixed
+     */
+    public function paginate(int $page = 1, int $perPage = 20, array $options = []);
+
+    /**
      * Count models.
      *
      * @param array $options

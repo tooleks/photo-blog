@@ -7,6 +7,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 use Lib\DataService\Exceptions\DataServiceNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -49,9 +50,9 @@ class Handler extends ExceptionHandler
         if ($e instanceof ModelNotFoundException || $e instanceof DataServiceNotFoundException) {
             $e = new NotFoundHttpException($e->getMessage(), $e);
         } elseif ($e instanceof AuthenticationException) {
-            $e = new HttpException(401, $e->getMessage());
+            $e = new HttpException(Response::HTTP_UNAUTHORIZED, $e->getMessage());
         } elseif ($e instanceof AuthorizationException) {
-            $e = new HttpException(403, $e->getMessage());
+            $e = new HttpException(Response::HTTP_FORBIDDEN, $e->getMessage());
         } elseif ($e instanceof HttpException) {
             $e = new HttpException($e->getStatusCode(), trans("errors.http.{$e->getStatusCode()}"), null, $e->getHeaders());
         }
@@ -83,7 +84,6 @@ class Handler extends ExceptionHandler
         $e = FlattenException::create($e);
 
         return response()->json([
-            'status' => false,
             'message' => $e->getMessage(),
         ], $e->getStatusCode(), $e->getHeaders());
     }
@@ -94,10 +94,9 @@ class Handler extends ExceptionHandler
     protected function convertValidationExceptionToResponse(ValidationException $e, $request)
     {
         return response()->json([
-            'status' => false,
             'message' => $e->getMessage(),
             'errors' => $e->validator->errors()->getMessages(),
-        ], 422);
+        ], Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     /**
@@ -108,8 +107,7 @@ class Handler extends ExceptionHandler
     protected function getDefaultExceptionResponse()
     {
         return response()->json([
-            'status' => false,
             'message' => trans('errors.http.500'),
-        ], 500);
+        ], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 }

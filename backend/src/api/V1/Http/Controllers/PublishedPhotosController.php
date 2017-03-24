@@ -12,10 +12,8 @@ use Core\DataServices\Photo\Criterias\HasTagWithText;
 use Core\DataServices\Photo\Contracts\PhotoDataService;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
+use Illuminate\Pagination\AbstractPaginator;
 use Lib\DataService\Criterias\SortByCreatedAt;
-use Lib\DataService\Criterias\Skip;
-use Lib\DataService\Criterias\Take;
 use Throwable;
 
 /**
@@ -58,47 +56,40 @@ class PublishedPhotosController extends ResourceController
      * @apiParam {Object[]} tags Tags collection.
      * @apiParam {String{1..255}} tags.text Tag text.
      * @apiSuccessExample {json} Success-Response:
-     *  HTTP/1.1 201 Created
-     *  {
-     *      "status": true,
-     *      "data": {
-     *          "id": 1,
-     *          "user_id": 1,
-     *          "absolute_url": "http://path/to/photo/file",
-     *          "avg_color": "#000000",
-     *          "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-     *          "created_at": "2016-10-24 12:24:33",
-     *          "updated_at": "2016-10-24 14:38:05",
-     *          "exif": {
-     *              "manufacturer": "Manufacturer Name",
-     *              "model": "Model Number",
-     *              "exposure_time": "1/160",
-     *              "aperture": "f/11.0",
-     *              "iso": 200,
-     *              "taken_at": "2016-10-24 12:24:33"
-     *          },
-     *          "thumbnails": [
-     *              "medium": {
-     *                  "absolute_url": "http://path/to/photo/thumbnail/medium_file"
-     *                  "width": 500,
-     *                  "height": 500
-     *              },
-     *              "large": {
-     *                  "absolute_url": "http://path/to/photo/thumbnail/large_file"
-     *                  "width": 1000,
-     *                  "height": 1000
-     *              }
-     *          ],
-     *          "tags": [
-     *              {
-     *                  "text": "lorem"
-     *              },
-     *              {
-     *                  "text": "ipsum"
-     *              }
-     *          ]
-     *      }
-     *  }
+     * HTTP/1.1 201 Created
+     * {
+     *     "id": 1,
+     *     "user_id": 1,
+     *     "absolute_url": "http://path/to/photo/file",
+     *     "avg_color": "#000000",
+     *     "created_at": "2016-10-24 12:24:33",
+     *     "updated_at": "2016-10-24 14:38:05",
+     *     "exif": {
+     *         "manufacturer": "Manufacturer Name",
+     *         "model": "Model Number",
+     *         "exposure_time": "1/160",
+     *         "aperture": "f/11.0",
+     *         "iso": 200,
+     *         "taken_at": "2016-10-24 12:24:33"
+     *     },
+     *     "thumbnails": [
+     *         "medium": {
+     *             "absolute_url": "http://path/to/photo/thumbnail/medium_file"
+     *             "width": 500,
+     *             "height": 500
+     *         },
+     *         "large": {
+     *              "absolute_url": "http://path/to/photo/thumbnail/large_file"
+     *              "width": 1000,
+     *              "height": 1000
+     *         }
+     *     ],
+     *     "tags": [
+     *         {
+     *             "text": "nature"
+     *         }
+     *     ]
+     * }
      */
 
     /**
@@ -129,47 +120,40 @@ class PublishedPhotosController extends ResourceController
      * @apiHeader {String} Accept application/json
      * @apiParam {Integer{1..N}} :id Unique resource ID.
      * @apiSuccessExample {json} Success-Response:
-     *  HTTP/1.1 200 OK
-     *  {
-     *      "status": true,
-     *      "data": {
-     *          "id": 1,
-     *          "user_id": 1,
-     *          "absolute_url": "http://path/to/photo/file",
-     *          "avg_color": "#000000",
-     *          "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-     *          "created_at": "2016-10-24 12:24:33",
-     *          "updated_at": "2016-10-24 14:38:05",
-     *          "exif": {
-     *              "manufacturer": "Manufacturer Name",
-     *              "model": "Model Number",
-     *              "exposure_time": "1/160",
-     *              "aperture": "f/11.0",
-     *              "iso": 200,
-     *              "taken_at": "2016-10-24 12:24:33"
-     *          },
-     *          "thumbnails": [
-     *              "medium": {
-     *                  "absolute_url": "http://path/to/photo/thumbnail/medium_file"
-     *                  "width": 500,
-     *                  "height": 500
-     *              },
-     *              "large": {
-     *                  "absolute_url": "http://path/to/photo/thumbnail/large_file"
-     *                  "width": 1000,
-     *                  "height": 1000
-     *              }
-     *          ],
-     *          "tags": [
-     *              {
-     *                  "text": "lorem"
-     *              },
-     *              {
-     *                  "text": "ipsum"
-     *              }
-     *          ]
-     *      }
-     *  }
+     * HTTP/1.1 200 OK
+     * {
+     *     "id": 1,
+     *     "user_id": 1,
+     *     "absolute_url": "http://path/to/photo/file",
+     *     "avg_color": "#000000",
+     *     "created_at": "2016-10-24 12:24:33",
+     *     "updated_at": "2016-10-24 14:38:05",
+     *     "exif": {
+     *         "manufacturer": "Manufacturer Name",
+     *         "model": "Model Number",
+     *         "exposure_time": "1/160",
+     *         "aperture": "f/11.0",
+     *         "iso": 200,
+     *         "taken_at": "2016-10-24 12:24:33"
+     *     },
+     *     "thumbnails": [
+     *         "medium": {
+     *             "absolute_url": "http://path/to/photo/thumbnail/medium_file"
+     *             "width": 500,
+     *             "height": 500
+     *         },
+     *         "large": {
+     *              "absolute_url": "http://path/to/photo/thumbnail/large_file"
+     *              "width": 1000,
+     *              "height": 1000
+     *         }
+     *     ],
+     *     "tags": [
+     *         {
+     *             "text": "nature"
+     *         }
+     *     ]
+     * }
      */
 
     /**
@@ -189,72 +173,77 @@ class PublishedPhotosController extends ResourceController
      * @apiName Find
      * @apiGroup Published Photos
      * @apiHeader {String} Accept application/json
-     * @apiParam {Integer{1..100}} take
-     * @apiParam {Integer{0..N}} skip
+     * @apiParam {Integer{0..N}} [page=1]
+     * @apiParam {Integer{1..100}} [per_page=20]
+     * @apiParam {String{1..255}} [tag] Tag value to search by.
+     * @apiParam {String{1..255}} [query] Search query value to search by.
      * @apiSuccessExample {json} Success-Response:
-     *  HTTP/1.1 200 OK
-     *  {
-     *      "status": true,
-     *      "data": [
-     *          {
-     *              "id": 1,
-     *              "user_id": 1,
-     *              "absolute_url": "http://path/to/photo/file",
-     *              "avg_color": "#000000",
-     *              "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-     *              "created_at": "2016-10-24 12:24:33",
-     *              "updated_at": "2016-10-24 14:38:05",
-     *              "exif": {
-     *                  "manufacturer": "Manufacturer Name",
-     *                  "model": "Model Number",
-     *                  "exposure_time": "1/160",
-     *                  "aperture": "f/11.0",
-     *                  "iso": 200,
-     *                  "taken_at": "2016-10-24 12:24:33"
-     *              },
-     *              "thumbnails": [
-     *                  "medium": {
-     *                      "absolute_url": "http://path/to/photo/thumbnail/medium_file"
-     *                      "width": 500,
-     *                      "height": 500
-     *                  },
-     *                  "large": {
+     * HTTP/1.1 200 OK
+     * {
+     *     "total": 100,
+     *     "per_page": 10,
+     *     "current_page": 2,
+     *     "last_page": 10,
+     *     "next_page_url": "http://path/to/api/resource?page=3",
+     *     "prev_page_url": "http://path/to/api/resource?page=1",
+     *     "from": 10,
+     *     "to": 20,
+     *     "data": [
+     *         {
+     *             "id": 1,
+     *             "user_id": 1,
+     *             "absolute_url": "http://path/to/photo/file",
+     *             "avg_color": "#000000",
+     *             "created_at": "2016-10-24 12:24:33",
+     *             "updated_at": "2016-10-24 14:38:05",
+     *             "exif": {
+     *                 "manufacturer": "Manufacturer Name",
+     *                 "model": "Model Number",
+     *                 "exposure_time": "1/160",
+     *                 "aperture": "f/11.0",
+     *                 "iso": 200,
+     *                 "taken_at": "2016-10-24 12:24:33"
+     *             },
+     *             "thumbnails": [
+     *                 "medium": {
+     *                     "absolute_url": "http://path/to/photo/thumbnail/medium_file"
+     *                     "width": 500,
+     *                     "height": 500
+     *                 },
+     *                 "large": {
      *                      "absolute_url": "http://path/to/photo/thumbnail/large_file"
      *                      "width": 1000,
      *                      "height": 1000
-     *                  }
-     *              ],
-     *              "tags": [
-     *                  {
-     *                      "text": "lorem"
-     *                  },
-     *                  {
-     *                      "text": "ipsum"
-     *                  }
-     *              ]
-     *          }
-     *      ]
-     *  }
+     *                 }
+     *             ],
+     *             "tags": [
+     *                 {
+     *                     "text": "nature"
+     *                 }
+     *             ]
+     *         }
+     *     ]
+     * }
      */
 
     /**
      * Find photos.
      *
      * @param FindPhotos $request
-     * @return Collection
+     * @return AbstractPaginator
      */
-    public function find(FindPhotos $request) : Collection
+    public function find(FindPhotos $request) : AbstractPaginator
     {
-        $photos = $this->photoDataService
+        $paginator = $this->photoDataService
             ->applyCriteria(new IsPublished(true))
             ->applyCriteriaWhen($request->has('tag'), new HasTagWithText($request->get('tag')))
             ->applyCriteriaWhen($request->has('query'), new HasSearchPhrase($request->get('query')))
-            ->applyCriteria(new Skip($request->get('skip', 0)))
-            ->applyCriteria(new Take($request->get('take', 10)))
             ->applyCriteria((new SortByCreatedAt)->desc())
-            ->get();
+            ->paginate($request->get('page', 1), $request->get('per_page', 20));
 
-        return $photos;
+        $paginator->appends($request->query());
+
+        return $paginator;
     }
 
     /**
@@ -269,47 +258,40 @@ class PublishedPhotosController extends ResourceController
      * @apiParam {Object[]} tags Tags collection.
      * @apiParam {String{1..255}} tags.text Tag text.
      * @apiSuccessExample {json} Success-Response:
-     *  HTTP/1.1 200 OK
-     *  {
-     *      "status": true,
-     *      "data": {
-     *          "id": 1,
-     *          "user_id": 1,
-     *          "absolute_url": "http://path/to/photo/file",
-     *          "avg_color": "#000000",
-     *          "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-     *          "created_at": "2016-10-24 12:24:33",
-     *          "updated_at": "2016-10-24 14:38:05",
-     *          "exif": {
-     *              "manufacturer": "Manufacturer Name",
-     *              "model": "Model Number",
-     *              "exposure_time": "1/160",
-     *              "aperture": "f/11.0",
-     *              "iso": 200,
-     *              "taken_at": "2016-10-24 12:24:33"
-     *          },
-     *          "thumbnails": [
-     *              "medium": {
-     *                  "absolute_url": "http://path/to/photo/thumbnail/medium_file"
-     *                  "width": 500,
-     *                  "height": 500
-     *              },
-     *              "large": {
-     *                  "absolute_url": "http://path/to/photo/thumbnail/large_file"
-     *                  "width": 1000,
-     *                  "height": 1000
-     *              }
-     *          ],
-     *          "tags": [
-     *              {
-     *                  "text": "lorem"
-     *              },
-     *              {
-     *                  "text": "ipsum"
-     *              }
-     *          ]
-     *      }
-     *  }
+     * HTTP/1.1 200 OK
+     * {
+     *     "id": 1,
+     *     "user_id": 1,
+     *     "absolute_url": "http://path/to/photo/file",
+     *     "avg_color": "#000000",
+     *     "created_at": "2016-10-24 12:24:33",
+     *     "updated_at": "2016-10-24 14:38:05",
+     *     "exif": {
+     *         "manufacturer": "Manufacturer Name",
+     *         "model": "Model Number",
+     *         "exposure_time": "1/160",
+     *         "aperture": "f/11.0",
+     *         "iso": 200,
+     *         "taken_at": "2016-10-24 12:24:33"
+     *     },
+     *     "thumbnails": [
+     *         "medium": {
+     *             "absolute_url": "http://path/to/photo/thumbnail/medium_file"
+     *             "width": 500,
+     *             "height": 500
+     *         },
+     *         "large": {
+     *              "absolute_url": "http://path/to/photo/thumbnail/large_file"
+     *              "width": 1000,
+     *              "height": 1000
+     *         }
+     *     ],
+     *     "tags": [
+     *         {
+     *             "text": "nature"
+     *         }
+     *     ]
+     * }
      */
 
     /**
@@ -335,7 +317,7 @@ class PublishedPhotosController extends ResourceController
      * @apiHeader {String} Accept application/json
      * @apiParam {Integer{1..N}} :id Unique resource ID.
      * @apiSuccessExample {json} Success-Response:
-     *  HTTP/1.1 204 No Content
+     * HTTP/1.1 204 No Content
      */
 
     /**

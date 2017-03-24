@@ -206,6 +206,22 @@ abstract class DataService implements DataServiceContract
     /**
      * @inheritdoc
      */
+    public function paginate(int $page = 1, int $perPage = 20, array $options = [])
+    {
+        $this->dispatchEvent('beforePaginate', $this->query, $options);
+
+        $models = $this->query->paginate($perPage, ['*'], 'page', $page);
+
+        $this->dispatchEvent('afterPaginate', $models, $options);
+
+        $this->reset();
+
+        return $models;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function count(array $options = []) : int
     {
         $this->dispatchEvent('beforeCount', $this->query, $options);

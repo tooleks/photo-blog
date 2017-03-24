@@ -29,10 +29,10 @@ class FindPhotos extends FormRequest
     public function rules()
     {
         return [
-            'take' => ['required', 'filled', 'integer', 'min:1', 'max:100'],
-            'skip' => ['required', 'filled', 'integer', 'min:0'],
-            'query' => ['filled', 'string', 'min:1'],
-            'tag' => ['filled', 'string', 'min:1'],
+            'page' => ['filled', 'integer', 'min:1'],
+            'per_page' => ['filled', 'integer', 'min:1', 'max:100'],
+            'query' => ['filled', 'string', 'min:1', 'max:255'],
+            'tag' => ['filled', 'string', 'min:1', 'max:255'],
         ];
     }
 }

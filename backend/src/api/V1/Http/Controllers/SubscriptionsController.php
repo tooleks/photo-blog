@@ -45,14 +45,11 @@ class SubscriptionsController extends ResourceController
      * @apiHeader {String} Content-Type application/json
      * @apiParam {String{1..255}} email Subscriber email address.
      * @apiSuccessExample {json} Success-Response:
-     *  HTTP/1.1 201 Created
-     *  {
-     *      "status": true,
-     *      "data": {
-     *          "email": "username@mail.address",
-     *          "token": "subscription_token_string"
-     *      }
-     *  }
+     * HTTP/1.1 201 Created
+     * {
+     *     "email": "username@mail.address",
+     *     "token": "subscription_token_string"
+     * }
      */
 
     /**
@@ -80,7 +77,7 @@ class SubscriptionsController extends ResourceController
      * @apiHeader {String} Accept application/json
      * @apiParam {String{1..255}} :token Subscription token.
      * @apiSuccessExample {json} Success-Response:
-     *  HTTP/1.1 204 No Content
+     * HTTP/1.1 204 No Content
      */
 
     /**

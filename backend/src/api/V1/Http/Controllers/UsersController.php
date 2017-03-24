@@ -48,18 +48,15 @@ class UsersController extends ResourceController
      * @apiParam {String{1..255}} email User email address.
      * @apiParam {String{1..255}} password User password.
      * @apiSuccessExample {json} Success-Response:
-     *  HTTP/1.1 201 Created
-     *  {
-     *      "status": true,
-     *      "data": {
-     *          "id": 1,
-     *          "name": "username",
-     *          "email": "username@mail.address",
-     *          "created_at": "2016-10-24 12:24:33",
-     *          "updated_at": "2016-10-24 14:38:05",
-     *          "role": "Customer"
-     *      }
-     *  }
+     * HTTP/1.1 201 Created
+     * {
+     *     "id": 1,
+     *     "name": "username",
+     *     "email": "username@mail.address",
+     *     "created_at": "2016-10-24 12:24:33",
+     *     "updated_at": "2016-10-24 14:38:05",
+     *     "role": "Customer"
+     * }
      */
 
     /**
@@ -89,18 +86,15 @@ class UsersController extends ResourceController
      * @apiHeader {String} Accept application/json
      * @apiParam {Integer{1..N}} :id Unique resource ID.
      * @apiSuccessExample {json} Success-Response:
-     *  HTTP/1.1 20O OK
-     *  {
-     *      "status": true,
-     *      "data": {
-     *          "id": 1,
-     *          "name": "username",
-     *          "email": "username@mail.address",
-     *          "created_at": "2016-10-24 12:24:33",
-     *          "updated_at": "2016-10-24 14:38:05",
-     *          "role": "Customer"
-     *      }
-     *  }
+     * HTTP/1.1 20O OK
+     * {
+     *     "id": 1,
+     *     "name": "username",
+     *     "email": "username@mail.address",
+     *     "created_at": "2016-10-24 12:24:33",
+     *     "updated_at": "2016-10-24 14:38:05",
+     *     "role": "Customer"
+     * }
      */
 
     /**
@@ -126,18 +120,15 @@ class UsersController extends ResourceController
      * @apiParam {String{1..255}} email User email address.
      * @apiParam {String{1..255}} password User password.
      * @apiSuccessExample {json} Success-Response:
-     *  HTTP/1.1 20O OK
-     *  {
-     *      "status": true,
-     *      "data": {
-     *          "id": 1,
-     *          "name": "username",
-     *          "email": "username@mail.address",
-     *          "created_at": "2016-10-24 12:24:33",
-     *          "updated_at": "2016-10-24 14:38:05",
-     *          "role": "Customer"
-     *      }
-     *  }
+     * HTTP/1.1 20O OK
+     * {
+     *     "id": 1,
+     *     "name": "username",
+     *     "email": "username@mail.address",
+     *     "created_at": "2016-10-24 12:24:33",
+     *     "updated_at": "2016-10-24 14:38:05",
+     *     "role": "Customer"
+     * }
      */
 
     /**
@@ -166,7 +157,7 @@ class UsersController extends ResourceController
      * @apiHeader {String} Accept application/json
      * @apiParam {Integer{1..N}} :id Unique resource ID.
      * @apiSuccessExample {json} Success-Response:
-     *  HTTP/1.1 204 No Content
+     * HTTP/1.1 204 No Content
      */
 
     /**

@@ -46,38 +46,35 @@ class PhotosController extends ResourceController
      * @apiHeader {String} Content-type multipart/form-data
      * @apiParam {File{1KB..20MB}=JPEG,PNG} file Photo file.
      * @apiSuccessExample {json} Success-Response:
-     *  HTTP/1.1 201 Created
-     *  {
-     *      "status": true,
-     *      "data": {
-     *          "id": 1,
-     *          "user_id": 1,
-     *          "absolute_url": "http://path/to/photo/file",
-     *          "avg_color": "#000000",
-     *          "created_at": "2016-10-24 12:24:33",
-     *          "updated_at": "2016-10-24 14:38:05",
-     *          "exif": {
-     *              "manufacturer": "Manufacturer Name",
-     *              "model": "Model Number",
-     *              "exposure_time": "1/160",
-     *              "aperture": "f/11.0",
-     *              "iso": 200,
-     *              "taken_at": "2016-10-24 12:24:33"
-     *          },
-     *          "thumbnails": [
-     *              "medium": {
-     *                  "absolute_url": "http://path/to/photo/thumbnail/medium_file"
-     *                  "width": 500,
-     *                  "height": 500
-     *              },
-     *              "large": {
-     *                  "absolute_url": "http://path/to/photo/thumbnail/large_file"
-     *                  "width": 1000,
-     *                  "height": 1000
-     *              }
-     *          ]
-     *      }
-     *  }
+     * HTTP/1.1 201 Created
+     * {
+     *     "id": 1,
+     *     "user_id": 1,
+     *     "absolute_url": "http://path/to/photo/file",
+     *     "avg_color": "#000000",
+     *     "created_at": "2016-10-24 12:24:33",
+     *     "updated_at": "2016-10-24 14:38:05",
+     *     "exif": {
+     *         "manufacturer": "Manufacturer Name",
+     *         "model": "Model Number",
+     *         "exposure_time": "1/160",
+     *         "aperture": "f/11.0",
+     *         "iso": 200,
+     *         "taken_at": "2016-10-24 12:24:33"
+     *     },
+     *     "thumbnails": [
+     *         "medium": {
+     *             "absolute_url": "http://path/to/photo/thumbnail/medium_file"
+     *             "width": 500,
+     *             "height": 500
+     *         },
+     *         "large": {
+     *              "absolute_url": "http://path/to/photo/thumbnail/large_file"
+     *              "width": 1000,
+     *              "height": 1000
+     *         }
+     *     ]
+     * }
      */
 
     /**
@@ -105,38 +102,35 @@ class PhotosController extends ResourceController
      * @apiHeader {String} Accept application/json
      * @apiParam {Integer{1..N}} :id Unique resource ID.
      * @apiSuccessExample {json} Success-Response:
-     *  HTTP/1.1 200 OK
-     *  {
-     *      "status": true,
-     *      "data": {
-     *          "id": 1,
-     *          "user_id": 1,
-     *          "absolute_url": "http://path/to/photo/file",
-     *          "avg_color": "#000000",
-     *          "created_at": "2016-10-24 12:24:33",
-     *          "updated_at": "2016-10-24 14:38:05",
-     *          "exif": {
-     *              "manufacturer": "Manufacturer Name",
-     *              "model": "Model Number",
-     *              "exposure_time": "1/160",
-     *              "aperture": "f/11.0",
-     *              "iso": 200,
-     *              "taken_at": "2016-10-24 12:24:33"
-     *          },
-     *          "thumbnails": [
-     *              "medium": {
-     *                  "absolute_url": "http://path/to/photo/thumbnail/medium_file"
-     *                  "width": 500,
-     *                  "height": 500
-     *              },
-     *              "large": {
-     *                  "absolute_url": "http://path/to/photo/thumbnail/large_file"
-     *                  "width": 1000,
-     *                  "height": 1000
-     *              }
-     *          ]
-     *      }
-     *  }
+     * HTTP/1.1 200 OK
+     * {
+     *     "id": 1,
+     *     "user_id": 1,
+     *     "absolute_url": "http://path/to/photo/file",
+     *     "avg_color": "#000000",
+     *     "created_at": "2016-10-24 12:24:33",
+     *     "updated_at": "2016-10-24 14:38:05",
+     *     "exif": {
+     *         "manufacturer": "Manufacturer Name",
+     *         "model": "Model Number",
+     *         "exposure_time": "1/160",
+     *         "aperture": "f/11.0",
+     *         "iso": 200,
+     *         "taken_at": "2016-10-24 12:24:33"
+     *     },
+     *     "thumbnails": [
+     *         "medium": {
+     *             "absolute_url": "http://path/to/photo/thumbnail/medium_file"
+     *             "width": 500,
+     *             "height": 500
+     *         },
+     *         "large": {
+     *              "absolute_url": "http://path/to/photo/thumbnail/large_file"
+     *              "width": 1000,
+     *              "height": 1000
+     *         }
+     *     ]
+     * }
      */
 
     /**
@@ -160,37 +154,35 @@ class PhotosController extends ResourceController
      * @apiParam {Integer{1..N}} :id Unique resource ID.
      * @apiParam {File{1KB..20MB}=JPEG,PNG} file Photo file.
      * @apiSuccessExample {json} Success-Response:
-     *  HTTP/1.1 200 OK
-     *  {
-     *      "status": true,
-     *      "data": {
-     *          "id": 1,
-     *          "user_id": 1,
-     *          "absolute_url": "http://path/to/photo/file",
-     *          "avg_color": "#000000",
-     *          "created_at": "2016-10-24 12:24:33",
-     *          "updated_at": "2016-10-24 14:38:05",
-     *          "exif": {
-     *              "manufacturer": "Manufacturer Name",
-     *              "model": "Model Number",
-     *              "exposure_time": "1/160",
-     *              "aperture": "f/11.0",
-     *              "iso": 200,
-     *              "taken_at": "2016-10-24 12:24:33"
-     *          },
-     *          "thumbnails": [
-     *              "medium": {
-     *                  "absolute_url": "http://path/to/photo/thumbnail/medium_file"
-     *                  "width": 500,
-     *                  "height": 500
-     *              },
-     *              "large": {
-     *                  "absolute_url": "http://path/to/photo/thumbnail/large_file"
-     *                  "width": 1000,
-     *                  "height": 1000
-     *              }
-     *          ]
-     *      }
+     * HTTP/1.1 200 OK
+     * {
+     *     "id": 1,
+     *     "user_id": 1,
+     *     "absolute_url": "http://path/to/photo/file",
+     *     "avg_color": "#000000",
+     *     "created_at": "2016-10-24 12:24:33",
+     *     "updated_at": "2016-10-24 14:38:05",
+     *     "exif": {
+     *         "manufacturer": "Manufacturer Name",
+     *         "model": "Model Number",
+     *         "exposure_time": "1/160",
+     *         "aperture": "f/11.0",
+     *         "iso": 200,
+     *         "taken_at": "2016-10-24 12:24:33"
+     *     },
+     *     "thumbnails": [
+     *         "medium": {
+     *             "absolute_url": "http://path/to/photo/thumbnail/medium_file"
+     *             "width": 500,
+     *             "height": 500
+     *         },
+     *         "large": {
+     *              "absolute_url": "http://path/to/photo/thumbnail/large_file"
+     *              "width": 1000,
+     *              "height": 1000
+     *         }
+     *     ]
+     * }
      *
      */
 
@@ -216,7 +208,7 @@ class PhotosController extends ResourceController
      * @apiHeader {String} Accept application/json
      * @apiParam {Integer{1..N}} :id Unique resource ID.
      * @apiSuccessExample {json} Success-Response:
-     *  HTTP/1.1 204 No Content
+     * HTTP/1.1 204 No Content
      */
 
     /**

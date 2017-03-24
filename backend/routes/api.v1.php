@@ -7,7 +7,7 @@ use Api\V1\Http\Middleware\{
     FetchExifData,
     GenerateAvgColor,
     GenerateThumbnails,
-    UploadPhotoFile
+    SaveUploadedPhotoFile
 };
 use Core\Models\{
     Photo,
@@ -82,7 +82,7 @@ Route::group(['prefix' => 'photos'], function () {
         ->middleware('can:create-resource,' . Photo::class)
         ->middleware(AppendUserId::class)
         ->middleware(FetchExifData::class)
-        ->middleware(UploadPhotoFile::class)
+        ->middleware(SaveUploadedPhotoFile::class)
         ->middleware(GenerateThumbnails::class)
         ->middleware(GenerateAvgColor::class);
 
@@ -94,7 +94,7 @@ Route::group(['prefix' => 'photos'], function () {
         ->uses('PhotosController@update')
         ->middleware('can:update-resource,photo')
         ->middleware(FetchExifData::class)
-        ->middleware(UploadPhotoFile::class)
+        ->middleware(SaveUploadedPhotoFile::class)
         ->middleware(GenerateThumbnails::class)
         ->middleware(GenerateAvgColor::class);
 

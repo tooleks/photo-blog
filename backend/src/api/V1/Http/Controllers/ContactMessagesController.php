@@ -35,14 +35,11 @@ class ContactMessagesController extends Controller
      * @apiHeader {String} Content-Type application/json
      * @apiParam {String{1..255}} email Author email address to reply.
      * @apiParam {String{1..255}} name Author name.
-     * @apiParam {String{1..255}} subject Subject.
+     * @apiParam {String{1..255}} subject Message subject.
      * @apiParam {String{1..65535}} text Message text.
      * @apiSuccessExample {json} Success-Response:
-     *  HTTP/1.1 201 Created
-     *  {
-     *      "status": true,
-     *      "data": null
-     *  }
+     * HTTP/1.1 201 Created
+     * {}
      */
 
     /**
