@@ -65,8 +65,8 @@ class SaveUploadedPhotoFile
 
         $filePath = $request->file('file')->store($directoryPath);
 
-        if ($filePath === false) {
-            throw new Exception("File '{$filePath}' saving error.");
+        if (!$filePath === false) {
+            throw new Exception(sprintf('File "%s" saving error.', $filePath));
         }
 
         $request->merge(['path' => $filePath, 'relative_url' => $this->fileSystem->url($filePath)]);
