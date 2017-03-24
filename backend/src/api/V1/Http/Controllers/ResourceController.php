@@ -40,10 +40,12 @@ abstract class ResourceController extends Controller
     {
         $response = parent::callAction($method, $parameters);
 
+        // If the response is an instance of a response class, return the response "as it".
         if ($response instanceof Response) {
             return $response;
         }
 
+        // Otherwise, present the response data with the presenter class.
         return new Response($this->present($response), $this->getStatusCode());
     }
 
@@ -55,23 +57,25 @@ abstract class ResourceController extends Controller
      */
     protected function present($response)
     {
-        // If response is the paginator, present each item in the collection with a presenter class via present macros.
+        // If the response is an instance of a paginator class,
+        // present each item in the collection with a presenter class via present macros.
         if ($response instanceof AbstractPaginator) {
             $items = $response->getCollection()->present($this->presenterClass);
             return $response->setCollection($items);
         }
 
-        // If response is the collection, present each item with a presenter class via present macros.
+        // If the response is an instance of a collection,
+        // present each item in the collection with a presenter class via present macros.
         if ($response instanceof Collection) {
             return $response->present($this->presenterClass);
         }
 
-        // If response is an object or an array, present it with a presenter class.
+        // If the response is an object or an array, present it with a presenter class.
         if (is_object($response) || is_array($response)) {
             return new $this->presenterClass($response);
         }
 
-        // Otherwise, return response "as it".
+        // Otherwise, return the response "as it".
         return $response;
     }
 
