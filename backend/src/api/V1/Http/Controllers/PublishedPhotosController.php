@@ -175,8 +175,8 @@ class PublishedPhotosController extends ResourceController
      * @apiHeader {String} Accept application/json
      * @apiParam {Integer{0..N}} [page=1]
      * @apiParam {Integer{1..100}} [per_page=20]
-     * @apiParam {String{1..255}} [tag] Tag value to search by.
-     * @apiParam {String{1..255}} [query] Search query value to search by.
+     * @apiParam {String{1..255}} [tag] Tag to search by.
+     * @apiParam {String{1..255}} [search_phrase] Search phrase to search by.
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
@@ -237,7 +237,7 @@ class PublishedPhotosController extends ResourceController
         $paginator = $this->photoDataService
             ->applyCriteria(new IsPublished(true))
             ->applyCriteriaWhen($request->has('tag'), new HasTagWithText($request->get('tag')))
-            ->applyCriteriaWhen($request->has('query'), new HasSearchPhrase($request->get('query')))
+            ->applyCriteriaWhen($request->has('search_phrase'), new HasSearchPhrase($request->get('search_phrase')))
             ->applyCriteria((new SortByCreatedAt)->desc())
             ->paginate($request->get('page', 1), $request->get('per_page', 20));
 
