@@ -39,7 +39,7 @@ class UsersController extends ResourceController
 
     /**
      * @apiVersion 1.0.0
-     * @api {post} /v1/users Create
+     * @api {post} /api/v1/users Create
      * @apiName Create
      * @apiGroup Users
      * @apiHeader {String} Accept application/json
@@ -80,7 +80,7 @@ class UsersController extends ResourceController
 
     /**
      * @apiVersion 1.0.0
-     * @api {get} /v1/users/:id Get
+     * @api {get} /api/v1/users/:id Get
      * @apiName Get
      * @apiGroup Users
      * @apiHeader {String} Accept application/json
@@ -110,7 +110,7 @@ class UsersController extends ResourceController
 
     /**
      * @apiVersion 1.0.0
-     * @api {put} /v1/users/:id Update
+     * @api {put} /api/v1/users/:id Update
      * @apiName Update
      * @apiGroup Users
      * @apiHeader {String} Accept application/json
@@ -151,7 +151,7 @@ class UsersController extends ResourceController
 
     /**
      * @apiVersion 1.0.0
-     * @api {delete} /v1/users/:id Delete
+     * @api {delete} /api/v1/users/:id Delete
      * @apiName Delete
      * @apiGroup Users
      * @apiHeader {String} Accept application/json
