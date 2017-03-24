@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon created_at
  * @property Carbon updated_at
  * @property string directory_path
+ * @property User $createdByUser
  * @property Exif $exif
  * @property Collection $tags
  * @property Collection $thumbnails
@@ -119,6 +120,14 @@ class Photo extends Model
     public function getDirectoryPathAttribute()
     {
         return $this->path ? pathinfo($this->path, PATHINFO_DIRNAME) : null;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function createdByUser()
+    {
+        return $this->belongsTo(User::class, 'created_by_user_id');
     }
 
     /**
