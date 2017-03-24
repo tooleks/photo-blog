@@ -3,18 +3,18 @@
 namespace Api\V1\Http\Middleware;
 
 use Closure;
+use Exception;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
-use League\Flysystem\FileNotFoundException;
 
 /**
- * Class UploadPhotoFile.
+ * Class SaveUploadedPhotoFile.
  *
  * @property Filesystem fileSystem
  * @package Api\V1\Http\Middleware
  */
-class UploadPhotoFile
+class SaveUploadedPhotoFile
 {
     use ValidatesRequests;
 
@@ -42,8 +42,8 @@ class UploadPhotoFile
                 'file',
                 'image',
                 'mimes:jpeg,png',
-                'min:' . config('main.upload.min-size'),
-                'max:' . config('main.upload.max-size'),
+                sprintf('min:%s', config('main.upload.min-size')),
+                sprintf('max:%s', config('main.upload.max-size')),
             ],
         ]);
     }
@@ -55,30 +55,22 @@ class UploadPhotoFile
      * @param Closure $next
      * @param string|null $guard
      * @return mixed
-     * @throws FileNotFoundException
+     * @throws Exception
      */
     public function handle($request, Closure $next, $guard = null)
     {
         $this->validateRequest($request);
 
-        $photoFilePath = $request->file('file')->store($this->generateDirPath());
+        $directoryPath = sprintf('%s/%s', config('main.storage.photos'), str_random(10));
 
-        if ($photoFilePath === false) {
-            throw new FileNotFoundException("File '{$photoFilePath}' saving error.");
+        $filePath = $request->file('file')->store($directoryPath);
+
+        if ($filePath === false) {
+            throw new Exception("File '{$filePath}' saving error.");
         }
 
-        $request->merge(['path' => $photoFilePath, 'relative_url' => $this->fileSystem->url($photoFilePath)]);
+        $request->merge(['path' => $filePath, 'relative_url' => $this->fileSystem->url($filePath)]);
 
         return $next($request);
-    }
-
-    /**
-     * Generate directory path for photo.
-     *
-     * @return string
-     */
-    protected function generateDirPath()
-    {
-        return sprintf('%s/%s', config('main.storage.photos'), str_random(10));
     }
 }
