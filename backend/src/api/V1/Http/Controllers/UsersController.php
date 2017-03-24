@@ -103,7 +103,7 @@ class UsersController extends ResourceController
      * @param User $user
      * @return User
      */
-    public function get($user) : User
+    public function get(User $user) : User
     {
         return $user;
     }
@@ -138,7 +138,7 @@ class UsersController extends ResourceController
      * @param User $user
      * @return User
      */
-    public function update(UpdateUser $request, $user) : User
+    public function update(UpdateUser $request, User $user) : User
     {
         if ($request->has('password')) {
             $user->setPassword($request->get('password'));
@@ -166,7 +166,7 @@ class UsersController extends ResourceController
      * @param User $user
      * @return void
      */
-    public function delete($user)
+    public function delete(User $user)
     {
         $this->userDataService->delete($user);
     }

@@ -140,7 +140,7 @@ class PhotosController extends ResourceController
      * @param Photo $photo
      * @return Photo
      */
-    public function get($photo) : Photo
+    public function get(Photo $photo) : Photo
     {
         return $photo;
     }
@@ -194,7 +194,7 @@ class PhotosController extends ResourceController
      * @param Photo $photo
      * @return Photo
      */
-    public function update(UpdateUploadedPhoto $request, $photo) : Photo
+    public function update(UpdateUploadedPhoto $request, Photo $photo) : Photo
     {
         $this->photoDataService->save($photo, $request->all(), ['save' => ['exif', 'thumbnails']]);
 
@@ -218,7 +218,7 @@ class PhotosController extends ResourceController
      * @param Photo $photo
      * @return void
      */
-    public function delete($photo)
+    public function delete(Photo $photo)
     {
         $this->photoDataService->delete($photo);
     }
