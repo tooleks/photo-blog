@@ -59,7 +59,7 @@ class PublishedPhotosController extends ResourceController
      * HTTP/1.1 201 Created
      * {
      *     "id": 1,
-     *     "user_id": 1,
+     *     "created_by_user_id" 1,
      *     "absolute_url": "http://path/to/photo/file",
      *     "avg_color": "#000000",
      *     "created_at": "2016-10-24 12:24:33",
@@ -123,7 +123,7 @@ class PublishedPhotosController extends ResourceController
      * HTTP/1.1 200 OK
      * {
      *     "id": 1,
-     *     "user_id": 1,
+     *     "created_by_user_id" 1,
      *     "absolute_url": "http://path/to/photo/file",
      *     "avg_color": "#000000",
      *     "created_at": "2016-10-24 12:24:33",
@@ -191,7 +191,7 @@ class PublishedPhotosController extends ResourceController
      *     "data": [
      *         {
      *             "id": 1,
-     *             "user_id": 1,
+     *             "created_by_user_id" 1,
      *             "absolute_url": "http://path/to/photo/file",
      *             "avg_color": "#000000",
      *             "created_at": "2016-10-24 12:24:33",
@@ -261,7 +261,7 @@ class PublishedPhotosController extends ResourceController
      * HTTP/1.1 200 OK
      * {
      *     "id": 1,
-     *     "user_id": 1,
+     *     "created_by_user_id" 1,
      *     "absolute_url": "http://path/to/photo/file",
      *     "avg_color": "#000000",
      *     "created_at": "2016-10-24 12:24:33",

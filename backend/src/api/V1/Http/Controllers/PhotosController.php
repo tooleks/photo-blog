@@ -49,7 +49,7 @@ class PhotosController extends ResourceController
      * HTTP/1.1 201 Created
      * {
      *     "id": 1,
-     *     "user_id": 1,
+     *     "created_by_user_id" 1,
      *     "absolute_url": "http://path/to/photo/file",
      *     "avg_color": "#000000",
      *     "created_at": "2016-10-24 12:24:33",
@@ -87,7 +87,9 @@ class PhotosController extends ResourceController
     {
         $photo = new Photo;
 
-        $photo->setIsPublishedAttribute(false);
+        $photo
+            ->setCreatedByUserIdAttribute($this->guard->user()->id)
+            ->setIsPublishedAttribute(false);
 
         $this->photoDataService->save($photo, $request->all(), ['save' => ['exif', 'thumbnails']]);
 
@@ -105,7 +107,7 @@ class PhotosController extends ResourceController
      * HTTP/1.1 200 OK
      * {
      *     "id": 1,
-     *     "user_id": 1,
+     *     "created_by_user_id" 1,
      *     "absolute_url": "http://path/to/photo/file",
      *     "avg_color": "#000000",
      *     "created_at": "2016-10-24 12:24:33",
@@ -157,7 +159,7 @@ class PhotosController extends ResourceController
      * HTTP/1.1 200 OK
      * {
      *     "id": 1,
-     *     "user_id": 1,
+     *     "created_by_user_id" 1,
      *     "absolute_url": "http://path/to/photo/file",
      *     "avg_color": "#000000",
      *     "created_at": "2016-10-24 12:24:33",

@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * Class Photo.
  *
  * @property int id
- * @property int user_id
+ * @property int created_by_user_id
  * @property string description
  * @property string path
  * @property string relative_url
@@ -52,7 +52,6 @@ class Photo extends Model
      * @inheritdoc
      */
     protected $fillable = [
-        'user_id',
         'description',
         'path',
         'relative_url',
@@ -71,6 +70,19 @@ class Photo extends Model
             $photo->thumbnails()->detach();
             $photo->tags()->detach();
         });
+    }
+
+    /**
+     * Setter for the 'created_by_user_id' attribute.
+     *
+     * @param int $createdByUserId
+     * @return $this
+     */
+    public function setCreatedByUserIdAttribute($createdByUserId)
+    {
+        $this->attributes['created_by_user_id'] = (int)$createdByUserId;
+
+        return $this;
     }
 
     /**

@@ -29,7 +29,6 @@ class CreateUploadedPhoto extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => ['required', 'filled', 'integer'],
             'path' => ['required', 'filled', 'string', 'min:1', 'max:255'],
             'relative_url' => ['required', 'filled', 'string', 'min:1', 'max:255'],
             'exif' => ['required', 'filled', 'array'],

@@ -2,7 +2,6 @@
 
 use Api\V1\Http\Middleware\{
     AppendClientIpAddress,
-    AppendUserId,
     DeletePhotoDirectory,
     FetchExifData,
     GenerateAvgColor,
@@ -80,7 +79,6 @@ Route::group(['prefix' => 'photos'], function () {
     Route::post('/')
         ->uses('PhotosController@create')
         ->middleware('can:create-resource,' . Photo::class)
-        ->middleware(AppendUserId::class)
         ->middleware(FetchExifData::class)
         ->middleware(SaveUploadedPhotoFile::class)
         ->middleware(GenerateThumbnails::class)

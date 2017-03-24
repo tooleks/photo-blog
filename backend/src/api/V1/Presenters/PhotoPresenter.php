@@ -27,7 +27,7 @@ class PhotoPresenter extends Presenter
     {
         return [
             'id' => 'id',
-            'user_id' => 'user_id',
+            'created_by_user_id' => 'created_by_user_id',
             'absolute_url' => function () {
                 return $this->getPresenteeAttribute('relative_url')
                     ? url(config('main.storage.url')) . $this->getPresenteeAttribute('relative_url')
