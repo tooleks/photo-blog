@@ -39,7 +39,7 @@ class TagsController extends ResourceController
 
     /**
      * @apiVersion 1.0.0
-     * @api {get} /api/v1/tags Find
+     * @api {get} /v1/tags Find
      * @apiName Find
      * @apiGroup Tags
      * @apiHeader {String} Accept application/json

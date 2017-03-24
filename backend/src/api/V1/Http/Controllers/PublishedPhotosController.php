@@ -46,7 +46,7 @@ class PublishedPhotosController extends ResourceController
 
     /**
      * @apiVersion 1.0.0
-     * @api {post} /api/v1/published_photos Create
+     * @api {post} /v1/published_photos Create
      * @apiName Create
      * @apiGroup Published Photos
      * @apiHeader {String} Accept application/json
@@ -114,7 +114,7 @@ class PublishedPhotosController extends ResourceController
 
     /**
      * @apiVersion 1.0.0
-     * @api {get} /api/v1/published_photos/:id Get
+     * @api {get} /v1/published_photos/:id Get
      * @apiName Get
      * @apiGroup Published Photos
      * @apiHeader {String} Accept application/json
@@ -169,7 +169,7 @@ class PublishedPhotosController extends ResourceController
 
     /**
      * @apiVersion 1.0.0
-     * @api {get} /api/v1/published_photos Find
+     * @api {get} /v1/published_photos Find
      * @apiName Find
      * @apiGroup Published Photos
      * @apiHeader {String} Accept application/json
@@ -248,7 +248,7 @@ class PublishedPhotosController extends ResourceController
 
     /**
      * @apiVersion 1.0.0
-     * @api {put} /api/v1/published_photos/:id Update
+     * @api {put} /v1/published_photos/:id Update
      * @apiName Update
      * @apiGroup Published Photos
      * @apiHeader {String} Accept application/json
@@ -311,7 +311,7 @@ class PublishedPhotosController extends ResourceController
 
     /**
      * @apiVersion 1.0.0
-     * @api {delete} /api/v1/published_photos/:id Delete
+     * @api {delete} /v1/published_photos/:id Delete
      * @apiName Delete
      * @apiGroup Published Photos
      * @apiHeader {String} Accept application/json

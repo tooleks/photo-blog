@@ -28,7 +28,7 @@ class ContactMessagesController extends Controller
 
     /**
      * @apiVersion 1.0.0
-     * @api {post} /api/v1/contact_message Create
+     * @api {post} /v1/contact_message Create
      * @apiName Create
      * @apiGroup Contact Message
      * @apiHeader {String} Accept application/json

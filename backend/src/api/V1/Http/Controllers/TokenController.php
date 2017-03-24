@@ -38,7 +38,7 @@ class TokenController extends ResourceController
 
     /**
      * @apiVersion 1.0.0
-     * @api {post} /api/v1/token Create
+     * @api {post} /v1/token Create
      * @apiName Create
      * @apiGroup Token
      * @apiHeader {String} Accept application/json

@@ -38,7 +38,7 @@ class SubscriptionsController extends ResourceController
 
     /**
      * @apiVersion 1.0.0
-     * @api {post} /api/v1/subscription Create
+     * @api {post} /v1/subscription Create
      * @apiName Create
      * @apiGroup Subscriptions
      * @apiHeader {String} Accept application/json
@@ -71,7 +71,7 @@ class SubscriptionsController extends ResourceController
 
     /**
      * @apiVersion 1.0.0
-     * @api {delete} /api/v1/subscriptions/:token Delete
+     * @api {delete} /v1/subscriptions/:token Delete
      * @apiName Delete
      * @apiGroup Subscriptions
      * @apiHeader {String} Accept application/json
