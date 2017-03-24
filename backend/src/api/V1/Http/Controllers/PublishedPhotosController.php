@@ -14,7 +14,6 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\AbstractPaginator;
 use Lib\DataService\Criterias\SortByCreatedAt;
-use Throwable;
 
 /**
  * Class PublishedPhotosController.
@@ -97,7 +96,6 @@ class PublishedPhotosController extends ResourceController
      *
      * @param CreatePublishedPhotoRequest $request
      * @return Photo
-     * @throws Throwable
      */
     public function create(CreatePublishedPhotoRequest $request) : Photo
     {
@@ -300,7 +298,6 @@ class PublishedPhotosController extends ResourceController
      * @param UpdatePublishedPhotoRequest $request
      * @param Photo $photo
      * @return Photo
-     * @throws Throwable
      */
     public function update(UpdatePublishedPhotoRequest $request, Photo $photo) : Photo
     {
