@@ -5,11 +5,11 @@ namespace Api\V1\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * Class UpdateUploadedPhoto.
+ * Class UpdatePhotoRequest.
  *
  * @package Api\V1\Http\Requests
  */
-class UpdateUploadedPhoto extends FormRequest
+class UpdatePhotoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

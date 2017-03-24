@@ -2,7 +2,7 @@
 
 namespace Api\V1\Http\Controllers;
 
-use Api\V1\Http\Requests\CreateSubscription;
+use Api\V1\Http\Requests\CreateSubscriptionRequest;
 use Core\DataServices\Subscription\Contracts\SubscriptionDataService;
 use Core\Models\Subscription;
 use Illuminate\Contracts\Auth\Guard;
@@ -55,10 +55,10 @@ class SubscriptionsController extends ResourceController
     /**
      * Create a subscription.
      *
-     * @param CreateSubscription $request
+     * @param CreateSubscriptionRequest $request
      * @return Subscription
      */
-    public function create(CreateSubscription $request) : Subscription
+    public function create(CreateSubscriptionRequest $request) : Subscription
     {
         $subscription = new Subscription;
 

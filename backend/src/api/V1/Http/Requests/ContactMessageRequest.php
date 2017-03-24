@@ -5,11 +5,11 @@ namespace Api\V1\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * Class CreateUser.
+ * Class ContactMessageRequest.
  *
  * @package Api\V1\Http\Requests
  */
-class CreateUser extends FormRequest
+class ContactMessageRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,9 +29,10 @@ class CreateUser extends FormRequest
     public function rules()
     {
         return [
+            'email' => ['required', 'email', 'min:1', 'max:255'],
             'name' => ['required', 'string', 'min:1', 'max:255'],
-            'email' => ['required', 'string', 'email', 'unique:users', 'min:1', 'max:255'],
-            'password' => ['required', 'string', 'min:1', 'max:255'],
+            'subject' => ['required', 'string', 'min:1', 'max:255'],
+            'text' => ['required', 'string', 'min:1', 'max:65535'],
         ];
     }
 }

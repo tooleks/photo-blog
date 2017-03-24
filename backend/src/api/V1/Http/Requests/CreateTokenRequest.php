@@ -5,11 +5,11 @@ namespace Api\V1\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * Class UpdatePhoto.
+ * Class CreateTokenRequest.
  *
  * @package Api\V1\Http\Requests
  */
-class UpdatePhoto extends FormRequest
+class CreateTokenRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,9 +29,8 @@ class UpdatePhoto extends FormRequest
     public function rules()
     {
         return [
-            'description' => ['required', 'string', 'min:1', 'max:65535'],
-            'tags' => ['required', 'array'],
-            'tags.*.text' => ['required', 'string', 'min:1', 'max:255'],
+            'email' => ['required', 'email', 'min:1', 'max:255'],
+            'password' => ['required', 'min:1', 'max:255'],
         ];
     }
 }

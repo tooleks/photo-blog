@@ -2,8 +2,8 @@
 
 namespace Api\V1\Http\Controllers;
 
-use Api\V1\Http\Requests\CreateUploadedPhoto;
-use Api\V1\Http\Requests\UpdateUploadedPhoto;
+use Api\V1\Http\Requests\CreatePhotoRequest;
+use Api\V1\Http\Requests\UpdatePhotoRequest;
 use Core\Models\Photo;
 use Core\DataServices\Photo\Contracts\PhotoDataService;
 use Illuminate\Contracts\Auth\Guard;
@@ -80,10 +80,10 @@ class PhotosController extends ResourceController
     /**
      * Create a photo.
      *
-     * @param CreateUploadedPhoto $request
+     * @param CreatePhotoRequest $request
      * @return Photo
      */
-    public function create(CreateUploadedPhoto $request) : Photo
+    public function create(CreatePhotoRequest $request) : Photo
     {
         $photo = new Photo;
 
@@ -190,11 +190,11 @@ class PhotosController extends ResourceController
     /**
      * Update a photo.
      *
-     * @param UpdateUploadedPhoto $request
+     * @param UpdatePhotoRequest $request
      * @param Photo $photo
      * @return Photo
      */
-    public function update(UpdateUploadedPhoto $request, Photo $photo) : Photo
+    public function update(UpdatePhotoRequest $request, Photo $photo) : Photo
     {
         $this->photoDataService->save($photo, $request->all(), ['save' => ['exif', 'thumbnails']]);
 

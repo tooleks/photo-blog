@@ -2,7 +2,7 @@
 
 namespace Api\V1\Http\Controllers;
 
-use Api\V1\Http\Requests\CreateToken;
+use Api\V1\Http\Requests\CreateTokenRequest;
 use Core\Models\User;
 use Core\DataServices\User\Contracts\UserDataService;
 use Illuminate\Contracts\Auth\Guard;
@@ -56,10 +56,10 @@ class TokenController extends ResourceController
     /**
      * Create a token.
      *
-     * @param CreateToken $request
+     * @param CreateTokenRequest $request
      * @return User
      */
-    public function create(CreateToken $request) : User
+    public function create(CreateTokenRequest $request) : User
     {
         $user = $this->userDataService->getByCredentials($request->get('email'), $request->get('password'));
 

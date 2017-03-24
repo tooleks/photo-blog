@@ -2,9 +2,9 @@
 
 namespace Api\V1\Http\Controllers;
 
-use Api\V1\Http\Requests\CreatePhoto;
-use Api\V1\Http\Requests\FindPhotos;
-use Api\V1\Http\Requests\UpdatePhoto;
+use Api\V1\Http\Requests\CreatePublishedPhotoRequest;
+use Api\V1\Http\Requests\FindPhotosRequest;
+use Api\V1\Http\Requests\UpdatePublishedPhotoRequest;
 use Core\Models\Photo;
 use Core\DataServices\Photo\Criterias\IsPublished;
 use Core\DataServices\Photo\Criterias\HasSearchPhrase;
@@ -95,11 +95,11 @@ class PublishedPhotosController extends ResourceController
     /**
      * Create a photo.
      *
-     * @param CreatePhoto $request
+     * @param CreatePublishedPhotoRequest $request
      * @return Photo
      * @throws Throwable
      */
-    public function create(CreatePhoto $request) : Photo
+    public function create(CreatePublishedPhotoRequest $request) : Photo
     {
         $photo = $this->photoDataService
             ->applyCriteria(new IsPublished(false))
@@ -229,10 +229,10 @@ class PublishedPhotosController extends ResourceController
     /**
      * Find photos.
      *
-     * @param FindPhotos $request
+     * @param FindPhotosRequest $request
      * @return AbstractPaginator
      */
-    public function find(FindPhotos $request) : AbstractPaginator
+    public function find(FindPhotosRequest $request) : AbstractPaginator
     {
         $paginator = $this->photoDataService
             ->applyCriteria(new IsPublished(true))
@@ -297,12 +297,12 @@ class PublishedPhotosController extends ResourceController
     /**
      * Update a photo.
      *
-     * @param UpdatePhoto $request
+     * @param UpdatePublishedPhotoRequest $request
      * @param Photo $photo
      * @return Photo
      * @throws Throwable
      */
-    public function update(UpdatePhoto $request, Photo $photo) : Photo
+    public function update(UpdatePublishedPhotoRequest $request, Photo $photo) : Photo
     {
         $this->photoDataService->save($photo, $request->all(), ['save' => ['tags']]);
 

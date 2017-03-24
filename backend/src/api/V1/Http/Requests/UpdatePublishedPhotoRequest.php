@@ -5,11 +5,11 @@ namespace Api\V1\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * Class FindTags.
+ * Class UpdatePublishedPhotoRequest.
  *
  * @package Api\V1\Http\Requests
  */
-class FindTags extends FormRequest
+class UpdatePublishedPhotoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,8 +29,9 @@ class FindTags extends FormRequest
     public function rules()
     {
         return [
-            'page' => ['filled', 'integer', 'min:1'],
-            'per_page' => ['filled', 'integer', 'min:1', 'max:100'],
+            'description' => ['required', 'string', 'min:1', 'max:65535'],
+            'tags' => ['required', 'array'],
+            'tags.*.text' => ['required', 'string', 'min:1', 'max:255'],
         ];
     }
 }

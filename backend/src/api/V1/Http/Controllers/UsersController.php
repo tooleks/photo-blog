@@ -2,8 +2,8 @@
 
 namespace Api\V1\Http\Controllers;
 
-use Api\V1\Http\Requests\CreateUser;
-use Api\V1\Http\Requests\UpdateUser;
+use Api\V1\Http\Requests\CreateUserRequest;
+use Api\V1\Http\Requests\UpdateUserRequest;
 use Core\Models\User;
 use Core\DataServices\User\Contracts\UserDataService;
 use Illuminate\Contracts\Auth\Guard;
@@ -62,10 +62,10 @@ class UsersController extends ResourceController
     /**
      * Create a user.
      *
-     * @param CreateUser $request
+     * @param CreateUserRequest $request
      * @return User
      */
-    public function create(CreateUser $request) : User
+    public function create(CreateUserRequest $request) : User
     {
         $user = new User;
 
@@ -134,11 +134,11 @@ class UsersController extends ResourceController
     /**
      * Update a user.
      *
-     * @param UpdateUser $request
+     * @param UpdateUserRequest $request
      * @param User $user
      * @return User
      */
-    public function update(UpdateUser $request, User $user) : User
+    public function update(UpdateUserRequest $request, User $user) : User
     {
         if ($request->has('password')) {
             $user->setPassword($request->get('password'));

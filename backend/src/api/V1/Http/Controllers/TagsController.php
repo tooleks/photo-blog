@@ -2,7 +2,7 @@
 
 namespace Api\V1\Http\Controllers;
 
-use Api\V1\Http\Requests\FindTags;
+use Api\V1\Http\Requests\FindTagsRequest;
 use Core\DataServices\Tag\Contracts\TagDataService;
 use Core\DataServices\Tag\Criterias\SortByPhotosCount;
 use Illuminate\Contracts\Auth\Guard;
@@ -67,10 +67,10 @@ class TagsController extends ResourceController
     /**
      * Find photos.
      *
-     * @param FindTags $request
+     * @param FindTagsRequest $request
      * @return AbstractPaginator
      */
-    public function find(FindTags $request) : AbstractPaginator
+    public function find(FindTagsRequest $request) : AbstractPaginator
     {
         $paginator = $this->tagDataService
             ->applyCriteria((new SortByPhotosCount)->desc())

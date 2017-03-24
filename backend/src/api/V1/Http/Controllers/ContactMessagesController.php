@@ -2,7 +2,7 @@
 
 namespace Api\V1\Http\Controllers;
 
-use Api\V1\Http\Requests\ContactMessage as ContactMessageRequest;
+use Api\V1\Http\Requests\ContactMessageRequest as ContactMessageRequest;
 use Api\V1\Mail\ContactMessage;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Http\Response;
