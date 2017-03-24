@@ -87,8 +87,7 @@ class PhotosController extends ResourceController
     {
         $photo = new Photo;
 
-        $photo
-            ->setCreatedByUserIdAttribute($this->guard->user()->id)
+        $photo->setCreatedByUserIdAttribute($this->guard->user()->id)
             ->setIsPublishedAttribute(false);
 
         $this->photoDataService->save($photo, $request->all(), ['save' => ['exif', 'thumbnails']]);
