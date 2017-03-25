@@ -34,31 +34,31 @@ export class PhotoDataProviderService {
         return this.api.get('/published_photos/' + id).toPromise();
     };
 
-    getAll = (take:number, skip:number):Promise<any> => {
+    getAll = (page:number, perPage:number):Promise<any> => {
         return this.api.get('/published_photos', {
             params: {
-                take: take,
-                skip: skip,
+                page: page,
+                per_page: perPage,
             }
         }).toPromise();
     };
 
-    getByTag = (take:number, skip:number, tag:string):Promise<any> => {
+    getByTag = (page:number, perPage:number, tag:string):Promise<any> => {
         return this.api.get('/published_photos', {
             params: {
-                take: take,
-                skip: skip,
+                page: page,
+                per_page: perPage,
                 tag: tag,
             }
         }).toPromise();
     };
 
-    getBySearchQuery = (take:number, skip:number, query:string):Promise<any> => {
+    getBySearchPhrase = (page:number, perPage:number, searchPhrase:string):Promise<any> => {
         return this.api.get('/published_photos', {
             params: {
-                take: take,
-                skip: skip,
-                query: query,
+                page: page,
+                per_page: perPage,
+                search_phrase: searchPhrase,
             }
         }).toPromise();
     };

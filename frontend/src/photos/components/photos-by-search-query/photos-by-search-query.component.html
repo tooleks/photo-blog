@@ -4,8 +4,8 @@
             <div class="form-group">
                 <div class="input-group">
                     <input #inputSearch
-                           [(ngModel)]="queryParams['query']"
-                           name="query"
+                           [(ngModel)]="queryParams['search_phrase']"
+                           name="search_phrase"
                            type="search"
                            (keyup.enter)="searchPhotos()"
                            placeholder="{{ 'Type any word then press enter' }}"
@@ -40,7 +40,7 @@
         ></gallery>
     </div>
 </div>
-<div *ngIf="!isEmpty()" class="text-center" style="margin-top: 20px;">
+<div *ngIf="!isEmpty() && initialized" class="text-center" style="margin-top: 20px;">
     <button class="btn btn-primary" (click)="loadMorePhotos()" [disabled]="isLoading()">
         <span>{{ !isLoading() ? 'Load More' : 'Loading...' }}</span>
     </button>

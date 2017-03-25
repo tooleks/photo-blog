@@ -21,7 +21,8 @@ import {PhotoDataProviderService} from '../../services';
 export class PhotosByTagComponent {
     @ViewChild('galleryComponent') galleryComponent:any;
 
-    private loaded:boolean;
+    private photos:Array<PublishedPhoto> = [];
+    private initialized:boolean = false;
     private queryParams:Object = {};
     private pager:PagerService;
     private lockProcess:LockProcessService;
@@ -36,7 +37,7 @@ export class PhotosByTagComponent {
                 @Inject(PagerServiceProvider) pagerProvider:PagerServiceProvider,
                 @Inject(LockProcessServiceProvider) lockProcessProvider:LockProcessServiceProvider) {
         this.navigator = navigatorProvider.getInstance();
-        this.pager = pagerProvider.getInstance();
+        this.pager = pagerProvider.getInstance(1, 20);
         this.lockProcess = lockProcessProvider.getInstance();
     }
 
@@ -56,40 +57,47 @@ export class PhotosByTagComponent {
         this.route.params
             .map((params) => params['tag'])
             .subscribe((tag:string) => {
+                this.photos = [];
                 this.galleryComponent.reset();
                 this.queryParams['tag'] = tag;
                 this.title.setTitle(['Photos', '#' + tag]);
-                this.pager.reset();
-                this.loadPhotos(this.pager.calculateLimitForPage(this.pager.getPage()),
-                    this.pager.getOffset(), this.queryParams['tag']);
+                this.loadPhotos(1, this.pager.getPerPage() * this.pager.getPage(), this.queryParams['tag']);
             });
     }
 
-    private processLoadPhotos = (take:number, skip:number, tag:string):Promise<Array<PublishedPhoto>> => {
+    private processLoadPhotos = (page:number, perPage:number, tag:string):Promise<Array<PublishedPhoto>> => {
         return this.photoDataProvider
-            .getByTag(take, skip, tag)
-            .then((photos:Array<PublishedPhoto>) => this.pager.appendItems(photos));
+            .getByTag(page, perPage, tag)
+            .then((response:any) => {
+                // If the response has data, set pager page to current page.
+                response.data.length && this.pager.setPage(response.current_page);
+                // Concatenate already loaded photos with just loaded photos and set initialized flag.
+                this.photos = this.photos.concat(response.data);
+                this.initialized = true;
+                // Return new photos.
+                return response.data;
+            });
     };
 
-    private loadPhotos = (take:number, skip:number, tag:string):Promise<Array<PublishedPhoto>> => {
+    private loadPhotos = (page:number, perPage:number, tag:string):Promise<Array<PublishedPhoto>> => {
         return this.lockProcess
-            .process(this.processLoadPhotos, [take, skip, tag])
+            .process(this.processLoadPhotos, [page, perPage, tag])
             .then((result:any) => {
                 this.navigator.setQueryParam('page', this.pager.getPage());
                 return result;
             });
     };
 
-    getLoadedPhotos = () => {
-        return this.pager.getItems();
+    loadMorePhotos = () => {
+        return this.loadPhotos(this.pager.getPage(), this.pager.getPerPage(), this.queryParams['tag']);
     };
 
-    loadMorePhotos = () => {
-        return this.loadPhotos(this.pager.getLimit(), this.pager.getOffset(), this.queryParams['tag']);
+    getLoadedPhotos = () => {
+        return this.photos;
     };
 
     isEmpty = ():boolean => {
-        return !this.pager.getItems().length && !this.lockProcess.isProcessing() && !this.loaded;
+        return this.initialized && !this.photos.length && !this.lockProcess.isProcessing();
     };
 
     isLoading = ():boolean => {

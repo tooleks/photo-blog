@@ -81,7 +81,7 @@ export class PhotoFormComponent {
 
         return uploader.then((photo:Photo) => {
             this.photo.photo_id = photo.id;
-            this.photo.user_id = photo.user_id;
+            this.photo.created_by_user_id = photo.created_by_user_id;
             this.photo.absolute_url = photo.absolute_url;
             this.photo.created_at = photo.absolute_url;
             this.photo.updated_at = photo.absolute_url;

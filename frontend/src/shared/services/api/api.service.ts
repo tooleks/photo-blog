@@ -102,6 +102,6 @@ export class ApiService {
     };
 
     private extractResponseData = (response:Response) => {
-        return response.json().data || {};
+        return response.json() || {};
     };
 }

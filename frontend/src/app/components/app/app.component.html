@@ -1,7 +1,6 @@
 <div class="app-wrapper">
     <notices></notices>
     <sidebar #sideBarComponent
-             [tags]="sideBarComponentTags"
              (onToggle)="onToggleSideBar($event)"
              (onShow)="onShowSideBar($event)"
              (onHide)="onHideSideBar($event)"></sidebar>

@@ -22,9 +22,10 @@ export class PhotosBySearchQueryComponent {
     @ViewChildren('inputSearch') inputSearchComponent:any;
     @ViewChild('galleryComponent') galleryComponent:any;
 
-    private loaded:boolean;
-    private queryParams:Object = {query: ''};
-    private query:string = null;
+    private photos:Array<PublishedPhoto> = [];
+    private initialized:boolean = false;
+    private queryParams:Object = {search_phrase: ''};
+    private searchPhrase:string = null;
     private pager:PagerService;
     private lockProcess:LockProcessService;
     private navigator:NavigatorService;
@@ -38,7 +39,7 @@ export class PhotosBySearchQueryComponent {
                 @Inject(PagerServiceProvider) pagerProvider:PagerServiceProvider,
                 @Inject(LockProcessServiceProvider) lockProcessProvider:LockProcessServiceProvider) {
         this.navigator = navigatorProvider.getInstance();
-        this.pager = pagerProvider.getInstance();
+        this.pager = pagerProvider.getInstance(1, 20);
         this.lockProcess = lockProcessProvider.getInstance();
     }
 
@@ -60,51 +61,58 @@ export class PhotosBySearchQueryComponent {
         this.inputSearchComponent.first.nativeElement.focus();
 
         this.route.queryParams
-            .map((queryParams) => queryParams['query'])
-            .subscribe((query:string) => {
-                if (!query || query == this.query) {
+            .map((queryParams) => queryParams['search_phrase'])
+            .subscribe((searchPhrase:string) => {
+                if (!searchPhrase || searchPhrase == this.searchPhrase) {
                     return;
                 }
+                this.photos = [];
                 this.galleryComponent.reset();
-                this.queryParams['query'] = this.query = query;
-                this.title.setTitle(['Photos', this.queryParams['query']]);
-                this.pager.reset();
-                this.loadPhotos(this.pager.calculateLimitForPage(this.pager.getPage()),
-                    this.pager.getOffset(), this.queryParams['query']);
+                this.queryParams['search_phrase'] = this.searchPhrase = searchPhrase;
+                this.title.setTitle(['Photos', this.queryParams['search_phrase']]);
+                this.loadPhotos(1, this.pager.getPerPage() * this.pager.getPage(), this.queryParams['search_phrase']);
             });
     }
 
-    private processLoadPhotos = (take:number, skip:number, query:string):Promise<Array<PublishedPhoto>> => {
+    private processLoadPhotos = (page:number, perPage:number, searchPhrase:string):Promise<Array<PublishedPhoto>> => {
         return this.photoDataProvider
-            .getBySearchQuery(take, skip, query)
-            .then((photos:Array<PublishedPhoto>) => this.pager.appendItems(photos));
+            .getBySearchPhrase(page, perPage, searchPhrase)
+            .then((response:any) => {
+                // If the response has data, set pager page to current page.
+                response.data.length && this.pager.setPage(response.current_page);
+                // Concatenate already loaded photos with just loaded photos and set initialized flag.
+                this.photos = this.photos.concat(response.data);
+                this.initialized = true;
+                // Return new photos.
+                return response.data;
+            });
     };
 
-    private loadPhotos = (take:number, skip:number, query:string):Promise<Array<PublishedPhoto>> => {
+    private loadPhotos = (page:number, perPage:number, searchPhrase:string):Promise<Array<PublishedPhoto>> => {
         return this.lockProcess
-            .process(this.processLoadPhotos, [take, skip, query])
+            .process(this.processLoadPhotos, [page, perPage, searchPhrase])
             .then((result:any) => {
                 this.navigator.setQueryParam('page', this.pager.getPage());
                 return result;
             });
     };
 
-    getLoadedPhotos = ():Array<PublishedPhoto> => {
-        return this.pager.getItems();
+    loadMorePhotos = ():Promise<Array<PublishedPhoto>> => {
+        return this.loadPhotos(this.pager.getNextPage(), this.pager.getPerPage(), this.queryParams['search_phrase']);
     };
 
-    loadMorePhotos = ():Promise<Array<PublishedPhoto>> => {
-        return this.loadPhotos(this.pager.getLimit(), this.pager.getOffset(), this.queryParams['query']);
+    getLoadedPhotos = ():Array<PublishedPhoto> => {
+        return this.photos;
     };
 
     searchPhotos = () => {
-        if (this.queryParams['query'].length) {
-            this.navigator.navigate(['photos/search'], {queryParams: {query: this.queryParams['query']}});
+        if (this.queryParams['search_phrase'].length) {
+            this.navigator.navigate(['photos/search'], {queryParams: {search_phrase: this.queryParams['search_phrase']}});
         }
     };
 
     isEmpty = ():boolean => {
-        return !this.pager.getItems().length && !this.lockProcess.isProcessing() && !this.loaded;
+        return this.initialized && !this.photos.length && !this.lockProcess.isProcessing();
     };
 
     isLoading = ():boolean => {

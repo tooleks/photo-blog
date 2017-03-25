@@ -5,7 +5,7 @@ import {Thumbnail} from './thumbnail';
 export class PublishedPhoto {
     id:number;
     photo_id:number;
-    user_id:number;
+    created_by_user_id:number;
     absolute_url:string;
     avg_color:string;
     description:string;

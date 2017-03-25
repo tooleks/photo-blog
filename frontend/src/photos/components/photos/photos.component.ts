@@ -19,7 +19,8 @@ import {PhotoDataProviderService} from '../../services/photo-data-provider';
     template: require('./photos.component.html'),
 })
 export class PhotosComponent {
-    private loaded:boolean = false;
+    private photos:Array<PublishedPhoto> = [];
+    private initialized:boolean = false;
     private queryParams:Object = {};
     private pager:PagerService;
     private lockProcess:LockProcessService;
@@ -34,7 +35,7 @@ export class PhotosComponent {
                 @Inject(PagerServiceProvider) pagerProvider:PagerServiceProvider,
                 @Inject(LockProcessServiceProvider) lockProcessProvider:LockProcessServiceProvider) {
         this.navigator = navigatorProvider.getInstance();
-        this.pager = pagerProvider.getInstance();
+        this.pager = pagerProvider.getInstance(1, 20);
         this.lockProcess = lockProcessProvider.getInstance();
     }
 
@@ -53,34 +54,38 @@ export class PhotosComponent {
     }
 
     ngAfterViewInit() {
-        this.loadPhotos(this.pager.calculateLimitForPage(this.pager.getPage()), this.pager.getOffset());
+        this.loadPhotos(1, this.pager.getPerPage() * this.pager.getPage());
     }
 
-    private processLoadPhotos = (take:number, skip:number):Promise<Array<PublishedPhoto>> => {
+    private processLoadPhotos = (page:number, perPage:number):Promise<Array<PublishedPhoto>> => {
         return this.photoDataProvider
-            .getAll(take, skip)
-            .then((photos:Array<PublishedPhoto>) => this.pager.appendItems(photos))
-            .then((photos:Array<PublishedPhoto>) => {
-                this.loaded = true;
-                return photos;
+            .getAll(page, perPage)
+            .then((response:any) => {
+                // If the response has data, set pager page to current page.
+                response.data.length && this.pager.setPage(response.current_page);
+                // Concatenate already loaded photos with just loaded photos and set initialized flag.
+                this.photos = this.photos.concat(response.data);
+                this.initialized = true;
+                // Return new photos.
+                return response.data;
             });
     };
 
-    private loadPhotos = (take:number, skip:number):Promise<Array<PublishedPhoto>> => {
+    private loadPhotos = (page:number, perPage:number):Promise<Array<PublishedPhoto>> => {
         return this.lockProcess
-            .process(this.processLoadPhotos, [take, skip])
+            .process(this.processLoadPhotos, [page, perPage])
             .then((photos:Array<PublishedPhoto>) => {
                 this.navigator.setQueryParam('page', this.pager.getPage());
                 return photos;
             });
     };
 
-    getLoadedPhotos = ():Array<PublishedPhoto> => {
-        return this.pager.getItems();
+    loadMorePhotos = ():Promise<Array<PublishedPhoto>> => {
+        return this.loadPhotos(this.pager.getNextPage(), this.pager.getPerPage());
     };
 
-    loadMorePhotos = ():Promise<Array<PublishedPhoto>> => {
-        return this.loadPhotos(this.pager.getLimit(), this.pager.getOffset());
+    getLoadedPhotos = ():Array<PublishedPhoto> => {
+        return this.photos;
     };
 
     isLoading = ():boolean => {
@@ -88,7 +93,7 @@ export class PhotosComponent {
     };
 
     isEmpty = ():boolean => {
-        return !this.pager.getItems().length && !this.lockProcess.isProcessing() && !this.loaded;
+        return this.initialized && !this.photos.length && !this.lockProcess.isProcessing();
     };
 
     onShowPhoto = (photo:PublishedPhoto):void => {

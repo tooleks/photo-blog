@@ -3,7 +3,7 @@ import {Thumbnail} from './thumbnail';
 
 export class Photo {
     id:number;
-    user_id:number;
+    created_by_user_id:number;
     absolute_url:string;
     created_at:string;
     updated_at:string;

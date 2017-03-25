@@ -3,7 +3,7 @@ import {Notice} from '../models';
 
 @Injectable()
 export class NoticesService {
-    public deleteTimeout:number = 3500;
+    public deleteTimeout:number = 100500;
     private notices:Array<Notice> = [];
 
     constructor() {
