@@ -43,7 +43,7 @@ class TagsController extends ResourceController
      * @apiName Find
      * @apiGroup Tags
      * @apiHeader {String} Accept application/json
-     * @apiParam {Integer{0..N}} [page=1]
+     * @apiParam {Integer{1..N}} [page=1]
      * @apiParam {Integer{1..100}} [per_page=20]
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK

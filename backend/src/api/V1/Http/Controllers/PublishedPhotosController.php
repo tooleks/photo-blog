@@ -3,7 +3,7 @@
 namespace Api\V1\Http\Controllers;
 
 use Api\V1\Http\Requests\CreatePublishedPhotoRequest;
-use Api\V1\Http\Requests\FindPhotosRequest;
+use Api\V1\Http\Requests\FindPublishedPhotosRequest;
 use Api\V1\Http\Requests\UpdatePublishedPhotoRequest;
 use Core\Models\Photo;
 use Core\DataServices\Photo\Criterias\IsPublished;
@@ -171,7 +171,7 @@ class PublishedPhotosController extends ResourceController
      * @apiName Find
      * @apiGroup Published Photos
      * @apiHeader {String} Accept application/json
-     * @apiParam {Integer{0..N}} [page=1]
+     * @apiParam {Integer{1..N}} [page=1]
      * @apiParam {Integer{1..100}} [per_page=20]
      * @apiParam {String{1..255}} [tag] Tag to search by.
      * @apiParam {String{1..255}} [search_phrase] Search phrase to search by.
@@ -227,10 +227,10 @@ class PublishedPhotosController extends ResourceController
     /**
      * Find photos.
      *
-     * @param FindPhotosRequest $request
+     * @param FindPublishedPhotosRequest $request
      * @return AbstractPaginator
      */
-    public function find(FindPhotosRequest $request) : AbstractPaginator
+    public function find(FindPublishedPhotosRequest $request) : AbstractPaginator
     {
         $paginator = $this->photoDataService
             ->applyCriteria(new IsPublished(true))
