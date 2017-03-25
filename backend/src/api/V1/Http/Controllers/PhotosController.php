@@ -5,14 +5,14 @@ namespace Api\V1\Http\Controllers;
 use Api\V1\Http\Requests\CreatePhotoRequest;
 use Api\V1\Http\Requests\UpdatePhotoRequest;
 use Core\Models\Photo;
-use Core\DataServices\Photo\Contracts\PhotoDataService;
+use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 
 /**
  * Class PhotosController.
  *
- * @property PhotoDataService photoDataService
+ * @property PhotoDataProvider photoDataProvider
  * @package Api\V1\Http\Controllers
  */
 class PhotosController extends ResourceController
@@ -23,18 +23,18 @@ class PhotosController extends ResourceController
      * @param Request $request
      * @param Guard $guard
      * @param string $presenterClass
-     * @param PhotoDataService $photoDataService
+     * @param PhotoDataProvider $photoDataProvider
      */
     public function __construct(
         Request $request,
         Guard $guard,
         string $presenterClass,
-        PhotoDataService $photoDataService
+        PhotoDataProvider $photoDataProvider
     )
     {
         parent::__construct($request, $guard, $presenterClass);
 
-        $this->photoDataService = $photoDataService;
+        $this->photoDataProvider = $photoDataProvider;
     }
 
     /**
@@ -90,7 +90,7 @@ class PhotosController extends ResourceController
         $photo->setCreatedByUserIdAttribute($this->guard->user()->id)
             ->setIsPublishedAttribute(false);
 
-        $this->photoDataService->save($photo, $request->all(), ['save' => ['exif', 'thumbnails']]);
+        $this->photoDataProvider->save($photo, $request->all(), ['save' => ['exif', 'thumbnails']]);
 
         return $photo;
     }
@@ -195,7 +195,7 @@ class PhotosController extends ResourceController
      */
     public function update(UpdatePhotoRequest $request, Photo $photo) : Photo
     {
-        $this->photoDataService->save($photo, $request->all(), ['save' => ['exif', 'thumbnails']]);
+        $this->photoDataProvider->save($photo, $request->all(), ['save' => ['exif', 'thumbnails']]);
 
         return $photo;
     }
@@ -219,6 +219,6 @@ class PhotosController extends ResourceController
      */
     public function delete(Photo $photo)
     {
-        $this->photoDataService->delete($photo);
+        $this->photoDataProvider->delete($photo);
     }
 }

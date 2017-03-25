@@ -5,14 +5,14 @@ namespace Api\V1\Http\Controllers;
 use Api\V1\Http\Requests\CreateUserRequest;
 use Api\V1\Http\Requests\UpdateUserRequest;
 use Core\Models\User;
-use Core\DataServices\User\Contracts\UserDataService;
+use Core\DataProviders\User\Contracts\UserDataProvider;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 
 /**
  * Class UsersController.
  *
- * @property UserDataService userDataService
+ * @property UserDataProvider userDataProvider
  * @package Api\V1\Http\Controllers
  */
 class UsersController extends ResourceController
@@ -23,18 +23,18 @@ class UsersController extends ResourceController
      * @param Request $request
      * @param Guard $guard
      * @param string $presenterClass
-     * @param UserDataService $userDataService
+     * @param UserDataProvider $userDataProvider
      */
     public function __construct(
         Request $request,
         Guard $guard,
         string $presenterClass,
-        UserDataService $userDataService
+        UserDataProvider $userDataProvider
     )
     {
         parent::__construct($request, $guard, $presenterClass);
 
-        $this->userDataService = $userDataService;
+        $this->userDataProvider = $userDataProvider;
     }
 
     /**
@@ -73,7 +73,7 @@ class UsersController extends ResourceController
             ->generateApiToken()
             ->setCustomerRole();
 
-        $this->userDataService->save($user, $request->all());
+        $this->userDataProvider->save($user, $request->all());
 
         return $user;
     }
@@ -144,7 +144,7 @@ class UsersController extends ResourceController
             $user->setPassword($request->get('password'));
         }
 
-        $this->userDataService->save($user, $request->all());
+        $this->userDataProvider->save($user, $request->all());
 
         return $user;
     }
@@ -168,6 +168,6 @@ class UsersController extends ResourceController
      */
     public function delete(User $user)
     {
-        $this->userDataService->delete($user);
+        $this->userDataProvider->delete($user);
     }
 }

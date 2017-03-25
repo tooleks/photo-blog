@@ -3,7 +3,7 @@
 namespace Api\V1\Http\Controllers;
 
 use Api\V1\Http\Requests\CreateSubscriptionRequest;
-use Core\DataServices\Subscription\Contracts\SubscriptionDataService;
+use Core\DataProviders\Subscription\Contracts\SubscriptionDataProvider;
 use Core\Models\Subscription;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 /**
  * Class SubscriptionsController.
  *
- * @property SubscriptionDataService subscriptionDataService
+ * @property SubscriptionDataProvider subscriptionDataProvider
  * @package Api\V1\Http\Controllers
  */
 class SubscriptionsController extends ResourceController
@@ -22,18 +22,18 @@ class SubscriptionsController extends ResourceController
      * @param Request $request
      * @param Guard $guard
      * @param string $presenterClass
-     * @param SubscriptionDataService $subscriptionDataService
+     * @param SubscriptionDataProvider $subscriptionDataProvider
      */
     public function __construct(
         Request $request,
         Guard $guard,
         string $presenterClass,
-        SubscriptionDataService $subscriptionDataService
+        SubscriptionDataProvider $subscriptionDataProvider
     )
     {
         parent::__construct($request, $guard, $presenterClass);
 
-        $this->subscriptionDataService = $subscriptionDataService;
+        $this->subscriptionDataProvider = $subscriptionDataProvider;
     }
 
     /**
@@ -64,7 +64,7 @@ class SubscriptionsController extends ResourceController
 
         $subscription->generateToken();
 
-        $this->subscriptionDataService->save($subscription, $request->all());
+        $this->subscriptionDataProvider->save($subscription, $request->all());
 
         return $subscription;
     }
@@ -88,6 +88,6 @@ class SubscriptionsController extends ResourceController
      */
     public function delete(Subscription $subscription)
     {
-        $this->subscriptionDataService->delete($subscription);
+        $this->subscriptionDataProvider->delete($subscription);
     }
 }

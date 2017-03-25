@@ -6,19 +6,19 @@ use Api\V1\Http\Requests\CreatePublishedPhotoRequest;
 use Api\V1\Http\Requests\FindPublishedPhotosRequest;
 use Api\V1\Http\Requests\UpdatePublishedPhotoRequest;
 use Core\Models\Photo;
-use Core\DataServices\Photo\Criterias\IsPublished;
-use Core\DataServices\Photo\Criterias\HasSearchPhrase;
-use Core\DataServices\Photo\Criterias\HasTagWithText;
-use Core\DataServices\Photo\Contracts\PhotoDataService;
+use Core\DataProviders\Photo\Criterias\IsPublished;
+use Core\DataProviders\Photo\Criterias\HasSearchPhrase;
+use Core\DataProviders\Photo\Criterias\HasTagWithText;
+use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\AbstractPaginator;
-use Lib\DataService\Criterias\SortByCreatedAt;
+use Lib\DataProvider\Criterias\SortByCreatedAt;
 
 /**
  * Class PublishedPhotosController.
  *
- * @property PhotoDataService photoDataService
+ * @property PhotoDataProvider photoDataProvider
  * @package Api\V1\Http\Controllers
  */
 class PublishedPhotosController extends ResourceController
@@ -29,18 +29,18 @@ class PublishedPhotosController extends ResourceController
      * @param Request $request
      * @param Guard $guard
      * @param string $presenterClass
-     * @param PhotoDataService $photoDataService
+     * @param PhotoDataProvider $photoDataProvider
      */
     public function __construct(
         Request $request,
         Guard $guard,
         string $presenterClass,
-        PhotoDataService $photoDataService
+        PhotoDataProvider $photoDataProvider
     )
     {
         parent::__construct($request, $guard, $presenterClass);
 
-        $this->photoDataService = $photoDataService;
+        $this->photoDataProvider = $photoDataProvider;
     }
 
     /**
@@ -99,13 +99,13 @@ class PublishedPhotosController extends ResourceController
      */
     public function create(CreatePublishedPhotoRequest $request) : Photo
     {
-        $photo = $this->photoDataService
+        $photo = $this->photoDataProvider
             ->applyCriteria(new IsPublished(false))
             ->getById($request->get('photo_id'));
 
         $photo->setIsPublishedAttribute(true);
 
-        $this->photoDataService->save($photo, $request->all(), ['save' => ['tags']]);
+        $this->photoDataProvider->save($photo, $request->all(), ['save' => ['tags']]);
 
         return $photo;
     }
@@ -232,7 +232,7 @@ class PublishedPhotosController extends ResourceController
      */
     public function find(FindPublishedPhotosRequest $request) : AbstractPaginator
     {
-        $paginator = $this->photoDataService
+        $paginator = $this->photoDataProvider
             ->applyCriteria(new IsPublished(true))
             ->applyCriteriaWhen($request->has('tag'), new HasTagWithText($request->get('tag')))
             ->applyCriteriaWhen($request->has('search_phrase'), new HasSearchPhrase($request->get('search_phrase')))
@@ -301,7 +301,7 @@ class PublishedPhotosController extends ResourceController
      */
     public function update(UpdatePublishedPhotoRequest $request, Photo $photo) : Photo
     {
-        $this->photoDataService->save($photo, $request->all(), ['save' => ['tags']]);
+        $this->photoDataProvider->save($photo, $request->all(), ['save' => ['tags']]);
 
         return $photo;
     }
@@ -325,6 +325,6 @@ class PublishedPhotosController extends ResourceController
      */
     public function delete(Photo $photo)
     {
-        $this->photoDataService->delete($photo);
+        $this->photoDataProvider->delete($photo);
     }
 }

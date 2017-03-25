@@ -4,14 +4,14 @@ namespace Api\V1\Http\Controllers;
 
 use Api\V1\Http\Requests\CreateTokenRequest;
 use Core\Models\User;
-use Core\DataServices\User\Contracts\UserDataService;
+use Core\DataProviders\User\Contracts\UserDataProvider;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 
 /**
  * Class TokenController.
  *
- * @property UserDataService userDataService
+ * @property UserDataProvider userDataProvider
  * @package Api\V1\Http\Controllers
  */
 class TokenController extends ResourceController
@@ -22,18 +22,18 @@ class TokenController extends ResourceController
      * @param Request $request
      * @param Guard $guard
      * @param string $presenterClass
-     * @param UserDataService $userDataService
+     * @param UserDataProvider $userDataProvider
      */
     public function __construct(
         Request $request,
         Guard $guard,
         string $presenterClass,
-        UserDataService $userDataService
+        UserDataProvider $userDataProvider
     )
     {
         parent::__construct($request, $guard, $presenterClass);
 
-        $this->userDataService = $userDataService;
+        $this->userDataProvider = $userDataProvider;
     }
 
     /**
@@ -61,11 +61,11 @@ class TokenController extends ResourceController
      */
     public function create(CreateTokenRequest $request) : User
     {
-        $user = $this->userDataService->getByCredentials($request->get('email'), $request->get('password'));
+        $user = $this->userDataProvider->getByCredentials($request->get('email'), $request->get('password'));
 
         $user->generateApiToken();
 
-        $this->userDataService->save($user);
+        $this->userDataProvider->save($user);
 
         $this->guard->setUser($user);
 

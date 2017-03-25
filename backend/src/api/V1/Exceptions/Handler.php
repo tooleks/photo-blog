@@ -9,7 +9,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
-use Lib\DataService\Exceptions\DataServiceNotFoundException;
+use Lib\DataProvider\Exceptions\DataProviderNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Debug\Exception\FlattenException;
@@ -31,7 +31,7 @@ class Handler extends ExceptionHandler
         \Illuminate\Database\Eloquent\ModelNotFoundException::class,
         \Illuminate\Session\TokenMismatchException::class,
         \Illuminate\Validation\ValidationException::class,
-        \Lib\DataService\Exceptions\DataServiceNotFoundException::class,
+        \Lib\DataProvider\Exceptions\DataProviderNotFoundException::class,
     ];
 
     /**
@@ -47,7 +47,7 @@ class Handler extends ExceptionHandler
      */
     protected function prepareException(Exception $e)
     {
-        if ($e instanceof ModelNotFoundException || $e instanceof DataServiceNotFoundException) {
+        if ($e instanceof ModelNotFoundException || $e instanceof DataProviderNotFoundException) {
             $e = new NotFoundHttpException($e->getMessage(), $e);
         } elseif ($e instanceof AuthenticationException) {
             $e = new HttpException(Response::HTTP_UNAUTHORIZED, $e->getMessage());

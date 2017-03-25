@@ -3,8 +3,8 @@
 namespace Api\V1\Http\Controllers;
 
 use Api\V1\Http\Requests\FindTagsRequest;
-use Core\DataServices\Tag\Contracts\TagDataService;
-use Core\DataServices\Tag\Criterias\SortByPhotosCount;
+use Core\DataProviders\Tag\Contracts\TagDataProvider;
+use Core\DataProviders\Tag\Criterias\SortByPhotosCount;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\AbstractPaginator;
@@ -12,7 +12,7 @@ use Illuminate\Pagination\AbstractPaginator;
 /**
  * Class TagsController.
  *
- * @property TagDataService tagDataService
+ * @property TagDataProvider tagDataProvider
  * @package Api\V1\Http\Controllers
  */
 class TagsController extends ResourceController
@@ -23,18 +23,18 @@ class TagsController extends ResourceController
      * @param Request $request
      * @param Guard $guard
      * @param string $presenterClass
-     * @param TagDataService $tagDataService
+     * @param TagDataProvider $tagDataProvider
      */
     public function __construct(
         Request $request,
         Guard $guard,
         string $presenterClass,
-        TagDataService $tagDataService
+        TagDataProvider $tagDataProvider
     )
     {
         parent::__construct($request, $guard, $presenterClass);
 
-        $this->tagDataService = $tagDataService;
+        $this->tagDataProvider = $tagDataProvider;
     }
 
     /**
@@ -72,7 +72,7 @@ class TagsController extends ResourceController
      */
     public function find(FindTagsRequest $request) : AbstractPaginator
     {
-        $paginator = $this->tagDataService
+        $paginator = $this->tagDataProvider
             ->applyCriteria((new SortByPhotosCount)->desc())
             ->paginate($request->get('page', 1), $request->get('per_page', 20));
 
