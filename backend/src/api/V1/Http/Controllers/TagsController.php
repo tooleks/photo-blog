@@ -61,7 +61,7 @@ class TagsController extends ResourceController
      *             "text": "nature"
      *         }
      *     ]
-     *  }
+     * }
      */
 
     /**

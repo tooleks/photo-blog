@@ -184,7 +184,6 @@ class PhotosController extends ResourceController
      *         }
      *     ]
      * }
-     *
      */
 
     /**
