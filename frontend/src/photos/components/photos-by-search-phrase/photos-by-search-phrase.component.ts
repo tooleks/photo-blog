@@ -23,6 +23,7 @@ export class PhotosBySearchPhraseComponent {
     @ViewChild('galleryComponent') galleryComponent:any;
     private photos:Array<PublishedPhoto> = [];
     private queryParams:Object = {search_phrase: ''};
+    private activeSearchPhrase:string = null;
     private pager:PagerService;
     private lockProcess:LockProcessService;
     private navigator:NavigatorService;
@@ -56,10 +57,10 @@ export class PhotosBySearchPhraseComponent {
         this.route.queryParams
             .map((queryParams) => queryParams['search_phrase'])
             .subscribe((searchPhrase:string) => {
-                if (!searchPhrase) return;
+                if (!searchPhrase || searchPhrase == this.activeSearchPhrase) return;
                 this.photos = [];
                 this.galleryComponent.reset();
-                this.queryParams['search_phrase'] = searchPhrase;
+                this.queryParams['search_phrase'] = this.activeSearchPhrase = searchPhrase;
                 this.title.setTitle(['Photos', 'Search "' + this.queryParams['search_phrase'] + '"']);
                 this.loadPhotos(1, this.pager.getPerPage() * this.pager.getPage(), this.queryParams['search_phrase']);
             });
