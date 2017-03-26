@@ -6,8 +6,6 @@ import {
     ScrollFreezerService
 } from '../../../shared/services';
 
-import '../../../../assets/app/css/overrides.css';
-
 @Component({
     selector: 'app',
     templateUrl: './app.component.html',
