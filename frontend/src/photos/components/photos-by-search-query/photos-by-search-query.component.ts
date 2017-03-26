@@ -60,7 +60,7 @@ export class PhotosBySearchQueryComponent {
                 this.photos = [];
                 this.galleryComponent.reset();
                 this.queryParams['search_phrase'] = searchPhrase;
-                this.title.setTitle(['Photos', this.queryParams['search_phrase']]);
+                this.title.setTitle(['Photos', 'Search "' + this.queryParams['search_phrase'] + '"']);
                 this.loadPhotos(1, this.pager.getPerPage() * this.pager.getPage(), this.queryParams['search_phrase']);
             });
     }
