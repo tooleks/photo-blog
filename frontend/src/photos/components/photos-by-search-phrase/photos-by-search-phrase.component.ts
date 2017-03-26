@@ -15,10 +15,10 @@ import {PublishedPhoto} from '../../../shared/models';
 import {PhotoDataProviderService} from '../../services';
 
 @Component({
-    selector: 'photos',
-    templateUrl: './photos-by-search-query.component.html',
+    selector: 'photos-by-search-phrase',
+    templateUrl: './photos-by-search-phrase.component.html',
 })
-export class PhotosBySearchQueryComponent {
+export class PhotosBySearchPhraseComponent {
     @ViewChildren('inputSearch') inputSearchComponent:any;
     @ViewChild('galleryComponent') galleryComponent:any;
     private photos:Array<PublishedPhoto> = [];

@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {InfiniteScrollModule} from 'angular2-infinite-scroll';
 import {SharedModule} from '../shared/shared.module';
-import {PhotoFormComponent, PhotosComponent, PhotosBySearchQueryComponent, PhotosByTagComponent} from './components';
+import {PhotoFormComponent, PhotosComponent, PhotosBySearchPhraseComponent, PhotosByTagComponent} from './components';
 import {PhotoDataProviderService} from './services';
 import {PhotosRouting, PhotosRoutingProviders} from './photos.routing';
 import {NoticesModule} from '../common/notices'; 
@@ -16,7 +16,7 @@ import {NoticesModule} from '../common/notices';
     declarations: [
         PhotoFormComponent,
         PhotosComponent,
-        PhotosBySearchQueryComponent,
+        PhotosBySearchPhraseComponent,
         PhotosByTagComponent,
     ],
     providers: [

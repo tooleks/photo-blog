@@ -1,6 +1,6 @@
 import {ModuleWithProviders} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
-import {PhotoFormComponent, PhotosComponent, PhotosByTagComponent, PhotosBySearchQueryComponent} from './components';
+import {PhotoFormComponent, PhotosComponent, PhotosByTagComponent, PhotosBySearchPhraseComponent} from './components';
 
 const PhotosRoutes:Routes = [
     {
@@ -21,7 +21,7 @@ const PhotosRoutes:Routes = [
     },
     {
         path: 'photos/search',
-        component: PhotosBySearchQueryComponent,
+        component: PhotosBySearchPhraseComponent,
     },
 ];
 

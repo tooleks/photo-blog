@@ -15,7 +15,7 @@ import {PublishedPhoto} from '../../../shared/models';
 import {PhotoDataProviderService} from '../../services';
 
 @Component({
-    selector: 'photos',
+    selector: 'photos-by-tag',
     templateUrl: './photos-by-tag.component.html',
 })
 export class PhotosByTagComponent {
