@@ -37,7 +37,7 @@ class ExifPresenter extends Presenter
             'aperture' => 'data.COMPUTED.ApertureFNumber',
             'iso' => 'data.ISOSpeedRatings',
             'taken_at' => function () {
-                $takenAt = $this->getPresenteeAttribute('data.DateTime');
+                $takenAt = $this->getPresenteeAttribute('data.DateTimeOriginal');
                 return $takenAt !== null ? (string)(new Carbon($takenAt)) : null;
             },
         ];

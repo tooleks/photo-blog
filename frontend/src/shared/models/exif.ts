@@ -7,27 +7,27 @@ export class Exif {
     taken_at:string;
 
     getManufacturer = ():string => {
-        return String(this.manufacturer).trim();
+        return String(this.manufacturer || '').trim();
     };
 
     getModel = ():string => {
-        return String(this.model).trim();
+        return String(this.model || '').trim();
     };
 
     getExposureTime = ():string => {
-        return String(this.exposure_time).trim();
+        return String(this.exposure_time || '').trim();
     };
 
     getAperture = ():string => {
-        return String(this.aperture).trim();
+        return String(this.aperture || '').trim();
     };
 
     getIso = ():string => {
-        return String(this.iso).trim();
+        return String(this.iso || '').trim();
     };
 
     getTakenAt = ():string => {
-        return String(this.taken_at).trim();
+        return String(this.taken_at || '').trim();
     };
 
     toString = ():string => {
@@ -46,6 +46,9 @@ export class Exif {
         }
         if (this.getIso()) {
             exif.push('Iso: ' + this.getIso());
+        }
+        if (this.getTakenAt()) {
+            exif.push('Taken At: ' + this.getTakenAt());
         }
         return exif.join(', ');
     }
