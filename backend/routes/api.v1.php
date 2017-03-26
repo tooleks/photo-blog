@@ -2,12 +2,11 @@
 
 use Api\V1\Http\Middleware\{
     AppendClientIpAddress,
-    AppendUserId,
     DeletePhotoDirectory,
     FetchExifData,
     GenerateAvgColor,
     GenerateThumbnails,
-    UploadPhotoFile
+    SaveUploadedPhotoFile
 };
 use Core\Models\{
     Photo,
@@ -80,9 +79,8 @@ Route::group(['prefix' => 'photos'], function () {
     Route::post('/')
         ->uses('PhotosController@create')
         ->middleware('can:create-resource,' . Photo::class)
-        ->middleware(AppendUserId::class)
         ->middleware(FetchExifData::class)
-        ->middleware(UploadPhotoFile::class)
+        ->middleware(SaveUploadedPhotoFile::class)
         ->middleware(GenerateThumbnails::class)
         ->middleware(GenerateAvgColor::class);
 
@@ -94,7 +92,7 @@ Route::group(['prefix' => 'photos'], function () {
         ->uses('PhotosController@update')
         ->middleware('can:update-resource,photo')
         ->middleware(FetchExifData::class)
-        ->middleware(UploadPhotoFile::class)
+        ->middleware(SaveUploadedPhotoFile::class)
         ->middleware(GenerateThumbnails::class)
         ->middleware(GenerateAvgColor::class);
 
@@ -153,7 +151,7 @@ Route::group(['prefix' => 'tags'], function () {
 Route::group(['prefix' => 'contact_messages'], function () {
 
     Route::post('/')
-        ->uses('ContactMessageController@create')
+        ->uses('ContactMessagesController@create')
         ->middleware(AppendClientIpAddress::class)
         ->middleware('throttle:5,1'); // Allow 5 requests per minute.
 
@@ -167,9 +165,9 @@ Route::group(['prefix' => 'contact_messages'], function () {
 Route::group(['prefix' => 'subscriptions'], function () {
 
     Route::post('/')
-        ->uses('SubscriptionController@create');
+        ->uses('SubscriptionsController@create');
 
     Route::delete('/{subscription}')
-        ->uses('SubscriptionController@delete');
+        ->uses('SubscriptionsController@delete');
 
 });

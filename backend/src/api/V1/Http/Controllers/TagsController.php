@@ -2,19 +2,17 @@
 
 namespace Api\V1\Http\Controllers;
 
-use Api\V1\Http\Requests\FindTags;
-use Core\DataServices\Tag\Contracts\TagDataService;
-use Core\DataServices\Tag\Criterias\SortByPhotosCount;
+use Api\V1\Http\Requests\FindTagsRequest;
+use Core\DataProviders\Tag\Contracts\TagDataProvider;
+use Core\DataProviders\Tag\Criterias\SortByPhotosCount;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
-use Lib\DataService\Criterias\Skip;
-use Lib\DataService\Criterias\Take;
+use Illuminate\Pagination\AbstractPaginator;
 
 /**
  * Class TagsController.
  *
- * @property TagDataService tagDataService
+ * @property TagDataProvider tagDataProvider
  * @package Api\V1\Http\Controllers
  */
 class TagsController extends ResourceController
@@ -25,18 +23,18 @@ class TagsController extends ResourceController
      * @param Request $request
      * @param Guard $guard
      * @param string $presenterClass
-     * @param TagDataService $tagDataService
+     * @param TagDataProvider $tagDataProvider
      */
     public function __construct(
         Request $request,
         Guard $guard,
         string $presenterClass,
-        TagDataService $tagDataService
+        TagDataProvider $tagDataProvider
     )
     {
         parent::__construct($request, $guard, $presenterClass);
 
-        $this->tagDataService = $tagDataService;
+        $this->tagDataProvider = $tagDataProvider;
     }
 
     /**
@@ -45,38 +43,41 @@ class TagsController extends ResourceController
      * @apiName Find
      * @apiGroup Tags
      * @apiHeader {String} Accept application/json
+     * @apiParam {Integer{1..N}} [page=1]
+     * @apiParam {Integer{1..100}} [per_page=20]
      * @apiSuccessExample {json} Success-Response:
-     *  HTTP/1.1 200 OK
-     *  {
-     *      "status": true,
-     *      "data": [
-     *          {
-     *              "text": "nature"
-     *          },
-     *          {
-     *              "text": "animals"
-     *          },
-     *          {
-     *              "text": "architecture"
-     *          }
-     *      ]
-     *  }
+     * HTTP/1.1 200 OK
+     * {
+     *     "total": 100,
+     *     "per_page": 10,
+     *     "current_page": 2,
+     *     "last_page": 10,
+     *     "next_page_url": "http://path/to/api/resource?page=3",
+     *     "prev_page_url": "http://path/to/api/resource?page=1",
+     *     "from": 10,
+     *     "to": 20,
+     *     "data": [
+     *         {
+     *             "text": "nature"
+     *         }
+     *     ]
+     * }
      */
 
     /**
      * Find photos.
      *
-     * @param FindTags $request
-     * @return Collection
+     * @param FindTagsRequest $request
+     * @return AbstractPaginator
      */
-    public function find(FindTags $request) : Collection
+    public function find(FindTagsRequest $request) : AbstractPaginator
     {
-        $tags = $this->tagDataService
-            ->applyCriteria(new Skip($request->get('skip', 0)))
-            ->applyCriteria(new Take($request->get('take', 10)))
+        $paginator = $this->tagDataProvider
             ->applyCriteria((new SortByPhotosCount)->desc())
-            ->get();
+            ->paginate($request->get('page', 1), $request->get('per_page', 20));
 
-        return $tags;
+        $paginator->appends($request->query());
+
+        return $paginator;
     }
 }

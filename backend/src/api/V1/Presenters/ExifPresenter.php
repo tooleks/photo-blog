@@ -30,14 +30,14 @@ class ExifPresenter extends Presenter
                 $exposureTime = $this->getPresenteeAttribute('data.ExposureTime');
                 if ($exposureTime) {
                     list($numerator, $denominator) = explode('/', $exposureTime);
-                    $exposureTime = '1/' . $denominator / $numerator;
+                    $exposureTime = '1/' . (int)($denominator / $numerator);
                 }
                 return $exposureTime ?? null;
             },
             'aperture' => 'data.COMPUTED.ApertureFNumber',
             'iso' => 'data.ISOSpeedRatings',
             'taken_at' => function () {
-                $takenAt = $this->getPresenteeAttribute('data.DateTime');
+                $takenAt = $this->getPresenteeAttribute('data.DateTimeOriginal');
                 return $takenAt !== null ? (string)(new Carbon($takenAt)) : null;
             },
         ];

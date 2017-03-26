@@ -97,3 +97,13 @@ gallery .gl-spinner {
     left: 50%;
     transform: translate(-50%, 0);
 }
+
+gallery .gl-info {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    padding: 7px;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.5);
+    text-align: center;
+}

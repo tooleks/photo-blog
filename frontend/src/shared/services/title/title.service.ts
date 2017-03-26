@@ -19,6 +19,10 @@ export class TitleService {
         return this.title.getTitle();
     };
 
+    getPageName = ():string => {
+        return this.getTitle().split(this.pathSeparator)[0];
+    };
+
     private buildTitle = (newTitle:any):string => {
         let titlePieces = [this.env.get('appName')];
 

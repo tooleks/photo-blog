@@ -3,7 +3,7 @@ gallery-grid {
     overflow: auto;
 }
 
-gallery-grid .gl-grid-item-row {
+gallery-grid .gl-grid-cell-wrapper {
     display: block;
     float: left;
 }

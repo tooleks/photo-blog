@@ -10,11 +10,10 @@ notices .notices-wrapper {
 
 notices .notices-wrapper .notice {
     display: block;
-    width: 300px;
+    width: 280px;
     padding: 10px;
     border: none;
     border-radius: 3px;
-    box-shadow: 0 0 12px #999;
     opacity: 0.85;
     cursor: pointer;
 }
@@ -28,7 +27,6 @@ notices .notices-wrapper .notice {
 }
 
 notices .notices-wrapper .notice:hover {
-    box-shadow: 0 0 12px #000;
     opacity: 0.95;
 }
 

@@ -40,8 +40,8 @@ class GenerateThumbnails
     public function validateRequest($request)
     {
         $this->validate($request, [
-            'path' => ['required', 'filled', 'string'],
-            'relative_url' => ['required', 'filled', 'string'],
+            'path' => ['required', 'string'],
+            'relative_url' => ['required', 'string'],
         ]);
     }
 

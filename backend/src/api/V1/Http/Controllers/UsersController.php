@@ -2,17 +2,17 @@
 
 namespace Api\V1\Http\Controllers;
 
-use Api\V1\Http\Requests\CreateUser;
-use Api\V1\Http\Requests\UpdateUser;
+use Api\V1\Http\Requests\CreateUserRequest;
+use Api\V1\Http\Requests\UpdateUserRequest;
 use Core\Models\User;
-use Core\DataServices\User\Contracts\UserDataService;
+use Core\DataProviders\User\Contracts\UserDataProvider;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 
 /**
  * Class UsersController.
  *
- * @property UserDataService userDataService
+ * @property UserDataProvider userDataProvider
  * @package Api\V1\Http\Controllers
  */
 class UsersController extends ResourceController
@@ -23,18 +23,18 @@ class UsersController extends ResourceController
      * @param Request $request
      * @param Guard $guard
      * @param string $presenterClass
-     * @param UserDataService $userDataService
+     * @param UserDataProvider $userDataProvider
      */
     public function __construct(
         Request $request,
         Guard $guard,
         string $presenterClass,
-        UserDataService $userDataService
+        UserDataProvider $userDataProvider
     )
     {
         parent::__construct($request, $guard, $presenterClass);
 
-        $this->userDataService = $userDataService;
+        $this->userDataProvider = $userDataProvider;
     }
 
     /**
@@ -48,27 +48,24 @@ class UsersController extends ResourceController
      * @apiParam {String{1..255}} email User email address.
      * @apiParam {String{1..255}} password User password.
      * @apiSuccessExample {json} Success-Response:
-     *  HTTP/1.1 201 Created
-     *  {
-     *      "status": true,
-     *      "data": {
-     *          "id": 1,
-     *          "name": "username",
-     *          "email": "username@mail.address",
-     *          "created_at": "2016-10-24 12:24:33",
-     *          "updated_at": "2016-10-24 14:38:05",
-     *          "role": "Customer"
-     *      }
-     *  }
+     * HTTP/1.1 201 Created
+     * {
+     *     "id": 1,
+     *     "name": "username",
+     *     "email": "username@mail.address",
+     *     "created_at": "2016-10-24 12:24:33",
+     *     "updated_at": "2016-10-24 14:38:05",
+     *     "role": "Customer"
+     * }
      */
 
     /**
      * Create a user.
      *
-     * @param CreateUser $request
+     * @param CreateUserRequest $request
      * @return User
      */
-    public function create(CreateUser $request) : User
+    public function create(CreateUserRequest $request) : User
     {
         $user = new User;
 
@@ -76,7 +73,7 @@ class UsersController extends ResourceController
             ->generateApiToken()
             ->setCustomerRole();
 
-        $this->userDataService->save($user, $request->all());
+        $this->userDataProvider->save($user, $request->all());
 
         return $user;
     }
@@ -89,18 +86,15 @@ class UsersController extends ResourceController
      * @apiHeader {String} Accept application/json
      * @apiParam {Integer{1..N}} :id Unique resource ID.
      * @apiSuccessExample {json} Success-Response:
-     *  HTTP/1.1 20O OK
-     *  {
-     *      "status": true,
-     *      "data": {
-     *          "id": 1,
-     *          "name": "username",
-     *          "email": "username@mail.address",
-     *          "created_at": "2016-10-24 12:24:33",
-     *          "updated_at": "2016-10-24 14:38:05",
-     *          "role": "Customer"
-     *      }
-     *  }
+     * HTTP/1.1 20O OK
+     * {
+     *     "id": 1,
+     *     "name": "username",
+     *     "email": "username@mail.address",
+     *     "created_at": "2016-10-24 12:24:33",
+     *     "updated_at": "2016-10-24 14:38:05",
+     *     "role": "Customer"
+     * }
      */
 
     /**
@@ -109,7 +103,7 @@ class UsersController extends ResourceController
      * @param User $user
      * @return User
      */
-    public function get($user) : User
+    public function get(User $user) : User
     {
         return $user;
     }
@@ -126,34 +120,31 @@ class UsersController extends ResourceController
      * @apiParam {String{1..255}} email User email address.
      * @apiParam {String{1..255}} password User password.
      * @apiSuccessExample {json} Success-Response:
-     *  HTTP/1.1 20O OK
-     *  {
-     *      "status": true,
-     *      "data": {
-     *          "id": 1,
-     *          "name": "username",
-     *          "email": "username@mail.address",
-     *          "created_at": "2016-10-24 12:24:33",
-     *          "updated_at": "2016-10-24 14:38:05",
-     *          "role": "Customer"
-     *      }
-     *  }
+     * HTTP/1.1 20O OK
+     * {
+     *     "id": 1,
+     *     "name": "username",
+     *     "email": "username@mail.address",
+     *     "created_at": "2016-10-24 12:24:33",
+     *     "updated_at": "2016-10-24 14:38:05",
+     *     "role": "Customer"
+     * }
      */
 
     /**
      * Update a user.
      *
-     * @param UpdateUser $request
+     * @param UpdateUserRequest $request
      * @param User $user
      * @return User
      */
-    public function update(UpdateUser $request, $user) : User
+    public function update(UpdateUserRequest $request, User $user) : User
     {
         if ($request->has('password')) {
             $user->setPassword($request->get('password'));
         }
 
-        $this->userDataService->save($user, $request->all());
+        $this->userDataProvider->save($user, $request->all());
 
         return $user;
     }
@@ -166,7 +157,7 @@ class UsersController extends ResourceController
      * @apiHeader {String} Accept application/json
      * @apiParam {Integer{1..N}} :id Unique resource ID.
      * @apiSuccessExample {json} Success-Response:
-     *  HTTP/1.1 204 No Content
+     * HTTP/1.1 204 No Content
      */
 
     /**
@@ -175,8 +166,8 @@ class UsersController extends ResourceController
      * @param User $user
      * @return void
      */
-    public function delete($user)
+    public function delete(User $user)
     {
-        $this->userDataService->delete($user);
+        $this->userDataProvider->delete($user);
     }
 }

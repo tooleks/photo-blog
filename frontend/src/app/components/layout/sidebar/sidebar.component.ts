@@ -11,12 +11,12 @@ import {
     transition,
     animate
 } from '@angular/core';
-import {ScreenDetectorService, AuthProviderService, EnvService} from '../../../../shared/services';
+import {ScreenDetectorService, ApiService, AuthProviderService, EnvService} from '../../../../shared/services';
 
 @Component({
     selector: 'sidebar',
-    template: require('./sidebar.component.html'),
-    styles: [require('./sidebar.component.css').toString()],
+    templateUrl: './sidebar.component.html',
+    styles: [String(require('./sidebar.component.css'))],
     animations: [
         trigger('slideInOut', [
             state('in', style({
@@ -53,9 +53,11 @@ export class SideBarComponent {
     private animationState:string;
 
     constructor(@Inject(ScreenDetectorService) private screenDetector:ScreenDetectorService,
+                @Inject(ApiService) private api:ApiService,
                 @Inject(AuthProviderService) private authProvider:AuthProviderService,
                 @Inject(EnvService) private env:EnvService) {
         this.init();
+        this.loadTags();
     }
 
     @HostListener('window:resize', ['$event'])
@@ -94,5 +96,12 @@ export class SideBarComponent {
             isSmallDevice: this.screenDetector.isSmallScreen(),
             isLargeDevice: this.screenDetector.isLargeScreen(),
         });
+    };
+
+    loadTags = () => {
+        this.api
+            .get('/tags', {params: {page: 1, per_page: 7}})
+            .toPromise()
+            .then((response:any) => this.tags = response.data);
     };
 }

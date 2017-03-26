@@ -4,16 +4,16 @@ import {GalleryGridComponent} from './gallery-grid.component';
 
 @Component({
     selector: 'gallery',
-    template: require('./gallery.component.html'),
-    styles: [require('./gallery.component.css').toString()],
+    templateUrl: './gallery.component.html',
+    styles: [String(require('./gallery.component.css'))],
 })
 export class GalleryComponent {
     @ViewChild('galleryGridComponent') galleryGridComponent:GalleryGridComponent;
-
     @Input() items:Array<any> = [];
     @Input() defaultItemId:string;
     @Input() onLoadMoreCallback:any;
     @Input() showCloseButton:boolean = true;
+    @Input() showInfoButton:boolean = true;
     @Input() showEditButton:boolean = true;
     @Input() showDeleteButton:boolean = false;
     @Output() onOpenItem:EventEmitter<any> = new EventEmitter<any>();
@@ -21,6 +21,7 @@ export class GalleryComponent {
     @Output() onEditItem:EventEmitter<any> = new EventEmitter<any>();
     @Output() onDeleteItem:EventEmitter<any> = new EventEmitter<any>();
 
+    private openedInfo:boolean = false;
     private openedItem:any;
     private openedItemIndex:any;
     private openedItemIsLoaded:boolean;
@@ -39,7 +40,7 @@ export class GalleryComponent {
         if (this.defaultItemId && changes['items'] && !changes['items'].previousValue.length) {
             this.viewItemById(this.defaultItemId);
         }
-    };
+    }
 
     @HostListener('document:keydown', ['$event'])
     onDocumentKeyDown = (event:KeyboardEvent) => {
@@ -86,6 +87,10 @@ export class GalleryComponent {
 
     getOpenedItem = ():any => {
         return this.openedItem;
+    };
+
+    getOpenedInfo = ():boolean => {
+        return this.openedInfo;
     };
 
     setItems = (items:Array<any>):void => {
@@ -151,6 +156,10 @@ export class GalleryComponent {
     closeItem = ():void => {
         this.onCloseItem.emit(this.openedItem);
         this.resetOpenedItem();
+    };
+
+    infoItem = ():void => {
+        this.openedInfo = !this.openedInfo;
     };
 
     editItem = ():void => {

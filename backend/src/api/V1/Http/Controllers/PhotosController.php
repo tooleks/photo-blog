@@ -2,17 +2,17 @@
 
 namespace Api\V1\Http\Controllers;
 
-use Api\V1\Http\Requests\CreateUploadedPhoto;
-use Api\V1\Http\Requests\UpdateUploadedPhoto;
+use Api\V1\Http\Requests\CreatePhotoRequest;
+use Api\V1\Http\Requests\UpdatePhotoRequest;
 use Core\Models\Photo;
-use Core\DataServices\Photo\Contracts\PhotoDataService;
+use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 
 /**
  * Class PhotosController.
  *
- * @property PhotoDataService photoDataService
+ * @property PhotoDataProvider photoDataProvider
  * @package Api\V1\Http\Controllers
  */
 class PhotosController extends ResourceController
@@ -23,18 +23,18 @@ class PhotosController extends ResourceController
      * @param Request $request
      * @param Guard $guard
      * @param string $presenterClass
-     * @param PhotoDataService $photoDataService
+     * @param PhotoDataProvider $photoDataProvider
      */
     public function __construct(
         Request $request,
         Guard $guard,
         string $presenterClass,
-        PhotoDataService $photoDataService
+        PhotoDataProvider $photoDataProvider
     )
     {
         parent::__construct($request, $guard, $presenterClass);
 
-        $this->photoDataService = $photoDataService;
+        $this->photoDataProvider = $photoDataProvider;
     }
 
     /**
@@ -46,53 +46,51 @@ class PhotosController extends ResourceController
      * @apiHeader {String} Content-type multipart/form-data
      * @apiParam {File{1KB..20MB}=JPEG,PNG} file Photo file.
      * @apiSuccessExample {json} Success-Response:
-     *  HTTP/1.1 201 Created
-     *  {
-     *      "status": true,
-     *      "data": {
-     *          "id": 1,
-     *          "user_id": 1,
-     *          "absolute_url": "http://path/to/photo/file",
-     *          "avg_color": "#000000",
-     *          "created_at": "2016-10-24 12:24:33",
-     *          "updated_at": "2016-10-24 14:38:05",
-     *          "exif": {
-     *              "manufacturer": "Manufacturer Name",
-     *              "model": "Model Number",
-     *              "exposure_time": "1/160",
-     *              "aperture": "f/11.0",
-     *              "iso": 200,
-     *              "taken_at": "2016-10-24 12:24:33"
-     *          },
-     *          "thumbnails": [
-     *              "medium": {
-     *                  "absolute_url": "http://path/to/photo/thumbnail/medium_file"
-     *                  "width": 500,
-     *                  "height": 500
-     *              },
-     *              "large": {
-     *                  "absolute_url": "http://path/to/photo/thumbnail/large_file"
-     *                  "width": 1000,
-     *                  "height": 1000
-     *              }
-     *          ]
-     *      }
-     *  }
+     * HTTP/1.1 201 Created
+     * {
+     *     "id": 1,
+     *     "created_by_user_id" 1,
+     *     "absolute_url": "http://path/to/photo/file",
+     *     "avg_color": "#000000",
+     *     "created_at": "2016-10-24 12:24:33",
+     *     "updated_at": "2016-10-24 14:38:05",
+     *     "exif": {
+     *         "manufacturer": "Manufacturer Name",
+     *         "model": "Model Number",
+     *         "exposure_time": "1/160",
+     *         "aperture": "f/11.0",
+     *         "iso": 200,
+     *         "taken_at": "2016-10-24 12:24:33"
+     *     },
+     *     "thumbnails": [
+     *         "medium": {
+     *             "absolute_url": "http://path/to/photo/thumbnail/medium_file"
+     *             "width": 500,
+     *             "height": 500
+     *         },
+     *         "large": {
+     *              "absolute_url": "http://path/to/photo/thumbnail/large_file"
+     *              "width": 1000,
+     *              "height": 1000
+     *         }
+     *     ]
+     * }
      */
 
     /**
      * Create a photo.
      *
-     * @param CreateUploadedPhoto $request
+     * @param CreatePhotoRequest $request
      * @return Photo
      */
-    public function create(CreateUploadedPhoto $request) : Photo
+    public function create(CreatePhotoRequest $request) : Photo
     {
         $photo = new Photo;
 
-        $photo->setIsPublishedAttribute(false);
+        $photo->setCreatedByUserIdAttribute($this->guard->user()->id)
+            ->setIsPublishedAttribute(false);
 
-        $this->photoDataService->save($photo, $request->all(), ['save' => ['exif', 'thumbnails']]);
+        $this->photoDataProvider->save($photo, $request->all(), ['save' => ['exif', 'thumbnails']]);
 
         return $photo;
     }
@@ -105,38 +103,35 @@ class PhotosController extends ResourceController
      * @apiHeader {String} Accept application/json
      * @apiParam {Integer{1..N}} :id Unique resource ID.
      * @apiSuccessExample {json} Success-Response:
-     *  HTTP/1.1 200 OK
-     *  {
-     *      "status": true,
-     *      "data": {
-     *          "id": 1,
-     *          "user_id": 1,
-     *          "absolute_url": "http://path/to/photo/file",
-     *          "avg_color": "#000000",
-     *          "created_at": "2016-10-24 12:24:33",
-     *          "updated_at": "2016-10-24 14:38:05",
-     *          "exif": {
-     *              "manufacturer": "Manufacturer Name",
-     *              "model": "Model Number",
-     *              "exposure_time": "1/160",
-     *              "aperture": "f/11.0",
-     *              "iso": 200,
-     *              "taken_at": "2016-10-24 12:24:33"
-     *          },
-     *          "thumbnails": [
-     *              "medium": {
-     *                  "absolute_url": "http://path/to/photo/thumbnail/medium_file"
-     *                  "width": 500,
-     *                  "height": 500
-     *              },
-     *              "large": {
-     *                  "absolute_url": "http://path/to/photo/thumbnail/large_file"
-     *                  "width": 1000,
-     *                  "height": 1000
-     *              }
-     *          ]
-     *      }
-     *  }
+     * HTTP/1.1 200 OK
+     * {
+     *     "id": 1,
+     *     "created_by_user_id" 1,
+     *     "absolute_url": "http://path/to/photo/file",
+     *     "avg_color": "#000000",
+     *     "created_at": "2016-10-24 12:24:33",
+     *     "updated_at": "2016-10-24 14:38:05",
+     *     "exif": {
+     *         "manufacturer": "Manufacturer Name",
+     *         "model": "Model Number",
+     *         "exposure_time": "1/160",
+     *         "aperture": "f/11.0",
+     *         "iso": 200,
+     *         "taken_at": "2016-10-24 12:24:33"
+     *     },
+     *     "thumbnails": [
+     *         "medium": {
+     *             "absolute_url": "http://path/to/photo/thumbnail/medium_file"
+     *             "width": 500,
+     *             "height": 500
+     *         },
+     *         "large": {
+     *              "absolute_url": "http://path/to/photo/thumbnail/large_file"
+     *              "width": 1000,
+     *              "height": 1000
+     *         }
+     *     ]
+     * }
      */
 
     /**
@@ -145,7 +140,7 @@ class PhotosController extends ResourceController
      * @param Photo $photo
      * @return Photo
      */
-    public function get($photo) : Photo
+    public function get(Photo $photo) : Photo
     {
         return $photo;
     }
@@ -160,50 +155,47 @@ class PhotosController extends ResourceController
      * @apiParam {Integer{1..N}} :id Unique resource ID.
      * @apiParam {File{1KB..20MB}=JPEG,PNG} file Photo file.
      * @apiSuccessExample {json} Success-Response:
-     *  HTTP/1.1 200 OK
-     *  {
-     *      "status": true,
-     *      "data": {
-     *          "id": 1,
-     *          "user_id": 1,
-     *          "absolute_url": "http://path/to/photo/file",
-     *          "avg_color": "#000000",
-     *          "created_at": "2016-10-24 12:24:33",
-     *          "updated_at": "2016-10-24 14:38:05",
-     *          "exif": {
-     *              "manufacturer": "Manufacturer Name",
-     *              "model": "Model Number",
-     *              "exposure_time": "1/160",
-     *              "aperture": "f/11.0",
-     *              "iso": 200,
-     *              "taken_at": "2016-10-24 12:24:33"
-     *          },
-     *          "thumbnails": [
-     *              "medium": {
-     *                  "absolute_url": "http://path/to/photo/thumbnail/medium_file"
-     *                  "width": 500,
-     *                  "height": 500
-     *              },
-     *              "large": {
-     *                  "absolute_url": "http://path/to/photo/thumbnail/large_file"
-     *                  "width": 1000,
-     *                  "height": 1000
-     *              }
-     *          ]
-     *      }
-     *
+     * HTTP/1.1 200 OK
+     * {
+     *     "id": 1,
+     *     "created_by_user_id" 1,
+     *     "absolute_url": "http://path/to/photo/file",
+     *     "avg_color": "#000000",
+     *     "created_at": "2016-10-24 12:24:33",
+     *     "updated_at": "2016-10-24 14:38:05",
+     *     "exif": {
+     *         "manufacturer": "Manufacturer Name",
+     *         "model": "Model Number",
+     *         "exposure_time": "1/160",
+     *         "aperture": "f/11.0",
+     *         "iso": 200,
+     *         "taken_at": "2016-10-24 12:24:33"
+     *     },
+     *     "thumbnails": [
+     *         "medium": {
+     *             "absolute_url": "http://path/to/photo/thumbnail/medium_file"
+     *             "width": 500,
+     *             "height": 500
+     *         },
+     *         "large": {
+     *              "absolute_url": "http://path/to/photo/thumbnail/large_file"
+     *              "width": 1000,
+     *              "height": 1000
+     *         }
+     *     ]
+     * }
      */
 
     /**
      * Update a photo.
      *
-     * @param UpdateUploadedPhoto $request
+     * @param UpdatePhotoRequest $request
      * @param Photo $photo
      * @return Photo
      */
-    public function update(UpdateUploadedPhoto $request, $photo) : Photo
+    public function update(UpdatePhotoRequest $request, Photo $photo) : Photo
     {
-        $this->photoDataService->save($photo, $request->all(), ['save' => ['exif', 'thumbnails']]);
+        $this->photoDataProvider->save($photo, $request->all(), ['save' => ['exif', 'thumbnails']]);
 
         return $photo;
     }
@@ -216,7 +208,7 @@ class PhotosController extends ResourceController
      * @apiHeader {String} Accept application/json
      * @apiParam {Integer{1..N}} :id Unique resource ID.
      * @apiSuccessExample {json} Success-Response:
-     *  HTTP/1.1 204 No Content
+     * HTTP/1.1 204 No Content
      */
 
     /**
@@ -225,8 +217,8 @@ class PhotosController extends ResourceController
      * @param Photo $photo
      * @return void
      */
-    public function delete($photo)
+    public function delete(Photo $photo)
     {
-        $this->photoDataService->delete($photo);
+        $this->photoDataProvider->delete($photo);
     }
 }

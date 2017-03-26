@@ -4,8 +4,7 @@ import {Thumbnail} from './thumbnail';
 
 export class PublishedPhoto {
     id:number;
-    photo_id:number;
-    user_id:number;
+    created_by_user_id:number;
     absolute_url:string;
     avg_color:string;
     description:string;
@@ -13,5 +12,5 @@ export class PublishedPhoto {
     updated_at:string;
     exif:Exif = new Exif;
     tags:Tag[] = [];
-    thumbnails:Thumbnail[] = [];
+    thumbnails:{large:Thumbnail, medium:Thumbnail} = {large: new Thumbnail, medium: new Thumbnail};
 }

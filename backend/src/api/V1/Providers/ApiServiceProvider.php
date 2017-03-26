@@ -35,7 +35,7 @@ class ApiServiceProvider extends ServiceProvider
             ->needs('$presenterClass')
             ->give(\Api\V1\Presenters\PublishedPhotoPresenter::class);
 
-        $this->app->when(\Api\V1\Http\Controllers\SubscriptionController::class)
+        $this->app->when(\Api\V1\Http\Controllers\SubscriptionsController::class)
             ->needs('$presenterClass')
             ->give(\Api\V1\Presenters\SubscriptionPresenter::class);
 

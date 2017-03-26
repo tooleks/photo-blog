@@ -1,7 +1,5 @@
 <div class="app-wrapper">
-    <notices></notices>
     <sidebar #sideBarComponent
-             [tags]="sideBarComponentTags"
              (onToggle)="onToggleSideBar($event)"
              (onShow)="onShowSideBar($event)"
              (onHide)="onHideSideBar($event)"></sidebar>
@@ -28,4 +26,20 @@
                 [routerLinkActiveOptions]="{ exact: true }">{{ 'Subscription' }}</a>
         </span>
     </div>
+    <notices></notices>
+    <go-top-button [html]="'<i class=\'fa fa-arrow-up\'></i>'"
+                   [animate]="true"
+                   [speed]="30"
+                   [acceleration]="50"
+                   [styles]="{
+                    'width': '40px',
+                    'height': '40px',
+                    'border-radius': '40px',
+                    'top': 'auto',
+                    'right': '24px',
+                    'bottom': '20px',
+                    'opacity': '1'
+                   }"
+                   title="{{ 'Go to top' }}"
+    ></go-top-button>
 </div>

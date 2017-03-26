@@ -56,10 +56,7 @@ class JsonApi
         $content = $response->getOriginalContent();
 
         if ($statusCode === Response::HTTP_OK || $statusCode === Response::HTTP_CREATED) {
-            $response = response()->json([
-                'status' => true,
-                'data' => $content,
-            ], $statusCode, $headers);
+            $response = response()->json($content, $statusCode, $headers);
         }
 
         return $this->addHeaders($response);

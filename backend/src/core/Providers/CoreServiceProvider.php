@@ -28,23 +28,23 @@ class CoreServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(
-            \Core\DataServices\Photo\Contracts\PhotoDataService::class,
-            \Core\DataServices\Photo\PhotoDataService::class
+            \Core\DataProviders\Photo\Contracts\PhotoDataProvider::class,
+            \Core\DataProviders\Photo\PhotoDataProvider::class
         );
 
         $this->app->bind(
-            \Core\DataServices\Subscription\Contracts\SubscriptionDataService::class,
-            \Core\DataServices\Subscription\SubscriptionDataService::class
+            \Core\DataProviders\Subscription\Contracts\SubscriptionDataProvider::class,
+            \Core\DataProviders\Subscription\SubscriptionDataProvider::class
         );
 
         $this->app->bind(
-            \Core\DataServices\Tag\Contracts\TagDataService::class,
-            \Core\DataServices\Tag\TagDataService::class
+            \Core\DataProviders\Tag\Contracts\TagDataProvider::class,
+            \Core\DataProviders\Tag\TagDataProvider::class
         );
 
         $this->app->bind(
-            \Core\DataServices\User\Contracts\UserDataService::class,
-            \Core\DataServices\User\UserDataService::class
+            \Core\DataProviders\User\Contracts\UserDataProvider::class,
+            \Core\DataProviders\User\UserDataProvider::class
         );
     }
 }

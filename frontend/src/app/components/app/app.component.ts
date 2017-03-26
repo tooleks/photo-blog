@@ -3,39 +3,27 @@ import {
     EnvService,
     TitleService,
     AuthProviderService,
-    ApiService,
     ScrollFreezerService
 } from '../../../shared/services';
 
-import '../../../../assets/app/css/overrides.css';
-
 @Component({
     selector: 'app',
-    template: require('./app.component.html'),
-    styles: [require('./app.component.css').toString()],
+    templateUrl: './app.component.html',
+    styles: [String(require('./app.component.css'))],
 })
 export class AppComponent {
     @ViewChild('sideBarComponent') sideBarComponent:any;
-    private sideBarComponentTags:Array<any> = [];
     private appContentStyles:{overflow:string} = {overflow: ''};
 
     constructor(@Inject(EnvService) private env:EnvService,
                 @Inject(TitleService) private title:TitleService,
                 @Inject(AuthProviderService) private authProvider:AuthProviderService,
-                @Inject(ApiService) private apiService:ApiService,
                 @Inject(ScrollFreezerService) private scrollFreezer:ScrollFreezerService) {
     }
 
     ngOnInit() {
         this.title.setTitle();
-        this.loadSideBarComponentTags();
     }
-
-    private loadSideBarComponentTags = () => {
-        this.apiService.get('/tags', {params: {take: 7, skip: 0}}).toPromise().then((tags:Array<any>) => {
-            this.sideBarComponentTags = tags;
-        });
-    };
 
     private onSwipeLeft = (event:any) => {
         // Prevent firing event on 'gallery' component swipeleft event, as it has an own handler.
