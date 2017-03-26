@@ -35,8 +35,8 @@ export class PhotosBySearchQueryComponent {
                 @Inject(NavigatorServiceProvider) navigatorProvider:NavigatorServiceProvider,
                 @Inject(PagerServiceProvider) pagerProvider:PagerServiceProvider,
                 @Inject(LockProcessServiceProvider) lockProcessProvider:LockProcessServiceProvider) {
-        this.navigator = navigatorProvider.getInstance();
         this.pager = pagerProvider.getInstance(1, 20);
+        this.navigator = navigatorProvider.getInstance();
         this.lockProcess = lockProcessProvider.getInstance();
     }
 
