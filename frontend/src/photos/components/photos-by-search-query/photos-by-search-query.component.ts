@@ -21,11 +21,8 @@ import {PhotoDataProviderService} from '../../services';
 export class PhotosBySearchQueryComponent {
     @ViewChildren('inputSearch') inputSearchComponent:any;
     @ViewChild('galleryComponent') galleryComponent:any;
-
     private photos:Array<PublishedPhoto> = [];
-    private initialized:boolean = false;
     private queryParams:Object = {search_phrase: ''};
-    private searchPhrase:string = null;
     private pager:PagerService;
     private lockProcess:LockProcessService;
     private navigator:NavigatorService;
@@ -55,35 +52,29 @@ export class PhotosBySearchQueryComponent {
         this.route.queryParams
             .map((queryParams) => queryParams['show'])
             .subscribe((show:number) => this.queryParams['show'] = show);
-    }
-
-    ngAfterViewInit() {
-        this.inputSearchComponent.first.nativeElement.focus();
 
         this.route.queryParams
             .map((queryParams) => queryParams['search_phrase'])
             .subscribe((searchPhrase:string) => {
-                if (!searchPhrase || searchPhrase == this.searchPhrase) {
-                    return;
-                }
+                if (!searchPhrase) return;
                 this.photos = [];
                 this.galleryComponent.reset();
-                this.queryParams['search_phrase'] = this.searchPhrase = searchPhrase;
+                this.queryParams['search_phrase'] = searchPhrase;
                 this.title.setTitle(['Photos', this.queryParams['search_phrase']]);
                 this.loadPhotos(1, this.pager.getPerPage() * this.pager.getPage(), this.queryParams['search_phrase']);
             });
+    }
+
+    ngAfterViewInit() {
+        this.inputSearchComponent.first.nativeElement.focus();
     }
 
     private processLoadPhotos = (page:number, perPage:number, searchPhrase:string):Promise<Array<PublishedPhoto>> => {
         return this.photoDataProvider
             .getBySearchPhrase(page, perPage, searchPhrase)
             .then((response:any) => {
-                // If the response has data, set pager page to current page.
-                response.data.length && this.pager.setPage(response.current_page);
-                // Concatenate already loaded photos with just loaded photos and set initialized flag.
-                this.photos = this.photos.concat(response.data);
-                this.initialized = true;
-                // Return new photos.
+                if (response.data.length) this.pager.setPage(response.current_page);
+                this.appendPhotos(response.data);
                 return response.data;
             });
     };
@@ -101,18 +92,20 @@ export class PhotosBySearchQueryComponent {
         return this.loadPhotos(this.pager.getNextPage(), this.pager.getPerPage(), this.queryParams['search_phrase']);
     };
 
-    getLoadedPhotos = ():Array<PublishedPhoto> => {
+    private appendPhotos = (photos:Array<PublishedPhoto>):void => {
+        this.photos = this.photos.concat(photos);
+    };
+
+    private getPhotos = ():Array<PublishedPhoto> => {
         return this.photos;
     };
 
-    searchPhotos = () => {
-        if (this.queryParams['search_phrase'].length) {
-            this.navigator.navigate(['photos/search'], {queryParams: {search_phrase: this.queryParams['search_phrase']}});
-        }
+    searchPhotos = (searchPhrase:string):void => {
+        if (searchPhrase) this.navigator.navigate(['photos/search'], {queryParams: {search_phrase: searchPhrase}});
     };
 
     isEmpty = ():boolean => {
-        return this.initialized && !this.photos.length && !this.lockProcess.isProcessing();
+        return !this.getPhotos().length && !this.lockProcess.isProcessing();
     };
 
     isLoading = ():boolean => {
