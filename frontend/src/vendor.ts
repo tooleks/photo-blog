@@ -15,3 +15,4 @@ import 'hammerjs';
 import '../assets/theme/font-awesome/css/font-awesome.css';
 import '../assets/theme/css/style.css';
 
+import 'ng2-go-top-button';

@@ -1,6 +1,7 @@
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {HttpModule, JsonpModule} from '@angular/http';
+import {GoTopButtonModule} from 'ng2-go-top-button';
 import {
     AboutMeComponent,
     AppComponent,
@@ -22,6 +23,7 @@ import {NoticesModule} from '../common/notices';
         BrowserModule,
         HttpModule,
         JsonpModule,
+        GoTopButtonModule,
         AppRouting,
         SharedModule,
         PhotosModule,
