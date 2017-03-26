@@ -30,7 +30,7 @@ class ExifPresenter extends Presenter
                 $exposureTime = $this->getPresenteeAttribute('data.ExposureTime');
                 if ($exposureTime) {
                     list($numerator, $denominator) = explode('/', $exposureTime);
-                    $exposureTime = '1/' . $denominator / $numerator;
+                    $exposureTime = '1/' . (int)($denominator / $numerator);
                 }
                 return $exposureTime ?? null;
             },
