@@ -14,7 +14,7 @@ import {NoticesService} from '../../../common/notices';
 
 @Component({
     selector: 'signin-form',
-    template: require('./signin-form.component.html'),
+    templateUrl: './signin-form.component.html',
 })
 export class SignInFormComponent {
     private form:SignInForm;

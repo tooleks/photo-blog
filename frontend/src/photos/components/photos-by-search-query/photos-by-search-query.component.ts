@@ -16,7 +16,7 @@ import {PhotoDataProviderService} from '../../services';
 
 @Component({
     selector: 'photos',
-    template: require('./photos-by-search-query.component.html'),
+    templateUrl: './photos-by-search-query.component.html',
 })
 export class PhotosBySearchQueryComponent {
     @ViewChildren('inputSearch') inputSearchComponent:any;

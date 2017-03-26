@@ -13,7 +13,7 @@ import {ContactMeForm} from './contact-me-form';
 
 @Component({
     selector: 'contact-me-form',
-    template: require('./contact-me-form.component.html'),
+    templateUrl: './contact-me-form.component.html',
 })
 export class ContactMeFormComponent {
     private form:ContactMeForm;

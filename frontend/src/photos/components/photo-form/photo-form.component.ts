@@ -15,8 +15,8 @@ import {NoticesService} from '../../../common/notices';
 
 @Component({
     selector: 'photo-form',
-    template: require('./photo-form.component.html'),
-    styles: [require('./photo-form.component.css').toString()],
+    templateUrl: './photo-form.component.html',
+    styles: [String(require('./photo-form.component.css'))],
 })
 export class PhotoFormComponent {
     private photo:PublishedPhoto;

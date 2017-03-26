@@ -16,7 +16,7 @@ import {PhotoDataProviderService} from '../../services';
 
 @Component({
     selector: 'photos',
-    template: require('./photos-by-tag.component.html'),
+    templateUrl: './photos-by-tag.component.html',
 })
 export class PhotosByTagComponent {
     @ViewChild('galleryComponent') galleryComponent:any;

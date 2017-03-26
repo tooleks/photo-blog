@@ -16,7 +16,7 @@ import {PhotoDataProviderService} from '../../services/photo-data-provider';
 
 @Component({
     selector: 'photos',
-    template: require('./photos.component.html'),
+    templateUrl: './photos.component.html',
 })
 export class PhotosComponent {
     private photos:Array<PublishedPhoto> = [];

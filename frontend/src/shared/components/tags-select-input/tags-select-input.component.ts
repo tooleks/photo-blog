@@ -2,8 +2,8 @@ import {Component, Input, Output, EventEmitter, SimpleChanges} from '@angular/co
 
 @Component({
     selector: 'tags-select-input',
-    template: require('./tags-select-input.component.html'),
-    styles: [require('./tags-select-input.component.css').toString()]
+    templateUrl: './tags-select-input.component.html',
+    styles: [String(require('./tags-select-input.component.css'))]
 })
 export class TagsSelectInputComponent {
     @Input() tags:Array<any> = [];

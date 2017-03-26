@@ -4,12 +4,11 @@ import {GalleryGridComponent} from './gallery-grid.component';
 
 @Component({
     selector: 'gallery',
-    template: require('./gallery.component.html'),
-    styles: [require('./gallery.component.css').toString()],
+    templateUrl: './gallery.component.html',
+    styles: [String(require('./gallery.component.css'))],
 })
 export class GalleryComponent {
     @ViewChild('galleryGridComponent') galleryGridComponent:GalleryGridComponent;
-
     @Input() items:Array<any> = [];
     @Input() defaultItemId:string;
     @Input() onLoadMoreCallback:any;
@@ -39,7 +38,7 @@ export class GalleryComponent {
         if (this.defaultItemId && changes['items'] && !changes['items'].previousValue.length) {
             this.viewItemById(this.defaultItemId);
         }
-    };
+    }
 
     @HostListener('document:keydown', ['$event'])
     onDocumentKeyDown = (event:KeyboardEvent) => {

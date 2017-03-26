@@ -2,8 +2,8 @@ import {Component, Input, Output, Inject, ElementRef, SimpleChanges, EventEmitte
 
 @Component({
     selector: 'gallery-grid',
-    template: require('./gallery-grid.component.html'),
-    styles: [require('./gallery-grid.component.css').toString()],
+    templateUrl: './gallery-grid.component.html',
+    styles: [String(require('./gallery-grid.component.css'))],
 })
 export class GalleryGridComponent {
     @Input() rowHeight:number = 0;
