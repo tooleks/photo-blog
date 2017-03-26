@@ -9,7 +9,7 @@ import {
     LockProcessServiceProvider,
     LockProcessService,
 } from '../../../shared/services';
-import {PublishedPhoto, Photo} from '../../../shared/models';
+import {Photo} from '../../../shared/models';
 import {PhotoDataProviderService} from '../../services'
 import {NoticesService} from '../../../common/notices';
 
@@ -19,7 +19,7 @@ import {NoticesService} from '../../../common/notices';
     styles: [String(require('./photo-form.component.css'))],
 })
 export class PhotoFormComponent {
-    private photo:PublishedPhoto;
+    private photo:Photo;
     private navigator:NavigatorService;
     private lockProcess:LockProcessService;
 
@@ -40,14 +40,14 @@ export class PhotoFormComponent {
 
         this.title.setTitle('Add Photo');
 
-        this.photo = new PublishedPhoto;
+        this.photo = new Photo;
 
         this.route.params.map((params) => params['id']).subscribe((id:number) => {
             if (!id) {
                 return;
             }
 
-            this.photoDataProvider.getById(id).then((photo:PublishedPhoto) => {
+            this.photoDataProvider.getById(id).then((photo:Photo) => {
                 this.title.setTitle('Edit Photo');
                 this.photo = photo;
                 return photo;
@@ -60,7 +60,7 @@ export class PhotoFormComponent {
             ? this.photoDataProvider.updateById(this.photo.id, this.photo)
             : this.photoDataProvider.create(this.photo);
 
-        return saver.then((photo:PublishedPhoto) => {
+        return saver.then((photo:Photo) => {
             this.photo = photo;
             return photo;
         });

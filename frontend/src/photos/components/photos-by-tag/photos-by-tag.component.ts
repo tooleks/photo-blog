@@ -12,7 +12,7 @@ import {
     LockProcessService,
 } from '../../../shared/services';
 import {PublishedPhoto} from '../../../shared/models';
-import {PhotoDataProviderService} from '../../services';
+import {PhotoDataProviderService, PublishedPhotoMapper} from '../../services';
 
 @Component({
     selector: 'photos-by-tag',
@@ -81,7 +81,7 @@ export class PhotosByTagComponent {
     };
 
     private appendPhotos = (photos:Array<PublishedPhoto>):void => {
-        this.photos = this.photos.concat(photos);
+        this.photos = this.photos.concat(photos.map(PublishedPhotoMapper.map));
     };
 
     private getPhotos = ():Array<PublishedPhoto> => {

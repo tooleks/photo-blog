@@ -13,6 +13,7 @@ export class GalleryComponent {
     @Input() defaultItemId:string;
     @Input() onLoadMoreCallback:any;
     @Input() showCloseButton:boolean = true;
+    @Input() showInfoButton:boolean = true;
     @Input() showEditButton:boolean = true;
     @Input() showDeleteButton:boolean = false;
     @Output() onOpenItem:EventEmitter<any> = new EventEmitter<any>();
@@ -20,6 +21,7 @@ export class GalleryComponent {
     @Output() onEditItem:EventEmitter<any> = new EventEmitter<any>();
     @Output() onDeleteItem:EventEmitter<any> = new EventEmitter<any>();
 
+    private openedInfo:boolean = false;
     private openedItem:any;
     private openedItemIndex:any;
     private openedItemIsLoaded:boolean;
@@ -87,6 +89,40 @@ export class GalleryComponent {
         return this.openedItem;
     };
 
+    getOpenedItemDescription = ():string => {
+        return this.getOpenedItem().description;
+    };
+
+    getOpenedInfo = ():boolean => {
+        return this.openedInfo;
+    };
+
+    getOpenedItemExif = ():string => {
+        let exif:Array<string> = [];
+
+        if (this.getOpenedItem().exif.getManufacturer()) {
+            exif.push('Manufacturer: ' + this.getOpenedItem().exif.getManufacturer());
+        }
+
+        if (this.getOpenedItem().exif.getModel()) {
+            exif.push('Model: ' + this.getOpenedItem().exif.getModel());
+        }
+
+        if (this.getOpenedItem().exif.getExposureTime()) {
+            exif.push('Exposure Time: ' + this.getOpenedItem().exif.getExposureTime());
+        }
+
+        if (this.getOpenedItem().exif.getAperture()) {
+            exif.push('Aperture: ' + this.getOpenedItem().exif.getAperture());
+        }
+
+        if (this.getOpenedItem().exif.getIso()) {
+            exif.push('Iso: ' + this.getOpenedItem().exif.getIso());
+        }
+
+        return exif.join(', ');
+    };
+
     setItems = (items:Array<any>):void => {
         this.items = items;
     };
@@ -150,6 +186,10 @@ export class GalleryComponent {
     closeItem = ():void => {
         this.onCloseItem.emit(this.openedItem);
         this.resetOpenedItem();
+    };
+
+    infoItem = ():void => {
+        this.openedInfo = !this.openedInfo;
     };
 
     editItem = ():void => {
