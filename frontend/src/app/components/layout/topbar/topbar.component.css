@@ -4,6 +4,8 @@
     left: 0;
     right: 0;
     border-bottom: 1px solid #eee;
+    background: #fff;
+    z-index: 1000;
 }
 
 @media (min-width: 768px) {
