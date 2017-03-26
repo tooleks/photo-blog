@@ -89,38 +89,8 @@ export class GalleryComponent {
         return this.openedItem;
     };
 
-    getOpenedItemDescription = ():string => {
-        return this.getOpenedItem().description;
-    };
-
     getOpenedInfo = ():boolean => {
         return this.openedInfo;
-    };
-
-    getOpenedItemExif = ():string => {
-        let exif:Array<string> = [];
-
-        if (this.getOpenedItem().exif.getManufacturer()) {
-            exif.push('Manufacturer: ' + this.getOpenedItem().exif.getManufacturer());
-        }
-
-        if (this.getOpenedItem().exif.getModel()) {
-            exif.push('Model: ' + this.getOpenedItem().exif.getModel());
-        }
-
-        if (this.getOpenedItem().exif.getExposureTime()) {
-            exif.push('Exposure Time: ' + this.getOpenedItem().exif.getExposureTime());
-        }
-
-        if (this.getOpenedItem().exif.getAperture()) {
-            exif.push('Aperture: ' + this.getOpenedItem().exif.getAperture());
-        }
-
-        if (this.getOpenedItem().exif.getIso()) {
-            exif.push('Iso: ' + this.getOpenedItem().exif.getIso());
-        }
-
-        return exif.join(', ');
     };
 
     setItems = (items:Array<any>):void => {

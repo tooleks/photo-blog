@@ -13,7 +13,7 @@
                      [title]="getOpenedItem().description"
                      class="gl-img">
             </div>
-            <div *ngIf="getOpenedInfo()" class="gl-info">{{ getOpenedItemDescription() }}<br>{{ getOpenedItemExif() }}</div>
+            <div *ngIf="getOpenedInfo()" class="gl-info">{{ getOpenedItem().description }}<br>{{ getOpenedItem().exif }}</div>
         </div>
         <div class="gl-actions">
             <button (click)="viewPrevItem()"
