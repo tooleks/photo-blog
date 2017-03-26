@@ -1,5 +1,5 @@
 import {Component, Inject} from '@angular/core';
-import {EnvService} from '../../../shared/services';
+import {TitleService, ScrollerService, EnvService} from '../../../shared/services';
 
 @Component({
     selector: 'about-me',
@@ -7,7 +7,14 @@ import {EnvService} from '../../../shared/services';
 
 })
 export class AboutMeComponent {
-    constructor(@Inject(EnvService) private env:EnvService) {
+    constructor(@Inject(EnvService) private env:EnvService,
+                @Inject(TitleService) private title:TitleService,
+                @Inject(ScrollerService) private scroller:ScrollerService) {
+    }
+
+    ngOnInit() {
+        this.scroller.scrollToTop();
+        this.title.setTitle('About Me');
     }
 
     getContent = () => {
