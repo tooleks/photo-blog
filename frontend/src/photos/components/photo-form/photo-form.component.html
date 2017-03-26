@@ -15,23 +15,23 @@
                                     </a>
                                 </div>
                                 <div class="file-name">
-                                    <div *ngIf="photo.exif.taken_at">
-                                        <small>{{ 'Taken On:' }} {{ photo.exif.taken_at }}</small>
+                                    <div *ngIf="photo.exif.getManufacturer()">
+                                        <small>{{ 'Manufacturer:' }} {{ photo.exif.getManufacturer() }}</small>
                                     </div>
-                                    <div *ngIf="photo.exif.manufacturer">
-                                        <small>{{ 'Manufacturer:' }} {{ photo.exif.manufacturer }}</small>
+                                    <div *ngIf="photo.exif.getModel()">
+                                        <small>{{ 'Model:' }} {{ photo.exif.getModel() }}</small>
                                     </div>
-                                    <div *ngIf="photo.exif.model">
-                                        <small>{{ 'Model:' }} {{ photo.exif.model }}</small>
+                                    <div *ngIf="photo.exif.getExposureTime()">
+                                        <small>{{ 'Exposure Time:' }} {{ photo.exif.getExposureTime() }}</small>
                                     </div>
-                                    <div *ngIf="photo.exif.exposure_time">
-                                        <small>{{ 'Exposure Time:' }} {{ photo.exif.exposure_time }}</small>
+                                    <div *ngIf="photo.exif.getAperture()">
+                                        <small>{{ 'Aperture:' }} {{ photo.exif.getAperture() }}</small>
                                     </div>
-                                    <div *ngIf="photo.exif.aperture">
-                                        <small>{{ 'Aperture:' }} {{ photo.exif.aperture }}</small>
+                                    <div *ngIf="photo.exif.getIso()">
+                                        <small>{{ 'ISO:' }} {{ photo.exif.getIso() }}</small>
                                     </div>
-                                    <div *ngIf="photo.exif.iso">
-                                        <small>{{ 'ISO:' }} {{ photo.exif.iso }}</small>
+                                    <div *ngIf="photo.exif.getTakenAt()">
+                                        <small>{{ 'Taken At:' }} {{ photo.exif.getTakenAt() }}</small>
                                     </div>
                                 </div>
                             </div>
