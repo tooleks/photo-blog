@@ -159,9 +159,7 @@ export class GalleryGridComponent {
 
     private releaseRowItems = (force:boolean = false):Array<GalleryItem> => {
         let rowItems:Array<GalleryItem> = [];
-        if (this.getActiveRowWidth() == this.getGridRowMaxWidth()) {
-            rowItems = this.scaleRowItemsToMaxWidth();
-        } else if (this.getActiveRowWidth() > this.getGridRowMaxWidth()) {
+        if (this.getActiveRowWidth() > this.getGridRowMaxWidth()) {
             rowItems = this.scaleRowItemsToMaxWidth();
             let rowWidth = this.calculateRowWidth(rowItems);
             let diffWidth = this.getGridRowMaxWidth() - rowWidth;
