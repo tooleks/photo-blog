@@ -162,8 +162,9 @@ export class GalleryGridComponent {
     private releaseRowItems = (force:boolean = false):Array<GalleryItem> => {
         let rowItems:Array<GalleryItem> = [];
         if (this.getActiveRowWidth() > this.getGridRowMaxWidth()) {
-            rowItems = this.scaleRowItemsToMaxWidth();
-            let rowWidth = this.calculateRowWidth(rowItems);
+            this.scaleActiveRowItemsToMaxWidth();
+            rowItems = this.getActiveRowItems();
+            let rowWidth = this.getActiveRowWidth();
             let diffWidth = this.getGridRowMaxWidth() - rowWidth;
             rowItems[rowItems.length - 1].setSmallSizeWidth(rowItems[rowItems.length - 1].getSmallSizeWidth() + diffWidth);
         }
@@ -195,14 +196,17 @@ export class GalleryGridComponent {
         return item;
     };
 
-    private scaleRowItemsToMaxWidth = ():Array<GalleryItem> => {
+    private scaleActiveRowItemsToMaxWidth = ():void => {
         let scaleRate = this.getActiveRowWidth() * 100 / this.getGridRowMaxWidth();
-        return this.getActiveRowItems().map((item:GalleryItem) => {
+        let scaledActiveRowItems = this.getActiveRowItems().map((item:GalleryItem) => {
             let scaledWidth = Math.floor(item.getSmallSizeWidth() * 100 / scaleRate);
             let scaledHeight = Math.floor(item.getSmallSizeHeight() * 100 / scaleRate);
             item.setSmallSizeWidth(scaledWidth);
             item.setSmallSizeHeight(scaledHeight);
             return item;
         });
+        this.setActiveRowItems(scaledActiveRowItems);
+        let scaledActiveRowWidth = this.calculateRowWidth(scaledActiveRowItems);
+        this.setActiveRowWidth(scaledActiveRowWidth);
     };
 }
