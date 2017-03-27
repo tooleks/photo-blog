@@ -37,14 +37,14 @@ export class GalleryGridComponent {
     }
 
     ngAfterContentInit() {
-        this.elementSizeCheckInterval = setInterval(this.trackElementSizeCallback, this.updateInterval);
+        this.elementSizeCheckInterval = setInterval(this.elementSizeCheckCallback, this.updateInterval);
     }
 
     ngOnDestroy() {
         if (this.elementSizeCheckInterval !== null) clearInterval(this.elementSizeCheckInterval);
     }
 
-    trackElementSizeCallback = ():void => {
+    elementSizeCheckCallback = ():void => {
         let height = this.elementRef.nativeElement.offsetHeight;
         let width = this.elementRef.nativeElement.offsetWidth;
         if (width !== this.getElementRefProperties().width) {
