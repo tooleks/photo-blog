@@ -37,21 +37,23 @@ export class GalleryGridComponent {
     }
 
     ngAfterContentInit() {
-        this.elementSizeCheckInterval = setInterval(() => {
-            let height = this.elementRef.nativeElement.offsetHeight;
-            let width = this.elementRef.nativeElement.offsetWidth;
-            if (width !== this.getElementRefProperties().width) {
-                this.setElementRefProperties(width, height);
-                this.setGridRowMaxWidth(this.elementRef.nativeElement.offsetWidth);
-                this.resetGridRowItems();
-                this.setGridItems(this.galleryItems);
-            }
-        }, this.updateInterval);
+        this.elementSizeCheckInterval = setInterval(this.trackElementSizeCallback, this.updateInterval);
     }
 
     ngOnDestroy() {
         if (this.elementSizeCheckInterval !== null) clearInterval(this.elementSizeCheckInterval);
     }
+
+    trackElementSizeCallback = ():void => {
+        let height = this.elementRef.nativeElement.offsetHeight;
+        let width = this.elementRef.nativeElement.offsetWidth;
+        if (width !== this.getElementRefProperties().width) {
+            this.setElementRefProperties(width, height);
+            this.setGridRowMaxWidth(this.elementRef.nativeElement.offsetWidth);
+            this.resetGridRowItems();
+            this.setGridItems(this.galleryItems);
+        }
+    };
 
     setElementRefProperties = (width:number, height:number):this => {
         this.elementRefProperties = {
