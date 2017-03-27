@@ -129,6 +129,7 @@ export class GalleryGridComponent {
 
     setGridItems = (items:Array<GalleryItem>):void => {
         let newGridItems = this.filterNewGridItems(items);
+        // Get the array of the new grid items concatenated with the array of the last row items.
         let gridItems = this.getGridRowItems().length ? this.getGridRowItems().pop().concat(newGridItems) : newGridItems;
         if (!gridItems.length) return;
         gridItems.forEach((item:GalleryItem, index:number) => {
