@@ -1,25 +1,25 @@
-<div class="row">
-    <div class="col-sm-12">
-        <div *ngIf="isEmpty()" class="widget p-sm text-center">
-            <h2 class="m-xs">{{ 'No photos found' }}</h2>
-        </div>
-        <gallery #galleryComponent
-                 [items]="getPhotos()"
-                 [defaultItemId]="queryParams['show']"
-                 [onLoadMoreCallback]="loadMorePhotos"
-                 (onOpenItem)="onShowPhoto($event)"
-                 (onCloseItem)="onHidePhoto($event)"
-                 (onEditItem)="authProvider.isAuthenticated() ? onEditPhoto($event) : false"
-                 [showEditButton]="authProvider.isAuthenticated()"
-                 infinite-scroll
-                 [infiniteScrollDistance]="3"
-                 [infiniteScrollThrottle]="500"
-                 (scrolled)="loadMorePhotos()"
-        ></gallery>
-    </div>
-</div>
-<div *ngIf="!isEmpty()" class="text-center" style="margin-top: 20px;">
-    <button class="btn btn-primary" (click)="loadMorePhotos()" [disabled]="isLoading()">
-        <span>{{ !isLoading() ? 'Load More' : 'Loading...' }}</span>
-    </button>
-</div>
+<!--<div class="row">-->
+    <!--<div class="col-sm-12">-->
+        <!--<div *ngIf="isEmpty()" class="widget p-sm text-center">-->
+            <!--<h2 class="m-xs">{{ 'No photos found' }}</h2>-->
+        <!--</div>-->
+        <!--<gallery #galleryComponent-->
+                 <!--[items]="getPhotos()"-->
+                 <!--[defaultItemId]="queryParams['show']"-->
+                 <!--[onLoadMoreCallback]="loadMorePhotos"-->
+                 <!--(onOpenItem)="onShowPhoto($event)"-->
+                 <!--(onCloseItem)="onHidePhoto($event)"-->
+                 <!--(onEditItem)="authProvider.isAuthenticated() ? onEditPhoto($event) : false"-->
+                 <!--[showEditButton]="authProvider.isAuthenticated()"-->
+                 <!--infinite-scroll-->
+                 <!--[infiniteScrollDistance]="3"-->
+                 <!--[infiniteScrollThrottle]="500"-->
+                 <!--(scrolled)="loadMorePhotos()"-->
+        <!--&gt;</gallery>-->
+    <!--</div>-->
+<!--</div>-->
+<!--<div *ngIf="!isEmpty()" class="text-center" style="margin-top: 20px;">-->
+    <!--<button class="btn btn-primary" (click)="loadMorePhotos()" [disabled]="isLoading()">-->
+        <!--<span>{{ !isLoading() ? 'Load More' : 'Loading...' }}</span>-->
+    <!--</button>-->
+<!--</div>-->

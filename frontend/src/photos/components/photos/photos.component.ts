@@ -12,7 +12,8 @@ import {
     LockProcessService,
 } from '../../../shared/services';
 import {PublishedPhoto} from '../../../shared/models';
-import {PhotoDataProviderService, PhotoMapper} from '../../services';
+import {PhotoDataProviderService, PhotoMapper, PhotoToGalleryItemMapper} from '../../services';
+import {GalleryItem} from '../../../shared/components/gallery';
 
 @Component({
     selector: 'photos',
@@ -20,6 +21,7 @@ import {PhotoDataProviderService, PhotoMapper} from '../../services';
 })
 export class PhotosComponent {
     private photos:Array<PublishedPhoto> = [];
+    private galleryItems:Array<GalleryItem> = [];
     private queryParams:Object = {};
     private pager:PagerService;
     private lockProcess:LockProcessService;
@@ -74,7 +76,13 @@ export class PhotosComponent {
     };
 
     private appendPhotos = (photos:Array<PublishedPhoto>):void => {
-        this.photos = this.photos.concat(photos.map(PhotoMapper.mapToPublishedPhoto));
+        photos = photos.map(PhotoMapper.mapToPublishedPhoto);
+        this.galleryItems = this.galleryItems.concat(photos.map(PhotoToGalleryItemMapper.map));
+        this.photos = this.photos.concat(photos);
+    };
+
+    private getGalleryItems = ():Array<GalleryItem> => {
+        return this.galleryItems;
     };
 
     private getPhotos = ():Array<PublishedPhoto> => {

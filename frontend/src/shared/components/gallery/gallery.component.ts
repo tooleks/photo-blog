@@ -1,6 +1,7 @@
 import {Component, Input, Output, Inject, EventEmitter, HostListener, SimpleChanges, ViewChild} from '@angular/core';
 import {CallbackHandlerService, ScrollFreezerService} from '../../services';
 import {GalleryGridComponent} from './gallery-grid.component';
+import {GalleryItem} from './gallery-item';
 
 @Component({
     selector: 'gallery',
@@ -9,21 +10,21 @@ import {GalleryGridComponent} from './gallery-grid.component';
 })
 export class GalleryComponent {
     @ViewChild('galleryGridComponent') galleryGridComponent:GalleryGridComponent;
-    @Input() items:Array<any> = [];
+    @Input() items:Array<GalleryItem> = [];
     @Input() defaultItemId:string;
     @Input() onLoadMoreCallback:any;
     @Input() showCloseButton:boolean = true;
     @Input() showInfoButton:boolean = true;
     @Input() showEditButton:boolean = true;
     @Input() showDeleteButton:boolean = false;
-    @Output() onOpenItem:EventEmitter<any> = new EventEmitter<any>();
-    @Output() onCloseItem:EventEmitter<any> = new EventEmitter<any>();
-    @Output() onEditItem:EventEmitter<any> = new EventEmitter<any>();
-    @Output() onDeleteItem:EventEmitter<any> = new EventEmitter<any>();
+    @Output() onOpenItem:EventEmitter<GalleryItem> = new EventEmitter<GalleryItem>();
+    @Output() onCloseItem:EventEmitter<GalleryItem> = new EventEmitter<GalleryItem>();
+    @Output() onEditItem:EventEmitter<GalleryItem> = new EventEmitter<GalleryItem>();
+    @Output() onDeleteItem:EventEmitter<GalleryItem> = new EventEmitter<GalleryItem>();
 
     private openedInfo:boolean = false;
-    private openedItem:any;
-    private openedItemIndex:any;
+    private openedItem:GalleryItem;
+    private openedItemIndex:number;
     private openedItemIsLoaded:boolean;
 
     constructor(@Inject(CallbackHandlerService) private callbackHandler:CallbackHandlerService,
@@ -61,11 +62,11 @@ export class GalleryComponent {
         this.galleryGridComponent.resetGridRowItems();
     };
 
-    setOpenedItem = (item:any, index:number):Promise<any> => {
+    setOpenedItem = (item:GalleryItem, index:number):void => {
         this.scrollFreezer.freezeBackgroundScroll();
         this.openedItem = item;
         this.openedItemIndex = index;
-        return new Promise((resolve) => {
+        new Promise((resolve) => {
             let image = new Image;
             let loaded = false;
             image.onload = () => {
@@ -74,7 +75,7 @@ export class GalleryComponent {
                 resolve();
             };
             setTimeout(() => (this.openedItemIsLoaded = loaded), 400);
-            image.src = item.thumbnails.large.absolute_url;
+            image.src = item.getLargeSizeUrl();
         }).then(() => this.onOpenItem.emit(this.openedItem));
     };
 
@@ -85,7 +86,7 @@ export class GalleryComponent {
         this.openedItemIsLoaded = false;
     };
 
-    getOpenedItem = ():any => {
+    getOpenedItem = ():GalleryItem => {
         return this.openedItem;
     };
 
@@ -93,21 +94,21 @@ export class GalleryComponent {
         return this.openedInfo;
     };
 
-    setItems = (items:Array<any>):void => {
+    setItems = (items:Array<GalleryItem>):void => {
         this.items = items;
     };
 
-    getItems = ():Array<any> => {
+    getItems = ():Array<GalleryItem> => {
         return this.items;
     };
 
-    viewItemById = (id:string):void => {
-        this.items.some((item:any, index:number) => {
-            if (item.id == id && index != this.openedItemIndex) {
+    viewItemById = (id:any):void => {
+        this.items.some((item:GalleryItem, index:number) => {
+            if (item.getId() == id && index != this.openedItemIndex) {
                 this.setOpenedItem(item, index);
                 return true;
             } else if (index === this.items.length - 1) {
-                this.loadMoreItems().then((items:Array<any>) => {
+                this.loadMoreItems().then((items:Array<GalleryItem>) => {
                     this.viewItemById(id);
                 });
             }
@@ -115,10 +116,10 @@ export class GalleryComponent {
         });
     };
 
-    viewItem = (item:any):void => {
-        let id = item.id;
-        this.items.some((item:any, index:number) => {
-            if (item.id == id && index != this.openedItemIndex) {
+    viewItem = (item:GalleryItem):void => {
+        let id = item.getId();
+        this.items.some((item:GalleryItem, index:number) => {
+            if (item.getId() == id && index != this.openedItemIndex) {
                 this.setOpenedItem(this.items[index], index);
                 return true;
             }
@@ -138,16 +139,16 @@ export class GalleryComponent {
         if (this.items[nextItemIndex]) {
             this.viewItem(this.items[nextItemIndex]);
         } else if (loadMoreIfNotExist) {
-            this.loadMoreItems().then((items:Array<any>) => {
+            this.loadMoreItems().then((items:Array<GalleryItem>) => {
                 this.viewNextItem(false)
             });
         }
     };
 
-    loadMoreItems = ():Promise<Array<any>> => {
+    loadMoreItems = ():Promise<Array<GalleryItem>> => {
         return this.callbackHandler
             .resolveCallback(this.onLoadMoreCallback)
-            .then((items:Array<any>) => {
+            .then((items:Array<GalleryItem>) => {
                 this.setItems(items);
                 return items;
             });

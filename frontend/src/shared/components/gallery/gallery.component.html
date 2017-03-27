@@ -1,19 +1,22 @@
-<div *ngIf="openedItem">
+<div *ngIf="getOpenedItem()">
     <div class="gl-backdrop"></div>
     <div class="gl-container"
          (swiperight)="viewPrevItem()"
          (swipeleft)="viewNextItem(true)"
          (swipeup)="closeItem()">
-        <i class="gl-spinner" [ngClass]="!openedItemIsLoaded ? 'fa fa-circle-o-notch fa-spin fa-2x' : ''" aria-hidden="true"></i>
+        <i class="gl-spinner"
+           [ngClass]="!openedItemIsLoaded ? 'fa fa-circle-o-notch fa-spin fa-2x' : ''" aria-hidden="true"></i>
         <div class="gl-view">
             <div *ngIf="openedItemIsLoaded" class="gl-img-container">
                 <img (click)="viewNextItem(true)"
-                     [src]="getOpenedItem().thumbnails.large.absolute_url"
-                     [alt]="getOpenedItem().description"
-                     [title]="getOpenedItem().description"
+                     [src]="getOpenedItem().getLargeSizeUrl()"
+                     [alt]="getOpenedItem().getDescription()"
+                     [title]="getOpenedItem().getDescription()"
                      class="gl-img">
             </div>
-            <div *ngIf="getOpenedInfo()" class="gl-info">{{ getOpenedItem().description }}<br>{{ getOpenedItem().exif }}</div>
+            <div *ngIf="getOpenedInfo()" class="gl-info">
+                {{ getOpenedItem().getDescription() }}<br>{{ getOpenedItem().getExif() }}
+            </div>
         </div>
         <div class="gl-actions">
             <button (click)="viewPrevItem()"

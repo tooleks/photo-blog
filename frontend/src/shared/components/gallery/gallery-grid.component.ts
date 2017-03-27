@@ -1,6 +1,5 @@
 import {Component, Input, Output, Inject, ElementRef, SimpleChanges, EventEmitter} from '@angular/core';
-
-// @TODO: Create grid row item class and map items to it.
+import {GalleryItem} from './gallery-item';
 
 @Component({
     selector: 'gallery-grid',
@@ -9,16 +8,16 @@ import {Component, Input, Output, Inject, ElementRef, SimpleChanges, EventEmitte
 })
 export class GalleryGridComponent {
     @Input() rowHeight:number = 0;
-    @Input() galleryItems:Array<any> = [];
+    @Input() galleryItems:Array<GalleryItem> = [];
     @Input() updateInterval:number;
-    @Output() onClickGridItem:EventEmitter<any> = new EventEmitter<any>();
+    @Output() onClickGridItem:EventEmitter<GalleryItem> = new EventEmitter<GalleryItem>();
     private elementRefProperties:any = {width: 0, height: 0};
     private elementSizeCheckInterval:any = null;
     private gridRowMaxHeight:number;
     private gridRowMaxWidth:number;
-    private gridRowItems:Array<any> = [];
+    private gridRowItems:Array<Array<GalleryItem>> = [];
     private activeRowWidth:number = 0;
-    private activeRowItems:Array<any> = [];
+    private activeRowItems:Array<GalleryItem> = [];
 
     constructor(@Inject(ElementRef) private elementRef:ElementRef) {
         this.reset()
@@ -93,21 +92,21 @@ export class GalleryGridComponent {
         return this.activeRowWidth;
     };
 
-    setActiveRowItems = (activeRowItems:Array<any>):this => {
+    setActiveRowItems = (activeRowItems:Array<GalleryItem>):this => {
         this.activeRowItems = activeRowItems;
         return this;
     };
 
-    getActiveRowItems = ():Array<any> => {
+    getActiveRowItems = ():Array<GalleryItem> => {
         return this.activeRowItems;
     };
 
-    setGridRowItems = (gridRowItems:Array<any>):this => {
+    setGridRowItems = (gridRowItems:Array<Array<GalleryItem>>):this => {
         this.gridRowItems = gridRowItems;
         return this;
     };
 
-    getGridRowItems = ():Array<any> => {
+    getGridRowItems = ():Array<Array<GalleryItem>> => {
         return this.gridRowItems;
     };
 
@@ -128,44 +127,44 @@ export class GalleryGridComponent {
         return this;
     };
 
-    setGridItems = (items:Array<any>):void => {
+    setGridItems = (items:Array<GalleryItem>):void => {
         let newGridItems = this.filterNewGridItems(items);
         let gridItems = this.getGridRowItems().length ? this.getGridRowItems().pop().concat(newGridItems) : newGridItems;
         if (!gridItems.length) return;
-        gridItems.forEach((item:any, index:number) => {
+        gridItems.forEach((item:GalleryItem, index:number) => {
             this.pushItemToRow(item, this.getGridRowMaxHeight());
             let rowItems = this.releaseRowItems(index == gridItems.length - 1);
             if (rowItems.length) this.getGridRowItems().push(rowItems);
         });
     };
 
-    private filterNewGridItems = (items:Array<any>):Array<any> => {
-        return items.filter((item:any) => !this.existsInGrid(item.id));
+    private filterNewGridItems = (items:Array<GalleryItem>):Array<GalleryItem> => {
+        return items.filter((item:GalleryItem) => !this.existsInGrid(item.getId()));
     };
 
     private existsInGrid = (id:number):boolean => {
         if (!this.getGridRowItems().length) return false;
         // Convert multi-dimensional array (of rows of items) into single-dimensional array (of items).
         let gridItems = [].concat.apply([], this.getGridRowItems());
-        return gridItems.some((item:any) => item.id == id);
+        return gridItems.some((item:GalleryItem) => item.getId() == id);
     };
 
-    private pushItemToRow = (item:any, maxHeight:number):number => {
+    private pushItemToRow = (item:GalleryItem, maxHeight:number):number => {
         let scaledToMaxHeightItem = this.scaleItemToMaxHeight(item, maxHeight);
-        let predictedRowWidth = this.predictRowWidth(scaledToMaxHeightItem.thumbnails.medium.width);
+        let predictedRowWidth = this.predictRowWidth(scaledToMaxHeightItem.getSmallSizeWidth());
         this.setActiveRowWidth(predictedRowWidth);
         return this.getActiveRowItems().push(scaledToMaxHeightItem);
     };
 
-    private releaseRowItems = (force:boolean = false):Array<any> => {
-        let rowItems = [];
+    private releaseRowItems = (force:boolean = false):Array<GalleryItem> => {
+        let rowItems:Array<GalleryItem> = [];
         if (this.getActiveRowWidth() == this.getGridRowMaxWidth()) {
             rowItems = this.scaleRowItemsToMaxWidth();
         } else if (this.getActiveRowWidth() > this.getGridRowMaxWidth()) {
             rowItems = this.scaleRowItemsToMaxWidth();
             let rowWidth = this.calculateRowWidth(rowItems);
             let diffWidth = this.getGridRowMaxWidth() - rowWidth;
-            rowItems[rowItems.length - 1].thumbnails.medium.width = rowItems[rowItems.length - 1].thumbnails.medium.width + diffWidth;
+            rowItems[rowItems.length - 1].setSmallSizeWidth(rowItems[rowItems.length - 1].getSmallSizeWidth() + diffWidth);
         }
         if (force && !rowItems.length) {
             rowItems = this.getActiveRowItems();
@@ -176,30 +175,30 @@ export class GalleryGridComponent {
         return rowItems;
     };
 
-    private calculateRowWidth = (rowItems:Array<any>):number => {
+    private calculateRowWidth = (rowItems:Array<GalleryItem>):number => {
         let width = 0;
-        rowItems.forEach((item:any) => width += item.thumbnails.medium.width);
+        rowItems.forEach((item:GalleryItem) => width += item.getSmallSizeWidth());
         return width;
     };
 
-    private predictRowWidth = (newItemWidth:any):number => {
+    private predictRowWidth = (newItemWidth:number):number => {
         let width = newItemWidth;
-        this.getActiveRowItems().forEach((item:any) => width += item.thumbnails.medium.width);
+        this.getActiveRowItems().forEach((item:GalleryItem) => width += item.getSmallSizeWidth());
         return width;
     };
 
-    private scaleItemToMaxHeight = (item:any, maxHeight:number):any => {
-        let scaleRate = item.thumbnails.medium.height * 100 / maxHeight;
-        item.thumbnails.medium.width = Math.floor(item.thumbnails.medium.width * 100 / scaleRate);
-        item.thumbnails.medium.height = Math.floor(maxHeight);
+    private scaleItemToMaxHeight = (item:GalleryItem, maxHeight:number):GalleryItem => {
+        let scaleRate = item.getSmallSizeHeight() * 100 / maxHeight;
+        item.setSmallSizeWidth(Math.floor(item.getSmallSizeWidth() * 100 / scaleRate));
+        item.setSmallSizeHeight(Math.floor(maxHeight));
         return item;
     };
 
-    private scaleRowItemsToMaxWidth = ():Array<any> => {
+    private scaleRowItemsToMaxWidth = ():Array<GalleryItem> => {
         let scaleRate = this.getActiveRowWidth() * 100 / this.getGridRowMaxWidth();
-        return this.getActiveRowItems().map((item:any) => {
-            item.thumbnails.medium.width = Math.floor(item.thumbnails.medium.width * 100 / scaleRate);
-            item.thumbnails.medium.height = Math.floor(item.thumbnails.medium.height * 100 / scaleRate);
+        return this.getActiveRowItems().map((item:GalleryItem) => {
+            item.setSmallSizeWidth(Math.floor(item.getSmallSizeWidth() * 100 / scaleRate));
+            item.setSmallSizeHeight(Math.floor(item.getSmallSizeHeight() * 100 / scaleRate));
             return item;
         });
     };

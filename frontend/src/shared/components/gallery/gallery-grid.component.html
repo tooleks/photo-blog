@@ -1,15 +1,15 @@
 <div *ngFor="let gridRow of gridRowItems" class="gl-grid-row">
     <div *ngFor="let gridItem of gridRow" class="gl-grid-cell-wrapper">
         <div class="gl-grid-cell"
-             [style.width.px]="gridItem.thumbnails.medium.width"
-             [style.height.px]="gridItem.thumbnails.medium.height">
-            <!-- Note: The image [width] and [height] attributes are initialized with .gl-grid-cell element padding offset. -->
-            <img (click)="onClickGridItem.emit(item)"
-                 [style.background]="gridItem.avg_color"
-                 [src]="gridItem.thumbnails.medium.absolute_url"
-                 [width]="gridItem.thumbnails.medium.width - 2"
-                 [height]="gridItem.thumbnails.medium.height - 2"
-                 [alt]="gridItem.description"
+             [style.width.px]="gridItem.getSmallSizeWidth()"
+             [style.height.px]="gridItem.getSmallSizeHeight()">
+            <!-- Note: The image [width] and [height] attributes are initialized with the .gl-grid-cell element padding offset. -->
+            <img (click)="onClickGridItem.emit(gridItem)"
+                 [style.background]="gridItem.getAvgColor()"
+                 [src]="gridItem.getSmallSizeUrl()"
+                 [width]="gridItem.getSmallSizeWidth()- 2"
+                 [height]="gridItem.getSmallSizeHeight() - 2"
+                 [alt]="gridItem.getDescription()"
                  class="gl-grid-item">
         </div>
     </div>
