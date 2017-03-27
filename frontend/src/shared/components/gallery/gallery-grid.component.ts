@@ -135,7 +135,7 @@ export class GalleryGridComponent {
         let gridItems = this.getGridRowItems().length ? this.getGridRowItems().pop().concat(newGridItems) : newGridItems;
         if (!gridItems.length) return;
         gridItems.forEach((item:GalleryItem, index:number) => {
-            this.pushItemToRow(item, this.getGridRowMaxHeight());
+            this.appendItemToActiveRow(item, this.getGridRowMaxHeight());
             let rowItems = this.releaseRowItems(index == gridItems.length - 1);
             if (rowItems.length) this.getGridRowItems().push(rowItems);
         });
@@ -152,7 +152,7 @@ export class GalleryGridComponent {
         return gridItems.some((item:GalleryItem) => item.getId() == id);
     };
 
-    private pushItemToRow = (item:GalleryItem, maxHeight:number):void => {
+    private appendItemToActiveRow = (item:GalleryItem, maxHeight:number):void => {
         this.scaleItemToHeight(item, maxHeight);
         let predictedRowWidth = this.predictRowWidth(this.getActiveRowItems(), item.getSmallSizeWidth());
         this.setActiveRowWidth(predictedRowWidth);
