@@ -1,6 +1,18 @@
 import {Component, Input, Output, Inject, ElementRef, SimpleChanges, EventEmitter} from '@angular/core';
 import {GalleryItem} from './gallery-item';
 
+/**
+ * Class GalleryGridComponent.
+ *
+ * The class provides gallery grid component that builds images into the structure like this:
+ * ________________________
+ * |____|___|___|___|___|_|
+ * |__|___|___|___|___|___|
+ * |____|___|___|___|___|_|
+ * |__|___|___|___|___|___|
+ * |____|___|___|___|___|_|
+ * |__|___|___|___|___|___|
+ */
 @Component({
     selector: 'gallery-grid',
     templateUrl: './gallery-grid.component.html',
