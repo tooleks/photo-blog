@@ -153,7 +153,7 @@ export class GalleryGridComponent {
     };
 
     private pushItemToRow = (item:GalleryItem, maxHeight:number):number => {
-        this.scaleItemToMaxHeight(item, maxHeight);
+        this.scaleItemToHeight(item, maxHeight);
         let predictedRowWidth = this.predictRowWidth(this.getActiveRowItems(), item.getSmallSizeWidth());
         this.setActiveRowWidth(predictedRowWidth);
         return this.getActiveRowItems().push(item);
@@ -162,7 +162,8 @@ export class GalleryGridComponent {
     private releaseRowItems = (force:boolean = false):Array<GalleryItem> => {
         let rowItems:Array<GalleryItem> = [];
         if (this.getActiveRowWidth() > this.getGridRowMaxWidth()) {
-            this.scaleActiveRowItemsToMaxWidth();
+            let gridRowMaxWidth = this.getGridRowMaxWidth();
+            this.scaleActiveRowItemsToWidth(gridRowMaxWidth);
             rowItems = this.getActiveRowItems();
             let rowWidth = this.getActiveRowWidth();
             let diffWidth = this.getGridRowMaxWidth() - rowWidth;
@@ -187,16 +188,16 @@ export class GalleryGridComponent {
         return this.calculateRowWidth(rowItems) + newItemWidth;
     };
 
-    private scaleItemToMaxHeight = (item:GalleryItem, maxHeight:number):void => {
-        let scaleRate = item.getSmallSizeHeight() * 100 / maxHeight;
+    private scaleItemToHeight = (item:GalleryItem, height:number):void => {
+        let scaleRate = item.getSmallSizeHeight() * 100 / height;
         let scaledWidth = Math.floor(item.getSmallSizeWidth() * 100 / scaleRate);
-        let scaledHeight = Math.floor(maxHeight);
+        let scaledHeight = Math.floor(height);
         item.setSmallSizeWidth(scaledWidth);
         item.setSmallSizeHeight(scaledHeight);
     };
 
-    private scaleActiveRowItemsToMaxWidth = ():void => {
-        let scaleRate = this.getActiveRowWidth() * 100 / this.getGridRowMaxWidth();
+    private scaleActiveRowItemsToWidth = (width:number):void => {
+        let scaleRate = this.getActiveRowWidth() * 100 / width;
         let scaledActiveRowItems = this.getActiveRowItems().map((item:GalleryItem) => {
             let scaledWidth = Math.floor(item.getSmallSizeWidth() * 100 / scaleRate);
             let scaledHeight = Math.floor(item.getSmallSizeHeight() * 100 / scaleRate);
@@ -204,8 +205,8 @@ export class GalleryGridComponent {
             item.setSmallSizeHeight(scaledHeight);
             return item;
         });
-        this.setActiveRowItems(scaledActiveRowItems);
         let scaledActiveRowWidth = this.calculateRowWidth(scaledActiveRowItems);
+        this.setActiveRowItems(scaledActiveRowItems);
         this.setActiveRowWidth(scaledActiveRowWidth);
     };
 }
