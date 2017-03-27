@@ -211,8 +211,8 @@ export class GalleryGridComponent {
         let scaledWidth = Math.floor(item.getSmallSizeWidth() * 100 / scaleRate);
         let scaledHeight = Math.floor(height);
 
-        item.setSmallSizeWidth(scaledWidth);
-        item.setSmallSizeHeight(scaledHeight);
+        item.setSmallSizeWidth(scaledWidth)
+            .setSmallSizeHeight(scaledHeight);
     };
 
     private scaleActiveRowItemsToWidth = (width:number):void => {
@@ -221,8 +221,8 @@ export class GalleryGridComponent {
         let scaledActiveRowItems = this.getActiveRowItems().map((item:GalleryItem) => {
             let scaledWidth = Math.floor(item.getSmallSizeWidth() * 100 / scaleRate);
             let scaledHeight = Math.floor(item.getSmallSizeHeight() * 100 / scaleRate);
-            item.setSmallSizeWidth(scaledWidth);
-            item.setSmallSizeHeight(scaledHeight);
+            item.setSmallSizeWidth(scaledWidth)
+                .setSmallSizeHeight(scaledHeight);
             return item;
         });
 
@@ -236,7 +236,7 @@ export class GalleryGridComponent {
 
         let scaledActiveRowWidth = this.calculateRowWidth(scaledActiveRowItems);
 
-        this.setActiveRowItems(scaledActiveRowItems);
-        this.setActiveRowWidth(scaledActiveRowWidth);
+        this.setActiveRowItems(scaledActiveRowItems)
+            .setActiveRowWidth(scaledActiveRowWidth);
     };
 }
