@@ -128,7 +128,7 @@ export class GalleryGridComponent {
         return this;
     };
 
-    setGridItems = (items:Array<any>) => {
+    setGridItems = (items:Array<any>):void => {
         let newGridItems = this.filterNewGridItems(items);
         let gridItems = this.getGridRowItems().length ? this.getGridRowItems().pop().concat(newGridItems) : newGridItems;
         if (!gridItems.length) return;
@@ -139,7 +139,7 @@ export class GalleryGridComponent {
         });
     };
 
-    private filterNewGridItems = (items:Array<any>) => {
+    private filterNewGridItems = (items:Array<any>):Array<any> => {
         return items.filter((item:any) => !this.existsInGrid(item.id));
     };
 
@@ -152,7 +152,8 @@ export class GalleryGridComponent {
 
     private pushItemToRow = (item:any, maxHeight:number):number => {
         let scaledToMaxHeightItem = this.scaleItemToMaxHeight(item, maxHeight);
-        this.setActiveRowWidth(this.predictRowWidth(scaledToMaxHeightItem));
+        let predictedRowWidth = this.predictRowWidth(scaledToMaxHeightItem.thumbnails.medium.width);
+        this.setActiveRowWidth(predictedRowWidth);
         return this.getActiveRowItems().push(scaledToMaxHeightItem);
     };
 
@@ -181,8 +182,8 @@ export class GalleryGridComponent {
         return width;
     };
 
-    private predictRowWidth = (item:any):number => {
-        let width = item.thumbnails.medium.width;
+    private predictRowWidth = (newItemWidth:any):number => {
+        let width = newItemWidth;
         this.getActiveRowItems().forEach((item:any) => width += item.thumbnails.medium.width);
         return width;
     };
@@ -195,7 +196,7 @@ export class GalleryGridComponent {
     };
 
     private scaleRowItemsToMaxWidth = ():Array<any> => {
-        let scaleRate = this.activeRowWidth * 100 / this.getGridRowMaxWidth();
+        let scaleRate = this.getActiveRowWidth() * 100 / this.getGridRowMaxWidth();
         return this.getActiveRowItems().map((item:any) => {
             item.thumbnails.medium.width = Math.floor(item.thumbnails.medium.width * 100 / scaleRate);
             item.thumbnails.medium.height = Math.floor(item.thumbnails.medium.height * 100 / scaleRate);
