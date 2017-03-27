@@ -229,7 +229,7 @@ export class GalleryGridComponent {
         // Note: After scaling the active row items may be a situation when the scaled row width will be less than the grid width.
         // The following lines of code fix this issue.
         let diffWidth = this.getGridRowMaxWidth() - this.calculateRowWidth(scaledActiveRowItems);
-        if (diffWidth > 0) {
+        if (diffWidth != 0) {
             let lastItemWidth = scaledActiveRowItems[scaledActiveRowItems.length - 1].getSmallSizeWidth() + diffWidth;
             scaledActiveRowItems[scaledActiveRowItems.length - 1].setSmallSizeWidth(lastItemWidth);
         }
