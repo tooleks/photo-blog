@@ -152,11 +152,11 @@ export class GalleryGridComponent {
         return gridItems.some((item:GalleryItem) => item.getId() == id);
     };
 
-    private pushItemToRow = (item:GalleryItem, maxHeight:number):number => {
+    private pushItemToRow = (item:GalleryItem, maxHeight:number):void => {
         this.scaleItemToHeight(item, maxHeight);
         let predictedRowWidth = this.predictRowWidth(this.getActiveRowItems(), item.getSmallSizeWidth());
         this.setActiveRowWidth(predictedRowWidth);
-        return this.getActiveRowItems().push(item);
+        this.getActiveRowItems().push(item);
     };
 
     private releaseRowItems = (force:boolean = false):Array<GalleryItem> => {
