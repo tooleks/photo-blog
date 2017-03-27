@@ -113,8 +113,8 @@ export class GalleryGridComponent {
     };
 
     reset = ():this => {
-        this.resetGridRowItems();
-        this.resetActiveRow();
+        this.resetGridRowItems()
+            .resetActiveRow();
         return this;
     };
 
@@ -124,8 +124,8 @@ export class GalleryGridComponent {
     };
 
     private resetActiveRow = ():this => {
-        this.setActiveRowWidth(0);
-        this.setActiveRowItems([]);
+        this.setActiveRowWidth(0)
+            .setActiveRowItems([]);
         return this;
     };
 
