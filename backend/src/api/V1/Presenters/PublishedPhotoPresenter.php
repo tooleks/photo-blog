@@ -30,18 +30,19 @@ class PublishedPhotoPresenter extends Presenter
         return [
             'id' => 'id',
             'created_by_user_id' => 'created_by_user_id',
-            'absolute_url' => function () {
-                return $this->getPresenteeAttribute('relative_url')
-                    ? url(config('main.storage.url')) . $this->getPresenteeAttribute('relative_url')
-                    : null;
+            'url' => function () {
+                $relativeUrl = $this->getPresenteeAttribute('relative_url');
+                return $relativeUrl ? url(config('main.storage.url')) . $relativeUrl : null;
             },
             'avg_color' => 'avg_color',
             'description' => 'description',
-            'created_at' => function () : string {
-                return $this->getPresenteeAttribute('created_at') ?? null;
+            'created_at' => function () {
+                $createdAt = $this->getPresenteeAttribute('created_at');
+                return (string)$createdAt ?? null;
             },
-            'updated_at' => function () : string {
-                return $this->getPresenteeAttribute('updated_at') ?? null;
+            'updated_at' => function () {
+                $updatedAt = $this->getPresenteeAttribute('updated_at');
+                return (string)$updatedAt?? null;
             },
             'exif' => function () {
                 return new ExifPresenter($this->getPresenteeAttribute('exif'));
