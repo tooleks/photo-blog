@@ -28,7 +28,7 @@ class UserPresenter extends Presenter
             'email' => 'email',
             'created_at' => function () {
                 $createdAt = $this->getPresenteeAttribute('created_at');
-                return (string)$createdAt?? null;
+                return (string)$createdAt ?? null;
             },
             'updated_at' => function () {
                 $updatedAt = $this->getPresenteeAttribute('updated_at');

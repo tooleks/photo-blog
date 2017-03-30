@@ -42,7 +42,7 @@ class PublishedPhotoPresenter extends Presenter
             },
             'updated_at' => function () {
                 $updatedAt = $this->getPresenteeAttribute('updated_at');
-                return (string)$updatedAt?? null;
+                return (string)$updatedAt ?? null;
             },
             'exif' => function () {
                 return new ExifPresenter($this->getPresenteeAttribute('exif'));
