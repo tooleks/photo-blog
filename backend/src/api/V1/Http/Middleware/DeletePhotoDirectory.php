@@ -36,7 +36,7 @@ class DeletePhotoDirectory
     {
         $response = $next($request);
 
-        if ($response->status() === 200) {
+        if ($response->isSuccessful()) {
             $this->deletePhotoDirectory($request->photo->directory_path ?? $request->published_photo->directory_path ?? null);
         }
 
