@@ -95,7 +95,9 @@ export class PhotosBySearchPhraseComponent {
     };
 
     navigateToSearchPhotos(searchPhrase:string) {
-        this.navigator.navigate(['photos/search'], {queryParams: {search_phrase: searchPhrase}});
+        if (searchPhrase) {
+            this.navigator.navigate(['photos/search'], {queryParams: {search_phrase: searchPhrase}});
+        }
     }
 
     isEmpty = ():boolean => {
