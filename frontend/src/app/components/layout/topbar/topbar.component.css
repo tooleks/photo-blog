@@ -1,4 +1,4 @@
-:host .tb {
+:host .topbar {
     position: fixed;
     top: 0;
     left: 0;
@@ -9,31 +9,31 @@
 }
 
 @media (min-width: 768px) {
-    :host .tb {
+    :host .topbar {
         display: none;
     }
 }
 
-:host .tb-wrapper {
+:host .topbar-wrapper {
     position: relative;
     width: 100%;
     height: 60px;
 }
 
-:host .tb-wrapper .tb-btn-nav {
+:host .topbar-wrapper .topbar-btn-nav {
     position: absolute;
     top: 14px;
     left: 20px;
 }
 
-:host .tb-wrapper .tb-page-name {
+:host .topbar-wrapper .topbar-page-name {
     position: absolute;
     top: 0;
     left: 70px;
     right: 20px;
 }
 
-:host .tb-wrapper .tb-page-name h1 {
+:host .topbar-wrapper .topbar-page-name h1 {
     margin: 0;
     font-size: 15px;
     line-height: 60px;

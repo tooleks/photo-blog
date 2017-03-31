@@ -1,5 +1,5 @@
 import {Component, Inject} from '@angular/core';
-import {SignInForm} from './signin-form';
+import {SignInForm} from './models';
 import {
     AuthService,
     TitleService,
@@ -9,12 +9,11 @@ import {
     NavigatorServiceProvider,
     NavigatorService,
 } from '../../../shared/services';
-import {User} from '../../../shared/models';
 import {NoticesService} from '../../../common/notices';
 
 @Component({
     selector: 'signin-form',
-    templateUrl: './signin-form.component.html',
+    templateUrl: 'signin-form.component.html',
 })
 export class SignInFormComponent {
     private form:SignInForm;
@@ -40,7 +39,7 @@ export class SignInFormComponent {
     signIn = () => {
         return this.lockProcess
             .process(this.auth.signIn, [this.form.email, this.form.password])
-            .then((user:User) => {
+            .then((user:any) => {
                 this.notices.success('Hello, ' + user.name + '!');
                 this.navigator.navigate(['/']);
                 return user;

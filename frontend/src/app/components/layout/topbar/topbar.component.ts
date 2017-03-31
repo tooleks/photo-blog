@@ -3,8 +3,8 @@ import {TitleService} from '../../../../shared/services';
 
 @Component({
     selector: 'topbar',
-    templateUrl: './topbar.component.html',
-    styles: [String(require('./topbar.component.css'))],
+    templateUrl: 'topbar.component.html',
+    styleUrls: ['topbar.component.css'],
 })
 export class TopBarComponent {
     @Output() onNavClick:EventEmitter<any> = new EventEmitter<any>();

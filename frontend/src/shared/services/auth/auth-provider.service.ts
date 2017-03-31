@@ -1,18 +1,17 @@
 import {Injectable, Inject} from '@angular/core';
 import {LocalStorageService} from '../local-storage/local-storage.service';
-import {Auth, User} from '../../models';
 
 @Injectable()
 export class AuthProviderService {
     constructor(@Inject(LocalStorageService) private localStorage:LocalStorageService) {
     }
 
-    setAuth = (auth:Auth):Auth => {
+    setAuth = (auth:any):any => {
         this.localStorage.set('auth', auth);
         return auth;
     };
 
-    getAuth = ():Auth => {
+    getAuth = ():any => {
         return this.localStorage.get('auth');
     };
 
@@ -25,12 +24,12 @@ export class AuthProviderService {
         return auth ? auth.api_token : null;
     };
 
-    setUser = (user:User):User => {
+    setUser = (user:any):any => {
         this.localStorage.set('user', user);
         return user;
     };
 
-    getUser = ():User => {
+    getUser = ():any => {
         return this.localStorage.get('user');
     };
 

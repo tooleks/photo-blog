@@ -1,4 +1,5 @@
 import {Component, Inject} from '@angular/core';
+import {ContactMeForm} from './models';
 import {
     ApiService,
     TitleService,
@@ -9,11 +10,10 @@ import {
     NavigatorService,
 } from '../../../shared/services';
 import {NoticesService} from '../../../common/notices';
-import {ContactMeForm} from './contact-me-form';
 
 @Component({
     selector: 'contact-me-form',
-    templateUrl: './contact-me-form.component.html',
+    templateUrl: 'contact-me-form.component.html',
 })
 export class ContactMeFormComponent {
     private form:ContactMeForm;
@@ -36,7 +36,7 @@ export class ContactMeFormComponent {
         this.form = new ContactMeForm;
     }
 
-    send = () => {
+    send = ():Promise<any> => {
         return this.lockProcess
             .process(() => this.api.post('/contact_messages', this.form).toPromise())
             .then((data:any) => {
