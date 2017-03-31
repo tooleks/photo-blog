@@ -20,9 +20,9 @@ export class GalleryGridComponent {
     private activeRowImages:Array<GalleryImage> = [];
 
     constructor(@Inject(ElementRef) private elementRef:ElementRef) {
-        this.reset()
-            .setGridRowMaxHeight(0)
-            .setGridRowMaxWidth(0);
+        this.reset();
+        this.setGridRowMaxHeight(0);
+        this.setGridRowMaxWidth(0);
     }
 
     ngOnChanges(changes:SimpleChanges) {
@@ -57,78 +57,69 @@ export class GalleryGridComponent {
         }
     };
 
-    setElementRefProperties = (width:number, height:number):this => {
+    setElementRefProperties = (width:number, height:number):void => {
         this.elementRefProperties = {
             width: width,
             height: height,
         };
-        return this;
     };
 
     getElementRefProperties = ():{width:number, height:number} => {
         return this.elementRefProperties;
     };
 
-    setGridRowMaxHeight = (gridRowMaxHeight:number):this => {
+    setGridRowMaxHeight = (gridRowMaxHeight:number):void => {
         this.gridRowMaxHeight = gridRowMaxHeight;
-        return this;
     };
 
     getGridRowMaxHeight = ():number => {
         return this.gridRowMaxHeight;
     };
 
-    setGridRowMaxWidth = (gridRowMaxWidth:number):this => {
+    setGridRowMaxWidth = (gridRowMaxWidth:number):void => {
         this.gridRowMaxWidth = gridRowMaxWidth;
-        return this;
     };
 
     getGridRowMaxWidth = ():number => {
         return this.gridRowMaxWidth;
     };
 
-    setActiveRowWidth = (activeRowWidth:number):this => {
+    setActiveRowWidth = (activeRowWidth:number):void => {
         this.activeRowWidth = activeRowWidth;
-        return this;
     };
 
     getActiveRowWidth = ():number => {
         return this.activeRowWidth;
     };
 
-    setActiveRowImages = (activeRowImages:Array<GalleryImage>):this => {
+    setActiveRowImages = (activeRowImages:Array<GalleryImage>):void => {
         this.activeRowImages = activeRowImages;
-        return this;
     };
 
     getActiveRowImages = ():Array<GalleryImage> => {
         return this.activeRowImages;
     };
 
-    setGridRowImages = (gridRowImages:Array<Array<GalleryImage>>):this => {
+    setGridRowImages = (gridRowImages:Array<Array<GalleryImage>>):void => {
         this.gridRowImages = gridRowImages;
-        return this;
     };
 
     getGridRowImages = ():Array<Array<GalleryImage>> => {
         return this.gridRowImages;
     };
 
-    reset = ():this => {
-        this.resetGridRowImages()
-            .resetActiveRow();
-        return this;
+    reset = ():void => {
+        this.resetGridRowImages();
+        this.resetActiveRow();
     };
 
-    resetGridRowImages = ():this => {
+    resetGridRowImages = ():void => {
         this.setGridRowImages([]);
-        return this;
     };
 
-    private resetActiveRow = ():this => {
-        this.setActiveRowWidth(0)
-            .setActiveRowImages([]);
-        return this;
+    private resetActiveRow = ():void => {
+        this.setActiveRowWidth(0);
+        this.setActiveRowImages([]);
     };
 
     setGridImages = (galleryImages:Array<GalleryImage>):void => {
@@ -199,8 +190,8 @@ export class GalleryGridComponent {
         let scaledWidth = Math.floor(galleryImage.getSmallSizeWidth() * 100 / scaleRate);
         let scaledHeight = Math.floor(height);
 
-        galleryImage.setSmallSizeWidth(scaledWidth)
-            .setSmallSizeHeight(scaledHeight);
+        galleryImage.setSmallSizeWidth(scaledWidth);
+        galleryImage.setSmallSizeHeight(scaledHeight);
     };
 
     private scaleActiveRowImagesToWidth = (width:number):void => {
@@ -224,7 +215,7 @@ export class GalleryGridComponent {
 
         let scaledActiveRowWidth = this.calculateRowWidth(scaledActiveRowImages);
 
-        this.setActiveRowImages(scaledActiveRowImages)
-            .setActiveRowWidth(scaledActiveRowWidth);
+        this.setActiveRowImages(scaledActiveRowImages);
+        this.setActiveRowWidth(scaledActiveRowWidth);
     };
 }
