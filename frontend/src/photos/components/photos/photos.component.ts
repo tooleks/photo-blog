@@ -58,7 +58,7 @@ export class PhotosComponent {
         this.loadPhotos(this.defaults.page, perPageOffset);
     }
 
-    private loadPhotos = (page:number, perPage:number):Promise<Array<any>> => {
+    private loadPhotos = (page:number, perPage:number):Promise<Array<GalleryImage>> => {
         return this.lockProcess
             .process(this.photoDataProvider.getAll, [page, perPage])
             .then(this.handleLoadPhotos);
@@ -74,7 +74,7 @@ export class PhotosComponent {
         return galleryImages;
     };
 
-    loadMorePhotos = ():Promise<Array<any>> => {
+    loadMorePhotos = ():Promise<Array<GalleryImage>> => {
         return this.loadPhotos(this.pager.getNextPage(), this.pager.getPerPage());
     };
 

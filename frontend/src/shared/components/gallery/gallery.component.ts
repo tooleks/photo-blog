@@ -11,6 +11,7 @@ import {GalleryImage} from './models';
 export class GalleryComponent {
     @ViewChild('galleryGridComponent') galleryGridComponent:GalleryGridComponent;
     @Input() galleryImages:Array<GalleryImage> = [];
+    @Output() galleryImagesChange:EventEmitter<Array<GalleryImage>> = new EventEmitter<Array<GalleryImage>>();
     @Input() defaultImageId:string;
     @Input() onLoadMoreCallback:any;
     @Input() showCloseButton:boolean = true;
@@ -55,8 +56,10 @@ export class GalleryComponent {
             }
         }
     };
-
+    
     reset = () => {
+        this.galleryImages = [];
+        this.galleryImagesChange.emit(this.galleryImages);
         this.unsetOpenedImage();
         this.galleryGridComponent.reset();
     };

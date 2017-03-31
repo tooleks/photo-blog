@@ -76,13 +76,12 @@ export class PhotosByTagComponent {
         return galleryImages;
     };
 
-    loadMorePhotos = () => {
+    loadMorePhotos = ():Promise<Array<GalleryImage>> => {
         return this.loadPhotos(this.pager.getPage(), this.pager.getPerPage(), this.queryParams['tag']);
     };
 
-    searchByTag = (tag:string) => {
-        if (tag) {
-            this.galleryImages = [];
+    searchByTag = (tag:string):void => {
+        if (tag && tag != this.queryParams['tag']) {
             this.galleryComponent.reset();
             this.queryParams['tag'] = tag;
             this.title.setTitle(['Photos', 'Tag #' + tag]);

@@ -4,7 +4,7 @@
             <h2 class="m-xs">{{ 'No photos found' }}</h2>
         </div>
         <gallery #galleryComponent
-                 [galleryImages]="galleryImages"
+                 [(galleryImages)]="galleryImages"
                  [defaultImageId]="queryParams['show']"
                  [onLoadMoreCallback]="loadMorePhotos"
                  (onOpenImage)="onShowPhoto($event)"

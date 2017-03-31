@@ -35,9 +35,8 @@ export class PhotoFormComponent {
     }
 
     ngOnInit() {
-        this.scroller.scrollToTop();
-
         this.title.setTitle('Add Photo');
+        this.scroller.scrollToTop();
 
         this.route.params
             .map((params) => params['id'])

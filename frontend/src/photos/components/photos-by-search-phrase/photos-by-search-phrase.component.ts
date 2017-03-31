@@ -85,7 +85,6 @@ export class PhotosBySearchPhraseComponent {
 
     searchPhotosByPhrase = (searchPhrase:string):void => {
         if (searchPhrase && searchPhrase != this.queryParams['search_phrase']) {
-            this.galleryImages = [];
             this.galleryComponent.reset();
             this.queryParams['search_phrase'] = String(searchPhrase);
             this.title.setTitle(['Photos', 'Search "' + this.queryParams['search_phrase'] + '"']);
@@ -94,7 +93,7 @@ export class PhotosBySearchPhraseComponent {
         }
     };
 
-    navigateToSearchPhotos(searchPhrase:string) {
+    navigateToSearchPhotos(searchPhrase:string):void {
         if (searchPhrase) {
             this.navigator.navigate(['photos/search'], {queryParams: {search_phrase: searchPhrase}});
         }
