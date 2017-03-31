@@ -82,6 +82,7 @@ export class PhotosByTagComponent {
 
     searchByTag = (tag:string) => {
         if (tag) {
+            this.galleryImages = [];
             this.galleryComponent.reset();
             this.queryParams['tag'] = tag;
             this.title.setTitle(['Photos', 'Tag #' + tag]);
