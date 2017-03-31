@@ -1,10 +1,11 @@
 import {GalleryImage} from '../../shared/components/gallery';
+import {ExifToStringMapper} from './exif-to-string-mapper';
 
-export class PhotoGalleryImageMapper {
+export class PhotoToGalleryImageMapper {
     static map(item:any):any {
         return (item instanceof Array)
-            ? PhotoGalleryImageMapper.mapMultiple(item)
-            : PhotoGalleryImageMapper.mapSingle(item);
+            ? PhotoToGalleryImageMapper.mapMultiple(item)
+            : PhotoToGalleryImageMapper.mapSingle(item);
     }
 
     private static mapSingle(item:any):GalleryImage {
@@ -19,11 +20,11 @@ export class PhotoGalleryImageMapper {
             largeSizeWidth: item.thumbnails.large.width,
             avgColor: item.avg_color,
             description: item.description,
-            exif: item.exif,
+            exif: ExifToStringMapper.map(item.exif),
         });
     }
 
     private static mapMultiple(items:Array<any>):Array<GalleryImage> {
-        return items.map(PhotoGalleryImageMapper.mapSingle);
+        return items.map(PhotoToGalleryImageMapper.mapSingle);
     }
 }

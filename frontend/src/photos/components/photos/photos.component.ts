@@ -12,7 +12,7 @@ import {
     LockProcessService,
 } from '../../../shared/services';
 import {PhotoDataProviderService} from '../../services';
-import {PhotoGalleryImageMapper} from '../../mappers';
+import {PhotoToGalleryImageMapper} from '../../mappers';
 import {GalleryImage} from '../../../shared/components/gallery';
 
 @Component({
@@ -65,7 +65,7 @@ export class PhotosComponent {
     };
 
     private handleLoadPhotos = (response:any):Array<GalleryImage> => {
-        const galleryImages = PhotoGalleryImageMapper.map(response.data);
+        const galleryImages = PhotoToGalleryImageMapper.map(response.data);
         if (response.data.length) {
             this.pager.setPage(response.current_page);
             this.navigator.setQueryParam('page', this.pager.getPage());
