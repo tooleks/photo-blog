@@ -7,33 +7,26 @@ use Api\V1\Http\Requests\UpdatePhotoRequest;
 use Core\Models\Photo;
 use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
 use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 /**
  * Class PhotosController.
  *
+ * @property Guard guard
  * @property PhotoDataProvider photoDataProvider
  * @package Api\V1\Http\Controllers
  */
-class PhotosController extends ResourceController
+class PhotosController extends Controller
 {
     /**
      * PhotosController constructor.
      *
-     * @param Request $request
      * @param Guard $guard
-     * @param string $presenterClass
      * @param PhotoDataProvider $photoDataProvider
      */
-    public function __construct(
-        Request $request,
-        Guard $guard,
-        string $presenterClass,
-        PhotoDataProvider $photoDataProvider
-    )
+    public function __construct(Guard $guard, PhotoDataProvider $photoDataProvider)
     {
-        parent::__construct($request, $guard, $presenterClass);
-
+        $this->guard = $guard;
         $this->photoDataProvider = $photoDataProvider;
     }
 
@@ -50,7 +43,7 @@ class PhotosController extends ResourceController
      * {
      *     "id": 1,
      *     "created_by_user_id" 1,
-     *     "absolute_url": "http://path/to/photo/file",
+     *     "url": "http://path/to/photo/file",
      *     "avg_color": "#000000",
      *     "created_at": "2016-10-24 12:24:33",
      *     "updated_at": "2016-10-24 14:38:05",
@@ -64,12 +57,12 @@ class PhotosController extends ResourceController
      *     },
      *     "thumbnails": [
      *         "medium": {
-     *             "absolute_url": "http://path/to/photo/thumbnail/medium_file"
+     *             "url": "http://path/to/photo/thumbnail/medium_file"
      *             "width": 500,
      *             "height": 500
      *         },
      *         "large": {
-     *              "absolute_url": "http://path/to/photo/thumbnail/large_file"
+     *              "url": "http://path/to/photo/thumbnail/large_file"
      *              "width": 1000,
      *              "height": 1000
      *         }
@@ -107,7 +100,7 @@ class PhotosController extends ResourceController
      * {
      *     "id": 1,
      *     "created_by_user_id" 1,
-     *     "absolute_url": "http://path/to/photo/file",
+     *     "url": "http://path/to/photo/file",
      *     "avg_color": "#000000",
      *     "created_at": "2016-10-24 12:24:33",
      *     "updated_at": "2016-10-24 14:38:05",
@@ -121,12 +114,12 @@ class PhotosController extends ResourceController
      *     },
      *     "thumbnails": [
      *         "medium": {
-     *             "absolute_url": "http://path/to/photo/thumbnail/medium_file"
+     *             "url": "http://path/to/photo/thumbnail/medium_file"
      *             "width": 500,
      *             "height": 500
      *         },
      *         "large": {
-     *              "absolute_url": "http://path/to/photo/thumbnail/large_file"
+     *              "url": "http://path/to/photo/thumbnail/large_file"
      *              "width": 1000,
      *              "height": 1000
      *         }
@@ -159,7 +152,7 @@ class PhotosController extends ResourceController
      * {
      *     "id": 1,
      *     "created_by_user_id" 1,
-     *     "absolute_url": "http://path/to/photo/file",
+     *     "url": "http://path/to/photo/file",
      *     "avg_color": "#000000",
      *     "created_at": "2016-10-24 12:24:33",
      *     "updated_at": "2016-10-24 14:38:05",
@@ -173,12 +166,12 @@ class PhotosController extends ResourceController
      *     },
      *     "thumbnails": [
      *         "medium": {
-     *             "absolute_url": "http://path/to/photo/thumbnail/medium_file"
+     *             "url": "http://path/to/photo/thumbnail/medium_file"
      *             "width": 500,
      *             "height": 500
      *         },
      *         "large": {
-     *              "absolute_url": "http://path/to/photo/thumbnail/large_file"
+     *              "url": "http://path/to/photo/thumbnail/large_file"
      *              "width": 1000,
      *              "height": 1000
      *         }

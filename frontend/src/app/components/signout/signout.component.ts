@@ -1,6 +1,5 @@
 import {Component, Inject} from '@angular/core';
 import {AuthService, NavigatorServiceProvider, NavigatorService} from '../../../shared/services';
-import {User} from '../../../shared/models';
 
 @Component({
     selector: 'signout',
@@ -17,7 +16,7 @@ export class SignOutComponent {
     ngOnInit() {
         this.auth
             .signOut()
-            .then((user:User) => {
+            .then((user:any) => {
                 this.navigator.navigate(['/signin']);
             })
             .catch((error:any) => {

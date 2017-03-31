@@ -4,14 +4,15 @@
             <div class="form-group">
                 <div class="input-group">
                     <input #inputSearch
-                           [(ngModel)]="queryParams['search_phrase']"
+                           [ngModel]="queryParams['search_phrase']"
                            name="search_phrase"
                            type="search"
-                           (keyup.enter)="searchPhotos(inputSearch.value)"
+                           (keyup.enter)="navigateToSearchPhotos(inputSearch.value)"
                            placeholder="{{ 'Type any word then press enter' }}"
                            class="form-control">
                     <span class="input-group-btn">
-                        <button (click)="searchPhotos(inputSearch.value)" type="button" class="btn btn-primary" title="{{ 'Search' }}">
+                        <button (click)="navigateToSearchPhotos(inputSearch.value)" type="button" class="btn btn-primary"
+                                title="{{ 'Search' }}">
                             <i class="fa fa-search" aria-hidden="true"></i>
                         </button>
                     </span>
@@ -26,12 +27,12 @@
             <h2 class="m-xs">{{ 'No photos found' }}</h2>
         </div>
         <gallery #galleryComponent
-                 [items]="getPhotos()"
-                 [defaultItemId]="queryParams['show']"
+                 [galleryImages]="galleryImages"
+                 [defaultImageId]="queryParams['show']"
                  [onLoadMoreCallback]="loadMorePhotos"
-                 (onOpenItem)="onShowPhoto($event)"
-                 (onCloseItem)="onHidePhoto($event)"
-                 (onEditItem)="authProvider.isAuthenticated() ? onEditPhoto($event) : false"
+                 (onOpenImage)="onShowPhoto($event)"
+                 (onCloseImage)="onHidePhoto($event)"
+                 (onEditImage)="authProvider.isAuthenticated() ? onEditPhoto($event) : null"
                  [showEditButton]="authProvider.isAuthenticated()"
                  infinite-scroll
                  [infiniteScrollDistance]="3"

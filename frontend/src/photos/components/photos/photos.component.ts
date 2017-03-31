@@ -11,19 +11,21 @@ import {
     LockProcessServiceProvider,
     LockProcessService,
 } from '../../../shared/services';
-import {PublishedPhoto} from '../../../shared/models';
-import {PhotoDataProviderService, PublishedPhotoMapper} from '../../services';
+import {PhotoDataProviderService} from '../../services';
+import {PhotoToGalleryImageMapper} from '../../mappers';
+import {GalleryImage} from '../../../shared/components/gallery';
 
 @Component({
     selector: 'photos',
-    templateUrl: './photos.component.html',
+    templateUrl: 'photos.component.html',
 })
 export class PhotosComponent {
-    private photos:Array<PublishedPhoto> = [];
+    private defaults:any = {page: 1, perPage: 20};
     private queryParams:Object = {};
     private pager:PagerService;
-    private lockProcess:LockProcessService;
     private navigator:NavigatorService;
+    private lockProcess:LockProcessService;
+    private galleryImages:Array<GalleryImage> = [];
 
     constructor(@Inject(ActivatedRoute) private route:ActivatedRoute,
                 @Inject(TitleService) private title:TitleService,
@@ -33,75 +35,66 @@ export class PhotosComponent {
                 @Inject(NavigatorServiceProvider) navigatorProvider:NavigatorServiceProvider,
                 @Inject(PagerServiceProvider) pagerProvider:PagerServiceProvider,
                 @Inject(LockProcessServiceProvider) lockProcessProvider:LockProcessServiceProvider) {
-        this.pager = pagerProvider.getInstance(1, 20);
+        this.pager = pagerProvider.getInstance(this.defaults.page, this.defaults.perPage);
         this.navigator = navigatorProvider.getInstance();
         this.lockProcess = lockProcessProvider.getInstance();
     }
 
     ngOnInit() {
-        this.scroller.scrollToTop();
-
         this.title.setTitle('All Photos');
+        this.scroller.scrollToTop();
 
         this.route.queryParams
             .map((queryParams) => queryParams['page'])
-            .subscribe((page:number) => this.pager.setPage(page));
+            .subscribe((page:number) => this.queryParams['page'] = page ? Number(page) : this.defaults.page);
 
         this.route.queryParams
             .map((queryParams) => queryParams['show'])
-            .subscribe((show:number) => this.queryParams['show'] = show);
-
-        this.loadPhotos(1, this.pager.getPerPage() * this.pager.getPage());
+            .subscribe((show:number) => this.queryParams['show'] = Number(show));
     }
 
-    private processLoadPhotos = (page:number, perPage:number):Promise<Array<PublishedPhoto>> => {
-        return this.photoDataProvider
-            .getAll(page, perPage)
-            .then((response:any) => {
-                if (response.data.length) this.pager.setPage(response.current_page);
-                this.appendPhotos(response.data);
-                return response.data;
-            });
-    };
+    ngAfterViewInit() {
+        const perPageOffset = this.queryParams['page'] * this.pager.getPerPage();
+        this.loadPhotos(this.defaults.page, perPageOffset);
+    }
 
-    private loadPhotos = (page:number, perPage:number):Promise<Array<PublishedPhoto>> => {
+    private loadPhotos = (page:number, perPage:number):Promise<Array<any>> => {
         return this.lockProcess
-            .process(this.processLoadPhotos, [page, perPage])
-            .then((photos:Array<PublishedPhoto>) => {
-                this.navigator.setQueryParam('page', this.pager.getPage());
-                return photos;
-            });
+            .process(this.photoDataProvider.getAll, [page, perPage])
+            .then(this.handleLoadPhotos);
     };
 
-    private appendPhotos = (photos:Array<PublishedPhoto>):void => {
-        this.photos = this.photos.concat(photos.map(PublishedPhotoMapper.map));
+    private handleLoadPhotos = (response:any):Array<GalleryImage> => {
+        const galleryImages = PhotoToGalleryImageMapper.map(response.data);
+        if (response.data.length) {
+            this.pager.setPage(response.current_page);
+            this.navigator.setQueryParam('page', this.pager.getPage());
+            this.galleryImages = this.galleryImages.concat(galleryImages);
+        }
+        return galleryImages;
     };
 
-    private getPhotos = ():Array<PublishedPhoto> => {
-        return this.photos;
-    };
-
-    loadMorePhotos = ():Promise<Array<PublishedPhoto>> => {
+    loadMorePhotos = ():Promise<Array<any>> => {
         return this.loadPhotos(this.pager.getNextPage(), this.pager.getPerPage());
     };
 
     isEmpty = ():boolean => {
-        return !this.getPhotos().length && !this.lockProcess.isProcessing();
+        return !this.galleryImages.length && !this.lockProcess.isProcessing();
     };
 
     isLoading = ():boolean => {
         return this.lockProcess.isProcessing();
     };
 
-    onShowPhoto = (photo:PublishedPhoto):void => {
-        this.navigator.setQueryParam('show', photo.id);
+    onShowPhoto = (galleryImage:GalleryImage):void => {
+        this.navigator.setQueryParam('show', galleryImage.getId());
     };
 
-    onHidePhoto = (photo:PublishedPhoto):void => {
+    onHidePhoto = (galleryImage:GalleryImage):void => {
         this.navigator.unsetQueryParam('show');
     };
 
-    onEditPhoto = (photo:PublishedPhoto):void => {
-        this.navigator.navigate(['photo/edit', photo.id]);
+    onEditPhoto = (galleryImage:GalleryImage):void => {
+        this.navigator.navigate(['photo/edit', galleryImage.getId()]);
     };
 }

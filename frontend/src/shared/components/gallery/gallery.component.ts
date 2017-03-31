@@ -1,172 +1,146 @@
 import {Component, Input, Output, Inject, EventEmitter, HostListener, SimpleChanges, ViewChild} from '@angular/core';
 import {CallbackHandlerService, ScrollFreezerService} from '../../services';
 import {GalleryGridComponent} from './gallery-grid.component';
+import {GalleryImage} from './models';
 
 @Component({
     selector: 'gallery',
-    templateUrl: './gallery.component.html',
-    styles: [String(require('./gallery.component.css'))],
+    templateUrl: 'gallery.component.html',
+    styleUrls: ['gallery.component.css'],
 })
 export class GalleryComponent {
     @ViewChild('galleryGridComponent') galleryGridComponent:GalleryGridComponent;
-    @Input() items:Array<any> = [];
-    @Input() defaultItemId:string;
+    @Input() galleryImages:Array<GalleryImage> = [];
+    @Input() defaultImageId:string;
     @Input() onLoadMoreCallback:any;
     @Input() showCloseButton:boolean = true;
     @Input() showInfoButton:boolean = true;
     @Input() showEditButton:boolean = true;
     @Input() showDeleteButton:boolean = false;
-    @Output() onOpenItem:EventEmitter<any> = new EventEmitter<any>();
-    @Output() onCloseItem:EventEmitter<any> = new EventEmitter<any>();
-    @Output() onEditItem:EventEmitter<any> = new EventEmitter<any>();
-    @Output() onDeleteItem:EventEmitter<any> = new EventEmitter<any>();
-
-    private openedInfo:boolean = false;
-    private openedItem:any;
-    private openedItemIndex:any;
-    private openedItemIsLoaded:boolean;
+    @Output() onOpenImage:EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
+    @Output() onCloseImage:EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
+    @Output() onEditImage:EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
+    @Output() onDeleteImage:EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
+    private isOpenedInfo:boolean = false;
+    private openedImage:GalleryImage;
+    private openedImageIndex:number;
+    private openedImageIsLoaded:boolean;
 
     constructor(@Inject(CallbackHandlerService) private callbackHandler:CallbackHandlerService,
                 @Inject(ScrollFreezerService) private scrollFreezer:ScrollFreezerService) {
     }
 
     ngOnInit() {
-        this.resetOpenedItem();
+        this.reset();
     }
 
     ngOnChanges(changes:SimpleChanges) {
-        // We will view default item only on the fresh load of items.
+        // We will view default image only on the fresh load of images.
         // This is a buggy piece of code. Be aware when making a changes.
-        if (this.defaultItemId && changes['items'] && !changes['items'].previousValue.length) {
-            this.viewItemById(this.defaultItemId);
+        if (this.defaultImageId && changes['galleryImages'] && !changes['galleryImages'].previousValue.length) {
+            this.viewImageById(this.defaultImageId);
         }
     }
 
     @HostListener('document:keydown', ['$event'])
     onDocumentKeyDown = (event:KeyboardEvent) => {
-        if (this.openedItem) {
+        if (this.openedImage) {
             switch (event.key) {
                 case 'Escape':
-                    return this.closeItem();
+                    return this.closeImage();
                 case 'ArrowLeft':
-                    return this.viewPrevItem();
+                    return this.viewPrevImage();
                 case 'ArrowRight':
-                    return this.viewNextItem(true);
+                    return this.viewNextImage(true);
             }
         }
     };
 
     reset = () => {
-        this.resetOpenedItem();
-        this.galleryGridComponent.resetGridRowItems();
+        this.unsetOpenedImage();
+        this.galleryGridComponent.reset();
     };
 
-    setOpenedItem = (item:any, index:number):Promise<any> => {
+    setOpenedImage = (galleryImage:GalleryImage, index:number):void => {
         this.scrollFreezer.freezeBackgroundScroll();
-        this.openedItem = item;
-        this.openedItemIndex = index;
-        return new Promise((resolve) => {
-            let image = new Image;
-            let loaded = false;
-            image.onload = () => {
-                loaded = true;
-                this.openedItemIsLoaded = true;
-                resolve();
-            };
-            setTimeout(() => (this.openedItemIsLoaded = loaded), 400);
-            image.src = item.thumbnails.large.absolute_url;
-        }).then(() => this.onOpenItem.emit(this.openedItem));
+        this.openedImage = galleryImage;
+        this.openedImageIndex = index;
+        const galleryImageLoader = new Image;
+        let loaded = false;
+        galleryImageLoader.onload = () => {
+            this.openedImageIsLoaded = loaded = true;
+            this.onOpenImage.emit(this.openedImage);
+        };
+        setTimeout(() => (this.openedImageIsLoaded = loaded), 400);
+        galleryImageLoader.src = galleryImage.getLargeSizeUrl();
     };
 
-    resetOpenedItem = ():void => {
+    unsetOpenedImage = ():void => {
         this.scrollFreezer.unfreezeBackgroundScroll();
-        this.openedItem = null;
-        this.openedItemIndex = null;
-        this.openedItemIsLoaded = false;
+        this.openedImage = null;
+        this.openedImageIndex = null;
+        this.openedImageIsLoaded = false;
     };
 
-    getOpenedItem = ():any => {
-        return this.openedItem;
-    };
-
-    getOpenedInfo = ():boolean => {
-        return this.openedInfo;
-    };
-
-    setItems = (items:Array<any>):void => {
-        this.items = items;
-    };
-
-    getItems = ():Array<any> => {
-        return this.items;
-    };
-
-    viewItemById = (id:string):void => {
-        this.items.some((item:any, index:number) => {
-            if (item.id == id && index != this.openedItemIndex) {
-                this.setOpenedItem(item, index);
+    viewImageById = (galleryImageId:any):void => {
+        this.galleryImages.some((galleryImage:GalleryImage, index:number) => {
+            if (galleryImage.getId() == galleryImageId && index != this.openedImageIndex) {
+                this.setOpenedImage(galleryImage, index);
                 return true;
-            } else if (index === this.items.length - 1) {
-                this.loadMoreItems().then((items:Array<any>) => {
-                    this.viewItemById(id);
-                });
+            } else if (index === this.galleryImages.length - 1) {
+                this.loadMoreImages().then(() => this.viewImageById(galleryImageId));
             }
             return false;
         });
     };
 
-    viewItem = (item:any):void => {
-        let id = item.id;
-        this.items.some((item:any, index:number) => {
-            if (item.id == id && index != this.openedItemIndex) {
-                this.setOpenedItem(this.items[index], index);
+    viewImage = (galleryImage:GalleryImage):void => {
+        const galleryImageId = galleryImage.getId();
+        this.galleryImages.some((galleryImage:GalleryImage, index:number) => {
+            if (galleryImage.getId() == galleryImageId && index != this.openedImageIndex) {
+                this.setOpenedImage(this.galleryImages[index], index);
                 return true;
             }
             return false;
         });
     };
 
-    viewPrevItem = ():void => {
-        let prevItemIndex = this.openedItemIndex - 1;
-        if (this.items[prevItemIndex]) {
-            this.viewItem(this.items[prevItemIndex]);
+    viewPrevImage = ():void => {
+        const prevImageIndex = this.openedImageIndex - 1;
+        if (this.galleryImages[prevImageIndex]) {
+            this.viewImage(this.galleryImages[prevImageIndex]);
         }
     };
 
-    viewNextItem = (loadMoreIfNotExist:boolean):void => {
-        let nextItemIndex = this.openedItemIndex + 1;
-        if (this.items[nextItemIndex]) {
-            this.viewItem(this.items[nextItemIndex]);
+    viewNextImage = (loadMoreIfNotExist:boolean):void => {
+        const nextImageIndex = this.openedImageIndex + 1;
+        if (this.galleryImages[nextImageIndex]) {
+            this.viewImage(this.galleryImages[nextImageIndex]);
         } else if (loadMoreIfNotExist) {
-            this.loadMoreItems().then((items:Array<any>) => {
-                this.viewNextItem(false)
-            });
+            this.loadMoreImages().then(() => this.viewNextImage(false));
         }
     };
 
-    loadMoreItems = ():Promise<Array<any>> => {
+    loadMoreImages = ():Promise<Array<GalleryImage>> => {
         return this.callbackHandler
             .resolveCallback(this.onLoadMoreCallback)
-            .then((items:Array<any>) => {
-                this.setItems(items);
-                return items;
-            });
+            .then((galleryImages:Array<GalleryImage>) => this.galleryImages = galleryImages);
     };
 
-    closeItem = ():void => {
-        this.onCloseItem.emit(this.openedItem);
-        this.resetOpenedItem();
+    closeImage = ():void => {
+        this.onCloseImage.emit(this.openedImage);
+        this.unsetOpenedImage();
     };
 
-    infoItem = ():void => {
-        this.openedInfo = !this.openedInfo;
+    toggleInfo = ():void => {
+        this.isOpenedInfo = !this.isOpenedInfo;
     };
 
-    editItem = ():void => {
-        this.onEditItem.emit(this.openedItem);
+    editImage = ():void => {
+        this.onEditImage.emit(this.openedImage);
     };
 
-    deleteItem = ():void => {
-        this.onDeleteItem.emit(this.openedItem);
+    deleteImage = ():void => {
+        this.onDeleteImage.emit(this.openedImage);
     };
 }

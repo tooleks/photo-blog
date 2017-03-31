@@ -4,20 +4,17 @@
             <div class="col-md-4 col-md-push-8">
                 <div class="row">
                     <div class="col-sm-12">
-                        <div class="file-box" *ngIf="photo.absolute_url">
+                        <div class="file-box" *ngIf="photo.url">
                             <div class="file">
                                 <span class="corner"></span>
                                 <div class="image">
-                                    <a [href]="photo.absolute_url" target="_blank" title="photo.description">
-                                        <img [src]="photo.thumbnails.medium.absolute_url"
+                                    <a [href]="photo.url" target="_blank" title="photo.description">
+                                        <img [src]="photo.thumbnails.medium.url"
                                              [alt]="photo.description"
                                              class="img-responsive">
                                     </a>
                                 </div>
                                 <div class="file-name">
-                                    <div *ngIf="photo.exif.taken_at">
-                                        <small>{{ 'Taken On:' }} {{ photo.exif.taken_at }}</small>
-                                    </div>
                                     <div *ngIf="photo.exif.manufacturer">
                                         <small>{{ 'Manufacturer:' }} {{ photo.exif.manufacturer }}</small>
                                     </div>
@@ -32,6 +29,9 @@
                                     </div>
                                     <div *ngIf="photo.exif.iso">
                                         <small>{{ 'ISO:' }} {{ photo.exif.iso }}</small>
+                                    </div>
+                                    <div *ngIf="photo.exif.taken_at">
+                                        <small>{{ 'Taken At:' }} {{ photo.exif.taken_at }}</small>
                                     </div>
                                 </div>
                             </div>

@@ -5,9 +5,8 @@ namespace Api\V1\Http\Controllers;
 use Api\V1\Http\Requests\FindTagsRequest;
 use Core\DataProviders\Tag\Contracts\TagDataProvider;
 use Core\DataProviders\Tag\Criterias\SortByPhotosCount;
-use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Http\Request;
 use Illuminate\Pagination\AbstractPaginator;
+use Illuminate\Routing\Controller;
 
 /**
  * Class TagsController.
@@ -15,25 +14,15 @@ use Illuminate\Pagination\AbstractPaginator;
  * @property TagDataProvider tagDataProvider
  * @package Api\V1\Http\Controllers
  */
-class TagsController extends ResourceController
+class TagsController extends Controller
 {
     /**
      * TagsController constructor.
      *
-     * @param Request $request
-     * @param Guard $guard
-     * @param string $presenterClass
      * @param TagDataProvider $tagDataProvider
      */
-    public function __construct(
-        Request $request,
-        Guard $guard,
-        string $presenterClass,
-        TagDataProvider $tagDataProvider
-    )
+    public function __construct(TagDataProvider $tagDataProvider)
     {
-        parent::__construct($request, $guard, $presenterClass);
-
         $this->tagDataProvider = $tagDataProvider;
     }
 

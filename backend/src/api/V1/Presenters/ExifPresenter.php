@@ -38,7 +38,7 @@ class ExifPresenter extends Presenter
             'iso' => 'data.ISOSpeedRatings',
             'taken_at' => function () {
                 $takenAt = $this->getPresenteeAttribute('data.DateTimeOriginal');
-                return $takenAt !== null ? (string)(new Carbon($takenAt)) : null;
+                return $takenAt ? (string)(new Carbon($takenAt)) : null;
             },
         ];
     }

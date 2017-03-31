@@ -13,7 +13,7 @@ import {SubscriptionForm} from './subscription-form';
 
 @Component({
     selector: 'subscription',
-    templateUrl: './subscription.component.html',
+    templateUrl: 'subscription.component.html',
 })
 export class SubscriptionComponent {
     private form:SubscriptionForm;

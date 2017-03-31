@@ -4,8 +4,8 @@ import {Notice} from '../models';
 
 @Component({
     selector: 'notices',
-    templateUrl: './notices.component.html',
-    styles: [String(require('./notices.component.css'))],
+    templateUrl: 'notices.component.html',
+    styleUrls: ['notices.component.css'],
 })
 export class NoticesComponent {
     constructor(@Inject(NoticesService) private notices:NoticesService) {

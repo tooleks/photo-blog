@@ -6,33 +6,26 @@ use Api\V1\Http\Requests\CreateTokenRequest;
 use Core\Models\User;
 use Core\DataProviders\User\Contracts\UserDataProvider;
 use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 /**
  * Class TokenController.
  *
+ * @property Guard guard
  * @property UserDataProvider userDataProvider
  * @package Api\V1\Http\Controllers
  */
-class TokenController extends ResourceController
+class TokenController extends Controller
 {
     /**
      * TokenController constructor.
      *
-     * @param Request $request
      * @param Guard $guard
-     * @param string $presenterClass
      * @param UserDataProvider $userDataProvider
      */
-    public function __construct(
-        Request $request,
-        Guard $guard,
-        string $presenterClass,
-        UserDataProvider $userDataProvider
-    )
+    public function __construct(Guard $guard, UserDataProvider $userDataProvider)
     {
-        parent::__construct($request, $guard, $presenterClass);
-
+        $this->guard = $guard;
         $this->userDataProvider = $userDataProvider;
     }
 

@@ -15,8 +15,8 @@ import {ScreenDetectorService, ApiService, AuthProviderService, EnvService} from
 
 @Component({
     selector: 'sidebar',
-    templateUrl: './sidebar.component.html',
-    styles: [String(require('./sidebar.component.css'))],
+    templateUrl: 'sidebar.component.html',
+    styleUrls: ['sidebar.component.css'],
     animations: [
         trigger('slideInOut', [
             state('in', style({

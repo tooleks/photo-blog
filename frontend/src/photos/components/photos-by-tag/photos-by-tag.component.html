@@ -4,12 +4,12 @@
             <h2 class="m-xs">{{ 'No photos found' }}</h2>
         </div>
         <gallery #galleryComponent
-                 [items]="getPhotos()"
-                 [defaultItemId]="queryParams['show']"
+                 [galleryImages]="galleryImages"
+                 [defaultImageId]="queryParams['show']"
                  [onLoadMoreCallback]="loadMorePhotos"
-                 (onOpenItem)="onShowPhoto($event)"
-                 (onCloseItem)="onHidePhoto($event)"
-                 (onEditItem)="authProvider.isAuthenticated() ? onEditPhoto($event) : false"
+                 (onOpenImage)="onShowPhoto($event)"
+                 (onCloseImage)="onHidePhoto($event)"
+                 (onEditImage)="authProvider.isAuthenticated() ? onEditPhoto($event) : null"
                  [showEditButton]="authProvider.isAuthenticated()"
                  infinite-scroll
                  [infiniteScrollDistance]="3"

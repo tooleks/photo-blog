@@ -2,7 +2,7 @@ import {Component, Input, Output, Inject, ElementRef, EventEmitter} from '@angul
 
 @Component({
     selector: 'file-select-input',
-    templateUrl: './file-select-input.component.html',
+    templateUrl: 'file-select-input.component.html',
 })
 export class FileSelectInputComponent {
     @Input() disabled:boolean;

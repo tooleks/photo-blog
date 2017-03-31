@@ -51,5 +51,6 @@ class Kernel extends HttpKernel
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'throttle' => \Api\V1\Http\Middleware\ThrottleRequests::class,
         'json_api' => \Api\V1\Http\Middleware\JsonApi::class,
+        'present' => \Api\V1\Http\Middleware\PresentResponses::class,
     ];
 }

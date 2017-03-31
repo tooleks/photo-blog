@@ -1,6 +1,6 @@
 gallery-grid {
     display: block;
-    overflow: auto;
+    width: 100%;
 }
 
 gallery-grid .gl-grid-cell-wrapper {

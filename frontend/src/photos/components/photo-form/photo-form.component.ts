@@ -9,17 +9,16 @@ import {
     LockProcessServiceProvider,
     LockProcessService,
 } from '../../../shared/services';
-import {Photo} from '../../../shared/models';
-import {PhotoDataProviderService} from '../../services'
 import {NoticesService} from '../../../common/notices';
+import {PhotoDataProviderService} from '../../services'
 
 @Component({
     selector: 'photo-form',
-    templateUrl: './photo-form.component.html',
-    styles: [String(require('./photo-form.component.css'))],
+    templateUrl: 'photo-form.component.html',
+    styleUrls: ['photo-form.component.css'],
 })
 export class PhotoFormComponent {
-    private photo:Photo;
+    private photo:any = {tags: []};
     private navigator:NavigatorService;
     private lockProcess:LockProcessService;
 
@@ -40,19 +39,13 @@ export class PhotoFormComponent {
 
         this.title.setTitle('Add Photo');
 
-        this.photo = new Photo;
-
-        this.route.params.map((params) => params['id']).subscribe((id:number) => {
-            if (!id) {
-                return;
-            }
-
-            this.photoDataProvider.getById(id).then((photo:Photo) => {
+        this.route.params
+            .map((params) => params['id'])
+            .subscribe((id:number) => {
+                if (!id) return;
                 this.title.setTitle('Edit Photo');
-                this.photo = photo;
-                return photo;
+                this.photoDataProvider.getById(id).then((photo:any) => this.photo = photo);
             });
-        });
     }
 
     private processSavePhoto = () => {
@@ -60,10 +53,7 @@ export class PhotoFormComponent {
             ? this.photoDataProvider.updateById(this.photo.id, this.photo)
             : this.photoDataProvider.create(this.photo);
 
-        return saver.then((photo:Photo) => {
-            this.photo = photo;
-            return photo;
-        });
+        return saver.then((photo:any) => this.photo = photo);
     };
 
     save = () => {
@@ -79,16 +69,7 @@ export class PhotoFormComponent {
             ? this.photoDataProvider.uploadById(this.photo.id, file)
             : this.photoDataProvider.upload(file);
 
-        return uploader.then((photo:Photo) => {
-            this.photo.photo_id = photo.id;
-            this.photo.created_by_user_id = photo.created_by_user_id;
-            this.photo.absolute_url = photo.absolute_url;
-            this.photo.created_at = photo.absolute_url;
-            this.photo.updated_at = photo.absolute_url;
-            this.photo.thumbnails = photo.thumbnails;
-            this.photo.exif = photo.exif;
-            return photo;
-        });
+        return uploader.then((photo:any) => this.photo = photo);
     };
 
     upload = (file:FileList) => {

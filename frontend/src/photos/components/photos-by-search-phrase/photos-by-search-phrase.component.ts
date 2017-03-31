@@ -11,22 +11,23 @@ import {
     LockProcessServiceProvider,
     LockProcessService,
 } from '../../../shared/services';
-import {PublishedPhoto} from '../../../shared/models';
-import {PhotoDataProviderService, PublishedPhotoMapper} from '../../services';
+import {PhotoDataProviderService} from '../../services';
+import {PhotoToGalleryImageMapper} from '../../mappers';
+import {GalleryImage} from '../../../shared/components/gallery';
 
 @Component({
     selector: 'photos-by-search-phrase',
-    templateUrl: './photos-by-search-phrase.component.html',
+    templateUrl: 'photos-by-search-phrase.component.html',
 })
 export class PhotosBySearchPhraseComponent {
     @ViewChildren('inputSearch') inputSearchComponent:any;
     @ViewChild('galleryComponent') galleryComponent:any;
-    private photos:Array<PublishedPhoto> = [];
+    private defaults:any = {page: 1, perPage: 20};
     private queryParams:Object = {search_phrase: ''};
-    private activeSearchPhrase:string = null;
     private pager:PagerService;
-    private lockProcess:LockProcessService;
     private navigator:NavigatorService;
+    private lockProcess:LockProcessService;
+    private galleryImages:Array<GalleryImage> = [];
 
     constructor(@Inject(ActivatedRoute) private route:ActivatedRoute,
                 @Inject(TitleService) private title:TitleService,
@@ -36,92 +37,86 @@ export class PhotosBySearchPhraseComponent {
                 @Inject(NavigatorServiceProvider) navigatorProvider:NavigatorServiceProvider,
                 @Inject(PagerServiceProvider) pagerProvider:PagerServiceProvider,
                 @Inject(LockProcessServiceProvider) lockProcessProvider:LockProcessServiceProvider) {
-        this.pager = pagerProvider.getInstance(1, 20);
+        this.pager = pagerProvider.getInstance(this.defaults.page, this.defaults.perPage);
         this.navigator = navigatorProvider.getInstance();
         this.lockProcess = lockProcessProvider.getInstance();
     }
 
     ngOnInit() {
-        this.scroller.scrollToTop();
-
         this.title.setTitle(['Search Photos']);
+        this.scroller.scrollToTop();
 
         this.route.queryParams
             .map((queryParams) => queryParams['page'])
-            .subscribe((page:number) => this.pager.setPage(page));
+            .subscribe((page:number) => this.queryParams['page'] = page ? Number(page) : this.defaults.page);
 
         this.route.queryParams
             .map((queryParams) => queryParams['show'])
-            .subscribe((show:number) => this.queryParams['show'] = show);
-
-        this.route.queryParams
-            .map((queryParams) => queryParams['search_phrase'])
-            .subscribe((searchPhrase:string) => {
-                if (!searchPhrase || searchPhrase == this.activeSearchPhrase) return;
-                this.photos = [];
-                this.galleryComponent.reset();
-                this.queryParams['search_phrase'] = this.activeSearchPhrase = searchPhrase;
-                this.title.setTitle(['Photos', 'Search "' + this.queryParams['search_phrase'] + '"']);
-                this.loadPhotos(1, this.pager.getPerPage() * this.pager.getPage(), this.queryParams['search_phrase']);
-            });
+            .subscribe((show:number) => this.queryParams['show'] = Number(show));
     }
 
     ngAfterViewInit() {
         this.inputSearchComponent.first.nativeElement.focus();
+
+        this.route.queryParams
+            .map((queryParams) => queryParams['search_phrase'])
+            .subscribe(this.searchPhotosByPhrase);
     }
 
-    private processLoadPhotos = (page:number, perPage:number, searchPhrase:string):Promise<Array<PublishedPhoto>> => {
-        return this.photoDataProvider
-            .getBySearchPhrase(page, perPage, searchPhrase)
-            .then((response:any) => {
-                if (response.data.length) this.pager.setPage(response.current_page);
-                this.appendPhotos(response.data);
-                return response.data;
-            });
-    };
-
-    private loadPhotos = (page:number, perPage:number, searchPhrase:string):Promise<Array<PublishedPhoto>> => {
+    private loadPhotos = (page:number, perPage:number, searchPhrase:string):Promise<Array<GalleryImage>> => {
         return this.lockProcess
-            .process(this.processLoadPhotos, [page, perPage, searchPhrase])
-            .then((result:any) => {
-                this.navigator.setQueryParam('page', this.pager.getPage());
-                return result;
-            });
+            .process(this.photoDataProvider.getBySearchPhrase, [page, perPage, searchPhrase])
+            .then(this.handleLoadPhotos);
     };
 
-    loadMorePhotos = ():Promise<Array<PublishedPhoto>> => {
+    private handleLoadPhotos = (response:any):Array<GalleryImage> => {
+        const galleryImages = PhotoToGalleryImageMapper.map(response.data);
+        if (response.data.length) {
+            this.pager.setPage(response.current_page);
+            this.navigator.setQueryParam('page', this.pager.getPage());
+            this.galleryImages = this.galleryImages.concat(galleryImages);
+        }
+        return galleryImages;
+    };
+
+    loadMorePhotos = ():Promise<Array<GalleryImage>> => {
         return this.loadPhotos(this.pager.getNextPage(), this.pager.getPerPage(), this.queryParams['search_phrase']);
     };
 
-    private appendPhotos = (photos:Array<PublishedPhoto>):void => {
-        this.photos = this.photos.concat(photos.map(PublishedPhotoMapper.map));
+    searchPhotosByPhrase = (searchPhrase:string):void => {
+        if (searchPhrase && searchPhrase != this.queryParams['search_phrase']) {
+            this.galleryImages = [];
+            this.galleryComponent.reset();
+            this.queryParams['search_phrase'] = String(searchPhrase);
+            this.title.setTitle(['Photos', 'Search "' + this.queryParams['search_phrase'] + '"']);
+            const perPageOffset = this.queryParams['page'] * this.pager.getPerPage();
+            this.loadPhotos(this.defaults.page, perPageOffset, this.queryParams['search_phrase']);
+        }
     };
 
-    private getPhotos = ():Array<PublishedPhoto> => {
-        return this.photos;
-    };
-
-    searchPhotos = (searchPhrase:string):void => {
-        if (searchPhrase) this.navigator.navigate(['photos/search'], {queryParams: {search_phrase: searchPhrase}});
-    };
+    navigateToSearchPhotos(searchPhrase:string) {
+        if (searchPhrase) {
+            this.navigator.navigate(['photos/search'], {queryParams: {search_phrase: searchPhrase}});
+        }
+    }
 
     isEmpty = ():boolean => {
-        return !this.getPhotos().length && !this.lockProcess.isProcessing();
+        return !this.galleryImages.length && !this.lockProcess.isProcessing();
     };
 
     isLoading = ():boolean => {
         return this.lockProcess.isProcessing();
     };
 
-    onShowPhoto = (photo:PublishedPhoto):void => {
-        this.navigator.setQueryParam('show', photo.id);
+    onShowPhoto = (galleryImage:GalleryImage):void => {
+        this.navigator.setQueryParam('show', galleryImage.getId());
     };
 
-    onHidePhoto = (photo:PublishedPhoto):void => {
+    onHidePhoto = (galleryImage:GalleryImage):void => {
         this.navigator.unsetQueryParam('show');
     };
 
-    onEditPhoto = (photo:PublishedPhoto):void => {
-        this.navigator.navigate(['photo/edit', photo.id]);
+    onEditPhoto = (galleryImage:GalleryImage):void => {
+        this.navigator.navigate(['photo/edit', galleryImage.getId()]);
     };
 }

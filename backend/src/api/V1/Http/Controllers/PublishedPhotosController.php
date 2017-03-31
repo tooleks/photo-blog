@@ -10,9 +10,8 @@ use Core\DataProviders\Photo\Criterias\IsPublished;
 use Core\DataProviders\Photo\Criterias\HasSearchPhrase;
 use Core\DataProviders\Photo\Criterias\HasTagWithText;
 use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
-use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Http\Request;
 use Illuminate\Pagination\AbstractPaginator;
+use Illuminate\Routing\Controller;
 use Lib\DataProvider\Criterias\SortByCreatedAt;
 
 /**
@@ -21,25 +20,15 @@ use Lib\DataProvider\Criterias\SortByCreatedAt;
  * @property PhotoDataProvider photoDataProvider
  * @package Api\V1\Http\Controllers
  */
-class PublishedPhotosController extends ResourceController
+class PublishedPhotosController extends Controller
 {
     /**
      * PublishedPhotosController constructor.
      *
-     * @param Request $request
-     * @param Guard $guard
-     * @param string $presenterClass
      * @param PhotoDataProvider $photoDataProvider
      */
-    public function __construct(
-        Request $request,
-        Guard $guard,
-        string $presenterClass,
-        PhotoDataProvider $photoDataProvider
-    )
+    public function __construct(PhotoDataProvider $photoDataProvider)
     {
-        parent::__construct($request, $guard, $presenterClass);
-
         $this->photoDataProvider = $photoDataProvider;
     }
 
@@ -59,7 +48,7 @@ class PublishedPhotosController extends ResourceController
      * {
      *     "id": 1,
      *     "created_by_user_id" 1,
-     *     "absolute_url": "http://path/to/photo/file",
+     *     "url": "http://path/to/photo/file",
      *     "avg_color": "#000000",
      *     "created_at": "2016-10-24 12:24:33",
      *     "updated_at": "2016-10-24 14:38:05",
@@ -73,12 +62,12 @@ class PublishedPhotosController extends ResourceController
      *     },
      *     "thumbnails": [
      *         "medium": {
-     *             "absolute_url": "http://path/to/photo/thumbnail/medium_file"
+     *             "url": "http://path/to/photo/thumbnail/medium_file"
      *             "width": 500,
      *             "height": 500
      *         },
      *         "large": {
-     *              "absolute_url": "http://path/to/photo/thumbnail/large_file"
+     *              "url": "http://path/to/photo/thumbnail/large_file"
      *              "width": 1000,
      *              "height": 1000
      *         }
@@ -122,7 +111,7 @@ class PublishedPhotosController extends ResourceController
      * {
      *     "id": 1,
      *     "created_by_user_id" 1,
-     *     "absolute_url": "http://path/to/photo/file",
+     *     "url": "http://path/to/photo/file",
      *     "avg_color": "#000000",
      *     "created_at": "2016-10-24 12:24:33",
      *     "updated_at": "2016-10-24 14:38:05",
@@ -136,12 +125,12 @@ class PublishedPhotosController extends ResourceController
      *     },
      *     "thumbnails": [
      *         "medium": {
-     *             "absolute_url": "http://path/to/photo/thumbnail/medium_file"
+     *             "url": "http://path/to/photo/thumbnail/medium_file"
      *             "width": 500,
      *             "height": 500
      *         },
      *         "large": {
-     *              "absolute_url": "http://path/to/photo/thumbnail/large_file"
+     *              "url": "http://path/to/photo/thumbnail/large_file"
      *              "width": 1000,
      *              "height": 1000
      *         }
@@ -190,7 +179,7 @@ class PublishedPhotosController extends ResourceController
      *         {
      *             "id": 1,
      *             "created_by_user_id" 1,
-     *             "absolute_url": "http://path/to/photo/file",
+     *             "url": "http://path/to/photo/file",
      *             "avg_color": "#000000",
      *             "created_at": "2016-10-24 12:24:33",
      *             "updated_at": "2016-10-24 14:38:05",
@@ -204,12 +193,12 @@ class PublishedPhotosController extends ResourceController
      *             },
      *             "thumbnails": [
      *                 "medium": {
-     *                     "absolute_url": "http://path/to/photo/thumbnail/medium_file"
+     *                     "url": "http://path/to/photo/thumbnail/medium_file"
      *                     "width": 500,
      *                     "height": 500
      *                 },
      *                 "large": {
-     *                      "absolute_url": "http://path/to/photo/thumbnail/large_file"
+     *                      "url": "http://path/to/photo/thumbnail/large_file"
      *                      "width": 1000,
      *                      "height": 1000
      *                 }
@@ -260,7 +249,7 @@ class PublishedPhotosController extends ResourceController
      * {
      *     "id": 1,
      *     "created_by_user_id" 1,
-     *     "absolute_url": "http://path/to/photo/file",
+     *     "url": "http://path/to/photo/file",
      *     "avg_color": "#000000",
      *     "created_at": "2016-10-24 12:24:33",
      *     "updated_at": "2016-10-24 14:38:05",
@@ -274,12 +263,12 @@ class PublishedPhotosController extends ResourceController
      *     },
      *     "thumbnails": [
      *         "medium": {
-     *             "absolute_url": "http://path/to/photo/thumbnail/medium_file"
+     *             "url": "http://path/to/photo/thumbnail/medium_file"
      *             "width": 500,
      *             "height": 500
      *         },
      *         "large": {
-     *              "absolute_url": "http://path/to/photo/thumbnail/large_file"
+     *              "url": "http://path/to/photo/thumbnail/large_file"
      *              "width": 1000,
      *              "height": 1000
      *         }

@@ -2,6 +2,7 @@
 
 namespace Console\Commands;
 
+use Closure;
 use Core\Models\Photo;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Collection;
@@ -27,7 +28,7 @@ class GeneratePhotoAvgColors extends Command
      *
      * @var string
      */
-    protected $description = 'Generate photo "avg_colors" field values by thumbnail files';
+    protected $description = 'Generate photo "avg_color" field values by thumbnail files';
 
     /**
      * GeneratePhotoAvgColors constructor.
@@ -48,16 +49,18 @@ class GeneratePhotoAvgColors extends Command
      */
     public function handle()
     {
-        $this->eachPhoto([$this, 'generatePhotoAvgColor']);
+        $this->eachPhoto(function (Photo $photo) {
+            $this->generatePhotoAvgColor($photo);
+        });
     }
 
     /**
      * Apply callback function on each photo in database.
      *
-     * @param callable $callback
+     * @param Closure $callback
      * @return void
      */
-    public function eachPhoto(callable $callback)
+    public function eachPhoto(Closure $callback)
     {
         Photo::with('thumbnails')->chunk(100, function (Collection $photos) use ($callback) {
             $photos->map($callback);

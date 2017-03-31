@@ -51,11 +51,10 @@ class JsonApi
      */
     protected function buildResponse(Response $response)
     {
-        $statusCode = $response->getStatusCode();
-        $headers = $response->headers->all();
-        $content = $response->getOriginalContent();
-
-        if ($statusCode === Response::HTTP_OK || $statusCode === Response::HTTP_CREATED) {
+        if ($response->isSuccessful()) {
+            $statusCode = $response->getStatusCode();
+            $headers = $response->headers->all();
+            $content = $response->getOriginalContent();
             $response = response()->json($content, $statusCode, $headers);
         }
 
