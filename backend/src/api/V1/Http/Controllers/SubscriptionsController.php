@@ -5,8 +5,7 @@ namespace Api\V1\Http\Controllers;
 use Api\V1\Http\Requests\CreateSubscriptionRequest;
 use Core\DataProviders\Subscription\Contracts\SubscriptionDataProvider;
 use Core\Models\Subscription;
-use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 /**
  * Class SubscriptionsController.
@@ -14,25 +13,15 @@ use Illuminate\Http\Request;
  * @property SubscriptionDataProvider subscriptionDataProvider
  * @package Api\V1\Http\Controllers
  */
-class SubscriptionsController extends ResourceController
+class SubscriptionsController extends Controller
 {
     /**
      * SubscriptionController constructor.
      *
-     * @param Request $request
-     * @param Guard $guard
-     * @param string $presenterClass
      * @param SubscriptionDataProvider $subscriptionDataProvider
      */
-    public function __construct(
-        Request $request,
-        Guard $guard,
-        string $presenterClass,
-        SubscriptionDataProvider $subscriptionDataProvider
-    )
+    public function __construct(SubscriptionDataProvider $subscriptionDataProvider)
     {
-        parent::__construct($request, $guard, $presenterClass);
-
         $this->subscriptionDataProvider = $subscriptionDataProvider;
     }
 

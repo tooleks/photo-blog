@@ -7,33 +7,26 @@ use Api\V1\Http\Requests\UpdatePhotoRequest;
 use Core\Models\Photo;
 use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
 use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 /**
  * Class PhotosController.
  *
+ * @property Guard guard
  * @property PhotoDataProvider photoDataProvider
  * @package Api\V1\Http\Controllers
  */
-class PhotosController extends ResourceController
+class PhotosController extends Controller
 {
     /**
      * PhotosController constructor.
      *
-     * @param Request $request
      * @param Guard $guard
-     * @param string $presenterClass
      * @param PhotoDataProvider $photoDataProvider
      */
-    public function __construct(
-        Request $request,
-        Guard $guard,
-        string $presenterClass,
-        PhotoDataProvider $photoDataProvider
-    )
+    public function __construct(Guard $guard, PhotoDataProvider $photoDataProvider)
     {
-        parent::__construct($request, $guard, $presenterClass);
-
+        $this->guard = $guard;
         $this->photoDataProvider = $photoDataProvider;
     }
 

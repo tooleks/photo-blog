@@ -1,17 +1,19 @@
 <?php
 
-use Api\V1\Http\Middleware\{
-    AppendClientIpAddress,
-    DeletePhotoDirectory,
-    FetchExifData,
-    GenerateAvgColor,
-    GenerateThumbnails,
-    SaveUploadedPhotoFile
-};
-use Core\Models\{
-    Photo,
-    User
-};
+use Api\V1\Http\Middleware\AppendClientIpAddress;
+use Api\V1\Http\Middleware\DeletePhotoDirectory;
+use Api\V1\Http\Middleware\FetchExifData;
+use Api\V1\Http\Middleware\GenerateAvgColor;
+use Api\V1\Http\Middleware\GenerateThumbnails;
+use Api\V1\Http\Middleware\SaveUploadedPhotoFile;
+use Api\V1\Presenters\PhotoPresenter;
+use Api\V1\Presenters\PublishedPhotoPresenter;
+use Api\V1\Presenters\SubscriptionPresenter;
+use Api\V1\Presenters\TagPresenter;
+use Api\V1\Presenters\TokenPresenter;
+use Api\V1\Presenters\UserPresenter;
+use Core\Models\Photo;
+use Core\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,7 +42,9 @@ Route::group(['prefix' => 'token'], function () {
 
     Route::post('/')
         ->uses('TokenController@create')
-        ->middleware('throttle:20,1'); // Allow 20 requests per minute.
+        // Allow 20 requests per minute.
+        ->middleware('throttle:20,1')
+        ->middleware(sprintf('present:%s', TokenPresenter::class));
 
 });
 
@@ -53,19 +57,23 @@ Route::group(['prefix' => 'users'], function () {
 
     Route::post('/')
         ->uses('UsersController@create')
-        ->middleware('can:create-resource,' . User::class);
+        ->middleware(sprintf('can:create-resource,%s', User::class))
+        ->middleware(sprintf('present:%s', UserPresenter::class));
 
     Route::get('/{user}')
         ->uses('UsersController@get')
-        ->middleware('can:get-resource,user');
+        ->middleware('can:get-resource,user')
+        ->middleware(sprintf('present:%s', UserPresenter::class));
 
     Route::put('/{user}')
         ->uses('UsersController@update')
-        ->middleware('can:update-resource,user');
+        ->middleware('can:update-resource,user')
+        ->middleware(sprintf('present:%s', UserPresenter::class));
 
     Route::delete('/{user}')
         ->uses('UsersController@delete')
-        ->middleware('can:delete-resource,user');
+        ->middleware('can:delete-resource,user')
+        ->middleware(sprintf('present:%s', UserPresenter::class));
 
 });
 
@@ -78,15 +86,17 @@ Route::group(['prefix' => 'photos'], function () {
 
     Route::post('/')
         ->uses('PhotosController@create')
-        ->middleware('can:create-resource,' . Photo::class)
+        ->middleware(sprintf('can:create-resource,%s', Photo::class))
         ->middleware(FetchExifData::class)
         ->middleware(SaveUploadedPhotoFile::class)
         ->middleware(GenerateThumbnails::class)
-        ->middleware(GenerateAvgColor::class);
+        ->middleware(GenerateAvgColor::class)
+        ->middleware(sprintf('present:%s', PhotoPresenter::class));
 
     Route::get('/{photo}')
         ->uses('PhotosController@get')
-        ->middleware('can:get-resource,photo');
+        ->middleware('can:get-resource,photo')
+        ->middleware(sprintf('present:%s', PhotoPresenter::class));
 
     Route::post('/{photo}')
         ->uses('PhotosController@update')
@@ -94,12 +104,14 @@ Route::group(['prefix' => 'photos'], function () {
         ->middleware(FetchExifData::class)
         ->middleware(SaveUploadedPhotoFile::class)
         ->middleware(GenerateThumbnails::class)
-        ->middleware(GenerateAvgColor::class);
+        ->middleware(GenerateAvgColor::class)
+        ->middleware(sprintf('present:%s', PhotoPresenter::class));
 
     Route::delete('/{photo}')
         ->uses('PhotosController@delete')
         ->middleware('can:delete-resource,photo')
-        ->middleware(DeletePhotoDirectory::class);
+        ->middleware(DeletePhotoDirectory::class)
+        ->middleware(sprintf('present:%s', PhotoPresenter::class));
 
 });
 
@@ -112,22 +124,27 @@ Route::group(['prefix' => 'published_photos'], function () {
 
     Route::post('/')
         ->uses('PublishedPhotosController@create')
-        ->middleware('can:create-resource,' . Photo::class);
+        ->middleware(sprintf('can:create-resource,%s', Photo::class))
+        ->middleware(sprintf('present:%s', PublishedPhotoPresenter::class));
 
     Route::get('/')
-        ->uses('PublishedPhotosController@find');
+        ->uses('PublishedPhotosController@find')
+        ->middleware(sprintf('present:%s', PublishedPhotoPresenter::class));
 
     Route::get('/{published_photo}')
-        ->uses('PublishedPhotosController@get');
+        ->uses('PublishedPhotosController@get')
+        ->middleware(sprintf('present:%s', PublishedPhotoPresenter::class));
 
     Route::put('/{published_photo}')
         ->uses('PublishedPhotosController@update')
-        ->middleware('can:update-resource,published_photo');
+        ->middleware('can:update-resource,published_photo')
+        ->middleware(sprintf('present:%s', PublishedPhotoPresenter::class));
 
     Route::delete('/{published_photo}')
         ->uses('PublishedPhotosController@delete')
         ->middleware('can:delete-resource,published_photo')
-        ->middleware(DeletePhotoDirectory::class);
+        ->middleware(DeletePhotoDirectory::class)
+        ->middleware(sprintf('present:%s', PublishedPhotoPresenter::class));
 
 });
 
@@ -139,7 +156,8 @@ Route::group(['prefix' => 'published_photos'], function () {
 Route::group(['prefix' => 'tags'], function () {
 
     Route::get('/')
-        ->uses('TagsController@find');
+        ->uses('TagsController@find')
+        ->middleware(sprintf('present:%s', TagPresenter::class));
 
 });
 
@@ -153,7 +171,8 @@ Route::group(['prefix' => 'contact_messages'], function () {
     Route::post('/')
         ->uses('ContactMessagesController@create')
         ->middleware(AppendClientIpAddress::class)
-        ->middleware('throttle:5,1'); // Allow 5 requests per minute.
+        // Allow 5 requests per minute.
+        ->middleware('throttle:5,1');
 
 });
 
@@ -165,9 +184,11 @@ Route::group(['prefix' => 'contact_messages'], function () {
 Route::group(['prefix' => 'subscriptions'], function () {
 
     Route::post('/')
-        ->uses('SubscriptionsController@create');
+        ->uses('SubscriptionsController@create')
+        ->middleware(sprintf('present:%s', SubscriptionPresenter::class));
 
     Route::delete('/{subscription}')
-        ->uses('SubscriptionsController@delete');
+        ->uses('SubscriptionsController@delete')
+        ->middleware(sprintf('present:%s', SubscriptionPresenter::class));
 
 });

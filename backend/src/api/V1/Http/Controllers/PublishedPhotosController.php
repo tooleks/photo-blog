@@ -10,9 +10,8 @@ use Core\DataProviders\Photo\Criterias\IsPublished;
 use Core\DataProviders\Photo\Criterias\HasSearchPhrase;
 use Core\DataProviders\Photo\Criterias\HasTagWithText;
 use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
-use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Http\Request;
 use Illuminate\Pagination\AbstractPaginator;
+use Illuminate\Routing\Controller;
 use Lib\DataProvider\Criterias\SortByCreatedAt;
 
 /**
@@ -21,25 +20,15 @@ use Lib\DataProvider\Criterias\SortByCreatedAt;
  * @property PhotoDataProvider photoDataProvider
  * @package Api\V1\Http\Controllers
  */
-class PublishedPhotosController extends ResourceController
+class PublishedPhotosController extends Controller
 {
     /**
      * PublishedPhotosController constructor.
      *
-     * @param Request $request
-     * @param Guard $guard
-     * @param string $presenterClass
      * @param PhotoDataProvider $photoDataProvider
      */
-    public function __construct(
-        Request $request,
-        Guard $guard,
-        string $presenterClass,
-        PhotoDataProvider $photoDataProvider
-    )
+    public function __construct(PhotoDataProvider $photoDataProvider)
     {
-        parent::__construct($request, $guard, $presenterClass);
-
         $this->photoDataProvider = $photoDataProvider;
     }
 
