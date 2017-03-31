@@ -48,7 +48,7 @@ class PublishedPhotosController extends Controller
      * {
      *     "id": 1,
      *     "created_by_user_id" 1,
-     *     "absolute_url": "http://path/to/photo/file",
+     *     "url": "http://path/to/photo/file",
      *     "avg_color": "#000000",
      *     "created_at": "2016-10-24 12:24:33",
      *     "updated_at": "2016-10-24 14:38:05",
@@ -62,12 +62,12 @@ class PublishedPhotosController extends Controller
      *     },
      *     "thumbnails": [
      *         "medium": {
-     *             "absolute_url": "http://path/to/photo/thumbnail/medium_file"
+     *             "url": "http://path/to/photo/thumbnail/medium_file"
      *             "width": 500,
      *             "height": 500
      *         },
      *         "large": {
-     *              "absolute_url": "http://path/to/photo/thumbnail/large_file"
+     *              "url": "http://path/to/photo/thumbnail/large_file"
      *              "width": 1000,
      *              "height": 1000
      *         }
@@ -111,7 +111,7 @@ class PublishedPhotosController extends Controller
      * {
      *     "id": 1,
      *     "created_by_user_id" 1,
-     *     "absolute_url": "http://path/to/photo/file",
+     *     "url": "http://path/to/photo/file",
      *     "avg_color": "#000000",
      *     "created_at": "2016-10-24 12:24:33",
      *     "updated_at": "2016-10-24 14:38:05",
@@ -125,12 +125,12 @@ class PublishedPhotosController extends Controller
      *     },
      *     "thumbnails": [
      *         "medium": {
-     *             "absolute_url": "http://path/to/photo/thumbnail/medium_file"
+     *             "url": "http://path/to/photo/thumbnail/medium_file"
      *             "width": 500,
      *             "height": 500
      *         },
      *         "large": {
-     *              "absolute_url": "http://path/to/photo/thumbnail/large_file"
+     *              "url": "http://path/to/photo/thumbnail/large_file"
      *              "width": 1000,
      *              "height": 1000
      *         }
@@ -179,7 +179,7 @@ class PublishedPhotosController extends Controller
      *         {
      *             "id": 1,
      *             "created_by_user_id" 1,
-     *             "absolute_url": "http://path/to/photo/file",
+     *             "url": "http://path/to/photo/file",
      *             "avg_color": "#000000",
      *             "created_at": "2016-10-24 12:24:33",
      *             "updated_at": "2016-10-24 14:38:05",
@@ -193,12 +193,12 @@ class PublishedPhotosController extends Controller
      *             },
      *             "thumbnails": [
      *                 "medium": {
-     *                     "absolute_url": "http://path/to/photo/thumbnail/medium_file"
+     *                     "url": "http://path/to/photo/thumbnail/medium_file"
      *                     "width": 500,
      *                     "height": 500
      *                 },
      *                 "large": {
-     *                      "absolute_url": "http://path/to/photo/thumbnail/large_file"
+     *                      "url": "http://path/to/photo/thumbnail/large_file"
      *                      "width": 1000,
      *                      "height": 1000
      *                 }
@@ -249,7 +249,7 @@ class PublishedPhotosController extends Controller
      * {
      *     "id": 1,
      *     "created_by_user_id" 1,
-     *     "absolute_url": "http://path/to/photo/file",
+     *     "url": "http://path/to/photo/file",
      *     "avg_color": "#000000",
      *     "created_at": "2016-10-24 12:24:33",
      *     "updated_at": "2016-10-24 14:38:05",
@@ -263,12 +263,12 @@ class PublishedPhotosController extends Controller
      *     },
      *     "thumbnails": [
      *         "medium": {
-     *             "absolute_url": "http://path/to/photo/thumbnail/medium_file"
+     *             "url": "http://path/to/photo/thumbnail/medium_file"
      *             "width": 500,
      *             "height": 500
      *         },
      *         "large": {
-     *              "absolute_url": "http://path/to/photo/thumbnail/large_file"
+     *              "url": "http://path/to/photo/thumbnail/large_file"
      *              "width": 1000,
      *              "height": 1000
      *         }
