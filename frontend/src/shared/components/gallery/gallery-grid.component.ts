@@ -183,22 +183,13 @@ export class GalleryGridComponent {
 
     private scaleImageToHeight = (galleryImage:GalleryImage, height:number):void => {
         let scaleRate = galleryImage.getSmallSizeHeight() * 100 / height;
-        let scaledWidth = Math.floor(galleryImage.getSmallSizeWidth() * 100 / scaleRate);
-        let scaledHeight = Math.floor(height);
-
-        galleryImage.setSmallSizeWidth(scaledWidth);
-        galleryImage.setSmallSizeHeight(scaledHeight);
+        this.scaleImageByScaleRate(galleryImage, scaleRate);
     };
 
     private scaleActiveRowImagesToWidth = (width:number):void => {
         let scaleRate = this.getActiveRowWidth() * 100 / width;
-        let scaledActiveRowImages = this.getActiveRowImages().map((galleryImage:GalleryImage) => {
-            let scaledWidth = Math.floor(galleryImage.getSmallSizeWidth() * 100 / scaleRate);
-            let scaledHeight = Math.floor(galleryImage.getSmallSizeHeight() * 100 / scaleRate);
-            galleryImage.setSmallSizeWidth(scaledWidth)
-                .setSmallSizeHeight(scaledHeight);
-            return galleryImage;
-        });
+        let scaledActiveRowImages = this.getActiveRowImages().map((galleryImage:GalleryImage) => this.scaleImageByScaleRate(galleryImage, scaleRate));
+
         // Note: After scaling the active row images may be a situation when the scaled row width will be not equal to the grid width.
         // The following lines of code fix this issue.
         let diffWidth = this.getGridRowMaxWidth() - this.calculateRowWidth(scaledActiveRowImages);
@@ -206,9 +197,22 @@ export class GalleryGridComponent {
             let lastImageWidth = scaledActiveRowImages[scaledActiveRowImages.length - 1].getSmallSizeWidth() + diffWidth;
             scaledActiveRowImages[scaledActiveRowImages.length - 1].setSmallSizeWidth(lastImageWidth);
         }
+
         let scaledActiveRowWidth = this.calculateRowWidth(scaledActiveRowImages);
 
         this.setActiveRowImages(scaledActiveRowImages);
         this.setActiveRowWidth(scaledActiveRowWidth);
+    };
+
+    private scaleImageByScaleRate = (galleryImage:GalleryImage, scaleRate:number):GalleryImage => {
+        let scaledWidth = this.scaleValue(galleryImage.getSmallSizeWidth(), scaleRate);
+        let scaledHeight = this.scaleValue(galleryImage.getSmallSizeHeight(), scaleRate);
+        galleryImage.setSmallSizeWidth(scaledWidth);
+        galleryImage.setSmallSizeHeight(scaledHeight);
+        return galleryImage;
+    };
+
+    private scaleValue = (value:number, scaleRate:number) => {
+        return Math.floor(value * 100 / scaleRate);
     };
 }
