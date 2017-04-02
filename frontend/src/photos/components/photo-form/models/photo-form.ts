@@ -16,7 +16,6 @@ export class PhotoForm {
         this.created_by_user_id = attributes.created_by_user_id;
         this.url = attributes.url;
         this.avg_color = attributes.avg_color;
-        this.description = attributes.description;
         this.created_at = attributes.created_at;
         this.updated_at = attributes.updated_at;
         this.exif = attributes.exif;
