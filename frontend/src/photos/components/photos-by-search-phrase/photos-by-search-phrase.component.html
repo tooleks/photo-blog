@@ -44,6 +44,6 @@
 </div>
 <div *ngIf="!isEmpty() && hasMoreGalleryImages" class="text-center" style="margin-top: 20px;">
     <button class="btn btn-primary" (click)="loadMorePhotos()" [disabled]="isLoading()">
-        <span>{{ !isLoading() ? 'Load More' : 'Loading...' }}</span>
+        {{ !isLoading() ? 'Load More' : 'Loading...' }}
     </button>
 </div>
