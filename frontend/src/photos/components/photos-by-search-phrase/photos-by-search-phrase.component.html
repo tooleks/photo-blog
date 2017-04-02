@@ -35,6 +35,7 @@
                  (onEditImage)="authProvider.isAuthenticated() ? onEditPhoto($event) : null"
                  [showEditButton]="authProvider.isAuthenticated()"
                  infinite-scroll
+                 [infiniteScrollDisabled]="!hasMoreGalleryImages"
                  [infiniteScrollDistance]="3"
                  [infiniteScrollThrottle]="500"
                  (scrolled)="loadMorePhotos()"

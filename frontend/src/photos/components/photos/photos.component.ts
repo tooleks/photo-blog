@@ -25,6 +25,7 @@ export class PhotosComponent {
     private navigator:NavigatorService;
     private lockProcess:LockProcessService;
     private galleryImages:Array<GalleryImage> = [];
+    private hasMoreGalleryImages:boolean = true;
 
     constructor(@Inject(ActivatedRoute) private route:ActivatedRoute,
                 @Inject(TitleService) private title:TitleService,
@@ -40,7 +41,7 @@ export class PhotosComponent {
 
     ngOnInit() {
         this.title.setTitle('All Photos');
-        window.scrollTo(0, 0); 
+        window.scrollTo(0, 0);
 
         this.route.queryParams
             .map((queryParams) => queryParams['page'])
@@ -64,6 +65,7 @@ export class PhotosComponent {
 
     private handleLoadPhotos = (response:any):Array<GalleryImage> => {
         const galleryImages = PhotoToGalleryImageMapper.map(response.data);
+        this.hasMoreGalleryImages = Boolean(response.data.length);
         if (response.data.length) {
             this.pager.setPage(response.current_page);
             this.navigator.setQueryParam('page', this.pager.getPage());
