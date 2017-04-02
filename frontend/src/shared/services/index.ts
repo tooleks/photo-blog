@@ -1,6 +1,5 @@
 export * from './api';
 export * from './auth';
-export * from './callback-handler';
 export * from './env';
 export * from './local-storage/';
 export * from './lock-process';
@@ -9,6 +8,5 @@ export * from './navigator';
 export * from './pager';
 export * from './screen-detector';
 export * from './scroll-freezer';
-export * from './scroller';
 export * from './title';
 export * from './user-data-provider';

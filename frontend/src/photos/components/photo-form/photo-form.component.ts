@@ -2,7 +2,6 @@ import {Component, Inject} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {
     TitleService,
-    ScrollerService,
     AuthProviderService,
     NavigatorServiceProvider,
     NavigatorService,
@@ -24,7 +23,6 @@ export class PhotoFormComponent {
 
     constructor(@Inject(ActivatedRoute) private route:ActivatedRoute,
                 @Inject(TitleService) private title:TitleService,
-                @Inject(ScrollerService) private scroller:ScrollerService,
                 @Inject(AuthProviderService) private authProvider:AuthProviderService,
                 @Inject(PhotoDataProviderService) private photoDataProvider:PhotoDataProviderService,
                 @Inject(NoticesService) private notices:NoticesService,
@@ -36,7 +34,7 @@ export class PhotoFormComponent {
 
     ngOnInit() {
         this.title.setTitle('Add Photo');
-        this.scroller.scrollToTop();
+        window.scrollTo(0, 0); 
 
         this.route.params
             .map((params) => params['id'])

@@ -2,7 +2,6 @@ import {Component, Inject} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {
     TitleService,
-    ScrollerService,
     AuthProviderService,
     NavigatorServiceProvider,
     NavigatorService,
@@ -29,7 +28,6 @@ export class PhotosComponent {
 
     constructor(@Inject(ActivatedRoute) private route:ActivatedRoute,
                 @Inject(TitleService) private title:TitleService,
-                @Inject(ScrollerService) private scroller:ScrollerService,
                 @Inject(AuthProviderService) private authProvider:AuthProviderService,
                 @Inject(PhotoDataProviderService) private photoDataProvider:PhotoDataProviderService,
                 @Inject(NavigatorServiceProvider) navigatorProvider:NavigatorServiceProvider,
@@ -42,7 +40,7 @@ export class PhotosComponent {
 
     ngOnInit() {
         this.title.setTitle('All Photos');
-        this.scroller.scrollToTop();
+        window.scrollTo(0, 0); 
 
         this.route.queryParams
             .map((queryParams) => queryParams['page'])

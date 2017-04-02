@@ -2,7 +2,6 @@ import {Component, Inject, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {
     TitleService,
-    ScrollerService,
     AuthProviderService,
     NavigatorServiceProvider,
     NavigatorService,
@@ -30,7 +29,6 @@ export class PhotosByTagComponent {
 
     constructor(@Inject(ActivatedRoute) private route:ActivatedRoute,
                 @Inject(TitleService) private title:TitleService,
-                @Inject(ScrollerService) private scroller:ScrollerService,
                 @Inject(AuthProviderService) private authProvider:AuthProviderService,
                 @Inject(PhotoDataProviderService) private photoDataProvider:PhotoDataProviderService,
                 @Inject(NavigatorServiceProvider) navigatorProvider:NavigatorServiceProvider,
@@ -43,7 +41,7 @@ export class PhotosByTagComponent {
 
     ngOnInit() {
         this.title.setTitle(['Search By Tag']);
-        this.scroller.scrollToTop();
+        window.scrollTo(0, 0); 
 
         this.route.queryParams
             .map((queryParams) => queryParams['page'])

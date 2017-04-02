@@ -3,7 +3,6 @@ import {SignInForm} from './models';
 import {
     AuthService,
     TitleService,
-    ScrollerService,
     LockProcessServiceProvider,
     LockProcessService,
     NavigatorServiceProvider,
@@ -22,7 +21,6 @@ export class SignInFormComponent {
 
     constructor(@Inject(AuthService) private auth:AuthService,
                 @Inject(TitleService) private title:TitleService,
-                @Inject(ScrollerService) private scroller:ScrollerService,
                 @Inject(NoticesService) private notices:NoticesService,
                 @Inject(NavigatorServiceProvider) navigatorProvider:NavigatorServiceProvider,
                 @Inject(LockProcessServiceProvider) lockProcessServiceProvider:LockProcessServiceProvider) {
@@ -31,7 +29,7 @@ export class SignInFormComponent {
     }
 
     ngOnInit() {
-        this.scroller.scrollToTop();
+        window.scrollTo(0, 0); 
         this.title.setTitle('Sing In');
         this.form = new SignInForm;
     }

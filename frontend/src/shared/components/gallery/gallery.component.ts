@@ -1,5 +1,4 @@
-import {Component, Input, Output, Inject, EventEmitter, HostListener, SimpleChanges, ViewChild} from '@angular/core';
-import {CallbackHandlerService, ScrollFreezerService} from '../../services';
+import {Component, Input, Output, EventEmitter, HostListener, SimpleChanges, ViewChild} from '@angular/core';
 import {GalleryGridComponent} from './gallery-grid.component';
 import {GalleryImage} from './models';
 
@@ -10,26 +9,31 @@ import {GalleryImage} from './models';
 })
 export class GalleryComponent {
     @ViewChild('galleryGridComponent') galleryGridComponent:GalleryGridComponent;
+
     @Input() galleryImages:Array<GalleryImage> = [];
     @Output() galleryImagesChange:EventEmitter<Array<GalleryImage>> = new EventEmitter<Array<GalleryImage>>();
+
     @Input() defaultImageId:string;
+
     @Input() onLoadMoreCallback:any;
-    @Input() showCloseButton:boolean = true;
-    @Input() showInfoButton:boolean = true;
-    @Input() showEditButton:boolean = true;
-    @Input() showDeleteButton:boolean = false;
     @Output() onOpenImage:EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
+
+    @Input() showCloseButton:boolean = true;
     @Output() onCloseImage:EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
+
+    @Input() showInfoButton:boolean = true;
+    @Input() isOpenedInfo:boolean = false;
+    @Output() onToggleInfo:EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
+
+    @Input() showEditButton:boolean = true;
     @Output() onEditImage:EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
+
+    @Input() showDeleteButton:boolean = false;
     @Output() onDeleteImage:EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
-    private isOpenedInfo:boolean = false;
+
     private openedImage:GalleryImage;
     private openedImageIndex:number;
     private openedImageIsLoaded:boolean;
-
-    constructor(@Inject(CallbackHandlerService) private callbackHandler:CallbackHandlerService,
-                @Inject(ScrollFreezerService) private scrollFreezer:ScrollFreezerService) {
-    }
 
     ngOnInit() {
         this.reset();
@@ -56,7 +60,7 @@ export class GalleryComponent {
             }
         }
     };
-    
+
     reset = () => {
         this.galleryImages = [];
         this.galleryImagesChange.emit(this.galleryImages);
@@ -65,7 +69,6 @@ export class GalleryComponent {
     };
 
     setOpenedImage = (galleryImage:GalleryImage, index:number):void => {
-        this.scrollFreezer.freezeBackgroundScroll();
         this.openedImage = galleryImage;
         this.openedImageIndex = index;
         const galleryImageLoader = new Image;
@@ -79,7 +82,6 @@ export class GalleryComponent {
     };
 
     unsetOpenedImage = ():void => {
-        this.scrollFreezer.unfreezeBackgroundScroll();
         this.openedImage = null;
         this.openedImageIndex = null;
         this.openedImageIsLoaded = false;
@@ -120,14 +122,12 @@ export class GalleryComponent {
         if (this.galleryImages[nextImageIndex]) {
             this.viewImage(this.galleryImages[nextImageIndex]);
         } else if (loadMoreIfNotExist) {
-            this.loadMoreImages().then(() => this.viewNextImage(false));
+            this.loadMoreImages();
         }
     };
 
     loadMoreImages = ():Promise<Array<GalleryImage>> => {
-        return this.callbackHandler
-            .resolveCallback(this.onLoadMoreCallback)
-            .then((galleryImages:Array<GalleryImage>) => this.galleryImages = galleryImages);
+        return this.onLoadMoreCallback();
     };
 
     closeImage = ():void => {
@@ -137,6 +137,7 @@ export class GalleryComponent {
 
     toggleInfo = ():void => {
         this.isOpenedInfo = !this.isOpenedInfo;
+        this.onToggleInfo.emit(this.openedImage);
     };
 
     editImage = ():void => {

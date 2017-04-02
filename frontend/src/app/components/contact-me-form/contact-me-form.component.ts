@@ -3,7 +3,6 @@ import {ContactMeForm} from './models';
 import {
     ApiService,
     TitleService,
-    ScrollerService,
     LockProcessServiceProvider,
     LockProcessService,
     NavigatorServiceProvider,
@@ -22,7 +21,6 @@ export class ContactMeFormComponent {
 
     constructor(@Inject(ApiService) private api:ApiService,
                 @Inject(TitleService) private title:TitleService,
-                @Inject(ScrollerService) private scroller:ScrollerService,
                 @Inject(NoticesService) private notices:NoticesService,
                 @Inject(NavigatorServiceProvider) navigatorProvider:NavigatorServiceProvider,
                 @Inject(LockProcessServiceProvider) lockProcessServiceProvider:LockProcessServiceProvider) {
@@ -31,7 +29,7 @@ export class ContactMeFormComponent {
     }
 
     ngOnInit() {
-        this.scroller.scrollToTop();
+        window.scrollTo(0, 0); 
         this.title.setTitle('Contact Me');
         this.form = new ContactMeForm;
     }
