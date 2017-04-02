@@ -42,16 +42,9 @@ export class PhotosBySearchPhraseComponent {
     }
 
     ngOnInit() {
+        window.scrollTo(0, 0);
         this.title.setTitle(['Search Photos']);
-        window.scrollTo(0, 0); 
-
-        this.route.queryParams
-            .map((queryParams) => queryParams['page'])
-            .subscribe((page:number) => this.queryParams['page'] = page ? Number(page) : this.defaults.page);
-
-        this.route.queryParams
-            .map((queryParams) => queryParams['show'])
-            .subscribe((show:number) => this.queryParams['show'] = Number(show));
+        this.initQueryParams();
     }
 
     ngAfterViewInit() {
@@ -61,6 +54,16 @@ export class PhotosBySearchPhraseComponent {
             .map((queryParams) => queryParams['search_phrase'])
             .subscribe(this.searchPhotosByPhrase);
     }
+
+    private initQueryParams = ():void => {
+        this.route.queryParams
+            .map((queryParams) => queryParams['page'])
+            .subscribe((page:number) => this.queryParams['page'] = page ? Number(page) : this.defaults.page);
+
+        this.route.queryParams
+            .map((queryParams) => queryParams['show'])
+            .subscribe((show:number) => this.queryParams['show'] = Number(show));
+    };
 
     private loadPhotos = (page:number, perPage:number, searchPhrase:string):Promise<Array<GalleryImage>> => {
         return this.lockProcess

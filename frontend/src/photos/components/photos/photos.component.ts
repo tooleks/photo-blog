@@ -40,9 +40,17 @@ export class PhotosComponent {
     }
 
     ngOnInit() {
-        this.title.setTitle('All Photos');
         window.scrollTo(0, 0);
+        this.title.setTitle('All Photos');
+        this.initQueryParams();
+    }
 
+    ngAfterViewInit() {
+        const perPageOffset = this.queryParams['page'] * this.pager.getPerPage();
+        this.loadPhotos(this.defaults.page, perPageOffset);
+    }
+
+    private initQueryParams = ():void => {
         this.route.queryParams
             .map((queryParams) => queryParams['page'])
             .subscribe((page:number) => this.queryParams['page'] = page ? Number(page) : this.defaults.page);
@@ -50,12 +58,7 @@ export class PhotosComponent {
         this.route.queryParams
             .map((queryParams) => queryParams['show'])
             .subscribe((show:number) => this.queryParams['show'] = Number(show));
-    }
-
-    ngAfterViewInit() {
-        const perPageOffset = this.queryParams['page'] * this.pager.getPerPage();
-        this.loadPhotos(this.defaults.page, perPageOffset);
-    }
+    };
 
     private loadPhotos = (page:number, perPage:number):Promise<Array<GalleryImage>> => {
         return this.lockProcess

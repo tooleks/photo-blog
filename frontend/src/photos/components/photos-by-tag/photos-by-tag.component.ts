@@ -41,16 +41,9 @@ export class PhotosByTagComponent {
     }
 
     ngOnInit() {
+        window.scrollTo(0, 0);
         this.title.setTitle(['Search By Tag']);
-        window.scrollTo(0, 0); 
-
-        this.route.queryParams
-            .map((queryParams) => queryParams['page'])
-            .subscribe((page:number) => this.queryParams['page'] = page ? Number(page) : this.defaults.page);
-
-        this.route.queryParams
-            .map((queryParams) => queryParams['show'])
-            .subscribe((show:number) => this.queryParams['show'] = Number(show));
+        this.initQueryParams();
     }
 
     ngAfterViewInit() {
@@ -58,6 +51,16 @@ export class PhotosByTagComponent {
             .map((params) => params['tag'])
             .subscribe(this.searchByTag);
     }
+
+    private initQueryParams = ():void => {
+        this.route.queryParams
+            .map((queryParams) => queryParams['page'])
+            .subscribe((page:number) => this.queryParams['page'] = page ? Number(page) : this.defaults.page);
+
+        this.route.queryParams
+            .map((queryParams) => queryParams['show'])
+            .subscribe((show:number) => this.queryParams['show'] = Number(show));
+    };
 
     private loadPhotos = (page:number, perPage:number, tag:string):Promise<Array<GalleryImage>> => {
         return this.lockProcess

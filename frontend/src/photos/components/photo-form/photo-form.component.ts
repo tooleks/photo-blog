@@ -1,5 +1,6 @@
 import {Component, Inject} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
+import {PhotoForm} from './models';
 import {
     TitleService,
     AuthProviderService,
@@ -17,7 +18,7 @@ import {PhotoDataProviderService} from '../../services'
     styleUrls: ['photo-form.component.css'],
 })
 export class PhotoFormComponent {
-    private photo:any = {tags: []};
+    private photo:PhotoForm;
     private navigator:NavigatorService;
     private lockProcess:LockProcessService;
 
@@ -33,55 +34,64 @@ export class PhotoFormComponent {
     }
 
     ngOnInit() {
+        window.scrollTo(0, 0);
         this.title.setTitle('Add Photo');
-        window.scrollTo(0, 0); 
-
-        this.route.params
-            .map((params) => params['id'])
-            .subscribe((id:number) => {
-                if (!id) return;
-                this.title.setTitle('Edit Photo');
-                this.photoDataProvider.getById(id).then((photo:any) => this.photo = photo);
-            });
+        this.photo = new PhotoForm;
     }
 
+    ngAfterViewInit() {
+        this.route.params
+            .map((params) => params['id'])
+            .subscribe(this.loadById);
+    }
+
+    private processLoadById = (id:number) => {
+        return id
+            ? this.photoDataProvider.getById(id)
+            : Promise.reject(new Error('Photo ID is not provided.'));
+    };
+
+    loadById = (id:number) => {
+        return this.lockProcess.process(this.processLoadById, [id]).then((photo:any) => {
+            this.photo.setSavedPhotoAttributes(photo);
+            this.title.setTitle('Edit Photo');
+            return photo;
+        });
+    };
+
     private processSavePhoto = () => {
-        let saver = this.photo.id
+        return this.photo.id
             ? this.photoDataProvider.updateById(this.photo.id, this.photo)
             : this.photoDataProvider.create(this.photo);
-
-        return saver.then((photo:any) => this.photo = photo);
     };
 
     save = () => {
-        return this.lockProcess.process(this.processSavePhoto).then((result:any) => {
+        return this.lockProcess.process(this.processSavePhoto).then((photo:any) => {
+            this.photo.setSavedPhotoAttributes(photo);
             this.notices.success('Photo was successfully saved.');
             this.navigator.navigate(['/photos']);
-            return result;
+            return photo;
         });
     };
 
     private processUploadPhoto = (file:FileList) => {
-        let uploader = this.photo.id
+        return this.photo.id
             ? this.photoDataProvider.uploadById(this.photo.id, file)
             : this.photoDataProvider.upload(file);
-
-        return uploader.then((photo:any) => this.photo = photo);
     };
 
     upload = (file:FileList) => {
-        return this.lockProcess.process(this.processUploadPhoto, [file]).then((result:any) => {
+        return this.lockProcess.process(this.processUploadPhoto, [file]).then((photo:any) => {
+            this.photo.setUploadedPhotoAttributes(photo);
             this.notices.success('File was successfully uploaded.');
-            return result;
+            return photo;
         });
     };
 
     private processDeletePhoto = () => {
-        let deleter:Promise<any> = this.photo.id
+        return this.photo.id
             ? this.photoDataProvider.deleteById(this.photo.id)
-            : Promise.reject(new Error('You can\'n delete unsaved photo.'));
-
-        return deleter;
+            : Promise.reject(new Error('Photo ID is not provided.'));
     };
 
     deletePhoto = () => {
