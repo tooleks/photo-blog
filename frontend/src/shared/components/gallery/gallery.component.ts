@@ -132,12 +132,12 @@ export class GalleryComponent {
         }
     };
 
-    loadMoreImages = ():Promise<Array<GalleryImage>> => {
+    loadMoreImages = ():Promise<any> => {
         if (typeof this.onLoadMoreCallback === 'function') {
             this.isLoadingMore = true;
             return this.onLoadMoreCallback();
         } else {
-            return Promise.reject('The "Load more" callback is not a function.');
+            return Promise.reject(new Error('The "Load more" callback is not a function.'));
         }
     };
 
