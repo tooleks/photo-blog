@@ -9,14 +9,14 @@ import {GalleryImage} from './models';
 })
 export class GalleryGridComponent {
     /**
-     * Grid row height in pixels.
+     * The grid row height in pixels.
      *
      * @type {number}
      */
     @Input() rowHeight:number = 0;
 
     /**
-     * Gallery images.
+     * The gallery images.
      *
      * @type {Array<GalleryImage>}
      */
@@ -30,35 +30,35 @@ export class GalleryGridComponent {
     @Output() onClickGridImage:EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
 
     /**
-     * Host element size.
+     * The host element size.
      *
      * @type {{width: number, height: number}}
      */
     private elementSize:any = {width: 0, height: 0};
 
     /**
-     * Host element size check function.
+     * The host element size check function.
      *
      * @type {function|null}
      */
     private elementSizeCheck:any = null;
 
     /**
-     * Host element size check interval in miliseconds.
+     * The host element size check interval in miliseconds.
      *
      * @type {number}
      */
     @Input() elementSizeCheckInterval:number = 250;
 
     /**
-     * Grid row max height in pixels.
+     * The grid row max height in pixels.
      *
      * @type {number}
      */
     private gridRowMaxHeight:number = 0;
 
     /**
-     * Grid row max width in pixels.
+     * The grid row max width in pixels.
      *
      * @type {number}
      */
@@ -77,7 +77,7 @@ export class GalleryGridComponent {
     private activeRowImages:Array<GalleryImage> = [];
 
     /**
-     * GalleryGridComponent constructor.
+     * The GalleryGridComponent constructor.
      *
      * @param {ElementRef} elementRef
      */
@@ -86,7 +86,7 @@ export class GalleryGridComponent {
     }
 
     /**
-     * Handle component state changes.
+     * Handle the component state changes.
      *
      * @param {SimpleChanges} changes
      */
@@ -103,14 +103,14 @@ export class GalleryGridComponent {
     }
 
     /**
-     * Handle component component init state.
+     * Handle the component component init state.
      */
     ngAfterContentInit() {
         this.elementSizeCheck = setInterval(this.elementSizeCheckCallback, this.elementSizeCheckInterval);
     }
 
     /**
-     * Handle component destroy state.
+     * Handle the component destroy state.
      */
     ngOnDestroy() {
         if (this.elementSizeCheck !== null) {
@@ -119,7 +119,7 @@ export class GalleryGridComponent {
     }
 
     /**
-     * Callback function that re-renders grid images after host element size has changed.
+     * The callback function that re-renders grid images after host element size has changed.
      */
     elementSizeCheckCallback = ():void => {
         let height = this.elementRef.nativeElement.offsetHeight;
@@ -133,7 +133,7 @@ export class GalleryGridComponent {
     };
 
     /**
-     * Set host element size.
+     * Set the host element size.
      *
      * @param {number} width
      * @param {number} height
@@ -143,7 +143,7 @@ export class GalleryGridComponent {
     };
 
     /**
-     * Get host element size.
+     * Get the host element size.
      *
      * @return {any}
      */
@@ -152,7 +152,7 @@ export class GalleryGridComponent {
     };
 
     /**
-     * Set grid row max height in pixels.
+     * Set the grid row max height in pixels.
      *
      * @param {number} gridRowMaxHeight
      */
@@ -161,7 +161,7 @@ export class GalleryGridComponent {
     };
 
     /**
-     * Get grid row max height in pixels
+     * Get the grid row max height in pixels
      *
      * @return {number}
      */
@@ -170,7 +170,7 @@ export class GalleryGridComponent {
     };
 
     /**
-     * Set grid row max width in pixels.
+     * Set the grid row max width in pixels.
      *
      * @param {number} gridRowMaxWidth
      */
@@ -179,7 +179,7 @@ export class GalleryGridComponent {
     };
 
     /**
-     * Get grid row max width in pixels.
+     * Get the grid row max width in pixels.
      *
      * @return {number}
      */
@@ -188,7 +188,7 @@ export class GalleryGridComponent {
     };
 
     /**
-     * Set grid rows.
+     * Set the grid rows.
      *
      * @param {Array<Array<GalleryImage>>} gridRows
      */
@@ -197,7 +197,7 @@ export class GalleryGridComponent {
     };
 
     /**
-     * Get grid rows.
+     * Get the grid rows.
      *
      * @return {Array<Array<GalleryImage>>}
      */
@@ -206,7 +206,7 @@ export class GalleryGridComponent {
     };
 
     /**
-     * Set active row images.
+     * Set the active row images.
      *
      * @param {Array<GalleryImage>} activeRowImages
      */
@@ -215,7 +215,7 @@ export class GalleryGridComponent {
     };
 
     /**
-     * Get active row images.
+     * Get the active row images.
      *
      * @return {Array<GalleryImage>}
      */
@@ -224,7 +224,7 @@ export class GalleryGridComponent {
     };
 
     /**
-     * Reset component state.
+     * Reset the component state.
      */
     reset = ():void => {
         this.setGridRows([]);
@@ -232,7 +232,7 @@ export class GalleryGridComponent {
     };
 
     /**
-     * Render grid.
+     * Render the grid.
      *
      * @param {Array<GalleryImage>} galleryImages
      */
@@ -241,14 +241,13 @@ export class GalleryGridComponent {
         // Get the array of the new grid images concatenated with the array of the last row images.
         const processImages = this.getGridRows().length ? this.getGridRows().pop().concat(newGalleryImages) : newGalleryImages;
         processImages.forEach((galleryImage:GalleryImage, index:number) => {
-            const scaledGalleryImage = scaleImageSmallSizeToHeight(galleryImage, this.getGridRowMaxHeight());
-            this.getActiveRowImages().push(scaledGalleryImage);
+            this.pushImageToActiveRow(galleryImage);
             this.renderActiveRowIfFilled(index == processImages.length - 1);
         });
     };
 
     /**
-     * Check if image exists in grid.
+     * Check if the image exists in the grid.
      *
      * @param {GalleryImage} galleryImage
      * @return {boolean}
@@ -260,7 +259,17 @@ export class GalleryGridComponent {
     };
 
     /**
-     * Render active row if it is filled.
+     * Push image to the active row.
+     *
+     * @param {GalleryImage} galleryImage
+     */
+    private pushImageToActiveRow = (galleryImage:GalleryImage):void => {
+        const scaledGalleryImage = scaleImageSmallSizeToHeight(galleryImage, this.getGridRowMaxHeight());
+        this.getActiveRowImages().push(scaledGalleryImage);
+    };
+
+    /**
+     * Render the active row if it is filled.
      *
      * @param {boolean} force
      */
