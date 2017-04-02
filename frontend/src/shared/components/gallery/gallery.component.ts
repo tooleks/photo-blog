@@ -16,6 +16,8 @@ export class GalleryComponent {
     @Input() defaultImageId:string;
 
     @Input() onLoadMoreCallback:any;
+    private isLoadingMore:boolean = false;
+
     @Output() onOpenImage:EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
 
     @Input() showCloseButton:boolean = true;
@@ -45,6 +47,10 @@ export class GalleryComponent {
         if (this.defaultImageId && changes['galleryImages'] && !changes['galleryImages'].previousValue.length) {
             this.viewImageById(this.defaultImageId);
         }
+
+        if (changes['galleryImages'] && this.openedImage && this.isLoadingMore) {
+            this.viewNextImage(false);
+        }
     }
 
     @HostListener('document:keydown', ['$event'])
@@ -61,7 +67,7 @@ export class GalleryComponent {
         }
     };
 
-    reset = () => {
+    reset = ():void => {
         this.galleryImages = [];
         this.galleryImagesChange.emit(this.galleryImages);
         this.unsetOpenedImage();
@@ -127,7 +133,12 @@ export class GalleryComponent {
     };
 
     loadMoreImages = ():Promise<Array<GalleryImage>> => {
-        return this.onLoadMoreCallback();
+        if (typeof this.onLoadMoreCallback === 'function') {
+            this.isLoadingMore = true;
+            return this.onLoadMoreCallback();
+        } else {
+            return Promise.reject('The "Load more" callback is not a function.');
+        }
     };
 
     closeImage = ():void => {
