@@ -12,14 +12,14 @@ import {
 } from '../../../shared/services';
 import {PhotoDataProviderService} from '../../services';
 import {PhotoToGalleryImageMapper} from '../../mappers';
-import {GalleryImage} from '../../../shared/components/gallery';
+import {GalleryImage, GalleryComponent} from '../../../shared/components/gallery';
 
 @Component({
     selector: 'photos-by-tag',
     templateUrl: 'photos-by-tag.component.html',
 })
 export class PhotosByTagComponent {
-    @ViewChild('galleryComponent') galleryComponent:any;
+    @ViewChild('galleryComponent') galleryComponent:GalleryComponent;
     private defaults:any = {page: 1, perPage: 20};
     private queryParams:Object = {search_phrase: ''};
     private pager:PagerService;
