@@ -80,7 +80,7 @@ export class PhotosByTagComponent {
     };
 
     loadMorePhotos = ():Promise<Array<GalleryImage>> => {
-        return this.loadPhotos(this.pager.getPage(), this.pager.getPerPage(), this.queryParams['tag']);
+        return this.loadPhotos(this.pager.getNextPage(), this.pager.getPerPage(), this.queryParams['tag']);
     };
 
     searchByTag = (tag:string):void => {
