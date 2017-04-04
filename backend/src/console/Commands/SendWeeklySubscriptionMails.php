@@ -108,7 +108,7 @@ class SendWeeklySubscriptionMails extends Command
     protected function extendSubscriptionData($data) : array
     {
         $data['website_url'] = config('main.frontend.url');
-        $data['unsubscribe_url'] = config('main.frontend.unsubscribe_url') . $data['token'];
+        $data['unsubscribe_url'] = config('main.frontend.unsubscribe_url') . '/' . $data['token'];
 
         return $data;
     }

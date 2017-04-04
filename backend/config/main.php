@@ -46,8 +46,8 @@ return [
     */
 
     'frontend' => [
-        'url' => env('FRONTEND_APP_URL', 'http://localhost:8080/'),
-        'unsubscribe_url' => env('FRONTEND_APP_UNSUBSCRIBE_URL', 'http://localhost:8080/unsubscription/'),
+        'url' => env('FRONTEND_APP_URL', 'http://localhost:8080'),
+        'unsubscribe_url' => env('FRONTEND_APP_UNSUBSCRIBE_URL', 'http://localhost:8080/unsubscription'),
     ],
 
     /*
