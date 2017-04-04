@@ -56,9 +56,9 @@ class SendWeeklySubscriptionMails extends Command
             $this->eachSubscription(function (Subscription $subscription) {
                 $this->sendWeeklySubscriptionMail($subscription);
             });
+        } else {
+            $this->comment('There are no available weekly updates.');
         }
-
-        $this->comment('There are no available weekly updates.');
     }
 
     /**
