@@ -67,7 +67,7 @@ export class PhotosComponent {
 
     private handleLoadPhotos = (response:any):Array<GalleryImage> => {
         const galleryImages = PhotoToGalleryImageMapper.map(response.data);
-        this.hasMoreGalleryImages = Boolean(response.data.length) || response.data.length < this.defaults.perPage;
+        this.hasMoreGalleryImages = !(response.data.length < this.defaults.perPage);
         if (response.data.length) {
             this.pager.setPage(response.current_page);
             this.navigator.setQueryParam('page', this.pager.getPage());
