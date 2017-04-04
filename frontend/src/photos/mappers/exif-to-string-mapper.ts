@@ -1,6 +1,12 @@
 export class ExifToStringMapper {
-    static map(item:any) {
-        let exif:Array<string> = [];
+    static map(item:any):any {
+        return (item instanceof Array)
+            ? ExifToStringMapper.mapMultiple(item)
+            : ExifToStringMapper.mapSingle(item);
+    }
+
+    private static mapSingle(item:any):string {
+        const exif:Array<string> = [];
         if (String(item.manufacturer).trim()) {
             exif.push('Manufacturer: ' + item.manufacturer);
         }
@@ -20,5 +26,9 @@ export class ExifToStringMapper {
             exif.push('Taken At: ' + item.taken_at);
         }
         return exif.join(', ');
+    }
+
+    private static mapMultiple(items:Array<any>):Array<string> {
+        return items.map(ExifToStringMapper.mapSingle);
     }
 }

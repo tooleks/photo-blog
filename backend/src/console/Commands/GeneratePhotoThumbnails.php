@@ -2,6 +2,7 @@
 
 namespace Console\Commands;
 
+use Closure;
 use Core\Models\Photo;
 use Core\Models\Thumbnail;
 use Illuminate\Console\Command;
@@ -53,12 +54,23 @@ class GeneratePhotoThumbnails extends Command
      */
     public function handle()
     {
-        Photo::with('thumbnails')->chunk(500, function (Collection $photos) {
-            $photos->map(function (Photo $photo) {
-                $this->comment(sprintf('Generating thumbnails for photo (ID:%s) ...', $photo->id));
-                $this->deletePhotoThumbnails($photo);
-                $this->generatePhotoThumbnails($photo);
-            });
+        $this->eachPhoto(function (Photo $photo) {
+            $this->comment(sprintf('Generating thumbnails for photo (ID:%s) ...', $photo->id));
+            $this->deletePhotoThumbnails($photo);
+            $this->generatePhotoThumbnails($photo);
+        });
+    }
+
+    /**
+     * Apply callback function on each photo.
+     *
+     * @param Closure $callback
+     * @return void
+     */
+    public function eachPhoto(Closure $callback)
+    {
+        Photo::with('thumbnails')->chunk(100, function (Collection $photos) use ($callback) {
+            $photos->map($callback);
         });
     }
 
@@ -69,7 +81,8 @@ class GeneratePhotoThumbnails extends Command
      */
     public function deletePhotoThumbnails(Photo $photo)
     {
-        $photo->thumbnails->map(function (Thumbnail $thumbnail) {
+        $photo->thumbnails->map(function (Thumbnail $thumbnail) use ($photo) {
+            $photo->thumbnails()->detach($thumbnail->id);
             $thumbnail->delete();
             $this->fileSystem->delete($thumbnail->path);
         });

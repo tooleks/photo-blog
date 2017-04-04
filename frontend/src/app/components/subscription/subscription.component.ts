@@ -2,7 +2,6 @@ import {Component, Inject} from '@angular/core';
 import {
     ApiService,
     TitleService,
-    ScrollerService,
     LockProcessServiceProvider,
     LockProcessService,
     NavigatorServiceProvider,
@@ -22,7 +21,6 @@ export class SubscriptionComponent {
 
     constructor(@Inject(ApiService) private api:ApiService,
                 @Inject(TitleService) private title:TitleService,
-                @Inject(ScrollerService) private scroller:ScrollerService,
                 @Inject(NoticesService) private notices:NoticesService,
                 @Inject(NavigatorServiceProvider) navigatorProvider:NavigatorServiceProvider,
                 @Inject(LockProcessServiceProvider) lockProcessServiceProvider:LockProcessServiceProvider) {
@@ -31,7 +29,6 @@ export class SubscriptionComponent {
     }
 
     ngOnInit() {
-        this.scroller.scrollToTop();
         this.title.setTitle('Subscription');
         this.form = new SubscriptionForm;
     }

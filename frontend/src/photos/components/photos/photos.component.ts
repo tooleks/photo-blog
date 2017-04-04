@@ -2,7 +2,6 @@ import {Component, Inject} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {
     TitleService,
-    ScrollerService,
     AuthProviderService,
     NavigatorServiceProvider,
     NavigatorService,
@@ -26,10 +25,10 @@ export class PhotosComponent {
     private navigator:NavigatorService;
     private lockProcess:LockProcessService;
     private galleryImages:Array<GalleryImage> = [];
+    private hasMoreGalleryImages:boolean = true;
 
     constructor(@Inject(ActivatedRoute) private route:ActivatedRoute,
                 @Inject(TitleService) private title:TitleService,
-                @Inject(ScrollerService) private scroller:ScrollerService,
                 @Inject(AuthProviderService) private authProvider:AuthProviderService,
                 @Inject(PhotoDataProviderService) private photoDataProvider:PhotoDataProviderService,
                 @Inject(NavigatorServiceProvider) navigatorProvider:NavigatorServiceProvider,
@@ -42,15 +41,7 @@ export class PhotosComponent {
 
     ngOnInit() {
         this.title.setTitle('All Photos');
-        this.scroller.scrollToTop();
-
-        this.route.queryParams
-            .map((queryParams) => queryParams['page'])
-            .subscribe((page:number) => this.queryParams['page'] = page ? Number(page) : this.defaults.page);
-
-        this.route.queryParams
-            .map((queryParams) => queryParams['show'])
-            .subscribe((show:number) => this.queryParams['show'] = Number(show));
+        this.initQueryParams();
     }
 
     ngAfterViewInit() {
@@ -58,7 +49,17 @@ export class PhotosComponent {
         this.loadPhotos(this.defaults.page, perPageOffset);
     }
 
-    private loadPhotos = (page:number, perPage:number):Promise<Array<any>> => {
+    private initQueryParams = ():void => {
+        this.route.queryParams
+            .map((queryParams) => queryParams['page'])
+            .subscribe((page:number) => this.queryParams['page'] = page ? Number(page) : this.defaults.page);
+
+        this.route.queryParams
+            .map((queryParams) => queryParams['show'])
+            .subscribe((show:number) => this.queryParams['show'] = Number(show));
+    };
+
+    private loadPhotos = (page:number, perPage:number):Promise<Array<GalleryImage>> => {
         return this.lockProcess
             .process(this.photoDataProvider.getAll, [page, perPage])
             .then(this.handleLoadPhotos);
@@ -66,6 +67,7 @@ export class PhotosComponent {
 
     private handleLoadPhotos = (response:any):Array<GalleryImage> => {
         const galleryImages = PhotoToGalleryImageMapper.map(response.data);
+        this.hasMoreGalleryImages = !(response.data.length < this.defaults.perPage);
         if (response.data.length) {
             this.pager.setPage(response.current_page);
             this.navigator.setQueryParam('page', this.pager.getPage());
@@ -74,7 +76,7 @@ export class PhotosComponent {
         return galleryImages;
     };
 
-    loadMorePhotos = ():Promise<Array<any>> => {
+    loadMorePhotos = ():Promise<Array<GalleryImage>> => {
         return this.loadPhotos(this.pager.getNextPage(), this.pager.getPerPage());
     };
 

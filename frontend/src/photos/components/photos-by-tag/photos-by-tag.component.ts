@@ -2,7 +2,6 @@ import {Component, Inject, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {
     TitleService,
-    ScrollerService,
     AuthProviderService,
     NavigatorServiceProvider,
     NavigatorService,
@@ -13,24 +12,24 @@ import {
 } from '../../../shared/services';
 import {PhotoDataProviderService} from '../../services';
 import {PhotoToGalleryImageMapper} from '../../mappers';
-import {GalleryImage} from '../../../shared/components/gallery';
+import {GalleryImage, GalleryComponent} from '../../../shared/components/gallery';
 
 @Component({
     selector: 'photos-by-tag',
     templateUrl: 'photos-by-tag.component.html',
 })
 export class PhotosByTagComponent {
-    @ViewChild('galleryComponent') galleryComponent:any;
+    @ViewChild('galleryComponent') galleryComponent:GalleryComponent;
     private defaults:any = {page: 1, perPage: 20};
     private queryParams:Object = {search_phrase: ''};
     private pager:PagerService;
     private navigator:NavigatorService;
     private lockProcess:LockProcessService;
     private galleryImages:Array<GalleryImage> = [];
+    private hasMoreGalleryImages:boolean = true;
 
     constructor(@Inject(ActivatedRoute) private route:ActivatedRoute,
                 @Inject(TitleService) private title:TitleService,
-                @Inject(ScrollerService) private scroller:ScrollerService,
                 @Inject(AuthProviderService) private authProvider:AuthProviderService,
                 @Inject(PhotoDataProviderService) private photoDataProvider:PhotoDataProviderService,
                 @Inject(NavigatorServiceProvider) navigatorProvider:NavigatorServiceProvider,
@@ -43,15 +42,7 @@ export class PhotosByTagComponent {
 
     ngOnInit() {
         this.title.setTitle(['Search By Tag']);
-        this.scroller.scrollToTop();
-
-        this.route.queryParams
-            .map((queryParams) => queryParams['page'])
-            .subscribe((page:number) => this.queryParams['page'] = page ? Number(page) : this.defaults.page);
-
-        this.route.queryParams
-            .map((queryParams) => queryParams['show'])
-            .subscribe((show:number) => this.queryParams['show'] = Number(show));
+        this.initQueryParams();
     }
 
     ngAfterViewInit() {
@@ -59,6 +50,16 @@ export class PhotosByTagComponent {
             .map((params) => params['tag'])
             .subscribe(this.searchByTag);
     }
+
+    private initQueryParams = ():void => {
+        this.route.queryParams
+            .map((queryParams) => queryParams['page'])
+            .subscribe((page:number) => this.queryParams['page'] = page ? Number(page) : this.defaults.page);
+
+        this.route.queryParams
+            .map((queryParams) => queryParams['show'])
+            .subscribe((show:number) => this.queryParams['show'] = Number(show));
+    };
 
     private loadPhotos = (page:number, perPage:number, tag:string):Promise<Array<GalleryImage>> => {
         return this.lockProcess
@@ -68,6 +69,7 @@ export class PhotosByTagComponent {
 
     private handleLoadPhotos = (response:any):Array<GalleryImage> => {
         const galleryImages = PhotoToGalleryImageMapper.map(response.data);
+        this.hasMoreGalleryImages = !(response.data.length < this.defaults.perPage);
         if (response.data.length) {
             this.pager.setPage(response.current_page);
             this.navigator.setQueryParam('page', this.pager.getPage());
@@ -76,13 +78,12 @@ export class PhotosByTagComponent {
         return galleryImages;
     };
 
-    loadMorePhotos = () => {
-        return this.loadPhotos(this.pager.getPage(), this.pager.getPerPage(), this.queryParams['tag']);
+    loadMorePhotos = ():Promise<Array<GalleryImage>> => {
+        return this.loadPhotos(this.pager.getNextPage(), this.pager.getPerPage(), this.queryParams['tag']);
     };
 
-    searchByTag = (tag:string) => {
-        if (tag) {
-            this.galleryImages = [];
+    searchByTag = (tag:string):void => {
+        if (tag && tag != this.queryParams['tag']) {
             this.galleryComponent.reset();
             this.queryParams['tag'] = tag;
             this.title.setTitle(['Photos', 'Tag #' + tag]);

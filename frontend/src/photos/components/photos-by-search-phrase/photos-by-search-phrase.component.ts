@@ -2,7 +2,6 @@ import {Component, Inject, ViewChildren, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {
     TitleService,
-    ScrollerService,
     AuthProviderService,
     NavigatorServiceProvider,
     NavigatorService,
@@ -13,7 +12,7 @@ import {
 } from '../../../shared/services';
 import {PhotoDataProviderService} from '../../services';
 import {PhotoToGalleryImageMapper} from '../../mappers';
-import {GalleryImage} from '../../../shared/components/gallery';
+import {GalleryImage, GalleryComponent} from '../../../shared/components/gallery';
 
 @Component({
     selector: 'photos-by-search-phrase',
@@ -21,17 +20,17 @@ import {GalleryImage} from '../../../shared/components/gallery';
 })
 export class PhotosBySearchPhraseComponent {
     @ViewChildren('inputSearch') inputSearchComponent:any;
-    @ViewChild('galleryComponent') galleryComponent:any;
+    @ViewChild('galleryComponent') galleryComponent:GalleryComponent;
     private defaults:any = {page: 1, perPage: 20};
     private queryParams:Object = {search_phrase: ''};
     private pager:PagerService;
     private navigator:NavigatorService;
     private lockProcess:LockProcessService;
     private galleryImages:Array<GalleryImage> = [];
+    private hasMoreGalleryImages:boolean = true;
 
     constructor(@Inject(ActivatedRoute) private route:ActivatedRoute,
                 @Inject(TitleService) private title:TitleService,
-                @Inject(ScrollerService) private scroller:ScrollerService,
                 @Inject(AuthProviderService) private authProvider:AuthProviderService,
                 @Inject(PhotoDataProviderService) private photoDataProvider:PhotoDataProviderService,
                 @Inject(NavigatorServiceProvider) navigatorProvider:NavigatorServiceProvider,
@@ -44,15 +43,7 @@ export class PhotosBySearchPhraseComponent {
 
     ngOnInit() {
         this.title.setTitle(['Search Photos']);
-        this.scroller.scrollToTop();
-
-        this.route.queryParams
-            .map((queryParams) => queryParams['page'])
-            .subscribe((page:number) => this.queryParams['page'] = page ? Number(page) : this.defaults.page);
-
-        this.route.queryParams
-            .map((queryParams) => queryParams['show'])
-            .subscribe((show:number) => this.queryParams['show'] = Number(show));
+        this.initQueryParams();
     }
 
     ngAfterViewInit() {
@@ -63,6 +54,16 @@ export class PhotosBySearchPhraseComponent {
             .subscribe(this.searchPhotosByPhrase);
     }
 
+    private initQueryParams = ():void => {
+        this.route.queryParams
+            .map((queryParams) => queryParams['page'])
+            .subscribe((page:number) => this.queryParams['page'] = page ? Number(page) : this.defaults.page);
+
+        this.route.queryParams
+            .map((queryParams) => queryParams['show'])
+            .subscribe((show:number) => this.queryParams['show'] = Number(show));
+    };
+
     private loadPhotos = (page:number, perPage:number, searchPhrase:string):Promise<Array<GalleryImage>> => {
         return this.lockProcess
             .process(this.photoDataProvider.getBySearchPhrase, [page, perPage, searchPhrase])
@@ -71,6 +72,7 @@ export class PhotosBySearchPhraseComponent {
 
     private handleLoadPhotos = (response:any):Array<GalleryImage> => {
         const galleryImages = PhotoToGalleryImageMapper.map(response.data);
+        this.hasMoreGalleryImages = !(response.data.length < this.defaults.perPage);
         if (response.data.length) {
             this.pager.setPage(response.current_page);
             this.navigator.setQueryParam('page', this.pager.getPage());
@@ -85,7 +87,6 @@ export class PhotosBySearchPhraseComponent {
 
     searchPhotosByPhrase = (searchPhrase:string):void => {
         if (searchPhrase && searchPhrase != this.queryParams['search_phrase']) {
-            this.galleryImages = [];
             this.galleryComponent.reset();
             this.queryParams['search_phrase'] = String(searchPhrase);
             this.title.setTitle(['Photos', 'Search "' + this.queryParams['search_phrase'] + '"']);
@@ -94,7 +95,7 @@ export class PhotosBySearchPhraseComponent {
         }
     };
 
-    navigateToSearchPhotos(searchPhrase:string) {
+    navigateToSearchPhotos(searchPhrase:string):void {
         if (searchPhrase) {
             this.navigator.navigate(['photos/search'], {queryParams: {search_phrase: searchPhrase}});
         }

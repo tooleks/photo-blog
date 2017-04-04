@@ -23,7 +23,7 @@ class ConfigApp extends Command
      *
      * @var string
      */
-    protected $description = '';
+    protected $description = 'Configure application';
 
     /**
      * Execute the console command.

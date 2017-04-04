@@ -1,7 +1,7 @@
 import {Component, Inject} from '@angular/core';
-import {SignInForm} from './models';
+import {ActivatedRoute} from '@angular/router';
 import {
-    AuthService,
+    ApiService,
     TitleService,
     LockProcessServiceProvider,
     LockProcessService,
@@ -11,15 +11,16 @@ import {
 import {NoticesService} from '../../../common/notices';
 
 @Component({
-    selector: 'signin-form',
-    templateUrl: 'signin-form.component.html',
+    selector: 'unsubscription',
+    templateUrl: 'unsubscription.component.html',
 })
-export class SignInFormComponent {
-    private form:SignInForm;
+export class UnsubscriptionComponent {
+    private token:string = null;
     private navigator:NavigatorService;
     private lockProcess:LockProcessService;
 
-    constructor(@Inject(AuthService) private auth:AuthService,
+    constructor(@Inject(ActivatedRoute) private route:ActivatedRoute,
+                @Inject(ApiService) private api:ApiService,
                 @Inject(TitleService) private title:TitleService,
                 @Inject(NoticesService) private notices:NoticesService,
                 @Inject(NavigatorServiceProvider) navigatorProvider:NavigatorServiceProvider,
@@ -28,19 +29,31 @@ export class SignInFormComponent {
         this.lockProcess = lockProcessServiceProvider.getInstance();
     }
 
-    ngOnInit() {
-        this.title.setTitle('Sing In');
-        this.form = new SignInForm;
+    ngAfterViewInit() {
+        this.route.params
+            .map((params:any) => params['token'])
+            .subscribe((token:string) => this.token = String(token));
     }
 
-    signIn = () => {
+    ngOnInit() {
+        this.title.setTitle('Unsubscription');
+    }
+
+    unsubscribe = ():Promise<any> => {
         return this.lockProcess
-            .process(this.auth.signIn, [this.form.email, this.form.password])
-            .then((user:any) => {
-                this.notices.success('Hello, ' + user.name + '!');
+            .process(() => this.api.delete('/subscriptions/' + this.token).toPromise())
+            .then((data:any) => {
+                this.notices.success('You have successfully unsubscribed from the website updates.');
                 this.navigator.navigate(['/']);
-                return user;
+                return data;
+            })
+            .catch((error:any) => {
+                this.navigator.navigate(['/']);
             });
+    };
+
+    navigateToHomePage = ():void => {
+        this.navigator.navigate(['/']);
     };
 
     isLoading = ():boolean => {

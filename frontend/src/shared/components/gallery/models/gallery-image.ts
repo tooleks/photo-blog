@@ -7,6 +7,12 @@ export class GalleryImage {
         this.setAttributes(attributes);
     }
 
+    clone():GalleryImage {
+        const cloned = new GalleryImage;
+        cloned.setAttributes(this.getAttributes());
+        return cloned;
+    }
+
     private callMethod(methodName:string, parameters:any) {
         if (typeof this[methodName] === 'function') {
             this[methodName](...parameters);
@@ -21,6 +27,10 @@ export class GalleryImage {
             }
         }
         return this;
+    }
+
+    getAttributes():GalleryImageAttributes {
+        return this.attributes;
     }
 
     setId(id:number):this {

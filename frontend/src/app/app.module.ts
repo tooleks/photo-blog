@@ -12,6 +12,7 @@ import {
     SignInFormComponent,
     SignOutComponent,
     SubscriptionComponent,
+    UnsubscriptionComponent,
 } from './components';
 import {AppRouting, AppRoutingProviders} from './app.routing';
 import {SharedModule} from '../shared/shared.module';
@@ -39,6 +40,7 @@ import {NoticesModule} from '../common/notices';
         SignInFormComponent,
         SignOutComponent,
         SubscriptionComponent,
+        UnsubscriptionComponent,
     ],
     exports: [],
     providers: [

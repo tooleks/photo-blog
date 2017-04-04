@@ -9,7 +9,7 @@ use Tooleks\Laravel\Presenter\Presenter;
  * Class PublishedPhotoPresenter.
  *
  * @property int id
- * @property int user_id
+ * @property int created_by_user_id
  * @property string absolute_url
  * @property string avg_color
  * @property string description

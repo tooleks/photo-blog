@@ -50,12 +50,13 @@ class GeneratePhotoAvgColors extends Command
     public function handle()
     {
         $this->eachPhoto(function (Photo $photo) {
+            $this->comment(sprintf('Generating average colors for photo (ID:%s) ...', $photo->id));
             $this->generatePhotoAvgColor($photo);
         });
     }
 
     /**
-     * Apply callback function on each photo in database.
+     * Apply callback function on each photo.
      *
      * @param Closure $callback
      * @return void
@@ -75,12 +76,10 @@ class GeneratePhotoAvgColors extends Command
      */
     public function generatePhotoAvgColor(Photo $photo)
     {
-        $this->comment(sprintf('Processing photo with ID %s ...', $photo->id));
-
         $thumbnail = $photo->thumbnails->first();
 
         if (is_null($thumbnail)) {
-            $this->comment(sprintf('No thumbnails found for photo with ID:%s.', $photo->id));
+            $this->comment(sprintf('No thumbnails found for photo (ID:%s).', $photo->id));
             return;
         }
 
@@ -88,7 +87,7 @@ class GeneratePhotoAvgColors extends Command
 
         $photo->avg_color = $this->avgColorPicker->getImageAvgHexColorByPath($absoluteThumbnailPath);
 
-        $this->comment(sprintf('Average color %s.', $photo->avg_color));
+        $this->comment(sprintf('Photo average color %s.', $photo->avg_color));
 
         $photo->saveOrFail();
     }
