@@ -54,6 +54,7 @@ class SendWeeklySubscriptionMails extends Command
     {
         if ($this->isWeeklySubscriptionAvailable()) {
             $this->eachSubscription(function (Subscription $subscription) {
+                $this->comment(sprintf('Sending mail to subscription (email:%s) ...', $subscription->email));
                 $this->sendWeeklySubscriptionMail($subscription);
             });
         } else {
@@ -92,8 +93,6 @@ class SendWeeklySubscriptionMails extends Command
      */
     protected function sendWeeklySubscriptionMail(Subscription $subscription)
     {
-        $this->comment(sprintf('Sending mail to %s...', $subscription->email));
-
         $data = $this->extendSubscriptionData($subscription->toArray());
 
         $this->mailer->send(new WeeklySubscription($data));
