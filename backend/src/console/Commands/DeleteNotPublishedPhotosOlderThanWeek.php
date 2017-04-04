@@ -2,10 +2,12 @@
 
 namespace Console\Commands;
 
+use Closure;
 use Core\Models\Photo;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Class DeleteNotPublishedPhotosOlderThanWeek.
@@ -48,14 +50,26 @@ class DeleteNotPublishedPhotosOlderThanWeek extends Command
      */
     public function handle()
     {
+        $this->eachNotPublishedPhotoOlderThanWeek(function (Photo $photo) {
+            $this->comment(sprintf('Processing photo (ID:%s) ...', $photo->id));
+            $this->deletePhotoWithDirectory($photo);
+        });
+    }
+
+    /**
+     * Apply callback function on each not published photo older than week.
+     *
+     * @param Closure $callback
+     * @return void
+     */
+    public function eachNotPublishedPhotoOlderThanWeek(Closure $callback)
+    {
         Photo::with('tags')
             ->with('thumbnails')
-            ->where('is_published', false)
+            ->whereIsPublished(false)
             ->where('updated_at', '<', (new Carbon())->addWeek('-1'))
-            ->chunk(500, function ($photos) {
-                foreach ($photos as $photo) {
-                    $this->deletePhotoWithDirectory($photo);
-                }
+            ->chunk(100, function (Collection $photos) use ($callback) {
+                $photos->map($callback);
             });
     }
 
@@ -63,11 +77,12 @@ class DeleteNotPublishedPhotosOlderThanWeek extends Command
      * Delete photo with directory.
      *
      * @param Photo $photo
+     * @return void
      */
     private function deletePhotoWithDirectory(Photo $photo)
     {
         if ($photo->delete()) {
-            $this->comment(sprintf('Photo was deleted: %s.', $photo->toJson()));
+            $this->comment(sprintf('Photo was deleted (ID:%s).', $photo->id));
         }
 
         if (!$photo->directory_path) {
@@ -75,7 +90,7 @@ class DeleteNotPublishedPhotosOlderThanWeek extends Command
         }
 
         if ($this->fileSystem->deleteDirectory($photo->directory_path)) {
-            $this->comment(sprintf('Directory was deleted: "%s".', $photo->directory_path));
+            $this->comment(sprintf('Photo directory was deleted (path:%s).', $photo->directory_path));
         }
     }
 }
