@@ -5,12 +5,12 @@ namespace Api\V1\Mail;
 use Illuminate\Mail\Mailable;
 
 /**
- * Class ContactMessage.
+ * Class WeeklySubscription.
  *
  * @property array data
  * @package Api\V1\Mail
  */
-class ContactMessage extends Mailable
+class WeeklySubscription extends Mailable
 {
     /**
      * ContactMessage constructor.
@@ -30,9 +30,8 @@ class ContactMessage extends Mailable
     public function build()
     {
         return $this
-            ->to(config('mail.address.administrator'))
-            ->replyTo($this->data['email'])
-            ->subject(sprintf('%s - %s - %s', config('app.name'), trans('mails.contact-message.subject'), $this->data['subject']))
-            ->view('api.v1.mails.contact-message', $this->data);
+            ->to($this->data['email'])
+            ->subject(sprintf('%s - %s', config('app.name'), trans('mails.weekly-subscription.subject')))
+            ->view('api.v1.mails.weekly-subscription', $this->data);
     }
 }

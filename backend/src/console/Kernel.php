@@ -11,6 +11,7 @@ use Console\Commands\CreateRoles;
 use Console\Commands\GeneratePhotoAvgColors;
 use Console\Commands\GeneratePhotoThumbnails;
 use Console\Commands\GenerateRestApiDocumentation;
+use Console\Commands\SendWeeklySubscriptionMails;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -36,6 +37,7 @@ class Kernel extends ConsoleKernel
         GeneratePhotoAvgColors::class,
         GeneratePhotoThumbnails::class,
         GenerateRestApiDocumentation::class,
+        SendWeeklySubscriptionMails::class,
     ];
 
     /**
@@ -51,6 +53,9 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('delete:unused_directories_within_photo_storage')
             ->dailyAt('00:10');
+
+        $schedule->command('send:weekly_subscription_mails')
+            ->weekly()->saturdays()->at('09:00');
     }
 
     /**
