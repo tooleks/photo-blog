@@ -49,9 +49,8 @@ class DeleteUnusedDirectoriesWithinPhotoStorage extends Command
     public function handle()
     {
         foreach ($this->getDirectoriesToDelete() as $directory) {
-            if ($this->fileSystem->deleteDirectory($directory)) {
-                $this->comment(sprintf('Directory was deleted: "%s".', $directory));
-            }
+            $this->comment(sprintf('Deleting directory (path:%s) ...', $directory));
+            $this->fileSystem->deleteDirectory($directory) && $this->comment(sprintf('Directory was deleted (path:%s).', $directory));
         }
     }
 
