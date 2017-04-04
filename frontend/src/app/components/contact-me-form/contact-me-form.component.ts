@@ -29,7 +29,6 @@ export class ContactMeFormComponent {
     }
 
     ngOnInit() {
-        window.scrollTo(0, 0); 
         this.title.setTitle('Contact Me');
         this.form = new ContactMeForm;
     }

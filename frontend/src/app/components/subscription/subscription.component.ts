@@ -29,7 +29,6 @@ export class SubscriptionComponent {
     }
 
     ngOnInit() {
-        window.scrollTo(0, 0); 
         this.title.setTitle('Subscription');
         this.form = new SubscriptionForm;
     }

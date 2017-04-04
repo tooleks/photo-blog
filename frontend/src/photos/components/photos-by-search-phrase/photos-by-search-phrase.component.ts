@@ -42,7 +42,6 @@ export class PhotosBySearchPhraseComponent {
     }
 
     ngOnInit() {
-        window.scrollTo(0, 0);
         this.title.setTitle(['Search Photos']);
         this.initQueryParams();
     }

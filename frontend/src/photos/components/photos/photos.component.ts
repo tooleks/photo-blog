@@ -40,7 +40,6 @@ export class PhotosComponent {
     }
 
     ngOnInit() {
-        window.scrollTo(0, 0);
         this.title.setTitle('All Photos');
         this.initQueryParams();
     }

@@ -41,7 +41,6 @@ export class PhotosByTagComponent {
     }
 
     ngOnInit() {
-        window.scrollTo(0, 0);
         this.title.setTitle(['Search By Tag']);
         this.initQueryParams();
     }

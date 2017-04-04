@@ -34,7 +34,6 @@ export class PhotoFormComponent {
     }
 
     ngOnInit() {
-        window.scrollTo(0, 0);
         this.title.setTitle('Add Photo');
         this.photo = new PhotoForm;
     }

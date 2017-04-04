@@ -29,7 +29,6 @@ export class SignInFormComponent {
     }
 
     ngOnInit() {
-        window.scrollTo(0, 0); 
         this.title.setTitle('Sing In');
         this.form = new SignInForm;
     }

@@ -12,7 +12,6 @@ export class AboutMeComponent {
     }
 
     ngOnInit() {
-        window.scrollTo(0, 0);
         this.title.setTitle('About Me');
     }
 
