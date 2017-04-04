@@ -7,6 +7,7 @@ import {
     SignInFormComponent,
     SignOutComponent,
     SubscriptionComponent,
+    UnsubscriptionComponent,
 } from './components';
 
 const AppRoutes:Routes = [
@@ -34,6 +35,10 @@ const AppRoutes:Routes = [
     {
         path: 'subscription',
         component: SubscriptionComponent,
+    },
+    {
+        path: 'unsubscription/:token',
+        component: UnsubscriptionComponent,
     },
     {
         path: '404',

@@ -1,0 +1,17 @@
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="alert alert-success">
+                    {{ 'Would you like to unsubscribe from receiving updates?' }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <button (click)="unsubscribe()" [disabled]="isLoading()" class="btn btn-danger">{{ 'Yes' }}</button>
+                <button (click)="navigateToHomePage()" [disabled]="isLoading()" class="btn btn-primary">{{ 'No' }}</button>
+            </div>
+        </div>
+    </div>
+</div>
