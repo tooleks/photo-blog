@@ -114,7 +114,7 @@ export class PhotosByTagComponent implements OnInit, AfterViewInit {
 
     onShowPhoto = (galleryImage:GalleryImage):void => {
         this.navigator.setQueryParam('show', galleryImage.getId());
-        this.metaTags.setImage(galleryImage.getSmallSizeUrl());
+        this.metaTags.setImage(galleryImage.getLargeSizeUrl());
         this.metaTags.setDescription(galleryImage.getDescription());
     };
 

@@ -19,7 +19,7 @@ export class MetaTagsService {
             {name: 'og:description', content: ''},
             {name: 'og:site_name', content: ''},
             // Twitter related meta tags.
-            {name: 'twitter:card', content: 'summary'},
+            {name: 'twitter:card', content: 'summary_large_image'},
             {name: 'twitter:title', content: ''},
             {name: 'twitter:image', content: ''},
         ];
