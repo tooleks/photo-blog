@@ -34,6 +34,10 @@ ROUTES.forEach(route => {
     });
 });
 
+app.get('*', (req, res) => {
+    res.status(404).redirect('/404');
+});
+
 app.listen(8000, () => {
     console.log(`Listening at ${baseUrl}`);
 });
