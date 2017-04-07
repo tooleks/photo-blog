@@ -1,6 +1,2 @@
 .idea/
-node_modules/
-vendor/
 dist/
-
-npm-debug.log

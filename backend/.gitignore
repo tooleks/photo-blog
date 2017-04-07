@@ -1,3 +1,9 @@
+/node_modules/
+/vendor/
+/dist/
+
+npm-debug.log
+
 /public/storage
 /public/storage/
 /public/api/v1/storage
