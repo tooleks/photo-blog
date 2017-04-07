@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {NavigatorServiceProvider, NavigatorService} from '../../../shared/services';
 
@@ -6,15 +6,14 @@ import {NavigatorServiceProvider, NavigatorService} from '../../../shared/servic
     selector: 'page-not-found',
     templateUrl: 'page-not-found.component.html',
 })
-export class PageNotFoundComponent {
+export class PageNotFoundComponent implements OnInit {
     private navigator:NavigatorService;
 
-    constructor(@Inject(Router) private router:Router,
-                @Inject(NavigatorServiceProvider) navigatorProvider:NavigatorServiceProvider) {
+    constructor(private router:Router, navigatorProvider:NavigatorServiceProvider) {
         this.navigator = navigatorProvider.getInstance();
     }
 
-    ngOnInit() {
+    ngOnInit():void {
         this.navigateTo404Page();
     }
 

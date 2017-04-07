@@ -1,4 +1,4 @@
-import {Component, Inject, ViewChild} from '@angular/core';
+import {Component, OnInit, AfterViewInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {
     TitleService,
@@ -18,7 +18,7 @@ import {GalleryImage, GalleryComponent} from '../../../shared/components/gallery
     selector: 'photos-by-tag',
     templateUrl: 'photos-by-tag.component.html',
 })
-export class PhotosByTagComponent {
+export class PhotosByTagComponent implements OnInit, AfterViewInit {
     @ViewChild('galleryComponent') galleryComponent:GalleryComponent;
     private defaults:any = {page: 1, perPage: 20};
     private queryParams:Object = {search_phrase: ''};
@@ -28,24 +28,24 @@ export class PhotosByTagComponent {
     private galleryImages:Array<GalleryImage> = [];
     private hasMoreGalleryImages:boolean = true;
 
-    constructor(@Inject(ActivatedRoute) private route:ActivatedRoute,
-                @Inject(TitleService) private title:TitleService,
-                @Inject(AuthProviderService) private authProvider:AuthProviderService,
-                @Inject(PhotoDataProviderService) private photoDataProvider:PhotoDataProviderService,
-                @Inject(NavigatorServiceProvider) navigatorProvider:NavigatorServiceProvider,
-                @Inject(PagerServiceProvider) pagerProvider:PagerServiceProvider,
-                @Inject(LockProcessServiceProvider) lockProcessProvider:LockProcessServiceProvider) {
+    constructor(private route:ActivatedRoute,
+                private title:TitleService,
+                private authProvider:AuthProviderService,
+                private photoDataProvider:PhotoDataProviderService,
+                navigatorProvider:NavigatorServiceProvider,
+                pagerProvider:PagerServiceProvider,
+                lockProcessProvider:LockProcessServiceProvider) {
         this.pager = pagerProvider.getInstance(this.defaults.page, this.defaults.perPage);
         this.navigator = navigatorProvider.getInstance();
         this.lockProcess = lockProcessProvider.getInstance();
     }
 
-    ngOnInit() {
+    ngOnInit():void {
         this.title.setTitle(['Search By Tag']);
         this.initQueryParams();
     }
 
-    ngAfterViewInit() {
+    ngAfterViewInit():void {
         this.route.params
             .map((params) => params['tag'])
             .subscribe(this.searchByTag);
@@ -96,7 +96,7 @@ export class PhotosByTagComponent {
         return !this.galleryImages.length && !this.lockProcess.isProcessing();
     };
 
-    isLoading = ():boolean => {
+    isProcessing = ():boolean => {
         return this.lockProcess.isProcessing();
     };
 

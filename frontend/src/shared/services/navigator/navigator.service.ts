@@ -1,12 +1,12 @@
-import {Injectable, Inject} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 
 @Injectable()
 export class NavigatorService {
     private queryParams:any = {};
 
-    constructor(@Inject(ActivatedRoute) private route:ActivatedRoute,
-                @Inject(Router) private router:Router) {
+    constructor(private route:ActivatedRoute,
+                private router:Router) {
         this.route.queryParams.subscribe((queryParams) => {
             Object.keys(queryParams).forEach((key) => {
                 this.queryParams[key] = queryParams[key];

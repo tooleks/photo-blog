@@ -1,4 +1,4 @@
-import {Component, Inject, Output, EventEmitter} from '@angular/core';
+import {Component, Output, EventEmitter} from '@angular/core';
 import {TitleService} from '../../../../shared/services';
 
 @Component({
@@ -9,7 +9,7 @@ import {TitleService} from '../../../../shared/services';
 export class TopBarComponent {
     @Output() onNavClick:EventEmitter<any> = new EventEmitter<any>();
 
-    constructor(@Inject(TitleService) private title:TitleService) {
+    constructor(private title:TitleService) {
     }
 
     private navClick = () => {

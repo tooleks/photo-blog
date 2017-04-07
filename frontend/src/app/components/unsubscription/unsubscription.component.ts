@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {Component, OnInit, AfterViewInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {
     ApiService,
@@ -14,34 +14,34 @@ import {NoticesService} from '../../../common/notices';
     selector: 'unsubscription',
     templateUrl: 'unsubscription.component.html',
 })
-export class UnsubscriptionComponent {
+export class UnsubscriptionComponent implements OnInit, AfterViewInit {
     private token:string = null;
     private navigator:NavigatorService;
     private lockProcess:LockProcessService;
 
-    constructor(@Inject(ActivatedRoute) private route:ActivatedRoute,
-                @Inject(ApiService) private api:ApiService,
-                @Inject(TitleService) private title:TitleService,
-                @Inject(NoticesService) private notices:NoticesService,
-                @Inject(NavigatorServiceProvider) navigatorProvider:NavigatorServiceProvider,
-                @Inject(LockProcessServiceProvider) lockProcessServiceProvider:LockProcessServiceProvider) {
+    constructor(private route:ActivatedRoute,
+                private api:ApiService,
+                private title:TitleService,
+                private notices:NoticesService,
+                navigatorProvider:NavigatorServiceProvider,
+                lockProcessServiceProvider:LockProcessServiceProvider) {
         this.navigator = navigatorProvider.getInstance();
         this.lockProcess = lockProcessServiceProvider.getInstance();
     }
 
-    ngAfterViewInit() {
+    ngOnInit():void {
+        this.title.setTitle('Unsubscription');
+    }
+
+    ngAfterViewInit():void {
         this.route.params
             .map((params:any) => params['token'])
             .subscribe((token:string) => this.token = String(token));
     }
 
-    ngOnInit() {
-        this.title.setTitle('Unsubscription');
-    }
-
     unsubscribe = ():Promise<any> => {
         return this.lockProcess
-            .process(() => this.api.delete('/subscriptions/' + this.token).toPromise())
+            .process(() => this.api.delete('/subscriptions/' + this.token))
             .then((data:any) => {
                 this.notices.success('You have successfully unsubscribed from the website updates.');
                 this.navigator.navigate(['/']);
@@ -49,6 +49,7 @@ export class UnsubscriptionComponent {
             })
             .catch((error:any) => {
                 this.navigator.navigate(['/']);
+                throw error;
             });
     };
 
@@ -56,7 +57,7 @@ export class UnsubscriptionComponent {
         this.navigator.navigate(['/']);
     };
 
-    isLoading = ():boolean => {
+    isProcessing = ():boolean => {
         return this.lockProcess.isProcessing();
     };
 }

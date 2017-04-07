@@ -1,15 +1,19 @@
 import {Injectable} from '@angular/core';
-import {env} from '../../../../env';
+import {env as values} from '../../../../env';
 
 @Injectable()
 export class EnvService {
-    private env:any;
+    private values:any;
 
     constructor() {
-        this.env = env;
+        this.values = values;
     }
 
-    get = (property:string) => {
-        return this.env.hasOwnProperty(property) ? this.env[property] : null;
+    get = (property:string):any => {
+        return this.has(property) ? this.values[property] : null;
+    };
+
+    has = (property:string):boolean => {
+        return this.values.hasOwnProperty(property);
     };
 }

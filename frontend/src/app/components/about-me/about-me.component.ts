@@ -1,21 +1,19 @@
-import {Component, Inject} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {TitleService, EnvService} from '../../../shared/services';
 
 @Component({
     selector: 'about-me',
-    template: `<div [innerHtml]="getContent() | safeHtml"></div>`,
-
+    templateUrl: 'about-me.component.html',
 })
-export class AboutMeComponent {
-    constructor(@Inject(EnvService) private env:EnvService,
-                @Inject(TitleService) private title:TitleService) {
+export class AboutMeComponent implements OnInit {
+    constructor(private title:TitleService, private env:EnvService) {
     }
 
-    ngOnInit() {
+    ngOnInit():void {
         this.title.setTitle('About Me');
     }
 
-    getContent = () => {
-        return this.env.get('aboutMePageContent');
+    getContent = ():string => {
+        return this.env.get('pageAboutMe');
     };
 }

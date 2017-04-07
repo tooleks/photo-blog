@@ -1,4 +1,4 @@
-import {Component, Input, Output, Inject, ElementRef, EventEmitter} from '@angular/core';
+import {Component, Input, Output, ElementRef, EventEmitter} from '@angular/core';
 
 @Component({
     selector: 'file-select-input',
@@ -8,10 +8,10 @@ export class FileSelectInputComponent {
     @Input() disabled:boolean;
     @Output() onSelect:EventEmitter<File> = new EventEmitter<File>();
 
-    constructor(@Inject(ElementRef) private elementRef:ElementRef) {
+    constructor(private elementRef:ElementRef) {
     }
 
-    private onChange = () => {
+    private onChange = ():void => {
         if (this.isFile()) {
             this.onSelect.emit(this.getFile());
         }

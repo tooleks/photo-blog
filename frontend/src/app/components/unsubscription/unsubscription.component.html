@@ -9,8 +9,8 @@
         </div>
         <div class="row">
             <div class="col-sm-12">
-                <button (click)="unsubscribe()" [disabled]="isLoading()" class="btn btn-danger">{{ 'Yes' }}</button>
-                <button (click)="navigateToHomePage()" [disabled]="isLoading()" class="btn btn-primary">{{ 'No' }}</button>
+                <button (click)="unsubscribe()" [disabled]="isProcessing()" class="btn btn-danger">{{ 'Yes' }}</button>
+                <button (click)="navigateToHomePage()" [disabled]="isProcessing()" class="btn btn-primary">{{ 'No' }}</button>
             </div>
         </div>
     </div>

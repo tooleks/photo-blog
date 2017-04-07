@@ -1,6 +1,6 @@
-import {Component, Inject} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {PhotoForm} from './models';
+import {PhotoForm as Form} from './models';
 import {
     TitleService,
     AuthProviderService,
@@ -17,28 +17,28 @@ import {PhotoDataProviderService} from '../../services'
     templateUrl: 'photo-form.component.html',
     styleUrls: ['photo-form.component.css'],
 })
-export class PhotoFormComponent {
-    private photo:PhotoForm;
+export class PhotoFormComponent implements OnInit {
+    private photo:Form;
     private navigator:NavigatorService;
     private lockProcess:LockProcessService;
 
-    constructor(@Inject(ActivatedRoute) private route:ActivatedRoute,
-                @Inject(TitleService) private title:TitleService,
-                @Inject(AuthProviderService) private authProvider:AuthProviderService,
-                @Inject(PhotoDataProviderService) private photoDataProvider:PhotoDataProviderService,
-                @Inject(NoticesService) private notices:NoticesService,
-                @Inject(NavigatorServiceProvider) navigatorServiceProvider:NavigatorServiceProvider,
-                @Inject(LockProcessServiceProvider) lockProcessServiceProvider:LockProcessServiceProvider) {
+    constructor(private route:ActivatedRoute,
+                private title:TitleService,
+                private authProvider:AuthProviderService,
+                private photoDataProvider:PhotoDataProviderService,
+                private notices:NoticesService,
+                navigatorServiceProvider:NavigatorServiceProvider,
+                lockProcessServiceProvider:LockProcessServiceProvider) {
         this.navigator = navigatorServiceProvider.getInstance();
         this.lockProcess = lockProcessServiceProvider.getInstance();
     }
 
-    ngOnInit() {
+    ngOnInit():void {
         this.title.setTitle('Add Photo');
-        this.photo = new PhotoForm;
+        this.photo = new Form;
     }
 
-    ngAfterViewInit() {
+    ngAfterViewInit():void {
         this.route.params
             .map((params) => params['id'])
             .subscribe(this.loadById);
@@ -101,7 +101,7 @@ export class PhotoFormComponent {
         });
     };
 
-    isLoading = ():boolean => {
+    isProcessing = ():boolean => {
         return this.lockProcess.isProcessing();
     };
 }

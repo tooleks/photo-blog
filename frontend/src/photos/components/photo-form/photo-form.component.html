@@ -41,11 +41,11 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="form-group">
-                            <label class="btn btn-info btn-file" [class.disabled]="isLoading()">
+                            <label class="btn btn-info btn-file" [class.disabled]="isProcessing()">
                                 <i class="fa fa-upload" aria-hidden="true"></i>
                                 <span>{{ 'Upload File' }}</span>
                                 <file-select-input (onSelect)="upload($event)"
-                                                   [disabled]="isLoading()">
+                                                   [disabled]="isProcessing()">
                                 </file-select-input>
                             </label>
                         </div>
@@ -71,13 +71,13 @@
                     <div class="form-group">
                         <div class="col-sm-10 col-sm-offset-2">
                             <button (click)="save()"
-                                    [disabled]="isLoading()"
+                                    [disabled]="isProcessing()"
                                     class="btn btn-primary">
                                 <span>{{ 'Save' }}</span>
                             </button>
                             <button *ngIf="photo.id"
                                     (click)="deletePhoto()"
-                                    [disabled]="isLoading()"
+                                    [disabled]="isProcessing()"
                                     class="btn btn-danger pull-right">
                                 <span>{{ 'Delete' }}</span>
                             </button>

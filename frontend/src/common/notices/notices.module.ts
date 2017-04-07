@@ -13,8 +13,6 @@ import {NoticesService} from './services';
         NoticesComponent,
     ],
     exports: [
-        CommonModule,
-        FormsModule,
         NoticesComponent,
     ],
     providers: [

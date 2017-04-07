@@ -1,19 +1,18 @@
-import {Component, Inject} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService, NavigatorServiceProvider, NavigatorService} from '../../../shared/services';
 
 @Component({
     selector: 'signout',
     template: '',
 })
-export class SignOutComponent {
+export class SignOutComponent implements OnInit {
     private navigator:NavigatorService;
 
-    constructor(@Inject(AuthService) private auth:AuthService,
-                @Inject(NavigatorServiceProvider) navigatorProvider:NavigatorServiceProvider) {
+    constructor(private auth:AuthService, navigatorProvider:NavigatorServiceProvider) {
         this.navigator = navigatorProvider.getInstance();
     }
 
-    ngOnInit() {
+    ngOnInit():void {
         this.auth
             .signOut()
             .then((user:any) => {
@@ -21,6 +20,7 @@ export class SignOutComponent {
             })
             .catch((error:any) => {
                 this.navigator.navigate(['/signin']);
+                throw error;
             });
     }
 }

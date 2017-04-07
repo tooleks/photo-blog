@@ -1,6 +1,5 @@
-import {Injectable, Inject} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Response} from '@angular/http';
-import {Observable} from 'rxjs/Observable';
 import {ApiErrorHandler as BaseApiErrorHandler} from '../api';
 import {NavigatorService, NavigatorServiceProvider} from '../navigator';
 import {NoticesService} from '../../../common/notices';
@@ -9,15 +8,14 @@ import {NoticesService} from '../../../common/notices';
 export class ApiErrorHandler extends BaseApiErrorHandler {
     private navigator:NavigatorService;
 
-    constructor(@Inject(NoticesService) private notices:NoticesService,
-                @Inject(NavigatorServiceProvider) private navigatorProvider:NavigatorServiceProvider) {
+    constructor(private notices:NoticesService,
+                private navigatorProvider:NavigatorServiceProvider) {
         super();
         this.navigator = navigatorProvider.getInstance();
     }
 
     handleResponse = (response:Response) => {
         let body = response.json();
-
         switch (response.status) {
             case 0:
                 this.handleUnknownError(response, body);
@@ -32,8 +30,7 @@ export class ApiErrorHandler extends BaseApiErrorHandler {
                 this.handleHttpError(response, body);
                 break;
         }
-
-        return Observable.throw(new Error(body.message));
+        throw new Error(body.message);
     };
 
     private handleUnknownError = (response:any, body:any):void => {

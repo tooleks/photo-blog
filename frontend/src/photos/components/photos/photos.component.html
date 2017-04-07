@@ -20,7 +20,7 @@
     </div>
 </div>
 <div *ngIf="!isEmpty() && hasMoreGalleryImages" class="text-center" style="margin-top: 20px;">
-    <button class="btn btn-primary" (click)="loadMorePhotos()" [disabled]="isLoading()">
-        {{ !isLoading() ? 'Load More' : 'Loading...' }}
+    <button class="btn btn-primary" (click)="loadMorePhotos()" [disabled]="isProcessing()">
+        {{ !isProcessing() ? 'Load More' : 'Loading...' }}
     </button>
 </div>

@@ -1,13 +1,13 @@
 import {Title} from '@angular/platform-browser';
-import {Injectable, Inject} from '@angular/core';
-import {EnvService} from '../env';
+import {Injectable} from '@angular/core';
+import {AppService} from '../app';
 
 @Injectable()
 export class TitleService {
     private pathSeparator = ' / ';
 
-    constructor(@Inject(EnvService) private env:EnvService,
-                @Inject(Title) private title:Title) {
+    constructor(private app:AppService,
+                private title:Title) {
     }
 
     setTitle = (newTitle?:any):void => {
@@ -24,7 +24,7 @@ export class TitleService {
     };
 
     private buildTitle = (newTitle:any):string => {
-        let titlePieces = [this.env.get('appName')];
+        let titlePieces = [this.app.getName()];
 
         if (!newTitle) {
             return titlePieces.reverse().join(this.pathSeparator);

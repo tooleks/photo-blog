@@ -2,14 +2,15 @@
     <sidebar #sideBarComponent
              (onToggle)="onToggleSideBar($event)"
              (onShow)="onShowSideBar($event)"
-             (onHide)="onHideSideBar($event)"></sidebar>
-    <topbar (onNavClick)="sideBarComponent.toggle()"></topbar>
+             (onHide)="onHideSideBar($event)">
+    </sidebar>
+    <topbar (onNavClick)="toggleSideBar()"></topbar>
     <div class="app-content" [ngStyle]="appContentStyles">
         <router-outlet></router-outlet>
     </div>
     <div class="app-footer">
         <span class="app-footer-item">&copy;
-            {{ getCurrentYear() }} <strong>{{ env.get('appName') }}</strong></span>
+            {{ getCurrentYear() }} <strong>{{ getAppName() }}</strong></span>
         <span class="app-footer-item app-desktop-screen">
              <a [routerLink]="['/contact-me']"
                 routerLinkActive="active"
@@ -40,6 +41,6 @@
                     'bottom': '20px',
                     'opacity': '1'
                    }"
-                   title="{{ 'Go to top' }}"
-    ></go-top-button>
+                   title="{{ 'Go to top' }}">
+    </go-top-button>
 </div>

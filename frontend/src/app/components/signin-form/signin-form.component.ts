@@ -1,5 +1,5 @@
-import {Component, Inject} from '@angular/core';
-import {SignInForm} from './models';
+import {Component, OnInit} from '@angular/core';
+import {SignInForm as Form} from './models';
 import {
     AuthService,
     TitleService,
@@ -14,28 +14,40 @@ import {NoticesService} from '../../../common/notices';
     selector: 'signin-form',
     templateUrl: 'signin-form.component.html',
 })
-export class SignInFormComponent {
-    private form:SignInForm;
+export class SignInFormComponent implements OnInit {
+    private form:Form;
     private navigator:NavigatorService;
     private lockProcess:LockProcessService;
 
-    constructor(@Inject(AuthService) private auth:AuthService,
-                @Inject(TitleService) private title:TitleService,
-                @Inject(NoticesService) private notices:NoticesService,
-                @Inject(NavigatorServiceProvider) navigatorProvider:NavigatorServiceProvider,
-                @Inject(LockProcessServiceProvider) lockProcessServiceProvider:LockProcessServiceProvider) {
+    constructor(private auth:AuthService,
+                private title:TitleService,
+                private notices:NoticesService,
+                navigatorProvider:NavigatorServiceProvider,
+                lockProcessServiceProvider:LockProcessServiceProvider) {
         this.navigator = navigatorProvider.getInstance();
         this.lockProcess = lockProcessServiceProvider.getInstance();
     }
 
-    ngOnInit() {
+    ngOnInit():void {
         this.title.setTitle('Sing In');
-        this.form = new SignInForm;
+        this.initForm();
     }
 
-    signIn = () => {
+    setForm = (form:Form):void => {
+        this.form = form;
+    };
+
+    getForm = ():Form => {
+        return this.form;
+    };
+
+    initForm = ():void => {
+        this.setForm(new Form);
+    };
+
+    signIn = ():Promise<any> => {
         return this.lockProcess
-            .process(this.auth.signIn, [this.form.email, this.form.password])
+            .process(() => this.auth.signIn(this.getForm().email, this.getForm().password))
             .then((user:any) => {
                 this.notices.success('Hello, ' + user.name + '!');
                 this.navigator.navigate(['/']);
@@ -43,7 +55,7 @@ export class SignInFormComponent {
             });
     };
 
-    isLoading = ():boolean => {
+    isProcessing = ():boolean => {
         return this.lockProcess.isProcessing();
     };
 }

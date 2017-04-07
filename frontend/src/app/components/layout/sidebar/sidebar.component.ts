@@ -1,17 +1,18 @@
 import {
     Component,
-    Inject,
     HostListener,
-    Input,
     Output,
     EventEmitter,
+    OnInit,
+} from '@angular/core';
+import {
     trigger,
     state,
     style,
     transition,
     animate
-} from '@angular/core';
-import {ScreenDetectorService, ApiService, AuthProviderService, EnvService} from '../../../../shared/services';
+} from '@angular/animations';
+import {ScreenDetectorService, ApiService, AuthProviderService, AppService} from '../../../../shared/services';
 
 @Component({
     selector: 'sidebar',
@@ -21,11 +22,11 @@ import {ScreenDetectorService, ApiService, AuthProviderService, EnvService} from
         trigger('slideInOut', [
             state('in', style({
                 'transform': 'translate3d(0, 0, 0)',
-                'box-shadow': '1px 0 3px rgba(0, 0, 0, 0.25)'
+                'box-shadow': '1px 0 3px rgba(0, 0, 0, 0.25)',
             })),
             state('out', style({
                 'transform': 'translate3d(-220px, 0, 0)',
-                'box-shadow': 'none'
+                'box-shadow': 'none',
             })),
             transition('in => out', animate('200ms ease-in-out')),
             transition('out => in', animate('200ms ease-in-out'))
@@ -33,31 +34,34 @@ import {ScreenDetectorService, ApiService, AuthProviderService, EnvService} from
         trigger('appearInOut', [
             state('in', style({
                 'display': 'block',
-                'opacity': '0.85'
+                'opacity': '0.85',
             })),
             state('out', style({
                 'display': 'none',
-                'opacity': '0'
+                'opacity': '0',
             })),
             transition('in => out', animate('200ms ease-in-out')),
             transition('out => in', animate('200ms ease-in-out'))
         ]),
     ],
 })
-export class SideBarComponent {
-    @Input() tags:Array<any> = [];
+export class SideBarComponent implements OnInit {
     @Output() onToggle:EventEmitter<any> = new EventEmitter<any>();
     @Output() onShow:EventEmitter<any> = new EventEmitter<any>();
     @Output() onHide:EventEmitter<any> = new EventEmitter<any>();
-
     private animationState:string;
+    private tags:Array<any> = [];
 
-    constructor(@Inject(ScreenDetectorService) private screenDetector:ScreenDetectorService,
-                @Inject(ApiService) private api:ApiService,
-                @Inject(AuthProviderService) private authProvider:AuthProviderService,
-                @Inject(EnvService) private env:EnvService) {
+    constructor(private screenDetector:ScreenDetectorService,
+                private api:ApiService,
+                private authProvider:AuthProviderService,
+                private app:AppService) {
         this.init();
         this.loadTags();
+    }
+
+    ngOnInit():void {
+        this.init();
     }
 
     @HostListener('window:resize', ['$event'])
@@ -65,23 +69,23 @@ export class SideBarComponent {
         this.init();
     }
 
-    init = () => {
+    init = ():void => {
         this.screenDetector.isLargeScreen() ? this.show() : this.hide();
     };
 
-    show = () => {
+    show = ():void => {
         this.animationState = 'in';
         this.emitChange('onShow');
     };
 
-    hide = () => {
+    hide = ():void => {
         if (this.screenDetector.isSmallScreen()) {
             this.animationState = 'out';
         }
         this.emitChange('onHide');
     };
 
-    toggle = () => {
+    toggle = ():void => {
         this.isVisible() ? this.hide() : this.show();
         this.emitChange('onToggle');
     };
@@ -90,7 +94,7 @@ export class SideBarComponent {
         return this.animationState === 'in';
     };
 
-    emitChange = (event:string) => {
+    emitChange = (event:string):void => {
         this[event].emit({
             isVisible: this.isVisible(),
             isSmallDevice: this.screenDetector.isSmallScreen(),
@@ -98,10 +102,11 @@ export class SideBarComponent {
         });
     };
 
-    loadTags = () => {
-        this.api
-            .get('/tags', {params: {page: 1, per_page: 7}})
-            .toPromise()
-            .then((response:any) => this.tags = response.data);
+    private loadTags = ():void => {
+        this.api.get('/tags', {params: {page: 1, per_page: 7}}).then((response:any) => this.tags = response.data);
+    };
+
+    private getAppName = ():string => {
+        return this.app.getName();
     };
 }

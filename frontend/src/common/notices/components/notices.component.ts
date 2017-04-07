@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {Component} from '@angular/core';
 import {NoticesService} from '../services';
 import {Notice} from '../models';
 
@@ -8,7 +8,7 @@ import {Notice} from '../models';
     styleUrls: ['notices.component.css'],
 })
 export class NoticesComponent {
-    constructor(@Inject(NoticesService) private notices:NoticesService) {
+    constructor(private notices:NoticesService) {
     }
 
     getNotices = ():Array<Notice> => {

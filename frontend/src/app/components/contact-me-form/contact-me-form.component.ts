@@ -1,5 +1,5 @@
-import {Component, Inject} from '@angular/core';
-import {ContactMeForm} from './models';
+import {Component, OnInit} from '@angular/core';
+import {ContactMeForm as Form} from './models';
 import {
     ApiService,
     TitleService,
@@ -14,28 +14,40 @@ import {NoticesService} from '../../../common/notices';
     selector: 'contact-me-form',
     templateUrl: 'contact-me-form.component.html',
 })
-export class ContactMeFormComponent {
-    private form:ContactMeForm;
+export class ContactMeFormComponent implements OnInit {
+    private form:Form;
     private navigator:NavigatorService;
     private lockProcess:LockProcessService;
 
-    constructor(@Inject(ApiService) private api:ApiService,
-                @Inject(TitleService) private title:TitleService,
-                @Inject(NoticesService) private notices:NoticesService,
-                @Inject(NavigatorServiceProvider) navigatorProvider:NavigatorServiceProvider,
-                @Inject(LockProcessServiceProvider) lockProcessServiceProvider:LockProcessServiceProvider) {
+    constructor(private api:ApiService,
+                private title:TitleService,
+                private notices:NoticesService,
+                navigatorProvider:NavigatorServiceProvider,
+                lockProcessServiceProvider:LockProcessServiceProvider) {
         this.navigator = navigatorProvider.getInstance();
         this.lockProcess = lockProcessServiceProvider.getInstance();
     }
 
-    ngOnInit() {
+    ngOnInit():void {
         this.title.setTitle('Contact Me');
-        this.form = new ContactMeForm;
+        this.initForm();
     }
+
+    setForm = (form:Form):void => {
+        this.form = form;
+    };
+
+    getForm = ():Form => {
+        return this.form;
+    };
+
+    initForm = ():void => {
+        this.setForm(new Form);
+    };
 
     send = ():Promise<any> => {
         return this.lockProcess
-            .process(() => this.api.post('/contact_messages', this.form).toPromise())
+            .process(() => this.api.post('/contact_messages', this.getForm()))
             .then((data:any) => {
                 this.notices.success('Your message successfully sent.');
                 this.navigator.navigate(['/']);
@@ -43,7 +55,7 @@ export class ContactMeFormComponent {
             });
     };
 
-    isLoading = ():boolean => {
+    isProcessing = ():boolean => {
         return this.lockProcess.isProcessing();
     };
 }

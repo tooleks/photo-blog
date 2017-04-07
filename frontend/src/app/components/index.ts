@@ -6,5 +6,5 @@ export * from './layout/topbar';
 export * from './page-not-found';
 export * from './signin-form';
 export * from './signout';
-export * from './subscription';
+export * from './subscription-form';
 export * from './unsubscription';

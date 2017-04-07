@@ -1,8 +1,9 @@
-import {Component, Inject, ViewChildren, ViewChild} from '@angular/core';
+import {Component, OnInit, AfterViewInit, ViewChildren, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {
     TitleService,
     AuthProviderService,
+    EnvironmentDetectorService,
     NavigatorServiceProvider,
     NavigatorService,
     PagerServiceProvider,
@@ -18,7 +19,7 @@ import {GalleryImage, GalleryComponent} from '../../../shared/components/gallery
     selector: 'photos-by-search-phrase',
     templateUrl: 'photos-by-search-phrase.component.html',
 })
-export class PhotosBySearchPhraseComponent {
+export class PhotosBySearchPhraseComponent implements OnInit, AfterViewInit {
     @ViewChildren('inputSearch') inputSearchComponent:any;
     @ViewChild('galleryComponent') galleryComponent:GalleryComponent;
     private defaults:any = {page: 1, perPage: 20};
@@ -29,25 +30,28 @@ export class PhotosBySearchPhraseComponent {
     private galleryImages:Array<GalleryImage> = [];
     private hasMoreGalleryImages:boolean = true;
 
-    constructor(@Inject(ActivatedRoute) private route:ActivatedRoute,
-                @Inject(TitleService) private title:TitleService,
-                @Inject(AuthProviderService) private authProvider:AuthProviderService,
-                @Inject(PhotoDataProviderService) private photoDataProvider:PhotoDataProviderService,
-                @Inject(NavigatorServiceProvider) navigatorProvider:NavigatorServiceProvider,
-                @Inject(PagerServiceProvider) pagerProvider:PagerServiceProvider,
-                @Inject(LockProcessServiceProvider) lockProcessProvider:LockProcessServiceProvider) {
+    constructor(private route:ActivatedRoute,
+                private title:TitleService,
+                private authProvider:AuthProviderService,
+                private environmentDetector:EnvironmentDetectorService,
+                private photoDataProvider:PhotoDataProviderService,
+                navigatorProvider:NavigatorServiceProvider,
+                pagerProvider:PagerServiceProvider,
+                lockProcessProvider:LockProcessServiceProvider) {
         this.pager = pagerProvider.getInstance(this.defaults.page, this.defaults.perPage);
         this.navigator = navigatorProvider.getInstance();
         this.lockProcess = lockProcessProvider.getInstance();
     }
 
-    ngOnInit() {
+    ngOnInit():void {
         this.title.setTitle(['Search Photos']);
         this.initQueryParams();
     }
 
-    ngAfterViewInit() {
-        this.inputSearchComponent.first.nativeElement.focus();
+    ngAfterViewInit():void {
+        if (this.environmentDetector.isBrowser()) {
+            this.inputSearchComponent.first.nativeElement.focus();
+        }
 
         this.route.queryParams
             .map((queryParams) => queryParams['search_phrase'])
@@ -105,7 +109,7 @@ export class PhotosBySearchPhraseComponent {
         return !this.galleryImages.length && !this.lockProcess.isProcessing();
     };
 
-    isLoading = ():boolean => {
+    isProcessing = ():boolean => {
         return this.lockProcess.isProcessing();
     };
 

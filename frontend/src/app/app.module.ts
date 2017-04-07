@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
-import {HttpModule, JsonpModule} from '@angular/http';
+import {CommonModule} from '@angular/common';
+import {TransferHttpModule} from '../modules/transfer-http/transfer-http.module';
 import {GoTopButtonModule} from 'ng2-go-top-button';
 import {
     AboutMeComponent,
@@ -11,9 +11,10 @@ import {
     TopBarComponent,
     SignInFormComponent,
     SignOutComponent,
-    SubscriptionComponent,
+    SubscriptionFormComponent,
     UnsubscriptionComponent,
 } from './components';
+import {HttpModule, JsonpModule} from '@angular/http';
 import {AppRouting, AppRoutingProviders} from './app.routing';
 import {SharedModule} from '../shared/shared.module';
 import {PhotosModule} from '../photos/photos.module';
@@ -21,8 +22,9 @@ import {NoticesModule} from '../common/notices';
 
 @NgModule({
     imports: [
-        BrowserModule,
+        CommonModule,
         HttpModule,
+        TransferHttpModule,
         JsonpModule,
         GoTopButtonModule,
         AppRouting,
@@ -39,15 +41,12 @@ import {NoticesModule} from '../common/notices';
         TopBarComponent,
         SignInFormComponent,
         SignOutComponent,
-        SubscriptionComponent,
+        SubscriptionFormComponent,
         UnsubscriptionComponent,
     ],
     exports: [],
     providers: [
         AppRoutingProviders,
-    ],
-    bootstrap: [
-        AppComponent,
     ],
 })
 export class AppModule {

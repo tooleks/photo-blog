@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {Component, OnInit, AfterViewInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {
     TitleService,
@@ -18,7 +18,7 @@ import {GalleryImage} from '../../../shared/components/gallery';
     selector: 'photos',
     templateUrl: 'photos.component.html',
 })
-export class PhotosComponent {
+export class PhotosComponent implements OnInit, AfterViewInit {
     private defaults:any = {page: 1, perPage: 20};
     private queryParams:Object = {};
     private pager:PagerService;
@@ -27,24 +27,24 @@ export class PhotosComponent {
     private galleryImages:Array<GalleryImage> = [];
     private hasMoreGalleryImages:boolean = true;
 
-    constructor(@Inject(ActivatedRoute) private route:ActivatedRoute,
-                @Inject(TitleService) private title:TitleService,
-                @Inject(AuthProviderService) private authProvider:AuthProviderService,
-                @Inject(PhotoDataProviderService) private photoDataProvider:PhotoDataProviderService,
-                @Inject(NavigatorServiceProvider) navigatorProvider:NavigatorServiceProvider,
-                @Inject(PagerServiceProvider) pagerProvider:PagerServiceProvider,
-                @Inject(LockProcessServiceProvider) lockProcessProvider:LockProcessServiceProvider) {
+    constructor(private route:ActivatedRoute,
+                private title:TitleService,
+                private authProvider:AuthProviderService,
+                private photoDataProvider:PhotoDataProviderService,
+                navigatorProvider:NavigatorServiceProvider,
+                pagerProvider:PagerServiceProvider,
+                lockProcessProvider:LockProcessServiceProvider) {
         this.pager = pagerProvider.getInstance(this.defaults.page, this.defaults.perPage);
         this.navigator = navigatorProvider.getInstance();
         this.lockProcess = lockProcessProvider.getInstance();
     }
 
-    ngOnInit() {
+    ngOnInit():void {
         this.title.setTitle('All Photos');
         this.initQueryParams();
     }
 
-    ngAfterViewInit() {
+    ngAfterViewInit():void {
         const perPageOffset = this.queryParams['page'] * this.pager.getPerPage();
         this.loadPhotos(this.defaults.page, perPageOffset);
     }
@@ -84,7 +84,7 @@ export class PhotosComponent {
         return !this.galleryImages.length && !this.lockProcess.isProcessing();
     };
 
-    isLoading = ():boolean => {
+    isProcessing = ():boolean => {
         return this.lockProcess.isProcessing();
     };
 

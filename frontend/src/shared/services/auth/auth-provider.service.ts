@@ -1,9 +1,9 @@
-import {Injectable, Inject} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {LocalStorageService} from '../local-storage/local-storage.service';
 
 @Injectable()
 export class AuthProviderService {
-    constructor(@Inject(LocalStorageService) private localStorage:LocalStorageService) {
+    constructor(private localStorage:LocalStorageService) {
     }
 
     setAuth = (auth:any):any => {

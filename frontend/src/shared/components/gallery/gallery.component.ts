@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter, HostListener, SimpleChanges, ViewChild} from '@angular/core';
+import {Component, OnChanges, Input, Output, EventEmitter, HostListener, SimpleChanges, ViewChild} from '@angular/core';
 import {GalleryGridComponent} from './gallery-grid.component';
 import {GalleryImage} from './models';
 
@@ -7,7 +7,7 @@ import {GalleryImage} from './models';
     templateUrl: 'gallery.component.html',
     styleUrls: ['gallery.component.css'],
 })
-export class GalleryComponent {
+export class GalleryComponent implements OnChanges {
     @ViewChild('galleryGridComponent') galleryGridComponent:GalleryGridComponent;
 
     @Input() galleryImages:Array<GalleryImage> = [];
@@ -37,14 +37,16 @@ export class GalleryComponent {
     private openedImageIndex:number;
     private openedImageIsLoaded:boolean;
 
-    ngOnInit() {
+    ngOnInit():void {
         this.reset();
     }
 
     ngOnChanges(changes:SimpleChanges) {
         // We will view default image only on the fresh load of images.
         // This is a buggy piece of code. Be aware when making a changes.
-        if (this.defaultImageId && changes['galleryImages'] && !changes['galleryImages'].previousValue.length) {
+        if (this.defaultImageId && changes['galleryImages'] &&
+            changes['galleryImages'].previousValue && !changes['galleryImages'].previousValue.length &&
+            changes['galleryImages'].currentValue && changes['galleryImages'].currentValue.length) {
             this.viewImageById(this.defaultImageId);
         }
 
@@ -77,14 +79,21 @@ export class GalleryComponent {
     setOpenedImage = (galleryImage:GalleryImage, index:number):void => {
         this.openedImage = galleryImage;
         this.openedImageIndex = index;
-        const galleryImageLoader = new Image;
-        let loaded = false;
-        galleryImageLoader.onload = () => {
-            this.openedImageIsLoaded = loaded = true;
+        if (typeof (window) !== 'undefined') {
+            // Browser-specific logic.
+            const galleryImageLoader = new Image;
+            let loaded = false;
+            galleryImageLoader.onload = () => {
+                this.openedImageIsLoaded = loaded = true;
+                this.onOpenImage.emit(this.openedImage);
+            };
+            setTimeout(() => (this.openedImageIsLoaded = loaded), 400);
+            galleryImageLoader.src = galleryImage.getLargeSizeUrl();
+        } else {
+            // Server-specific logic.
+            this.openedImageIsLoaded = true;
             this.onOpenImage.emit(this.openedImage);
-        };
-        setTimeout(() => (this.openedImageIsLoaded = loaded), 400);
-        galleryImageLoader.src = galleryImage.getLargeSizeUrl();
+        }
     };
 
     unsetOpenedImage = ():void => {

@@ -1,13 +1,21 @@
 import {Injectable} from '@angular/core';
+import {EnvironmentDetectorService} from '../environment-detector';
 
 @Injectable()
 export class ScrollFreezerService {
-    freezeBackgroundScroll = () => {
-        let top = window.scrollY;
-        window.onscroll = () => window.scroll(0, top);
+    constructor(private environmentDetector:EnvironmentDetectorService) {
+    }
+
+    freezeBackgroundScroll = ():void => {
+        if (this.environmentDetector.isBrowser()) {
+            const top = window.scrollY;
+            window.onscroll = () => window.scroll(0, top);
+        }
     };
 
-    unfreezeBackgroundScroll = () => {
-        window.onscroll = null;
+    unfreezeBackgroundScroll = ():void => {
+        if (this.environmentDetector.isBrowser()) {
+            window.onscroll = null;
+        }
     };
 }

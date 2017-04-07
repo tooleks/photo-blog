@@ -6,7 +6,7 @@ import {
     PageNotFoundComponent,
     SignInFormComponent,
     SignOutComponent,
-    SubscriptionComponent,
+    SubscriptionFormComponent,
     UnsubscriptionComponent,
 } from './components';
 
@@ -14,7 +14,7 @@ const AppRoutes:Routes = [
     {
         path: '',
         redirectTo: '/photos',
-        pathMatch: 'full'
+        pathMatch: 'full',
     },
     {
         path: 'signin',
@@ -34,7 +34,7 @@ const AppRoutes:Routes = [
     },
     {
         path: 'subscription',
-        component: SubscriptionComponent,
+        component: SubscriptionFormComponent,
     },
     {
         path: 'unsubscription/:token',

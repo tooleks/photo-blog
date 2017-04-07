@@ -1,4 +1,4 @@
-import {Injectable, Inject} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Http, Headers, Response, URLSearchParams} from '@angular/http';
 import 'rxjs/Rx';
 import {ApiErrorHandler} from './api-error-handler';
@@ -10,39 +10,43 @@ export class ApiService {
     url:string;
     debug:boolean;
 
-    constructor(@Inject(EnvService) public env:EnvService,
-                @Inject(Http) public http:Http,
-                @Inject(ApiErrorHandler) public errorHandler:ApiErrorHandler,
-                @Inject(AuthProviderService) public authProvider:AuthProviderService) {
+    constructor(public env:EnvService,
+                public http:Http,
+                public errorHandler:ApiErrorHandler,
+                public authProvider:AuthProviderService) {
         this.url = this.env.get('apiUrl');
         this.debug = this.env.get('debug');
     }
 
-    get = (url:string, options?:any) => {
+    get = (url:string, options?:any):Promise<any> => {
         return this.http
             .get(this.getAbsoluteUrl(url), this.initializeOptions(options))
-            .map(this.extractResponseData)
+            .toPromise()
+            .then(this.extractResponseData)
             .catch(this.errorHandler.handleResponse);
     };
 
-    post = (url:string, body?:any, options?:any) => {
+    post = (url:string, body?:any, options?:any):Promise<any> => {
         return this.http
             .post(this.getAbsoluteUrl(url), this.initializeBody(body), this.initializeOptions(options))
-            .map(this.extractResponseData)
+            .toPromise()
+            .then(this.extractResponseData)
             .catch(this.errorHandler.handleResponse);
     };
 
-    put = (url:string, body?:any, options?:any) => {
+    put = (url:string, body?:any, options?:any):Promise<any> => {
         return this.http
             .put(this.getAbsoluteUrl(url), this.initializeBody(body), this.initializeOptions(options))
-            .map(this.extractResponseData)
+            .toPromise()
+            .then(this.extractResponseData)
             .catch(this.errorHandler.handleResponse);
     };
 
-    delete = (url:string, options?:any) => {
+    delete = (url:string, options?:any):Promise<any> => {
         return this.http
             .delete(this.getAbsoluteUrl(url), this.initializeOptions(options))
-            .map(this.extractResponseData)
+            .toPromise()
+            .then(this.extractResponseData)
             .catch(this.errorHandler.handleResponse);
     };
 
@@ -101,7 +105,7 @@ export class ApiService {
         return this.url + relativeUrl;
     };
 
-    private extractResponseData = (response:Response) => {
+    public extractResponseData = (response:Response):any => {
         return response.json() || {};
     };
 }

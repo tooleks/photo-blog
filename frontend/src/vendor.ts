@@ -7,12 +7,13 @@ import '@angular/router';
 
 import 'rxjs';
 
-import 'bootstrap';
-import 'bootstrap/dist/css/bootstrap.css';
-
 import 'hammerjs';
 
-import '../assets/theme/font-awesome/css/font-awesome.css';
-import '../assets/theme/css/style.css';
-
+import 'angular2-infinite-scroll';
+import 'ng2-tag-input';
 import 'ng2-go-top-button';
+
+import '../assets/vendor/font-awesome/css/font-awesome.css';
+import '../assets/vendor/bootstrap/css/bootstrap.css';
+import '../assets/vendor/theme/css/style.css';
+import '../assets/app/css/overrides.css';
