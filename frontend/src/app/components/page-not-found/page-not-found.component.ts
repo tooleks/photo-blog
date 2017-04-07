@@ -28,7 +28,7 @@ export class PageNotFoundComponent implements OnInit {
     }
 
     private initTitle = ():void => {
-        this.title.setTitle('Page not found');
+        this.title.setTitle('Page Not Found');
     };
 
     private initMeta = ():void => {
