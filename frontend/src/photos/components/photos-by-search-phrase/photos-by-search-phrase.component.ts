@@ -105,6 +105,7 @@ export class PhotosBySearchPhraseComponent implements OnInit, AfterViewInit {
             this.galleryComponent.reset();
             this.queryParams['search_phrase'] = String(searchPhrase);
             this.title.setTitle(['Photos', 'Search "' + this.queryParams['search_phrase'] + '"']);
+            this.metaTags.setTitle(this.title.getPageName());
             const perPageOffset = this.queryParams['page'] * this.pager.getPerPage();
             this.loadPhotos(this.defaults.page, perPageOffset, this.queryParams['search_phrase']);
         }

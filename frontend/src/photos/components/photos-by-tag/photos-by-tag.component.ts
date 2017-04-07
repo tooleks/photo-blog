@@ -98,6 +98,7 @@ export class PhotosByTagComponent implements OnInit, AfterViewInit {
             this.galleryComponent.reset();
             this.queryParams['tag'] = tag;
             this.title.setTitle(['Photos', 'Tag #' + tag]);
+            this.metaTags.setTitle(this.title.getPageName());
             const perPageOffset = this.queryParams['page'] * this.pager.getPerPage();
             this.loadPhotos(this.defaults.page, perPageOffset, this.queryParams['tag']);
         }
