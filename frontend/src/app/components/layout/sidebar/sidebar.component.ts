@@ -105,8 +105,4 @@ export class SideBarComponent implements OnInit {
     private loadTags = ():void => {
         this.api.get('/tags', {params: {page: 1, per_page: 7}}).then((response:any) => this.tags = response.data);
     };
-
-    private getAppName = ():string => {
-        return this.app.getName();
-    };
 }
