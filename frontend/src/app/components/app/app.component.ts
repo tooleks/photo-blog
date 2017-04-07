@@ -35,8 +35,9 @@ export class AppComponent implements OnInit {
 
     private initMeta = ():void => {
         this.metaTags.setUrl(this.app.getUrl());
+        this.metaTags.setWebsiteName(this.app.getName());
         this.metaTags.setTitle(this.title.getPageName());
-        this.metaTags.setDescription(this.title.getTitle());
+        this.metaTags.setDescription(this.app.getDescription());
         this.metaTags.setImage(this.app.getUrl() + '/assets/static/meta_image.png');
     };
 

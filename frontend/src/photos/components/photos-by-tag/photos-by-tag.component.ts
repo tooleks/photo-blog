@@ -3,6 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {
     TitleService,
     AuthProviderService,
+    MetaTagsService,
     NavigatorServiceProvider,
     NavigatorService,
     PagerServiceProvider,
@@ -30,6 +31,7 @@ export class PhotosByTagComponent implements OnInit, AfterViewInit {
 
     constructor(private route:ActivatedRoute,
                 private title:TitleService,
+                private metaTags:MetaTagsService,
                 private authProvider:AuthProviderService,
                 private photoDataProvider:PhotoDataProviderService,
                 navigatorProvider:NavigatorServiceProvider,
@@ -41,7 +43,8 @@ export class PhotosByTagComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit():void {
-        this.title.setTitle(['Search By Tag']);
+        this.initTitle();
+        this.initMeta();
         this.initQueryParams();
     }
 
@@ -50,6 +53,14 @@ export class PhotosByTagComponent implements OnInit, AfterViewInit {
             .map((params) => params['tag'])
             .subscribe(this.searchByTag);
     }
+
+    private initTitle = ():void => {
+        this.title.setTitle('Search By Tag');
+    };
+
+    private initMeta = ():void => {
+        this.metaTags.setTitle(this.title.getPageName());
+    };
 
     private initQueryParams = ():void => {
         this.route.queryParams
@@ -102,6 +113,8 @@ export class PhotosByTagComponent implements OnInit, AfterViewInit {
 
     onShowPhoto = (galleryImage:GalleryImage):void => {
         this.navigator.setQueryParam('show', galleryImage.getId());
+        this.metaTags.setImage(galleryImage.getSmallSizeUrl());
+        this.metaTags.setDescription(galleryImage.getDescription());
     };
 
     onHidePhoto = (galleryImage:GalleryImage):void => {

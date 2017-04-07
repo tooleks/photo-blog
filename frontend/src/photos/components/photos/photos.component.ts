@@ -3,6 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {
     TitleService,
     AuthProviderService,
+    MetaTagsService,
     NavigatorServiceProvider,
     NavigatorService,
     PagerServiceProvider,
@@ -29,6 +30,7 @@ export class PhotosComponent implements OnInit, AfterViewInit {
 
     constructor(private route:ActivatedRoute,
                 private title:TitleService,
+                private metaTags:MetaTagsService,
                 private authProvider:AuthProviderService,
                 private photoDataProvider:PhotoDataProviderService,
                 navigatorProvider:NavigatorServiceProvider,
@@ -40,7 +42,8 @@ export class PhotosComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit():void {
-        this.title.setTitle('All Photos');
+        this.initTitle();
+        this.initMeta();
         this.initQueryParams();
     }
 
@@ -48,6 +51,14 @@ export class PhotosComponent implements OnInit, AfterViewInit {
         const perPageOffset = this.queryParams['page'] * this.pager.getPerPage();
         this.loadPhotos(this.defaults.page, perPageOffset);
     }
+
+    private initTitle = ():void => {
+        this.title.setTitle('All Photos');
+    };
+
+    private initMeta = ():void => {
+        this.metaTags.setTitle(this.title.getPageName());
+    };
 
     private initQueryParams = ():void => {
         this.route.queryParams
@@ -90,6 +101,8 @@ export class PhotosComponent implements OnInit, AfterViewInit {
 
     onShowPhoto = (galleryImage:GalleryImage):void => {
         this.navigator.setQueryParam('show', galleryImage.getId());
+        this.metaTags.setImage(galleryImage.getSmallSizeUrl());
+        this.metaTags.setDescription(galleryImage.getDescription());
     };
 
     onHidePhoto = (galleryImage:GalleryImage):void => {

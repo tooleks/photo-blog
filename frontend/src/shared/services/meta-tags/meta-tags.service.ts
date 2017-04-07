@@ -26,13 +26,16 @@ export class MetaTagsService {
         this.meta.addTags(tags);
     };
 
+    setWebsiteName = (content:string):void => {
+        this.meta.updateTag({name: 'og:site_name', content: content}, 'name="og:site_name"');
+    };
+
     setUrl = (content:string):void => {
         this.meta.updateTag({name: 'og:url', content: content}, 'name="og:url"');
     };
 
     setTitle = (content:string):void => {
         this.meta.updateTag({name: 'og:title', content: content}, 'name="og:title"');
-        this.meta.updateTag({name: 'og:site_name', content: content}, 'name="og:site_name"');
         this.meta.updateTag({name: 'twitter:title', content: content}, 'name="twitter:title"');
     };
 

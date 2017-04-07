@@ -6,11 +6,15 @@ export class AppService {
     constructor(private env:EnvService) {
     }
 
+    getUrl = ():string => {
+        return String(this.env.get('appUrl'));
+    };
+
     getName = ():string => {
         return String(this.env.get('appName'));
     };
 
-    getUrl = ():string => {
-        return String(this.env.get('appUrl'));
+    getDescription = ():string => {
+        return String(this.env.get('appDescription'));
     };
 }
