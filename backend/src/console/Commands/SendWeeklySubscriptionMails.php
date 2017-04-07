@@ -69,7 +69,7 @@ class SendWeeklySubscriptionMails extends Command
      */
     protected function isWeeklySubscriptionAvailable() : bool
     {
-        return Photo::whereIsPublished(true)->where('updated_at', '>', (new Carbon())->addWeek('-1'))->exists();
+        return Photo::whereIsPublished(true)->where('created_at', '>', (new Carbon())->addWeek('-1'))->exists();
     }
 
     /**
