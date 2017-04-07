@@ -3,6 +3,7 @@ import {SignInForm as Form} from './models';
 import {
     AuthService,
     TitleService,
+    MetaTagsService,
     LockProcessServiceProvider,
     LockProcessService,
     NavigatorServiceProvider,
@@ -21,6 +22,7 @@ export class SignInFormComponent implements OnInit {
 
     constructor(private auth:AuthService,
                 private title:TitleService,
+                private metaTags:MetaTagsService,
                 private notices:NoticesService,
                 navigatorProvider:NavigatorServiceProvider,
                 lockProcessServiceProvider:LockProcessServiceProvider) {
@@ -29,9 +31,22 @@ export class SignInFormComponent implements OnInit {
     }
 
     ngOnInit():void {
-        this.title.setTitle('Sing In');
+        this.initTitle();
+        this.initMeta();
         this.initForm();
     }
+
+    private initTitle = ():void => {
+        this.title.setTitle('Sing In');
+    };
+
+    private initMeta = ():void => {
+        this.metaTags.setTitle(this.title.getPageName());
+    };
+
+    private initForm = ():void => {
+        this.setForm(new Form);
+    };
 
     setForm = (form:Form):void => {
         this.form = form;
@@ -39,10 +54,6 @@ export class SignInFormComponent implements OnInit {
 
     getForm = ():Form => {
         return this.form;
-    };
-
-    initForm = ():void => {
-        this.setForm(new Form);
     };
 
     signIn = ():Promise<any> => {
