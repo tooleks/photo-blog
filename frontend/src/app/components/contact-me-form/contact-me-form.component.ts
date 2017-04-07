@@ -3,6 +3,7 @@ import {ContactMeForm as Form} from './models';
 import {
     ApiService,
     TitleService,
+    MetaTagsService,
     LockProcessServiceProvider,
     LockProcessService,
     NavigatorServiceProvider,
@@ -21,6 +22,7 @@ export class ContactMeFormComponent implements OnInit {
 
     constructor(private api:ApiService,
                 private title:TitleService,
+                private metaTags:MetaTagsService,
                 private notices:NoticesService,
                 navigatorProvider:NavigatorServiceProvider,
                 lockProcessServiceProvider:LockProcessServiceProvider) {
@@ -29,9 +31,22 @@ export class ContactMeFormComponent implements OnInit {
     }
 
     ngOnInit():void {
-        this.title.setTitle('Contact Me');
+        this.initTitle();
+        this.initMeta();
         this.initForm();
     }
+
+    private initTitle = ():void => {
+        this.title.setTitle('Contact Me');
+    };
+
+    private initMeta = ():void => {
+        this.metaTags.setTitle(this.title.getPageName());
+    };
+
+    private initForm = ():void => {
+        this.setForm(new Form);
+    };
 
     setForm = (form:Form):void => {
         this.form = form;
@@ -39,10 +54,6 @@ export class ContactMeFormComponent implements OnInit {
 
     getForm = ():Form => {
         return this.form;
-    };
-
-    initForm = ():void => {
-        this.setForm(new Form);
     };
 
     send = ():Promise<any> => {
