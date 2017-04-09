@@ -3,15 +3,15 @@ gallery-grid {
     width: 100%;
 }
 
-gallery-grid .gl-grid-cell-wrapper {
+gallery-grid .gallery-grid-cell-wrapper {
     display: block;
     float: left;
 }
 
-gallery-grid .gl-grid-cell {
+gallery-grid .gallery-grid-cell {
     padding: 1px;
 }
 
-gallery-grid .gl-grid-item {
+gallery-grid .gallery-grid-item {
     cursor: pointer;
 }

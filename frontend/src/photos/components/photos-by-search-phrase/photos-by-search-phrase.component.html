@@ -27,22 +27,23 @@
             <h2 class="m-xs">{{ 'No photos found' }}</h2>
         </div>
         <gallery #galleryComponent
-                 [(galleryImages)]="galleryImages"
+                 [images]="images"
                  [defaultImageId]="queryParams['show']"
-                 [onLoadMoreCallback]="loadMorePhotos"
+                 [loadMoreCallback]="loadMorePhotos.bind(this)"
                  (onOpenImage)="onShowPhoto($event)"
                  (onCloseImage)="onHidePhoto($event)"
+                 [showEditImageButton]="authProvider.isAuthenticated()"
                  (onEditImage)="authProvider.isAuthenticated() ? onEditPhoto($event) : null"
-                 [showEditButton]="authProvider.isAuthenticated()"
+                 [showDeleteImageButton]="false"
                  infinite-scroll
-                 [infiniteScrollDisabled]="!hasMoreGalleryImages"
+                 [infiniteScrollDisabled]="!hasMoreImages"
                  [infiniteScrollDistance]="3"
                  [infiniteScrollThrottle]="500"
                  (scrolled)="loadMorePhotos()"
         ></gallery>
     </div>
 </div>
-<div *ngIf="!isEmpty() && hasMoreGalleryImages" class="text-center" style="margin-top: 20px;">
+<div *ngIf="!isEmpty() && hasMoreImages" class="text-center" style="margin-top: 20px;">
     <button class="btn btn-primary" (click)="loadMorePhotos()" [disabled]="isProcessing()">
         {{ !isProcessing() ? 'Load More' : 'Loading...' }}
     </button>

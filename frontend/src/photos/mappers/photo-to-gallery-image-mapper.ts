@@ -1,4 +1,4 @@
-import {GalleryImage} from '../../shared/components/gallery';
+import {GalleryImage} from '../../lib/gallery';
 import {ExifToStringMapper} from './exif-to-string-mapper';
 
 export class PhotoToGalleryImageMapper {

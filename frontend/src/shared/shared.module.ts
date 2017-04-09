@@ -22,14 +22,9 @@ import {
     UserDataProviderService,
 } from './services';
 import {ApiErrorHandler} from './services/api-error-handler'
-import {
-    FileSelectInputComponent,
-    GalleryComponent,
-    GalleryGridComponent,
-    TagsSelectInputComponent,
-} from './components';
+import {FileSelectInputComponent, TagsSelectInputComponent} from './components';
 import {SafeHtmlPipe} from './pipes';
-import {NoticesModule} from '../common/notices';
+import {NoticesModule} from '../lib/notices';
 
 @NgModule({
     imports: [
@@ -40,8 +35,6 @@ import {NoticesModule} from '../common/notices';
     ],
     declarations: [
         FileSelectInputComponent,
-        GalleryComponent,
-        GalleryGridComponent,
         TagsSelectInputComponent,
         SafeHtmlPipe,
     ],
@@ -49,8 +42,6 @@ import {NoticesModule} from '../common/notices';
         CommonModule,
         FormsModule,
         FileSelectInputComponent,
-        GalleryComponent,
-        GalleryGridComponent,
         TagsSelectInputComponent,
         SafeHtmlPipe,
     ],

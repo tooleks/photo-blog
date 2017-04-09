@@ -132,5 +132,3 @@ export class GalleryImage {
         return this.attributes.exif;
     }
 }
-
-

@@ -1,16 +1,16 @@
-<div *ngFor="let gridRow of gridRows" class="gl-grid-row">
-    <div *ngFor="let gridImage of gridRow" class="gl-grid-cell-wrapper">
-        <div class="gl-grid-cell"
+<div *ngFor="let gridRow of gridRows" class="gallery-grid-row">
+    <div *ngFor="let gridImage of gridRow" class="gallery-grid-cell-wrapper">
+        <div class="gallery-grid-cell"
              [style.width.px]="gridImage.getSmallSizeWidth()"
              [style.height.px]="gridImage.getSmallSizeHeight()">
-            <!-- Note: The image [width] and [height] attributes are initialized with the .gl-grid-cell element padding offset. -->
+            <!-- Note: The image [width] and [height] attributes are initialized with the .gallery-grid-cell element padding offset. -->
             <img (click)="onClickGridImage.emit(gridImage)"
                  [style.background]="gridImage.getAvgColor()"
                  [src]="gridImage.getSmallSizeUrl()"
                  [width]="gridImage.getSmallSizeWidth()- 2"
                  [height]="gridImage.getSmallSizeHeight() - 2"
                  [alt]="gridImage.getDescription()"
-                 class="gl-grid-item">
+                 class="gallery-grid-item">
         </div>
     </div>
 </div>

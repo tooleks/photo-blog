@@ -1,128 +1,78 @@
-import {Component, OnInit, AfterViewInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
+import {PhotosGalleryComponent} from '../abstract';
 import {
     TitleService,
     AuthProviderService,
     MetaTagsService,
     NavigatorServiceProvider,
-    NavigatorService,
     PagerServiceProvider,
-    PagerService,
     LockProcessServiceProvider,
-    LockProcessService,
 } from '../../../shared/services';
 import {PhotoDataProviderService} from '../../services';
-import {PhotoToGalleryImageMapper} from '../../mappers';
-import {GalleryImage, GalleryComponent} from '../../../shared/components/gallery';
+import {GalleryImage, GalleryComponent} from '../../../lib/gallery';
 
 @Component({
     selector: 'photos-by-tag',
     templateUrl: 'photos-by-tag.component.html',
 })
-export class PhotosByTagComponent implements OnInit, AfterViewInit {
+export class PhotosByTagComponent extends PhotosGalleryComponent implements OnInit {
     @ViewChild('galleryComponent') galleryComponent:GalleryComponent;
-    private defaults:any = {page: 1, perPage: 20};
-    private queryParams:Object = {search_phrase: ''};
-    private pager:PagerService;
-    private navigator:NavigatorService;
-    private lockProcess:LockProcessService;
-    private galleryImages:Array<GalleryImage> = [];
-    private hasMoreGalleryImages:boolean = true;
+    protected queryParams:any = {tag: ''};
 
-    constructor(private route:ActivatedRoute,
-                private title:TitleService,
-                private metaTags:MetaTagsService,
-                private authProvider:AuthProviderService,
-                private photoDataProvider:PhotoDataProviderService,
+    constructor(protected authProvider:AuthProviderService,
+                protected photoDataProvider:PhotoDataProviderService,
+                route:ActivatedRoute,
+                title:TitleService,
+                metaTags:MetaTagsService,
                 navigatorProvider:NavigatorServiceProvider,
                 pagerProvider:PagerServiceProvider,
                 lockProcessProvider:LockProcessServiceProvider) {
-        this.pager = pagerProvider.getInstance(this.defaults.page, this.defaults.perPage);
-        this.navigator = navigatorProvider.getInstance();
-        this.lockProcess = lockProcessProvider.getInstance();
+        super(route, title, metaTags, navigatorProvider, pagerProvider, lockProcessProvider);
     }
 
     ngOnInit():void {
-        this.initTitle();
-        this.initMeta();
-        this.initQueryParams();
+        this.init();
     }
 
-    ngAfterViewInit():void {
-        this.route.params
-            .map((params) => params['tag'])
-            .subscribe(this.searchByTag);
-    }
-
-    private initTitle = ():void => {
+    protected initTitle():void {
         this.title.setTitle('Search By Tag');
-    };
+    }
 
-    private initMeta = ():void => {
-        this.metaTags.setTitle(this.title.getPageName());
-    };
+    protected initQueryParamsSubscribers() {
+        super.initQueryParamsSubscribers();
+        this.route.params
+            .map((params:any) => params['tag'])
+            .subscribe(this.searchByTag.bind(this));
+    }
 
-    private initQueryParams = ():void => {
-        this.route.queryParams
-            .map((queryParams) => queryParams['page'])
-            .subscribe((page:number) => this.queryParams['page'] = page ? Number(page) : this.defaults.page);
+    protected reset():void {
+        super.reset();
+        this.galleryComponent.reset();
+    }
 
-        this.route.queryParams
-            .map((queryParams) => queryParams['show'])
-            .subscribe((show:number) => this.queryParams['show'] = Number(show));
-    };
-
-    private loadPhotos = (page:number, perPage:number, tag:string):Promise<Array<GalleryImage>> => {
+    protected loadPhotos(page:number, perPage:number, parameters?:any):Promise<Array<GalleryImage>> {
         return this.lockProcess
-            .process(this.photoDataProvider.getByTag, [page, perPage, tag])
-            .then(this.handleLoadPhotos);
-    };
+            .process(() => this.photoDataProvider.getByTag(page, perPage, parameters['tag']))
+            .then(this.handleLoadPhotos.bind(this));
+    }
 
-    private handleLoadPhotos = (response:any):Array<GalleryImage> => {
-        const galleryImages = PhotoToGalleryImageMapper.map(response.data);
-        this.hasMoreGalleryImages = !(response.data.length < this.defaults.perPage);
-        if (response.data.length) {
-            this.pager.setPage(response.current_page);
-            this.navigator.setQueryParam('page', this.pager.getPage());
-            this.galleryImages = this.galleryImages.concat(galleryImages);
-        }
-        return galleryImages;
-    };
+    protected loadMorePhotos():Promise<Array<GalleryImage>> {
+        return this.loadPhotos(this.pager.getNextPage(), this.pager.getPerPage(), {
+            tag: this.queryParams['tag'],
+        });
+    }
 
-    loadMorePhotos = ():Promise<Array<GalleryImage>> => {
-        return this.loadPhotos(this.pager.getNextPage(), this.pager.getPerPage(), this.queryParams['tag']);
-    };
-
-    searchByTag = (tag:string):void => {
+    protected searchByTag(tag:string):void {
         if (tag && tag != this.queryParams['tag']) {
-            this.galleryComponent.reset();
-            this.queryParams['tag'] = tag;
-            this.title.setTitle(['Photos', 'Tag #' + tag]);
+            this.reset();
+            this.queryParams['tag'] = String(tag);
+            this.title.setTitle(['Photos', `Tag #${this.queryParams['tag']}`]);
             this.metaTags.setTitle(this.title.getPageName());
             const perPageOffset = this.queryParams['page'] * this.pager.getPerPage();
-            this.loadPhotos(this.defaults.page, perPageOffset, this.queryParams['tag']);
+            this.loadPhotos(this.defaults.page, perPageOffset, {
+                tag: this.queryParams['tag'],
+            });
         }
-    };
-
-    isEmpty = ():boolean => {
-        return !this.galleryImages.length && !this.lockProcess.isProcessing();
-    };
-
-    isProcessing = ():boolean => {
-        return this.lockProcess.isProcessing();
-    };
-
-    onShowPhoto = (galleryImage:GalleryImage):void => {
-        this.navigator.setQueryParam('show', galleryImage.getId());
-        this.metaTags.setImage(galleryImage.getLargeSizeUrl());
-        this.metaTags.setTitle(galleryImage.getDescription());
-    };
-
-    onHidePhoto = (galleryImage:GalleryImage):void => {
-        this.navigator.unsetQueryParam('show');
-    };
-
-    onEditPhoto = (galleryImage:GalleryImage):void => {
-        this.navigator.navigate(['photo/edit', galleryImage.getId()]);
-    };
+    }
 }

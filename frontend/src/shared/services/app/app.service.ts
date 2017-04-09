@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {EnvService} from "../env/env.service";
+import {EnvService} from '../env/env.service';
 
 @Injectable()
 export class AppService {

@@ -9,7 +9,7 @@ import {
     LockProcessServiceProvider,
     LockProcessService,
 } from '../../../shared/services';
-import {NoticesService} from '../../../common/notices';
+import {NoticesService} from '../../../lib/notices';
 import {PhotoDataProviderService} from '../../services'
 
 @Component({

@@ -9,7 +9,7 @@ import {
     NavigatorServiceProvider,
     NavigatorService,
 } from '../../../shared/services';
-import {NoticesService} from '../../../common/notices';
+import {NoticesService} from '../../../lib/notices';
 
 @Component({
     selector: 'signin-form',

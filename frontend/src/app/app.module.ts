@@ -18,7 +18,7 @@ import {HttpModule, JsonpModule} from '@angular/http';
 import {AppRouting, AppRoutingProviders} from './app.routing';
 import {SharedModule} from '../shared/shared.module';
 import {PhotosModule} from '../photos/photos.module';
-import {NoticesModule} from '../common/notices';
+import {NoticesModule} from '../lib/notices';
 
 @NgModule({
     imports: [

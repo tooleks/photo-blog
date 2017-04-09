@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Response} from '@angular/http';
 import {ApiErrorHandler as BaseApiErrorHandler} from '../api';
 import {NavigatorService, NavigatorServiceProvider} from '../navigator';
-import {NoticesService} from '../../../common/notices';
+import {NoticesService} from '../../../lib/notices';
 
 @Injectable()
 export class ApiErrorHandler extends BaseApiErrorHandler {

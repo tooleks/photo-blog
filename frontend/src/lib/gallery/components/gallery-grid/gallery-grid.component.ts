@@ -9,8 +9,8 @@ import {
     AfterContentInit,
     OnDestroy
 } from '@angular/core';
-import {scaleImageSmallSizeToHeight, scaleImagesSmallSizeToWidth, sumImagesSmallSizeWidth} from './helpers';
-import {GalleryImage} from './models';
+import {scaleImageSmallSizeToHeight, scaleImagesSmallSizeToWidth, sumImagesSmallSizeWidth} from '../../helpers';
+import {GalleryImage} from '../../models';
 
 @Component({
     selector: 'gallery-grid',
@@ -20,14 +20,18 @@ import {GalleryImage} from './models';
 export class GalleryGridComponent implements OnChanges, AfterContentInit, OnDestroy {
     private elementSize:any = {width: 0, height: 0};
     private elementSizeCheck:any = null;
+
     @Input() elementSizeCheckInterval:number = 250;
 
     @Input() rowHeight:number = 0;
+
     private gridRowMaxHeight:number = 0;
     private gridRowMaxWidth:number = 0;
 
-    @Input() galleryImages:Array<GalleryImage> = [];
+    @Input() images:Array<GalleryImage> = [];
+
     @Output() onClickGridImage:EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
+
     private gridRows:Array<Array<GalleryImage>> = [];
     private activeRowImages:Array<GalleryImage> = [];
 
@@ -38,12 +42,12 @@ export class GalleryGridComponent implements OnChanges, AfterContentInit, OnDest
     ngOnChanges(changes:SimpleChanges) {
         if (changes['rowHeight']) {
             this.setGridRowMaxHeight(changes['rowHeight'].currentValue);
-            this.renderGrid(this.galleryImages);
+            this.renderGrid(this.images);
         }
 
-        if (changes['galleryImages'] && changes['galleryImages'].currentValue.length) {
+        if (changes['images'] && changes['images'].currentValue.length) {
             this.setGridRowMaxWidth(this.elementRef.nativeElement.offsetWidth);
-            this.renderGrid(changes['galleryImages'].currentValue);
+            this.renderGrid(changes['images'].currentValue);
         }
     }
 
@@ -67,7 +71,7 @@ export class GalleryGridComponent implements OnChanges, AfterContentInit, OnDest
             this.setElementSize(width, height);
             this.setGridRowMaxWidth(this.elementRef.nativeElement.offsetWidth);
             this.setGridRows([]);
-            this.renderGrid(this.galleryImages);
+            this.renderGrid(this.images);
         }
     };
 
@@ -112,29 +116,30 @@ export class GalleryGridComponent implements OnChanges, AfterContentInit, OnDest
     };
 
     reset = ():void => {
-        this.setGridRows([]);
-        this.setActiveRowImages([]);
+        this.gridRows = [];
+        this.activeRowImages = [];
+        this.images = [];
     };
 
-    renderGrid = (galleryImages:Array<GalleryImage>):void => {
-        const newGalleryImages = galleryImages.filter((galleryImage:GalleryImage) => !this.existsInGrid(galleryImage));
+    renderGrid = (images:Array<GalleryImage>):void => {
+        const newImages = images.filter((image:GalleryImage) => !this.existsInGrid(image));
         // Get the array of the new grid images concatenated with the array of the last row images.
-        const processImages = this.getGridRows().length ? this.getGridRows().pop().concat(newGalleryImages) : newGalleryImages;
-        processImages.forEach((galleryImage:GalleryImage, index:number) => {
-            this.pushImageToActiveRow(galleryImage);
+        const processImages = this.getGridRows().length ? this.getGridRows().pop().concat(newImages) : newImages;
+        processImages.forEach((image:GalleryImage, index:number) => {
+            this.pushImageToActiveRow(image);
             this.renderActiveRowIfFilled(index == processImages.length - 1);
         });
     };
 
-    private existsInGrid = (galleryImage:GalleryImage):boolean => {
+    private existsInGrid = (image:GalleryImage):boolean => {
         // Note: Convert multi-dimensional array (of rows of images) into single-dimensional array (of images).
         return [].concat.apply([], this.getGridRows())
-            .some((gridGalleryImage:GalleryImage) => gridGalleryImage.getId() == galleryImage.getId());
+            .some((gridImage:GalleryImage) => gridImage.getId() == image.getId());
     };
 
-    private pushImageToActiveRow = (galleryImage:GalleryImage):void => {
-        const scaledGalleryImage = scaleImageSmallSizeToHeight(galleryImage, this.getGridRowMaxHeight());
-        this.getActiveRowImages().push(scaledGalleryImage);
+    private pushImageToActiveRow = (image:GalleryImage):void => {
+        const scaledImage = scaleImageSmallSizeToHeight(image, this.getGridRowMaxHeight());
+        this.getActiveRowImages().push(scaledImage);
     };
 
     private renderActiveRowIfFilled = (force:boolean = false):void => {

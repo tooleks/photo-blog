@@ -1,9 +1,9 @@
-gallery {
+gallery-viewer {
     display: block;
     width: 100%;
 }
 
-gallery .gl-backdrop {
+gallery-viewer .gallery-backdrop {
     position: fixed;
     left: 0;
     top: 0;
@@ -13,7 +13,7 @@ gallery .gl-backdrop {
     z-index: 20000;
 }
 
-gallery .gl-container {
+gallery-viewer .gallery-container {
     position: fixed;
     left: 0;
     top: 0;
@@ -23,19 +23,19 @@ gallery .gl-container {
     text-align: center;
 }
 
-gallery .gl-view {
+gallery-viewer .gallery-view {
     position: absolute;
     height: 100%;
     width: 100%;
 }
 
-gallery .gl-img-container {
+gallery-viewer .gallery-img-container {
     position: relative;
     height: 100%;
     width: 100%;
 }
 
-gallery .gl-img {
+gallery-viewer .gallery-img {
     position: absolute;
     max-height: 100%;
     max-width: 100%;
@@ -49,7 +49,7 @@ gallery .gl-img {
     cursor: pointer;
 }
 
-gallery .gl-action {
+gallery-viewer .gallery-action {
     display: block;
     padding: 16px 20px 16px;
     background-color: rgba(0, 0, 0, 0.45);
@@ -60,26 +60,26 @@ gallery .gl-action {
     transition: transform 0.35s cubic-bezier(0, 0, 0.25, 1) 0s, opacity 0.35s cubic-bezier(0, 0, 0.25, 1) 0s, color 0.2s linear;
 }
 
-gallery .gl-action:hover {
+gallery-viewer .gallery-action:hover {
     color: #FFF;
 }
 
-gallery .gl-actions .gl-action {
+gallery-viewer .gallery-actions .gallery-action {
     position: absolute;
     top: 50%;
     margin-top: -10px;
     z-index: 20020;
 }
 
-gallery .gl-actions .gl-prev {
+gallery-viewer .gallery-actions .gallery-prev {
     left: 0;
 }
 
-gallery .gl-actions .gl-next {
+gallery-viewer .gallery-actions .gallery-next {
     right: 0;
 }
 
-gallery .gl-navbar {
+gallery-viewer .gallery-navbar {
     position: absolute;
     width: 100%;
     left: 0;
@@ -88,22 +88,22 @@ gallery .gl-navbar {
     z-index: 20030;
 }
 
-gallery .gl-navbar .gl-right {
+gallery-viewer .gallery-navbar .gallery-right {
     float: right;
 }
 
-gallery .gl-navbar .gl-left {
+gallery-viewer .gallery-navbar .gallery-left {
     float: left;
 }
 
-gallery .gl-spinner {
+gallery-viewer .gallery-spinner {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, 0);
 }
 
-gallery .gl-info {
+gallery-viewer .gallery-info {
     position: fixed;
     width: 100%;
     bottom: 0;

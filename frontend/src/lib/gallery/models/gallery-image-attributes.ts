@@ -1,5 +1,5 @@
 export class GalleryImageAttributes {
-    id:number;
+    id:any;
     fullSizeUrl:string;
     smallSizeUrl:string;
     smallSizeHeight:number;
