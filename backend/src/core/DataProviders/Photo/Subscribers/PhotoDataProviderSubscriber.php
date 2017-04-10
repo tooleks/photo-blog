@@ -51,6 +51,11 @@ class PhotoDataProviderSubscriber
         );
 
         $events->listen(
+            PhotoDataProvider::class . '@beforePaginate',
+            static::class . '@onBeforeGet'
+        );
+
+        $events->listen(
             PhotoDataProvider::class . '@afterSave',
             static::class . '@onAfterSave'
         );
@@ -144,7 +149,7 @@ class PhotoDataProviderSubscriber
 
         // Attach existing tags.
         foreach ($records as $key => $attributes) {
-            $tag = Tag::whereText($attributes['text'])->first();
+            $tag = Tag::whereValue($attributes['value'])->first();
             if (!is_null($tag)) {
                 $existingTags[] = $tag;
                 $photo->tags()->attach($tag->id);
