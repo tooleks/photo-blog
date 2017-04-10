@@ -36,35 +36,34 @@ export class PhotoFormComponent implements OnInit {
     ngOnInit():void {
         this.title.setTitle('Add Photo');
         this.photo = new Form;
-    }
-
-    ngAfterViewInit():void {
         this.route.params
             .map((params) => params['id'])
             .subscribe(this.loadById);
     }
 
-    private processLoadById = (id:number) => {
+    private processLoadById = (id:number):Promise<any> => {
         return id
             ? this.photoDataProvider.getById(id)
             : Promise.reject(new Error('Photo ID is not provided.'));
     };
 
-    loadById = (id:number) => {
-        return this.lockProcess.process(this.processLoadById, [id]).then((photo:any) => {
-            this.photo.setSavedPhotoAttributes(photo);
-            this.title.setTitle('Edit Photo');
-            return photo;
-        });
+    loadById = (id:number):Promise<any> => {
+        if (id) {
+            return this.lockProcess.process(this.processLoadById, [id]).then((photo:any) => {
+                this.photo.setSavedPhotoAttributes(photo);
+                this.title.setTitle('Edit Photo');
+                return photo;
+            });
+        }
     };
 
-    private processSavePhoto = () => {
+    private processSavePhoto = ():Promise<any> => {
         return this.photo.id
             ? this.photoDataProvider.updateById(this.photo.id, this.photo)
             : this.photoDataProvider.create(this.photo);
     };
 
-    save = () => {
+    save = ():Promise<any> => {
         return this.lockProcess.process(this.processSavePhoto).then((photo:any) => {
             this.photo.setSavedPhotoAttributes(photo);
             this.notices.success('Photo was successfully saved.');
@@ -73,13 +72,13 @@ export class PhotoFormComponent implements OnInit {
         });
     };
 
-    private processUploadPhoto = (file:FileList) => {
+    private processUploadPhoto = (file:FileList):Promise<any> => {
         return this.photo.id
             ? this.photoDataProvider.uploadById(this.photo.id, file)
             : this.photoDataProvider.upload(file);
     };
 
-    upload = (file:FileList) => {
+    upload = (file:FileList):Promise<any> => {
         return this.lockProcess.process(this.processUploadPhoto, [file]).then((photo:any) => {
             this.photo.setUploadedPhotoAttributes(photo);
             this.notices.success('File was successfully uploaded.');
@@ -87,13 +86,13 @@ export class PhotoFormComponent implements OnInit {
         });
     };
 
-    private processDeletePhoto = () => {
+    private processDeletePhoto = ():Promise<any> => {
         return this.photo.id
             ? this.photoDataProvider.deleteById(this.photo.id)
             : Promise.reject(new Error('Photo ID is not provided.'));
     };
 
-    deletePhoto = () => {
+    deletePhoto = ():Promise<any> => {
         return this.lockProcess.process(this.processDeletePhoto).then((result:any) => {
             this.notices.success('Photo was successfully deleted.');
             this.navigator.navigate(['/photos']);

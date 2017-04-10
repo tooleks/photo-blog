@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * Class Tag.
  *
  * @property int id
- * @property string text
+ * @property string value
  * @property Collection photos
  * @package Core\Models
  */
@@ -19,7 +19,7 @@ class Tag extends Model
      * @inheritdoc
      */
     protected $fillable = [
-        'text',
+        'value',
     ];
 
     /**
@@ -28,16 +28,26 @@ class Tag extends Model
     public $timestamps = false;
 
     /**
-     * Setter for the 'text' attribute.
+     * Setter for the 'value' attribute.
      *
-     * @param string $text
+     * @param string $value
      * @return $this
      */
-    public function setTextAttribute($text)
+    public function setValueAttribute($value)
     {
-        $this->attributes['text'] = strtolower($text);
+        $this->attributes['value'] = strtolower($value);
 
         return $this;
+    }
+
+    /**
+     * Getter for the 'value' attribute.
+     *
+     * @return string
+     */
+    public function getValueAttribute()
+    {
+        return $this->attributes['value'];
     }
 
     /**

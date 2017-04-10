@@ -7,7 +7,7 @@ use Tooleks\Laravel\Presenter\Presenter;
 /**
  * Class TagPresenter.
  *
- * @property string text
+ * @property string value
  * @package Api\V1\Presenters
  */
 class TagPresenter extends Presenter
@@ -18,7 +18,9 @@ class TagPresenter extends Presenter
     protected function getAttributesMap() : array
     {
         return [
-            'text' => 'text',
+            'value' => function () {
+                return $this->getPresenteeAttribute('value');
+            },
         ];
     }
 }

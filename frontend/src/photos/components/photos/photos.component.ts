@@ -30,7 +30,6 @@ export class PhotosComponent extends PhotosGalleryComponent implements OnInit, A
 
     ngOnInit():void {
         this.init();
-
     }
 
     ngAfterViewInit():void {

@@ -1,8 +1,9 @@
-<tag-input [(ngModel)]="items"
-           [maxItems]="5"
+<tag-input [ngModel]="tags"
+           [identifyBy]="'value'"
+           [displayBy]="'value'"
+           [maxItems]="20"
+           [transform]="transform"
            (onAdd)="onAdd($event)"
            (onRemove)="onRemove($event)"
-           [transform]="transform"
-           [separatorKeys]="[32]"
-           [secondaryPlaceholder]="undefined"
-           [placeholder]="'+ tag'"></tag-input>
+           theme="minimal"
+></tag-input>

@@ -31,7 +31,7 @@ class HasSearchPhrase implements Criteria
             $query
                 ->where('photos.description', 'like', "%{$this->searchPhrase}%")
                 ->orWhereHas('tags', function ($query) {
-                    $query->where('tags.text', 'like', "%{$this->searchPhrase}%");
+                    $query->where('tags.value', 'like', "%{$this->searchPhrase}%");
                 });
         });
     }

@@ -42,10 +42,10 @@
             </span>
             <ul>
                 <li *ngFor="let tag of tags">
-                    <a [routerLink]="['/photos/tag', tag.text]"
+                    <a [routerLink]="['/photos/tag', tag.value]"
                        (click)="toggle()"
                        routerLinkActive="active"
-                       [routerLinkActiveOptions]="{ exact: true }">{{ '#' + tag.text }}</a>
+                       [routerLinkActiveOptions]="{ exact: true }">{{ '#' + tag.value }}</a>
                 </li>
             </ul>
         </li>

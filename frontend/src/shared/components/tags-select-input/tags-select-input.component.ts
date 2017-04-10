@@ -1,33 +1,25 @@
-import {Component, OnChanges, Input, Output, EventEmitter, SimpleChanges} from '@angular/core';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
 
 @Component({
     selector: 'tags-select-input',
     templateUrl: 'tags-select-input.component.html',
     styleUrls: ['tags-select-input.component.css']
 })
-export class TagsSelectInputComponent implements OnChanges {
+export class TagsSelectInputComponent {
     @Input() tags:Array<any> = [];
     @Output() tagsChange:EventEmitter<Array<any>> = new EventEmitter<Array<any>>();
 
-    items:Array<any> = [];
-
-    ngOnChanges(changes:SimpleChanges) {
-        if (changes['tags'] && !this.items.length) {
-            this.items = this.tags.map((tag:any) => tag.text);
-        }
-    }
-
-    onAdd = (text:string):void => {
-        this.tags.push({text: text});
+    onAdd = (addedTag:any):void => {
+        this.tags.push(addedTag);
         this.tagsChange.emit(this.tags);
     };
 
-    onRemove = (text:string):void => {
-        this.tags = this.tags.filter((tag:any) => tag.text !== text);
+    onRemove = (removedTag:any):void => {
+        this.tags = this.tags.filter((tag:any) => tag.value !== removedTag.value);
         this.tagsChange.emit(this.tags);
     };
 
-    transform = (text:string):string => {
-        return text.toLowerCase();
+    transform = (value:string):string => {
+        return value.toLowerCase();
     };
 }

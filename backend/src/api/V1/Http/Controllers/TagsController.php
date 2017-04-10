@@ -47,7 +47,7 @@ class TagsController extends Controller
      *     "to": 20,
      *     "data": [
      *         {
-     *             "text": "nature"
+     *             "value": "nature"
      *         }
      *     ]
      * }

@@ -32,7 +32,7 @@ class CreatePublishedPhotoRequest extends FormRequest
             'photo_id' => ['required', 'integer'],
             'description' => ['required', 'string', 'min:1', 'max:65535'],
             'tags' => ['required', 'array'],
-            'tags.*.text' => ['required', 'string', 'min:1', 'max:255'],
+            'tags.*.value' => ['required', 'string', 'min:1', 'max:255'],
         ];
     }
 }

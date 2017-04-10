@@ -5,21 +5,21 @@ namespace Core\DataProviders\Photo\Criterias;
 use Lib\DataProvider\Contracts\Criteria;
 
 /**
- * Class HasTagWithText.
+ * Class HasTagWithValue.
  *
- * @property string tagText
+ * @property string tagValue
  * @package Core\DataProviders\Photo\Criterias
  */
-class HasTagWithText implements Criteria
+class HasTagWithValue implements Criteria
 {
     /**
-     * HasTagWithText constructor.
+     * HasTagWithValue constructor.
      *
-     * @param string $tagText
+     * @param string $tagValue
      */
-    public function __construct($tagText)
+    public function __construct($tagValue)
     {
-        $this->tagText = $tagText;
+        $this->tagValue = $tagValue;
     }
 
     /**
@@ -28,7 +28,7 @@ class HasTagWithText implements Criteria
     public function apply($query)
     {
         $query->whereHas('tags', function ($query) {
-            $query->where('tags.text', $this->tagText);
+            $query->where('tags.value', $this->tagValue);
         });
     }
 }

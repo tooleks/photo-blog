@@ -8,7 +8,7 @@ use Api\V1\Http\Requests\UpdatePublishedPhotoRequest;
 use Core\Models\Photo;
 use Core\DataProviders\Photo\Criterias\IsPublished;
 use Core\DataProviders\Photo\Criterias\HasSearchPhrase;
-use Core\DataProviders\Photo\Criterias\HasTagWithText;
+use Core\DataProviders\Photo\Criterias\HasTagWithValue;
 use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
 use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Routing\Controller;
@@ -42,7 +42,7 @@ class PublishedPhotosController extends Controller
      * @apiParam {Integer{1..N}} photo_id Unique resource ID.
      * @apiParam {Integer{1..65535}} description Description.
      * @apiParam {Object[]} tags Tags collection.
-     * @apiParam {String{1..255}} tags.text Tag text.
+     * @apiParam {String{1..255}} tags.value Tag value.
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 201 Created
      * {
@@ -74,7 +74,7 @@ class PublishedPhotosController extends Controller
      *     ],
      *     "tags": [
      *         {
-     *             "text": "nature"
+     *             "value": "nature"
      *         }
      *     ]
      * }
@@ -137,7 +137,7 @@ class PublishedPhotosController extends Controller
      *     ],
      *     "tags": [
      *         {
-     *             "text": "nature"
+     *             "value": "nature"
      *         }
      *     ]
      * }
@@ -205,7 +205,7 @@ class PublishedPhotosController extends Controller
      *             ],
      *             "tags": [
      *                 {
-     *                     "text": "nature"
+     *                     "value": "nature"
      *                 }
      *             ]
      *         }
@@ -223,7 +223,7 @@ class PublishedPhotosController extends Controller
     {
         $paginator = $this->photoDataProvider
             ->applyCriteria(new IsPublished(true))
-            ->applyCriteriaWhen($request->has('tag'), new HasTagWithText($request->get('tag')))
+            ->applyCriteriaWhen($request->has('tag'), new HasTagWithValue($request->get('tag')))
             ->applyCriteriaWhen($request->has('search_phrase'), new HasSearchPhrase($request->get('search_phrase')))
             ->applyCriteria((new SortByCreatedAt)->desc())
             ->paginate($request->get('page', 1), $request->get('per_page', 20));
@@ -243,7 +243,7 @@ class PublishedPhotosController extends Controller
      * @apiParam {Integer{1..N}} :id Unique resource ID.
      * @apiParam {Integer{1..65535}} description Description.
      * @apiParam {Object[]} tags Tags collection.
-     * @apiParam {String{1..255}} tags.text Tag text.
+     * @apiParam {String{1..255}} tags.value Tag value.
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
@@ -275,7 +275,7 @@ class PublishedPhotosController extends Controller
      *     ],
      *     "tags": [
      *         {
-     *             "text": "nature"
+     *             "value": "nature"
      *         }
      *     ]
      * }
