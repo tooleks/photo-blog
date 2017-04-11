@@ -9,6 +9,7 @@ import {
     PagerService,
     LockProcessServiceProvider,
     LockProcessService,
+    ScrollFreezerService,
 } from '../../../shared';
 import {GalleryImage} from '../../../lib/gallery';
 
@@ -24,12 +25,13 @@ export abstract class PhotosGalleryComponent {
     constructor(protected route:ActivatedRoute,
                 protected title:TitleService,
                 protected metaTags:MetaTagsService,
-                navigatorProvider:NavigatorServiceProvider,
-                pagerProvider:PagerServiceProvider,
-                lockProcessProvider:LockProcessServiceProvider) {
-        this.pager = pagerProvider.getInstance(this.defaults.page, this.defaults.perPage);
-        this.navigator = navigatorProvider.getInstance();
-        this.lockProcess = lockProcessProvider.getInstance();
+                protected navigatorProvider:NavigatorServiceProvider,
+                protected pagerProvider:PagerServiceProvider,
+                protected lockProcessProvider:LockProcessServiceProvider,
+                protected scrollFreezer:ScrollFreezerService) {
+        this.pager = this.pagerProvider.getInstance(this.defaults.page, this.defaults.perPage);
+        this.navigator = this.navigatorProvider.getInstance();
+        this.lockProcess = this.lockProcessProvider.getInstance();
     }
 
     protected init():void {
@@ -82,12 +84,14 @@ export abstract class PhotosGalleryComponent {
     }
 
     protected onShowPhoto(image:GalleryImage):void {
+        this.scrollFreezer.freezeBackgroundScroll();
         this.navigator.setQueryParam('show', image.getId());
         this.metaTags.setImage(image.getLargeSizeUrl());
         this.metaTags.setTitle(image.getDescription());
     }
 
     protected onHidePhoto(image:GalleryImage):void {
+        this.scrollFreezer.unfreezeBackgroundScroll();
         this.navigator.unsetQueryParam('show');
     }
 

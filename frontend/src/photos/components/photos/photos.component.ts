@@ -8,6 +8,7 @@ import {
     NavigatorServiceProvider,
     PagerServiceProvider,
     LockProcessServiceProvider,
+    ScrollFreezerService,
 } from '../../../shared/services';
 import {PhotoDataProviderService} from '../../services';
 import {GalleryImage} from '../../../lib/gallery';
@@ -24,8 +25,9 @@ export class PhotosComponent extends PhotosGalleryComponent implements OnInit, A
                 metaTags:MetaTagsService,
                 navigatorProvider:NavigatorServiceProvider,
                 pagerProvider:PagerServiceProvider,
-                lockProcessProvider:LockProcessServiceProvider) {
-        super(route, title, metaTags, navigatorProvider, pagerProvider, lockProcessProvider);
+                lockProcessProvider:LockProcessServiceProvider,
+                scrollFreezer:ScrollFreezerService) {
+        super(route, title, metaTags, navigatorProvider, pagerProvider, lockProcessProvider, scrollFreezer);
     }
 
     ngOnInit():void {

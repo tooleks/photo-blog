@@ -9,6 +9,7 @@ import {
     NavigatorServiceProvider,
     PagerServiceProvider,
     LockProcessServiceProvider,
+    ScrollFreezerService,
 } from '../../../shared/services';
 import {PhotoDataProviderService} from '../../services';
 import {GalleryImage, GalleryComponent} from '../../../lib/gallery';
@@ -30,8 +31,9 @@ export class PhotosBySearchPhraseComponent extends PhotosGalleryComponent implem
                 metaTags:MetaTagsService,
                 navigatorProvider:NavigatorServiceProvider,
                 pagerProvider:PagerServiceProvider,
-                lockProcessProvider:LockProcessServiceProvider) {
-        super(route, title, metaTags, navigatorProvider, pagerProvider, lockProcessProvider);
+                lockProcessProvider:LockProcessServiceProvider,
+                scrollFreezer:ScrollFreezerService) {
+        super(route, title, metaTags, navigatorProvider, pagerProvider, lockProcessProvider, scrollFreezer);
     }
 
     ngOnInit():void {

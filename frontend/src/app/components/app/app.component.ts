@@ -27,6 +27,7 @@ export class AppComponent implements OnInit {
     ngOnInit():void {
         this.initTitle();
         this.initMeta();
+        this.initScrollFreezerSubscribers();
     }
 
     protected initTitle = ():void => {
@@ -41,6 +42,11 @@ export class AppComponent implements OnInit {
         this.metaTags.setImage(this.app.getUrl() + '/assets/static/meta_image.png');
     };
 
+    protected initScrollFreezerSubscribers = ():void => {
+        this.scrollFreezer.freezed.subscribe(() => this.appContentStyles.overflow = 'hidden');
+        this.scrollFreezer.unfreezed.subscribe(() => this.appContentStyles.overflow = '');
+    };
+
     protected toggleSideBar = ():void => {
         this.sideBarComponent.toggle();
     };
@@ -48,13 +54,11 @@ export class AppComponent implements OnInit {
     protected onShowSideBar = (event:any):void => {
         if (event.isSmallDevice) {
             this.scrollFreezer.freezeBackgroundScroll();
-            this.appContentStyles.overflow = 'hidden';
         }
     };
 
     protected onHideSideBar = (event:any):void => {
         this.scrollFreezer.unfreezeBackgroundScroll();
-        this.appContentStyles.overflow = '';
     };
 
     protected onToggleSideBar = (event:any):void => {
