@@ -12,12 +12,12 @@ export class MetaTagsService {
             // General meta tags.
             {name: 'description', content: ''},
             // Open Graph related meta tags.
-            {name: 'og:title', content: ''},
-            {name: 'og:type', content: 'article'},
-            {name: 'og:url', content: ''},
-            {name: 'og:image', content: ''},
-            {name: 'og:description', content: ''},
-            {name: 'og:site_name', content: ''},
+            {property: 'og:title', content: ''},
+            {property: 'og:type', content: 'article'},
+            {property: 'og:url', content: ''},
+            {property: 'og:image', content: ''},
+            {property: 'og:description', content: ''},
+            {property: 'og:site_name', content: ''},
             // Twitter related meta tags.
             {name: 'twitter:card', content: 'summary_large_image'},
             {name: 'twitter:title', content: ''},
@@ -27,25 +27,25 @@ export class MetaTagsService {
     };
 
     setWebsiteName = (content:string):void => {
-        this.meta.updateTag({name: 'og:site_name', content: content}, 'name="og:site_name"');
+        this.meta.updateTag({property: 'og:site_name', content: content}, 'property="og:site_name"');
     };
 
     setUrl = (content:string):void => {
-        this.meta.updateTag({name: 'og:url', content: content}, 'name="og:url"');
+        this.meta.updateTag({property: 'og:url', content: content}, 'property="og:url"');
     };
 
     setTitle = (content:string):void => {
-        this.meta.updateTag({name: 'og:title', content: content}, 'name="og:title"');
+        this.meta.updateTag({property: 'og:title', content: content}, 'property="og:title"');
         this.meta.updateTag({name: 'twitter:title', content: content}, 'name="twitter:title"');
     };
 
     setDescription = (content:string):void => {
         this.meta.updateTag({name: 'description', content: content}, 'name="description"');
-        this.meta.updateTag({name: 'og:description', content: content}, 'name="og:description"');
+        this.meta.updateTag({property: 'og:description', content: content}, 'property="og:description"');
     };
 
     setImage = (content:string):void => {
-        this.meta.updateTag({name: 'og:image', content: content}, 'name="og:image"');
+        this.meta.updateTag({property: 'og:image', content: content}, 'property="og:image"');
         this.meta.updateTag({name: 'twitter:image', content: content}, 'name="twitter:image"');
     };
 }
