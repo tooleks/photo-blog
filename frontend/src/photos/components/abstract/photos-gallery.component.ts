@@ -84,14 +84,14 @@ export abstract class PhotosGalleryComponent {
     }
 
     protected onShowPhoto(image:GalleryImage):void {
-        this.scrollFreezer.freezeBackgroundScroll();
+        this.scrollFreezer.freezeScroll();
         this.navigator.setQueryParam('show', image.getId());
         this.metaTags.setImage(image.getLargeSizeUrl());
         this.metaTags.setTitle(image.getDescription());
     }
 
     protected onHidePhoto(image:GalleryImage):void {
-        this.scrollFreezer.unfreezeBackgroundScroll();
+        this.scrollFreezer.unfreezeScroll();
         this.navigator.unsetQueryParam('show');
     }
 
