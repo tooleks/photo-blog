@@ -53,12 +53,12 @@ export class AppComponent implements OnInit {
 
     protected onShowSideBar = (event:any):void => {
         if (event.isSmallDevice) {
-            this.scrollFreezer.freezeScroll();
+            this.scrollFreezer.freeze();
         }
     };
 
     protected onHideSideBar = (event:any):void => {
-        this.scrollFreezer.unfreezeScroll();
+        this.scrollFreezer.unfreeze();
     };
 
     protected onToggleSideBar = (event:any):void => {
