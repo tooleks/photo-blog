@@ -16,8 +16,7 @@ export class GalleryComponent implements OnInit, OnChanges {
 
     @Input() defaultImageId:any;
 
-    @Input() loadMoreCallback:any;
-    protected isLoadingMore:boolean = false;
+    @Input() loadMoreCallback:any = null;
 
     @Output() onOpenImage:EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
 
@@ -50,16 +49,14 @@ export class GalleryComponent implements OnInit, OnChanges {
         this.reset();
     }
 
-    ngOnChanges(changes:SimpleChanges) {
-        // We will view default image only on the fresh load of images.
-        // This is a buggy piece of code. Be aware when making a changes.
-        if (this.defaultImageId && changes['images'] &&
-            changes['images'].previousValue && !changes['images'].previousValue.length &&
-            changes['images'].currentValue && changes['images'].currentValue.length) {
-            this.viewImageById(this.defaultImageId);
+    ngOnChanges(changes:SimpleChanges):void {
+        if (this.defaultImageId && changes['images'] && !changes['images'].firstChange &&
+            changes['images'].previousValue.length < changes['images'].currentValue.length) {
+            this.openImageById(this.defaultImageId);
         }
 
-        if (changes['images'] && this.openedImage && this.isLoadingMore) {
+        if (this.openedImage && changes['images'] && !changes['images'].firstChange &&
+            changes['images'].previousValue.length < changes['images'].currentValue.length) {
             this.openNextImage(false);
         }
     }
@@ -80,13 +77,13 @@ export class GalleryComponent implements OnInit, OnChanges {
         this.openedImageIndex = null;
     };
 
-    viewImageById = (imageId:any):void => {
+    openImageById = (imageId:any):void => {
         this.images.some((image:GalleryImage, index:number) => {
             if (image.getId() == imageId) {
                 this.setOpenedImage(image, index);
                 return true;
             } else if (index === this.images.length - 1) {
-                this.loadMoreImages().then(() => this.viewImageById(imageId));
+                this.loadMoreImages();
             }
             return false;
         });
@@ -121,12 +118,9 @@ export class GalleryComponent implements OnInit, OnChanges {
 
     loadMoreImages = ():Promise<any> => {
         return new Promise((resolve, reject) => {
-            if (typeof (this.loadMoreCallback) === 'function') {
-                this.isLoadingMore = true;
-                resolve(this.loadMoreCallback());
-            } else {
-                reject(new Error('The "loadMoreCallback" callback is not a function.'));
-            }
+            typeof (this.loadMoreCallback) === 'function'
+                ? resolve(this.loadMoreCallback())
+                : reject(new Error('The "loadMoreCallback" callback is not a function.'));
         });
     };
 
