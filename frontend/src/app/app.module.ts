@@ -1,12 +1,18 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
+import {HttpModule, JsonpModule} from '@angular/http';
 import {TransferHttpModule} from '../modules/transfer-http/transfer-http.module';
 import {GoTopButtonModule} from 'ng2-go-top-button';
+import {SharedModule} from '../shared';
+import {PhotosModule} from '../photos';
+import {NoticesModule} from '../lib';
+import {AppRouting, AppRoutingProviders} from './app.routing';
 import {
     AboutMeComponent,
     AppComponent,
     ContactMeFormComponent,
     PageNotFoundComponent,
+    BottomBarComponent,
     SideBarComponent,
     TopBarComponent,
     SignInFormComponent,
@@ -14,11 +20,6 @@ import {
     SubscriptionFormComponent,
     UnsubscriptionComponent,
 } from './components';
-import {HttpModule, JsonpModule} from '@angular/http';
-import {AppRouting, AppRoutingProviders} from './app.routing';
-import {SharedModule} from '../shared/shared.module';
-import {PhotosModule} from '../photos/photos.module';
-import {NoticesModule} from '../lib/notices';
 
 @NgModule({
     imports: [
@@ -37,6 +38,7 @@ import {NoticesModule} from '../lib/notices';
         AppComponent,
         ContactMeFormComponent,
         PageNotFoundComponent,
+        BottomBarComponent,
         SideBarComponent,
         TopBarComponent,
         SignInFormComponent,

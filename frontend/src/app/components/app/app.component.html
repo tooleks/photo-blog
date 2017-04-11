@@ -8,25 +8,7 @@
     <div class="app-content" [ngStyle]="appContentStyles">
         <router-outlet></router-outlet>
     </div>
-    <div class="app-footer">
-        <span class="app-footer-item">&copy;
-            {{ getCurrentYear() }} <strong>{{ getAppName() }}</strong></span>
-        <span class="app-footer-item app-desktop-screen">
-             <a [routerLink]="['/contact-me']"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }">{{ 'Contact Me' }}</a>
-        </span>
-        <span class="app-footer-item app-desktop-screen">
-             <a [routerLink]="['/about-me']"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }">{{ 'About Me' }}</a>
-        </span>
-        <span class="app-footer-item app-desktop-screen">
-             <a [routerLink]="['/subscription']"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }">{{ 'Subscription' }}</a>
-        </span>
-    </div>
+    <bottombar></bottombar>
     <notices></notices>
     <go-top-button [html]="'<i class=\'fa fa-arrow-up\'></i>'"
                    [animate]="true"

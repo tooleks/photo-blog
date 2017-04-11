@@ -1,0 +1,19 @@
+<div class="bottombar">
+        <span class="bottombar-item">&copy;
+            {{ getCurrentYear() }} <strong>{{ getAppName() }}</strong></span>
+        <span class="bottombar-item app-desktop-screen">
+             <a [routerLink]="['/contact-me']"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }">{{ 'Contact Me' }}</a>
+        </span>
+        <span class="bottombar-item app-desktop-screen">
+             <a [routerLink]="['/about-me']"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }">{{ 'About Me' }}</a>
+        </span>
+        <span class="bottombar-item app-desktop-screen">
+             <a [routerLink]="['/subscription']"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }">{{ 'Subscription' }}</a>
+        </span>
+</div>

@@ -1,0 +1,38 @@
+:host .bottombar {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 40px;
+    background: none repeat scroll 0 0 white;
+    border-top: 1px solid #e7eaec;
+}
+
+@media (min-width: 768px) {
+    :host .bottombar {
+        margin-left: 220px;
+    }
+}
+
+:host .bottombar-item {
+    padding-right: 5px;
+    line-height: 40px;
+}
+
+:host .bottombar-item:first-child {
+    padding-left: 20px;
+}
+
+:host .bottombar-item:last-child {
+    padding-right: 20px;
+}
+
+:host .bottombar-desktop-screen {
+    display: none;
+}
+
+@media (min-width: 468px) {
+    :host .bottombar-desktop-screen {
+        display: initial;
+    }
+}

@@ -60,12 +60,4 @@ export class AppComponent implements OnInit {
     protected onToggleSideBar = (event:any):void => {
         event.isVisible ? this.onShowSideBar(event) : this.onHideSideBar(event);
     };
-
-    protected getCurrentYear = ():number => {
-        return (new Date).getFullYear();
-    };
-
-    protected getAppName = ():string => {
-        return this.app.getName();
-    };
 }
