@@ -1,14 +1,13 @@
 server {
+
     listen 80;
 
-    server_name photos.tooleks.com;
+    server_name server.name;
+
+    root /var/www/photo-blog/frontend/dist;
 
     location / {
-        root /var/www/photo-blog/frontend/dist;
-        add_header Cache-Control public;
-        expires 1d;
-        try_files $uri $uri/ @nodejs;
-        access_log off;
+        try_files $uri @nodejs;
     }
 
     location @nodejs {
@@ -19,5 +18,5 @@ server {
         proxy_set_header Host $host;
         proxy_cache_bypass $http_upgrade;
     }
-}
 
+}
