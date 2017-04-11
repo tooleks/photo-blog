@@ -8,7 +8,7 @@
                             <div class="file">
                                 <span class="corner"></span>
                                 <div class="image">
-                                    <a [href]="getPhoto().url" target="_blank" title="getPhoto().description">
+                                    <a [href]="getPhoto().url" target="_blank" [title]="getPhoto().description">
                                         <img [src]="getPhoto().thumbnails.medium.url"
                                              [alt]="getPhoto().description"
                                              class="img-responsive">
