@@ -58,7 +58,8 @@ export class GalleryViewerComponent implements OnChanges {
     };
 
     protected processImageLoading = ():void => {
-        var loaded = false;
+        var loaded;
+        this.loaded = loaded = false;
         loadImage(this.image.getLargeSizeUrl(), () => {
             this.loaded = loaded = true;
             this.onImageLoaded.emit(this.image);
