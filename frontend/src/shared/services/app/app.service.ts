@@ -3,7 +3,7 @@ import {EnvService} from '../env/env.service';
 
 @Injectable()
 export class AppService {
-    constructor(private env:EnvService) {
+    constructor(protected env:EnvService) {
     }
 
     getUrl = ():string => {

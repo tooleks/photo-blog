@@ -8,7 +8,7 @@ export class PhotoToGalleryImageMapper {
             : PhotoToGalleryImageMapper.mapSingle(item);
     }
 
-    private static mapSingle(item:any):GalleryImage {
+    protected static mapSingle(item:any):GalleryImage {
         return new GalleryImage({
             id: item.id,
             fullSizeUrl: item.url,
@@ -24,7 +24,7 @@ export class PhotoToGalleryImageMapper {
         });
     }
 
-    private static mapMultiple(items:Array<any>):Array<GalleryImage> {
+    protected static mapMultiple(items:Array<any>):Array<GalleryImage> {
         return items.map(PhotoToGalleryImageMapper.mapSingle);
     }
 }

@@ -5,9 +5,9 @@ import {EnvironmentDetectorService} from '../../../shared/services';
 @Injectable()
 export class NoticesService {
     public deleteTimeout:number = 4500;
-    private notices:Array<Notice> = [];
+    protected notices:Array<Notice> = [];
 
-    constructor(private environmentDetector:EnvironmentDetectorService) {
+    constructor(protected environmentDetector:EnvironmentDetectorService) {
         if (environmentDetector.isBrowser()) {
             setInterval(this.shiftAfterDeleteTimeout, 100);
         }

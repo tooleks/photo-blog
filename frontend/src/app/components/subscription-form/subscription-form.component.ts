@@ -16,14 +16,14 @@ import {SubscriptionForm as Form} from './models';
     templateUrl: 'subscription-form.component.html',
 })
 export class SubscriptionFormComponent implements OnInit {
-    private form:Form;
-    private navigator:NavigatorService;
-    private lockProcess:LockProcessService;
+    protected form:Form;
+    protected navigator:NavigatorService;
+    protected lockProcess:LockProcessService;
 
-    constructor(private api:ApiService,
-                private title:TitleService,
-                private metaTags:MetaTagsService,
-                private notices:NoticesService,
+    constructor(protected api:ApiService,
+                protected title:TitleService,
+                protected metaTags:MetaTagsService,
+                protected notices:NoticesService,
                 navigatorProvider:NavigatorServiceProvider,
                 lockProcessServiceProvider:LockProcessServiceProvider) {
         this.navigator = navigatorProvider.getInstance();
@@ -36,15 +36,15 @@ export class SubscriptionFormComponent implements OnInit {
         this.initForm();
     }
 
-    private initTitle = ():void => {
+    protected initTitle = ():void => {
         this.title.setTitle('Subscription');
     };
 
-    private initMeta = ():void => {
+    protected initMeta = ():void => {
         this.metaTags.setTitle(this.title.getPageName());
     };
 
-    private initForm = ():void => {
+    protected initForm = ():void => {
         this.setForm(new Form);
     };
 

@@ -6,10 +6,10 @@ import {NoticesService} from '../../../lib/notices';
 
 @Injectable()
 export class ApiErrorHandler extends BaseApiErrorHandler {
-    private navigator:NavigatorService;
+    protected navigator:NavigatorService;
 
-    constructor(private notices:NoticesService,
-                private navigatorProvider:NavigatorServiceProvider) {
+    constructor(protected notices:NoticesService,
+                protected navigatorProvider:NavigatorServiceProvider) {
         super();
         this.navigator = navigatorProvider.getInstance();
     }
@@ -33,19 +33,19 @@ export class ApiErrorHandler extends BaseApiErrorHandler {
         throw new Error(body.message);
     };
 
-    private handleUnknownError = (response:any, body:any):void => {
+    protected handleUnknownError = (response:any, body:any):void => {
         this.notices.error(body.message, 'Remote server connection error.');
     };
 
-    private handleUnauthorizedError = (response:any, body:any):void => {
+    protected handleUnauthorizedError = (response:any, body:any):void => {
         this.navigator.navigate(['/signout']);
     };
 
-    private handleHttpError = (response:any, body:any):void => {
+    protected handleHttpError = (response:any, body:any):void => {
         this.notices.error(body.message, response.status + ' Error');
     };
 
-    private handleValidationErrors = (response:any, body:any):void => {
+    protected handleValidationErrors = (response:any, body:any):void => {
         body.errors = body.errors || {};
         for (var property in body.errors) {
             if (body.errors.hasOwnProperty(property)) {

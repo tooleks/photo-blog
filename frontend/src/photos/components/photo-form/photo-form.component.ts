@@ -18,15 +18,15 @@ import {PhotoDataProviderService} from '../../services'
     styleUrls: ['photo-form.component.css'],
 })
 export class PhotoFormComponent implements OnInit {
-    private photo:Form;
-    private navigator:NavigatorService;
-    private lockProcess:LockProcessService;
+    protected photo:Form;
+    protected navigator:NavigatorService;
+    protected lockProcess:LockProcessService;
 
-    constructor(private route:ActivatedRoute,
-                private title:TitleService,
-                private authProvider:AuthProviderService,
-                private photoDataProvider:PhotoDataProviderService,
-                private notices:NoticesService,
+    constructor(protected route:ActivatedRoute,
+                protected title:TitleService,
+                protected authProvider:AuthProviderService,
+                protected photoDataProvider:PhotoDataProviderService,
+                protected notices:NoticesService,
                 navigatorServiceProvider:NavigatorServiceProvider,
                 lockProcessServiceProvider:LockProcessServiceProvider) {
         this.navigator = navigatorServiceProvider.getInstance();
@@ -34,14 +34,34 @@ export class PhotoFormComponent implements OnInit {
     }
 
     ngOnInit():void {
-        this.title.setTitle('Add Photo');
-        this.photo = new Form;
+        this.initPhoto();
+        this.initTitle();
+        this.initParamsSubscribers();
+    }
+
+    protected initParamsSubscribers = ():void => {
         this.route.params
             .map((params) => params['id'])
             .subscribe(this.loadById);
-    }
+    };
 
-    private processLoadById = (id:number):Promise<any> => {
+    protected initTitle = ():void => {
+        this.title.setTitle('Add Photo');
+    };
+
+    protected initPhoto = ():void => {
+        this.setPhoto(new Form);
+    };
+
+    setPhoto = (form:Form):void => {
+        this.photo = form;
+    };
+
+    getPhoto = ():Form => {
+        return this.photo;
+    };
+
+    protected processLoadById = (id:number):Promise<any> => {
         return id
             ? this.photoDataProvider.getById(id)
             : Promise.reject(new Error('Photo ID is not provided.'));
@@ -57,7 +77,7 @@ export class PhotoFormComponent implements OnInit {
         }
     };
 
-    private processSavePhoto = ():Promise<any> => {
+    protected processSavePhoto = ():Promise<any> => {
         return this.photo.id
             ? this.photoDataProvider.updateById(this.photo.id, this.photo)
             : this.photoDataProvider.create(this.photo);
@@ -72,7 +92,7 @@ export class PhotoFormComponent implements OnInit {
         });
     };
 
-    private processUploadPhoto = (file:FileList):Promise<any> => {
+    protected processUploadPhoto = (file:FileList):Promise<any> => {
         return this.photo.id
             ? this.photoDataProvider.uploadById(this.photo.id, file)
             : this.photoDataProvider.upload(file);
@@ -86,7 +106,7 @@ export class PhotoFormComponent implements OnInit {
         });
     };
 
-    private processDeletePhoto = ():Promise<any> => {
+    protected processDeletePhoto = ():Promise<any> => {
         return this.photo.id
             ? this.photoDataProvider.deleteById(this.photo.id)
             : Promise.reject(new Error('Photo ID is not provided.'));

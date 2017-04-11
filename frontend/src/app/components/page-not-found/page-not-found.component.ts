@@ -12,11 +12,11 @@ import {
     templateUrl: 'page-not-found.component.html',
 })
 export class PageNotFoundComponent implements OnInit {
-    private navigator:NavigatorService;
+    protected navigator:NavigatorService;
 
-    constructor(private title:TitleService,
-                private metaTags:MetaTagsService,
-                private router:Router,
+    constructor(protected title:TitleService,
+                protected metaTags:MetaTagsService,
+                protected router:Router,
                 navigatorProvider:NavigatorServiceProvider) {
         this.navigator = navigatorProvider.getInstance();
     }
@@ -27,15 +27,15 @@ export class PageNotFoundComponent implements OnInit {
         this.navigateTo404Page();
     }
 
-    private initTitle = ():void => {
+    protected initTitle = ():void => {
         this.title.setTitle('Page Not Found');
     };
 
-    private initMeta = ():void => {
+    protected initMeta = ():void => {
         this.metaTags.setTitle(this.title.getPageName());
     };
 
-    private navigateTo404Page = () => {
+    protected navigateTo404Page = () => {
         if (this.router.url !== '/404') {
             this.navigator.navigate(['/404']);
         }

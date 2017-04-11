@@ -3,7 +3,7 @@ import {ApiService} from '../api';
 
 @Injectable()
 export class UserDataProviderService {
-    constructor(private api:ApiService) {
+    constructor(protected api:ApiService) {
     }
 
     getById = (id:number):Promise<any> => {

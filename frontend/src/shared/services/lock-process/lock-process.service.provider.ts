@@ -4,7 +4,7 @@ import {LockProcessService} from './lock-process.service';
 
 @Injectable()
 export class LockProcessServiceProvider {
-    constructor(private lockerProvider:LockerServiceProvider) {
+    constructor(protected lockerProvider:LockerServiceProvider) {
     }
 
     getInstance = ():LockProcessService => {

@@ -3,7 +3,7 @@ import {env as values} from '../../../../env';
 
 @Injectable()
 export class EnvService {
-    private values:any;
+    protected values:any;
 
     constructor() {
         this.values = values;

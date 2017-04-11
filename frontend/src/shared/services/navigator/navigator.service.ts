@@ -3,10 +3,10 @@ import {ActivatedRoute, Router} from '@angular/router';
 
 @Injectable()
 export class NavigatorService {
-    private queryParams:any = {};
+    protected queryParams:any = {};
 
-    constructor(private route:ActivatedRoute,
-                private router:Router) {
+    constructor(protected route:ActivatedRoute,
+                protected router:Router) {
         this.route.queryParams.subscribe((queryParams) => {
             Object.keys(queryParams).forEach((key) => {
                 this.queryParams[key] = queryParams[key];

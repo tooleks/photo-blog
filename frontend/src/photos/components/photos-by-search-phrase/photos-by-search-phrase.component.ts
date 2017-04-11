@@ -48,8 +48,8 @@ export class PhotosBySearchPhraseComponent extends PhotosGalleryComponent implem
         }
     }
 
-    protected initQueryParamsSubscribers() {
-        super.initQueryParamsSubscribers();
+    protected initParamsSubscribers() {
+        super.initParamsSubscribers();
         this.route.queryParams
             .map((queryParams:any) => queryParams['search_phrase'])
             .subscribe(this.searchPhotosByPhrase.bind(this));

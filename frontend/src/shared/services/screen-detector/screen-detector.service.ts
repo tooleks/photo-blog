@@ -3,7 +3,7 @@ import {EnvironmentDetectorService} from '../environment-detector';
 
 @Injectable()
 export class ScreenDetectorService {
-    constructor(private environmentDetector:EnvironmentDetectorService) {
+    constructor(protected environmentDetector:EnvironmentDetectorService) {
     }
 
     isLargeScreen = ():boolean => {

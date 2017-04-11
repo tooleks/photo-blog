@@ -39,8 +39,8 @@ export class PhotosByTagComponent extends PhotosGalleryComponent implements OnIn
         this.title.setTitle('Search By Tag');
     }
 
-    protected initQueryParamsSubscribers() {
-        super.initQueryParamsSubscribers();
+    protected initParamsSubscribers() {
+        super.initParamsSubscribers();
         this.route.params
             .map((params:any) => params['tag'])
             .subscribe(this.searchByTag.bind(this));

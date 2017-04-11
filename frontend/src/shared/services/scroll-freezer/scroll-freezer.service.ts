@@ -3,7 +3,7 @@ import {EnvironmentDetectorService} from '../environment-detector';
 
 @Injectable()
 export class ScrollFreezerService {
-    constructor(private environmentDetector:EnvironmentDetectorService) {
+    constructor(protected environmentDetector:EnvironmentDetectorService) {
     }
 
     freezeBackgroundScroll = ():void => {

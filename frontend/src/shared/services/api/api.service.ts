@@ -50,7 +50,7 @@ export class ApiService {
             .catch(this.errorHandler.handleResponse);
     };
 
-    private initializeOptions = (options?:any) => {
+    protected initializeOptions = (options?:any) => {
         options = options || {};
         return {
             headers: this.initializeHeaders(options.headers),
@@ -58,7 +58,7 @@ export class ApiService {
         };
     };
 
-    private initializeHeaders = (headers?:any):Headers => {
+    protected initializeHeaders = (headers?:any):Headers => {
         let initializedHeaders = this.getDefaultHeaders();
         headers = headers || {};
         for (var name in headers) {
@@ -69,7 +69,7 @@ export class ApiService {
         return initializedHeaders;
     };
 
-    private getDefaultHeaders = ():Headers => {
+    protected getDefaultHeaders = ():Headers => {
         let defaultHeaders = new Headers;
         defaultHeaders.append('Accept', 'application/json');
         if (this.authProvider.hasAuth()) {
@@ -78,7 +78,7 @@ export class ApiService {
         return defaultHeaders;
     };
 
-    private initializeSearchParams = (searchParams?:any):URLSearchParams => {
+    protected initializeSearchParams = (searchParams?:any):URLSearchParams => {
         let initializedSearchParams = this.getDefaultSearchParams();
         searchParams = searchParams || {};
         for (var name in searchParams) {
@@ -89,7 +89,7 @@ export class ApiService {
         return initializedSearchParams;
     };
 
-    private getDefaultSearchParams = ():URLSearchParams => {
+    protected getDefaultSearchParams = ():URLSearchParams => {
         let defaultSearchParams = new URLSearchParams;
         if (this.debug) {
             defaultSearchParams.set('XDEBUG_SESSION_START', 'START');
@@ -97,11 +97,11 @@ export class ApiService {
         return defaultSearchParams;
     };
 
-    private initializeBody = (body?:any) => {
+    protected initializeBody = (body?:any) => {
         return body || {};
     };
 
-    private getAbsoluteUrl = (relativeUrl:string):string => {
+    protected getAbsoluteUrl = (relativeUrl:string):string => {
         return this.url + relativeUrl;
     };
 

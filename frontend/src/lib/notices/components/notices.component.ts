@@ -8,7 +8,7 @@ import {Notice} from '../models';
     styleUrls: ['notices.component.css'],
 })
 export class NoticesComponent {
-    constructor(private notices:NoticesService) {
+    constructor(protected notices:NoticesService) {
     }
 
     getNotices = ():Array<Notice> => {

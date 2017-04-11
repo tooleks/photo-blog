@@ -3,11 +3,11 @@ import {Meta, MetaDefinition} from '@angular/platform-browser';
 
 @Injectable()
 export class MetaTagsService {
-    constructor(private meta:Meta) {
+    constructor(protected meta:Meta) {
         this.initDefaults();
     }
 
-    private initDefaults = ():void => {
+    protected initDefaults = ():void => {
         const tags:Array<MetaDefinition> = [
             // General meta tags.
             {name: 'description', content: ''},

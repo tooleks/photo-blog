@@ -15,14 +15,14 @@ import {NoticesService} from '../../../lib/notices';
     templateUrl: 'unsubscription.component.html',
 })
 export class UnsubscriptionComponent implements OnInit, AfterViewInit {
-    private token:string = null;
-    private navigator:NavigatorService;
-    private lockProcess:LockProcessService;
+    protected token:string = null;
+    protected navigator:NavigatorService;
+    protected lockProcess:LockProcessService;
 
-    constructor(private route:ActivatedRoute,
-                private api:ApiService,
-                private title:TitleService,
-                private notices:NoticesService,
+    constructor(protected route:ActivatedRoute,
+                protected api:ApiService,
+                protected title:TitleService,
+                protected notices:NoticesService,
                 navigatorProvider:NavigatorServiceProvider,
                 lockProcessServiceProvider:LockProcessServiceProvider) {
         this.navigator = navigatorProvider.getInstance();

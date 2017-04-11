@@ -4,8 +4,8 @@ import {NavigatorService} from './navigator.service';
 
 @Injectable()
 export class NavigatorServiceProvider {
-    constructor(private route:ActivatedRoute,
-                private router:Router) {
+    constructor(protected route:ActivatedRoute,
+                protected router:Router) {
     }
 
     getInstance = ():NavigatorService => {

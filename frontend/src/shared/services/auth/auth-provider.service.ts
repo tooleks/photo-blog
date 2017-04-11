@@ -3,7 +3,7 @@ import {LocalStorageService} from '../local-storage/local-storage.service';
 
 @Injectable()
 export class AuthProviderService {
-    constructor(private localStorage:LocalStorageService) {
+    constructor(protected localStorage:LocalStorageService) {
     }
 
     setAuth = (auth:any):any => {

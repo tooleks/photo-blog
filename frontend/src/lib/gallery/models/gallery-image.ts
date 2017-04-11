@@ -1,7 +1,7 @@
 import {GalleryImageAttributes} from './gallery-image-attributes';
 
 export class GalleryImage {
-    private attributes:GalleryImageAttributes = new GalleryImageAttributes;
+    protected attributes:GalleryImageAttributes = new GalleryImageAttributes;
 
     constructor(attributes:any = {}) {
         this.setAttributes(attributes);
@@ -13,7 +13,7 @@ export class GalleryImage {
         return cloned;
     }
 
-    private callMethod(methodName:string, parameters:any) {
+    protected callMethod(methodName:string, parameters:any) {
         if (typeof this[methodName] === 'function') {
             this[methodName](...parameters);
         }

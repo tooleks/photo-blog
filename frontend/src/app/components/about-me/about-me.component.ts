@@ -6,7 +6,7 @@ import {TitleService, MetaTagsService, EnvService} from '../../../shared/service
     templateUrl: 'about-me.component.html',
 })
 export class AboutMeComponent implements OnInit {
-    constructor(private title:TitleService, private metaTags:MetaTagsService, private env:EnvService) {
+    constructor(protected title:TitleService, protected metaTags:MetaTagsService, protected env:EnvService) {
     }
 
     ngOnInit():void {
@@ -14,11 +14,11 @@ export class AboutMeComponent implements OnInit {
         this.initMeta();
     }
 
-    private initTitle = ():void => {
+    protected initTitle = ():void => {
         this.title.setTitle('About Me');
     };
 
-    private initMeta = ():void => {
+    protected initMeta = ():void => {
         this.metaTags.setTitle(this.title.getPageName());
     };
 

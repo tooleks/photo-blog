@@ -4,10 +4,10 @@ import {AppService} from '../app';
 
 @Injectable()
 export class TitleService {
-    private pathSeparator = ' / ';
+    protected pathSeparator = ' / ';
 
-    constructor(private app:AppService,
-                private title:Title) {
+    constructor(protected app:AppService,
+                protected title:Title) {
     }
 
     setTitle = (newTitle?:any):void => {
@@ -23,7 +23,7 @@ export class TitleService {
         return this.getTitle().split(this.pathSeparator)[0];
     };
 
-    private buildTitle = (newTitle:any):string => {
+    protected buildTitle = (newTitle:any):string => {
         let titlePieces = [this.app.getName()];
 
         if (!newTitle) {

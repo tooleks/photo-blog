@@ -49,13 +49,13 @@ export class SideBarComponent implements OnInit {
     @Output() onToggle:EventEmitter<any> = new EventEmitter<any>();
     @Output() onShow:EventEmitter<any> = new EventEmitter<any>();
     @Output() onHide:EventEmitter<any> = new EventEmitter<any>();
-    private animationState:string;
-    private tags:Array<any> = [];
+    protected animationState:string;
+    protected tags:Array<any> = [];
 
-    constructor(private screenDetector:ScreenDetectorService,
-                private api:ApiService,
-                private authProvider:AuthProviderService,
-                private app:AppService) {
+    constructor(protected screenDetector:ScreenDetectorService,
+                protected api:ApiService,
+                protected authProvider:AuthProviderService,
+                protected app:AppService) {
         this.init();
         this.loadTags();
     }
@@ -102,7 +102,7 @@ export class SideBarComponent implements OnInit {
         });
     };
 
-    private loadTags = ():void => {
+    protected loadTags = ():void => {
         this.api.get('/tags', {params: {page: 1, per_page: 7}}).then((response:any) => this.tags = response.data);
     };
 }

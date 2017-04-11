@@ -9,14 +9,14 @@ import {TitleService} from '../../../../shared/services';
 export class TopBarComponent {
     @Output() onNavClick:EventEmitter<any> = new EventEmitter<any>();
 
-    constructor(private title:TitleService) {
+    constructor(protected title:TitleService) {
     }
 
-    private navClick = () => {
+    protected navClick = () => {
         this.onNavClick.emit(null);
     };
 
-    private getPageName = ():string => {
+    protected getPageName = ():string => {
         return this.title.getPageName();
     };
 }

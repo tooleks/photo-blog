@@ -3,7 +3,7 @@ import {EnvironmentDetectorService} from '../environment-detector/environment-de
 
 @Injectable()
 export class LocalStorageService {
-    constructor(private environmentDetector:EnvironmentDetectorService) {
+    constructor(protected environmentDetector:EnvironmentDetectorService) {
     }
 
     set = (name:string, value:Object):void => {

@@ -15,13 +15,13 @@ import '../../../../assets/static/img/meta_image.png'
 })
 export class AppComponent implements OnInit {
     @ViewChild('sideBarComponent') sideBarComponent:any;
-    private appContentStyles:{overflow:string} = {overflow: ''};
+    protected appContentStyles:{overflow:string} = {overflow: ''};
 
-    constructor(private app:AppService,
-                private title:TitleService,
-                private metaTags:MetaTagsService,
-                private authProvider:AuthProviderService,
-                private scrollFreezer:ScrollFreezerService) {
+    constructor(protected app:AppService,
+                protected title:TitleService,
+                protected metaTags:MetaTagsService,
+                protected authProvider:AuthProviderService,
+                protected scrollFreezer:ScrollFreezerService) {
     }
 
     ngOnInit():void {
@@ -29,11 +29,11 @@ export class AppComponent implements OnInit {
         this.initMeta();
     }
 
-    private initTitle = ():void => {
+    protected initTitle = ():void => {
         this.title.setTitle();
     };
 
-    private initMeta = ():void => {
+    protected initMeta = ():void => {
         this.metaTags.setUrl(this.app.getUrl());
         this.metaTags.setWebsiteName(this.app.getName());
         this.metaTags.setTitle(this.title.getPageName());
@@ -41,31 +41,31 @@ export class AppComponent implements OnInit {
         this.metaTags.setImage(this.app.getUrl() + '/assets/static/meta_image.png');
     };
 
-    private toggleSideBar = ():void => {
+    protected toggleSideBar = ():void => {
         this.sideBarComponent.toggle();
     };
 
-    private onShowSideBar = (event:any):void => {
+    protected onShowSideBar = (event:any):void => {
         if (event.isSmallDevice) {
             this.scrollFreezer.freezeBackgroundScroll();
             this.appContentStyles.overflow = 'hidden';
         }
     };
 
-    private onHideSideBar = (event:any):void => {
+    protected onHideSideBar = (event:any):void => {
         this.scrollFreezer.unfreezeBackgroundScroll();
         this.appContentStyles.overflow = '';
     };
 
-    private onToggleSideBar = (event:any):void => {
+    protected onToggleSideBar = (event:any):void => {
         event.isVisible ? this.onShowSideBar(event) : this.onHideSideBar(event);
     };
 
-    private getCurrentYear = ():number => {
+    protected getCurrentYear = ():number => {
         return (new Date).getFullYear();
     };
 
-    private getAppName = ():string => {
+    protected getAppName = ():string => {
         return this.app.getName();
     };
 }

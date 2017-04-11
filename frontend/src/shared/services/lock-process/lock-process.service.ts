@@ -3,7 +3,7 @@ import {LockerService, LockerServiceProvider} from '../locker';
 
 @Injectable()
 export class LockProcessService {
-    private locker:LockerService;
+    protected locker:LockerService;
 
     constructor(lockerProvider:LockerServiceProvider) {
         this.locker = lockerProvider.getInstance();
@@ -17,7 +17,7 @@ export class LockProcessService {
         return this.locker.isLocked();
     };
 
-    private startProcess = (callback:any, args?:any):Promise<any> => {
+    protected startProcess = (callback:any, args?:any):Promise<any> => {
         return new Promise((resolve, reject) => {
             if (!this.locker.isLocked()) {
                 this.locker.lock();
@@ -28,12 +28,12 @@ export class LockProcessService {
         });
     };
 
-    private endProcess = (result:any):any => {
+    protected endProcess = (result:any):any => {
         this.locker.unlock();
         return result;
     };
 
-    private handleProcessErrors = (error:any) => {
+    protected handleProcessErrors = (error:any) => {
         if (error instanceof Error && error.message !== LockProcessService.name) {
             this.locker.unlock();
         }

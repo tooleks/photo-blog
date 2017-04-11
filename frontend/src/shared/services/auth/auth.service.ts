@@ -4,7 +4,7 @@ import {UserDataProviderService} from '../user-data-provider';
 
 @Injectable()
 export class AuthService {
-    constructor(private userDataProvider:UserDataProviderService, private authProvider:AuthProviderService) {
+    constructor(protected userDataProvider:UserDataProviderService, protected authProvider:AuthProviderService) {
     }
 
     signIn = (email:string, password:string):Promise<any> => {

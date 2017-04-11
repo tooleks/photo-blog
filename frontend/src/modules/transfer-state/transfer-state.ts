@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 
 @Injectable()
 export class TransferState {
-    private _map = new Map<string, any>();
+    protected _map = new Map<string, any>();
 
     constructor() {
     }

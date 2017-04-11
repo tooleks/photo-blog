@@ -16,14 +16,14 @@ import {NoticesService} from '../../../lib/notices';
     templateUrl: 'signin-form.component.html',
 })
 export class SignInFormComponent implements OnInit {
-    private form:Form;
-    private navigator:NavigatorService;
-    private lockProcess:LockProcessService;
+    protected form:Form;
+    protected navigator:NavigatorService;
+    protected lockProcess:LockProcessService;
 
-    constructor(private auth:AuthService,
-                private title:TitleService,
-                private metaTags:MetaTagsService,
-                private notices:NoticesService,
+    constructor(protected auth:AuthService,
+                protected title:TitleService,
+                protected metaTags:MetaTagsService,
+                protected notices:NoticesService,
                 navigatorProvider:NavigatorServiceProvider,
                 lockProcessServiceProvider:LockProcessServiceProvider) {
         this.navigator = navigatorProvider.getInstance();
@@ -36,15 +36,15 @@ export class SignInFormComponent implements OnInit {
         this.initForm();
     }
 
-    private initTitle = ():void => {
+    protected initTitle = ():void => {
         this.title.setTitle('Sing In');
     };
 
-    private initMeta = ():void => {
+    protected initMeta = ():void => {
         this.metaTags.setTitle(this.title.getPageName());
     };
 
-    private initForm = ():void => {
+    protected initForm = ():void => {
         this.setForm(new Form);
     };
 

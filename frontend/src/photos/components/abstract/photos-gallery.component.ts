@@ -35,10 +35,16 @@ export abstract class PhotosGalleryComponent {
     protected init():void {
         this.initTitle();
         this.initMeta();
-        this.initQueryParamsSubscribers();
+        this.initParamsSubscribers();
     }
 
-    protected initQueryParamsSubscribers():void {
+    protected abstract initTitle():void;
+
+    protected initMeta():void {
+        this.metaTags.setTitle(this.title.getPageName());
+    }
+
+    protected initParamsSubscribers():void {
         this.route.queryParams
             .map((queryParams:any) => queryParams['page'])
             .subscribe((page:number) => this.queryParams['page'] = page ? Number(page) : this.defaults.page);
@@ -46,12 +52,6 @@ export abstract class PhotosGalleryComponent {
         this.route.queryParams
             .map((queryParams:any) => queryParams['show'])
             .subscribe((show:number) => this.queryParams['show'] = show ? Number(show) : this.defaults.show);
-    }
-
-    protected abstract initTitle():void;
-
-    protected initMeta():void {
-        this.metaTags.setTitle(this.title.getPageName());
     }
 
     protected reset():void {

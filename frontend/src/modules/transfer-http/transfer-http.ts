@@ -10,7 +10,7 @@ import 'rxjs/add/observable/fromPromise';
 
 @Injectable()
 export class TransferHttp {
-    constructor(private http:Http, protected transferState:TransferState) {
+    constructor(protected http:Http, protected transferState:TransferState) {
     }
 
     request(uri:string | Request, options?:RequestOptionsArgs):Observable<any> {
@@ -82,7 +82,7 @@ export class TransferHttp {
         });
     }
 
-    private getData(uri:string | Request, options:RequestOptionsArgs, callback:(uri:string | Request, options?:RequestOptionsArgs) => Observable<Response>) {
+    protected getData(uri:string | Request, options:RequestOptionsArgs, callback:(uri:string | Request, options?:RequestOptionsArgs) => Observable<Response>) {
 
         let url = uri;
 
@@ -104,7 +104,7 @@ export class TransferHttp {
         }
     }
 
-    private getPostData(uri:string | Request, body:any, options:RequestOptionsArgs, callback:(uri:string | Request, body:any, options?:RequestOptionsArgs) => Observable<Response>) {
+    protected getPostData(uri:string | Request, body:any, options:RequestOptionsArgs, callback:(uri:string | Request, body:any, options?:RequestOptionsArgs) => Observable<Response>) {
 
         let url = uri;
 
@@ -127,7 +127,7 @@ export class TransferHttp {
         }
     }
 
-    private resolveData(key:string) {
+    protected resolveData(key:string) {
         const data = this.getFromCache(key);
 
         if (!data) {
@@ -137,11 +137,11 @@ export class TransferHttp {
         return Observable.fromPromise(Promise.resolve(data));
     }
 
-    private setCache(key, data) {
+    protected setCache(key, data) {
         return this.transferState.set(key, data);
     }
 
-    private getFromCache(key):any {
+    protected getFromCache(key):any {
         return this.transferState.get(key);
     }
 }

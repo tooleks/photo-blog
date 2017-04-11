@@ -2,8 +2,8 @@ import {Injectable} from '@angular/core';
 
 @Injectable()
 export class PagerService {
-    private page:number;
-    private perPage:number;
+    protected page:number;
+    protected perPage:number;
 
     constructor(page:any, perPage:any) {
         this.setPage(page);

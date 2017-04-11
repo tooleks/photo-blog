@@ -6,9 +6,9 @@ import {AuthService, NavigatorServiceProvider, NavigatorService} from '../../../
     template: '',
 })
 export class SignOutComponent implements OnInit {
-    private navigator:NavigatorService;
+    protected navigator:NavigatorService;
 
-    constructor(private auth:AuthService, navigatorProvider:NavigatorServiceProvider) {
+    constructor(protected auth:AuthService, navigatorProvider:NavigatorServiceProvider) {
         this.navigator = navigatorProvider.getInstance();
     }
 

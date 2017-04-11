@@ -18,24 +18,24 @@ import {GalleryImage} from '../../models';
     styleUrls: ['gallery-grid.component.css'],
 })
 export class GalleryGridComponent implements OnChanges, AfterContentInit, OnDestroy {
-    private elementSize:any = {width: 0, height: 0};
-    private elementSizeCheck:any = null;
+    protected elementSize:any = {width: 0, height: 0};
+    protected elementSizeCheck:any = null;
 
     @Input() elementSizeCheckInterval:number = 250;
 
     @Input() rowHeight:number = 0;
 
-    private gridRowMaxHeight:number = 0;
-    private gridRowMaxWidth:number = 0;
+    protected gridRowMaxHeight:number = 0;
+    protected gridRowMaxWidth:number = 0;
 
     @Input() images:Array<GalleryImage> = [];
 
     @Output() onClickGridImage:EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
 
-    private gridRows:Array<Array<GalleryImage>> = [];
-    private activeRowImages:Array<GalleryImage> = [];
+    protected gridRows:Array<Array<GalleryImage>> = [];
+    protected activeRowImages:Array<GalleryImage> = [];
 
-    constructor(private elementRef:ElementRef) {
+    constructor(protected elementRef:ElementRef) {
         this.reset();
     }
 
@@ -131,18 +131,18 @@ export class GalleryGridComponent implements OnChanges, AfterContentInit, OnDest
         });
     };
 
-    private existsInGrid = (image:GalleryImage):boolean => {
+    protected existsInGrid = (image:GalleryImage):boolean => {
         // Note: Convert multi-dimensional array (of rows of images) into single-dimensional array (of images).
         return [].concat.apply([], this.getGridRows())
             .some((gridImage:GalleryImage) => gridImage.getId() == image.getId());
     };
 
-    private pushImageToActiveRow = (image:GalleryImage):void => {
+    protected pushImageToActiveRow = (image:GalleryImage):void => {
         const scaledImage = scaleImageSmallSizeToHeight(image, this.getGridRowMaxHeight());
         this.getActiveRowImages().push(scaledImage);
     };
 
-    private renderActiveRowIfFilled = (force:boolean = false):void => {
+    protected renderActiveRowIfFilled = (force:boolean = false):void => {
         let renderedImages:Array<GalleryImage> = [];
         // If the active row width is bigger than the max row width, scale the active row to the max row width.
         if (sumImagesSmallSizeWidth(this.getActiveRowImages()) > this.getGridRowMaxWidth()) {

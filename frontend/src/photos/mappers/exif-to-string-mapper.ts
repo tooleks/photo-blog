@@ -5,7 +5,7 @@ export class ExifToStringMapper {
             : ExifToStringMapper.mapSingle(item);
     }
 
-    private static mapSingle(item:any):string {
+    protected static mapSingle(item:any):string {
         const exif:Array<string> = [];
         if (String(item.manufacturer).trim()) {
             exif.push('Manufacturer: ' + item.manufacturer);
@@ -28,7 +28,7 @@ export class ExifToStringMapper {
         return exif.join(', ');
     }
 
-    private static mapMultiple(items:Array<any>):Array<string> {
+    protected static mapMultiple(items:Array<any>):Array<string> {
         return items.map(ExifToStringMapper.mapSingle);
     }
 }

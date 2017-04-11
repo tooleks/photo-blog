@@ -17,7 +17,7 @@ export class GalleryComponent implements OnInit, OnChanges {
     @Input() defaultImageId:any;
 
     @Input() loadMoreCallback:any;
-    private isLoadingMore:boolean = false;
+    protected isLoadingMore:boolean = false;
 
     @Output() onOpenImage:EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
 
@@ -43,8 +43,8 @@ export class GalleryComponent implements OnInit, OnChanges {
     @Input() visibleImageInfo:boolean = false;
     @Output() visibleImageInfoChange:EventEmitter<boolean> = new EventEmitter<boolean>();
 
-    private openedImage:GalleryImage;
-    private openedImageIndex:number;
+    protected openedImage:GalleryImage;
+    protected openedImageIndex:number;
 
     ngOnInit():void {
         this.reset();

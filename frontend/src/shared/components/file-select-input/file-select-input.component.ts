@@ -8,20 +8,20 @@ export class FileSelectInputComponent {
     @Input() disabled:boolean;
     @Output() onSelect:EventEmitter<File> = new EventEmitter<File>();
 
-    constructor(private elementRef:ElementRef) {
+    constructor(protected elementRef:ElementRef) {
     }
 
-    private onChange = ():void => {
+    protected onChange = ():void => {
         if (this.isFile()) {
             this.onSelect.emit(this.getFile());
         }
     };
 
-    private getFile = ():File => {
+    protected getFile = ():File => {
         return this.elementRef.nativeElement.firstElementChild.files[0];
     };
 
-    private isFile = ():boolean => {
+    protected isFile = ():boolean => {
         return this.elementRef.nativeElement.firstElementChild.files.length > 0;
     };
 }
