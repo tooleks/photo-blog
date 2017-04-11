@@ -14,7 +14,7 @@
                      [title]="image.getDescription()"
                      class="gallery-img">
             </div>
-            <div *ngIf="visibleImageInfo" class="gallery-info">
+            <div *ngIf="loaded && visibleImageInfo" class="gallery-info">
                 {{ image.getDescription() }}<br>{{ image.getExif() }}
             </div>
         </div>
