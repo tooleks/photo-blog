@@ -8,8 +8,8 @@ import {
     NavigatorService,
     LockProcessServiceProvider,
     LockProcessService,
-} from '../../../shared/services';
-import {NoticesService} from '../../../lib/notices';
+    NoticesService,
+} from '../../../lib';
 import {PhotoDataProviderService} from '../../services'
 
 @Component({

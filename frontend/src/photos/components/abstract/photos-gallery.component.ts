@@ -10,8 +10,8 @@ import {
     LockProcessServiceProvider,
     LockProcessService,
     ScrollFreezerService,
-} from '../../../shared';
-import {GalleryImage} from '../../../lib/gallery';
+    GalleryImage,
+} from '../../../lib';
 
 export abstract class PhotosGalleryComponent {
     protected defaults:any = {page: 1, perPage: 20, show: null};

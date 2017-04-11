@@ -1,14 +1,13 @@
 import {Injectable} from '@angular/core';
 import {Notice} from '../models';
-import {EnvironmentDetectorService} from '../../../shared/services';
 
 @Injectable()
 export class NoticesService {
     public deleteTimeout:number = 4500;
     protected notices:Array<Notice> = [];
 
-    constructor(protected environmentDetector:EnvironmentDetectorService) {
-        if (environmentDetector.isBrowser()) {
+    constructor() {
+        if (typeof (window) !== 'undefined') {
             setInterval(this.shiftAfterDeleteTimeout, 100);
         }
     }

@@ -5,7 +5,7 @@ import {
     MetaTagsService,
     NavigatorServiceProvider,
     NavigatorService
-} from '../../../shared/services';
+} from '../../../lib';
 
 @Component({
     selector: 'page-not-found',

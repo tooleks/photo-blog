@@ -9,9 +9,9 @@ import {
     PagerServiceProvider,
     LockProcessServiceProvider,
     ScrollFreezerService,
-} from '../../../shared/services';
+    GalleryImage,
+} from '../../../lib';
 import {PhotoDataProviderService} from '../../services';
-import {GalleryImage} from '../../../lib/gallery';
 
 @Component({
     selector: 'photos',

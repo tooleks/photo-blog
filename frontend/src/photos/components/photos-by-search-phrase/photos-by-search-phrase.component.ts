@@ -10,9 +10,10 @@ import {
     PagerServiceProvider,
     LockProcessServiceProvider,
     ScrollFreezerService,
-} from '../../../shared/services';
+    GalleryImage,
+    GalleryComponent,
+} from '../../../lib';
 import {PhotoDataProviderService} from '../../services';
-import {GalleryImage, GalleryComponent} from '../../../lib/gallery';
 
 @Component({
     selector: 'photos-by-search-phrase',

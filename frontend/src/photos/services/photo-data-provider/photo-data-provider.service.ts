@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {ApiService} from '../../../shared/services';
+import {ApiService} from '../../../lib';
 
 @Injectable()
 export class PhotoDataProviderService {

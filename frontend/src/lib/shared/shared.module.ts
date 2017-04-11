@@ -24,7 +24,7 @@ import {
 import {ApiErrorHandler} from './services/api-error-handler'
 import {FileSelectInputComponent, TagsSelectInputComponent} from './components';
 import {SafeHtmlPipe} from './pipes';
-import {NoticesModule} from '../lib/notices';
+import {NoticesModule} from '../notices';
 
 @NgModule({
     imports: [

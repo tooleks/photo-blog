@@ -1,4 +1,4 @@
-import {GalleryImage} from '../../lib/gallery';
+import {GalleryImage} from '../../lib';
 import {ExifToStringMapper} from './exif-to-string-mapper';
 
 export class PhotoToGalleryImageMapper {

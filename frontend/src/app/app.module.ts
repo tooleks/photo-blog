@@ -3,9 +3,8 @@ import {CommonModule} from '@angular/common';
 import {HttpModule, JsonpModule} from '@angular/http';
 import {TransferHttpModule} from '../modules/transfer-http/transfer-http.module';
 import {GoTopButtonModule} from 'ng2-go-top-button';
-import {SharedModule} from '../shared';
+import {SharedModule, NoticesModule} from '../lib';
 import {PhotosModule} from '../photos';
-import {NoticesModule} from '../lib';
 import {AppRouting, AppRoutingProviders} from './app.routing';
 import {
     AboutMeComponent,

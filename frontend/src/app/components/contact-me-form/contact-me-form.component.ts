@@ -8,8 +8,8 @@ import {
     LockProcessService,
     NavigatorServiceProvider,
     NavigatorService,
-} from '../../../shared/services';
-import {NoticesService} from '../../../lib/notices';
+    NoticesService,
+} from '../../../lib';
 
 @Component({
     selector: 'contact-me-form',

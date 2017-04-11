@@ -7,8 +7,8 @@ import {
     LockProcessService,
     NavigatorServiceProvider,
     NavigatorService,
-} from '../../../shared/services';
-import {NoticesService} from '../../../lib/notices';
+    NoticesService,
+} from '../../../lib';
 import {SubscriptionForm as Form} from './models';
 
 @Component({

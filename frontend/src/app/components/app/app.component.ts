@@ -5,7 +5,7 @@ import {
     TitleService,
     AuthProviderService,
     ScrollFreezerService
-} from '../../../shared/services';
+} from '../../../lib';
 import '../../../../assets/static/img/meta_image.png'
 
 @Component({
