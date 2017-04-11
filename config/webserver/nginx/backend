@@ -6,7 +6,7 @@ server {
 
     listen 80;
 
-    server_name backend.server.name;
+    server_name backend.{{server.name}};
 
     root /var/www/photo-blog/backend/public;
 

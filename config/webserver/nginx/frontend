@@ -2,7 +2,7 @@ server {
 
     listen 80;
 
-    server_name server.name;
+    server_name {{server.name}};
 
     root /var/www/photo-blog/frontend/dist;
 

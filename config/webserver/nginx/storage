@@ -2,7 +2,7 @@ server {
 
     listen 80;
 
-    server_name storage.server.name;
+    server_name storage.{{server.name}};
 
     root /var/www/photo-blog/backend/public;
     index index.html;
