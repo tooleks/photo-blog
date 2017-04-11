@@ -17,6 +17,7 @@ export class GalleryComponent implements OnInit, OnChanges {
     @Input() defaultImageId:any;
 
     @Input() loadMoreCallback:any = null;
+    protected loadingNextImages:boolean = false;
 
     @Output() onOpenImage:EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
 
@@ -55,8 +56,9 @@ export class GalleryComponent implements OnInit, OnChanges {
             this.openImageById(this.defaultImageId);
         }
 
-        if (this.openedImage && changes['images'] && !changes['images'].firstChange &&
+        if (this.openedImage && this.loadingNextImages && changes['images'] && !changes['images'].firstChange &&
             changes['images'].previousValue.length < changes['images'].currentValue.length) {
+            this.loadingNextImages = false;
             this.openNextImage(false);
         }
     }
@@ -79,24 +81,30 @@ export class GalleryComponent implements OnInit, OnChanges {
 
     openImageById = (imageId:any):void => {
         this.images.some((image:GalleryImage, index:number) => {
-            if (image.getId() == imageId) {
+            const isAlreadyOpened = (index === this.openedImageIndex);
+            const isLastImage = (index === this.images.length - 1);
+            if (!isAlreadyOpened && image.getId() == imageId) {
                 this.setOpenedImage(image, index);
                 return true;
-            } else if (index === this.images.length - 1) {
+            } else if (isLastImage) {
                 this.loadMoreImages();
+                return false;
+            } else {
+                return false;
             }
-            return false;
         });
     };
 
     openImage = (image:GalleryImage):void => {
         const imageId = image.getId();
         this.images.some((image:GalleryImage, index:number) => {
-            if (image.getId() == imageId) {
-                this.setOpenedImage(this.images[index], index);
+            const isAlreadyOpened = (index === this.openedImageIndex);
+            if (!isAlreadyOpened && image.getId() == imageId) {
+                this.setOpenedImage(image, index);
                 return true;
+            } else {
+                return false;
             }
-            return false;
         });
     };
 
@@ -112,6 +120,7 @@ export class GalleryComponent implements OnInit, OnChanges {
         if (this.images[nextImageIndex]) {
             this.openImage(this.images[nextImageIndex]);
         } else if (loadMoreImages) {
+            this.loadingNextImages = true;
             this.loadMoreImages();
         }
     };
