@@ -38,7 +38,7 @@ export class GalleryViewerComponent implements OnChanges {
     @Output() visibleImageInfoChange:EventEmitter<boolean> = new EventEmitter<boolean>();
 
     ngOnChanges(changes:SimpleChanges) {
-        if (changes['image'].currentValue) {
+        if (changes['image'] && changes['image'].currentValue) {
             this.processImageLoading();
         }
     }
