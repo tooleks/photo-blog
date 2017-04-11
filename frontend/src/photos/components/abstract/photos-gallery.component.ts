@@ -96,6 +96,7 @@ export abstract class PhotosGalleryComponent {
     }
 
     protected onEditPhoto(image:GalleryImage):void {
+        this.scrollFreezer.unfreeze();
         this.navigator.navigate(['photo/edit', image.getId()]);
     }
 }
