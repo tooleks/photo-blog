@@ -9,7 +9,10 @@ import {ngExpressEngine} from './modules/ng-express-engine/express-engine';
 import {ROUTES} from './routes';
 import {enableProdMode} from '@angular/core';
 
-enableProdMode();
+if (process.env.NODE_ENV === 'production') {
+    enableProdMode();
+}
+
 const app = express();
 const port = 8000;
 const baseUrl = `http://localhost:${port}`;

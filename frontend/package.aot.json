@@ -6,8 +6,10 @@
   "scripts": {
     "start": "npm run build && npm run server",
     "build": "webpack",
-    "build:prod": "NODE_ENV='production' webpack -p",
+    "build:aot": "webpack --env.aot --env.client & webpack --env.aot --env.server",
+    "build:prod": "webpack --env.aot --env.client -p & webpack --env.aot --env.server",
     "prebuild": "npm run clean",
+    "prebuild:aot": "npm run clean",
     "prebuild:prod": "npm run clean",
     "clean": "rimraf dist",
     "server": "nodemon dist/server.js",
