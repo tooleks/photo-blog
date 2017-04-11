@@ -6,7 +6,7 @@ import {
     AuthProviderService,
     ScrollFreezerService
 } from '../../../lib';
-import '../../../../assets/static/img/meta_image.png'
+import '../../../../assets/static/img/meta_image.jpg'
 
 @Component({
     selector: 'app',
@@ -39,7 +39,7 @@ export class AppComponent implements OnInit {
         this.metaTags.setWebsiteName(this.app.getName());
         this.metaTags.setTitle(this.title.getPageName());
         this.metaTags.setDescription(this.app.getDescription());
-        this.metaTags.setImage(this.app.getUrl() + '/assets/static/meta_image.png');
+        this.metaTags.setImage(this.app.getUrl() + '/assets/static/meta_image.jpg');
     };
 
     protected initScrollFreezerSubscribers = ():void => {
