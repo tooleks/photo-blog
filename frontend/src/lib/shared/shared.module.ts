@@ -60,7 +60,7 @@ import {NoticesModule} from '../notices';
                     }
                     return headers;
                 }, () => {
-                    return app.isDebugMode() ? {'XDEBUG_SESSION_START': 'START'} : {};
+                    return app.inDebugMode() ? {'XDEBUG_SESSION_START': 'START'} : {};
                 });
             },
         },

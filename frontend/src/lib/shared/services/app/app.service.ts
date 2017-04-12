@@ -1,27 +1,28 @@
 import {Injectable} from '@angular/core';
+import {Storage} from './interfaces';
 
 @Injectable()
 export class AppService {
-    constructor(protected env:any) {
+    constructor(protected storage:Storage) {
     }
 
-    isDebugMode = ():boolean => {
-        return Boolean(this.env.get('debugMode'));
+    inDebugMode = ():boolean => {
+        return Boolean(this.storage.get('debugMode'));
     };
 
     getApiUrl = ():string => {
-        return String(this.env.get('apiUrl'));
+        return String(this.storage.get('apiUrl'));
     };
 
     getUrl = ():string => {
-        return String(this.env.get('appUrl'));
+        return String(this.storage.get('appUrl'));
     };
 
     getName = ():string => {
-        return String(this.env.get('appName'));
+        return String(this.storage.get('appName'));
     };
 
     getDescription = ():string => {
-        return String(this.env.get('appDescription'));
+        return String(this.storage.get('appDescription'));
     };
 }

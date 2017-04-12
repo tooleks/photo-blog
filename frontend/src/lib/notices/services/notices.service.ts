@@ -3,12 +3,13 @@ import {Notice} from '../models';
 
 @Injectable()
 export class NoticesService {
-    public deleteTimeout:number = 4500;
     protected notices:Array<Notice> = [];
+    public deleteTimeout:number = 4500;
+    public deleteInterval:number = 100;
 
     constructor() {
         if (typeof (window) !== 'undefined') {
-            setInterval(this.shiftAfterDeleteTimeout, 100);
+            setInterval(this.shiftAfterDeleteTimeout, this.deleteInterval);
         }
     }
 
