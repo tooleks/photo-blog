@@ -1,11 +1,12 @@
-import {Component, OnInit, ViewChild} from '@angular/core'
+import {Component, OnInit} from '@angular/core'
 import {Router, NavigationEnd} from '@angular/router';
 import {
     AppService,
     MetaTagsService,
     TitleService,
     AuthProviderService,
-    ScrollFreezerService
+    ScrollFreezerService,
+    ScreenDetectorService,
 } from '../../../lib';
 import '../../../../assets/static/img/meta_image.jpg'
 
@@ -15,7 +16,6 @@ import '../../../../assets/static/img/meta_image.jpg'
     styleUrls: ['app.component.css']
 })
 export class AppComponent implements OnInit {
-    @ViewChild('sideBarComponent') sideBarComponent:any;
     protected appContentStyles:{overflow:string} = {overflow: ''};
 
     constructor(protected router:Router,
@@ -23,6 +23,7 @@ export class AppComponent implements OnInit {
                 protected title:TitleService,
                 protected metaTags:MetaTagsService,
                 protected authProvider:AuthProviderService,
+                protected screenDetector:ScreenDetectorService,
                 protected scrollFreezer:ScrollFreezerService) {
     }
 
@@ -38,8 +39,8 @@ export class AppComponent implements OnInit {
     };
 
     protected initMeta = ():void => {
-        this.metaTags.setUrl(this.app.getUrl());
         this.metaTags.setWebsiteName(this.app.getName());
+        this.metaTags.setUrl(this.app.getUrl());
         this.metaTags.setTitle(this.title.getPageName());
         this.metaTags.setDescription(this.app.getDescription());
         this.metaTags.setImage(this.app.getUrl() + '/assets/static/meta_image.jpg');
@@ -56,14 +57,8 @@ export class AppComponent implements OnInit {
         this.scrollFreezer.unfreezed.subscribe(() => this.appContentStyles.overflow = '');
     };
 
-    protected toggleSideBar = ():void => {
-        this.sideBarComponent.toggle();
-    };
-
     protected onShowSideBar = (event:any):void => {
-        if (event.isSmallDevice) {
-            this.scrollFreezer.freeze();
-        }
+        this.screenDetector.isSmallScreen() && this.scrollFreezer.freeze()
     };
 
     protected onHideSideBar = (event:any):void => {

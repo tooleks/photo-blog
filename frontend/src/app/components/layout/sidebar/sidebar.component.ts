@@ -52,24 +52,24 @@ export class SideBarComponent implements OnInit {
     protected animationState:string;
     protected tags:Array<any> = [];
 
-    constructor(protected screenDetector:ScreenDetectorService,
+    constructor(protected app:AppService,
                 protected api:ApiService,
                 protected authProvider:AuthProviderService,
-                protected app:AppService) {
-        this.init();
+                protected screenDetector:ScreenDetectorService) {
+        this.reset();
         this.loadTags();
     }
 
     ngOnInit():void {
-        this.init();
+        this.reset();
     }
 
     @HostListener('window:resize', ['$event'])
     onWindowResize(event:any) {
-        this.init();
+        this.reset();
     }
 
-    init = ():void => {
+    reset = ():void => {
         this.screenDetector.isLargeScreen() ? this.show() : this.hide();
     };
 
@@ -95,11 +95,7 @@ export class SideBarComponent implements OnInit {
     };
 
     emitChange = (event:string):void => {
-        this[event].emit({
-            isVisible: this.isVisible(),
-            isSmallDevice: this.screenDetector.isSmallScreen(),
-            isLargeDevice: this.screenDetector.isLargeScreen(),
-        });
+        this[event].emit({isVisible: this.isVisible()});
     };
 
     protected loadTags = ():void => {

@@ -1,18 +1,14 @@
-import {Title} from '@angular/platform-browser';
 import {Injectable} from '@angular/core';
-import {AppService} from '../app';
+import {Title} from '@angular/platform-browser';
 
 @Injectable()
 export class TitleService {
-    protected pathSeparator = ' / ';
-
-    constructor(protected app:AppService,
-                protected title:Title) {
+    constructor(protected title:Title, protected segmentsSeparator:string, protected defaultSegment:string = null) {
     }
 
-    setTitle = (newTitle?:any):void => {
-        newTitle = newTitle || [];
-        this.title.setTitle(this.buildTitle(newTitle));
+    setTitle = (newTitle:any = []):void => {
+        const title = this.buildTitle(newTitle);
+        this.title.setTitle(title);
     };
 
     getTitle = ():string => {
@@ -20,22 +16,16 @@ export class TitleService {
     };
 
     getPageName = ():string => {
-        return this.getTitle().split(this.pathSeparator)[0];
+        return this.getTitle().split(this.segmentsSeparator)[0];
     };
 
-    protected buildTitle = (newTitle:any):string => {
-        let titlePieces = [this.app.getName()];
-
-        if (!newTitle) {
-            return titlePieces.reverse().join(this.pathSeparator);
-        }
-
-        if (newTitle instanceof Array) {
-            titlePieces = titlePieces.concat(newTitle);
+    protected buildTitle = (segments:any = []):string => {
+        let titleSegments = this.defaultSegment ? [this.defaultSegment] : [];
+        if (segments instanceof Array) {
+            titleSegments = titleSegments.concat(segments);
         } else {
-            titlePieces.push(newTitle);
+            titleSegments.push(segments);
         }
-
-        return titlePieces.reverse().join(this.pathSeparator);
+        return titleSegments.reverse().join(this.segmentsSeparator);
     };
 }

@@ -4,17 +4,18 @@
              (onShow)="onShowSideBar($event)"
              (onHide)="onHideSideBar($event)">
     </sidebar>
-    <topbar (onNavClick)="toggleSideBar()"></topbar>
+    <topbar (onNavClick)="sideBarComponent.toggle()"></topbar>
     <div class="app-content" [ngStyle]="appContentStyles">
         <router-outlet></router-outlet>
     </div>
     <bottombar></bottombar>
-    <notices></notices>
-    <go-top-button [html]="'<i class=\'fa fa-arrow-up\'></i>'"
-                   [animate]="true"
-                   [speed]="30"
-                   [acceleration]="50"
-                   [styles]="{
+</div>
+<notices></notices>
+<go-top-button [html]="'<i class=\'fa fa-arrow-up\'></i>'"
+               [animate]="true"
+               [speed]="30"
+               [acceleration]="50"
+               [styles]="{
                     'width': '40px',
                     'height': '40px',
                     'border-radius': '40px',
@@ -23,6 +24,5 @@
                     'bottom': '20px',
                     'opacity': '1'
                    }"
-                   title="{{ 'Go to top' }}">
-    </go-top-button>
-</div>
+               title="{{ 'Go to top' }}">
+</go-top-button>

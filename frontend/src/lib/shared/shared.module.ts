@@ -1,6 +1,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
+import {Title} from '@angular/platform-browser';
 import {TagInputModule} from 'ng2-tag-input';
 import {
     ApiService,
@@ -47,7 +48,10 @@ import {NoticesModule} from '../notices';
     ],
     providers: [
         ApiService,
-        {provide: BaseApiErrorHandler, useClass: ApiErrorHandler},
+        {
+            provide: BaseApiErrorHandler,
+            useClass: ApiErrorHandler,
+        },
         AppService,
         AuthService,
         AuthProviderService,
@@ -61,7 +65,13 @@ import {NoticesModule} from '../notices';
         PagerServiceProvider,
         ScreenDetectorService,
         ScrollFreezerService,
-        TitleService,
+        {
+            provide: TitleService,
+            deps: [AppService, Title],
+            useFactory(app:AppService, title:Title) {
+                return new TitleService(title, ' / ', app.getName());
+            },
+        },
         UserDataProviderService,
     ],
 })

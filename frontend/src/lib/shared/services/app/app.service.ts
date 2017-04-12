@@ -6,6 +6,10 @@ export class AppService {
     constructor(protected env:EnvService) {
     }
 
+    getApiUrl = ():string => {
+        return String(this.env.get('apiUrl'));
+    };
+
     getUrl = ():string => {
         return String(this.env.get('appUrl'));
     };
