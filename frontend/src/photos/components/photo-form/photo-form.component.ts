@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {PhotoForm as Form} from './models';
+import {NoticesService} from '../../../lib';
 import {
     TitleService,
     AuthProviderService,
@@ -8,9 +8,9 @@ import {
     NavigatorService,
     LockProcessServiceProvider,
     LockProcessService,
-    NoticesService,
-} from '../../../lib';
+} from '../../../shared';
 import {PhotoDataProviderService} from '../../services'
+import {PhotoForm as Form} from './models';
 
 @Component({
     selector: 'photo-form',

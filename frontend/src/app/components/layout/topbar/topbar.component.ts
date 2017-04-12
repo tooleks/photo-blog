@@ -1,5 +1,5 @@
 import {Component, Output, EventEmitter} from '@angular/core';
-import {TitleService} from '../../../../lib';
+import {TitleService} from '../../../../shared';
 
 @Component({
     selector: 'topbar',

@@ -1,9 +1,11 @@
 import {NgModule} from '@angular/core';
+import {HttpModule, JsonpModule} from '@angular/http';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {Http} from '@angular/http';
 import {Title} from '@angular/platform-browser';
-import {TagInputModule} from 'ng2-tag-input';
+import {EnvModule, EnvService, HtmlModule, SeoModule} from '../core';
+import {GalleryModule, NoticesModule} from '../lib';
 import {
     ApiService,
     ApiErrorHandler as BaseApiErrorHandler,
@@ -14,7 +16,6 @@ import {
     LocalStorageService,
     LockProcessServiceProvider,
     LockerServiceProvider,
-    MetaTagsService,
     NavigatorServiceProvider,
     PagerServiceProvider,
     ScreenDetectorService,
@@ -23,30 +24,29 @@ import {
     UserDataProviderService,
 } from './services';
 import {ApiErrorHandler} from './services/api-error-handler';
-import {FileSelectInputComponent, TagsSelectInputComponent} from './components';
-import {SafeHtmlPipe} from './pipes';
-import {EnvModule, EnvService} from '../env';
-import {NoticesModule} from '../notices';
 
 @NgModule({
     imports: [
+        HttpModule,
+        JsonpModule,
         CommonModule,
         FormsModule,
-        TagInputModule,
         EnvModule,
+        HtmlModule,
+        GalleryModule,
         NoticesModule,
-    ],
-    declarations: [
-        FileSelectInputComponent,
-        TagsSelectInputComponent,
-        SafeHtmlPipe,
+        SeoModule,
     ],
     exports: [
+        HttpModule,
+        JsonpModule,
         CommonModule,
         FormsModule,
-        FileSelectInputComponent,
-        TagsSelectInputComponent,
-        SafeHtmlPipe,
+        EnvModule,
+        HtmlModule,
+        GalleryModule,
+        NoticesModule,
+        SeoModule,
     ],
     providers: [
         {
@@ -81,7 +81,6 @@ import {NoticesModule} from '../notices';
         LocalStorageService,
         LockProcessServiceProvider,
         LockerServiceProvider,
-        MetaTagsService,
         NavigatorServiceProvider,
         PagerServiceProvider,
         ScreenDetectorService,

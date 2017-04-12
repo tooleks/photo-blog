@@ -3,7 +3,6 @@ import {Component, Input, Output, EventEmitter} from '@angular/core';
 @Component({
     selector: 'tags-select-input',
     templateUrl: 'tags-select-input.component.html',
-    styleUrls: ['tags-select-input.component.css']
 })
 export class TagsSelectInputComponent {
     @Input() tags:Array<any> = [];

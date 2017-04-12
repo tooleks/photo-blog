@@ -1,4 +1,5 @@
 export const ROUTES:string[] = [
+    // Root.
     '/',
     // App module.
     '/signin',

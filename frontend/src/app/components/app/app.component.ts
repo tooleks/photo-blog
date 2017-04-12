@@ -1,13 +1,13 @@
 import {Component, OnInit} from '@angular/core'
 import {Router, NavigationEnd} from '@angular/router';
+import {MetaTagsService} from '../../../core';
 import {
     AppService,
-    MetaTagsService,
     TitleService,
     AuthProviderService,
     ScrollFreezerService,
     ScreenDetectorService,
-} from '../../../lib';
+} from '../../../shared';
 import '../../../../assets/static/img/meta_image.jpg'
 
 @Component({

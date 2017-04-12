@@ -1,9 +1,8 @@
 import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
 import {HttpModule, JsonpModule} from '@angular/http';
-import {TransferHttpModule} from '../modules/transfer-http/transfer-http.module';
 import {GoTopButtonModule} from 'ng2-go-top-button';
-import {SharedModule, NoticesModule} from '../lib';
+import {TransferHttpModule} from '../modules';
+import {SharedModule} from '../shared';
 import {PhotosModule} from '../photos';
 import {AppRouting, AppRoutingProviders} from './app.routing';
 import {
@@ -22,15 +21,13 @@ import {
 
 @NgModule({
     imports: [
-        CommonModule,
         HttpModule,
-        TransferHttpModule,
         JsonpModule,
         GoTopButtonModule,
+        TransferHttpModule,
         AppRouting,
         SharedModule,
         PhotosModule,
-        NoticesModule,
     ],
     declarations: [
         AboutMeComponent,
@@ -45,7 +42,6 @@ import {
         SubscriptionFormComponent,
         UnsubscriptionComponent,
     ],
-    exports: [],
     providers: [
         AppRoutingProviders,
     ],

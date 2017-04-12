@@ -1,19 +1,18 @@
 import {Component, OnInit, AfterViewInit, ViewChildren, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {PhotosGalleryComponent} from '../abstract';
+import {MetaTagsService} from '../../../core'
+import {GalleryComponent, GalleryImage} from '../../../lib';
 import {
     TitleService,
     AuthProviderService,
-    MetaTagsService,
     EnvironmentDetectorService,
     NavigatorServiceProvider,
     PagerServiceProvider,
     LockProcessServiceProvider,
     ScrollFreezerService,
-    GalleryImage,
-    GalleryComponent,
-} from '../../../lib';
+} from '../../../shared';
 import {PhotoDataProviderService} from '../../services';
+import {PhotosGalleryComponent} from '../abstract';
 
 @Component({
     selector: 'photos-by-search-phrase',

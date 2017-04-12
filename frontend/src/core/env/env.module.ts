@@ -1,13 +1,14 @@
 import {NgModule} from '@angular/core';
 import {EnvService} from './services';
-import {env as envVariables} from '../../../env'
+// Environment variables file in the project root directory.
+import {env} from '../../../env';
 
 @NgModule({
     providers: [
         {
             provide: EnvService,
             useFactory() {
-                return new EnvService(envVariables);
+                return new EnvService(env);
             },
         },
     ],

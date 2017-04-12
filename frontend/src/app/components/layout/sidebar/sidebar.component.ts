@@ -12,7 +12,7 @@ import {
     transition,
     animate
 } from '@angular/animations';
-import {ScreenDetectorService, ApiService, AuthProviderService, AppService} from '../../../../lib';
+import {ScreenDetectorService, ApiService, AuthProviderService, AppService} from '../../../../shared';
 
 @Component({
     selector: 'sidebar',

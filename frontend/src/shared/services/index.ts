@@ -5,7 +5,6 @@ export * from './environment-detector';
 export * from './local-storage/';
 export * from './lock-process';
 export * from './locker';
-export * from './meta-tags';
 export * from './navigator';
 export * from './pager';
 export * from './screen-detector';

@@ -1,11 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {
-    TitleService,
-    MetaTagsService,
-    NavigatorServiceProvider,
-    NavigatorService
-} from '../../../lib';
+import {MetaTagsService} from '../../../core'
+import {TitleService, NavigatorServiceProvider, NavigatorService} from '../../../shared';
 
 @Component({
     selector: 'page-not-found',
