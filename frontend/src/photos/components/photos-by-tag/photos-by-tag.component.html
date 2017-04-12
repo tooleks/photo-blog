@@ -4,20 +4,24 @@
             <h2 class="m-xs">{{ 'No photos found' }}</h2>
         </div>
         <gallery #galleryComponent
-                 [items]="getLoadedPhotos()"
-                 [defaultItemId]="queryParams['show']"
-                 [onLoadMoreCallback]="loadMorePhotos"
-                 (onOpenItem)="onShowPhoto($event)"
-                 (onCloseItem)="onHidePhoto($event)"
-                 (onEditItem)="authProvider.isAuthenticated() ? onEditPhoto($event) : false"
-                 [showEditButton]="authProvider.isAuthenticated()"
+                 [images]="images"
+                 [defaultImageId]="queryParams['show']"
+                 [loadMoreCallback]="loadMorePhotos.bind(this)"
+                 (onOpenImage)="onShowPhoto($event)"
+                 (onCloseImage)="onHidePhoto($event)"
+                 [showEditImageButton]="authProvider.isAuthenticated()"
+                 (onEditImage)="authProvider.isAuthenticated() ? onEditPhoto($event) : null"
+                 [showDeleteImageButton]="false"
                  infinite-scroll
+                 [infiniteScrollDisabled]="!hasMoreImages"
                  [infiniteScrollDistance]="3"
                  [infiniteScrollThrottle]="500"
                  (scrolled)="loadMorePhotos()"
         ></gallery>
     </div>
 </div>
-<div class="load-more-container text-center">
-    <spinner [visible]="isLoading()"></spinner>
+<div *ngIf="!isEmpty() && hasMoreImages" class="text-center" style="margin-top: 20px;">
+    <button class="btn btn-primary" (click)="loadMorePhotos()" [disabled]="isProcessing()">
+        {{ !isProcessing() ? 'Load More' : 'Loading...' }}
+    </button>
 </div>

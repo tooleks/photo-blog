@@ -1,53 +1,72 @@
-import {Component, Inject} from '@angular/core';
-import {SignInForm} from './signin-form';
+import {Component, OnInit} from '@angular/core';
+import {SignInForm as Form} from './models';
 import {
     AuthService,
     TitleService,
-    ScrollerService,
+    MetaTagsService,
     LockProcessServiceProvider,
     LockProcessService,
-    NotificatorService,
     NavigatorServiceProvider,
     NavigatorService,
-} from '../../../shared/services';
-import {User} from '../../../shared/models';
+    NoticesService,
+} from '../../../lib';
 
 @Component({
     selector: 'signin-form',
-    template: require('./signin-form.component.html'),
+    templateUrl: 'signin-form.component.html',
 })
-export class SignInFormComponent {
-    private form:SignInForm;
-    private navigator:NavigatorService;
-    private lockProcess:LockProcessService;
+export class SignInFormComponent implements OnInit {
+    protected form:Form;
+    protected navigator:NavigatorService;
+    protected lockProcess:LockProcessService;
 
-    constructor(@Inject(AuthService) private auth:AuthService,
-                @Inject(TitleService) private title:TitleService,
-                @Inject(ScrollerService) private scroller:ScrollerService,
-                @Inject(NotificatorService) private notificator:NotificatorService,
-                @Inject(NavigatorServiceProvider) navigatorProvider:NavigatorServiceProvider,
-                @Inject(LockProcessServiceProvider) lockProcessServiceProvider:LockProcessServiceProvider) {
+    constructor(protected auth:AuthService,
+                protected title:TitleService,
+                protected metaTags:MetaTagsService,
+                protected notices:NoticesService,
+                navigatorProvider:NavigatorServiceProvider,
+                lockProcessServiceProvider:LockProcessServiceProvider) {
         this.navigator = navigatorProvider.getInstance();
         this.lockProcess = lockProcessServiceProvider.getInstance();
     }
 
-    ngOnInit() {
-        this.scroller.scrollToTop();
-        this.title.setTitle('Sing In');
-        this.form = new SignInForm;
+    ngOnInit():void {
+        this.initTitle();
+        this.initMeta();
+        this.initForm();
     }
 
-    signIn = () => {
+    protected initTitle = ():void => {
+        this.title.setTitle('Sing In');
+    };
+
+    protected initMeta = ():void => {
+        this.metaTags.setTitle(this.title.getPageName());
+    };
+
+    protected initForm = ():void => {
+        this.setForm(new Form);
+    };
+
+    setForm = (form:Form):void => {
+        this.form = form;
+    };
+
+    getForm = ():Form => {
+        return this.form;
+    };
+
+    signIn = ():Promise<any> => {
         return this.lockProcess
-            .process(this.auth.signIn, [this.form.email, this.form.password])
-            .then((user:User) => {
-                this.notificator.success('Hello, ' + user.name + '!');
+            .process(() => this.auth.signIn(this.getForm().email, this.getForm().password))
+            .then((user:any) => {
+                this.notices.success('Hello, ' + user.name + '!');
                 this.navigator.navigate(['/']);
                 return user;
             });
     };
 
-    isLoading = ():boolean => {
+    isProcessing = ():boolean => {
         return this.lockProcess.isProcessing();
     };
 }

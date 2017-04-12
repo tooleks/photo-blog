@@ -1,105 +1,55 @@
-import {Component, Inject} from '@angular/core';
+import {Component, OnInit, AfterViewInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
+import {PhotosGalleryComponent} from '../abstract';
 import {
     TitleService,
-    ScrollerService,
     AuthProviderService,
+    MetaTagsService,
     NavigatorServiceProvider,
-    NavigatorService,
     PagerServiceProvider,
-    PagerService,
     LockProcessServiceProvider,
-    LockProcessService,
-} from '../../../shared/services';
-import {Photo} from '../../../shared/models';
-import {PhotoDataProviderService} from '../../services/photo-data-provider';
+    ScrollFreezerService,
+    GalleryImage,
+} from '../../../lib';
+import {PhotoDataProviderService} from '../../services';
 
 @Component({
     selector: 'photos',
-    template: require('./photos.component.html'),
+    templateUrl: 'photos.component.html',
 })
-export class PhotosComponent {
-    private loaded:boolean = false;
-    private queryParams:Object = {};
-    private pager:PagerService;
-    private lockProcess:LockProcessService;
-    private navigator:NavigatorService;
-
-    constructor(@Inject(ActivatedRoute) private route:ActivatedRoute,
-                @Inject(TitleService) private title:TitleService,
-                @Inject(ScrollerService) private scroller:ScrollerService,
-                @Inject(AuthProviderService) private authProvider:AuthProviderService,
-                @Inject(PhotoDataProviderService) private photoDataProvider:PhotoDataProviderService,
-                @Inject(NavigatorServiceProvider) navigatorProvider:NavigatorServiceProvider,
-                @Inject(PagerServiceProvider) pagerProvider:PagerServiceProvider,
-                @Inject(LockProcessServiceProvider) lockProcessProvider:LockProcessServiceProvider) {
-        this.navigator = navigatorProvider.getInstance();
-        this.pager = pagerProvider.getInstance();
-        this.lockProcess = lockProcessProvider.getInstance();
+export class PhotosComponent extends PhotosGalleryComponent implements OnInit, AfterViewInit {
+    constructor(protected authProvider:AuthProviderService,
+                protected photoDataProvider:PhotoDataProviderService,
+                route:ActivatedRoute,
+                title:TitleService,
+                metaTags:MetaTagsService,
+                navigatorProvider:NavigatorServiceProvider,
+                pagerProvider:PagerServiceProvider,
+                lockProcessProvider:LockProcessServiceProvider,
+                scrollFreezer:ScrollFreezerService) {
+        super(route, title, metaTags, navigatorProvider, pagerProvider, lockProcessProvider, scrollFreezer);
     }
 
-    ngOnInit() {
-        this.scroller.scrollToTop();
+    ngOnInit():void {
+        this.init();
+    }
 
+    ngAfterViewInit():void {
+        const perPageOffset = this.queryParams['page'] * this.pager.getPerPage();
+        this.loadPhotos(this.defaults.page, perPageOffset);
+    }
+
+    protected initTitle():void {
         this.title.setTitle('All Photos');
-
-        this.route.queryParams
-            .map((queryParams) => queryParams['page'])
-            .subscribe((page:number) => this.pager.setPage(page));
-
-        this.route.queryParams
-            .map((queryParams) => queryParams['show'])
-            .subscribe((show:number) => this.queryParams['show'] = show);
     }
 
-    ngAfterViewInit() {
-        this.loadPhotos(this.pager.calculateLimitForPage(this.pager.getPage()), this.pager.getOffset());
-    }
-
-    private processLoadPhotos = (take:number, skip:number):Promise<Array<Photo>> => {
-        return this.photoDataProvider
-            .getAll(take, skip)
-            .then((photos:Array<Photo>) => this.pager.appendItems(photos))
-            .then((photos:Array<Photo>) => {
-                this.loaded = true;
-                return photos;
-            });
-    };
-
-    private loadPhotos = (take:number, skip:number):Promise<Array<Photo>> => {
+    protected loadPhotos(page:number, perPage:number, parameters?:any):Promise<Array<GalleryImage>> {
         return this.lockProcess
-            .process(this.processLoadPhotos, [take, skip])
-            .then((photos:Array<Photo>) => {
-                this.navigator.setQueryParam('page', this.pager.getPage());
-                return photos;
-            });
-    };
+            .process(() => this.photoDataProvider.getAll(page, perPage))
+            .then(this.handleLoadPhotos.bind(this));
+    }
 
-    getLoadedPhotos = ():Array<Photo> => {
-        return this.pager.getItems();
-    };
-
-    loadMorePhotos = ():Promise<Array<Photo>> => {
-        return this.loadPhotos(this.pager.getLimit(), this.pager.getOffset());
-    };
-
-    isLoading = ():boolean => {
-        return this.lockProcess.isProcessing();
-    };
-
-    isEmpty = ():boolean => {
-        return !this.pager.getItems().length && !this.lockProcess.isProcessing() && !this.loaded;
-    };
-
-    onShowPhoto = (photo:Photo):void => {
-        this.navigator.setQueryParam('show', photo.id);
-    };
-
-    onHidePhoto = (photo:Photo):void => {
-        this.navigator.unsetQueryParam('show');
-    };
-
-    onEditPhoto = (photo:Photo):void => {
-        this.navigator.navigate(['photo/edit', photo.id]);
-    };
+    protected loadMorePhotos():Promise<Array<GalleryImage>> {
+        return this.loadPhotos(this.pager.getNextPage(), this.pager.getPerPage());
+    }
 }

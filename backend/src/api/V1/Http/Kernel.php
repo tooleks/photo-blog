@@ -19,7 +19,7 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middleware = [
-        \Api\V1\Http\Middleware\AllowCorsRequests::class,
+        \Api\V1\Http\Middleware\AddCorsHeaders::class,
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
@@ -51,5 +51,6 @@ class Kernel extends HttpKernel
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'throttle' => \Api\V1\Http\Middleware\ThrottleRequests::class,
         'json_api' => \Api\V1\Http\Middleware\JsonApi::class,
+        'present' => \Api\V1\Http\Middleware\PresentResponses::class,
     ];
 }

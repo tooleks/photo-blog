@@ -4,7 +4,7 @@
 
 #### Development Configuration
 
-Apache 2.4, MySQL 5.7, Node.js 4.2, PHP 7.0, Laravel 5.4.
+NGINX 1.10, MySQL 5.7, PHP 7.0 (ext-openssl, ext-pdo, ext-mbstring, ext-tokenizer, ext-xml, ext-gd), Laravel 5.4, Node.js 7.5, Angular 4.0.
 
 #### Installation
 
@@ -57,14 +57,8 @@ npm install
 
 Create the `./frontend/env.ts` file from the example `./frontend/env.ts.example`. Setup API connection credentials.
 
-Run the following command (within the `./frontend` directory) to start dev server:
-
-```
-npm start
-```
-
 Run the following command (within the `./frontend` directory) to build distribution (it will appear in the `./frontend/dist` directory).
 
 ```
-npm run build
+npm run start
 ```

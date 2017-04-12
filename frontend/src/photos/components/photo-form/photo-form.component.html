@@ -4,34 +4,34 @@
             <div class="col-md-4 col-md-push-8">
                 <div class="row">
                     <div class="col-sm-12">
-                        <div class="file-box" *ngIf="photo.absolute_url">
+                        <div class="file-box" *ngIf="getPhoto().url">
                             <div class="file">
                                 <span class="corner"></span>
                                 <div class="image">
-                                    <a [href]="photo.absolute_url" target="_blank" title="photo.description">
-                                        <img [src]="photo.thumbnails.medium.absolute_url"
-                                             [alt]="photo.description"
+                                    <a [href]="getPhoto().url" target="_blank" [title]="getPhoto().description">
+                                        <img [src]="getPhoto().thumbnails.medium.url"
+                                             [alt]="getPhoto().description"
                                              class="img-responsive">
                                     </a>
                                 </div>
                                 <div class="file-name">
-                                    <div *ngIf="photo.exif.taken_at">
-                                        <small>{{ 'Taken On:' }} {{ photo.exif.taken_at }}</small>
+                                    <div *ngIf="getPhoto().exif.manufacturer">
+                                        <small>{{ 'Manufacturer:' }} {{ getPhoto().exif.manufacturer }}</small>
                                     </div>
-                                    <div *ngIf="photo.exif.manufacturer">
-                                        <small>{{ 'Manufacturer:' }} {{ photo.exif.manufacturer }}</small>
+                                    <div *ngIf="getPhoto().exif.model">
+                                        <small>{{ 'Model:' }} {{ getPhoto().exif.model }}</small>
                                     </div>
-                                    <div *ngIf="photo.exif.model">
-                                        <small>{{ 'Model:' }} {{ photo.exif.model }}</small>
+                                    <div *ngIf="getPhoto().exif.exposure_time">
+                                        <small>{{ 'Exposure Time:' }} {{ getPhoto().exif.exposure_time }}</small>
                                     </div>
-                                    <div *ngIf="photo.exif.exposure_time">
-                                        <small>{{ 'Exposure Time:' }} {{ photo.exif.exposure_time }}</small>
+                                    <div *ngIf="getPhoto().exif.aperture">
+                                        <small>{{ 'Aperture:' }} {{ getPhoto().exif.aperture }}</small>
                                     </div>
-                                    <div *ngIf="photo.exif.aperture">
-                                        <small>{{ 'Aperture:' }} {{ photo.exif.aperture }}</small>
+                                    <div *ngIf="getPhoto().exif.iso">
+                                        <small>{{ 'ISO:' }} {{ getPhoto().exif.iso }}</small>
                                     </div>
-                                    <div *ngIf="photo.exif.iso">
-                                        <small>{{ 'ISO:' }} {{ photo.exif.iso }}</small>
+                                    <div *ngIf="getPhoto().exif.taken_at">
+                                        <small>{{ 'Taken At:' }} {{ getPhoto().exif.taken_at }}</small>
                                     </div>
                                 </div>
                             </div>
@@ -41,11 +41,11 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="form-group">
-                            <label class="btn btn-info btn-file" [class.disabled]="isLoading()">
+                            <label class="btn btn-info btn-file" [class.disabled]="isProcessing()">
                                 <i class="fa fa-upload" aria-hidden="true"></i>
-                                {{ 'Upload File' }}
+                                <span>{{ 'Upload File' }}</span>
                                 <file-select-input (onSelect)="upload($event)"
-                                                   [disabled]="isLoading()">
+                                                   [disabled]="isProcessing()">
                                 </file-select-input>
                             </label>
                         </div>
@@ -55,32 +55,31 @@
             <div class="col-md-8 col-md-pull-4">
                 <div class="form-horizontal">
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">Tags</label>
+                        <label class="col-sm-2 control-label">{{ 'Tags' }}</label>
                         <div class="col-sm-10">
-                            <tags-select-input [(tags)]="photo.tags"></tags-select-input>
+                            <tags-select-input [(tags)]="getPhoto().tags"></tags-select-input>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">Description</label>
+                        <label class="col-sm-2 control-label">{{ 'Description' }}</label>
                         <div class="col-sm-10">
-                            <textarea [(ngModel)]="photo.description"
+                            <textarea [(ngModel)]="getPhoto().description"
                                       class="form-control"
                                       rows="8"></textarea>
                         </div>
                     </div>
-                    <div class="hr-line-dashed"></div>
                     <div class="form-group">
-                        <div class="col-sm-4 col-sm-offset-2">
+                        <div class="col-sm-10 col-sm-offset-2">
                             <button (click)="save()"
-                                    [disabled]="isLoading()"
+                                    [disabled]="isProcessing()"
                                     class="btn btn-primary">
-                                {{ 'Save' }}
+                                <span>{{ 'Save' }}</span>
                             </button>
-                            <button *ngIf="photo.id"
+                            <button *ngIf="getPhoto().id"
                                     (click)="deletePhoto()"
-                                    [disabled]="isLoading()"
-                                    class="btn btn-danger">
-                                {{ 'Delete' }}
+                                    [disabled]="isProcessing()"
+                                    class="btn btn-danger pull-right">
+                                <span>{{ 'Delete' }}</span>
                             </button>
                         </div>
                     </div>

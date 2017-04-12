@@ -9,10 +9,12 @@ use Tooleks\Laravel\Presenter\Presenter;
  * Class PhotoPresenter.
  *
  * @property int id
- * @property int user_id
+ * @property int created_by_user_id
  * @property string absolute_url
+ * @property string avg_color
  * @property string created_at
  * @property string updated_at
+ * @property ExifPresenter exif
  * @property Collection thumbnails
  * @package Api\V1\Presenters
  */
@@ -25,17 +27,19 @@ class PhotoPresenter extends Presenter
     {
         return [
             'id' => 'id',
-            'user_id' => 'user_id',
-            'absolute_url' => function () {
-                return $this->getPresenteeAttribute('relative_url')
-                    ? url(config('app.url')) . $this->getPresenteeAttribute('relative_url')
-                    : null;
+            'created_by_user_id' => 'created_by_user_id',
+            'url' => function () {
+                $relativeUrl = $this->getPresenteeAttribute('relative_url');
+                return $relativeUrl ? url(config('main.storage.url')) . $relativeUrl : null;
             },
-            'created_at' => function () : string {
-                return $this->getPresenteeAttribute('created_at') ?? null;
+            'avg_color' => 'avg_color',
+            'created_at' => function () {
+                $createdAt = $this->getPresenteeAttribute('created_at');
+                return (string)$createdAt ?? null;
             },
-            'updated_at' => function () : string {
-                return $this->getPresenteeAttribute('updated_at') ?? null;
+            'updated_at' => function () {
+                $updatedAt = $this->getPresenteeAttribute('updated_at');
+                return (string)$updatedAt ?? null;
             },
             'exif' => function () {
                 return new ExifPresenter($this->getPresenteeAttribute('exif'));

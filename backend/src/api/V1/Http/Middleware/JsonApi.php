@@ -5,7 +5,7 @@ namespace Api\V1\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Class JsonApi.
@@ -24,9 +24,7 @@ class JsonApi
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if (!$request->wantsJson()) {
-            throw new BadRequestHttpException(trans('errors.http.400'));
-        }
+        $this->assertRequest($request);
 
         $response = $next($request);
 
@@ -34,22 +32,30 @@ class JsonApi
     }
 
     /**
-     * Create a JSON API response.
+     * Assert a request.
+     *
+     * @param Request $request
+     */
+    protected function assertRequest(Request $request)
+    {
+        if (!$request->wantsJson()) {
+            throw new HttpException(406, trans('errors.http.406'));
+        }
+    }
+
+    /**
+     * Create a response.
      *
      * @param Response $response
      * @return Response
      */
     protected function buildResponse(Response $response)
     {
-        $statusCode = $response->getStatusCode();
-        $headers = $response->headers->all();
-        $content = $response->getOriginalContent();
-
-        if ($statusCode === Response::HTTP_OK || $statusCode === Response::HTTP_CREATED) {
-            $response = response()->json([
-                'status' => true,
-                'data' => $content,
-            ], $statusCode, $headers);
+        if ($response->isSuccessful()) {
+            $statusCode = $response->getStatusCode();
+            $headers = $response->headers->all();
+            $content = $response->getOriginalContent();
+            $response = response()->json($content, $statusCode, $headers);
         }
 
         return $this->addHeaders($response);

@@ -7,10 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-<app>
-    <div style="height: 100%; width:100%; display:flex; align-items: center; justify-content: center; color: #a7b1c2;">
-        <h1>Loading...</h1>
-    </div>
-</app>
+<app id="app"></app>
+<script type="text/javascript">
+    (function () {
+        var app = document.getElementById('app');
+        app.innerHTML = `<div style="height: 100%; width:100%; display:flex; align-items: center; justify-content: center; color: #a7b1c2;"><h1>Loading...</h1></div>`;
+    })();
+</script>
 </body>
 </html>

@@ -20,10 +20,9 @@ class ThumbnailPresenter extends Presenter
     protected function getAttributesMap() : array
     {
         return [
-            'absolute_url' => function () {
-                return $this->getPresenteeAttribute('relative_url')
-                    ? url(config('app.url')) . $this->getPresenteeAttribute('relative_url')
-                    : null;
+            'url' => function () {
+                $relativeUrl = $this->getPresenteeAttribute('relative_url');
+                return $relativeUrl ? url(config('main.storage.url')) . $relativeUrl : null;
             },
             'width' => 'width',
             'height' => 'height',

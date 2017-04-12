@@ -1,30 +1,32 @@
 import {
     Component,
-    Inject,
     HostListener,
     Output,
     EventEmitter,
+    OnInit,
+} from '@angular/core';
+import {
     trigger,
     state,
     style,
     transition,
     animate
-} from '@angular/core';
-import {AuthProviderService, EnvService} from '../../../../shared/services';
+} from '@angular/animations';
+import {ScreenDetectorService, ApiService, AuthProviderService, AppService} from '../../../../lib';
 
 @Component({
     selector: 'sidebar',
-    template: require('./sidebar.component.html'),
-    styles: [require('./sidebar.component.css').toString()],
+    templateUrl: 'sidebar.component.html',
+    styleUrls: ['sidebar.component.css'],
     animations: [
         trigger('slideInOut', [
             state('in', style({
                 'transform': 'translate3d(0, 0, 0)',
-                'box-shadow': '1px 0 3px rgba(0, 0, 0, 0.25)'
+                'box-shadow': '1px 0 3px rgba(0, 0, 0, 0.25)',
             })),
             state('out', style({
                 'transform': 'translate3d(-220px, 0, 0)',
-                'box-shadow': 'none'
+                'box-shadow': 'none',
             })),
             transition('in => out', animate('200ms ease-in-out')),
             transition('out => in', animate('200ms ease-in-out'))
@@ -32,51 +34,58 @@ import {AuthProviderService, EnvService} from '../../../../shared/services';
         trigger('appearInOut', [
             state('in', style({
                 'display': 'block',
-                'opacity': '0.85'
+                'opacity': '0.85',
             })),
             state('out', style({
                 'display': 'none',
-                'opacity': '0'
+                'opacity': '0',
             })),
             transition('in => out', animate('200ms ease-in-out')),
             transition('out => in', animate('200ms ease-in-out'))
         ]),
     ],
 })
-export class SideBarComponent {
+export class SideBarComponent implements OnInit {
     @Output() onToggle:EventEmitter<any> = new EventEmitter<any>();
     @Output() onShow:EventEmitter<any> = new EventEmitter<any>();
     @Output() onHide:EventEmitter<any> = new EventEmitter<any>();
+    protected animationState:string;
+    protected tags:Array<any> = [];
 
-    private animationState:string;
+    constructor(protected app:AppService,
+                protected api:ApiService,
+                protected authProvider:AuthProviderService,
+                protected screenDetector:ScreenDetectorService) {
+        this.reset();
+        this.loadTags();
+    }
 
-    constructor(@Inject(AuthProviderService) private authProvider:AuthProviderService,
-                @Inject(EnvService) private env:EnvService) {
-        this.init();
+    ngOnInit():void {
+        this.reset();
     }
 
     @HostListener('window:resize', ['$event'])
     onWindowResize(event:any) {
-        this.init();
+        this.reset();
     }
 
-    init = () => {
-        this.isLargeDevice() ? this.show() : this.hide();
+    reset = ():void => {
+        this.screenDetector.isLargeScreen() ? this.show() : this.hide();
     };
 
-    show = () => {
+    show = ():void => {
         this.animationState = 'in';
         this.emitChange('onShow');
     };
 
-    hide = () => {
-        if (this.isSmallDevice()) {
+    hide = ():void => {
+        if (this.screenDetector.isSmallScreen()) {
             this.animationState = 'out';
-            this.emitChange('onHide');
         }
+        this.emitChange('onHide');
     };
 
-    toggle = () => {
+    toggle = ():void => {
         this.isVisible() ? this.hide() : this.show();
         this.emitChange('onToggle');
     };
@@ -85,19 +94,11 @@ export class SideBarComponent {
         return this.animationState === 'in';
     };
 
-    isLargeDevice = ():boolean => {
-        return window.innerWidth > 767;
+    emitChange = (event:string):void => {
+        this[event].emit({isVisible: this.isVisible()});
     };
 
-    isSmallDevice = ():boolean => {
-        return !this.isLargeDevice();
-    };
-
-    emitChange = (event:string) => {
-        this[event].emit({
-            isVisible: this.isVisible(),
-            isSmallDevice: this.isSmallDevice(),
-            isLargeDevice: this.isLargeDevice(),
-        });
+    protected loadTags = ():void => {
+        this.api.get('/tags', {params: {page: 1, per_page: 7}}).then((response:any) => this.tags = response.data);
     };
 }

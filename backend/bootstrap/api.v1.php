@@ -33,12 +33,12 @@ $app->singleton(
 
 $app->singleton(
     Illuminate\Contracts\Console\Kernel::class,
-    App\Console\Kernel::class
+    Console\Kernel::class
 );
 
 $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
-    Api\V1\Exceptions\JsonApiHandler::class
+    Api\V1\Exceptions\Handler::class
 );
 
 $app->register(Api\V1\Providers\ApiServiceProvider::class);

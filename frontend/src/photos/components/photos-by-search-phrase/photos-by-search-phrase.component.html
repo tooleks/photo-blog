@@ -1,0 +1,50 @@
+<div class="row">
+    <div class="col-sm-12">
+        <form>
+            <div class="form-group">
+                <div class="input-group">
+                    <input #inputSearch
+                           [ngModel]="queryParams['search_phrase']"
+                           name="search_phrase"
+                           type="search"
+                           (keyup.enter)="navigateToSearchPhotos(inputSearch.value)"
+                           placeholder="{{ 'Type any word then press enter' }}"
+                           class="form-control">
+                    <span class="input-group-btn">
+                        <button (click)="navigateToSearchPhotos(inputSearch.value)" type="button" class="btn btn-primary"
+                                title="{{ 'Search' }}">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <div *ngIf="isEmpty()" class="widget p-sm text-center">
+            <h2 class="m-xs">{{ 'No photos found' }}</h2>
+        </div>
+        <gallery #galleryComponent
+                 [images]="images"
+                 [defaultImageId]="queryParams['show']"
+                 [loadMoreCallback]="loadMorePhotos.bind(this)"
+                 (onOpenImage)="onShowPhoto($event)"
+                 (onCloseImage)="onHidePhoto($event)"
+                 [showEditImageButton]="authProvider.isAuthenticated()"
+                 (onEditImage)="authProvider.isAuthenticated() ? onEditPhoto($event) : null"
+                 [showDeleteImageButton]="false"
+                 infinite-scroll
+                 [infiniteScrollDisabled]="!hasMoreImages"
+                 [infiniteScrollDistance]="3"
+                 [infiniteScrollThrottle]="500"
+                 (scrolled)="loadMorePhotos()"
+        ></gallery>
+    </div>
+</div>
+<div *ngIf="!isEmpty() && hasMoreImages" class="text-center" style="margin-top: 20px;">
+    <button class="btn btn-primary" (click)="loadMorePhotos()" [disabled]="isProcessing()">
+        {{ !isProcessing() ? 'Load More' : 'Loading...' }}
+    </button>
+</div>

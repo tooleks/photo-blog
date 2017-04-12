@@ -1,0 +1,17 @@
+gallery-grid {
+    display: block;
+    width: 100%;
+}
+
+gallery-grid .gallery-grid-cell-wrapper {
+    display: block;
+    float: left;
+}
+
+gallery-grid .gallery-grid-cell {
+    padding: 1px;
+}
+
+gallery-grid .gallery-grid-item {
+    cursor: pointer;
+}

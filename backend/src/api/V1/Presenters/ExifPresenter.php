@@ -8,6 +8,12 @@ use Tooleks\Laravel\Presenter\Presenter;
 /**
  * Class ExifPresenter.
  *
+ * @property string manufacturer
+ * @property string model
+ * @property string exposure_time
+ * @property string aperture
+ * @property string iso
+ * @property string taken_at
  * @package Api\V1\Presenters
  */
 class ExifPresenter extends Presenter
@@ -24,15 +30,15 @@ class ExifPresenter extends Presenter
                 $exposureTime = $this->getPresenteeAttribute('data.ExposureTime');
                 if ($exposureTime) {
                     list($numerator, $denominator) = explode('/', $exposureTime);
-                    $exposureTime = '1/' . $denominator / $numerator;
+                    $exposureTime = '1/' . (int)($denominator / $numerator);
                 }
                 return $exposureTime ?? null;
             },
             'aperture' => 'data.COMPUTED.ApertureFNumber',
             'iso' => 'data.ISOSpeedRatings',
             'taken_at' => function () {
-                $takenAt = $this->getPresenteeAttribute('data.DateTime');
-                return $takenAt !== null ? (string)(new Carbon($takenAt)) : null;
+                $takenAt = $this->getPresenteeAttribute('data.DateTimeOriginal');
+                return $takenAt ? (string)(new Carbon($takenAt)) : null;
             },
         ];
     }

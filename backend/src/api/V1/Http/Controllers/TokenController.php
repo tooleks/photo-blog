@@ -2,38 +2,31 @@
 
 namespace Api\V1\Http\Controllers;
 
-use Api\V1\Http\Requests\CreateToken;
+use Api\V1\Http\Requests\CreateTokenRequest;
 use Core\Models\User;
-use Core\DataServices\User\Contracts\UserDataService;
+use Core\DataProviders\User\Contracts\UserDataProvider;
 use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 /**
  * Class TokenController.
  *
- * @property UserDataService userDataService
+ * @property Guard guard
+ * @property UserDataProvider userDataProvider
  * @package Api\V1\Http\Controllers
  */
-class TokenController extends ResourceController
+class TokenController extends Controller
 {
     /**
      * TokenController constructor.
      *
-     * @param Request $request
      * @param Guard $guard
-     * @param string $presenterClass
-     * @param UserDataService $userDataService
+     * @param UserDataProvider $userDataProvider
      */
-    public function __construct(
-        Request $request,
-        Guard $guard,
-        string $presenterClass,
-        UserDataService $userDataService
-    )
+    public function __construct(Guard $guard, UserDataProvider $userDataProvider)
     {
-        parent::__construct($request, $guard, $presenterClass);
-
-        $this->userDataService = $userDataService;
+        $this->guard = $guard;
+        $this->userDataProvider = $userDataProvider;
     }
 
     /**
@@ -46,28 +39,26 @@ class TokenController extends ResourceController
      * @apiParam {String{1..255}} email User's email address.
      * @apiParam {String{1..255}} password User's password.
      * @apiSuccessExample {json} Success-Response:
-     *  {
-     *      "status": true,
-     *      "data": {
-     *          "user_id": 1,
-     *          "api_token": "user_api_token_string"
-     *      }
-     *  }
+     * HTTP/1.1 201 Created
+     * {
+     *     "user_id": 1,
+     *     "api_token": "user_api_token_string"
+     * }
      */
 
     /**
      * Create a token.
      *
-     * @param CreateToken $request
+     * @param CreateTokenRequest $request
      * @return User
      */
-    public function create(CreateToken $request) : User
+    public function create(CreateTokenRequest $request) : User
     {
-        $user = $this->userDataService->getByCredentials($request->get('email'), $request->get('password'));
+        $user = $this->userDataProvider->getByCredentials($request->get('email'), $request->get('password'));
 
         $user->generateApiToken();
 
-        $this->userDataService->save($user);
+        $this->userDataProvider->save($user);
 
         $this->guard->setUser($user);
 

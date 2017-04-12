@@ -97,7 +97,7 @@ return [
         'tags.*.text' => [
             'required' => 'The tags field is required.',
         ],
-        'uploaded_photo_id' => [
+        'photo_id' => [
             'required' => 'The file upload is required.',
         ],
     ],
@@ -114,5 +114,20 @@ return [
     */
 
     'attributes' => [],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Custom Model Validation Attributes
+    |--------------------------------------------------------------------------
+    |
+    */
+
+    'model' => [
+        'subscription' => [
+            'email' => [
+                'unique' => 'This email address is already subscribed for receiving the website updates.',
+            ],
+        ],
+    ],
 
 ];

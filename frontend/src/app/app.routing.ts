@@ -1,12 +1,20 @@
 import {ModuleWithProviders} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
-import {SignInFormComponent, SignOutComponent, PageNotFoundComponent} from './components';
+import {
+    AboutMeComponent,
+    ContactMeFormComponent,
+    PageNotFoundComponent,
+    SignInFormComponent,
+    SignOutComponent,
+    SubscriptionFormComponent,
+    UnsubscriptionComponent,
+} from './components';
 
 const AppRoutes:Routes = [
     {
         path: '',
         redirectTo: '/photos',
-        pathMatch: 'full'
+        pathMatch: 'full',
     },
     {
         path: 'signin',
@@ -15,6 +23,26 @@ const AppRoutes:Routes = [
     {
         path: 'signout',
         component: SignOutComponent,
+    },
+    {
+        path: 'about-me',
+        component: AboutMeComponent,
+    },
+    {
+        path: 'contact-me',
+        component: ContactMeFormComponent,
+    },
+    {
+        path: 'subscription',
+        component: SubscriptionFormComponent,
+    },
+    {
+        path: 'unsubscription/:token',
+        component: UnsubscriptionComponent,
+    },
+    {
+        path: '404',
+        component: PageNotFoundComponent
     },
     {
         path: '**',

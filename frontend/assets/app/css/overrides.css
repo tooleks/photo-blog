@@ -1,0 +1,47 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+button, a {
+    outline: 0;
+    cursor: pointer;
+}
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+.file-box .file .icon,
+.file-box .file .image {
+    height: auto;
+}
+
+.ng2-tag-input {
+    border: 1px solid #e5e6e7 !important;
+    border-radius: 1px !important;
+    padding: 6px 12px !important;
+}
+
+.ng2-tag-input:focus {
+    border-color: #1ab394 !important;
+}

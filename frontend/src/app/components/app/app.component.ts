@@ -1,63 +1,71 @@
-import {Component, Inject, ViewChild} from '@angular/core';
-import {EnvService, TitleService, AuthProviderService, ScrollFreezerService} from '../../../shared/services';
-
-import '../../../../public/app/css/styles.css';
+import {Component, OnInit} from '@angular/core'
+import {Router, NavigationEnd} from '@angular/router';
+import {
+    AppService,
+    MetaTagsService,
+    TitleService,
+    AuthProviderService,
+    ScrollFreezerService,
+    ScreenDetectorService,
+} from '../../../lib';
+import '../../../../assets/static/img/meta_image.jpg'
 
 @Component({
     selector: 'app',
-    template: require('./app.component.html'),
-    styles: [require('./app.component.css').toString()],
+    templateUrl: 'app.component.html',
+    styleUrls: ['app.component.css']
 })
-export class AppComponent {
-    @ViewChild('sideBarComponent') sideBarComponent:any;
+export class AppComponent implements OnInit {
+    protected appContentStyles:{overflow:string} = {overflow: ''};
 
-    constructor(@Inject(EnvService) private env:EnvService,
-                @Inject(TitleService) private title:TitleService,
-                @Inject(AuthProviderService) private authProvider:AuthProviderService,
-                @Inject(ScrollFreezerService) private scrollFreezer:ScrollFreezerService) {
+    constructor(protected router:Router,
+                protected app:AppService,
+                protected title:TitleService,
+                protected metaTags:MetaTagsService,
+                protected authProvider:AuthProviderService,
+                protected screenDetector:ScreenDetectorService,
+                protected scrollFreezer:ScrollFreezerService) {
     }
 
-    ngOnInit() {
+    ngOnInit():void {
+        this.initTitle();
+        this.initMeta();
+        this.initRouterSubscribers();
+        this.initScrollFreezerSubscribers();
+    }
+
+    protected initTitle = ():void => {
         this.title.setTitle();
-    }
-
-    private onSwipeLeft = (event:any) => {
-        // Prevent firing event on 'gallery' component swipeleft event, as it has an own handler.
-        if (event.target.className.search('gl-') !== -1) {
-            return;
-        }
-
-        this.sideBarComponent.hide();
     };
 
-    private onSwipeRight = (event:any) => {
-        // Prevent firing event on 'gallery' component swipeleft event, as it has an own handler.
-        if (event.target.className.search('gl-') !== -1) {
-            return;
-        }
-
-        this.sideBarComponent.show();
+    protected initMeta = ():void => {
+        this.metaTags.setWebsiteName(this.app.getName());
+        this.metaTags.setUrl(this.app.getUrl());
+        this.metaTags.setTitle(this.title.getPageName());
+        this.metaTags.setDescription(this.app.getDescription());
+        this.metaTags.setImage(this.app.getUrl() + '/assets/static/meta_image.jpg');
     };
 
-    private onShowSideBar = (event:any) => {
-        if (event.isSmallDevice) {
-            this.scrollFreezer.freezeBackgroundScroll();
-        }
+    protected initRouterSubscribers = ():void => {
+        this.router.events
+            .filter((event:any) => event instanceof NavigationEnd)
+            .subscribe((event:NavigationEnd) => this.metaTags.setUrl(this.app.getUrl() + event.url));
     };
 
-    private onHideSideBar = (event:any) => {
-        this.scrollFreezer.unfreezeBackgroundScroll();
+    protected initScrollFreezerSubscribers = ():void => {
+        this.scrollFreezer.freezed.subscribe(() => this.appContentStyles.overflow = 'hidden');
+        this.scrollFreezer.unfreezed.subscribe(() => this.appContentStyles.overflow = '');
     };
 
-    private onToggleSideBar = (event:any) => {
-        if (event.isVisible) {
-            this.scrollFreezer.freezeBackgroundScroll();
-        } else {
-            this.scrollFreezer.unfreezeBackgroundScroll();
-        }
+    protected onShowSideBar = (event:any):void => {
+        this.screenDetector.isSmallScreen() && this.scrollFreezer.freeze()
     };
 
-    private getCurrentYear = () => {
-        return (new Date).getFullYear();
+    protected onHideSideBar = (event:any):void => {
+        this.scrollFreezer.unfreeze();
+    };
+
+    protected onToggleSideBar = (event:any):void => {
+        event.isVisible ? this.onShowSideBar(event) : this.onHideSideBar(event);
     };
 }

@@ -10,14 +10,16 @@ use Illuminate\Database\Eloquent\Model;
  * Class Photo.
  *
  * @property int id
- * @property int user_id
+ * @property int created_by_user_id
  * @property string description
  * @property string path
  * @property string relative_url
+ * @property string avg_color
  * @property bool is_published
  * @property Carbon created_at
  * @property Carbon updated_at
  * @property string directory_path
+ * @property User $createdByUser
  * @property Exif $exif
  * @property Collection $tags
  * @property Collection $thumbnails
@@ -25,6 +27,13 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Photo extends Model
 {
+    /**
+     * @inheritdoc
+     */
+    protected $attributes = [
+        'description' => '',
+    ];
+
     /**
      * @inheritdoc
      */
@@ -44,10 +53,10 @@ class Photo extends Model
      * @inheritdoc
      */
     protected $fillable = [
-        'user_id',
+        'description',
         'path',
         'relative_url',
-        'description',
+        'avg_color',
     ];
 
     /**
@@ -59,11 +68,22 @@ class Photo extends Model
 
         static::deleting(function (Photo $photo) {
             $photo->exif()->delete();
-            $photo->thumbnails()->delete();
             $photo->thumbnails()->detach();
-            $photo->tags()->delete();
             $photo->tags()->detach();
         });
+    }
+
+    /**
+     * Setter for the 'created_by_user_id' attribute.
+     *
+     * @param int $createdByUserId
+     * @return $this
+     */
+    public function setCreatedByUserIdAttribute($createdByUserId)
+    {
+        $this->attributes['created_by_user_id'] = (int)$createdByUserId;
+
+        return $this;
     }
 
     /**
@@ -100,6 +120,14 @@ class Photo extends Model
     public function getDirectoryPathAttribute()
     {
         return $this->path ? pathinfo($this->path, PATHINFO_DIRNAME) : null;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function createdByUser()
+    {
+        return $this->belongsTo(User::class, 'created_by_user_id');
     }
 
     /**

@@ -32,6 +32,6 @@ class ExifFetcher implements ExifFetcherContract
         */
         $exif = @exif_read_data($filePath);
 
-        return $exif ? $exif : [];
+        return $exif ?? [];
     }
 }

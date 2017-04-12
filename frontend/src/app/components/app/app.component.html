@@ -1,21 +1,28 @@
-<div id="wrapper" (swiperight)="onSwipeRight($event)" (swipeleft)="onSwipeLeft($event)">
+<div class="app-wrapper">
     <sidebar #sideBarComponent
              (onToggle)="onToggleSideBar($event)"
              (onShow)="onShowSideBar($event)"
-             (onHide)="onHideSideBar($event)"></sidebar>
+             (onHide)="onHideSideBar($event)">
+    </sidebar>
     <topbar (onNavClick)="sideBarComponent.toggle()"></topbar>
-    <div id="page-wrapper" class="gray-bg" [style.overflow]="scrollFreezer.getBackgroundOverflow()">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="wrapper wrapper-content">
-                    <router-outlet></router-outlet>
-                </div>
-            </div>
-        </div>
-        <div class="footer">
-            <span>
-                Copyright &copy; <strong>{{ env.get('appName') }}</strong> {{ getCurrentYear() }}
-            </span>
-        </div>
+    <div class="app-content" [ngStyle]="appContentStyles">
+        <router-outlet></router-outlet>
     </div>
+    <bottombar></bottombar>
 </div>
+<notices></notices>
+<go-top-button [html]="'<i class=\'fa fa-arrow-up\'></i>'"
+               [animate]="true"
+               [speed]="30"
+               [acceleration]="50"
+               [styles]="{
+                    'width': '40px',
+                    'height': '40px',
+                    'border-radius': '40px',
+                    'top': 'auto',
+                    'right': '24px',
+                    'bottom': '20px',
+                    'opacity': '1'
+                   }"
+               title="{{ 'Go to top' }}">
+</go-top-button>

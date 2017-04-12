@@ -5,7 +5,7 @@ namespace Api\V1\Http\Middleware;
 use Closure;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Middleware\ThrottleRequests as CoreThrottleRequests;
+use Illuminate\Routing\Middleware\ThrottleRequests as IlluminateThrottleRequests;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -14,7 +14,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  *
  * @package Api\V1\Http\Middleware
  */
-class ThrottleRequests extends CoreThrottleRequests
+class ThrottleRequests extends IlluminateThrottleRequests
 {
     /**
      * Handle an incoming request.
@@ -82,6 +82,6 @@ class ThrottleRequests extends CoreThrottleRequests
 
         $headers = $this->buildHeaders($maxAttempts, $remainingAttempts, $retryAfter);
 
-        throw new HttpException(429, trans('errors.http.429'), null, $headers);
+        throw new HttpException(Response::HTTP_TOO_MANY_REQUESTS, trans('errors.http.429'), null, $headers);
     }
 }

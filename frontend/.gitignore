@@ -1,6 +1,6 @@
-/src/**/*.js
-/src/**/*.js.map
+/node_modules/
+/dist/
+/lib/
+*.log
 
 /env.ts
-/env.js
-/env.js.map

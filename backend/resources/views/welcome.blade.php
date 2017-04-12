@@ -70,7 +70,7 @@
 
                 <div class="links">
                     <a href="<?= config('main.repository.url') ?>" target="_blank">GitHub Repository</a>
-                    <a href="<?= config('main.documentation.api.url') ?>" target="_blank">API Documentation</a>
+                    <a href="<?= config('main.documentation.rest_api.url') ?>" target="_blank">API Documentation</a>
                 </div>
             </div>
         </div>

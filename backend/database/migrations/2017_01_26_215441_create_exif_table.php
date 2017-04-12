@@ -14,9 +14,9 @@ class CreateExifTable extends Migration
     public function up()
     {
         Schema::create('exif', function (Blueprint $table) {
-            $table->increments('id')->unsigned();
-            $table->integer('photo_id')->unsigned();
-            $table->longText('data')->nullable();
+            $table->increments('id');
+            $table->unsignedInteger('photo_id');
+            $table->longText('data');
         });
     }
 

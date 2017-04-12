@@ -1,34 +1,53 @@
 import {NgModule} from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
+import {CommonModule} from '@angular/common';
 import {HttpModule, JsonpModule} from '@angular/http';
-import {AppComponent, SideBarComponent, TopBarComponent, PageNotFoundComponent, SignInFormComponent, SignOutComponent} from './components';
+import {TransferHttpModule} from '../modules/transfer-http/transfer-http.module';
+import {GoTopButtonModule} from 'ng2-go-top-button';
+import {SharedModule, NoticesModule} from '../lib';
+import {PhotosModule} from '../photos';
 import {AppRouting, AppRoutingProviders} from './app.routing';
-import {SharedModule} from '../shared/shared.module';
-import {PhotosModule} from '../photos/photos.module';
+import {
+    AboutMeComponent,
+    AppComponent,
+    ContactMeFormComponent,
+    PageNotFoundComponent,
+    BottomBarComponent,
+    SideBarComponent,
+    TopBarComponent,
+    SignInFormComponent,
+    SignOutComponent,
+    SubscriptionFormComponent,
+    UnsubscriptionComponent,
+} from './components';
 
 @NgModule({
     imports: [
-        BrowserModule,
+        CommonModule,
         HttpModule,
+        TransferHttpModule,
         JsonpModule,
+        GoTopButtonModule,
         AppRouting,
         SharedModule,
         PhotosModule,
+        NoticesModule,
     ],
     declarations: [
+        AboutMeComponent,
         AppComponent,
+        ContactMeFormComponent,
+        PageNotFoundComponent,
+        BottomBarComponent,
         SideBarComponent,
         TopBarComponent,
-        PageNotFoundComponent,
         SignInFormComponent,
         SignOutComponent,
+        SubscriptionFormComponent,
+        UnsubscriptionComponent,
     ],
     exports: [],
     providers: [
         AppRoutingProviders,
-    ],
-    bootstrap: [
-        AppComponent,
     ],
 })
 export class AppModule {

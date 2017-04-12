@@ -1,0 +1,56 @@
+<div *ngIf="image">
+    <div class="gallery-backdrop"></div>
+    <div class="gallery-container"
+         (swiperight)="clickPrevImage()"
+         (swipeleft)="clickNextImage()">
+        <i class="gallery-spinner"
+           [ngClass]="!loaded ? 'fa fa-circle-o-notch fa-spin fa-2x' : ''"
+           aria-hidden="true"></i>
+        <div class="gallery-view">
+            <div *ngIf="loaded" class="gallery-img-container">
+                <img (click)="clickNextImage()"
+                     [src]="image.getLargeSizeUrl()"
+                     [alt]="image.getDescription()"
+                     [title]="image.getDescription()"
+                     class="gallery-img">
+            </div>
+            <div *ngIf="loaded && visibleImageInfo" class="gallery-info">
+                {{ image.getDescription() }}<br>{{ image.getExif() }}
+            </div>
+        </div>
+        <div class="gallery-actions">
+            <button *ngIf="showPrevImageButton"
+                    (click)="clickPrevImage()"
+                    title="{{ 'Previous' }}"
+                    type="button"
+                    class="gallery-action gallery-prev"><i class="fa fa-chevron-left gallery-icon" aria-hidden="true"></i></button>
+            <button *ngIf="showNextImageButton"
+                    (click)="clickNextImage()"
+                    title="{{ 'Next' }}"
+                    type="button"
+                    class="gallery-action gallery-next"><i class="fa fa-chevron-right gallery-icon" aria-hidden="true"></i></button>
+        </div>
+        <div class="gallery-navbar">
+            <button *ngIf="showCloseImageButton"
+                    (click)="clickCloseImage()"
+                    title="{{ 'Close' }}"
+                    type="button"
+                    class="gallery-action gallery-right"><i class="fa fa-close gallery-icon" aria-hidden="true"></i></button>
+            <button *ngIf="showImageInfoButton"
+                    (click)="clickImageInfo()"
+                    title="{{ 'Info' }}"
+                    type="button"
+                    class="gallery-action gallery-left"><i class="fa fa-info gallery-icon" aria-hidden="true"></i></button>
+            <button *ngIf="showEditImageButton"
+                    (click)="clickEditImage()"
+                    title="{{ 'Edit' }}"
+                    type="button"
+                    class="gallery-action gallery-left"><i class="fa fa-pencil gallery-icon" aria-hidden="true"></i></button>
+            <button *ngIf="showDeleteImageButton"
+                    (click)="clickDeleteImage()"
+                    title="{{ 'Delete' }}"
+                    type="button"
+                    class="gallery-action gallery-left"><i class="fa fa-trash gallery-icon" aria-hidden="true"></i></button>
+        </div>
+    </div>
+</div>

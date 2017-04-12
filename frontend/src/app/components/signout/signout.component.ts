@@ -1,27 +1,26 @@
-import {Component, Inject} from '@angular/core';
-import {AuthService, NavigatorServiceProvider, NavigatorService} from '../../../shared/services';
-import {User} from '../../../shared/models';
+import {Component, OnInit} from '@angular/core';
+import {AuthService, NavigatorServiceProvider, NavigatorService} from '../../../lib';
 
 @Component({
     selector: 'signout',
     template: '',
 })
-export class SignOutComponent {
-    private navigator:NavigatorService;
+export class SignOutComponent implements OnInit {
+    protected navigator:NavigatorService;
 
-    constructor(@Inject(AuthService) private auth:AuthService,
-                @Inject(NavigatorServiceProvider) navigatorProvider:NavigatorServiceProvider) {
+    constructor(protected auth:AuthService, navigatorProvider:NavigatorServiceProvider) {
         this.navigator = navigatorProvider.getInstance();
     }
 
-    ngOnInit() {
+    ngOnInit():void {
         this.auth
             .signOut()
-            .then((user:User) => {
+            .then((user:any) => {
                 this.navigator.navigate(['/signin']);
             })
             .catch((error:any) => {
                 this.navigator.navigate(['/signin']);
+                throw error;
             });
     }
 }
