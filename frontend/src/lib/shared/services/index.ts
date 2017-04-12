@@ -1,7 +1,6 @@
 export * from './api';
 export * from './app';
 export * from './auth';
-export * from './env';
 export * from './environment-detector';
 export * from './local-storage/';
 export * from './lock-process';

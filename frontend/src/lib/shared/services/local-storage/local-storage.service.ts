@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {EnvironmentDetectorService} from '../environment-detector/environment-detector.service';
+import {EnvironmentDetectorService} from '../environment-detector';
 
 @Injectable()
 export class LocalStorageService {

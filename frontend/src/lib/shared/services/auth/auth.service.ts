@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
-import {AuthProviderService} from './auth-provider.service';
 import {UserDataProviderService} from '../user-data-provider';
+import {AuthProviderService} from './auth-provider.service';
 
 @Injectable()
 export class AuthService {

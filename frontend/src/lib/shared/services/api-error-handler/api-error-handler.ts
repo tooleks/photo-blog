@@ -8,8 +8,7 @@ import {NoticesService} from '../../../notices';
 export class ApiErrorHandler extends BaseApiErrorHandler {
     protected navigator:NavigatorService;
 
-    constructor(protected notices:NoticesService,
-                protected navigatorProvider:NavigatorServiceProvider) {
+    constructor(protected notices:NoticesService, protected navigatorProvider:NavigatorServiceProvider) {
         super();
         this.navigator = navigatorProvider.getInstance();
     }

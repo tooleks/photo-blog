@@ -1,10 +1,13 @@
 import {Injectable} from '@angular/core';
-import {EnvService} from '../env/env.service';
 
 @Injectable()
 export class AppService {
-    constructor(protected env:EnvService) {
+    constructor(protected env:any) {
     }
+
+    isDebugMode = ():boolean => {
+        return Boolean(this.env.get('debugMode'));
+    };
 
     getApiUrl = ():string => {
         return String(this.env.get('apiUrl'));

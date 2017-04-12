@@ -10,7 +10,6 @@ import {
     AppService,
     AuthService,
     AuthProviderService,
-    EnvService,
     EnvironmentDetectorService,
     LocalStorageService,
     LockProcessServiceProvider,
@@ -23,17 +22,18 @@ import {
     TitleService,
     UserDataProviderService,
 } from './services';
-import {ApiErrorHandler} from './services/api-error-handler'
+import {ApiErrorHandler} from './services/api-error-handler';
 import {FileSelectInputComponent, TagsSelectInputComponent} from './components';
 import {SafeHtmlPipe} from './pipes';
+import {EnvModule, EnvService} from '../env';
 import {NoticesModule} from '../notices';
-import {env} from '../../../env'
 
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
         TagInputModule,
+        EnvModule,
         NoticesModule,
     ],
     declarations: [
@@ -51,33 +51,32 @@ import {env} from '../../../env'
     providers: [
         {
             provide: ApiService,
-            deps: [Http, BaseApiErrorHandler, AuthProviderService],
-            useFactory(http:Http, errorHandler:BaseApiErrorHandler, authProvider:AuthProviderService) {
-                return new ApiService(
-                    http,
-                    errorHandler,
-                    env.apiUrl,
-                    () => {
-                        const headers = {'Accept': 'application/json'};
-                        if (authProvider.hasAuth()) {
-                            headers['Authorization'] = `Bearer ${authProvider.getAuthApiToken()}`;
-                        }
-                        return headers;
-                    },
-                    () => {
-                        return env.debug ? {'XDEBUG_SESSION_START': 'START'} : {};
+            deps: [Http, BaseApiErrorHandler, AppService, AuthProviderService],
+            useFactory(http:Http, errorHandler:BaseApiErrorHandler, app:AppService, authProvider:AuthProviderService) {
+                return new ApiService(http, errorHandler, app.getApiUrl(), () => {
+                    const headers = {'Accept': 'application/json'};
+                    if (authProvider.hasAuth()) {
+                        headers['Authorization'] = `Bearer ${authProvider.getAuthApiToken()}`;
                     }
-                );
+                    return headers;
+                }, () => {
+                    return app.isDebugMode() ? {'XDEBUG_SESSION_START': 'START'} : {};
+                });
             },
         },
         {
             provide: BaseApiErrorHandler,
             useClass: ApiErrorHandler,
         },
-        AppService,
+        {
+            provide: AppService,
+            deps: [EnvService],
+            useFactory(env:EnvService) {
+                return new AppService(env);
+            },
+        },
         AuthService,
         AuthProviderService,
-        EnvService,
         EnvironmentDetectorService,
         LocalStorageService,
         LockProcessServiceProvider,
