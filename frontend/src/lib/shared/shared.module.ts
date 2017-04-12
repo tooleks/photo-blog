@@ -1,6 +1,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
+import {Http} from '@angular/http';
 import {Title} from '@angular/platform-browser';
 import {TagInputModule} from 'ng2-tag-input';
 import {
@@ -26,6 +27,7 @@ import {ApiErrorHandler} from './services/api-error-handler'
 import {FileSelectInputComponent, TagsSelectInputComponent} from './components';
 import {SafeHtmlPipe} from './pipes';
 import {NoticesModule} from '../notices';
+import {env} from '../../../env'
 
 @NgModule({
     imports: [
@@ -47,7 +49,27 @@ import {NoticesModule} from '../notices';
         SafeHtmlPipe,
     ],
     providers: [
-        ApiService,
+        {
+            provide: ApiService,
+            deps: [Http, BaseApiErrorHandler, AuthProviderService],
+            useFactory(http:Http, errorHandler:BaseApiErrorHandler, authProvider:AuthProviderService) {
+                return new ApiService(
+                    http,
+                    errorHandler,
+                    env.apiUrl,
+                    () => {
+                        const headers = {'Accept': 'application/json'};
+                        if (authProvider.hasAuth()) {
+                            headers['Authorization'] = `Bearer ${authProvider.getAuthApiToken()}`;
+                        }
+                        return headers;
+                    },
+                    () => {
+                        return env.debug ? {'XDEBUG_SESSION_START': 'START'} : {};
+                    }
+                );
+            },
+        },
         {
             provide: BaseApiErrorHandler,
             useClass: ApiErrorHandler,

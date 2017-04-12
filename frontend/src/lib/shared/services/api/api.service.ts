@@ -2,52 +2,50 @@ import {Injectable} from '@angular/core';
 import {Http, Headers, Response, URLSearchParams} from '@angular/http';
 import 'rxjs/Rx';
 import {ApiErrorHandler} from './api-error-handler';
-import {EnvService} from '../env';
-import {AuthProviderService} from '../auth/auth-provider.service';
 
 @Injectable()
 export class ApiService {
-    url:string;
-    debug:boolean;
-
-    constructor(public env:EnvService,
-                public http:Http,
+    constructor(public http:Http,
                 public errorHandler:ApiErrorHandler,
-                public authProvider:AuthProviderService) {
-        this.url = this.env.get('apiUrl');
-        this.debug = this.env.get('debug');
+                public apiUrl:string,
+                public defaultHeadersCallback:any = null,
+                public defaultSearchParamsCallback:any = null) {
     }
 
-    get = (url:string, options?:any):Promise<any> => {
+    get = (relativeUrl:string, options?:any):Promise<any> => {
         return this.http
-            .get(this.getAbsoluteUrl(url), this.initializeOptions(options))
+            .get(this.getApiAbsoluteUrl(relativeUrl), this.initializeOptions(options))
             .toPromise()
             .then(this.extractResponseData)
             .catch(this.errorHandler.handleResponse);
     };
 
-    post = (url:string, body?:any, options?:any):Promise<any> => {
+    post = (relativeUrl:string, body?:any, options?:any):Promise<any> => {
         return this.http
-            .post(this.getAbsoluteUrl(url), this.initializeBody(body), this.initializeOptions(options))
+            .post(this.getApiAbsoluteUrl(relativeUrl), this.initializeBody(body), this.initializeOptions(options))
             .toPromise()
             .then(this.extractResponseData)
             .catch(this.errorHandler.handleResponse);
     };
 
-    put = (url:string, body?:any, options?:any):Promise<any> => {
+    put = (relativeUrl:string, body?:any, options?:any):Promise<any> => {
         return this.http
-            .put(this.getAbsoluteUrl(url), this.initializeBody(body), this.initializeOptions(options))
+            .put(this.getApiAbsoluteUrl(relativeUrl), this.initializeBody(body), this.initializeOptions(options))
             .toPromise()
             .then(this.extractResponseData)
             .catch(this.errorHandler.handleResponse);
     };
 
-    delete = (url:string, options?:any):Promise<any> => {
+    delete = (relativeUrl:string, options?:any):Promise<any> => {
         return this.http
-            .delete(this.getAbsoluteUrl(url), this.initializeOptions(options))
+            .delete(this.getApiAbsoluteUrl(relativeUrl), this.initializeOptions(options))
             .toPromise()
             .then(this.extractResponseData)
             .catch(this.errorHandler.handleResponse);
+    };
+
+    protected getApiAbsoluteUrl = (relativeUrl:string):string => {
+        return this.apiUrl + relativeUrl;
     };
 
     protected initializeOptions = (options?:any) => {
@@ -59,9 +57,9 @@ export class ApiService {
     };
 
     protected initializeHeaders = (headers?:any):Headers => {
-        let initializedHeaders = this.getDefaultHeaders();
+        const initializedHeaders = this.getDefaultHeaders();
         headers = headers || {};
-        for (var name in headers) {
+        for (let name in headers) {
             if (headers.hasOwnProperty(name)) {
                 initializedHeaders.append(name, headers[name]);
             }
@@ -70,18 +68,20 @@ export class ApiService {
     };
 
     protected getDefaultHeaders = ():Headers => {
-        let defaultHeaders = new Headers;
-        defaultHeaders.append('Accept', 'application/json');
-        if (this.authProvider.hasAuth()) {
-            defaultHeaders.append('Authorization', 'Bearer ' + this.authProvider.getAuthApiToken());
+        const defaultHeaders = new Headers;
+        const rawDefaultHeaders = this.defaultHeadersCallback ? this.defaultHeadersCallback() : {};
+        for (let property in rawDefaultHeaders) {
+            if (rawDefaultHeaders.hasOwnProperty(property)) {
+                defaultHeaders.append(property, rawDefaultHeaders[property]);
+            }
         }
         return defaultHeaders;
     };
 
     protected initializeSearchParams = (searchParams?:any):URLSearchParams => {
-        let initializedSearchParams = this.getDefaultSearchParams();
+        const initializedSearchParams = this.getDefaultSearchParams();
         searchParams = searchParams || {};
-        for (var name in searchParams) {
+        for (let name in searchParams) {
             if (searchParams.hasOwnProperty(name)) {
                 initializedSearchParams.set(name, searchParams[name]);
             }
@@ -90,19 +90,18 @@ export class ApiService {
     };
 
     protected getDefaultSearchParams = ():URLSearchParams => {
-        let defaultSearchParams = new URLSearchParams;
-        if (this.debug) {
-            defaultSearchParams.set('XDEBUG_SESSION_START', 'START');
+        const defaultSearchParams = new URLSearchParams;
+        const rawDefaultSearchParams = this.defaultSearchParamsCallback ? this.defaultSearchParamsCallback() : {};
+        for (let property in rawDefaultSearchParams) {
+            if (rawDefaultSearchParams.hasOwnProperty(property)) {
+                defaultSearchParams.set(property, rawDefaultSearchParams[property]);
+            }
         }
         return defaultSearchParams;
     };
 
     protected initializeBody = (body?:any) => {
         return body || {};
-    };
-
-    protected getAbsoluteUrl = (relativeUrl:string):string => {
-        return this.url + relativeUrl;
     };
 
     public extractResponseData = (response:Response):any => {
