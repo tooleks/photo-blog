@@ -1,4 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core'
+import {Router, NavigationEnd} from '@angular/router';
 import {
     AppService,
     MetaTagsService,
@@ -17,7 +18,8 @@ export class AppComponent implements OnInit {
     @ViewChild('sideBarComponent') sideBarComponent:any;
     protected appContentStyles:{overflow:string} = {overflow: ''};
 
-    constructor(protected app:AppService,
+    constructor(protected router:Router,
+                protected app:AppService,
                 protected title:TitleService,
                 protected metaTags:MetaTagsService,
                 protected authProvider:AuthProviderService,
@@ -27,6 +29,7 @@ export class AppComponent implements OnInit {
     ngOnInit():void {
         this.initTitle();
         this.initMeta();
+        this.initRouterSubscribers();
         this.initScrollFreezerSubscribers();
     }
 
@@ -40,6 +43,12 @@ export class AppComponent implements OnInit {
         this.metaTags.setTitle(this.title.getPageName());
         this.metaTags.setDescription(this.app.getDescription());
         this.metaTags.setImage(this.app.getUrl() + '/assets/static/meta_image.jpg');
+    };
+
+    protected initRouterSubscribers = ():void => {
+        this.router.events
+            .filter((event:any) => event instanceof NavigationEnd)
+            .subscribe((event:NavigationEnd) => this.metaTags.setUrl(this.app.getUrl() + event.url));
     };
 
     protected initScrollFreezerSubscribers = ():void => {
