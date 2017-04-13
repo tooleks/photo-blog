@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core'
 import {Router, NavigationEnd} from '@angular/router';
 import {MetaTagsService} from '../../../core';
+import {TransferState} from '../../../sys';
 import {
     AppService,
     TitleService,
@@ -13,12 +14,13 @@ import '../../../../assets/static/img/meta_image.jpg'
 @Component({
     selector: 'app',
     templateUrl: 'app.component.html',
-    styleUrls: ['app.component.css']
+    styleUrls: ['app.component.css'],
 })
 export class AppComponent implements OnInit {
     protected appContentStyles:{overflow:string} = {overflow: ''};
 
-    constructor(protected router:Router,
+    constructor(protected cache:TransferState,
+                protected router:Router,
                 protected app:AppService,
                 protected title:TitleService,
                 protected metaTags:MetaTagsService,
@@ -32,6 +34,7 @@ export class AppComponent implements OnInit {
         this.initMeta();
         this.initRouterSubscribers();
         this.initScrollFreezerSubscribers();
+        this.cache.set('state-transfer', true);
     }
 
     protected initTitle = ():void => {

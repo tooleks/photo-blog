@@ -8,7 +8,7 @@ import 'rxjs/Rx';
 import * as express from 'express';
 import {platformServer, renderModuleFactory} from '@angular/platform-server';
 import {ServerAppModuleNgFactory} from './ngfactory/app/server-app.module.ngfactory';
-import {ngExpressEngine} from './modules/ng-express-engine/express-engine';
+import {ngExpressEngine} from './sys/ng-express-engine/express-engine';
 import {ROUTES} from './routes';
 import {enableProdMode} from '@angular/core';
 
