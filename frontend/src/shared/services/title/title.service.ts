@@ -3,7 +3,7 @@ import {Title} from '@angular/platform-browser';
 
 @Injectable()
 export class TitleService {
-    constructor(protected title:Title, protected segmentsSeparator:string, protected defaultSegment:string = null) {
+    constructor(protected title:Title, protected defaultSegment:string = null, protected segmentsSeparator:string = ' / ') {
     }
 
     setTitle = (newTitle:any = []):void => {

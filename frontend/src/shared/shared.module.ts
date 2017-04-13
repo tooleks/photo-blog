@@ -51,30 +51,11 @@ import {ApiErrorHandler} from './services/api-error-handler';
     providers: [
         {
             provide: ApiService,
-            deps: [Http, BaseApiErrorHandler, AppService, AuthProviderService],
-            useFactory(http:Http, errorHandler:BaseApiErrorHandler, app:AppService, authProvider:AuthProviderService) {
-                return new ApiService(http, errorHandler, app.getApiUrl(), () => {
-                    const headers = {'Accept': 'application/json'};
-                    if (authProvider.hasAuth()) {
-                        headers['Authorization'] = `Bearer ${authProvider.getAuthApiToken()}`;
-                    }
-                    return headers;
-                }, () => {
-                    return app.inDebugMode() ? {'XDEBUG_SESSION_START': 'START'} : {};
-                });
-            },
+            useFactory: getApiService,
+            deps: [Http, BaseApiErrorHandler, AppService, AuthProviderService]
         },
-        {
-            provide: BaseApiErrorHandler,
-            useClass: ApiErrorHandler,
-        },
-        {
-            provide: AppService,
-            deps: [EnvService],
-            useFactory(env:EnvService) {
-                return new AppService(env);
-            },
-        },
+        {provide: BaseApiErrorHandler, useClass: ApiErrorHandler},
+        {provide: AppService, useFactory: getAppService, deps: [EnvService]},
         AuthService,
         AuthProviderService,
         EnvironmentDetectorService,
@@ -85,15 +66,29 @@ import {ApiErrorHandler} from './services/api-error-handler';
         PagerServiceProvider,
         ScreenDetectorService,
         ScrollFreezerService,
-        {
-            provide: TitleService,
-            deps: [AppService, Title],
-            useFactory(app:AppService, title:Title) {
-                return new TitleService(title, ' / ', app.getName());
-            },
-        },
+        {provide: TitleService, useFactory: getTitleService, deps: [AppService, Title]},
         UserDataProviderService,
     ],
 })
 export class SharedModule {
+}
+
+export function getApiService(http:Http, errorHandler:BaseApiErrorHandler, app:AppService, authProvider:AuthProviderService) {
+    return new ApiService(http, errorHandler, app.getApiUrl(), () => {
+        const headers = {'Accept': 'application/json'};
+        if (authProvider.hasAuth()) {
+            headers['Authorization'] = `Bearer ${authProvider.getAuthApiToken()}`;
+        }
+        return headers;
+    }, () => {
+        return app.inDebugMode() ? {'XDEBUG_SESSION_START': 'START'} : {};
+    });
+}
+
+export function getAppService(env:EnvService) {
+    return new AppService(env);
+}
+
+export function getTitleService(app:AppService, title:Title) {
+    return new TitleService(title, app.getName());
 }
