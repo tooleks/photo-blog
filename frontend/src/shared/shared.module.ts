@@ -52,7 +52,7 @@ import {ApiErrorHandler} from './services/api-error-handler';
         {
             provide: ApiService,
             useFactory: getApiService,
-            deps: [Http, BaseApiErrorHandler, AppService, AuthProviderService]
+            deps: [Http, BaseApiErrorHandler, AppService, AuthProviderService],
         },
         {provide: BaseApiErrorHandler, useClass: ApiErrorHandler},
         {provide: AppService, useFactory: getAppService, deps: [EnvService]},
@@ -66,7 +66,7 @@ import {ApiErrorHandler} from './services/api-error-handler';
         PagerServiceProvider,
         ScreenDetectorService,
         ScrollFreezerService,
-        {provide: TitleService, useFactory: getTitleService, deps: [AppService, Title]},
+        {provide: TitleService, useFactory: getTitleService, deps: [Title, AppService]},
         UserDataProviderService,
     ],
 })
@@ -89,6 +89,6 @@ export function getAppService(env:EnvService) {
     return new AppService(env);
 }
 
-export function getTitleService(app:AppService, title:Title) {
+export function getTitleService(title:Title, app:AppService) {
     return new TitleService(title, app.getName());
 }
