@@ -1,15 +1,15 @@
 import {Component, OnInit} from '@angular/core';
 import {ContactMeForm as Form} from './models';
+import {MetaTagsService} from '../../../core';
+import {NoticesService} from '../../../lib';
 import {
     ApiService,
     TitleService,
-    MetaTagsService,
     LockProcessServiceProvider,
     LockProcessService,
     NavigatorServiceProvider,
     NavigatorService,
-    NoticesService,
-} from '../../../lib';
+} from '../../../shared';
 
 @Component({
     selector: 'contact-me-form',

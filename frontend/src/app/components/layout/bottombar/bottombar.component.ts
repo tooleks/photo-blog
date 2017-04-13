@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {AppService} from '../../../../lib';
+import {AppService} from '../../../../shared';
 
 @Component({
     selector: 'bottombar',

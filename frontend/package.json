@@ -16,7 +16,7 @@
     "watch": "webpack --watch"
   },
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=7.5.0"
   },
   "license": "MIT",
   "dependencies": {

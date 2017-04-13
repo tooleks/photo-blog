@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {TitleService, MetaTagsService, EnvService} from '../../../lib';
+import {EnvService, MetaTagsService} from '../../../core';
+import {TitleService} from '../../../shared';
 
 @Component({
     selector: 'about-me',

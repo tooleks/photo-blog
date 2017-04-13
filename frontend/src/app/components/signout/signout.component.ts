@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthService, NavigatorServiceProvider, NavigatorService} from '../../../lib';
+import {AuthService, NavigatorServiceProvider, NavigatorService} from '../../../shared';
 
 @Component({
     selector: 'signout',

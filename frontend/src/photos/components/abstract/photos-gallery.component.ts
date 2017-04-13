@@ -1,8 +1,9 @@
 import {ActivatedRoute} from '@angular/router';
 import {PhotoToGalleryImageMapper} from '../../mappers';
+import {MetaTagsService} from '../../../core'
+import {GalleryImage} from '../../../lib';
 import {
     TitleService,
-    MetaTagsService,
     NavigatorServiceProvider,
     NavigatorService,
     PagerServiceProvider,
@@ -10,8 +11,7 @@ import {
     LockProcessServiceProvider,
     LockProcessService,
     ScrollFreezerService,
-    GalleryImage,
-} from '../../../lib';
+} from '../../../shared';
 
 export abstract class PhotosGalleryComponent {
     protected defaults:any = {page: 1, perPage: 20, show: null};

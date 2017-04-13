@@ -1,14 +1,14 @@
 import {Component, OnInit} from '@angular/core';
+import {MetaTagsService} from '../../../core'
+import {NoticesService} from '../../../lib';
 import {
     ApiService,
     TitleService,
-    MetaTagsService,
     LockProcessServiceProvider,
     LockProcessService,
     NavigatorServiceProvider,
     NavigatorService,
-    NoticesService,
-} from '../../../lib';
+} from '../../../shared';
 import {SubscriptionForm as Form} from './models';
 
 @Component({

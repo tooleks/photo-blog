@@ -1,17 +1,17 @@
 import {Component, OnInit, AfterViewInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {PhotosGalleryComponent} from '../abstract';
+import {MetaTagsService} from '../../../core'
+import {GalleryImage} from '../../../lib';
 import {
     TitleService,
     AuthProviderService,
-    MetaTagsService,
     NavigatorServiceProvider,
     PagerServiceProvider,
     LockProcessServiceProvider,
     ScrollFreezerService,
-    GalleryImage,
-} from '../../../lib';
+} from '../../../shared';
 import {PhotoDataProviderService} from '../../services';
+import {PhotosGalleryComponent} from '../abstract';
 
 @Component({
     selector: 'photos',

@@ -1,5 +1,6 @@
 import {Component, OnInit, AfterViewInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
+import {NoticesService} from '../../../lib';
 import {
     ApiService,
     TitleService,
@@ -7,8 +8,7 @@ import {
     LockProcessService,
     NavigatorServiceProvider,
     NavigatorService,
-    NoticesService,
-} from '../../../lib';
+} from '../../../shared';
 
 @Component({
     selector: 'unsubscription',
