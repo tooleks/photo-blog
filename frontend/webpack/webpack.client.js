@@ -9,7 +9,6 @@ const webpack = require('webpack');
  */
 module.exports = {
     entry: {
-        'polyfills': root('./src/polyfills.ts'),
         'vendor': root('./src/vendor.ts'),
         'browser': root('./src/main.browser.ts')
     },
