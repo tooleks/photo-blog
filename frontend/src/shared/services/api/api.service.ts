@@ -69,7 +69,9 @@ export class ApiService {
 
     protected getDefaultHeaders = ():Headers => {
         const defaultHeaders = new Headers;
-        const rawDefaultHeaders = this.defaultHeadersCallback ? this.defaultHeadersCallback() : {};
+        const rawDefaultHeaders = typeof (this.defaultHeadersCallback) === 'function'
+            ? this.defaultHeadersCallback()
+            : {};
         for (let property in rawDefaultHeaders) {
             if (rawDefaultHeaders.hasOwnProperty(property)) {
                 defaultHeaders.append(property, rawDefaultHeaders[property]);
@@ -91,7 +93,9 @@ export class ApiService {
 
     protected getDefaultSearchParams = ():URLSearchParams => {
         const defaultSearchParams = new URLSearchParams;
-        const rawDefaultSearchParams = this.defaultSearchParamsCallback ? this.defaultSearchParamsCallback() : {};
+        const rawDefaultSearchParams = typeof (this.defaultSearchParamsCallback) === 'function'
+            ? this.defaultSearchParamsCallback()
+            : {};
         for (let property in rawDefaultSearchParams) {
             if (rawDefaultSearchParams.hasOwnProperty(property)) {
                 defaultSearchParams.set(property, rawDefaultSearchParams[property]);
