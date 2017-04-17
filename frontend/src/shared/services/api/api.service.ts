@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Http, Headers, Response, URLSearchParams} from '@angular/http';
-import 'rxjs/Rx';
+import 'rxjs/add/operator/toPromise';
 import {ApiErrorHandler} from './api-error-handler';
 
 @Injectable()

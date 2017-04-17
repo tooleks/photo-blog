@@ -6,7 +6,6 @@ const {AotPlugin} = require('@ngtools/webpack');
  */
 module.exports = {
     entry: {
-        'polyfills': root('./src/polyfills.ts'),
         'vendor': root('./src/vendor.ts'),
         'server': root('./src/main.server.ts')
     },
