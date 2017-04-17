@@ -8,12 +8,12 @@ isProdMode() {
     fi
 }
 
-echo \Updating Sources
+echo \> Updating Sources
 cd "$root_path"
 echo "$PWD"
 git pull
 
-echo \Building Frontend Application
+echo \> Building Frontend Application
 cd "$root_path/frontend"
 echo "$PWD"
 if isProdMode $1; then
@@ -22,26 +22,18 @@ else
     npm run build
 fi
 
-echo \Migrating Database
+echo \> Migrating Database
 cd "$root_path/backend"
 echo "$PWD"
-php artisan migrate
+php artisan migrate --force
 
-echo \Publishing Frontend Application
+echo \> Publishing Frontend Application
 cd "$root_path/frontend"
 echo "$PWD"
 rm -r public
 cp -r dist public
 
-echo \Generating REST API Documentation
+echo \> Generating REST API Documentation
 cd "$root_path/backend"
 echo "$PWD"
 php artisan generate:rest_api_documentation
-
-if isProdMode $1; then
-    echo \Restarting Web Servers
-    cd "$root_path"
-    echo "$PWD"
-    pm2 restart public/server.js
-    systemctl restart nginx php7.0-fpm
-fi
