@@ -13,6 +13,22 @@ cd "$root_path"
 echo "$PWD"
 git pull
 
+echo \> Migrating Database
+cd "$root_path/backend"
+echo "$PWD"
+php artisan migrate --force
+
+echo \> Updating Backend Application Dependencies
+cd "$root_path/backend"
+echo "$PWD"
+composer install
+composer dump-autoload
+
+echo \> Updating Frontend Application Dependencies
+cd "$root_path/frontend"
+echo "$PWD"
+yarn install
+
 echo \> Building Frontend Application
 cd "$root_path/frontend"
 echo "$PWD"
@@ -21,11 +37,6 @@ if isProdMode $1; then
 else
     npm run build
 fi
-
-echo \> Migrating Database
-cd "$root_path/backend"
-echo "$PWD"
-php artisan migrate --force
 
 echo \> Publishing Frontend Application
 cd "$root_path/frontend"
