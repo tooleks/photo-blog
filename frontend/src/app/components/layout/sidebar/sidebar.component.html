@@ -1,7 +1,8 @@
 <div class="sidebar" [@slideInOut]="animationState">
-    <ul>
-        <li>
-            <a [routerLink]="['/']"
+    <ul itemscope itemtype="http://www.schema.org/SiteNavigationElement">
+        <li itemprop="name">
+            <a itemprop="url"
+               [routerLink]="['/']"
                (click)="toggle()"
                class="sidebar-brand">
                 <i class="fa fa-home" aria-hidden="true"></i>
@@ -9,7 +10,8 @@
             </a>
         </li>
         <li *ngIf="authProvider.isAuthenticated()">
-            <a [routerLink]="['/photo/add']"
+            <a itemprop="url"
+               [routerLink]="['/photo/add']"
                (click)="toggle()"
                routerLinkActive="active"
                [routerLinkActiveOptions]="{ exact: true }">
@@ -17,8 +19,9 @@
                 <span>{{ 'Add Photo' }}</span>
             </a>
         </li>
-        <li>
-            <a [routerLink]="['/photos']"
+        <li itemprop="name">
+            <a itemprop="url"
+               [routerLink]="['/photos']"
                (click)="toggle()"
                routerLinkActive="active"
                [routerLinkActiveOptions]="{ exact: true }">
@@ -26,8 +29,9 @@
                 <span>{{ 'All Photos' }}</span>
             </a>
         </li>
-        <li>
-            <a [routerLink]="['/photos/search']"
+        <li itemprop="name">
+            <a itemprop="url"
+               [routerLink]="['/photos/search']"
                (click)="toggle()"
                routerLinkActive="active"
                [routerLinkActiveOptions]="{ exact: true }">
@@ -42,15 +46,17 @@
             </span>
             <ul>
                 <li *ngFor="let tag of tags">
-                    <a [routerLink]="['/photos/tag', tag.value]"
+                    <a itemprop="url"
+                       [routerLink]="['/photos/tag', tag.value]"
                        (click)="toggle()"
                        routerLinkActive="active"
                        [routerLinkActiveOptions]="{ exact: true }">{{ '#' + tag.value }}</a>
                 </li>
             </ul>
         </li>
-        <li>
-            <a [routerLink]="['/about-me']"
+        <li itemprop="name">
+            <a itemprop="url"
+               [routerLink]="['/about-me']"
                (click)="toggle()"
                routerLinkActive="active"
                [routerLinkActiveOptions]="{ exact: true }">
@@ -58,8 +64,9 @@
                 <span>{{ 'About Me' }}</span>
             </a>
         </li>
-        <li>
-            <a [routerLink]="['/contact-me']"
+        <li itemprop="name">
+            <a itemprop="url"
+               [routerLink]="['/contact-me']"
                (click)="toggle()"
                routerLinkActive="active"
                [routerLinkActiveOptions]="{ exact: true }">
@@ -67,8 +74,9 @@
                 <span>{{ 'Contact Me' }}</span>
             </a>
         </li>
-        <li>
-            <a [routerLink]="['/subscription']"
+        <li itemprop="name">
+            <a itemprop="url"
+               [routerLink]="['/subscription']"
                (click)="toggle()"
                routerLinkActive="active"
                [routerLinkActiveOptions]="{ exact: true }">
@@ -77,7 +85,8 @@
             </a>
         </li>
         <li *ngIf="authProvider.isAuthenticated()">
-            <a [routerLink]="['/signout']"
+            <a itemprop="url"
+               [routerLink]="['/signout']"
                (click)="toggle()"
                routerLinkActive="active"
                [routerLinkActiveOptions]="{ exact: true }">
