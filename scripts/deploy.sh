@@ -43,4 +43,9 @@ if isProdMode $1; then
     cd "$root_path/frontend/public"
     echo "$PWD"
     pm2 restart server.js
+
+    echo \> Restarting Backend Application
+    cd "$root_path/frontend/public"
+    echo "$PWD"
+    sudo systemctl restart nginx php7.0-fpm
 fi
