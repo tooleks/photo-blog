@@ -1,0 +1,95 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
+use Core\DataProviders\Tag\Contracts\TagDataProvider;
+use Core\Models\Photo;
+use Core\Models\Tag;
+use Illuminate\Routing\Controller;
+use Lib\SiteMap\Contracts\SiteMapBuilder;
+use Lib\SiteMap\SiteMapItem;
+
+/**
+ * Class SiteMapController.
+ *
+ * @property SiteMapBuilder siteMapBuilder
+ * @property PhotoDataProvider photoDataProvider
+ * @property TagDataProvider tagDataProvider
+ * @package App\Http\Controllers
+ */
+class SiteMapController extends Controller
+{
+    /**
+     * SiteMapController constructor.
+     *
+     * @param SiteMapBuilder $siteMapBuilder
+     * @param PhotoDataProvider $photoDataProvider
+     * @param TagDataProvider $tagDataProvider
+     */
+    public function __construct(
+        SiteMapBuilder $siteMapBuilder,
+        PhotoDataProvider $photoDataProvider,
+        TagDataProvider $tagDataProvider
+    )
+    {
+        $this->siteMapBuilder = $siteMapBuilder;
+        $this->photoDataProvider = $photoDataProvider;
+        $this->tagDataProvider = $tagDataProvider;
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function index()
+    {
+        $this->siteMapBuilder->addItem(
+            (new SiteMapItem)
+                ->setLocation(config('main.frontend.url'))
+                ->setChangeFrequency('daily')
+                ->setPriority('1')
+        );
+
+        $this->siteMapBuilder->addItem(
+            (new SiteMapItem)
+                ->setLocation(sprintf('%s/%s', config('main.frontend.url'), 'about-me'))
+                ->setChangeFrequency('weekly')
+                ->setPriority('0.6')
+        );
+
+        $this->siteMapBuilder->addItem(
+            (new SiteMapItem)
+                ->setLocation(sprintf('%s/%s', config('main.frontend.url'), 'contact-me'))
+                ->setChangeFrequency('weekly')
+                ->setPriority('0.6')
+        );
+
+        $this->siteMapBuilder->addItem(
+            (new SiteMapItem)
+                ->setLocation(sprintf('%s/%s', config('main.frontend.url'), 'subscription'))
+                ->setChangeFrequency('weekly')
+                ->setPriority('0.5')
+        );
+
+        $this->photoDataProvider->each(function (Photo $photo) {
+            $item = (new SiteMapItem)
+                ->setLocation(sprintf('%s/photos?show=%s', config('main.frontend.url'), $photo->id))
+                ->setLastModified($photo->updated_at->tz('UTC')->toAtomString())
+                ->setChangeFrequency('weekly')
+                ->setPriority('0.8');
+            $this->siteMapBuilder->addItem($item);
+        });
+
+        $this->tagDataProvider->each(function (Tag $tag) {
+            $item = (new SiteMapItem)
+                ->setLocation(sprintf('%s/photos/tag/%s', config('main.frontend.url'), $tag->value))
+                ->setChangeFrequency('daily')
+                ->setPriority('0.7');
+            $this->siteMapBuilder->addItem($item);
+        });
+
+        return response()
+            ->view('app.site-map.index', ['items' => $this->siteMapBuilder->getItems()])
+            ->header('Content-Type', 'text/xml');
+    }
+}

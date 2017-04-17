@@ -30,6 +30,11 @@ app.set('views', 'src');
 
 app.use('/', express.static('dist', {index: false}));
 
+app.get('/sitemap.xml', (req, res) => {
+    res.writeHead(301, {'Location': `${env.backendUrl}/sitemap.xml`});
+    res.end();
+});
+
 ROUTES.forEach(route => {
     app.get(route, (req, res) => {
         console.time(`GET: ${req.originalUrl}`);

@@ -226,7 +226,7 @@ class PublishedPhotosController extends Controller
             ->applyCriteriaWhen($request->has('tag'), new HasTagWithValue($request->get('tag')))
             ->applyCriteriaWhen($request->has('search_phrase'), new HasSearchPhrase($request->get('search_phrase')))
             ->applyCriteria((new SortByCreatedAt)->desc())
-            ->paginate($request->get('page', 1), $request->get('per_page', 20));
+            ->getPaginator($request->get('page', 1), $request->get('per_page', 20));
 
         $paginator->appends($request->query());
 

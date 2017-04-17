@@ -8,6 +8,7 @@ import {ServerAppModule} from './app/server-app.module';
 import {ngExpressEngine} from './sys/ng-express-engine/express-engine';
 import {ROUTES} from './routes';
 import {enableProdMode} from '@angular/core';
+import {env} from '../env';
 
 if (process.env.NODE_ENV === 'production') {
     enableProdMode();
@@ -25,6 +26,11 @@ app.set('view engine', 'html');
 app.set('views', 'src');
 
 app.use('/', express.static('dist', {index: false}));
+
+app.get('/sitemap.xml', (req, res) => {
+    res.writeHead(301, {'Location': `${env.backendUrl}/sitemap.xml`});
+    res.end();
+});
 
 ROUTES.forEach(route => {
     app.get(route, (req, res) => {
