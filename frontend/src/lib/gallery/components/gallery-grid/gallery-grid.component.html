@@ -1,10 +1,12 @@
 <div *ngFor="let gridRow of gridRows" class="gallery-grid-row">
     <div *ngFor="let gridImage of gridRow" class="gallery-grid-cell-wrapper">
-        <div class="gallery-grid-cell"
+        <div itemscope itemtype="http://schema.org/ImageObject"
+             class="gallery-grid-cell"
              [style.width.px]="gridImage.getSmallSizeWidth()"
              [style.height.px]="gridImage.getSmallSizeHeight()">
             <!-- Note: The image [width] and [height] attributes are initialized with the .gallery-grid-cell element padding offset. -->
-            <img (click)="onClickGridImage.emit(gridImage)"
+            <img itemprop="contentUrl"
+                 (click)="onClickGridImage.emit(gridImage)"
                  [style.background]="gridImage.getAvgColor()"
                  [src]="gridImage.getSmallSizeUrl()"
                  [width]="gridImage.getSmallSizeWidth()- 2"
