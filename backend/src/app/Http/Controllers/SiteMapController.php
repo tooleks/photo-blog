@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
+use Core\DataProviders\Photo\Criterias\IsPublished;
 use Core\DataProviders\Tag\Contracts\TagDataProvider;
 use Core\Models\Photo;
 use Core\Models\Tag;
@@ -71,22 +72,25 @@ class SiteMapController extends Controller
                 ->setPriority('0.5')
         );
 
-        $this->photoDataProvider->each(function (Photo $photo) {
-            $item = (new SiteMapItem)
-                ->setLocation(sprintf('%s/photos?show=%s', config('main.frontend.url'), $photo->id))
-                ->setLastModified($photo->updated_at->tz('UTC')->toAtomString())
-                ->setChangeFrequency('weekly')
-                ->setPriority('0.8');
-            $this->siteMapBuilder->addItem($item);
-        });
+        $this->photoDataProvider
+            ->applyCriteria(new IsPublished(true))
+            ->each(function (Photo $photo) {
+                $item = (new SiteMapItem)
+                    ->setLocation(sprintf('%s/photos?show=%s', config('main.frontend.url'), $photo->id))
+                    ->setLastModified($photo->updated_at->tz('UTC')->toAtomString())
+                    ->setChangeFrequency('weekly')
+                    ->setPriority('0.8');
+                $this->siteMapBuilder->addItem($item);
+            });
 
-        $this->tagDataProvider->each(function (Tag $tag) {
-            $item = (new SiteMapItem)
-                ->setLocation(sprintf('%s/photos/tag/%s', config('main.frontend.url'), $tag->value))
-                ->setChangeFrequency('daily')
-                ->setPriority('0.7');
-            $this->siteMapBuilder->addItem($item);
-        });
+        $this->tagDataProvider
+            ->each(function (Tag $tag) {
+                $item = (new SiteMapItem)
+                    ->setLocation(sprintf('%s/photos/tag/%s', config('main.frontend.url'), $tag->value))
+                    ->setChangeFrequency('daily')
+                    ->setPriority('0.7');
+                $this->siteMapBuilder->addItem($item);
+            });
 
         return response()
             ->view('app.site-map.index', ['items' => $this->siteMapBuilder->getItems()])
