@@ -13,7 +13,7 @@ module.exports = {
         extensions: ['.ts', '.js']
     },
     output: {
-        path: root('dist')
+        path: root('./dist')
     },
     module: {
         rules: [

@@ -19,7 +19,7 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: root('./src/index.html'),
-            output: root('dist'),
+            output: root('./dist'),
             inject: 'head',
             favicon: root('./assets/static/img/favicon.ico')
         }),
