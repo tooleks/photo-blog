@@ -40,14 +40,14 @@ php artisan generate:rest_api_documentation
 
 if isProdMode $1; then
     echo \> Restarting Frontend Application
-    cd "$root_path/frontend/public"
+    cd "$root_path"
     echo "$PWD"
     pm2 restart server.js
 fi
 
 if isProdMode $1; then
     echo \> Restarting Backend Application
-    cd "$root_path/frontend/public"
+    cd "$root_path"
     echo "$PWD"
     sudo systemctl restart nginx php7.0-fpm
 fi
