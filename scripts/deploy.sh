@@ -39,7 +39,7 @@ echo "$PWD"
 php artisan generate:rest_api_documentation
 
 if isProdMode $1; then
-    echo \> Generating REST API Documentation
+    echo \> Restarting Frontend Application
     cd "$root_path/frontend/public"
     echo "$PWD"
     pm2 restart server.js
