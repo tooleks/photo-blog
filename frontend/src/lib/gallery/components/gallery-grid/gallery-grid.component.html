@@ -1,6 +1,7 @@
 <div *ngFor="let gridRow of gridRows" class="gallery-grid-row">
     <div *ngFor="let gridImage of gridRow" class="gallery-grid-cell-wrapper">
-        <div itemscope itemtype="http://schema.org/ImageObject"
+        <div itemscope
+             itemtype="http://schema.org/ImageObject"
              class="gallery-grid-cell"
              [style.width.px]="gridImage.getSmallSizeWidth()"
              [style.height.px]="gridImage.getSmallSizeHeight()">
