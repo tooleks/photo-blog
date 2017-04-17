@@ -2,6 +2,7 @@
 
 namespace Lib\DataProvider;
 
+use Closure;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\ConnectionInterface as Connection;
 use Illuminate\Database\Eloquent\Model;
@@ -206,7 +207,21 @@ abstract class DataProvider implements DataProviderContract
     /**
      * @inheritdoc
      */
-    public function paginate(int $page = 1, int $perPage = 20, array $options = [])
+    public function each(Closure $callback, int $chunkSize = 100, array $options = [])
+    {
+        $this->query->chunk($chunkSize, function ($models) use ($callback, &$options) {
+            foreach ($models as $model) {
+                $this->dispatchEvent('beforeEach', $this->query, $options);
+                $callback($model);
+                $this->dispatchEvent('afterEach', $model, $options);
+            }
+        });
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getPaginator(int $page = 1, int $perPage = 20, array $options = [])
     {
         $this->dispatchEvent('beforePaginate', $this->query, $options);
 

@@ -63,7 +63,7 @@ class TagsController extends Controller
     {
         $paginator = $this->tagDataProvider
             ->applyCriteria((new SortByPhotosCount)->desc())
-            ->paginate($request->get('page', 1), $request->get('per_page', 20));
+            ->getPaginator($request->get('page', 1), $request->get('per_page', 20));
 
         $paginator->appends($request->query());
 

@@ -1,4 +1,4 @@
-<div *ngIf="image">
+<div *ngIf="image" itemscope itemtype="http://schema.org/ImageObject">
     <div class="gallery-backdrop"></div>
     <div class="gallery-container"
          (swiperight)="clickPrevImage()"
@@ -8,14 +8,15 @@
            aria-hidden="true"></i>
         <div class="gallery-view">
             <div *ngIf="loaded" class="gallery-img-container">
-                <img (click)="clickNextImage()"
+                <img itemprop="contentUrl"
+                     (click)="clickNextImage()"
                      [src]="image.getLargeSizeUrl()"
                      [alt]="image.getDescription()"
                      [title]="image.getDescription()"
                      class="gallery-img">
             </div>
             <div *ngIf="loaded && visibleImageInfo" class="gallery-info">
-                {{ image.getDescription() }}<br>{{ image.getExif() }}
+                <span itemprop="description">{{ image.getDescription() }}</span><br>{{ image.getExif() }}
             </div>
         </div>
         <div class="gallery-actions">
@@ -23,34 +24,40 @@
                     (click)="clickPrevImage()"
                     title="{{ 'Previous' }}"
                     type="button"
-                    class="gallery-action gallery-prev"><i class="fa fa-chevron-left gallery-icon" aria-hidden="true"></i></button>
+                    class="gallery-action gallery-prev"><i class="fa fa-chevron-left gallery-icon"
+                                                           aria-hidden="true"></i></button>
             <button *ngIf="showNextImageButton"
                     (click)="clickNextImage()"
                     title="{{ 'Next' }}"
                     type="button"
-                    class="gallery-action gallery-next"><i class="fa fa-chevron-right gallery-icon" aria-hidden="true"></i></button>
+                    class="gallery-action gallery-next"><i class="fa fa-chevron-right gallery-icon"
+                                                           aria-hidden="true"></i></button>
         </div>
         <div class="gallery-navbar">
             <button *ngIf="showCloseImageButton"
                     (click)="clickCloseImage()"
                     title="{{ 'Close' }}"
                     type="button"
-                    class="gallery-action gallery-right"><i class="fa fa-close gallery-icon" aria-hidden="true"></i></button>
+                    class="gallery-action gallery-right"><i class="fa fa-close gallery-icon" aria-hidden="true"></i>
+            </button>
             <button *ngIf="showImageInfoButton"
                     (click)="clickImageInfo()"
                     title="{{ 'Info' }}"
                     type="button"
-                    class="gallery-action gallery-left"><i class="fa fa-info gallery-icon" aria-hidden="true"></i></button>
+                    class="gallery-action gallery-left"><i class="fa fa-info gallery-icon" aria-hidden="true"></i>
+            </button>
             <button *ngIf="showEditImageButton"
                     (click)="clickEditImage()"
                     title="{{ 'Edit' }}"
                     type="button"
-                    class="gallery-action gallery-left"><i class="fa fa-pencil gallery-icon" aria-hidden="true"></i></button>
+                    class="gallery-action gallery-left"><i class="fa fa-pencil gallery-icon" aria-hidden="true"></i>
+            </button>
             <button *ngIf="showDeleteImageButton"
                     (click)="clickDeleteImage()"
                     title="{{ 'Delete' }}"
                     type="button"
-                    class="gallery-action gallery-left"><i class="fa fa-trash gallery-icon" aria-hidden="true"></i></button>
+                    class="gallery-action gallery-left"><i class="fa fa-trash gallery-icon" aria-hidden="true"></i>
+            </button>
         </div>
     </div>
 </div>

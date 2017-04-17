@@ -2,6 +2,8 @@
 
 namespace Lib\DataProvider\Contracts;
 
+use Closure;
+
 /**
  * Interface DataProvider.
  *
@@ -66,14 +68,24 @@ interface DataProvider
     public function get(array $options = []);
 
     /**
-     * Get paginated models.
+     * Apply callback function on each model.
+     *
+     * @param Closure $callback
+     * @param int $chunkSize
+     * @param array $options
+     * @return void
+     */
+    public function each(Closure $callback, int $chunkSize = 100, array $options = []);
+
+    /**
+     * Get models paginator.
      *
      * @param int $page
      * @param int $perPage
      * @param array $options
      * @return mixed
      */
-    public function paginate(int $page = 1, int $perPage = 20, array $options = []);
+    public function getPaginator(int $page = 1, int $perPage = 20, array $options = []);
 
     /**
      * Count models.

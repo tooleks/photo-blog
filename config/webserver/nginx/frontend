@@ -7,6 +7,8 @@ server {
     root /var/www/photo-blog/frontend/dist;
 
     location / {
+        add_header Cache-Control public;
+        expires 1d;
         try_files $uri @nodejs;
     }
 
