@@ -86,10 +86,12 @@ class SiteMapController extends Controller
 
         $this->tagDataProvider
             ->each(function (Tag $tag) {
-                $this->siteMapBuilder->addItem((new SiteMapItem)
-                    ->setLocation(sprintf('%s/photos/tag/%s', config('main.frontend.url'), $tag->value))
-                    ->setChangeFrequency('daily')
-                    ->setPriority('0.7'));
+                $this->siteMapBuilder->addItem(
+                    (new SiteMapItem)
+                        ->setLocation(sprintf('%s/photos/tag/%s', config('main.frontend.url'), $tag->value))
+                        ->setChangeFrequency('daily')
+                        ->setPriority('0.7')
+                );
             });
 
         return response()
