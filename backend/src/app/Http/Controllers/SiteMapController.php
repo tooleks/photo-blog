@@ -75,21 +75,21 @@ class SiteMapController extends Controller
         $this->photoDataProvider
             ->applyCriteria(new IsPublished(true))
             ->each(function (Photo $photo) {
-                $item = (new SiteMapItem)
-                    ->setLocation(sprintf('%s/photos?show=%s', config('main.frontend.url'), $photo->id))
-                    ->setLastModified($photo->updated_at->tz('UTC')->toAtomString())
-                    ->setChangeFrequency('weekly')
-                    ->setPriority('0.8');
-                $this->siteMapBuilder->addItem($item);
+                $this->siteMapBuilder->addItem(
+                    (new SiteMapItem)
+                        ->setLocation(sprintf('%s/photos?show=%s', config('main.frontend.url'), $photo->id))
+                        ->setLastModified($photo->updated_at->tz('UTC')->toAtomString())
+                        ->setChangeFrequency('weekly')
+                        ->setPriority('0.8')
+                );
             });
 
         $this->tagDataProvider
             ->each(function (Tag $tag) {
-                $item = (new SiteMapItem)
+                $this->siteMapBuilder->addItem((new SiteMapItem)
                     ->setLocation(sprintf('%s/photos/tag/%s', config('main.frontend.url'), $tag->value))
                     ->setChangeFrequency('daily')
-                    ->setPriority('0.7');
-                $this->siteMapBuilder->addItem($item);
+                    ->setPriority('0.7'));
             });
 
         return response()
