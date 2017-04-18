@@ -34,7 +34,7 @@
         <li *ngIf="tags.length" class="sidebar-second-level">
             <span><i class="fa fa-tags" aria-hidden="true"></i> {{ 'Tags' }}</span>
             <ul>
-                <li *ngFor="let tag of tags">
+                <li *ngFor="let tag of tags" itemprop="name">
                     <a itemprop="url"
                        [routerLink]="['/photos/tag', tag.value]"
                        (click)="toggle()"
