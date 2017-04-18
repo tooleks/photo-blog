@@ -40,8 +40,6 @@ export class GalleryComponent implements OnInit, OnChanges {
 
     @Input() showImageInfoButton:boolean = true;
     @Output() onImageInfo:EventEmitter<any> = new EventEmitter<any>();
-    @Input() visibleImageInfo:boolean = false;
-    @Output() visibleImageInfoChange:EventEmitter<boolean> = new EventEmitter<boolean>();
 
     protected openedImage:GalleryImage;
     protected openedImageIndex:number;
@@ -161,8 +159,6 @@ export class GalleryComponent implements OnInit, OnChanges {
     };
 
     clickImageInfo = (image:GalleryImage):void => {
-        this.visibleImageInfo = !this.visibleImageInfo;
-        this.visibleImageInfoChange.emit(this.visibleImageInfo);
         this.onImageInfo.emit(image);
     };
 }
