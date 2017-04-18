@@ -42,6 +42,15 @@ export class GalleryImage {
         return this.attributes.id;
     }
 
+    setViewUrl(viewUrl:string):this {
+        this.attributes.viewUrl = String(viewUrl);
+        return this;
+    }
+
+    getViewUrl():string {
+        return this.attributes.viewUrl;
+    }
+
     setSmallSizeUrl(smallSizeUrl:string):this {
         this.attributes.smallSizeUrl = String(smallSizeUrl);
         return this;

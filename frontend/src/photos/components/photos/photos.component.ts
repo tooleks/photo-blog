@@ -1,5 +1,5 @@
 import {Component, OnInit, AfterViewInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {Router, ActivatedRoute} from '@angular/router';
 import {MetaTagsService} from '../../../core'
 import {GalleryImage} from '../../../lib';
 import {
@@ -20,6 +20,7 @@ import {PhotosGalleryComponent} from '../abstract';
 export class PhotosComponent extends PhotosGalleryComponent implements OnInit, AfterViewInit {
     constructor(protected authProvider:AuthProviderService,
                 protected photoDataProvider:PhotoDataProviderService,
+                router:Router,
                 route:ActivatedRoute,
                 title:TitleService,
                 metaTags:MetaTagsService,
@@ -27,7 +28,7 @@ export class PhotosComponent extends PhotosGalleryComponent implements OnInit, A
                 pagerProvider:PagerServiceProvider,
                 lockProcessProvider:LockProcessServiceProvider,
                 scrollFreezer:ScrollFreezerService) {
-        super(route, title, metaTags, navigatorProvider, pagerProvider, lockProcessProvider, scrollFreezer);
+        super(router, route, title, metaTags, navigatorProvider, pagerProvider, lockProcessProvider, scrollFreezer);
     }
 
     ngOnInit():void {

@@ -1,20 +1,26 @@
 <div *ngFor="let gridRow of gridRows" class="gallery-grid-row">
-    <div *ngFor="let gridImage of gridRow" class="gallery-grid-cell-wrapper">
+    <div *ngFor="let image of gridRow" class="gallery-grid-cell-wrapper">
         <div itemscope
              itemtype="http://schema.org/ImageObject"
              class="gallery-grid-cell"
-             [style.width.px]="gridImage.getSmallSizeWidth()"
-             [style.height.px]="gridImage.getSmallSizeHeight()">
+             [style.width.px]="image.getSmallSizeWidth()"
+             [style.height.px]="image.getSmallSizeHeight()">
             <!-- Note: The image [width] and [height] attributes are initialized with the .gallery-grid-cell element padding offset. -->
             <img itemprop="contentUrl"
-                 (click)="onClickGridImage.emit(gridImage)"
-                 [style.background]="gridImage.getAvgColor()"
-                 [src]="gridImage.getSmallSizeUrl()"
-                 [width]="gridImage.getSmallSizeWidth()- 2"
-                 [height]="gridImage.getSmallSizeHeight() - 2"
-                 [alt]="gridImage.getDescription()"
-                 [title]="gridImage.getDescription()"
+                 (click)="onClickGridImage.emit(image)"
+                 [style.background]="image.getAvgColor()"
+                 [src]="image.getSmallSizeUrl()"
+                 [width]="image.getSmallSizeWidth() - 2"
+                 [height]="image.getSmallSizeHeight() - 2"
+                 [alt]="image.getDescription()"
+                 [title]="image.getDescription()"
                  class="gallery-grid-item">
+            <a *ngIf="image.getViewUrl()"
+               [href]="image.getViewUrl()"
+               title="{{ 'Open image in new tab' }}"
+               target="_blank"
+               class="gallery-grid-cell-link"
+            ><i class="fa fa-link" aria-hidden="true"></i></a>
         </div>
     </div>
 </div>

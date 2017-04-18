@@ -1,4 +1,4 @@
-import {ActivatedRoute} from '@angular/router';
+import {Router, ActivatedRoute} from '@angular/router';
 import {PhotoToGalleryImageMapper} from '../../mappers';
 import {MetaTagsService} from '../../../core'
 import {GalleryImage} from '../../../lib';
@@ -22,7 +22,8 @@ export abstract class PhotosGalleryComponent {
     protected images:Array<GalleryImage> = [];
     protected hasMoreImages:boolean = true;
 
-    constructor(protected route:ActivatedRoute,
+    constructor(protected router:Router,
+                protected route:ActivatedRoute,
                 protected title:TitleService,
                 protected metaTags:MetaTagsService,
                 protected navigatorProvider:NavigatorServiceProvider,
@@ -65,7 +66,10 @@ export abstract class PhotosGalleryComponent {
     protected abstract loadMorePhotos():Promise<Array<GalleryImage>>;
 
     protected handleLoadPhotos(response:any):Array<GalleryImage> {
-        const images = PhotoToGalleryImageMapper.map(response.data);
+        const images = PhotoToGalleryImageMapper.map(response.data).map((image:GalleryImage) => {
+            const imageViewUrl = this.router.createUrlTree([], {queryParams: {'show': image.getId()}}).toString();
+            return image.setViewUrl(imageViewUrl);
+        });
         this.hasMoreImages = !(response.data.length < this.defaults.perPage);
         if (response.data.length) {
             this.pager.setPage(response.current_page);
