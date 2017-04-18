@@ -34,7 +34,7 @@ export class GalleryViewerComponent implements OnChanges {
 
     @Input() showImageInfoButton:boolean = true;
     @Output() onImageInfo:EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
-    @Input() visibleImageInfo:boolean = false;
+    @Input() visibleImageInfo:boolean = true;
     @Output() visibleImageInfoChange:EventEmitter<boolean> = new EventEmitter<boolean>();
 
     ngOnChanges(changes:SimpleChanges) {
