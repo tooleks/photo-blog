@@ -17,7 +17,7 @@ class HasSearchPhrase implements Criteria
      *
      * @param string $searchPhrase
      */
-    public function __construct(string $searchPhrase)
+    public function __construct($searchPhrase)
     {
         $this->searchPhrase = $searchPhrase;
     }
