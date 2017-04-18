@@ -1,12 +1,12 @@
 <div *ngIf="image" itemscope itemtype="http://schema.org/ImageObject">
     <div class="gallery-backdrop"></div>
-    <div class="gallery-container"
-         (swiperight)="clickPrevImage()"
-         (swipeleft)="clickNextImage()">
+    <div class="gallery-container">
         <i class="gallery-spinner"
            [ngClass]="!loaded ? 'fa fa-circle-o-notch fa-spin fa-2x' : ''"
            aria-hidden="true"></i>
-        <div class="gallery-view">
+        <div (swiperight)="clickPrevImage()"
+             (swipeleft)="clickNextImage()"
+             class="gallery-view">
             <div *ngIf="loaded" class="gallery-img-container">
                 <img itemprop="contentUrl"
                      (click)="clickNextImage()"
@@ -15,9 +15,9 @@
                      [title]="image.getDescription()"
                      class="gallery-img">
             </div>
-            <div *ngIf="loaded && visibleImageInfo" class="gallery-info">
-                <span itemprop="description">{{ image.getDescription() }}</span><br>{{ image.getExif() }}
-            </div>
+        </div>
+        <div *ngIf="loaded && visibleImageInfo" class="gallery-info">
+            <span itemprop="description">{{ image.getDescription() }}</span><br>{{ image.getExif() }}
         </div>
         <div class="gallery-actions">
             <button *ngIf="showPrevImageButton"
