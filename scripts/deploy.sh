@@ -28,17 +28,17 @@ printfPWD
 git pull
 printfStepFooter
 
-printfStepHeader "Migrating Database"
-cd "$root_path/backend"
-printfPWD
-php artisan migrate --force
-printfStepFooter
-
 printfStepHeader "Updating Backend Application Dependencies"
 cd "$root_path/backend"
 printfPWD
 composer install
 composer dump-autoload
+printfStepFooter
+
+printfStepHeader "Migrating Database"
+cd "$root_path/backend"
+printfPWD
+php artisan migrate --force
 printfStepFooter
 
 printfStepHeader "Updating Frontend Application Dependencies"
@@ -64,12 +64,6 @@ rm -r public
 cp -r dist public
 printfStepFooter
 
-printfStepHeader "Generating REST API Documentation"
-cd "$root_path/backend"
-printfPWD
-php artisan generate:rest_api_documentation
-printfStepFooter
-
 if isProdMode $1; then
     printfStepHeader "Restarting Frontend Application"
     cd "$root_path/frontend/public"
@@ -85,3 +79,9 @@ if isProdMode $1; then
     sudo systemctl restart nginx php7.0-fpm
     printfStepFooter
 fi
+
+printfStepHeader "Generating REST API Documentation"
+cd "$root_path/backend"
+printfPWD
+php artisan generate:rest_api_documentation
+printfStepFooter
