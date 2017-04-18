@@ -35,7 +35,7 @@ class Tag extends Model
      */
     public function setValueAttribute($value)
     {
-        $this->attributes['value'] = strtolower($value);
+        $this->attributes['value'] = str_replace(' ', '_', strtolower($value));
 
         return $this;
     }

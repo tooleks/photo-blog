@@ -19,6 +19,6 @@ export class TagsSelectInputComponent {
     };
 
     transform = (value:string):string => {
-        return value.toLowerCase();
+        return value.split(' ').join('_').toLowerCase();
     };
 }
