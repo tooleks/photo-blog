@@ -1,3 +1,5 @@
+#!/bin/bash
+
 root_path="$PWD/.."
 
 isProdMode() {
@@ -8,57 +10,78 @@ isProdMode() {
     fi
 }
 
-echo \> Updating Sources
+printfPWD() {
+    printf "$PWD\n"
+}
+
+printfStepHeader() {
+    printf ">> $1\n"
+}
+
+printfStepFooter() {
+    printf "\n\n"
+}
+
+printfStepHeader "Updating Sources"
 cd "$root_path"
-echo "$PWD"
+printfPWD
 git pull
+printfStepFooter
 
-echo \> Migrating Database
+printfStepHeader "Migrating Database"
 cd "$root_path/backend"
-echo "$PWD"
+printfPWD
 php artisan migrate --force
+printfStepFooter
 
-echo \> Updating Backend Application Dependencies
+printfStepHeader "Updating Backend Application Dependencies"
 cd "$root_path/backend"
-echo "$PWD"
+printfPWD
 composer install
 composer dump-autoload
+printfStepFooter
 
-echo \> Updating Frontend Application Dependencies
+printfStepHeader "Updating Frontend Application Dependencies"
 cd "$root_path/frontend"
-echo "$PWD"
+printfPWD
 yarn install
+printfStepFooter
 
-echo \> Building Frontend Application
+printfStepHeader "Building Frontend Application"
 cd "$root_path/frontend"
-echo "$PWD"
+printfPWD
 if isProdMode $1; then
     npm run build:prod
 else
     npm run build
 fi
+printfStepFooter
 
-echo \> Publishing Frontend Application
+printfStepHeader "Publishing Frontend Application"
 cd "$root_path/frontend"
-echo "$PWD"
+printfPWD
 rm -r public
 cp -r dist public
+printfStepFooter
 
-echo \> Generating REST API Documentation
+printfStepHeader "Generating REST API Documentation"
 cd "$root_path/backend"
-echo "$PWD"
+printfPWD
 php artisan generate:rest_api_documentation
+printfStepFooter
 
 if isProdMode $1; then
-    echo \> Restarting Frontend Application
+    printfStepHeader "Restarting Frontend Application"
     cd "$root_path/frontend/public"
-    echo "$PWD"
+    printfPWD
     pm2 restart server.js
+    printfStepFooter
 fi
 
 if isProdMode $1; then
-    echo \> Restarting Backend Application
+    printfStepHeader "Restarting Backend Application"
     cd "$root_path"
-    echo "$PWD"
+    printfPWD
     sudo systemctl restart nginx php7.0-fpm
+    printfStepFooter
 fi
