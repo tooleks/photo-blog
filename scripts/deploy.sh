@@ -41,6 +41,20 @@ printfPWD
 php artisan migrate --force
 printfStepFooter
 
+printfStepHeader "Generating REST API Documentation"
+cd "$root_path/backend"
+printfPWD
+php artisan generate:rest_api_documentation
+printfStepFooter
+
+if isProdMode $1; then
+    printfStepHeader "Restarting Backend Application"
+    cd "$root_path"
+    printfPWD
+    sudo systemctl restart nginx php7.0-fpm
+    printfStepFooter
+fi
+
 printfStepHeader "Updating Frontend Application Dependencies"
 cd "$root_path/frontend"
 printfPWD
@@ -71,17 +85,3 @@ if isProdMode $1; then
     pm2 restart server.js
     printfStepFooter
 fi
-
-if isProdMode $1; then
-    printfStepHeader "Restarting Backend Application"
-    cd "$root_path"
-    printfPWD
-    sudo systemctl restart nginx php7.0-fpm
-    printfStepFooter
-fi
-
-printfStepHeader "Generating REST API Documentation"
-cd "$root_path/backend"
-printfPWD
-php artisan generate:rest_api_documentation
-printfStepFooter
