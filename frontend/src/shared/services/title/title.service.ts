@@ -4,6 +4,7 @@ import {Title} from '@angular/platform-browser';
 @Injectable()
 export class TitleService {
     constructor(protected title:Title, protected defaultSegment:string = null, protected segmentsSeparator:string = ' / ') {
+        this.setTitle();
     }
 
     setTitle = (newTitle:any = []):void => {
@@ -23,7 +24,7 @@ export class TitleService {
         let titleSegments = this.defaultSegment ? [this.defaultSegment] : [];
         if (segments instanceof Array) {
             titleSegments = titleSegments.concat(segments);
-        } else {
+        } else if (segments) {
             titleSegments.push(segments);
         }
         return titleSegments.reverse().join(this.segmentsSeparator);

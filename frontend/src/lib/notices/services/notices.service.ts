@@ -36,6 +36,10 @@ export class NoticesService {
     deleteByIndex = (index:number):void => {
         this.notices = this.notices.filter((element, elementIndex) => elementIndex !== index);
     };
+    
+    deleteAll = ():void => {
+        this.notices = [];
+    };
 
     shiftAfterDeleteTimeout = ():void => {
         if (this.notices.length && this.notices[0].timestampCreated + this.deleteTimeout < Math.floor(Date.now())) {

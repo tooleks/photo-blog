@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core'
 import {Router, NavigationEnd} from '@angular/router';
 import {MetaTagsService} from '../../../core';
 import {TransferState} from '../../../sys';
+import {NoticesService} from '../../../lib';
 import {
     AppService,
     TitleService,
@@ -26,20 +27,16 @@ export class AppComponent implements OnInit {
                 protected metaTags:MetaTagsService,
                 protected authProvider:AuthProviderService,
                 protected screenDetector:ScreenDetectorService,
-                protected scrollFreezer:ScrollFreezerService) {
+                protected scrollFreezer:ScrollFreezerService,
+                protected notices:NoticesService) {
     }
 
     ngOnInit():void {
-        this.initTitle();
         this.initMeta();
         this.initRouterSubscribers();
         this.initScrollFreezerSubscribers();
         this.cache.set('state-transfer', true);
     }
-
-    protected initTitle = ():void => {
-        this.title.setTitle();
-    };
 
     protected initMeta = ():void => {
         this.metaTags.setWebsiteName(this.app.getName());
@@ -53,6 +50,10 @@ export class AppComponent implements OnInit {
         this.router.events
             .filter((event:any) => event instanceof NavigationEnd)
             .subscribe((event:NavigationEnd) => this.metaTags.setUrl(this.app.getUrl() + event.url));
+
+        this.router.events
+            .filter((event:any) => event instanceof NavigationEnd)
+            .subscribe((event:NavigationEnd) => this.notices.deleteAll());
     };
 
     protected initScrollFreezerSubscribers = ():void => {
