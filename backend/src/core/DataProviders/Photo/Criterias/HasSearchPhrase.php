@@ -17,9 +17,29 @@ class HasSearchPhrase implements Criteria
      *
      * @param string $searchPhrase
      */
-    public function __construct($searchPhrase)
+    public function __construct(string $searchPhrase)
     {
         $this->searchPhrase = $searchPhrase;
+    }
+
+    /**
+     * Get search phrase words.
+     *
+     * @return array
+     */
+    protected function getSearchPhraseWords() : array
+    {
+        return explode(' ', $this->searchPhrase);
+    }
+
+    /**
+     * Count search phrase words.
+     *
+     * @return int
+     */
+    protected function countSearchPhraseWords() : int
+    {
+        return count($this->getSearchPhraseWords());
     }
 
     /**
@@ -27,12 +47,30 @@ class HasSearchPhrase implements Criteria
      */
     public function apply($query)
     {
-        $query->where(function ($query) {
+        $whereSearchPhraseScope = function ($query, string $searchPhrase) {
             $query
-                ->where('photos.description', 'like', "%{$this->searchPhrase}%")
-                ->orWhereHas('tags', function ($query) {
-                    $query->where('tags.value', 'like', "%{$this->searchPhrase}%");
+                ->where('photos.description', 'like', "%{$searchPhrase}%")
+                ->orWhereHas('tags', function ($query) use ($searchPhrase) {
+                    $query->where('tags.value', 'like', "%{$searchPhrase}%");
                 });
+        };
+
+        $query->where(function ($query) use ($whereSearchPhraseScope) {
+            // Search by whole search phrase.
+            $query->where(function ($query) use ($whereSearchPhraseScope) {
+                $whereSearchPhraseScope($query, $this->searchPhrase);
+            });
+
+            if ($this->countSearchPhraseWords() > 1) {
+                $query->orWhere(function ($query) use ($whereSearchPhraseScope) {
+                    // Search by each word separately.
+                    foreach ($this->getSearchPhraseWords() as $searchPhrase) {
+                        $query->where(function ($query) use ($whereSearchPhraseScope, $searchPhrase) {
+                            $whereSearchPhraseScope($query, $searchPhrase);
+                        });
+                    }
+                });
+            }
         });
     }
 }
