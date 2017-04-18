@@ -13,8 +13,7 @@
             <a itemprop="url"
                [routerLink]="['/photo/add']"
                (click)="toggle()"
-               routerLinkActive="active"
-               [routerLinkActiveOptions]="{ exact: true }">
+               routerLinkActive="active">
                 <i class="fa fa-plus" aria-hidden="true"></i>
                 <span>{{ 'Add Photo' }}</span>
             </a>
@@ -23,8 +22,7 @@
             <a itemprop="url"
                [routerLink]="['/photos']"
                (click)="toggle()"
-               routerLinkActive="active"
-               [routerLinkActiveOptions]="{ exact: true }">
+               routerLinkActive="active">
                 <i class="fa fa-th-large" aria-hidden="true"></i>
                 <span>{{ 'All Photos' }}</span>
             </a>
@@ -33,8 +31,7 @@
             <a itemprop="url"
                [routerLink]="['/photos/search']"
                (click)="toggle()"
-               routerLinkActive="active"
-               [routerLinkActiveOptions]="{ exact: true }">
+               routerLinkActive="active">
                 <i class="fa fa-search" aria-hidden="true"></i>
                 <span>{{ 'Search' }}</span>
             </a>
@@ -49,8 +46,7 @@
                     <a itemprop="url"
                        [routerLink]="['/photos/tag', tag.value]"
                        (click)="toggle()"
-                       routerLinkActive="active"
-                       [routerLinkActiveOptions]="{ exact: true }">{{ '#' + tag.value }}</a>
+                       routerLinkActive="active">{{ '#' + tag.value }}</a>
                 </li>
             </ul>
         </li>
@@ -58,8 +54,7 @@
             <a itemprop="url"
                [routerLink]="['/about-me']"
                (click)="toggle()"
-               routerLinkActive="active"
-               [routerLinkActiveOptions]="{ exact: true }">
+               routerLinkActive="active">
                 <i class="fa fa-user" aria-hidden="true"></i>
                 <span>{{ 'About Me' }}</span>
             </a>
@@ -68,8 +63,7 @@
             <a itemprop="url"
                [routerLink]="['/contact-me']"
                (click)="toggle()"
-               routerLinkActive="active"
-               [routerLinkActiveOptions]="{ exact: true }">
+               routerLinkActive="active">
                 <i class="fa fa-mail-forward" aria-hidden="true"></i>
                 <span>{{ 'Contact Me' }}</span>
             </a>
@@ -78,8 +72,7 @@
             <a itemprop="url"
                [routerLink]="['/subscription']"
                (click)="toggle()"
-               routerLinkActive="active"
-               [routerLinkActiveOptions]="{ exact: true }">
+               routerLinkActive="active">
                 <i class="fa fa-envelope" aria-hidden="true"></i>
                 <span>{{ 'Subscription' }}</span>
             </a>
@@ -88,8 +81,7 @@
             <a itemprop="url"
                [routerLink]="['/signout']"
                (click)="toggle()"
-               routerLinkActive="active"
-               [routerLinkActiveOptions]="{ exact: true }">
+               routerLinkActive="active">
                 <i class="fa fa-sign-out" aria-hidden="true"></i>
                 <span>{{ 'Sign Out' }}</span>
             </a>
