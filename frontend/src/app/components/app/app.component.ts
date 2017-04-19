@@ -7,10 +7,12 @@ import {
     AppService,
     TitleService,
     AuthProviderService,
+    EnvironmentDetectorService,
     ScrollFreezerService,
     ScreenDetectorService,
 } from '../../../shared';
 import '../../../../assets/static/img/meta_image.jpg'
+declare let ga:Function;
 
 @Component({
     selector: 'app',
@@ -26,6 +28,7 @@ export class AppComponent implements OnInit {
                 protected title:TitleService,
                 protected metaTags:MetaTagsService,
                 protected authProvider:AuthProviderService,
+                protected environmentDetector:EnvironmentDetectorService,
                 protected screenDetector:ScreenDetectorService,
                 protected scrollFreezer:ScrollFreezerService,
                 protected notices:NoticesService) {
@@ -49,11 +52,20 @@ export class AppComponent implements OnInit {
     protected initRouterSubscribers = ():void => {
         this.router.events
             .filter((event:any) => event instanceof NavigationEnd)
-            .subscribe((event:NavigationEnd) => this.metaTags.setUrl(this.app.getUrl() + event.url));
+            .subscribe((event:NavigationEnd) => this.metaTags.setUrl(this.app.getUrl() + event.urlAfterRedirects));
 
         this.router.events
             .filter((event:any) => event instanceof NavigationEnd)
             .subscribe((event:NavigationEnd) => this.notices.deleteAll());
+
+        if (this.environmentDetector.isBrowser()) {
+            this.router.events
+                .filter((event:any) => event instanceof NavigationEnd)
+                .subscribe((event:NavigationEnd) => {
+                    ga('set', 'page', event.urlAfterRedirects);
+                    ga('send', 'pageview');
+                });
+        }
     };
 
     protected initScrollFreezerSubscribers = ():void => {

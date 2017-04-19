@@ -2,6 +2,7 @@ import {NgModule} from '@angular/core';
 import {HttpModule, JsonpModule} from '@angular/http';
 import {GoTopButtonModule} from 'ng2-go-top-button';
 import {TransferHttpModule} from '../sys';
+import {ExternalModule} from '../external';
 import {SharedModule} from '../shared';
 import {PhotosModule} from '../photos';
 import {AppRouting, AppRoutingProviders} from './app.routing';
@@ -26,6 +27,7 @@ import {
         GoTopButtonModule,
         TransferHttpModule,
         AppRouting,
+        ExternalModule,
         SharedModule,
         PhotosModule,
     ],
