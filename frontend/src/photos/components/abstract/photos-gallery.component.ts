@@ -67,7 +67,7 @@ export abstract class PhotosGalleryComponent {
 
     protected handleLoadPhotos(response:any):Array<GalleryImage> {
         const images = PhotoToGalleryImageMapper.map(response.data).map((image:GalleryImage) => {
-            const imageViewUrl = this.router.createUrlTree([], {queryParams: {'show': image.getId()}}).toString();
+            const imageViewUrl = this.router.createUrlTree(['photos'], {queryParams: {'show': image.getId()}}).toString();
             return image.setViewUrl(imageViewUrl);
         });
         this.hasMoreImages = !(response.data.length < this.defaults.perPage);
