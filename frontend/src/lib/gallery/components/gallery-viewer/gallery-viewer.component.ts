@@ -65,7 +65,7 @@ export class GalleryViewerComponent implements OnChanges {
             this.onImageLoaded.emit(this.image);
         });
 
-        // Note: Browser-specific logic.
+        // #browser-specific
         if (typeof (window) !== 'undefined') {
             setTimeout(() => (this.loaded = loaded), this.loaderDelay);
         }

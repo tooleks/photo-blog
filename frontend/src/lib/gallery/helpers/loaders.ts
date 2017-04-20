@@ -7,14 +7,12 @@
  * @param {function} callback
  */
 export function loadImage(imageUrl:string, callback:any) {
-    // Browser-specific logic.
+    // #browser-specific
     if (typeof (window) !== 'undefined') {
         const image = new Image;
         image.onload = callback;
         image.src = imageUrl;
-    }
-    // Server-specific logic.
-    else {
+    } else {
         callback();
     }
 }
