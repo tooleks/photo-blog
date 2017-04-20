@@ -1,18 +1,16 @@
 import {Component, OnInit} from '@angular/core'
 import {Router, NavigationEnd} from '@angular/router';
-import {MetaTagsService} from '../../../core';
+import {MetaTagsService, GoogleAnalyticsService} from '../../../core';
 import {TransferState} from '../../../sys';
+import {ScreenDetectorService} from '../../../core';
 import {NoticesService} from '../../../lib';
 import {
     AppService,
     TitleService,
     AuthProviderService,
-    EnvironmentDetectorService,
     ScrollFreezerService,
-    ScreenDetectorService,
 } from '../../../shared';
 import '../../../../assets/static/img/meta_image.jpg'
-declare let ga:Function;
 
 @Component({
     selector: 'app',
@@ -28,10 +26,10 @@ export class AppComponent implements OnInit {
                 protected title:TitleService,
                 protected metaTags:MetaTagsService,
                 protected authProvider:AuthProviderService,
-                protected environmentDetector:EnvironmentDetectorService,
                 protected screenDetector:ScreenDetectorService,
                 protected scrollFreezer:ScrollFreezerService,
-                protected notices:NoticesService) {
+                protected notices:NoticesService,
+                protected googleAnalytics:GoogleAnalyticsService) {
     }
 
     ngOnInit():void {
@@ -39,6 +37,7 @@ export class AppComponent implements OnInit {
         this.initRouterSubscribers();
         this.initScrollFreezerSubscribers();
         this.cache.set('state-transfer', true);
+        this.googleAnalytics.init();
     }
 
     protected initMeta = ():void => {
@@ -57,15 +56,6 @@ export class AppComponent implements OnInit {
         this.router.events
             .filter((event:any) => event instanceof NavigationEnd)
             .subscribe((event:NavigationEnd) => this.notices.deleteAll());
-
-        if (this.environmentDetector.isBrowser()) {
-            this.router.events
-                .filter((event:any) => event instanceof NavigationEnd)
-                .subscribe((event:NavigationEnd) => {
-                    ga('set', 'page', event.urlAfterRedirects);
-                    ga('send', 'pageview');
-                });
-        }
     };
 
     protected initScrollFreezerSubscribers = ():void => {

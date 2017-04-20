@@ -1,18 +1,7 @@
-import {
-    Component,
-    HostListener,
-    Output,
-    EventEmitter,
-    OnInit,
-} from '@angular/core';
-import {
-    trigger,
-    state,
-    style,
-    transition,
-    animate
-} from '@angular/animations';
-import {ScreenDetectorService, ApiService, AuthProviderService, AppService} from '../../../../shared';
+import {Component, HostListener, Output, EventEmitter, OnInit} from '@angular/core';
+import {trigger, state, style, transition, animate} from '@angular/animations';
+import {ScreenDetectorService} from '../../../../core';
+import {ApiService, AuthProviderService, AppService} from '../../../../shared';
 
 @Component({
     selector: 'sidebar',

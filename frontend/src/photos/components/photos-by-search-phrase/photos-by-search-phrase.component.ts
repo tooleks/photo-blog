@@ -1,11 +1,10 @@
 import {Component, OnInit, AfterViewInit, ViewChildren, ViewChild} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
-import {MetaTagsService} from '../../../core'
+import {MetaTagsService, EnvironmentDetectorService} from '../../../core'
 import {GalleryComponent, GalleryImage} from '../../../lib';
 import {
     TitleService,
     AuthProviderService,
-    EnvironmentDetectorService,
     NavigatorServiceProvider,
     PagerServiceProvider,
     LockProcessServiceProvider,

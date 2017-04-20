@@ -5,13 +5,12 @@ import {env} from '../../../env';
 
 @NgModule({
     providers: [
-        {
-            provide: EnvService,
-            useFactory() {
-                return new EnvService(env);
-            },
-        },
+        {provide: EnvService, useFactory: getEnvService},
     ],
 })
 export class EnvModule {
+}
+
+export function getEnvService() {
+    return new EnvService(env);
 }

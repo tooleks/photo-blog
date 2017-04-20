@@ -4,7 +4,7 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {Http} from '@angular/http';
 import {Title} from '@angular/platform-browser';
-import {EnvModule, EnvService, HtmlModule, SeoModule} from '../core';
+import {CoreModule, EnvService} from '../core';
 import {GalleryModule, NoticesModule} from '../lib';
 import {
     ApiService,
@@ -12,13 +12,11 @@ import {
     AppService,
     AuthService,
     AuthProviderService,
-    EnvironmentDetectorService,
     LocalStorageService,
     LockProcessServiceProvider,
     LockerServiceProvider,
     NavigatorServiceProvider,
     PagerServiceProvider,
-    ScreenDetectorService,
     ScrollFreezerService,
     TitleService,
     UserDataProviderService,
@@ -31,22 +29,18 @@ import {ApiErrorHandler} from './services/api-error-handler';
         JsonpModule,
         CommonModule,
         FormsModule,
-        EnvModule,
-        HtmlModule,
+        CoreModule,
         GalleryModule,
         NoticesModule,
-        SeoModule,
     ],
     exports: [
         HttpModule,
         JsonpModule,
         CommonModule,
         FormsModule,
-        EnvModule,
-        HtmlModule,
+        CoreModule,
         GalleryModule,
         NoticesModule,
-        SeoModule,
     ],
     providers: [
         {
@@ -58,13 +52,11 @@ import {ApiErrorHandler} from './services/api-error-handler';
         {provide: AppService, useFactory: getAppService, deps: [EnvService]},
         AuthService,
         AuthProviderService,
-        EnvironmentDetectorService,
         LocalStorageService,
         LockProcessServiceProvider,
         LockerServiceProvider,
         NavigatorServiceProvider,
         PagerServiceProvider,
-        ScreenDetectorService,
         ScrollFreezerService,
         {provide: TitleService, useFactory: getTitleService, deps: [Title, AppService]},
         UserDataProviderService,

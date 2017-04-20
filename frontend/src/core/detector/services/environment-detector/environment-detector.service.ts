@@ -7,6 +7,6 @@ export class EnvironmentDetectorService {
     };
 
     isServer = ():boolean => {
-        return typeof (window) === 'undefined';
+        return !this.isBrowser();
     };
 }
