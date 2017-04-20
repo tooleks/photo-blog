@@ -52,7 +52,7 @@ export class GalleryGridComponent implements OnChanges, AfterContentInit, OnDest
     }
 
     ngAfterContentInit() {
-        // Check if code is running in a browser.
+        // #browser-specific
         if (typeof (window) !== 'undefined') {
             this.elementSizeCheck = setInterval(this.elementSizeCheckCallback, this.elementSizeCheckInterval);
         }

@@ -8,6 +8,7 @@ export class NoticesService {
     public deleteInterval:number = 100;
 
     constructor() {
+        // #browser-specific
         if (typeof (window) !== 'undefined') {
             setInterval(this.shiftAfterDeleteTimeout, this.deleteInterval);
         }
