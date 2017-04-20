@@ -1,14 +1,15 @@
 import {Injectable} from '@angular/core';
 import {Router, NavigationEnd} from '@angular/router';
+import {EnvironmentDetectorService} from '../../../detector';
 declare let ga:Function;
 
 @Injectable()
 export class GoogleAnalyticsService {
-    constructor(protected router:Router, protected config:any) {
+    constructor(protected router:Router, protected environmentDetector:EnvironmentDetectorService, protected config:any) {
     }
 
     init = ():void => {
-        if (typeof (window) !== 'undefined') {
+        if (this.environmentDetector.isBrowser()) {
             this.initScript();
             this.initRouterSubscribers();
         }
