@@ -89,14 +89,19 @@ export abstract class PhotosGalleryComponent {
 
     protected onShowPhoto(image:GalleryImage):void {
         this.scrollFreezer.freeze();
-        this.navigator.setQueryParam('show', image.getId());
+        if (this.queryParams['show'] !== null) {
+            this.title.popTitleSegment();
+        }
+        this.title.pushTitleSegment(image.getDescription());
         this.metaTags.setImage(image.getLargeSizeUrl());
         this.metaTags.setTitle(image.getDescription());
+        this.navigator.setQueryParam('show', image.getId());
     }
 
     protected onHidePhoto(image:GalleryImage):void {
         this.scrollFreezer.unfreeze();
         this.navigator.unsetQueryParam('show');
+        this.title.popTitleSegment();
     }
 
     protected onEditPhoto(image:GalleryImage):void {
