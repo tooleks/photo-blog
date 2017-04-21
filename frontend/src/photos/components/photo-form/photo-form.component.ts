@@ -6,8 +6,8 @@ import {
     AuthProviderService,
     NavigatorServiceProvider,
     NavigatorService,
-    LockProcessServiceProvider,
-    LockProcessService,
+    ProcessLockerServiceProvider,
+    ProcessLockerService,
 } from '../../../shared';
 import {PhotoDataProviderService} from '../../services'
 import {Photo} from './models';
@@ -20,7 +20,7 @@ import {Photo} from './models';
 export class PhotoFormComponent implements OnInit {
     protected photo:Photo;
     protected navigator:NavigatorService;
-    protected lockProcess:LockProcessService;
+    protected processLocker:ProcessLockerService;
 
     constructor(protected route:ActivatedRoute,
                 protected title:TitleService,
@@ -28,9 +28,9 @@ export class PhotoFormComponent implements OnInit {
                 protected photoDataProvider:PhotoDataProviderService,
                 protected notices:NoticesService,
                 navigatorServiceProvider:NavigatorServiceProvider,
-                lockProcessServiceProvider:LockProcessServiceProvider) {
+                processLockerServiceProvider:ProcessLockerServiceProvider) {
         this.navigator = navigatorServiceProvider.getInstance();
-        this.lockProcess = lockProcessServiceProvider.getInstance();
+        this.processLocker = processLockerServiceProvider.getInstance();
     }
 
     ngOnInit():void {
@@ -54,7 +54,7 @@ export class PhotoFormComponent implements OnInit {
     };
 
     loadById = (id:number):Promise<any> => {
-        return this.lockProcess.process(this.processLoadById, [id]).then((photo:any) => {
+        return this.processLocker.lock(this.processLoadById, [id]).then((photo:any) => {
             this.photo.setSavedPhotoAttributes(photo);
             this.title.setTitle('Edit Photo');
             return photo;
@@ -68,7 +68,7 @@ export class PhotoFormComponent implements OnInit {
     };
 
     save = ():Promise<any> => {
-        return this.lockProcess.process(this.processSavePhoto).then((photo:any) => {
+        return this.processLocker.lock(this.processSavePhoto).then((photo:any) => {
             this.photo.setSavedPhotoAttributes(photo);
             this.notices.success('Photo was successfully saved.');
             this.navigator.navigate(['/photos']);
@@ -83,7 +83,7 @@ export class PhotoFormComponent implements OnInit {
     };
 
     upload = (file:FileList):Promise<any> => {
-        return this.lockProcess.process(this.processUploadPhoto, [file]).then((photo:any) => {
+        return this.processLocker.lock(this.processUploadPhoto, [file]).then((photo:any) => {
             this.photo.setUploadedPhotoAttributes(photo);
             this.notices.success('File was successfully uploaded.');
             return photo;
@@ -97,7 +97,7 @@ export class PhotoFormComponent implements OnInit {
     };
 
     deletePhoto = ():Promise<any> => {
-        return this.lockProcess.process(this.processDeletePhoto).then((result:any) => {
+        return this.processLocker.lock(this.processDeletePhoto).then((result:any) => {
             this.notices.success('Photo was successfully deleted.');
             this.navigator.navigate(['/photos']);
             return result;
@@ -105,6 +105,6 @@ export class PhotoFormComponent implements OnInit {
     };
 
     isProcessing = ():boolean => {
-        return this.lockProcess.isProcessing();
+        return this.processLocker.isLocked();
     };
 }

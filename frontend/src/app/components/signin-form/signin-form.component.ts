@@ -4,8 +4,8 @@ import {NoticesService} from '../../../lib';
 import {
     AuthService,
     TitleService,
-    LockProcessServiceProvider,
-    LockProcessService,
+    ProcessLockerServiceProvider,
+    ProcessLockerService,
     NavigatorServiceProvider,
     NavigatorService,
 } from '../../../shared';
@@ -18,16 +18,16 @@ import {SignIn as Model} from './models';
 export class SignInFormComponent implements OnInit {
     protected model:Model;
     protected navigator:NavigatorService;
-    protected lockProcess:LockProcessService;
+    protected processLocker:ProcessLockerService;
 
     constructor(protected auth:AuthService,
                 protected title:TitleService,
                 protected metaTags:MetaTagsService,
                 protected notices:NoticesService,
                 navigatorProvider:NavigatorServiceProvider,
-                lockProcessServiceProvider:LockProcessServiceProvider) {
+                processLockerServiceProvider:ProcessLockerServiceProvider) {
         this.navigator = navigatorProvider.getInstance();
-        this.lockProcess = lockProcessServiceProvider.getInstance();
+        this.processLocker = processLockerServiceProvider.getInstance();
     }
 
     ngOnInit():void {
@@ -37,8 +37,8 @@ export class SignInFormComponent implements OnInit {
     }
 
     signIn = ():Promise<any> => {
-        return this.lockProcess
-            .process(() => this.auth.signIn(this.model.email, this.model.password))
+        return this.processLocker
+            .lock(() => this.auth.signIn(this.model.email, this.model.password))
             .then(this.onSignInSuccess);
     };
 
@@ -49,6 +49,6 @@ export class SignInFormComponent implements OnInit {
     };
 
     isProcessing = ():boolean => {
-        return this.lockProcess.isProcessing();
+        return this.processLocker.isLocked();
     };
 }

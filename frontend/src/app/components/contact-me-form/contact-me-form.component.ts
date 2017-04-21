@@ -4,8 +4,8 @@ import {NoticesService} from '../../../lib';
 import {
     ApiService,
     TitleService,
-    LockProcessServiceProvider,
-    LockProcessService,
+    ProcessLockerServiceProvider,
+    ProcessLockerService,
     NavigatorServiceProvider,
     NavigatorService,
 } from '../../../shared';
@@ -18,16 +18,16 @@ import {ContactMe as Model} from './models';
 export class ContactMeFormComponent implements OnInit {
     protected model:Model;
     protected navigator:NavigatorService;
-    protected lockProcess:LockProcessService;
+    protected processLocker:ProcessLockerService;
 
     constructor(protected api:ApiService,
                 protected title:TitleService,
                 protected metaTags:MetaTagsService,
                 protected notices:NoticesService,
                 navigatorProvider:NavigatorServiceProvider,
-                lockProcessServiceProvider:LockProcessServiceProvider) {
+                processLockerServiceProvider:ProcessLockerServiceProvider) {
         this.navigator = navigatorProvider.getInstance();
-        this.lockProcess = lockProcessServiceProvider.getInstance();
+        this.processLocker = processLockerServiceProvider.getInstance();
     }
 
     ngOnInit():void {
@@ -37,8 +37,8 @@ export class ContactMeFormComponent implements OnInit {
     }
 
     contactMe = ():Promise<any> => {
-        return this.lockProcess
-            .process(() => this.api.post('/contact_messages', this.model))
+        return this.processLocker
+            .lock(() => this.api.post('/contact_messages', this.model))
             .then(this.onContactMeSuccess);
     };
 
@@ -49,6 +49,6 @@ export class ContactMeFormComponent implements OnInit {
     };
 
     isProcessing = ():boolean => {
-        return this.lockProcess.isProcessing();
+        return this.processLocker.isLocked();
     };
 }

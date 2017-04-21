@@ -1,3 +1,4 @@
+import {OnInit} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {PhotoToGalleryImageMapper} from '../../mappers';
 import {MetaTagsService} from '../../../core'
@@ -8,17 +9,17 @@ import {
     NavigatorService,
     PagerServiceProvider,
     PagerService,
-    LockProcessServiceProvider,
-    LockProcessService,
+    ProcessLockerServiceProvider,
+    ProcessLockerService,
     ScrollFreezerService,
 } from '../../../shared';
 
-export abstract class PhotosGalleryComponent {
+export abstract class BasePhotosComponent implements OnInit {
     protected defaults:any = {page: 1, perPage: 20, show: null};
     protected queryParams:any = {};
     protected pager:PagerService;
     protected navigator:NavigatorService;
-    protected lockProcess:LockProcessService;
+    protected processLocker:ProcessLockerService;
     protected images:Array<GalleryImage> = [];
     protected hasMoreImages:boolean = true;
 
@@ -28,33 +29,29 @@ export abstract class PhotosGalleryComponent {
                 protected metaTags:MetaTagsService,
                 protected navigatorProvider:NavigatorServiceProvider,
                 protected pagerProvider:PagerServiceProvider,
-                protected lockProcessProvider:LockProcessServiceProvider,
+                protected processLockerProvider:ProcessLockerServiceProvider,
                 protected scrollFreezer:ScrollFreezerService) {
         this.pager = this.pagerProvider.getInstance(this.defaults.page, this.defaults.perPage);
         this.navigator = this.navigatorProvider.getInstance();
-        this.lockProcess = this.lockProcessProvider.getInstance();
+        this.processLocker = this.processLockerProvider.getInstance();
     }
 
-    protected init():void {
-        this.initTitle();
-        this.initMeta();
+    ngOnInit():void {
+        this.queryParams['page'] = this.defaults.page;
+        this.queryParams['show'] = this.defaults.show;
         this.initParamsSubscribers();
-    }
-
-    protected abstract initTitle():void;
-
-    protected initMeta():void {
-        this.metaTags.setTitle(this.title.getPageName());
     }
 
     protected initParamsSubscribers():void {
         this.route.queryParams
             .map((queryParams:any) => queryParams['page'])
-            .subscribe((page:number) => this.queryParams['page'] = page ? Number(page) : this.defaults.page);
+            .filter((page:any) => page)
+            .subscribe((page:number) => this.queryParams['page'] = Number(page));
 
         this.route.queryParams
             .map((queryParams:any) => queryParams['show'])
-            .subscribe((show:number) => this.queryParams['show'] = show ? Number(show) : this.defaults.show);
+            .filter((show:any) => show)
+            .subscribe((show:number) => this.queryParams['show'] = Number(show));
     }
 
     protected reset():void {
@@ -65,11 +62,8 @@ export abstract class PhotosGalleryComponent {
 
     protected abstract loadMorePhotos():Promise<Array<GalleryImage>>;
 
-    protected handleLoadPhotos(response:any):Array<GalleryImage> {
-        const images = PhotoToGalleryImageMapper.map(response.data).map((image:GalleryImage) => {
-            const imageViewUrl = this.router.createUrlTree(['photos'], {queryParams: {'show': image.getId()}}).toString();
-            return image.setViewUrl(imageViewUrl);
-        });
+    protected onLoadPhotosSuccess(response:any):Array<GalleryImage> {
+        const images = this.mapImages(response.data);
         this.hasMoreImages = !(response.data.length < this.defaults.perPage);
         if (response.data.length) {
             this.pager.setPage(response.current_page);
@@ -79,12 +73,20 @@ export abstract class PhotosGalleryComponent {
         return images;
     }
 
+    protected mapImages(images:Array<any>):Array<GalleryImage> {
+        return PhotoToGalleryImageMapper.map(images).map((image:GalleryImage) => {
+            return image.setViewUrl(
+                this.router.createUrlTree(['photos'], {queryParams: {show: image.getId()}}).toString()
+            );
+        });
+    }
+
     protected isEmpty():boolean {
-        return !this.images.length && !this.lockProcess.isProcessing();
+        return !this.images.length && !this.processLocker.isLocked();
     }
 
     protected isProcessing():boolean {
-        return this.lockProcess.isProcessing();
+        return this.processLocker.isLocked();
     }
 
     protected onShowPhoto(image:GalleryImage):void {

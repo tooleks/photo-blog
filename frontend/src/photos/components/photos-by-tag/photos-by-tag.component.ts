@@ -7,17 +7,17 @@ import {
     AuthProviderService,
     NavigatorServiceProvider,
     PagerServiceProvider,
-    LockProcessServiceProvider,
+    ProcessLockerServiceProvider,
     ScrollFreezerService,
 } from '../../../shared';
 import {PhotoDataProviderService} from '../../services';
-import {PhotosGalleryComponent} from '../abstract';
+import {BasePhotosComponent} from '../abstract';
 
 @Component({
     selector: 'photos-by-tag',
     templateUrl: 'photos-by-tag.component.html',
 })
-export class PhotosByTagComponent extends PhotosGalleryComponent implements OnInit {
+export class PhotosByTagComponent extends BasePhotosComponent implements OnInit {
     @ViewChild('galleryComponent') galleryComponent:GalleryComponent;
     protected queryParams:any = {tag: ''};
 
@@ -29,23 +29,22 @@ export class PhotosByTagComponent extends PhotosGalleryComponent implements OnIn
                 metaTags:MetaTagsService,
                 navigatorProvider:NavigatorServiceProvider,
                 pagerProvider:PagerServiceProvider,
-                lockProcessProvider:LockProcessServiceProvider,
+                processLockerProvider:ProcessLockerServiceProvider,
                 scrollFreezer:ScrollFreezerService) {
-        super(router, route, title, metaTags, navigatorProvider, pagerProvider, lockProcessProvider, scrollFreezer);
+        super(router, route, title, metaTags, navigatorProvider, pagerProvider, processLockerProvider, scrollFreezer);
     }
 
     ngOnInit():void {
-        this.init();
-    }
-
-    protected initTitle():void {
+        super.ngOnInit();
         this.title.setTitle('Search By Tag');
+        this.metaTags.setTitle(this.title.getPageName());
     }
 
     protected initParamsSubscribers() {
         super.initParamsSubscribers();
         this.route.params
             .map((params:any) => params['tag'])
+            .filter((tag:any) => tag && tag != this.queryParams['tag'])
             .subscribe(this.searchByTag.bind(this));
     }
 
@@ -55,9 +54,9 @@ export class PhotosByTagComponent extends PhotosGalleryComponent implements OnIn
     }
 
     protected loadPhotos(page:number, perPage:number, parameters?:any):Promise<Array<GalleryImage>> {
-        return this.lockProcess
-            .process(() => this.photoDataProvider.getByTag(page, perPage, parameters['tag']))
-            .then(this.handleLoadPhotos.bind(this));
+        return this.processLocker
+            .lock(() => this.photoDataProvider.getByTag(page, perPage, parameters['tag']))
+            .then(this.onLoadPhotosSuccess.bind(this));
     }
 
     protected loadMorePhotos():Promise<Array<GalleryImage>> {
@@ -67,15 +66,11 @@ export class PhotosByTagComponent extends PhotosGalleryComponent implements OnIn
     }
 
     protected searchByTag(tag:string):void {
-        if (tag && tag != this.queryParams['tag']) {
-            this.reset();
-            this.queryParams['tag'] = String(tag);
-            this.title.setTitle(['Photos', `Tag #${this.queryParams['tag']}`]);
-            this.metaTags.setTitle(this.title.getPageName());
-            const perPageOffset = this.queryParams['page'] * this.pager.getPerPage();
-            this.loadPhotos(this.defaults.page, perPageOffset, {
-                tag: this.queryParams['tag'],
-            });
-        }
+        this.reset();
+        this.queryParams['tag'] = String(tag);
+        this.title.setTitle(['Photos', `Tag #${this.queryParams['tag']}`]);
+        this.metaTags.setTitle(this.title.getPageName());
+        const perPageOffset = this.queryParams['page'] * this.pager.getPerPage();
+        this.loadPhotos(this.defaults.page, perPageOffset, {tag: this.queryParams['tag']});
     }
 }

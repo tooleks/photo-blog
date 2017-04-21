@@ -2,17 +2,17 @@ import {Injectable} from '@angular/core';
 import {LockerService} from '../locker';
 
 @Injectable()
-export class LockProcessService {
+export class ProcessLockerService {
     constructor(protected locker:LockerService) {
     }
 
-    process = (callback:any, args?:any):Promise<any> => {
+    lock = (callback:any, args?:any):Promise<any> => {
         return this.startProcess(callback, args)
             .then(this.endProcess)
             .catch(this.handleProcessErrors);
     };
 
-    isProcessing = ():boolean => {
+    isLocked = ():boolean => {
         return this.locker.isLocked();
     };
 

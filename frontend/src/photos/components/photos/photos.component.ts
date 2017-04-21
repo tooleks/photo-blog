@@ -7,17 +7,17 @@ import {
     AuthProviderService,
     NavigatorServiceProvider,
     PagerServiceProvider,
-    LockProcessServiceProvider,
+    ProcessLockerServiceProvider,
     ScrollFreezerService,
 } from '../../../shared';
 import {PhotoDataProviderService} from '../../services';
-import {PhotosGalleryComponent} from '../abstract';
+import {BasePhotosComponent} from '../abstract';
 
 @Component({
     selector: 'photos',
     templateUrl: 'photos.component.html',
 })
-export class PhotosComponent extends PhotosGalleryComponent implements OnInit, AfterViewInit {
+export class PhotosComponent extends BasePhotosComponent implements OnInit, AfterViewInit {
     constructor(protected authProvider:AuthProviderService,
                 protected photoDataProvider:PhotoDataProviderService,
                 router:Router,
@@ -26,13 +26,15 @@ export class PhotosComponent extends PhotosGalleryComponent implements OnInit, A
                 metaTags:MetaTagsService,
                 navigatorProvider:NavigatorServiceProvider,
                 pagerProvider:PagerServiceProvider,
-                lockProcessProvider:LockProcessServiceProvider,
+                processLockerProvider:ProcessLockerServiceProvider,
                 scrollFreezer:ScrollFreezerService) {
-        super(router, route, title, metaTags, navigatorProvider, pagerProvider, lockProcessProvider, scrollFreezer);
+        super(router, route, title, metaTags, navigatorProvider, pagerProvider, processLockerProvider, scrollFreezer);
     }
 
     ngOnInit():void {
-        this.init();
+        super.ngOnInit();
+        this.title.setTitle('All Photos');
+        this.metaTags.setTitle(this.title.getPageName());
     }
 
     ngAfterViewInit():void {
@@ -40,14 +42,10 @@ export class PhotosComponent extends PhotosGalleryComponent implements OnInit, A
         this.loadPhotos(this.defaults.page, perPageOffset);
     }
 
-    protected initTitle():void {
-        this.title.setTitle('All Photos');
-    }
-
     protected loadPhotos(page:number, perPage:number, parameters?:any):Promise<Array<GalleryImage>> {
-        return this.lockProcess
-            .process(() => this.photoDataProvider.getAll(page, perPage))
-            .then(this.handleLoadPhotos.bind(this));
+        return this.processLocker
+            .lock(() => this.photoDataProvider.getAll(page, perPage))
+            .then(this.onLoadPhotosSuccess.bind(this));
     }
 
     protected loadMorePhotos():Promise<Array<GalleryImage>> {

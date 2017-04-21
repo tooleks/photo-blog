@@ -4,8 +4,8 @@ import {NoticesService} from '../../../lib';
 import {
     ApiService,
     TitleService,
-    LockProcessServiceProvider,
-    LockProcessService,
+    ProcessLockerServiceProvider,
+    ProcessLockerService,
     NavigatorServiceProvider,
     NavigatorService,
 } from '../../../shared';
@@ -17,16 +17,16 @@ import {
 export class UnsubscriptionComponent implements OnInit {
     protected token:string = null;
     protected navigator:NavigatorService;
-    protected lockProcess:LockProcessService;
+    protected processLocker:ProcessLockerService;
 
     constructor(protected route:ActivatedRoute,
                 protected api:ApiService,
                 protected title:TitleService,
                 protected notices:NoticesService,
                 navigatorProvider:NavigatorServiceProvider,
-                lockProcessServiceProvider:LockProcessServiceProvider) {
+                processLockerServiceProvider:ProcessLockerServiceProvider) {
         this.navigator = navigatorProvider.getInstance();
-        this.lockProcess = lockProcessServiceProvider.getInstance();
+        this.processLocker = processLockerServiceProvider.getInstance();
     }
 
     ngOnInit():void {
@@ -41,8 +41,8 @@ export class UnsubscriptionComponent implements OnInit {
     };
 
     unsubscribe = ():Promise<any> => {
-        return this.lockProcess
-            .process(() => this.api.delete(`/subscriptions/${this.token}`))
+        return this.processLocker
+            .lock(() => this.api.delete(`/subscriptions/${this.token}`))
             .then(this.onUnsubscribeSuccess)
             .catch(this.onUnsubscribeError);
     };
@@ -63,6 +63,6 @@ export class UnsubscriptionComponent implements OnInit {
     };
 
     isProcessing = ():boolean => {
-        return this.lockProcess.isProcessing();
+        return this.processLocker.isLocked();
     };
 }
