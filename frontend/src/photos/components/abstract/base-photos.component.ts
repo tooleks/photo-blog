@@ -9,8 +9,8 @@ import {
     NavigatorService,
     PagerServiceProvider,
     PagerService,
-    LockProcessServiceProvider,
-    LockProcessService,
+    ProcessLockerServiceProvider,
+    ProcessLockerService,
     ScrollFreezerService,
 } from '../../../shared';
 
@@ -19,7 +19,7 @@ export abstract class BasePhotosComponent implements OnInit {
     protected queryParams:any = {};
     protected pager:PagerService;
     protected navigator:NavigatorService;
-    protected lockProcess:LockProcessService;
+    protected processLocker:ProcessLockerService;
     protected images:Array<GalleryImage> = [];
     protected hasMoreImages:boolean = true;
 
@@ -29,11 +29,11 @@ export abstract class BasePhotosComponent implements OnInit {
                 protected metaTags:MetaTagsService,
                 protected navigatorProvider:NavigatorServiceProvider,
                 protected pagerProvider:PagerServiceProvider,
-                protected lockProcessProvider:LockProcessServiceProvider,
+                protected processLockerProvider:ProcessLockerServiceProvider,
                 protected scrollFreezer:ScrollFreezerService) {
         this.pager = this.pagerProvider.getInstance(this.defaults.page, this.defaults.perPage);
         this.navigator = this.navigatorProvider.getInstance();
-        this.lockProcess = this.lockProcessProvider.getInstance();
+        this.processLocker = this.processLockerProvider.getInstance();
     }
 
     ngOnInit():void {
@@ -63,12 +63,9 @@ export abstract class BasePhotosComponent implements OnInit {
     protected abstract loadMorePhotos():Promise<Array<GalleryImage>>;
 
     protected onLoadPhotosSuccess(response:any):Array<GalleryImage> {
-        let images = [];
+        const images = this.mapImages(response.data);
         this.hasMoreImages = !(response.data.length < this.defaults.perPage);
         if (response.data.length) {
-            images = PhotoToGalleryImageMapper.map(response.data).map((image:GalleryImage) => image.setViewUrl(
-                this.router.createUrlTree(['photos'], {queryParams: {show: image.getId()}}).toString()
-            ));
             this.pager.setPage(response.current_page);
             this.navigator.setQueryParam('page', this.pager.getPage());
             this.images = this.images.concat(images);
@@ -76,12 +73,20 @@ export abstract class BasePhotosComponent implements OnInit {
         return images;
     }
 
+    protected mapImages(images:Array<any>):Array<GalleryImage> {
+        return PhotoToGalleryImageMapper.map(images).map((image:GalleryImage) => {
+            return image.setViewUrl(
+                this.router.createUrlTree(['photos'], {queryParams: {show: image.getId()}}).toString()
+            );
+        });
+    }
+
     protected isEmpty():boolean {
-        return !this.images.length && !this.lockProcess.isProcessing();
+        return !this.images.length && !this.processLocker.isLocked();
     }
 
     protected isProcessing():boolean {
-        return this.lockProcess.isProcessing();
+        return this.processLocker.isLocked();
     }
 
     protected onShowPhoto(image:GalleryImage):void {

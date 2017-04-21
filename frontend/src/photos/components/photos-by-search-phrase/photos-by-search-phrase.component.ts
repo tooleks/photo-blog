@@ -7,7 +7,7 @@ import {
     AuthProviderService,
     NavigatorServiceProvider,
     PagerServiceProvider,
-    LockProcessServiceProvider,
+    ProcessLockerServiceProvider,
     ScrollFreezerService,
 } from '../../../shared';
 import {PhotoDataProviderService} from '../../services';
@@ -31,9 +31,9 @@ export class PhotosBySearchPhraseComponent extends BasePhotosComponent implement
                 metaTags:MetaTagsService,
                 navigatorProvider:NavigatorServiceProvider,
                 pagerProvider:PagerServiceProvider,
-                lockProcessProvider:LockProcessServiceProvider,
+                processLockerProvider:ProcessLockerServiceProvider,
                 scrollFreezer:ScrollFreezerService) {
-        super(router, route, title, metaTags, navigatorProvider, pagerProvider, lockProcessProvider, scrollFreezer);
+        super(router, route, title, metaTags, navigatorProvider, pagerProvider, processLockerProvider, scrollFreezer);
     }
 
     ngOnInit():void {
@@ -66,8 +66,8 @@ export class PhotosBySearchPhraseComponent extends BasePhotosComponent implement
     }
 
     protected loadPhotos(page:number, perPage:number, parameters?:any):Promise<Array<GalleryImage>> {
-        return this.lockProcess
-            .process(() => this.photoDataProvider.getBySearchPhrase(page, perPage, parameters['searchPhrase']))
+        return this.processLocker
+            .lock(() => this.photoDataProvider.getBySearchPhrase(page, perPage, parameters['searchPhrase']))
             .then(this.onLoadPhotosSuccess.bind(this));
     }
 

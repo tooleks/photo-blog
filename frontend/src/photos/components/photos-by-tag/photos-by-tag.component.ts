@@ -7,7 +7,7 @@ import {
     AuthProviderService,
     NavigatorServiceProvider,
     PagerServiceProvider,
-    LockProcessServiceProvider,
+    ProcessLockerServiceProvider,
     ScrollFreezerService,
 } from '../../../shared';
 import {PhotoDataProviderService} from '../../services';
@@ -29,9 +29,9 @@ export class PhotosByTagComponent extends BasePhotosComponent implements OnInit 
                 metaTags:MetaTagsService,
                 navigatorProvider:NavigatorServiceProvider,
                 pagerProvider:PagerServiceProvider,
-                lockProcessProvider:LockProcessServiceProvider,
+                processLockerProvider:ProcessLockerServiceProvider,
                 scrollFreezer:ScrollFreezerService) {
-        super(router, route, title, metaTags, navigatorProvider, pagerProvider, lockProcessProvider, scrollFreezer);
+        super(router, route, title, metaTags, navigatorProvider, pagerProvider, processLockerProvider, scrollFreezer);
     }
 
     ngOnInit():void {
@@ -54,8 +54,8 @@ export class PhotosByTagComponent extends BasePhotosComponent implements OnInit 
     }
 
     protected loadPhotos(page:number, perPage:number, parameters?:any):Promise<Array<GalleryImage>> {
-        return this.lockProcess
-            .process(() => this.photoDataProvider.getByTag(page, perPage, parameters['tag']))
+        return this.processLocker
+            .lock(() => this.photoDataProvider.getByTag(page, perPage, parameters['tag']))
             .then(this.onLoadPhotosSuccess.bind(this));
     }
 
