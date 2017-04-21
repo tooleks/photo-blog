@@ -1,4 +1,5 @@
 export * from './api';
+export * from './api-error-handler';
 export * from './app';
 export * from './auth';
 export * from './local-storage/';

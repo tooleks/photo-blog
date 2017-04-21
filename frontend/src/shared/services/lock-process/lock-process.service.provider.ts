@@ -8,6 +8,6 @@ export class LockProcessServiceProvider {
     }
 
     getInstance = ():LockProcessService => {
-        return new LockProcessService(this.lockerProvider);
+        return new LockProcessService(this.lockerProvider.getInstance());
     };
 }

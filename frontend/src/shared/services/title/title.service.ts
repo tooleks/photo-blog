@@ -3,13 +3,16 @@ import {Title} from '@angular/platform-browser';
 
 @Injectable()
 export class TitleService {
+    protected segments:Array<string> = [];
+
     constructor(protected title:Title, protected defaultSegment:string = null, protected segmentsSeparator:string = ' / ') {
         this.setTitle();
     }
 
-    setTitle = (newTitle:any = []):void => {
-        const title = this.buildTitle(newTitle);
-        this.title.setTitle(title);
+    setTitle = (title:any = []):void => {
+        const segments:Array<string> = this.prepareSegments(title);
+        this.setSegments(segments);
+        this.renderSegments(this.segments);
     };
 
     getTitle = ():string => {
@@ -17,16 +20,35 @@ export class TitleService {
     };
 
     getPageName = ():string => {
-        return this.getTitle().split(this.segmentsSeparator)[0];
+        return this.segments.length ? this.segments[this.segments.length - 1] : '';
     };
 
-    protected buildTitle = (segments:any = []):string => {
-        let titleSegments = this.defaultSegment ? [this.defaultSegment] : [];
+    setDynamicTitle = (title:any = []):void => {
+        const segments:Array<string> = this.prepareSegments(title);
+        this.renderSegments([].concat(this.segments).concat(segments));
+    };
+
+    unsetDynamicTitle = ():void => {
+        this.renderSegments(this.segments);
+    };
+
+    protected setSegments = (segments:Array<string>):void => {
+        const defaultSegments:Array<string> = this.prepareSegments(this.defaultSegment);
+        this.segments = [].concat(defaultSegments).concat(segments);
+    };
+
+    protected prepareSegments = (segments:any):Array<string> => {
         if (segments instanceof Array) {
-            titleSegments = titleSegments.concat(segments);
+            return [].concat(segments).map((segment:any) => String(segment));
         } else if (segments) {
-            titleSegments.push(segments);
+            return [String(segments)];
+        } else {
+            return [];
         }
-        return titleSegments.reverse().join(this.segmentsSeparator);
+    };
+
+    protected renderSegments = (segments:Array<string>):void => {
+        const title:string = [].concat(segments).reverse().join(this.segmentsSeparator);
+        this.title.setTitle(title);
     };
 }

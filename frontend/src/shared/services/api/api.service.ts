@@ -1,47 +1,46 @@
 import {Injectable} from '@angular/core';
 import {Http, Headers, Response, URLSearchParams} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
-import {ApiErrorHandler} from './api-error-handler';
 
 @Injectable()
 export class ApiService {
-    constructor(public http:Http,
-                public errorHandler:ApiErrorHandler,
-                public apiUrl:string,
-                public defaultHeadersCallback:any = null,
-                public defaultSearchParamsCallback:any = null) {
+    constructor(protected http:Http,
+                protected apiUrl:string,
+                protected handleResponseErrors:any,
+                protected provideDefaultHeaders:any = null,
+                protected provideDefaultSearchParams:any = null) {
     }
 
     get = (relativeUrl:string, options?:any):Promise<any> => {
         return this.http
             .get(this.getApiAbsoluteUrl(relativeUrl), this.initializeOptions(options))
             .toPromise()
-            .then(this.extractResponseData)
-            .catch(this.errorHandler.handleResponse);
+            .then(this.extractResponseBody)
+            .catch(this.handleResponseErrors);
     };
 
     post = (relativeUrl:string, body?:any, options?:any):Promise<any> => {
         return this.http
             .post(this.getApiAbsoluteUrl(relativeUrl), this.initializeBody(body), this.initializeOptions(options))
             .toPromise()
-            .then(this.extractResponseData)
-            .catch(this.errorHandler.handleResponse);
+            .then(this.extractResponseBody)
+            .catch(this.handleResponseErrors);
     };
 
     put = (relativeUrl:string, body?:any, options?:any):Promise<any> => {
         return this.http
             .put(this.getApiAbsoluteUrl(relativeUrl), this.initializeBody(body), this.initializeOptions(options))
             .toPromise()
-            .then(this.extractResponseData)
-            .catch(this.errorHandler.handleResponse);
+            .then(this.extractResponseBody)
+            .catch(this.handleResponseErrors);
     };
 
     delete = (relativeUrl:string, options?:any):Promise<any> => {
         return this.http
             .delete(this.getApiAbsoluteUrl(relativeUrl), this.initializeOptions(options))
             .toPromise()
-            .then(this.extractResponseData)
-            .catch(this.errorHandler.handleResponse);
+            .then(this.extractResponseBody)
+            .catch(this.handleResponseErrors);
     };
 
     protected getApiAbsoluteUrl = (relativeUrl:string):string => {
@@ -79,8 +78,8 @@ export class ApiService {
     };
 
     protected getRawDefaultHeaders = ():any => {
-        return typeof (this.defaultHeadersCallback) === 'function'
-            ? this.defaultHeadersCallback()
+        return typeof (this.provideDefaultHeaders) === 'function'
+            ? this.provideDefaultHeaders()
             : {};
     };
 
@@ -107,8 +106,8 @@ export class ApiService {
     };
 
     protected getRawDefaultSearchParams = ():any => {
-        return typeof (this.defaultSearchParamsCallback) === 'function'
-            ? this.defaultSearchParamsCallback()
+        return typeof (this.provideDefaultSearchParams) === 'function'
+            ? this.provideDefaultSearchParams()
             : {};
     };
 
@@ -116,7 +115,7 @@ export class ApiService {
         return body || {};
     };
 
-    public extractResponseData = (response:Response):any => {
+    protected extractResponseBody = (response:Response):any => {
         return response.json() || {};
     };
 }

@@ -8,7 +8,7 @@ import {CoreModule, EnvService} from '../core';
 import {GalleryModule, NoticesModule} from '../lib';
 import {
     ApiService,
-    ApiErrorHandler as BaseApiErrorHandler,
+    ApiErrorHandler,
     AppService,
     AuthService,
     AuthProviderService,
@@ -21,7 +21,6 @@ import {
     TitleService,
     UserDataProviderService,
 } from './services';
-import {ApiErrorHandler} from './services/api-error-handler';
 
 @NgModule({
     imports: [
@@ -46,9 +45,9 @@ import {ApiErrorHandler} from './services/api-error-handler';
         {
             provide: ApiService,
             useFactory: getApiService,
-            deps: [Http, BaseApiErrorHandler, AppService, AuthProviderService],
+            deps: [Http, AppService,ApiErrorHandler,  AuthProviderService],
         },
-        {provide: BaseApiErrorHandler, useClass: ApiErrorHandler},
+        ApiErrorHandler,
         {provide: AppService, useFactory: getAppService, deps: [EnvService]},
         AuthService,
         AuthProviderService,
@@ -65,8 +64,8 @@ import {ApiErrorHandler} from './services/api-error-handler';
 export class SharedModule {
 }
 
-export function getApiService(http:Http, errorHandler:BaseApiErrorHandler, app:AppService, authProvider:AuthProviderService) {
-    return new ApiService(http, errorHandler, app.getApiUrl(), () => {
+export function getApiService(http:Http, app:AppService, errorHandler:ApiErrorHandler, authProvider:AuthProviderService) {
+    return new ApiService(http, app.getApiUrl(), errorHandler.handleResponse, () => {
         const headers = {'Accept': 'application/json'};
         if (authProvider.hasAuth()) {
             headers['Authorization'] = `Bearer ${authProvider.getAuthApiToken()}`;

@@ -1,16 +1,15 @@
 import {Injectable} from '@angular/core';
-import {LockerService, LockerServiceProvider} from '../locker';
+import {LockerService} from '../locker';
 
 @Injectable()
 export class LockProcessService {
-    protected locker:LockerService;
-
-    constructor(lockerProvider:LockerServiceProvider) {
-        this.locker = lockerProvider.getInstance();
+    constructor(protected locker:LockerService) {
     }
 
     process = (callback:any, args?:any):Promise<any> => {
-        return this.startProcess(callback, args).then(this.endProcess).catch(this.handleProcessErrors);
+        return this.startProcess(callback, args)
+            .then(this.endProcess)
+            .catch(this.handleProcessErrors);
     };
 
     isProcessing = ():boolean => {
@@ -22,8 +21,6 @@ export class LockProcessService {
             if (!this.locker.isLocked()) {
                 this.locker.lock();
                 resolve(callback(...args));
-            } else {
-                reject(new Error(LockProcessService.name));
             }
         });
     };
@@ -33,10 +30,8 @@ export class LockProcessService {
         return result;
     };
 
-    protected handleProcessErrors = (error:any) => {
-        if (error instanceof Error && error.message !== LockProcessService.name) {
-            this.locker.unlock();
-        }
+    protected handleProcessErrors = (error:any):Promise<any> => {
+        this.locker.unlock();
         return Promise.reject(error);
     };
 }

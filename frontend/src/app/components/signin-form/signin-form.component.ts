@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {SignInForm as Form} from './models';
 import {MetaTagsService} from '../../../core'
 import {NoticesService} from '../../../lib';
 import {
@@ -10,13 +9,14 @@ import {
     NavigatorServiceProvider,
     NavigatorService,
 } from '../../../shared';
+import {SignIn as Model} from './models';
 
 @Component({
     selector: 'signin-form',
     templateUrl: 'signin-form.component.html',
 })
 export class SignInFormComponent implements OnInit {
-    protected form:Form;
+    protected model:Model;
     protected navigator:NavigatorService;
     protected lockProcess:LockProcessService;
 
@@ -31,39 +31,21 @@ export class SignInFormComponent implements OnInit {
     }
 
     ngOnInit():void {
-        this.initTitle();
-        this.initMeta();
-        this.initForm();
-    }
-
-    protected initTitle = ():void => {
+        this.model = new Model;
         this.title.setTitle('Sing In');
-    };
-
-    protected initMeta = ():void => {
         this.metaTags.setTitle(this.title.getPageName());
-    };
-
-    protected initForm = ():void => {
-        this.setForm(new Form);
-    };
-
-    setForm = (form:Form):void => {
-        this.form = form;
-    };
-
-    getForm = ():Form => {
-        return this.form;
-    };
+    }
 
     signIn = ():Promise<any> => {
         return this.lockProcess
-            .process(() => this.auth.signIn(this.getForm().email, this.getForm().password))
-            .then((user:any) => {
-                this.notices.success('Hello, ' + user.name + '!');
-                this.navigator.navigate(['/']);
-                return user;
-            });
+            .process(() => this.auth.signIn(this.model.email, this.model.password))
+            .then(this.onSignInSuccess);
+    };
+
+    onSignInSuccess = (user:any):any => {
+        this.notices.success('Hello, ' + user.name + '!');
+        this.navigator.navigate(['/']);
+        return user;
     };
 
     isProcessing = ():boolean => {

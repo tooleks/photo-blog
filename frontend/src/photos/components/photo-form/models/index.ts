@@ -1,1 +1,1 @@
-export * from './photo-form';
+export * from './photo';
