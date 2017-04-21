@@ -13,7 +13,7 @@ import {
     ScrollFreezerService,
 } from '../../../shared';
 
-export abstract class PhotosGalleryComponent {
+export abstract class BasePhotosComponent {
     protected defaults:any = {page: 1, perPage: 20, show: null};
     protected queryParams:any = {};
     protected pager:PagerService;
@@ -67,7 +67,9 @@ export abstract class PhotosGalleryComponent {
 
     protected handleLoadPhotos(response:any):Array<GalleryImage> {
         const images = PhotoToGalleryImageMapper.map(response.data).map((image:GalleryImage) => {
-            const imageViewUrl = this.router.createUrlTree(['photos'], {queryParams: {'show': image.getId()}}).toString();
+            const imageViewUrl = this.router.createUrlTree(['photos'], {
+                queryParams: {'show': image.getId()}
+            }).toString();
             return image.setViewUrl(imageViewUrl);
         });
         this.hasMoreImages = !(response.data.length < this.defaults.perPage);
@@ -76,7 +78,7 @@ export abstract class PhotosGalleryComponent {
             this.navigator.setQueryParam('page', this.pager.getPage());
             this.images = this.images.concat(images);
         }
-        return images;
+        return images ? images : [];
     }
 
     protected isEmpty():boolean {

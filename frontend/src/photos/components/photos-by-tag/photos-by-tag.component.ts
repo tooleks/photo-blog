@@ -11,13 +11,13 @@ import {
     ScrollFreezerService,
 } from '../../../shared';
 import {PhotoDataProviderService} from '../../services';
-import {PhotosGalleryComponent} from '../abstract';
+import {BasePhotosComponent} from '../abstract';
 
 @Component({
     selector: 'photos-by-tag',
     templateUrl: 'photos-by-tag.component.html',
 })
-export class PhotosByTagComponent extends PhotosGalleryComponent implements OnInit {
+export class PhotosByTagComponent extends BasePhotosComponent implements OnInit {
     @ViewChild('galleryComponent') galleryComponent:GalleryComponent;
     protected queryParams:any = {tag: ''};
 

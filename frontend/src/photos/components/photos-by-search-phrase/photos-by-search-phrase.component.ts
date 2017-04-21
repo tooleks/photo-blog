@@ -11,13 +11,13 @@ import {
     ScrollFreezerService,
 } from '../../../shared';
 import {PhotoDataProviderService} from '../../services';
-import {PhotosGalleryComponent} from '../abstract';
+import {BasePhotosComponent} from '../abstract';
 
 @Component({
     selector: 'photos-by-search-phrase',
     templateUrl: 'photos-by-search-phrase.component.html',
 })
-export class PhotosBySearchPhraseComponent extends PhotosGalleryComponent implements OnInit, AfterViewInit {
+export class PhotosBySearchPhraseComponent extends BasePhotosComponent implements OnInit, AfterViewInit {
     @ViewChildren('inputSearch') inputSearchComponent:any;
     @ViewChild('galleryComponent') galleryComponent:GalleryComponent;
     protected queryParams:any = {search_phrase: ''};

@@ -11,13 +11,13 @@ import {
     ScrollFreezerService,
 } from '../../../shared';
 import {PhotoDataProviderService} from '../../services';
-import {PhotosGalleryComponent} from '../abstract';
+import {BasePhotosComponent} from '../abstract';
 
 @Component({
     selector: 'photos',
     templateUrl: 'photos.component.html',
 })
-export class PhotosComponent extends PhotosGalleryComponent implements OnInit, AfterViewInit {
+export class PhotosComponent extends BasePhotosComponent implements OnInit, AfterViewInit {
     constructor(protected authProvider:AuthProviderService,
                 protected photoDataProvider:PhotoDataProviderService,
                 router:Router,
