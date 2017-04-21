@@ -1,4 +1,4 @@
-import {Component, OnInit, AfterViewInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {NoticesService} from '../../../lib';
 import {
@@ -14,7 +14,7 @@ import {
     selector: 'unsubscription',
     templateUrl: 'unsubscription.component.html',
 })
-export class UnsubscriptionComponent implements OnInit, AfterViewInit {
+export class UnsubscriptionComponent implements OnInit {
     protected token:string = null;
     protected navigator:NavigatorService;
     protected lockProcess:LockProcessService;
@@ -31,26 +31,31 @@ export class UnsubscriptionComponent implements OnInit, AfterViewInit {
 
     ngOnInit():void {
         this.title.setTitle('Unsubscription');
+        this.initParamsSubscribers();
     }
 
-    ngAfterViewInit():void {
+    protected initParamsSubscribers = ():void => {
         this.route.params
             .map((params:any) => params['token'])
             .subscribe((token:string) => this.token = String(token));
-    }
+    };
 
     unsubscribe = ():Promise<any> => {
         return this.lockProcess
-            .process(() => this.api.delete('/subscriptions/' + this.token))
-            .then((data:any) => {
-                this.notices.success('You have successfully unsubscribed from the website updates.');
-                this.navigator.navigate(['/']);
-                return data;
-            })
-            .catch((error:any) => {
-                this.navigator.navigate(['/']);
-                throw error;
-            });
+            .process(() => this.api.delete(`/subscriptions/${this.token}`))
+            .then(this.onUnsubscribeSuccess)
+            .catch(this.onUnsubscribeError);
+    };
+
+    onUnsubscribeSuccess = (data:any):any => {
+        this.notices.success('You have successfully unsubscribed from the website updates.');
+        this.navigator.navigate(['/']);
+        return data;
+    };
+
+    onUnsubscribeError = (error:any):any => {
+        this.navigator.navigate(['/']);
+        return Promise.reject(error);
     };
 
     navigateToHomePage = ():void => {

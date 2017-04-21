@@ -31,18 +31,18 @@ export class SignInFormComponent implements OnInit {
     }
 
     ngOnInit():void {
+        this.model = new Model;
         this.title.setTitle('Sing In');
         this.metaTags.setTitle(this.title.getPageName());
-        this.model = new Model;
     }
 
-    submit = ():Promise<any> => {
+    signIn = ():Promise<any> => {
         return this.lockProcess
             .process(() => this.auth.signIn(this.model.email, this.model.password))
-            .then(this.onSubmitSuccess);
+            .then(this.onSignInSuccess);
     };
 
-    onSubmitSuccess = (user:any):any => {
+    onSignInSuccess = (user:any):any => {
         this.notices.success('Hello, ' + user.name + '!');
         this.navigator.navigate(['/']);
         return user;

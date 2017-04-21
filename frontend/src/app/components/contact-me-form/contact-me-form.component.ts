@@ -31,18 +31,18 @@ export class ContactMeFormComponent implements OnInit {
     }
 
     ngOnInit():void {
+        this.model = new Model;
         this.title.setTitle('Contact Me');
         this.metaTags.setTitle(this.title.getPageName());
-        this.model = new Model;
     }
 
-    submit = ():Promise<any> => {
+    contactMe = ():Promise<any> => {
         return this.lockProcess
             .process(() => this.api.post('/contact_messages', this.model))
-            .then(this.onSubmitSuccess);
+            .then(this.onContactMeSuccess);
     };
 
-    onSubmitSuccess = (data:any):any => {
+    onContactMeSuccess = (data:any):any => {
         this.notices.success('Your message successfully sent.');
         this.navigator.navigate(['/']);
         return data;

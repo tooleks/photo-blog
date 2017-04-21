@@ -31,18 +31,18 @@ export class SubscriptionFormComponent implements OnInit {
     }
 
     ngOnInit():void {
+        this.model = new Model;
         this.title.setTitle('Subscription');
         this.metaTags.setTitle(this.title.getPageName());
-        this.model = new Model;
     }
 
-    submit = ():Promise<any> => {
+    subscribe = ():Promise<any> => {
         return this.lockProcess
             .process(() => this.api.post('/subscriptions', this.model))
-            .then(this.onSubmitSuccess);
+            .then(this.onSubscribeSuccess);
     };
 
-    onSubmitSuccess = (data:any):any => {
+    onSubscribeSuccess = (data:any):any => {
         this.notices.success('You have successfully subscribed to the website updates.');
         this.navigator.navigate(['/']);
         return data;

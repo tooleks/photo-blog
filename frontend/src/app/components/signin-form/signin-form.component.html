@@ -7,7 +7,7 @@
                         <label class="col-sm-2 control-label">{{ 'Email' }}</label>
                         <div class="col-sm-10">
                             <input [(ngModel)]="model.email"
-                                   (keyup.enter)="submit()"
+                                   (keyup.enter)="signIn()"
                                    type="email"
                                    class="form-control"
                                    name="email"
@@ -18,7 +18,7 @@
                         <label class="col-sm-2 control-label">{{ 'Password' }}</label>
                         <div class="col-sm-10">
                             <input [(ngModel)]="model.password"
-                                   (keyup.enter)="submit()"
+                                   (keyup.enter)="signIn()"
                                    type="password"
                                    class="form-control"
                                    name="password"
@@ -27,7 +27,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sm-4 col-sm-offset-2">
-                            <button (click)="submit()"
+                            <button (click)="signIn()"
                                     [disabled]="isProcessing()"
                                     class="btn btn-primary">
                                 {{ !isProcessing() ? 'Sign In' : 'Processing...' }}

@@ -37,12 +37,13 @@ export class PhotoFormComponent implements OnInit {
         this.photo = new Photo;
         this.title.setTitle('Add Photo');
         this.initParamsSubscribers();
-        
+
     }
 
     protected initParamsSubscribers = ():void => {
         this.route.params
             .map((params) => params['id'])
+            .filter((id:any) => id)
             .subscribe(this.loadById);
     };
 
@@ -53,13 +54,11 @@ export class PhotoFormComponent implements OnInit {
     };
 
     loadById = (id:number):Promise<any> => {
-        if (id) {
-            return this.lockProcess.process(this.processLoadById, [id]).then((photo:any) => {
-                this.photo.setSavedPhotoAttributes(photo);
-                this.title.setTitle('Edit Photo');
-                return photo;
-            });
-        }
+        return this.lockProcess.process(this.processLoadById, [id]).then((photo:any) => {
+            this.photo.setSavedPhotoAttributes(photo);
+            this.title.setTitle('Edit Photo');
+            return photo;
+        });
     };
 
     protected processSavePhoto = ():Promise<any> => {
@@ -104,7 +103,7 @@ export class PhotoFormComponent implements OnInit {
             return result;
         });
     };
-    
+
     isProcessing = ():boolean => {
         return this.lockProcess.isProcessing();
     };
