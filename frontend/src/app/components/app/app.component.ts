@@ -52,10 +52,6 @@ export class AppComponent implements OnInit {
         this.router.events
             .filter((event:any) => event instanceof NavigationEnd)
             .subscribe((event:NavigationEnd) => this.metaTags.setUrl(this.app.getUrl() + event.urlAfterRedirects));
-
-        this.router.events
-            .filter((event:any) => event instanceof NavigationEnd)
-            .subscribe((event:NavigationEnd) => this.notices.deleteAll());
     };
 
     protected initScrollFreezerSubscribers = ():void => {
