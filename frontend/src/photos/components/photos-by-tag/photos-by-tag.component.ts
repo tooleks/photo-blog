@@ -35,17 +35,16 @@ export class PhotosByTagComponent extends BasePhotosComponent implements OnInit 
     }
 
     ngOnInit():void {
-        this.init();
-    }
-
-    protected initTitle():void {
+        super.ngOnInit();
         this.title.setTitle('Search By Tag');
+        this.metaTags.setTitle(this.title.getPageName());
     }
 
     protected initParamsSubscribers() {
         super.initParamsSubscribers();
         this.route.params
             .map((params:any) => params['tag'])
+            .filter((tag:any) => tag && tag != this.queryParams['tag'])
             .subscribe(this.searchByTag.bind(this));
     }
 
@@ -57,7 +56,7 @@ export class PhotosByTagComponent extends BasePhotosComponent implements OnInit 
     protected loadPhotos(page:number, perPage:number, parameters?:any):Promise<Array<GalleryImage>> {
         return this.lockProcess
             .process(() => this.photoDataProvider.getByTag(page, perPage, parameters['tag']))
-            .then(this.handleLoadPhotos.bind(this));
+            .then(this.onLoadPhotosSuccess.bind(this));
     }
 
     protected loadMorePhotos():Promise<Array<GalleryImage>> {
@@ -67,15 +66,11 @@ export class PhotosByTagComponent extends BasePhotosComponent implements OnInit 
     }
 
     protected searchByTag(tag:string):void {
-        if (tag && tag != this.queryParams['tag']) {
-            this.reset();
-            this.queryParams['tag'] = String(tag);
-            this.title.setTitle(['Photos', `Tag #${this.queryParams['tag']}`]);
-            this.metaTags.setTitle(this.title.getPageName());
-            const perPageOffset = this.queryParams['page'] * this.pager.getPerPage();
-            this.loadPhotos(this.defaults.page, perPageOffset, {
-                tag: this.queryParams['tag'],
-            });
-        }
+        this.reset();
+        this.queryParams['tag'] = String(tag);
+        this.title.setTitle(['Photos', `Tag #${this.queryParams['tag']}`]);
+        this.metaTags.setTitle(this.title.getPageName());
+        const perPageOffset = this.queryParams['page'] * this.pager.getPerPage();
+        this.loadPhotos(this.defaults.page, perPageOffset, {tag: this.queryParams['tag']});
     }
 }

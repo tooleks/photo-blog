@@ -32,7 +32,9 @@ export class PhotosComponent extends BasePhotosComponent implements OnInit, Afte
     }
 
     ngOnInit():void {
-        this.init();
+        super.ngOnInit();
+        this.title.setTitle('All Photos');
+        this.metaTags.setTitle(this.title.getPageName());
     }
 
     ngAfterViewInit():void {
@@ -40,14 +42,10 @@ export class PhotosComponent extends BasePhotosComponent implements OnInit, Afte
         this.loadPhotos(this.defaults.page, perPageOffset);
     }
 
-    protected initTitle():void {
-        this.title.setTitle('All Photos');
-    }
-
     protected loadPhotos(page:number, perPage:number, parameters?:any):Promise<Array<GalleryImage>> {
         return this.lockProcess
             .process(() => this.photoDataProvider.getAll(page, perPage))
-            .then(this.handleLoadPhotos.bind(this));
+            .then(this.onLoadPhotosSuccess.bind(this));
     }
 
     protected loadMorePhotos():Promise<Array<GalleryImage>> {

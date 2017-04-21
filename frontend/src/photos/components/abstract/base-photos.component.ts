@@ -1,3 +1,4 @@
+import {OnInit} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {PhotoToGalleryImageMapper} from '../../mappers';
 import {MetaTagsService} from '../../../core'
@@ -13,7 +14,7 @@ import {
     ScrollFreezerService,
 } from '../../../shared';
 
-export abstract class BasePhotosComponent {
+export abstract class BasePhotosComponent implements OnInit {
     protected defaults:any = {page: 1, perPage: 20, show: null};
     protected queryParams:any = {};
     protected pager:PagerService;
@@ -35,26 +36,22 @@ export abstract class BasePhotosComponent {
         this.lockProcess = this.lockProcessProvider.getInstance();
     }
 
-    protected init():void {
-        this.initTitle();
-        this.initMeta();
+    ngOnInit():void {
+        this.queryParams['page'] = this.defaults.page;
+        this.queryParams['show'] = this.defaults.show;
         this.initParamsSubscribers();
-    }
-
-    protected abstract initTitle():void;
-
-    protected initMeta():void {
-        this.metaTags.setTitle(this.title.getPageName());
     }
 
     protected initParamsSubscribers():void {
         this.route.queryParams
             .map((queryParams:any) => queryParams['page'])
-            .subscribe((page:number) => this.queryParams['page'] = page ? Number(page) : this.defaults.page);
+            .filter((page:any) => page)
+            .subscribe((page:number) => this.queryParams['page'] = Number(page));
 
         this.route.queryParams
             .map((queryParams:any) => queryParams['show'])
-            .subscribe((show:number) => this.queryParams['show'] = show ? Number(show) : this.defaults.show);
+            .filter((show:any) => show)
+            .subscribe((show:number) => this.queryParams['show'] = Number(show));
     }
 
     protected reset():void {
@@ -65,20 +62,18 @@ export abstract class BasePhotosComponent {
 
     protected abstract loadMorePhotos():Promise<Array<GalleryImage>>;
 
-    protected handleLoadPhotos(response:any):Array<GalleryImage> {
-        const images = PhotoToGalleryImageMapper.map(response.data).map((image:GalleryImage) => {
-            const imageViewUrl = this.router.createUrlTree(['photos'], {
-                queryParams: {'show': image.getId()}
-            }).toString();
-            return image.setViewUrl(imageViewUrl);
-        });
+    protected onLoadPhotosSuccess(response:any):Array<GalleryImage> {
+        let images = [];
         this.hasMoreImages = !(response.data.length < this.defaults.perPage);
         if (response.data.length) {
+            images = PhotoToGalleryImageMapper.map(response.data).map((image:GalleryImage) => image.setViewUrl(
+                this.router.createUrlTree(['photos'], {queryParams: {show: image.getId()}}).toString()
+            ));
             this.pager.setPage(response.current_page);
             this.navigator.setQueryParam('page', this.pager.getPage());
             this.images = this.images.concat(images);
         }
-        return images ? images : [];
+        return images;
     }
 
     protected isEmpty():boolean {

@@ -37,7 +37,9 @@ export class PhotosBySearchPhraseComponent extends BasePhotosComponent implement
     }
 
     ngOnInit():void {
-        this.init();
+        super.ngOnInit();
+        this.title.setTitle('Search Photos');
+        this.metaTags.setTitle(this.title.getPageName());
     }
 
     ngAfterViewInit():void {
@@ -54,13 +56,10 @@ export class PhotosBySearchPhraseComponent extends BasePhotosComponent implement
         super.initParamsSubscribers();
         this.route.queryParams
             .map((queryParams:any) => queryParams['search_phrase'])
+            .filter((searchPhrase:any) => searchPhrase && searchPhrase != this.queryParams['search_phrase'])
             .subscribe(this.searchPhotosByPhrase.bind(this));
     }
 
-    protected initTitle():void {
-        this.title.setTitle('Search Photos');
-    }
-    
     protected reset():void {
         super.reset();
         this.galleryComponent.reset();
@@ -69,7 +68,7 @@ export class PhotosBySearchPhraseComponent extends BasePhotosComponent implement
     protected loadPhotos(page:number, perPage:number, parameters?:any):Promise<Array<GalleryImage>> {
         return this.lockProcess
             .process(() => this.photoDataProvider.getBySearchPhrase(page, perPage, parameters['searchPhrase']))
-            .then(this.handleLoadPhotos.bind(this));
+            .then(this.onLoadPhotosSuccess.bind(this));
     }
 
     protected loadMorePhotos():Promise<Array<GalleryImage>> {
@@ -79,16 +78,12 @@ export class PhotosBySearchPhraseComponent extends BasePhotosComponent implement
     }
 
     protected searchPhotosByPhrase(searchPhrase:string):void {
-        if (searchPhrase && searchPhrase != this.queryParams['search_phrase']) {
-            this.reset();
-            this.queryParams['search_phrase'] = String(searchPhrase);
-            this.title.setTitle(['Photos', `Search "${this.queryParams['search_phrase']}"`]);
-            this.metaTags.setTitle(this.title.getPageName());
-            const perPageOffset = this.queryParams['page'] * this.pager.getPerPage();
-            this.loadPhotos(this.defaults.page, perPageOffset, {
-                searchPhrase: this.queryParams['search_phrase'],
-            });
-        }
+        this.reset();
+        this.queryParams['search_phrase'] = String(searchPhrase);
+        this.title.setTitle(['Photos', `Search "${this.queryParams['search_phrase']}"`]);
+        this.metaTags.setTitle(this.title.getPageName());
+        const perPageOffset = this.queryParams['page'] * this.pager.getPerPage();
+        this.loadPhotos(this.defaults.page, perPageOffset, {searchPhrase: this.queryParams['search_phrase']});
     }
 
     protected navigateToSearchPhotos(searchPhrase:string):void {
