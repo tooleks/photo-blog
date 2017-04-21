@@ -45,7 +45,7 @@ import {
         {
             provide: ApiService,
             useFactory: getApiService,
-            deps: [Http, AppService,ApiErrorHandler,  AuthProviderService],
+            deps: [Http, AppService, ApiErrorHandler,  AuthProviderService],
         },
         ApiErrorHandler,
         {provide: AppService, useFactory: getAppService, deps: [EnvService]},
