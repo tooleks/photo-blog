@@ -10,7 +10,7 @@ import {
     LockProcessService,
 } from '../../../shared';
 import {PhotoDataProviderService} from '../../services'
-import {PhotoForm as Form} from './models';
+import {Photo} from './models';
 
 @Component({
     selector: 'photo-form',
@@ -18,7 +18,7 @@ import {PhotoForm as Form} from './models';
     styleUrls: ['photo-form.component.css'],
 })
 export class PhotoFormComponent implements OnInit {
-    protected photo:Form;
+    protected photo:Photo;
     protected navigator:NavigatorService;
     protected lockProcess:LockProcessService;
 
@@ -34,31 +34,16 @@ export class PhotoFormComponent implements OnInit {
     }
 
     ngOnInit():void {
-        this.initPhoto();
-        this.initTitle();
+        this.photo = new Photo;
+        this.title.setTitle('Add Photo');
         this.initParamsSubscribers();
+        
     }
 
     protected initParamsSubscribers = ():void => {
         this.route.params
             .map((params) => params['id'])
             .subscribe(this.loadById);
-    };
-
-    protected initTitle = ():void => {
-        this.title.setTitle('Add Photo');
-    };
-
-    protected initPhoto = ():void => {
-        this.setPhoto(new Form);
-    };
-
-    setPhoto = (form:Form):void => {
-        this.photo = form;
-    };
-
-    getPhoto = ():Form => {
-        return this.photo;
     };
 
     protected processLoadById = (id:number):Promise<any> => {
@@ -119,7 +104,7 @@ export class PhotoFormComponent implements OnInit {
             return result;
         });
     };
-
+    
     isProcessing = ():boolean => {
         return this.lockProcess.isProcessing();
     };

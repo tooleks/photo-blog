@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {ContactMeForm as Form} from './models';
 import {MetaTagsService} from '../../../core';
 import {NoticesService} from '../../../lib';
 import {
@@ -10,13 +9,14 @@ import {
     NavigatorServiceProvider,
     NavigatorService,
 } from '../../../shared';
+import {ContactMe as Model} from './models';
 
 @Component({
     selector: 'contact-me-form',
     templateUrl: 'contact-me-form.component.html',
 })
 export class ContactMeFormComponent implements OnInit {
-    protected form:Form;
+    protected model:Model;
     protected navigator:NavigatorService;
     protected lockProcess:LockProcessService;
 
@@ -31,39 +31,21 @@ export class ContactMeFormComponent implements OnInit {
     }
 
     ngOnInit():void {
-        this.initTitle();
-        this.initMeta();
-        this.initForm();
+        this.title.setTitle('Contact Me');
+        this.metaTags.setTitle(this.title.getPageName());
+        this.model = new Model;
     }
 
-    protected initTitle = ():void => {
-        this.title.setTitle('Contact Me');
-    };
-
-    protected initMeta = ():void => {
-        this.metaTags.setTitle(this.title.getPageName());
-    };
-
-    protected initForm = ():void => {
-        this.setForm(new Form);
-    };
-
-    setForm = (form:Form):void => {
-        this.form = form;
-    };
-
-    getForm = ():Form => {
-        return this.form;
-    };
-
-    send = ():Promise<any> => {
+    submit = ():Promise<any> => {
         return this.lockProcess
-            .process(() => this.api.post('/contact_messages', this.getForm()))
-            .then((data:any) => {
-                this.notices.success('Your message successfully sent.');
-                this.navigator.navigate(['/']);
-                return data;
-            });
+            .process(() => this.api.post('/contact_messages', this.model))
+            .then(this.onSubmitSuccess);
+    };
+
+    onSubmitSuccess = (data:any):any => {
+        this.notices.success('Your message successfully sent.');
+        this.navigator.navigate(['/']);
+        return data;
     };
 
     isProcessing = ():boolean => {

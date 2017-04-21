@@ -9,14 +9,14 @@ import {
     NavigatorServiceProvider,
     NavigatorService,
 } from '../../../shared';
-import {SubscriptionForm as Form} from './models';
+import {Subscription as Model} from './models';
 
 @Component({
     selector: 'subscription-form',
     templateUrl: 'subscription-form.component.html',
 })
 export class SubscriptionFormComponent implements OnInit {
-    protected form:Form;
+    protected model:Model;
     protected navigator:NavigatorService;
     protected lockProcess:LockProcessService;
 
@@ -31,39 +31,21 @@ export class SubscriptionFormComponent implements OnInit {
     }
 
     ngOnInit():void {
-        this.initTitle();
-        this.initMeta();
-        this.initForm();
+        this.title.setTitle('Subscription');
+        this.metaTags.setTitle(this.title.getPageName());
+        this.model = new Model;
     }
 
-    protected initTitle = ():void => {
-        this.title.setTitle('Subscription');
-    };
-
-    protected initMeta = ():void => {
-        this.metaTags.setTitle(this.title.getPageName());
-    };
-
-    protected initForm = ():void => {
-        this.setForm(new Form);
-    };
-
-    setForm = (form:Form):void => {
-        this.form = form;
-    };
-
-    getForm = ():Form => {
-        return this.form;
-    };
-
-    subscribe = ():Promise<any> => {
+    submit = ():Promise<any> => {
         return this.lockProcess
-            .process(() => this.api.post('/subscriptions', this.getForm()))
-            .then((data:any) => {
-                this.notices.success('You have successfully subscribed to the website updates.');
-                this.navigator.navigate(['/']);
-                return data;
-            });
+            .process(() => this.api.post('/subscriptions', this.model))
+            .then(this.onSubmitSuccess);
+    };
+
+    onSubmitSuccess = (data:any):any => {
+        this.notices.success('You have successfully subscribed to the website updates.');
+        this.navigator.navigate(['/']);
+        return data;
     };
 
     isProcessing = ():boolean => {

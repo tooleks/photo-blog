@@ -1,4 +1,4 @@
-export class PhotoForm {
+export class Photo {
     id:number;
     photo_id:number;
     created_by_user_id:number;
