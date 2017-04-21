@@ -3,7 +3,6 @@ import {Router, NavigationEnd} from '@angular/router';
 import {MetaTagsService, GoogleAnalyticsService} from '../../../core';
 import {TransferState} from '../../../sys';
 import {ScreenDetectorService} from '../../../core';
-import {NoticesService} from '../../../lib';
 import {
     AppService,
     TitleService,
@@ -28,7 +27,6 @@ export class AppComponent implements OnInit {
                 protected authProvider:AuthProviderService,
                 protected screenDetector:ScreenDetectorService,
                 protected scrollFreezer:ScrollFreezerService,
-                protected notices:NoticesService,
                 protected googleAnalytics:GoogleAnalyticsService) {
     }
 
