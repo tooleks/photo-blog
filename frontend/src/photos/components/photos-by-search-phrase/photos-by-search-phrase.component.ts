@@ -37,9 +37,9 @@ export class PhotosBySearchPhraseComponent extends BasePhotosComponent implement
     }
 
     ngOnInit():void {
-        super.ngOnInit();
         this.title.setTitle('Search Photos');
         this.metaTags.setTitle(this.title.getPageName());
+        super.ngOnInit();
     }
 
     ngAfterViewInit():void {

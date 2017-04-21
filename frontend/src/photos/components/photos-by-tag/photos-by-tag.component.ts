@@ -35,9 +35,9 @@ export class PhotosByTagComponent extends BasePhotosComponent implements OnInit 
     }
 
     ngOnInit():void {
-        super.ngOnInit();
         this.title.setTitle('Search By Tag');
         this.metaTags.setTitle(this.title.getPageName());
+        super.ngOnInit();
     }
 
     protected initParamsSubscribers() {
