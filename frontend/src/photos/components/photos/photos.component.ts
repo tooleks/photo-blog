@@ -32,9 +32,9 @@ export class PhotosComponent extends BasePhotosComponent implements OnInit, Afte
     }
 
     ngOnInit():void {
-        super.ngOnInit();
         this.title.setTitle('All Photos');
         this.metaTags.setTitle(this.title.getPageName());
+        super.ngOnInit();
     }
 
     ngAfterViewInit():void {

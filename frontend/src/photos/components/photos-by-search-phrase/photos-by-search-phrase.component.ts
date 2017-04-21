@@ -37,9 +37,9 @@ export class PhotosBySearchPhraseComponent extends BasePhotosComponent implement
     }
 
     ngOnInit():void {
-        super.ngOnInit();
         this.title.setTitle('Search Photos');
         this.metaTags.setTitle(this.title.getPageName());
+        super.ngOnInit();
     }
 
     ngAfterViewInit():void {
@@ -57,7 +57,8 @@ export class PhotosBySearchPhraseComponent extends BasePhotosComponent implement
         this.route.queryParams
             .map((queryParams:any) => queryParams['search_phrase'])
             .filter((searchPhrase:any) => searchPhrase && searchPhrase != this.queryParams['search_phrase'])
-            .subscribe(this.searchPhotosByPhrase.bind(this));
+            .map((searchPhrase:any) => String(searchPhrase))
+            .subscribe(this.onSearchPhraseChange.bind(this));
     }
 
     protected reset():void {
@@ -77,10 +78,10 @@ export class PhotosBySearchPhraseComponent extends BasePhotosComponent implement
         });
     }
 
-    protected searchPhotosByPhrase(searchPhrase:string):void {
+    protected onSearchPhraseChange(searchPhrase:string):void {
         this.reset();
-        this.queryParams['search_phrase'] = String(searchPhrase);
-        this.title.setTitle(['Photos', `Search "${this.queryParams['search_phrase']}"`]);
+        this.queryParams['search_phrase'] = searchPhrase;
+        this.title.setTitle(`Search "${this.queryParams['search_phrase']}"`);
         this.metaTags.setTitle(this.title.getPageName());
         const perPageOffset = this.queryParams['page'] * this.pager.getPerPage();
         this.loadPhotos(this.defaults.page, perPageOffset, {searchPhrase: this.queryParams['search_phrase']});
