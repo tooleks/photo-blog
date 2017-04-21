@@ -58,7 +58,7 @@ export class PhotosBySearchPhraseComponent extends BasePhotosComponent implement
             .map((queryParams:any) => queryParams['search_phrase'])
             .filter((searchPhrase:any) => searchPhrase && searchPhrase != this.queryParams['search_phrase'])
             .map((searchPhrase:any) => String(searchPhrase))
-            .subscribe(this.searchPhotosByPhrase.bind(this));
+            .subscribe(this.onSearchPhraseChange.bind(this));
     }
 
     protected reset():void {
@@ -78,7 +78,7 @@ export class PhotosBySearchPhraseComponent extends BasePhotosComponent implement
         });
     }
 
-    protected searchPhotosByPhrase(searchPhrase:string):void {
+    protected onSearchPhraseChange(searchPhrase:string):void {
         this.reset();
         this.queryParams['search_phrase'] = searchPhrase;
         this.title.setTitle(`Search "${this.queryParams['search_phrase']}"`);

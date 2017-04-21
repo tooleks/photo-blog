@@ -46,7 +46,7 @@ export class PhotosByTagComponent extends BasePhotosComponent implements OnInit 
             .map((params:any) => params['tag'])
             .filter((tag:any) => tag && tag != this.queryParams['tag'])
             .map((tag:any) => String(tag))
-            .subscribe(this.searchByTag.bind(this));
+            .subscribe(this.onTagChange.bind(this));
     }
 
     protected reset():void {
@@ -66,7 +66,7 @@ export class PhotosByTagComponent extends BasePhotosComponent implements OnInit 
         });
     }
 
-    protected searchByTag(tag:string):void {
+    protected onTagChange(tag:string):void {
         this.reset();
         this.queryParams['tag'] = tag;
         this.title.setTitle(`Tag #${this.queryParams['tag']}`);
