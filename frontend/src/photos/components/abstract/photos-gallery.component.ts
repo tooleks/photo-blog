@@ -89,10 +89,7 @@ export abstract class PhotosGalleryComponent {
 
     protected onShowPhoto(image:GalleryImage):void {
         this.scrollFreezer.freeze();
-        if (this.queryParams['show'] !== null) {
-            this.title.popTitleSegment();
-        }
-        this.title.pushTitleSegment(image.getDescription());
+        this.title.setDynamicTitle(image.getDescription());
         this.metaTags.setImage(image.getLargeSizeUrl());
         this.metaTags.setTitle(image.getDescription());
         this.navigator.setQueryParam('show', image.getId());
@@ -101,7 +98,7 @@ export abstract class PhotosGalleryComponent {
     protected onHidePhoto(image:GalleryImage):void {
         this.scrollFreezer.unfreeze();
         this.navigator.unsetQueryParam('show');
-        this.title.popTitleSegment();
+        this.title.unsetDynamicTitle();
     }
 
     protected onEditPhoto(image:GalleryImage):void {
