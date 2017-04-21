@@ -57,6 +57,7 @@ export class PhotosBySearchPhraseComponent extends BasePhotosComponent implement
         this.route.queryParams
             .map((queryParams:any) => queryParams['search_phrase'])
             .filter((searchPhrase:any) => searchPhrase && searchPhrase != this.queryParams['search_phrase'])
+            .map((searchPhrase:any) => String(searchPhrase))
             .subscribe(this.searchPhotosByPhrase.bind(this));
     }
 
@@ -79,8 +80,8 @@ export class PhotosBySearchPhraseComponent extends BasePhotosComponent implement
 
     protected searchPhotosByPhrase(searchPhrase:string):void {
         this.reset();
-        this.queryParams['search_phrase'] = String(searchPhrase);
-        this.title.setTitle(['Photos', `Search "${this.queryParams['search_phrase']}"`]);
+        this.queryParams['search_phrase'] = searchPhrase;
+        this.title.setTitle(`Search "${this.queryParams['search_phrase']}"`);
         this.metaTags.setTitle(this.title.getPageName());
         const perPageOffset = this.queryParams['page'] * this.pager.getPerPage();
         this.loadPhotos(this.defaults.page, perPageOffset, {searchPhrase: this.queryParams['search_phrase']});

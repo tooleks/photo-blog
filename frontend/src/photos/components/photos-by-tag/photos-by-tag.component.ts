@@ -45,6 +45,7 @@ export class PhotosByTagComponent extends BasePhotosComponent implements OnInit 
         this.route.params
             .map((params:any) => params['tag'])
             .filter((tag:any) => tag && tag != this.queryParams['tag'])
+            .map((tag:any) => String(tag))
             .subscribe(this.searchByTag.bind(this));
     }
 
@@ -67,8 +68,8 @@ export class PhotosByTagComponent extends BasePhotosComponent implements OnInit 
 
     protected searchByTag(tag:string):void {
         this.reset();
-        this.queryParams['tag'] = String(tag);
-        this.title.setTitle(['Photos', `Tag #${this.queryParams['tag']}`]);
+        this.queryParams['tag'] = tag;
+        this.title.setTitle(`Tag #${this.queryParams['tag']}`);
         this.metaTags.setTitle(this.title.getPageName());
         const perPageOffset = this.queryParams['page'] * this.pager.getPerPage();
         this.loadPhotos(this.defaults.page, perPageOffset, {tag: this.queryParams['tag']});
