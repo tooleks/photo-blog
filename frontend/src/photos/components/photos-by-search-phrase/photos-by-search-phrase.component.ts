@@ -11,13 +11,13 @@ import {
     ScrollFreezerService,
 } from '../../../shared';
 import {PhotoDataProviderService} from '../../services';
-import {BasePhotosComponent} from '../abstract';
+import {PhotosComponent as AbstractPhotosComponent} from '../abstract';
 
 @Component({
     selector: 'photos-by-search-phrase',
     templateUrl: 'photos-by-search-phrase.component.html',
 })
-export class PhotosBySearchPhraseComponent extends BasePhotosComponent implements OnInit, AfterViewInit {
+export class PhotosBySearchPhraseComponent extends AbstractPhotosComponent implements OnInit, AfterViewInit {
     @ViewChildren('inputSearch') inputSearchComponent:any;
     @ViewChild('galleryComponent') galleryComponent:GalleryComponent;
     protected queryParams:any = {search_phrase: ''};
@@ -37,12 +37,13 @@ export class PhotosBySearchPhraseComponent extends BasePhotosComponent implement
     }
 
     ngOnInit():void {
+        super.ngOnInit();
         this.title.setTitle('Search Photos');
         this.metaTags.setTitle(this.title.getPageName());
-        super.ngOnInit();
     }
 
     ngAfterViewInit():void {
+        super.ngAfterViewInit();
         this.focusOnSearchInput();
     }
 
@@ -66,25 +67,21 @@ export class PhotosBySearchPhraseComponent extends BasePhotosComponent implement
         this.galleryComponent.reset();
     }
 
-    protected loadPhotos(page:number, perPage:number, parameters?:any):Promise<Array<GalleryImage>> {
-        return this.processLocker
-            .lock(() => this.photoDataProvider.getBySearchPhrase(page, perPage, parameters['searchPhrase']))
-            .then(this.onLoadPhotosSuccess.bind(this));
+    protected loadImages(page:number, perPage:number, searchPhrase?:any):Promise<Array<GalleryImage>> {
+        return this.processLoadImages(() => this.photoDataProvider.getBySearchPhrase(page, perPage, searchPhrase));
     }
 
-    protected loadMorePhotos():Promise<Array<GalleryImage>> {
-        return this.loadPhotos(this.pager.getNextPage(), this.pager.getPerPage(), {
-            searchPhrase: this.queryParams['search_phrase'],
-        });
+    protected loadMoreImages():Promise<Array<GalleryImage>> {
+        return this.loadImages(this.pager.getNextPage(), this.pager.getPerPage(), this.queryParams['search_phrase']);
     }
 
     protected onSearchPhraseChange(searchPhrase:string):void {
         this.reset();
         this.queryParams['search_phrase'] = searchPhrase;
-        this.title.setTitle(`Search "${this.queryParams['search_phrase']}"`);
+        this.title.setTitle(`Search "${searchPhrase}"`);
         this.metaTags.setTitle(this.title.getPageName());
         const perPageOffset = this.queryParams['page'] * this.pager.getPerPage();
-        this.loadPhotos(this.defaults.page, perPageOffset, {searchPhrase: this.queryParams['search_phrase']});
+        this.loadImages(this.defaults.page, perPageOffset, searchPhrase);
     }
 
     protected navigateToSearchPhotos(searchPhrase:string):void {

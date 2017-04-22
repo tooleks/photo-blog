@@ -11,13 +11,13 @@ import {
     ScrollFreezerService,
 } from '../../../shared';
 import {PhotoDataProviderService} from '../../services';
-import {BasePhotosComponent} from '../abstract';
+import {PhotosComponent as AbstractPhotosComponent} from '../abstract';
 
 @Component({
     selector: 'photos',
     templateUrl: 'photos.component.html',
 })
-export class PhotosComponent extends BasePhotosComponent implements OnInit, AfterViewInit {
+export class PhotosComponent extends AbstractPhotosComponent implements OnInit, AfterViewInit {
     constructor(protected authProvider:AuthProviderService,
                 protected photoDataProvider:PhotoDataProviderService,
                 router:Router,
@@ -32,23 +32,22 @@ export class PhotosComponent extends BasePhotosComponent implements OnInit, Afte
     }
 
     ngOnInit():void {
+        super.ngOnInit();
         this.title.setTitle('All Photos');
         this.metaTags.setTitle(this.title.getPageName());
-        super.ngOnInit();
     }
 
     ngAfterViewInit():void {
+        super.ngAfterViewInit();
         const perPageOffset = this.queryParams['page'] * this.pager.getPerPage();
-        this.loadPhotos(this.defaults.page, perPageOffset);
+        this.loadImages(this.defaults.page, perPageOffset);
     }
 
-    protected loadPhotos(page:number, perPage:number, parameters?:any):Promise<Array<GalleryImage>> {
-        return this.processLocker
-            .lock(() => this.photoDataProvider.getAll(page, perPage))
-            .then(this.onLoadPhotosSuccess.bind(this));
+    protected loadImages(page:number, perPage:number):Promise<Array<GalleryImage>> {
+        return this.processLoadImages(() => this.photoDataProvider.getAll(page, perPage));
     }
 
-    protected loadMorePhotos():Promise<Array<GalleryImage>> {
-        return this.loadPhotos(this.pager.getNextPage(), this.pager.getPerPage());
+    protected loadMoreImages():Promise<Array<GalleryImage>> {
+        return this.loadImages(this.pager.getNextPage(), this.pager.getPerPage());
     }
 }
