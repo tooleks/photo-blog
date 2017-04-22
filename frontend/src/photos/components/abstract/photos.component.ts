@@ -1,4 +1,4 @@
-import {OnInit} from '@angular/core';
+import {OnInit, AfterViewInit} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {PhotoToGalleryImageMapper} from '../../mappers';
 import {MetaTagsService} from '../../../core'
@@ -14,7 +14,7 @@ import {
     ScrollFreezerService,
 } from '../../../shared';
 
-export abstract class BasePhotosComponent implements OnInit {
+export abstract class PhotosComponent implements OnInit, AfterViewInit {
     protected defaults:any = {page: 1, perPage: 20, show: null};
     protected queryParams:any = {};
     protected pager:PagerService;
@@ -39,6 +39,9 @@ export abstract class BasePhotosComponent implements OnInit {
     ngOnInit():void {
         this.queryParams['page'] = this.defaults.page;
         this.queryParams['show'] = this.defaults.show;
+    }
+
+    ngAfterViewInit():void {
         this.initParamsSubscribers();
     }
 
@@ -58,11 +61,13 @@ export abstract class BasePhotosComponent implements OnInit {
         this.images = [];
     }
 
-    protected abstract loadPhotos(page:number, perPage:number, parameters?:any):Promise<Array<GalleryImage>>;
+    protected processLoadImages(callback):Promise<Array<GalleryImage>> {
+        return this.processLocker
+            .lock(callback)
+            .then(this.onLoadImagesSuccess.bind(this));
+    }
 
-    protected abstract loadMorePhotos():Promise<Array<GalleryImage>>;
-
-    protected onLoadPhotosSuccess(response:any):Array<GalleryImage> {
+    protected onLoadImagesSuccess(response:any):Array<GalleryImage> {
         const images = this.mapImages(response.data);
         this.hasMoreImages = !(response.data.length < this.defaults.perPage);
         if (response.data.length) {

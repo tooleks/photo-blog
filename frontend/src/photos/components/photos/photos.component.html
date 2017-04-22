@@ -6,7 +6,7 @@
         <gallery #galleryComponent
                  [images]="images"
                  [defaultImageId]="queryParams['show']"
-                 [loadMoreCallback]="loadMorePhotos.bind(this)"
+                 [loadMoreCallback]="loadMoreImages.bind(this)"
                  (onOpenImage)="onShowPhoto($event)"
                  (onCloseImage)="onHidePhoto($event)"
                  [showEditImageButton]="authProvider.isAuthenticated()"
@@ -16,12 +16,12 @@
                  [infiniteScrollDisabled]="!hasMoreImages"
                  [infiniteScrollDistance]="3"
                  [infiniteScrollThrottle]="500"
-                 (scrolled)="loadMorePhotos()"
+                 (scrolled)="loadMoreImages()"
         ></gallery>
     </div>
 </div>
 <div *ngIf="!isEmpty() && hasMoreImages" class="text-center" style="margin-top: 20px;">
-    <button class="btn btn-primary" (click)="loadMorePhotos()" [disabled]="isProcessing()">
+    <button class="btn btn-primary" (click)="loadMoreImages()" [disabled]="isProcessing()">
         {{ !isProcessing() ? 'Load More' : 'Loading...' }}
     </button>
 </div>

@@ -1,1 +1,1 @@
-export * from './base-photos.component';
+export * from './photos.component';

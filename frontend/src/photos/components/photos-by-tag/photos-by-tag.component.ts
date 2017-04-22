@@ -11,13 +11,13 @@ import {
     ScrollFreezerService,
 } from '../../../shared';
 import {PhotoDataProviderService} from '../../services';
-import {BasePhotosComponent} from '../abstract';
+import {PhotosComponent as AbstractPhotosComponent} from '../abstract';
 
 @Component({
     selector: 'photos-by-tag',
     templateUrl: 'photos-by-tag.component.html',
 })
-export class PhotosByTagComponent extends BasePhotosComponent implements OnInit {
+export class PhotosByTagComponent extends AbstractPhotosComponent implements OnInit {
     @ViewChild('galleryComponent') galleryComponent:GalleryComponent;
     protected queryParams:any = {tag: ''};
 
@@ -35,9 +35,9 @@ export class PhotosByTagComponent extends BasePhotosComponent implements OnInit 
     }
 
     ngOnInit():void {
+        super.ngOnInit();
         this.title.setTitle('Search By Tag');
         this.metaTags.setTitle(this.title.getPageName());
-        super.ngOnInit();
     }
 
     protected initParamsSubscribers() {
@@ -54,24 +54,20 @@ export class PhotosByTagComponent extends BasePhotosComponent implements OnInit 
         this.galleryComponent.reset();
     }
 
-    protected loadPhotos(page:number, perPage:number, parameters?:any):Promise<Array<GalleryImage>> {
-        return this.processLocker
-            .lock(() => this.photoDataProvider.getByTag(page, perPage, parameters['tag']))
-            .then(this.onLoadPhotosSuccess.bind(this));
+    protected loadImages(page:number, perPage:number, tag:string):Promise<Array<GalleryImage>> {
+        return this.processLoadImages(() => this.photoDataProvider.getByTag(page, perPage, tag));
     }
 
-    protected loadMorePhotos():Promise<Array<GalleryImage>> {
-        return this.loadPhotos(this.pager.getNextPage(), this.pager.getPerPage(), {
-            tag: this.queryParams['tag'],
-        });
+    protected loadMoreImages():Promise<Array<GalleryImage>> {
+        return this.loadImages(this.pager.getNextPage(), this.pager.getPerPage(), this.queryParams['tag']);
     }
 
     protected onTagChange(tag:string):void {
         this.reset();
         this.queryParams['tag'] = tag;
-        this.title.setTitle(`Tag #${this.queryParams['tag']}`);
+        this.title.setTitle(`Tag #${tag}`);
         this.metaTags.setTitle(this.title.getPageName());
         const perPageOffset = this.queryParams['page'] * this.pager.getPerPage();
-        this.loadPhotos(this.defaults.page, perPageOffset, {tag: this.queryParams['tag']});
+        this.loadImages(this.defaults.page, perPageOffset, tag);
     }
 }
