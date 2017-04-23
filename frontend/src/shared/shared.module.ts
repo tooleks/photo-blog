@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {HttpModule, JsonpModule} from '@angular/http';
+import {HttpModule, JsonpModule, Response} from '@angular/http';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {Http} from '@angular/http';
@@ -45,7 +45,7 @@ import {
         {
             provide: ApiService,
             useFactory: getApiService,
-            deps: [Http, AppService, ApiErrorHandler,  AuthProviderService],
+            deps: [Http, AppService, ApiErrorHandler, AuthProviderService],
         },
         ApiErrorHandler,
         {provide: AppService, useFactory: getAppService, deps: [EnvService]},
@@ -65,15 +65,26 @@ export class SharedModule {
 }
 
 export function getApiService(http:Http, app:AppService, errorHandler:ApiErrorHandler, authProvider:AuthProviderService) {
-    return new ApiService(http, app.getApiUrl(), errorHandler.handleResponse, () => {
-        const headers = {'Accept': 'application/json'};
-        if (authProvider.hasAuth()) {
-            headers['Authorization'] = `Bearer ${authProvider.getAuthApiToken()}`;
+    return new ApiService(
+        http,
+        app.getApiUrl(),
+        function onResponseSuccess(response:Response) {
+            return response.json() || {};
+        },
+        function onResponseError(response:Response) {
+            return errorHandler.onResponseError(response);
+        },
+        function provideDefaultHeaders() {
+            const headers = {'Accept': 'application/json'};
+            if (authProvider.hasAuth()) {
+                headers['Authorization'] = `Bearer ${authProvider.getAuthApiToken()}`;
+            }
+            return headers;
+        },
+        function provideDefaultSearchParams() {
+            return app.inDebugMode() ? {'XDEBUG_SESSION_START': 'START'} : {};
         }
-        return headers;
-    }, () => {
-        return app.inDebugMode() ? {'XDEBUG_SESSION_START': 'START'} : {};
-    });
+    );
 }
 
 export function getAppService(env:EnvService) {

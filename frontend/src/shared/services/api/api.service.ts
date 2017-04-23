@@ -1,12 +1,13 @@
 import {Injectable} from '@angular/core';
-import {Http, Headers, Response, URLSearchParams} from '@angular/http';
+import {Http, Headers, URLSearchParams} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
 @Injectable()
 export class ApiService {
     constructor(protected http:Http,
                 protected apiUrl:string,
-                protected handleResponseErrors:any,
+                protected onResponseSuccess:any,
+                protected onResponseError:any,
                 protected provideDefaultHeaders:any = null,
                 protected provideDefaultSearchParams:any = null) {
     }
@@ -15,32 +16,32 @@ export class ApiService {
         return this.http
             .get(this.getApiAbsoluteUrl(relativeUrl), this.initializeOptions(options))
             .toPromise()
-            .then(this.extractResponseBody)
-            .catch(this.handleResponseErrors);
+            .then(this.onResponseSuccess)
+            .catch(this.onResponseError);
     };
 
     post = (relativeUrl:string, body?:any, options?:any):Promise<any> => {
         return this.http
             .post(this.getApiAbsoluteUrl(relativeUrl), this.initializeBody(body), this.initializeOptions(options))
             .toPromise()
-            .then(this.extractResponseBody)
-            .catch(this.handleResponseErrors);
+            .then(this.onResponseSuccess)
+            .catch(this.onResponseError);
     };
 
     put = (relativeUrl:string, body?:any, options?:any):Promise<any> => {
         return this.http
             .put(this.getApiAbsoluteUrl(relativeUrl), this.initializeBody(body), this.initializeOptions(options))
             .toPromise()
-            .then(this.extractResponseBody)
-            .catch(this.handleResponseErrors);
+            .then(this.onResponseSuccess)
+            .catch(this.onResponseError);
     };
 
     delete = (relativeUrl:string, options?:any):Promise<any> => {
         return this.http
             .delete(this.getApiAbsoluteUrl(relativeUrl), this.initializeOptions(options))
             .toPromise()
-            .then(this.extractResponseBody)
-            .catch(this.handleResponseErrors);
+            .then(this.onResponseSuccess)
+            .catch(this.onResponseError);
     };
 
     protected getApiAbsoluteUrl = (relativeUrl:string):string => {
@@ -113,9 +114,5 @@ export class ApiService {
 
     protected initializeBody = (body?:any) => {
         return body || {};
-    };
-
-    protected extractResponseBody = (response:Response):any => {
-        return response.json() || {};
     };
 }
