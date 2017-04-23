@@ -11,49 +11,45 @@ export class ApiErrorHandler {
         this.navigator = navigatorProvider.getInstance();
     }
 
-    handleResponse = (response:Response) => {
+    onResponseError = (response:Response):Promise<any> => {
         switch (response.status) {
             case 0:
-                this.handleUnknownError(response);
-                break;
+                return this.onResponseUnknownError(response);
             case 401:
-                this.handleUnauthorizedError(response);
-                break;
+                return this.onResponseUnauthorizedError(response);
             case 422:
-                this.handleValidationErrors(response);
-                break;
+                return this.onResponseValidationError(response);
             default:
-                this.handleHttpError(response);
-                break;
+                return this.onResponseHttpError(response);
         }
-        throw new Error(this.extractResponseBody(response).message);
     };
 
-    protected handleUnknownError = (response:Response):void => {
-        const body = this.extractResponseBody(response);
+    protected onResponseUnknownError = (response:Response):Promise<any> => {
+        const body = response.json();
         this.notices.error(body.message, 'Remote server connection error.');
+        return Promise.reject(new Error(body.message));
     };
 
-    protected handleUnauthorizedError = (response:Response):void => {
+    protected onResponseUnauthorizedError = (response:Response):Promise<any> => {
+        const body = response.json();
         this.navigator.navigate(['/signout']);
+        return Promise.reject(new Error(body.message));
     };
 
-    protected handleValidationErrors = (response:Response):void => {
-        const body = this.extractResponseBody(response);
+    protected onResponseValidationError = (response:Response):Promise<any> => {
+        const body = response.json();
         body.errors = body.errors || {};
         for (var property in body.errors) {
             if (body.errors.hasOwnProperty(property)) {
                 body.errors[property].forEach((message:string) => this.notices.warning(message));
             }
         }
+        return Promise.reject(new Error(body.message));
     };
 
-    protected handleHttpError = (response:Response):void => {
-        const body = this.extractResponseBody(response);
+    protected onResponseHttpError = (response:Response):Promise<any> => {
+        const body = response.json();
         this.notices.error(body.message, `${response.status} Error`);
-    };
-
-    protected extractResponseBody = (response:Response):any => {
-        return response.json() || {};
+        return Promise.reject(new Error(body.message));
     };
 }
