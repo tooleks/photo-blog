@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
 import {Http, Headers, URLSearchParams} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
+import {ApiServiceInterface} from './interfaces';
 
 @Injectable()
-export class ApiService {
+export class ApiService implements ApiServiceInterface {
     constructor(protected http:Http,
                 protected apiUrl:string,
                 protected onResponseSuccess:any,
@@ -12,51 +13,51 @@ export class ApiService {
                 protected provideDefaultSearchParams:any = null) {
     }
 
-    get = (relativeUrl:string, options?:any):Promise<any> => {
+    get(relativeUrl:string, options?:any):Promise<any> {
         return this.http
             .get(this.getApiAbsoluteUrl(relativeUrl), this.initializeOptions(options))
             .toPromise()
             .then(this.onResponseSuccess)
             .catch(this.onResponseError);
-    };
+    }
 
-    post = (relativeUrl:string, body?:any, options?:any):Promise<any> => {
+    post(relativeUrl:string, body?:any, options?:any):Promise<any> {
         return this.http
             .post(this.getApiAbsoluteUrl(relativeUrl), this.initializeBody(body), this.initializeOptions(options))
             .toPromise()
             .then(this.onResponseSuccess)
             .catch(this.onResponseError);
-    };
+    }
 
-    put = (relativeUrl:string, body?:any, options?:any):Promise<any> => {
+    put(relativeUrl:string, body?:any, options?:any):Promise<any> {
         return this.http
             .put(this.getApiAbsoluteUrl(relativeUrl), this.initializeBody(body), this.initializeOptions(options))
             .toPromise()
             .then(this.onResponseSuccess)
             .catch(this.onResponseError);
-    };
+    }
 
-    delete = (relativeUrl:string, options?:any):Promise<any> => {
+    delete(relativeUrl:string, options?:any):Promise<any> {
         return this.http
             .delete(this.getApiAbsoluteUrl(relativeUrl), this.initializeOptions(options))
             .toPromise()
             .then(this.onResponseSuccess)
             .catch(this.onResponseError);
-    };
+    }
 
-    protected getApiAbsoluteUrl = (relativeUrl:string):string => {
+    protected getApiAbsoluteUrl(relativeUrl:string):string {
         return this.apiUrl + relativeUrl;
-    };
+    }
 
-    protected initializeOptions = (options?:any) => {
+    protected initializeOptions(options?:any) {
         options = options || {};
         return {
             headers: this.initializeHeaders(options.headers),
             search: this.initializeSearchParams(options.params),
         };
-    };
+    }
 
-    protected initializeHeaders = (headers?:any):Headers => {
+    protected initializeHeaders(headers?:any):Headers {
         const initializedHeaders = this.getDefaultHeaders();
         headers = headers || {};
         for (let name in headers) {
@@ -65,9 +66,9 @@ export class ApiService {
             }
         }
         return initializedHeaders;
-    };
+    }
 
-    protected getDefaultHeaders = ():Headers => {
+    protected getDefaultHeaders():Headers {
         const defaultHeaders = new Headers;
         const rawDefaultHeaders = this.getRawDefaultHeaders();
         for (let name in rawDefaultHeaders) {
@@ -76,15 +77,15 @@ export class ApiService {
             }
         }
         return defaultHeaders;
-    };
+    }
 
-    protected getRawDefaultHeaders = ():any => {
+    protected getRawDefaultHeaders():any {
         return typeof (this.provideDefaultHeaders) === 'function'
             ? this.provideDefaultHeaders()
             : {};
-    };
+    }
 
-    protected initializeSearchParams = (searchParams?:any):URLSearchParams => {
+    protected initializeSearchParams(searchParams?:any):URLSearchParams {
         const initializedSearchParams = this.getDefaultSearchParams();
         searchParams = searchParams || {};
         for (let name in searchParams) {
@@ -93,9 +94,9 @@ export class ApiService {
             }
         }
         return initializedSearchParams;
-    };
+    }
 
-    protected getDefaultSearchParams = ():URLSearchParams => {
+    protected getDefaultSearchParams():URLSearchParams {
         const defaultSearchParams = new URLSearchParams;
         const rawDefaultSearchParams = this.getRawDefaultSearchParams();
         for (let name in rawDefaultSearchParams) {
@@ -104,15 +105,15 @@ export class ApiService {
             }
         }
         return defaultSearchParams;
-    };
+    }
 
-    protected getRawDefaultSearchParams = ():any => {
+    protected getRawDefaultSearchParams():any {
         return typeof (this.provideDefaultSearchParams) === 'function'
             ? this.provideDefaultSearchParams()
             : {};
-    };
+    }
 
-    protected initializeBody = (body?:any) => {
+    protected initializeBody(body?:any) {
         return body || {};
-    };
+    }
 }
