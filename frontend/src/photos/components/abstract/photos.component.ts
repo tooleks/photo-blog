@@ -48,18 +48,21 @@ export abstract class PhotosComponent implements OnInit, AfterViewInit {
     protected initParamsSubscribers():void {
         this.route.queryParams
             .map((queryParams:any) => queryParams['page'])
-            .subscribe((page:number) => this.queryParams['page'] = page ? Number(page) : this.defaults.page);
+            .subscribe((page:any) => this.queryParams['page'] = page ? Number(page) : this.defaults.page);
 
         this.route.queryParams
             .map((queryParams:any) => queryParams['show'])
-            .subscribe((show:number) => this.queryParams['show'] = show ? Number(show) : this.defaults.show);
+            .subscribe((show:any) => this.queryParams['show'] = show ? Number(show) : this.defaults.show);
     }
 
     protected reset():void {
         this.images = [];
     }
 
-    protected processLoadImages(callback):Promise<Array<GalleryImage>> {
+    protected processLoadImages(callback:any):Promise<Array<GalleryImage>> {
+        if (typeof (callback) !== 'function') {
+            throw new Error('Type of the "callback" parameter should be a function.');
+        }
         return this.processLocker
             .lock(callback)
             .then(this.onLoadImagesSuccess.bind(this));
