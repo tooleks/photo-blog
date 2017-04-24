@@ -131,7 +131,7 @@ export class GalleryComponent implements OnInit, OnChanges {
         return new Promise((resolve, reject) => {
             typeof (this.loadMoreCallback) === 'function'
                 ? resolve(this.loadMoreCallback())
-                : reject(new Error('The "loadMoreCallback" callback is not a function.'));
+                : reject(new Error('Type of the "loadMoreCallback" parameter should be a function.'));
         });
     };
 
