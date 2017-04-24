@@ -13,7 +13,7 @@ export class GalleryViewerComponent implements OnChanges {
 
     @Input() image:GalleryImage = null;
 
-    protected loaded:boolean = false;
+    protected loadedImage:boolean = false;
 
     @Output() onImageLoaded:EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
 
@@ -34,7 +34,7 @@ export class GalleryViewerComponent implements OnChanges {
 
     @Input() showImageInfoButton:boolean = true;
     @Output() onImageInfo:EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
-    @Input() visibleImageInfo:boolean = true;
+    @Input() visibleImageInfo:boolean = false;
     @Output() visibleImageInfoChange:EventEmitter<boolean> = new EventEmitter<boolean>();
 
     ngOnChanges(changes:SimpleChanges) {
@@ -58,16 +58,15 @@ export class GalleryViewerComponent implements OnChanges {
     };
 
     protected processImageLoading = ():void => {
-        var loaded;
-        this.loaded = loaded = false;
+        var loadedImage;
+        this.loadedImage = loadedImage = false;
         loadImage(this.image.getLargeSizeUrl(), () => {
-            this.loaded = loaded = true;
+            this.loadedImage = loadedImage = true;
             this.onImageLoaded.emit(this.image);
         });
-
         // #browser-specific
         if (typeof (window) !== 'undefined') {
-            setTimeout(() => (this.loaded = loaded), this.loaderDelay);
+            setTimeout(() => (this.loadedImage = loadedImage), this.loaderDelay);
         }
     };
 
@@ -95,5 +94,18 @@ export class GalleryViewerComponent implements OnChanges {
         this.visibleImageInfo = !this.visibleImageInfo;
         this.visibleImageInfoChange.emit(this.visibleImageInfo);
         this.onImageInfo.emit(this.image);
+    };
+
+    protected isVisibleImageInfo = ():boolean => {
+        // #browser-specific
+        if (typeof (window) !== 'undefined') {
+            return this.loadedImage && this.visibleImageInfo;
+        } else {
+            return true;
+        }
+    };
+
+    protected isLoadedImage = ():boolean => {
+        return this.loadedImage;
     };
 }

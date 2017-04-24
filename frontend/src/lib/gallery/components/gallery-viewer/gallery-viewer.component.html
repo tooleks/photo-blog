@@ -2,12 +2,12 @@
     <div class="gallery-backdrop"></div>
     <div class="gallery-container">
         <i class="gallery-spinner"
-           [ngClass]="!loaded ? 'fa fa-circle-o-notch fa-spin fa-2x' : ''"
+           [ngClass]="!isLoadedImage() ? 'fa fa-circle-o-notch fa-spin fa-2x' : ''"
            aria-hidden="true"></i>
         <div (swiperight)="clickPrevImage()"
              (swipeleft)="clickNextImage()"
              class="gallery-view">
-            <div *ngIf="loaded" class="gallery-img-container">
+            <div *ngIf="isLoadedImage()" class="gallery-img-container">
                 <img itemprop="contentUrl"
                      (click)="clickNextImage()"
                      [src]="image.getLargeSizeUrl()"
@@ -16,7 +16,7 @@
                      class="gallery-img">
             </div>
         </div>
-        <div *ngIf="loaded && visibleImageInfo" class="gallery-info">
+        <div [style.opacity]="isVisibleImageInfo() ? '1' : '0'" class="gallery-info">
             <span itemprop="description">{{ image.getDescription() }}</span><br>{{ image.getExif() }}
         </div>
         <div class="gallery-actions">
