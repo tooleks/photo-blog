@@ -52,16 +52,17 @@ gallery-viewer .gallery-img {
 gallery-viewer .gallery-action {
     display: block;
     padding: 16px 20px 16px;
-    background-color: rgba(0, 0, 0, 0.45);
-    color: #999;
+    background: transparent;
+    color: #dfdfdf;
     cursor: pointer;
     font-size: 18px;
     border: none;
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
     transition: transform 0.35s cubic-bezier(0, 0, 0.25, 1) 0s, opacity 0.35s cubic-bezier(0, 0, 0.25, 1) 0s, color 0.2s linear;
 }
 
 gallery-viewer .gallery-action:hover {
-    color: #FFF;
+    color: #fff;
 }
 
 gallery-viewer .gallery-actions .gallery-action {
