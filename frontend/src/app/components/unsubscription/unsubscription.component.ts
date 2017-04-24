@@ -55,7 +55,7 @@ export class UnsubscriptionComponent implements OnInit {
 
     onUnsubscribeError = (error:any):any => {
         this.navigator.navigate(['/']);
-        return Promise.reject(error);
+        throw error;
     };
 
     navigateToHomePage = ():void => {

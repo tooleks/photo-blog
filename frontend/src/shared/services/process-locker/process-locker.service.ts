@@ -30,8 +30,8 @@ export class ProcessLockerService {
         return result;
     };
 
-    protected handleProcessErrors = (error:any):Promise<any> => {
+    protected handleProcessErrors = (error:any):any => {
         this.locker.unlock();
-        return Promise.reject(error);
+        throw error;
     };
 }

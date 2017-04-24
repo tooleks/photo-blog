@@ -11,7 +11,7 @@ export class ApiErrorHandler {
         this.navigator = navigatorProvider.getInstance();
     }
 
-    onResponseError = (response:Response):Promise<any> => {
+    onResponseError = (response:Response):any => {
         switch (response.status) {
             case 0:
                 return this.onResponseUnknownError(response);
@@ -24,32 +24,32 @@ export class ApiErrorHandler {
         }
     };
 
-    protected onResponseUnknownError = (response:Response):Promise<any> => {
+    protected onResponseUnknownError = (response:Response):any => {
         const body = response.json();
         this.notices.error(body.message, 'Remote server connection error. Try again later.');
-        return Promise.reject(new Error(body.message));
+        throw new Error(body.message);
     };
 
-    protected onResponseUnauthorizedError = (response:Response):Promise<any> => {
+    protected onResponseUnauthorizedError = (response:Response):any => {
         const body = response.json();
         this.navigator.navigate(['/signout']);
-        return Promise.reject(new Error(body.message));
+        throw new Error(body.message);
     };
 
-    protected onResponseValidationError = (response:Response):Promise<any> => {
+    protected onResponseValidationError = (response:Response):any => {
         const body = response.json();
         body.errors = body.errors || {};
-        for (var property in body.errors) {
-            if (body.errors.hasOwnProperty(property)) {
-                body.errors[property].forEach((message:string) => this.notices.warning(message));
+        for (var attribute in body.errors) {
+            if (body.errors.hasOwnProperty(attribute)) {
+                body.errors[attribute].forEach((message:string) => this.notices.warning(message));
             }
         }
-        return Promise.reject(new Error(body.message));
+        throw new Error(body.message);
     };
 
-    protected onResponseHttpError = (response:Response):Promise<any> => {
+    protected onResponseHttpError = (response:Response):any => {
         const body = response.json();
         this.notices.error(body.message, `${response.status} Error`);
-        return Promise.reject(new Error(body.message));
+        throw new Error(body.message);
     };
 }
