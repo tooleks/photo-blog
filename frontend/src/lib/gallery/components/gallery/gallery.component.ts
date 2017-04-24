@@ -109,14 +109,18 @@ export class GalleryComponent implements OnInit, OnChanges {
     openPrevImage = ():void => {
         const prevImageIndex = this.openedImageIndex - 1;
         if (this.images[prevImageIndex]) {
-            this.openImage(this.images[prevImageIndex]);
+            const image:GalleryImage = this.images[prevImageIndex];
+            this.onPrevImage.emit(image);
+            this.openImage(image);
         }
     };
 
     openNextImage = (loadMoreImages:boolean):void => {
         const nextImageIndex = this.openedImageIndex + 1;
         if (this.images[nextImageIndex]) {
-            this.openImage(this.images[nextImageIndex]);
+            const image:GalleryImage = this.images[nextImageIndex];
+            this.onNextImage.emit(image);
+            this.openImage(image);
         } else if (loadMoreImages) {
             this.loadingNextImages = true;
             this.loadMoreImages();
@@ -136,12 +140,10 @@ export class GalleryComponent implements OnInit, OnChanges {
     };
 
     clickPrevImage = (image:GalleryImage):void => {
-        this.onPrevImage.emit(image);
         this.openPrevImage();
     };
 
     clickNextImage = (image:GalleryImage):void => {
-        this.onNextImage.emit(image);
         this.openNextImage(true);
     };
 
