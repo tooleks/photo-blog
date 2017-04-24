@@ -152,7 +152,7 @@ export class GalleryGridComponent implements OnChanges, AfterContentInit, OnDest
         if (force && !renderedImages.length) {
             renderedImages = this.getActiveRowImages();
         }
-        // If there some rendered images, reset the active row images and append the images to to the grid.
+        // If there some rendered images, reset the active row images and append the images to the grid.
         if (renderedImages.length) {
             this.setActiveRowImages([]);
             this.getGridRows().push(renderedImages);
