@@ -26,7 +26,7 @@ export class ApiErrorHandler {
 
     protected onResponseUnknownError = (response:Response):Promise<any> => {
         const body = response.json();
-        this.notices.error(body.message, 'Remote server connection error.');
+        this.notices.error(body.message, 'Remote server connection error. Try again later.');
         return Promise.reject(new Error(body.message));
     };
 
