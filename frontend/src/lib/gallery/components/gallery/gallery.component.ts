@@ -14,7 +14,7 @@ export class GalleryComponent implements OnInit, OnChanges {
 
     @Input() images:Array<GalleryImage> = [];
 
-    @Input() defaultImageId:any;
+    @Input() defaultImageId:any = null;
 
     @Input() loadMoreCallback:any = null;
     protected loadingNextImages:boolean = false;
