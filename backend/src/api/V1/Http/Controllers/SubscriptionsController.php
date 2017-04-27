@@ -27,7 +27,7 @@ class SubscriptionsController extends Controller
 
     /**
      * @apiVersion 1.0.0
-     * @api {post} /v1/subscription Create
+     * @api {post} /v1/subscriptions Create
      * @apiName Create
      * @apiGroup Subscriptions
      * @apiHeader {String} Accept application/json
