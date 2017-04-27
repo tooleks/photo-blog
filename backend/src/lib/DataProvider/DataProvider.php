@@ -315,6 +315,6 @@ abstract class DataProvider implements DataProviderContract
 
         }
 
-        return $deleted;
+        return $deleted ?? false;
     }
 }
