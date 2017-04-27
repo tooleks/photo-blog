@@ -34,7 +34,9 @@
     },
     "autoload-dev": {
         "classmap": [
-            "tests/TestCase.php"
+            "tests/TestCase.php",
+            "tests/integration/api/v1/IntegrationApiV1TestCase.php",
+            "tests/integration/app/IntegrationAppTestCase.php"
         ]
     },
     "scripts": {
