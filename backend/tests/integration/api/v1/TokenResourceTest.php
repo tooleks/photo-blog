@@ -14,7 +14,7 @@ class TokenResourceTest extends IntegrationApiV1TestCase
 
     public function testCreateSuccess()
     {
-        $this->createTestUser([
+        $user = $this->createTestUser([
             'email' => $email = $this->fake()->safeEmail,
             'password' => $password = $this->fake()->password(),
         ]);
@@ -25,12 +25,15 @@ class TokenResourceTest extends IntegrationApiV1TestCase
                 'password' => $password,
             ])
             ->assertStatus(201)
-            ->assertJsonStructure($this->resourceStructure);
+            ->assertJsonStructure($this->resourceStructure)
+            ->assertJson([
+                'user_id' => $user->id
+            ]);
     }
 
     public function testCreateWithInvalidEmail()
     {
-        $this->createTestUser([
+        $user = $this->createTestUser([
             'email' => $email = $this->fake()->safeEmail,
             'password' => $password = $this->fake()->password(),
         ]);
@@ -45,7 +48,7 @@ class TokenResourceTest extends IntegrationApiV1TestCase
 
     public function testCreateWithInvalidPassword()
     {
-        $this->createTestUser([
+        $user = $this->createTestUser([
             'email' => $email = $this->fake()->safeEmail,
             'password' => $password = $this->fake()->password(),
         ]);
