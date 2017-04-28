@@ -44,11 +44,14 @@ abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
     /**
      * Create administrator user for testing scenarios.
      *
+     * @param array $attributes
      * @return User
      */
-    protected function createTestAdministratorUser()
+    protected function createTestAdministratorUser(array $attributes = [])
     {
-        $user = factory(User::class)->create(['role_id' => Role::administrator()->first()->id ?? null]);
+        $requiredAttributes = ['role_id' => Role::administrator()->first()->id ?? null];
+
+        $user = factory(User::class)->create(array_merge($attributes, $requiredAttributes));
 
         return $user;
     }

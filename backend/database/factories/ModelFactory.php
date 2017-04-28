@@ -2,6 +2,7 @@
 
 use Core\Models\Exif;
 use Core\Models\Photo;
+use Core\Models\Role;
 use Core\Models\Subscription;
 use Core\Models\Tag;
 use Core\Models\Thumbnail;
@@ -61,6 +62,7 @@ $factory->define(Thumbnail::class, function (Generator $faker) {
 $factory->define(User::class, function (Generator $faker) {
     static $password;
     return [
+        'role_id' => Role::inRandomOrder()->first()->id,
         'name' => $faker->userName,
         'email' => $faker->safeEmail,
         'api_token' => str_random(64),

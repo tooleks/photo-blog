@@ -58,7 +58,7 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
 
         $user = $this->createTestAdministratorUser();
 
-        $responce = $this
+        $this
             ->actingAs($user)
             ->json('POST', sprintf('/%s', $this->resourceName), [
                 'file' => UploadedFile::fake()->image('photo.jpg', 1000, 1000)->size(500),
@@ -71,7 +71,7 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
     {
         Storage::fake(config('filesystems.default'));
 
-        $responce = $this
+        $this
             ->json('POST', sprintf('/%s', $this->resourceName), [
                 'file' => UploadedFile::fake()->image('photo.jpg', 1000, 1000)->size(500),
             ])
@@ -85,7 +85,7 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
         $user = $this->createTestAdministratorUser();
         $photo = $this->createTestPhoto(['created_by_user_id' => $user->id]);
 
-        $responce = $this
+        $this
             ->actingAs($user)
             ->json('POST', sprintf('/%s/%s', $this->resourceName, $photo->id), [
                 'file' => UploadedFile::fake()->image('photo.jpg', 1000, 1000)->size(500),
@@ -101,7 +101,7 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
         $user = $this->createTestAdministratorUser();
         $photo = $this->createTestPhoto(['created_by_user_id' => $user->id]);
 
-        $responce = $this
+        $this
             ->json('POST', sprintf('/%s/%s', $this->resourceName, $photo->id), [
                 'file' => UploadedFile::fake()->image('photo.jpg', 1000, 1000)->size(500),
             ])
@@ -113,7 +113,7 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
         $user = $this->createTestAdministratorUser();
         $photo = $this->createTestPhoto(['created_by_user_id' => $user->id]);
 
-        $responce = $this
+        $this
             ->actingAs($user)
             ->json('DELETE', sprintf('/%s/%s', $this->resourceName, $photo->id))
             ->assertStatus(204);
@@ -124,7 +124,7 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
         $user = $this->createTestAdministratorUser();
         $photo = $this->createTestPhoto(['created_by_user_id' => $user->id]);
 
-        $responce = $this
+        $this
             ->json('DELETE', sprintf('/%s/%s', $this->resourceName, $photo->id))
             ->assertStatus(401);
     }
@@ -134,8 +134,20 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
         $user = $this->createTestAdministratorUser();
         $photo = $this->createTestPhoto(['created_by_user_id' => $user->id]);
 
-        $responce = $this
+        $this
+            ->actingAs($user)
             ->json('GET', sprintf('/%s/%s', $this->resourceName, $photo->id))
+            ->assertStatus(200)
             ->assertJsonStructure($this->resourceStructure);
+    }
+
+    public function testGetByIdUnauthorized()
+    {
+        $user = $this->createTestAdministratorUser();
+        $photo = $this->createTestPhoto(['created_by_user_id' => $user->id]);
+
+        $this
+            ->json('GET', sprintf('/%s/%s', $this->resourceName, $photo->id))
+            ->assertStatus(401);
     }
 }
