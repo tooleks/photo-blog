@@ -14,11 +14,18 @@ class SubscriptionsResourceTest extends IntegrationApiV1TestCase
         'token',
     ];
 
+    protected function createTestSubscription()
+    {
+        $subscription = factory(Subscription::class)->create();
+
+        return $subscription;
+    }
+
     public function testCreateSuccess()
     {
         $email = $this->fake()->email;
 
-        $responce = $this
+        $this
             ->json('POST', sprintf('/%s', $this->resourceName), [
                 'email' => $email,
             ])
@@ -31,9 +38,9 @@ class SubscriptionsResourceTest extends IntegrationApiV1TestCase
 
     public function testDeleteSuccess()
     {
-        $subscription = factory(Subscription::class)->create();
+        $subscription = $this->createTestSubscription();
 
-        $responce = $this
+        $this
             ->json('DELETE', sprintf('/%s/%s', $this->resourceName, $subscription->token))
             ->assertStatus(204);
     }

@@ -11,7 +11,7 @@ class ContactMessagesResourceTest extends IntegrationApiV1TestCase
 
     public function testCreateSuccess()
     {
-        $response = $this
+        $this
             ->json('POST', sprintf('/%s', $this->resourceName), [
                 'email' => $this->fake()->email,
                 'name' => $this->fake()->name,
