@@ -72,9 +72,7 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
         Storage::fake(config('filesystems.default'));
 
         $this
-            ->json('POST', sprintf('/%s', $this->resourceName), [
-                'file' => UploadedFile::fake()->image('photo.jpg', 1000, 1000)->size(500),
-            ])
+            ->json('POST', sprintf('/%s', $this->resourceName))
             ->assertStatus(401);
     }
 
@@ -102,9 +100,7 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
         $photo = $this->createTestPhoto(['created_by_user_id' => $user->id]);
 
         $this
-            ->json('POST', sprintf('/%s/%s', $this->resourceName, $photo->id), [
-                'file' => UploadedFile::fake()->image('photo.jpg', 1000, 1000)->size(500),
-            ])
+            ->json('POST', sprintf('/%s/%s', $this->resourceName, $photo->id))
             ->assertStatus(401);
     }
 
@@ -117,6 +113,11 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
             ->actingAs($user)
             ->json('DELETE', sprintf('/%s/%s', $this->resourceName, $photo->id))
             ->assertStatus(204);
+
+        $this
+            ->actingAs($user)
+            ->json('GET', sprintf('/%s/%s', $this->resourceName, $photo->id))
+            ->assertStatus(404);
     }
 
     public function testDeleteUnauthorized()
