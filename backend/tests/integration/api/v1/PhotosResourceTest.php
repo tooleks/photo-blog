@@ -56,7 +56,7 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
     {
         Storage::fake(config('filesystems.default'));
 
-        $user = $this->createTestAdministratorUser();
+        $user = $this->createTestUser();
 
         $this
             ->actingAs($user)
@@ -82,7 +82,7 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
     {
         Storage::fake(config('filesystems.default'));
 
-        $user = $this->createTestAdministratorUser();
+        $user = $this->createTestUser();
         $photo = $this->createTestPhoto(['created_by_user_id' => $user->id]);
 
         $this
@@ -98,7 +98,7 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
     {
         Storage::fake(config('filesystems.default'));
 
-        $user = $this->createTestAdministratorUser();
+        $user = $this->createTestUser();
         $photo = $this->createTestPhoto(['created_by_user_id' => $user->id]);
 
         $this
@@ -110,7 +110,7 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
 
     public function testDeleteSuccess()
     {
-        $user = $this->createTestAdministratorUser();
+        $user = $this->createTestUser();
         $photo = $this->createTestPhoto(['created_by_user_id' => $user->id]);
 
         $this
@@ -121,7 +121,7 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
 
     public function testDeleteUnauthorized()
     {
-        $user = $this->createTestAdministratorUser();
+        $user = $this->createTestUser();
         $photo = $this->createTestPhoto(['created_by_user_id' => $user->id]);
 
         $this
@@ -131,7 +131,7 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
 
     public function testGetByIdSuccess()
     {
-        $user = $this->createTestAdministratorUser();
+        $user = $this->createTestUser();
         $photo = $this->createTestPhoto(['created_by_user_id' => $user->id]);
 
         $this
@@ -143,7 +143,7 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
 
     public function testGetByIdUnauthorized()
     {
-        $user = $this->createTestAdministratorUser();
+        $user = $this->createTestUser();
         $photo = $this->createTestPhoto(['created_by_user_id' => $user->id]);
 
         $this

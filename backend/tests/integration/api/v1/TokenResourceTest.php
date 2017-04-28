@@ -1,8 +1,5 @@
 <?php
 
-use Core\Models\User;
-use Illuminate\Support\Facades\Hash;
-
 /**
  * Class TokenResourceTest.
  */
@@ -17,13 +14,10 @@ class TokenResourceTest extends IntegrationApiV1TestCase
 
     public function testCreateSuccess()
     {
-        $user = new User;
-        $user->name = $this->fake()->userName;
-        $user->email = $email = $this->fake()->safeEmail;
-        $user->password = Hash::make($password = $this->fake()->password());
-        $user->generateApiToken();
-        $user->setAdministratorRole();
-        $user->saveOrFail();
+        $this->createTestUser([
+            'email' => $email = $this->fake()->safeEmail,
+            'password' => $password = $this->fake()->password(),
+        ]);
 
         $this
             ->json('POST', sprintf('/%s', $this->resourceName), [
@@ -36,13 +30,10 @@ class TokenResourceTest extends IntegrationApiV1TestCase
 
     public function testCreateInvalidEmail()
     {
-        $user = new User;
-        $user->name = $this->fake()->userName;
-        $user->email = $email = $this->fake()->safeEmail;
-        $user->password = Hash::make($password = $this->fake()->password());
-        $user->generateApiToken();
-        $user->setAdministratorRole();
-        $user->saveOrFail();
+        $this->createTestUser([
+            'email' => $email = $this->fake()->safeEmail,
+            'password' => $password = $this->fake()->password(),
+        ]);
 
         $this
             ->json('POST', sprintf('/%s', $this->resourceName), [
@@ -54,13 +45,10 @@ class TokenResourceTest extends IntegrationApiV1TestCase
 
     public function testCreateInvalidPassword()
     {
-        $user = new User;
-        $user->name = $this->fake()->userName;
-        $user->email = $email = $this->fake()->safeEmail;
-        $user->password = Hash::make($password = $this->fake()->password());
-        $user->generateApiToken();
-        $user->setAdministratorRole();
-        $user->saveOrFail();
+        $this->createTestUser([
+            'email' => $email = $this->fake()->safeEmail,
+            'password' => $password = $this->fake()->password(),
+        ]);
 
         $this
             ->json('POST', sprintf('/%s', $this->resourceName), [

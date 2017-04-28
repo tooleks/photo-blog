@@ -2,6 +2,7 @@
 
 use Core\Models\Role;
 use Core\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 /**
  * Class TestCase.
@@ -42,16 +43,20 @@ abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
     }
 
     /**
-     * Create administrator user for testing scenarios.
+     * Create user for testing scenarios.
      *
      * @param array $attributes
      * @return User
      */
-    protected function createTestAdministratorUser(array $attributes = [])
+    protected function createTestUser(array $attributes = [])
     {
-        $requiredAttributes = ['role_id' => Role::administrator()->first()->id ?? null];
+        $defaultAttributes = ['role_id' => Role::administrator()->first()->id ?? null];
 
-        $user = factory(User::class)->create(array_merge($attributes, $requiredAttributes));
+        if (array_key_exists('password', $attributes)) {
+            $attributes['password'] = Hash::make($attributes['password']);
+        }
+
+        $user = factory(User::class)->create(array_merge($defaultAttributes, $attributes));
 
         return $user;
     }
