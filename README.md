@@ -45,6 +45,14 @@ php artisan create:api_documentation
 
 This command will create `./docs/api/dist` directory. Open the `./docs/api/dist/index.html` file in your favorite web browser to show the REST API documentation.
 
+#### Tests
+
+Run the following command (within the `./backend` directory) to run tests:
+
+```
+./vendor/bin/phpunit
+```
+
 ### Frontend
 
 #### Installation

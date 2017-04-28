@@ -56,10 +56,10 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
     {
         Storage::fake(config('filesystems.default'));
 
-        $user = $this->createTestUser();
+        $authUser = $this->createTestUser();
 
         $this
-            ->actingAs($user)
+            ->actingAs($authUser)
             ->json('POST', sprintf('/%s', $this->resourceName), [
                 'file' => UploadedFile::fake()->image('photo.jpg', 1000, 1000)->size(500),
             ])
@@ -80,11 +80,11 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
     {
         Storage::fake(config('filesystems.default'));
 
-        $user = $this->createTestUser();
-        $photo = $this->createTestPhoto(['created_by_user_id' => $user->id]);
+        $authUser = $this->createTestUser();
+        $photo = $this->createTestPhoto(['created_by_user_id' => $authUser->id]);
 
         $this
-            ->actingAs($user)
+            ->actingAs($authUser)
             ->json('POST', sprintf('/%s/%s', $this->resourceName, $photo->id), [
                 'file' => UploadedFile::fake()->image('photo.jpg', 1000, 1000)->size(500),
             ])
@@ -106,11 +106,11 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
 
     public function testDeleteSuccess()
     {
-        $user = $this->createTestUser();
-        $photo = $this->createTestPhoto(['created_by_user_id' => $user->id])->load('exif', 'thumbnails');
+        $authUser = $this->createTestUser();
+        $photo = $this->createTestPhoto(['created_by_user_id' => $authUser->id])->load('exif', 'thumbnails');
 
         $this
-            ->actingAs($user)
+            ->actingAs($authUser)
             ->json('DELETE', sprintf('/%s/%s', $this->resourceName, $photo->id))
             ->assertStatus(204);
 
@@ -133,11 +133,11 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
 
     public function testGetByIdSuccess()
     {
-        $user = $this->createTestUser();
-        $photo = $this->createTestPhoto(['created_by_user_id' => $user->id]);
+        $authUser = $this->createTestUser();
+        $photo = $this->createTestPhoto(['created_by_user_id' => $authUser->id]);
 
         $this
-            ->actingAs($user)
+            ->actingAs($authUser)
             ->json('GET', sprintf('/%s/%s', $this->resourceName, $photo->id))
             ->assertStatus(200)
             ->assertJsonStructure($this->resourceStructure);

@@ -105,22 +105,6 @@ class User extends Authenticatable
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function role()
-    {
-        return $this->belongsTo(Role::class);
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function photos()
-    {
-        return $this->hasMany(Photo::class);
-    }
-
-    /**
      * Check if user is 'Administrator'.
      *
      * @return string
@@ -138,5 +122,21 @@ class User extends Authenticatable
     public function isCustomer()
     {
         return $this->role->name === Role::NAME_CUSTOMER;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function photos()
+    {
+        return $this->hasMany(Photo::class, 'created_by_user_id');
     }
 }

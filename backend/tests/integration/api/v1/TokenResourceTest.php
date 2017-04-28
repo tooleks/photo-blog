@@ -14,26 +14,26 @@ class TokenResourceTest extends IntegrationApiV1TestCase
 
     public function testCreateSuccess()
     {
-        $user = $this->createTestUser([
+        $user = $this->createTestUser($data = [
             'email' => $email = $this->fake()->safeEmail,
             'password' => $password = $this->fake()->password(),
         ]);
 
         $this
             ->json('POST', sprintf('/%s', $this->resourceName), [
-                'email' => $email,
-                'password' => $password,
+                'email' => $data['email'],
+                'password' => $data['password'],
             ])
             ->assertStatus(201)
             ->assertJsonStructure($this->resourceStructure)
             ->assertJson([
-                'user_id' => $user->id
+                'user_id' => $user->id,
             ]);
     }
 
     public function testCreateWithInvalidEmail()
     {
-        $user = $this->createTestUser([
+        $user = $this->createTestUser($data = [
             'email' => $email = $this->fake()->safeEmail,
             'password' => $password = $this->fake()->password(),
         ]);
@@ -41,21 +41,21 @@ class TokenResourceTest extends IntegrationApiV1TestCase
         $this
             ->json('POST', sprintf('/%s', $this->resourceName), [
                 'email' => $this->fake()->safeEmail,
-                'password' => $password,
+                'password' => $data['password'],
             ])
             ->assertStatus(404);
     }
 
     public function testCreateWithInvalidPassword()
     {
-        $user = $this->createTestUser([
+        $user = $this->createTestUser($data = [
             'email' => $email = $this->fake()->safeEmail,
             'password' => $password = $this->fake()->password(),
         ]);
 
         $this
             ->json('POST', sprintf('/%s', $this->resourceName), [
-                'email' => $email,
+                'email' => $data['email'],
                 'password' => $this->fake()->password(),
             ])
             ->assertStatus(404);

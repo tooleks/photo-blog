@@ -14,25 +14,41 @@ class SubscriptionsResourceTest extends IntegrationApiV1TestCase
         'token',
     ];
 
-    protected function createTestSubscription()
+    protected function createTestSubscription(array $attributes = [])
     {
-        $subscription = factory(Subscription::class)->create();
+        $subscription = factory(Subscription::class)->create($attributes);
 
         return $subscription;
     }
 
     public function testCreateSuccess()
     {
-        $email = $this->fake()->email;
-
         $this
-            ->json('POST', sprintf('/%s', $this->resourceName), [
-                'email' => $email,
+            ->json('POST', sprintf('/%s', $this->resourceName), $body = [
+                'email' => $this->fake()->email,
             ])
             ->assertStatus(201)
             ->assertJsonStructure($this->resourceStructure)
             ->assertJson([
-                'email' => $email,
+                'email' => $body['email'],
+            ]);
+    }
+
+    public function testCreateWithDuplicatedEmail()
+    {
+        $subscription = $this->createTestSubscription($data = [
+            'email' => $this->fake()->email,
+        ]);
+
+        $this
+            ->json('POST', sprintf('/%s', $this->resourceName), [
+                'email' => $data['email'],
+            ])
+            ->assertStatus(422)
+            ->assertJsonStructure([
+                'errors' => [
+                    'email',
+                ],
             ]);
     }
 

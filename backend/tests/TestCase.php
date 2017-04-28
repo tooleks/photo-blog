@@ -75,5 +75,7 @@ abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
     protected function tearDown()
     {
         $this->artisan('migrate:rollback');
+
+        parent::tearDown();
     }
 }

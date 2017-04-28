@@ -59,15 +59,15 @@ class PublishedPhotosResourceTest extends IntegrationApiV1TestCase
 
     public function testCreateSuccess()
     {
-        $user = $this->createTestUser();
+        $authUser = $this->createTestUser();
         $photo = $this->createTestPhoto([
-            'created_by_user_id' => $user->id,
+            'created_by_user_id' => $authUser->id,
             'is_published' => false,
         ]);
 
         $this
-            ->actingAs($user)
-            ->json('POST', sprintf('/%s', $this->resourceName), $data = [
+            ->actingAs($authUser)
+            ->json('POST', sprintf('/%s', $this->resourceName), $body = [
                 'photo_id' => $photo->id,
                 'description' => $this->fake()->realText(),
                 'tags' => [
@@ -76,10 +76,12 @@ class PublishedPhotosResourceTest extends IntegrationApiV1TestCase
                     ['value' => strtolower($this->fake()->word)],
                 ],
             ])
+            ->assertStatus(201)
+            ->assertJsonStructure($this->resourceStructure)
             ->assertJson([
                 'id' => $photo->id,
-                'description' => $data['description'],
-                'tags' => $data['tags'],
+                'description' => $body['description'],
+                'tags' => $body['tags'],
             ]);
     }
 
@@ -98,15 +100,15 @@ class PublishedPhotosResourceTest extends IntegrationApiV1TestCase
 
     public function testUpdateSuccess()
     {
-        $user = $this->createTestUser();
+        $authUser = $this->createTestUser();
         $photo = $this->createTestPhoto([
-            'created_by_user_id' => $user->id,
+            'created_by_user_id' => $authUser->id,
             'is_published' => true,
         ]);
 
         $this
-            ->actingAs($user)
-            ->json('PUT', sprintf('/%s/%s', $this->resourceName, $photo->id), $data = [
+            ->actingAs($authUser)
+            ->json('PUT', sprintf('/%s/%s', $this->resourceName, $photo->id), $body = [
                 'description' => $this->fake()->realText(),
                 'tags' => [
                     ['value' => strtolower($this->fake()->word)],
@@ -118,8 +120,8 @@ class PublishedPhotosResourceTest extends IntegrationApiV1TestCase
             ->assertJsonStructure($this->resourceStructure)
             ->assertJson([
                 'id' => $photo->id,
-                'description' => $data['description'],
-                'tags' => $data['tags'],
+                'description' => $body['description'],
+                'tags' => $body['tags'],
             ]);
     }
 
@@ -188,14 +190,14 @@ class PublishedPhotosResourceTest extends IntegrationApiV1TestCase
 
     public function testDeleteSuccess()
     {
-        $user = $this->createTestUser();
+        $authUser = $this->createTestUser();
         $photo = $this->createTestPhoto([
-            'created_by_user_id' => $user->id,
+            'created_by_user_id' => $authUser->id,
             'is_published' => true,
         ])->load('exif', 'tags', 'thumbnails');
 
         $this
-            ->actingAs($user)
+            ->actingAs($authUser)
             ->json('DELETE', sprintf('/%s/%s', $this->resourceName, $photo->id))
             ->assertStatus(204);
 
