@@ -24,13 +24,16 @@ class TagsResourceTest extends IntegrationApiV1TestCase
     {
         $tag = $this->createTestTag();
 
-        $this
+        $retrievedTags = $this
             ->json('GET', sprintf('/%s', $this->resourceName))
             ->assertStatus(200)
             ->assertJsonStructure([
                 'data' => [
                     $this->resourceStructure,
                 ],
-            ]);
+            ])
+            ->getData(true);
+
+        $this->assertEquals($retrievedTags['data'][0]['value'], $tag->value);
     }
 }
