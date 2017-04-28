@@ -56,7 +56,7 @@ class TokenResourceTest extends IntegrationApiV1TestCase
         $this
             ->json('POST', sprintf('/%s', $this->resourceName), [
                 'email' => $email,
-                'password' => 'invalid_password',
+                'password' => $this->fake()->password(),
             ])
             ->assertStatus(404);
     }
