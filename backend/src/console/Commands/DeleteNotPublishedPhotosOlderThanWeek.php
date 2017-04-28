@@ -8,11 +8,11 @@ use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Class DeleteNotPublishedPhotosOlderThanWeek.
  *
- * @property Filesystem fileSystem
  * @package Console\Commands
  */
 class DeleteNotPublishedPhotosOlderThanWeek extends Command
@@ -30,18 +30,6 @@ class DeleteNotPublishedPhotosOlderThanWeek extends Command
      * @var string
      */
     protected $description = 'Delete not published photos older than week';
-
-    /**
-     * Create a new command instance.
-     *
-     * @param Filesystem $fileSystem
-     */
-    public function __construct(Filesystem $fileSystem)
-    {
-        parent::__construct();
-
-        $this->fileSystem = $fileSystem;
-    }
 
     /**
      * Execute the console command.
@@ -89,7 +77,7 @@ class DeleteNotPublishedPhotosOlderThanWeek extends Command
             return;
         }
 
-        if ($this->fileSystem->deleteDirectory($photo->directory_path)) {
+        if (Storage::disk(config('filesystems.default'))->deleteDirectory($photo->directory_path)) {
             $this->comment(sprintf('Photo directory was deleted (path:%s).', $photo->directory_path));
         }
     }

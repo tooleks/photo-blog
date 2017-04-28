@@ -1,5 +1,13 @@
 <?php
 
+use Core\Models\Exif;
+use Core\Models\Photo;
+use Core\Models\Subscription;
+use Core\Models\Tag;
+use Core\Models\Thumbnail;
+use Core\Models\User;
+use Faker\Generator;
+
 /*
 |--------------------------------------------------------------------------
 | Model Factories
@@ -11,38 +19,52 @@
 |
 */
 
-$factory->define(\Core\Models\User::class, function (Faker\Generator $faker) {
-    static $password;
+$factory->define(Exif::class, function (Generator $faker) {
     return [
-        'name' => $faker->name,
-        'email' => $faker->safeEmail,
-        'api_token' => str_random(64),
-        'password' => $password ?: $password = bcrypt('secret'),
-        'remember_token' => str_random(10),
+        'photo_id' => Photo::inRandomOrder()->first()->id,
+        'data' => [],
     ];
 });
 
-$factory->define(\Core\Models\Photo::class, function (Faker\Generator $faker) {
+$factory->define(Photo::class, function (Generator $faker) {
     return [
-        'user_id' => $faker->randomDigit,
+        'created_by_user_id' => User::inRandomOrder()->first()->id,
         'description' => $faker->realText(),
         'path' => sprintf('/%s/%s.%s', str_random(12), str_random(5), str_random(3)),
         'relative_url' => sprintf('/%s/%s/%s.%s', str_random(12), str_random(12), str_random(5), str_random(3)),
-        'is_published' => true,
+        'is_published' => $faker->boolean(75),
     ];
 });
 
-$factory->define(\Core\Models\Tag::class, function (Faker\Generator $faker) {
+$factory->define(Subscription::class, function (Generator $faker) {
     return [
-        'text' => $faker->word,
+        'email' => $faker->safeEmail,
+        'token' => str_random(64),
     ];
 });
 
-$factory->define(\Core\Models\Thumbnail::class, function (Faker\Generator $faker) {
+$factory->define(Tag::class, function (Generator $faker) {
+    return [
+        'text' => strtolower($faker->word),
+    ];
+});
+
+$factory->define(Thumbnail::class, function (Generator $faker) {
     return [
         'path' => sprintf('/%s/%s.%s', str_random(12), str_random(5), str_random(3)),
         'relative_url' => sprintf('/%s/%s/%s.%s', str_random(12), str_random(12), str_random(5), str_random(3)),
         'width' => $faker->randomNumber(4),
         'height' => $faker->randomNumber(3),
+    ];
+});
+
+$factory->define(User::class, function (Generator $faker) {
+    static $password;
+    return [
+        'name' => $faker->userName,
+        'email' => $faker->safeEmail,
+        'api_token' => str_random(64),
+        'password' => $password ?: $password = bcrypt('secret'),
+        'remember_token' => str_random(10),
     ];
 });

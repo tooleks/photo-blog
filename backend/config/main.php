@@ -58,8 +58,10 @@ return [
     */
 
     'upload' => [
-        'min-size' => '1', // kilobytes
-        'max-size' => '20480', // kilobytes
+        'min-size' => 1, // kilobytes
+        'max-size' => 20480, // kilobytes
+        'min-image-width' => 600, // pixels
+        'min-image-height' => 600, // pixels
     ],
 
     /*

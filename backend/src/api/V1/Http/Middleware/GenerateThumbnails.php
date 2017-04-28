@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Storage;
 use League\Flysystem\FileNotFoundException;
 use Lib\ThumbnailsGenerator\Contracts\ThumbnailsGenerator;
 
@@ -13,7 +14,6 @@ use Lib\ThumbnailsGenerator\Contracts\ThumbnailsGenerator;
  * Class GenerateThumbnails.
  *
  * @property ThumbnailsGenerator thumbnailsGenerator
- * @property Filesystem fileSystem
  * @package Api\V1\Http\Middleware
  */
 class GenerateThumbnails
@@ -24,12 +24,10 @@ class GenerateThumbnails
      * GenerateThumbnails constructor.
      *
      * @param ThumbnailsGenerator $thumbnailsGenerator
-     * @param Filesystem $fileSystem
      */
-    public function __construct(ThumbnailsGenerator $thumbnailsGenerator, Filesystem $fileSystem)
+    public function __construct(ThumbnailsGenerator $thumbnailsGenerator)
     {
         $this->thumbnailsGenerator = $thumbnailsGenerator;
-        $this->fileSystem = $fileSystem;
     }
 
     /**
@@ -58,15 +56,19 @@ class GenerateThumbnails
     {
         $this->validateRequest($request);
 
-        $absolutePhotoFilePath = storage_path('app') . '/' . $request->get('path');
+        $storageRootPath = env('APP_ENV') === 'testing'
+            ? config('filesystems.disks.testing.root') . '/' . config('filesystems.default')
+            : config('filesystems.disks.local.root');
+
+        $absolutePhotoFilePath = $storageRootPath . '/' . $request->get('path');
 
         $metaData = $this->thumbnailsGenerator->generateThumbnails($absolutePhotoFilePath);
-        
+
         foreach ($metaData as $metaDataItem) {
-            $relativeThumbnailPath = str_replace(storage_path('app') . '/', '', $metaDataItem['path']);
+            $relativeThumbnailPath = str_replace($storageRootPath . '/', '', $metaDataItem['path']);
             $thumbnails[] = [
                 'path' => $relativeThumbnailPath,
-                'relative_url' => $this->fileSystem->url($relativeThumbnailPath),
+                'relative_url' => Storage::disk(config('filesystems.default'))->url($relativeThumbnailPath),
                 'width' => $metaDataItem['width'],
                 'height' => $metaDataItem['height'],
             ];

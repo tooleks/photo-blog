@@ -34,7 +34,11 @@ class GenerateAvgColor
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        $thumbnailPath = storage_path('app') . '/' . $request->get('thumbnails')[1]['path'];
+        $storageRootPath = env('APP_ENV') === 'testing'
+            ? config('filesystems.disks.testing.root') . '/' . config('filesystems.default')
+            : config('filesystems.disks.local.root');
+
+        $thumbnailPath = $storageRootPath . '/' . $request->get('thumbnails')[1]['path'];
 
         $avgColor = $this->avgColorPicker->getImageAvgHexColorByPath($thumbnailPath);
 

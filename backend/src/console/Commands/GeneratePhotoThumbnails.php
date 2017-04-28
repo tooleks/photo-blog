@@ -6,14 +6,13 @@ use Closure;
 use Core\Models\Photo;
 use Core\Models\Thumbnail;
 use Illuminate\Console\Command;
-use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Storage;
 use Lib\ThumbnailsGenerator\Contracts\ThumbnailsGenerator;
 
 /**
  * Class GeneratePhotoThumbnails.
  *
- * @property Filesystem fileSystem
  * @property ThumbnailsGenerator thumbnailsGenerator
  * @package Console\Commands
  */
@@ -36,14 +35,12 @@ class GeneratePhotoThumbnails extends Command
     /**
      * GeneratePhotoThumbnails constructor.
      *
-     * @param Filesystem $fileSystem
      * @param ThumbnailsGenerator $thumbnailsGenerator
      */
-    public function __construct(Filesystem $fileSystem, ThumbnailsGenerator $thumbnailsGenerator)
+    public function __construct(ThumbnailsGenerator $thumbnailsGenerator)
     {
         parent::__construct();
 
-        $this->fileSystem = $fileSystem;
         $this->thumbnailsGenerator = $thumbnailsGenerator;
     }
 
@@ -84,7 +81,7 @@ class GeneratePhotoThumbnails extends Command
         $photo->thumbnails->map(function (Thumbnail $thumbnail) use ($photo) {
             $photo->thumbnails()->detach($thumbnail->id);
             $thumbnail->delete();
-            $this->fileSystem->delete($thumbnail->path);
+            Storage::disk(config('filesystems.default'))->delete($thumbnail->path);
         });
     }
 
@@ -103,7 +100,7 @@ class GeneratePhotoThumbnails extends Command
             $relativeThumbnailPath = str_replace(storage_path('app') . '/', '', $metaDataItem['path']);
             $thumbnails[] = [
                 'path' => $relativeThumbnailPath,
-                'relative_url' => $this->fileSystem->url($relativeThumbnailPath),
+                'relative_url' => Storage::disk(config('filesystems.default'))->url($relativeThumbnailPath),
                 'width' => $metaDataItem['width'],
                 'height' => $metaDataItem['height'],
             ];

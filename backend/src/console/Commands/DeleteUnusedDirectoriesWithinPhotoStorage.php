@@ -4,13 +4,12 @@ namespace Console\Commands;
 
 use Core\Models\Photo;
 use Illuminate\Console\Command;
-use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Class DeleteUnusedDirectoriesWithinPhotoStorage.
  *
- * @property Filesystem fileSystem
  * @package Console\Commands
  */
 class DeleteUnusedDirectoriesWithinPhotoStorage extends Command
@@ -30,18 +29,6 @@ class DeleteUnusedDirectoriesWithinPhotoStorage extends Command
     protected $description = 'Delete unused directories within photo storage';
 
     /**
-     * Create a new command instance.
-     *
-     * @param Filesystem $fileSystem
-     */
-    public function __construct(Filesystem $fileSystem)
-    {
-        parent::__construct();
-
-        $this->fileSystem = $fileSystem;
-    }
-
-    /**
      * Execute the console command.
      *
      * @return mixed
@@ -50,7 +37,7 @@ class DeleteUnusedDirectoriesWithinPhotoStorage extends Command
     {
         foreach ($this->getDirectoriesToDelete() as $directory) {
             $this->comment(sprintf('Deleting directory (path:%s) ...', $directory));
-            $this->fileSystem->deleteDirectory($directory) && $this->comment(sprintf('Directory was deleted (path:%s).', $directory));
+            Storage::disk(config('filesystems.default'))->deleteDirectory($directory) && $this->comment(sprintf('Directory was deleted (path:%s).', $directory));
         }
     }
 
@@ -75,7 +62,7 @@ class DeleteUnusedDirectoriesWithinPhotoStorage extends Command
      */
     private function getDirectoriesWithinPhotoStorage()
     {
-        return $this->fileSystem->directories(config('main.storage.photos'));
+        return Storage::disk(config('filesystems.default'))->directories(config('main.storage.photos'));
     }
 
     /**

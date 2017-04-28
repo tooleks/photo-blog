@@ -5,7 +5,7 @@
  */
 class SiteMapTest extends IntegrationAppTestCase
 {
-    public function testIndex()
+    public function testIndexSuccess()
     {
         $this
             ->get('/sitemap.xml')

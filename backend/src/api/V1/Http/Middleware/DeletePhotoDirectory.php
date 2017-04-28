@@ -3,27 +3,16 @@
 namespace Api\V1\Http\Middleware;
 
 use Illuminate\Http\Request;
-use Illuminate\Contracts\Filesystem\Filesystem;
 use Closure;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Class DeletePhotoDirectory.
  *
- * @property Filesystem $fileSystem
  * @package Api\V1\Http\Middleware
  */
 class DeletePhotoDirectory
 {
-    /**
-     * DeletePhotoDirectory constructor.
-     *
-     * @param Filesystem $fileSystem
-     */
-    public function __construct(Filesystem $fileSystem)
-    {
-        $this->fileSystem = $fileSystem;
-    }
-
     /**
      * Handle an incoming request.
      *
@@ -51,7 +40,7 @@ class DeletePhotoDirectory
     public function deletePhotoDirectory($directoryPath)
     {
         if (!is_null($directoryPath)) {
-            $this->fileSystem->deleteDirectory($directoryPath);
+            Storage::disk(config('filesystems.default'))->deleteDirectory($directoryPath);
         }
     }
 }
