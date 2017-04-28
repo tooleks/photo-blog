@@ -43,5 +43,7 @@ class SubscriptionsResourceTest extends IntegrationApiV1TestCase
         $this
             ->json('DELETE', sprintf('/%s/%s', $this->resourceName, $subscription->token))
             ->assertStatus(204);
+
+        $this->assertFalse(Subscription::whereToken($subscription->token)->exists());
     }
 }

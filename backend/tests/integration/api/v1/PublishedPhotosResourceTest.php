@@ -199,18 +199,7 @@ class PublishedPhotosResourceTest extends IntegrationApiV1TestCase
             ->json('DELETE', sprintf('/%s/%s', $this->resourceName, $photo->id))
             ->assertStatus(204);
 
-        $this
-            ->actingAs($user)
-            ->json('GET', sprintf('/%s/%s', $this->resourceName, $photo->id))
-            ->assertStatus(404);
-
-        $this
-            ->actingAs($user)
-            ->json('GET', sprintf('/%s', $this->resourceName))
-            ->assertStatus(200)
-            ->assertJson([
-                'data' => [],
-            ]);
+        $this->assertFalse(Photo::whereId($photo->id)->exists());
     }
 
     public function testDeleteUnauthorized()
