@@ -38,4 +38,19 @@ class Thumbnail extends Model
     {
         return $this->belongsToMany(Photo::class, 'photo_thumbnails');
     }
+
+    /**
+     * Delete all models without relations.
+     */
+    public static function deleteAllWithoutRelations()
+    {
+        $model = new static;
+
+        $model
+            ->getConnection()
+            ->table($model->getTable())
+            ->leftJoin('photo_thumbnails', 'photo_thumbnails.thumbnail_id', '=', 'thumbnails.id')
+            ->whereNull('photo_thumbnails.photo_id')
+            ->delete();
+    }
 }

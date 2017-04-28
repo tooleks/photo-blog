@@ -107,14 +107,18 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
     public function testDeleteSuccess()
     {
         $user = $this->createTestUser();
-        $photo = $this->createTestPhoto(['created_by_user_id' => $user->id]);
+        $photo = $this->createTestPhoto(['created_by_user_id' => $user->id])->load('exif', 'thumbnails');
 
         $this
             ->actingAs($user)
             ->json('DELETE', sprintf('/%s/%s', $this->resourceName, $photo->id))
             ->assertStatus(204);
 
-        $this->assertFalse(Photo::whereId($photo->id)->exists());
+        $this->assertFalse(Photo::whereId($photo->id)->exists(), 'The photo was not deleted.');
+        $this->assertFalse(Exif::whereId($photo->exif->id)->exists(), 'The exif was not deleted.');
+        $photo->thumbnails->each(function ($thumbnail) {
+            $this->assertFalse(Thumbnail::whereId($thumbnail->id)->exists(), 'The thumbnail was not deleted.');
+        });
     }
 
     public function testDeleteUnauthorized()

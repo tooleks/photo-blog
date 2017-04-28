@@ -57,4 +57,19 @@ class Tag extends Model
     {
         return $this->belongsToMany(Photo::class, 'photo_tags');
     }
+
+    /**
+     * Delete all models without relations.
+     */
+    public static function deleteAllWithoutRelations()
+    {
+        $model = new static;
+
+        $model
+            ->getConnection()
+            ->table($model->getTable())
+            ->leftJoin('photo_tags', 'photo_tags.tag_id', '=', 'tags.id')
+            ->whereNull('photo_tags.photo_id')
+            ->delete();
+    }
 }

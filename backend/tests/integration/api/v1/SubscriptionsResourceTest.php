@@ -44,6 +44,6 @@ class SubscriptionsResourceTest extends IntegrationApiV1TestCase
             ->json('DELETE', sprintf('/%s/%s', $this->resourceName, $subscription->token))
             ->assertStatus(204);
 
-        $this->assertFalse(Subscription::whereToken($subscription->token)->exists());
+        $this->assertFalse(Subscription::whereToken($subscription->token)->exists(), 'The subscription was not deleted.');
     }
 }

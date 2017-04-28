@@ -5,6 +5,7 @@ namespace Core\DataProviders\Photo\Subscribers;
 use Core\DataProviders\Photo\PhotoDataProvider;
 use Core\Models\Photo;
 use Core\Models\Tag;
+use Core\Models\Thumbnail;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Eloquent\Builder;
@@ -129,12 +130,7 @@ class PhotoDataProviderSubscriber
 
         $photo->thumbnails = new Collection($thumbnails);
 
-        // Delete unused thumbnails.
-        $this->dbConnection
-            ->table('thumbnails')
-            ->leftJoin('photo_thumbnails', 'photo_thumbnails.thumbnail_id', '=', 'thumbnails.id')
-            ->whereNull('photo_thumbnails.photo_id')
-            ->delete();
+        Thumbnail::deleteAllWithoutRelations();
     }
 
     /**
@@ -161,11 +157,6 @@ class PhotoDataProviderSubscriber
 
         $photo->tags = (new Collection($newTags))->merge($existingTags ?? []);
 
-        // Delete unused tags.
-        $this->dbConnection
-            ->table('tags')
-            ->leftJoin('photo_tags', 'photo_tags.tag_id', '=', 'tags.id')
-            ->whereNull('photo_tags.photo_id')
-            ->delete();
+        Tag::deleteAllWithoutRelations();
     }
 }
