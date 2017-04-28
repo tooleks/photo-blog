@@ -65,7 +65,7 @@ class PublishedPhotosResourceTest extends IntegrationApiV1TestCase
             'is_published' => false,
         ]);
 
-        $createdPhoto = $this
+        $this
             ->actingAs($user)
             ->json('POST', sprintf('/%s', $this->resourceName), $data = [
                 'photo_id' => $photo->id,
@@ -76,13 +76,11 @@ class PublishedPhotosResourceTest extends IntegrationApiV1TestCase
                     ['value' => strtolower($this->fake()->word)],
                 ],
             ])
-            ->assertStatus(201)
-            ->assertJsonStructure($this->resourceStructure)
-            ->getData(true);
-
-        $this->assertEquals($createdPhoto['id'], $photo->id);
-        $this->assertEquals($createdPhoto['description'], $data['description']);
-        $this->assertEquals($createdPhoto['tags'], $data['tags']);
+            ->assertJson([
+                'id' => $photo->id,
+                'description' => $data['description'],
+                'tags' => $data['tags'],
+            ]);
     }
 
     public function testCreateUnauthorized()
@@ -106,7 +104,7 @@ class PublishedPhotosResourceTest extends IntegrationApiV1TestCase
             'is_published' => true,
         ]);
 
-        $updatedPhoto = $this
+        $this
             ->actingAs($user)
             ->json('PUT', sprintf('/%s/%s', $this->resourceName, $photo->id), $data = [
                 'description' => $this->fake()->realText(),
@@ -118,11 +116,11 @@ class PublishedPhotosResourceTest extends IntegrationApiV1TestCase
             ])
             ->assertStatus(200)
             ->assertJsonStructure($this->resourceStructure)
-            ->getData(true);
-
-        $this->assertEquals($updatedPhoto['id'], $photo->id);
-        $this->assertEquals($updatedPhoto['description'], $data['description']);
-        $this->assertEquals($updatedPhoto['tags'], $data['tags']);
+            ->assertJson([
+                'id' => $photo->id,
+                'description' => $data['description'],
+                'tags' => $data['tags'],
+            ]);
     }
 
     public function testUpdateUnauthorized()
@@ -146,17 +144,17 @@ class PublishedPhotosResourceTest extends IntegrationApiV1TestCase
             'is_published' => true,
         ]);
 
-        $retrievedPhoto = $this
+        $this
             ->json('GET', sprintf('/%s/%s', $this->resourceName, $photo->id))
             ->assertStatus(200)
             ->assertJsonStructure($this->resourceStructure)
-            ->getData(true);
-
-        $this->assertEquals($retrievedPhoto['id'], $photo->id);
-        $this->assertEquals($retrievedPhoto['description'], $photo->description);
-        $this->assertEquals($retrievedPhoto['tags'], array_map(function ($tag) {
-            return ['value' => $tag['value']];
-        }, $photo->tags->toArray()));
+            ->assertJson([
+                'id' => $photo->id,
+                'description' => $photo->description,
+                'tags' => array_map(function ($tag) {
+                    return ['value' => $tag['value']];
+                }, $photo->tags->toArray()),
+            ]);
     }
 
     public function testGetSuccess()
@@ -167,7 +165,7 @@ class PublishedPhotosResourceTest extends IntegrationApiV1TestCase
             'is_published' => true,
         ]);
 
-        $retrievedPhotos = $this
+        $this
             ->json('GET', sprintf('/%s', $this->resourceName))
             ->assertStatus(200)
             ->assertJsonStructure([
@@ -175,13 +173,17 @@ class PublishedPhotosResourceTest extends IntegrationApiV1TestCase
                     $this->resourceStructure,
                 ],
             ])
-            ->getData(true);
-
-        $this->assertEquals($retrievedPhotos['data'][0]['id'], $photo->id);
-        $this->assertEquals($retrievedPhotos['data'][0]['description'], $photo->description);
-        $this->assertEquals($retrievedPhotos['data'][0]['tags'], array_map(function ($tag) {
-            return ['value' => $tag['value']];
-        }, $photo->tags->toArray()));
+            ->assertJson([
+                'data' => [
+                    [
+                        'id' => $photo->id,
+                        'description' => $photo->description,
+                        'tags' => array_map(function ($tag) {
+                            return ['value' => $tag['value']];
+                        }, $photo->tags->toArray()),
+                    ],
+                ],
+            ]);
     }
 
     public function testDeleteSuccess()
