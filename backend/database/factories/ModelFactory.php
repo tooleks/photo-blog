@@ -46,7 +46,7 @@ $factory->define(Subscription::class, function (Generator $faker) {
 
 $factory->define(Tag::class, function (Generator $faker) {
     return [
-        'text' => strtolower($faker->word),
+        'value' => strtolower($faker->word),
     ];
 });
 
