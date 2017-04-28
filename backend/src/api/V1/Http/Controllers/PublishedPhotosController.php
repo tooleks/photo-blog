@@ -245,7 +245,7 @@ class PublishedPhotosController extends Controller
      * @apiParam {Object[]} tags Tags collection.
      * @apiParam {String{1..255}} tags.value Tag value.
      * @apiSuccessExample {json} Success-Response:
-     * HTTP/1.1 200 OK
+     * HTTP/1.1 201 Created
      * {
      *     "id": 1,
      *     "created_by_user_id" 1,
