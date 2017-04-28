@@ -2,7 +2,7 @@
 
 use Core\Models\Subscription;
 
-/***
+/**
  * Class SubscriptionsResourceTest.
  */
 class SubscriptionsResourceTest extends IntegrationApiV1TestCase
