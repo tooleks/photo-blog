@@ -54,9 +54,9 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
 
     public static function assertFileExists($filename, $message = '')
     {
-        $storagePath = Storage::disk('public')->getDriver()->getAdapter()->getPathPrefix();
+        $storageAbsPath = Storage::disk('public')->getDriver()->getAdapter()->getPathPrefix();
 
-        $filename = $storagePath . $filename;
+        $filename = $storageAbsPath . $filename;
 
         return parent::assertFileExists($filename, $message);
     }
