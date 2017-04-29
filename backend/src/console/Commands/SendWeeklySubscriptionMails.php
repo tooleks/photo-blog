@@ -39,7 +39,7 @@ class SendWeeklySubscriptionMails extends Command
      */
     public function handle()
     {
-        if ($this->isWeeklySubscriptionAvailable()) {
+        if ($this->isAvailableWeeklySubscription()) {
             $this->eachSubscriptionByEmailFilter(function (Subscription $subscription) {
                 $this->sendWeeklySubscriptionMail($subscription);
             });
@@ -51,7 +51,7 @@ class SendWeeklySubscriptionMails extends Command
      *
      * @return bool
      */
-    protected function isWeeklySubscriptionAvailable() : bool
+    protected function isAvailableWeeklySubscription() : bool
     {
         return Photo::whereIsPublished(true)->where('created_at', '>', (new Carbon())->addWeek('-1'))->exists();
     }
