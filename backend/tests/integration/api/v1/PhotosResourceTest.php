@@ -52,13 +52,11 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
         return $photo;
     }
 
-    public static function assertFileExists($filename, $message = '')
+    protected function getPathFromUrl($url)
     {
-        $storageAbsPath = Storage::disk('public')->getDriver()->getAdapter()->getPathPrefix();
-
-        $filename = $storageAbsPath . $filename;
-
-        return parent::assertFileExists($filename, $message);
+        $storageUrl = sprintf('%s/storage/', config('main.storage.url'));
+        $path = str_replace($storageUrl, '', $url);
+        return $path;
     }
 
     public function testCreateSuccess()
@@ -75,10 +73,18 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
             ->assertStatus(201)
             ->assertJsonStructure($this->resourceStructure);
 
-        $storageUrl = sprintf('%s/storage/', config('main.storage.url'));
-        $this->assertFileExists(str_replace($storageUrl, '', $response->getData()->url), 'The photo file was not saved.');
-        $this->assertFileExists(str_replace($storageUrl, '', $response->getData()->thumbnails->medium->url), 'The photo thumbnail file was not generated.');
-        $this->assertFileExists(str_replace($storageUrl, '', $response->getData()->thumbnails->large->url), 'The photo thumbnail file was not generated.');
+        Storage::disk('public')->assertExists(
+            $this->getPathFromUrl($response->getData()->url),
+            'The photo file was not saved.'
+        );
+        Storage::disk('public')->assertExists(
+            $this->getPathFromUrl($response->getData()->thumbnails->medium->url),
+            'The photo thumbnail file was not generated.'
+        );
+        Storage::disk('public')->assertExists(
+            $this->getPathFromUrl($response->getData()->thumbnails->large->url),
+            'The photo thumbnail file was not generated.'
+        );
     }
 
     public function testCreateUnauthorized()
@@ -105,10 +111,18 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
             ->assertStatus(201)
             ->assertJsonStructure($this->resourceStructure);
 
-        $storageUrl = sprintf('%s/storage/', config('main.storage.url'));
-        $this->assertFileExists(str_replace($storageUrl, '', $response->getData()->url), 'The photo file was not saved.');
-        $this->assertFileExists(str_replace($storageUrl, '', $response->getData()->thumbnails->medium->url), 'The photo thumbnail file was not generated.');
-        $this->assertFileExists(str_replace($storageUrl, '', $response->getData()->thumbnails->large->url), 'The photo thumbnail file was not generated.');
+        Storage::disk('public')->assertExists(
+            $this->getPathFromUrl($response->getData()->url),
+            'The photo file was not saved.'
+        );
+        Storage::disk('public')->assertExists(
+            $this->getPathFromUrl($response->getData()->thumbnails->medium->url),
+            'The photo thumbnail file was not generated.'
+        );
+        Storage::disk('public')->assertExists(
+            $this->getPathFromUrl($response->getData()->thumbnails->large->url),
+            'The photo thumbnail file was not generated.'
+        );
     }
 
     public function testUpdateUnauthorized()
