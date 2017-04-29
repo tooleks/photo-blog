@@ -23,7 +23,7 @@ class SendWeeklySubscriptionMails extends Command
      *
      * @var string
      */
-    protected $signature = 'send:weekly_subscription_mails';
+    protected $signature = 'send:weekly_subscription_mails {email_filter?*}';
 
     /**
      * The console command description.
@@ -40,12 +40,9 @@ class SendWeeklySubscriptionMails extends Command
     public function handle()
     {
         if ($this->isWeeklySubscriptionAvailable()) {
-            $this->eachSubscription(function (Subscription $subscription) {
-                $this->comment(sprintf('Sending mail to subscription (email:%s) ...', $subscription->email));
+            $this->eachSubscriptionByEmailFilter(function (Subscription $subscription) {
                 $this->sendWeeklySubscriptionMail($subscription);
             });
-        } else {
-            $this->comment('There are no available weekly updates.');
         }
     }
 
@@ -65,9 +62,15 @@ class SendWeeklySubscriptionMails extends Command
      * @param Closure $callback
      * @return void
      */
-    protected function eachSubscription(Closure $callback)
+    protected function eachSubscriptionByEmailFilter(Closure $callback)
     {
-        Subscription::chunk(100, function (Collection $subscription) use ($callback) {
+        $query = (new Subscription)->newQuery();
+
+        if ($this->argument('email_filter')) {
+            $query->whereIn('email', $this->argument('email_filter'));
+        }
+
+        $query->chunk(100, function (Collection $subscription) use ($callback) {
             $subscription->each($callback);
         });
     }
@@ -80,6 +83,8 @@ class SendWeeklySubscriptionMails extends Command
      */
     protected function sendWeeklySubscriptionMail(Subscription $subscription)
     {
+        $this->comment(sprintf('Sending mail to subscription (email:%s) ...', $subscription->email));
+
         $data = $this->extractSubscriptionData($subscription);
 
         Mail::send(new WeeklySubscription($data));
