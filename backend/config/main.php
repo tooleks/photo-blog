@@ -35,7 +35,7 @@ return [
 
     'storage' => [
         'url' => env('STORAGE_URL', env('APP_URL') . '/' . 'storage'),
-        'photos' => 'public/photos',
+        'photos' => 'photos',
     ],
 
     /*

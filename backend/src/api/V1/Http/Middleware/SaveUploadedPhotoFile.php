@@ -4,19 +4,29 @@ namespace Api\V1\Http\Middleware;
 
 use Closure;
 use Exception;
-use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Contracts\Filesystem\Factory as Storage;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 /**
  * Class SaveUploadedPhotoFile.
  *
+ * @property Storage storage
  * @package Api\V1\Http\Middleware
  */
 class SaveUploadedPhotoFile
 {
     use ValidatesRequests;
+
+    /**
+     * SaveUploadedPhotoFile constructor.
+     *
+     * @param Storage $storage
+     */
+    public function __construct(Storage $storage)
+    {
+        $this->storage = $storage;
+    }
 
     /**
      * Validate request.
@@ -52,15 +62,15 @@ class SaveUploadedPhotoFile
     {
         $this->validateRequest($request);
 
-        $directoryPath = sprintf('%s/%s', config('main.storage.photos'), str_random(10));
+        $photoDirectoryRelPath = sprintf('%s/%s', config('main.storage.photos'), str_random(10));
 
-        $filePath = Storage::disk(config('filesystems.default'))->put($directoryPath, $request->file('file'));
+        $photoRelPath = $this->storage->disk('public')->put($photoDirectoryRelPath, $request->file('file'));
 
-        if ($filePath === false) {
-            throw new Exception(sprintf('File "%s" saving error.', $filePath));
+        if ($photoRelPath === false) {
+            throw new Exception(sprintf('File "%s" saving error.', $photoRelPath));
         }
 
-        $request->merge(['path' => $filePath, 'relative_url' => Storage::disk(config('filesystems.default'))->url($filePath)]);
+        $request->merge(['path' => $photoRelPath, 'relative_url' => $this->storage->disk('public')->url($photoRelPath)]);
 
         return $next($request);
     }

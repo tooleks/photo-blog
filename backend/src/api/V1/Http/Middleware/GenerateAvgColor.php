@@ -3,12 +3,14 @@
 namespace Api\V1\Http\Middleware;
 
 use Closure;
+use Illuminate\Contracts\Filesystem\Factory as Storage;
 use Illuminate\Http\Request;
 use Lib\AvgColorPicker\Contracts\AvgColorPicker;
 
 /**
  * Class GenerateAvgColor.
  *
+ * @property Storage storage
  * @property AvgColorPicker avgColorPicker
  * @package Api\V1\Http\Middleware
  */
@@ -17,10 +19,12 @@ class GenerateAvgColor
     /**
      * GenerateAvgColor constructor.
      *
+     * @param Storage $storage
      * @param AvgColorPicker $avgColorPicker
      */
-    public function __construct(AvgColorPicker $avgColorPicker)
+    public function __construct(Storage $storage, AvgColorPicker $avgColorPicker)
     {
+        $this->storage = $storage;
         $this->avgColorPicker = $avgColorPicker;
     }
 
@@ -34,13 +38,11 @@ class GenerateAvgColor
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        $storageRootPath = env('APP_ENV') === 'testing'
-            ? config('filesystems.disks.testing.root') . '/' . config('filesystems.default')
-            : config('filesystems.disks.local.root');
+        $storageAbsPath = $this->storage->disk('public')->getDriver()->getAdapter()->getPathPrefix();
 
-        $thumbnailPath = $storageRootPath . '/' . $request->get('thumbnails')[1]['path'];
+        $thumbnailAbsPath = $storageAbsPath . $request->get('thumbnails')[1]['path'];
 
-        $avgColor = $this->avgColorPicker->getImageAvgHexColorByPath($thumbnailPath);
+        $avgColor = $this->avgColorPicker->getImageAvgHexColorByPath($thumbnailAbsPath);
 
         $request->merge(['avg_color' => $avgColor]);
 

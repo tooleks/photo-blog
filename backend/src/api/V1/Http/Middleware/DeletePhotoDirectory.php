@@ -4,15 +4,26 @@ namespace Api\V1\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Closure;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Contracts\Filesystem\Factory as Storage;
 
 /**
  * Class DeletePhotoDirectory.
  *
+ * @property Storage storage
  * @package Api\V1\Http\Middleware
  */
 class DeletePhotoDirectory
 {
+    /**
+     * DeletePhotoDirectory constructor.
+     *
+     * @param Storage $storage
+     */
+    public function __construct(Storage $storage)
+    {
+        $this->storage = $storage;
+    }
+
     /**
      * Handle an incoming request.
      *
@@ -26,21 +37,12 @@ class DeletePhotoDirectory
         $response = $next($request);
 
         if ($response->isSuccessful()) {
-            $this->deletePhotoDirectory($request->photo->directory_path ?? $request->published_photo->directory_path ?? null);
+            $directoryPath = $request->photo->directory_path ?? $request->published_photo->directory_path ?? null;
+            if (!is_null($directoryPath)) {
+                $this->storage->disk('public')->deleteDirectory($directoryPath);
+            }
         }
 
         return $response;
-    }
-
-    /**
-     * Delete photo directory.
-     *
-     * @param string|null $directoryPath
-     */
-    public function deletePhotoDirectory($directoryPath)
-    {
-        if (!is_null($directoryPath)) {
-            Storage::disk(config('filesystems.default'))->deleteDirectory($directoryPath);
-        }
     }
 }

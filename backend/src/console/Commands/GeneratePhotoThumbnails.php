@@ -6,13 +6,14 @@ use Closure;
 use Core\Models\Photo;
 use Core\Models\Thumbnail;
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Filesystem\Factory as Storage;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Storage;
 use Lib\ThumbnailsGenerator\Contracts\ThumbnailsGenerator;
 
 /**
  * Class GeneratePhotoThumbnails.
  *
+ * @property Storage storage
  * @property ThumbnailsGenerator thumbnailsGenerator
  * @package Console\Commands
  */
@@ -35,12 +36,14 @@ class GeneratePhotoThumbnails extends Command
     /**
      * GeneratePhotoThumbnails constructor.
      *
+     * @param Storage $storage
      * @param ThumbnailsGenerator $thumbnailsGenerator
      */
-    public function __construct(ThumbnailsGenerator $thumbnailsGenerator)
+    public function __construct(Storage $storage, ThumbnailsGenerator $thumbnailsGenerator)
     {
         parent::__construct();
 
+        $this->storage = $storage;
         $this->thumbnailsGenerator = $thumbnailsGenerator;
     }
 
@@ -78,10 +81,10 @@ class GeneratePhotoThumbnails extends Command
      */
     public function deletePhotoThumbnails(Photo $photo)
     {
-        $photo->thumbnails->map(function (Thumbnail $thumbnail) use ($photo) {
+        $photo->thumbnails->each(function (Thumbnail $thumbnail) use ($photo) {
             $photo->thumbnails()->detach($thumbnail->id);
             $thumbnail->delete();
-            Storage::disk(config('filesystems.default'))->delete($thumbnail->path);
+            $this->storage->disk('public')->delete($thumbnail->path);
         });
     }
 
@@ -92,15 +95,17 @@ class GeneratePhotoThumbnails extends Command
      */
     public function generatePhotoThumbnails(Photo $photo)
     {
-        $absolutePhotoFilePath = config('filesystems.disks.local.root') . '/' . $photo->path;
+        $storageAbsolutePath = $this->storage->disk('public')->getDriver()->getAdapter()->getPathPrefix();
+
+        $absolutePhotoFilePath = $storageAbsolutePath . $photo->path;
 
         $metaData = $this->thumbnailsGenerator->generateThumbnails($absolutePhotoFilePath);
 
         foreach ($metaData as $metaDataItem) {
-            $relativeThumbnailPath = str_replace(config('filesystems.disks.local.root') . '/', '', $metaDataItem['path']);
+            $relativeThumbnailPath = str_replace($storageAbsolutePath, '', $metaDataItem['path']);
             $thumbnails[] = [
                 'path' => $relativeThumbnailPath,
-                'relative_url' => Storage::disk(config('filesystems.default'))->url($relativeThumbnailPath),
+                'relative_url' => $this->storage->disk('public')->url($relativeThumbnailPath),
                 'width' => $metaDataItem['width'],
                 'height' => $metaDataItem['height'],
             ];

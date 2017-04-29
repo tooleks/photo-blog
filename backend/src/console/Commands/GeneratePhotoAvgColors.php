@@ -5,12 +5,14 @@ namespace Console\Commands;
 use Closure;
 use Core\Models\Photo;
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Filesystem\Factory as Storage;
 use Illuminate\Database\Eloquent\Collection;
 use Lib\AvgColorPicker\Contracts\AvgColorPicker;
 
 /**
  * Class GeneratePhotoAvgColors.
  *
+ * @property Storage storage
  * @property AvgColorPicker avgColorPicker
  * @package Console\Commands
  */
@@ -33,12 +35,14 @@ class GeneratePhotoAvgColors extends Command
     /**
      * GeneratePhotoAvgColors constructor.
      *
+     * @param Storage $storage
      * @param AvgColorPicker $avgColorPicker
      */
-    public function __construct(AvgColorPicker $avgColorPicker)
+    public function __construct(Storage $storage, AvgColorPicker $avgColorPicker)
     {
         parent::__construct();
 
+        $this->storage = $storage;
         $this->avgColorPicker = $avgColorPicker;
     }
 
@@ -78,7 +82,9 @@ class GeneratePhotoAvgColors extends Command
     {
         $thumbnail = $photo->thumbnails->first();
 
-        $absoluteThumbnailPath = config('filesystems.disks.local.root') . '/' . $thumbnail->path;
+        $storageAbsolutePath = $this->storage->disk('public')->getDriver()->getAdapter()->getPathPrefix();
+
+        $absoluteThumbnailPath = $storageAbsolutePath . $thumbnail->path;
 
         $photo->avg_color = $this->avgColorPicker->getImageAvgHexColorByPath($absoluteThumbnailPath);
 
