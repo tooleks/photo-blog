@@ -43,7 +43,7 @@ export class ContactMeFormComponent implements OnInit {
     };
 
     onContactMeSuccess = (data:any):any => {
-        this.notices.success('Your message successfully sent.');
+        this.notices.success('Your message has been successfully sent.');
         this.navigator.navigate(['/']);
         return data;
     };
