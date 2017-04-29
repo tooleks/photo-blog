@@ -92,12 +92,12 @@ class GeneratePhotoThumbnails extends Command
      */
     public function generatePhotoThumbnails(Photo $photo)
     {
-        $absolutePhotoFilePath = storage_path('app') . '/' . $photo->path;
+        $absolutePhotoFilePath = config('filesystems.disks.local.root') . '/' . $photo->path;
 
         $metaData = $this->thumbnailsGenerator->generateThumbnails($absolutePhotoFilePath);
 
         foreach ($metaData as $metaDataItem) {
-            $relativeThumbnailPath = str_replace(storage_path('app') . '/', '', $metaDataItem['path']);
+            $relativeThumbnailPath = str_replace(config('filesystems.disks.local.root') . '/', '', $metaDataItem['path']);
             $thumbnails[] = [
                 'path' => $relativeThumbnailPath,
                 'relative_url' => Storage::disk(config('filesystems.default'))->url($relativeThumbnailPath),
