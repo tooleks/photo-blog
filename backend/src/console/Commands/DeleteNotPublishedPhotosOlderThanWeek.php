@@ -57,7 +57,7 @@ class DeleteNotPublishedPhotosOlderThanWeek extends Command
             ->whereIsPublished(false)
             ->where('updated_at', '<', (new Carbon())->addWeek('-1'))
             ->chunk(100, function (Collection $photos) use ($callback) {
-                $photos->map($callback);
+                $photos->each($callback);
             });
     }
 

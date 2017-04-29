@@ -8,13 +8,12 @@ use Closure;
 use Core\Models\Photo;
 use Core\Models\Subscription;
 use Illuminate\Console\Command;
-use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Mail;
 
 /**
  * Class SendWeeklySubscriptionMails.
  *
- * @property Mailer mailer
  * @package Console\Commands
  */
 class SendWeeklySubscriptionMails extends Command
@@ -32,18 +31,6 @@ class SendWeeklySubscriptionMails extends Command
      * @var string
      */
     protected $description = 'Send weekly subscription mails';
-
-    /**
-     * SendWeeklySubscriptionMails constructor.
-     *
-     * @param Mailer $mailer
-     */
-    public function __construct(Mailer $mailer)
-    {
-        parent::__construct();
-
-        $this->mailer = $mailer;
-    }
 
     /**
      * Execute the console command.
@@ -80,8 +67,8 @@ class SendWeeklySubscriptionMails extends Command
      */
     protected function eachSubscription(Closure $callback)
     {
-        Subscription::chunk(100, function (Collection $photos) use ($callback) {
-            $photos->map($callback);
+        Subscription::chunk(100, function (Collection $subscription) use ($callback) {
+            $subscription->each($callback);
         });
     }
 
@@ -93,21 +80,23 @@ class SendWeeklySubscriptionMails extends Command
      */
     protected function sendWeeklySubscriptionMail(Subscription $subscription)
     {
-        $data = $this->extendSubscriptionData($subscription->toArray());
+        $data = $this->extractSubscriptionData($subscription);
 
-        $this->mailer->send(new WeeklySubscription($data));
+        Mail::send(new WeeklySubscription($data));
     }
 
     /**
-     * Prepare subscription data.
+     * Extract subscription data.
      *
-     * @param array $data
+     * @param Subscription $subscription
      * @return array
      */
-    protected function extendSubscriptionData($data) : array
+    protected function extractSubscriptionData(Subscription $subscription) : array
     {
+        $data = $subscription->toArray();
+
         $data['website_url'] = config('main.frontend.url');
-        $data['unsubscribe_url'] = config('main.frontend.unsubscribe_url') . '/' . $data['token'];
+        $data['unsubscribe_url'] = sprintf('%s/%s', config('main.frontend.unsubscribe_url'), $data['token']);
 
         return $data;
     }

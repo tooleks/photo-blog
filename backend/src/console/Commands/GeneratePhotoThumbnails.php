@@ -67,7 +67,7 @@ class GeneratePhotoThumbnails extends Command
     public function eachPhoto(Closure $callback)
     {
         Photo::with('thumbnails')->chunk(100, function (Collection $photos) use ($callback) {
-            $photos->map($callback);
+            $photos->each($callback);
         });
     }
 
