@@ -78,12 +78,7 @@ class GeneratePhotoAvgColors extends Command
     {
         $thumbnail = $photo->thumbnails->first();
 
-        if (is_null($thumbnail)) {
-            $this->comment(sprintf('No thumbnails found for photo (ID:%s).', $photo->id));
-            return;
-        }
-
-        $absoluteThumbnailPath = storage_path('app') . '/' . $thumbnail->path;
+        $absoluteThumbnailPath = config('filesystems.disks.local.root') . '/' . $thumbnail->path;
 
         $photo->avg_color = $this->avgColorPicker->getImageAvgHexColorByPath($absoluteThumbnailPath);
 
