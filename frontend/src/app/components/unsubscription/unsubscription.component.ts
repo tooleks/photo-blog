@@ -48,7 +48,7 @@ export class UnsubscriptionComponent implements OnInit {
     };
 
     onUnsubscribeSuccess = (data:any):any => {
-        this.notices.success('You have successfully unsubscribed from the website updates.');
+        this.notices.success('You have been successfully unsubscribed from the website updates.');
         this.navigator.navigate(['/']);
         return data;
     };

@@ -43,7 +43,7 @@ export class SubscriptionFormComponent implements OnInit {
     };
 
     onSubscribeSuccess = (data:any):any => {
-        this.notices.success('You have successfully subscribed to the website updates.');
+        this.notices.success('You have been successfully subscribed to the website updates.');
         this.navigator.navigate(['/']);
         return data;
     };
