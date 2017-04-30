@@ -1,21 +1,21 @@
 <?php
 
-namespace Api\V1\Http\Middleware;
+namespace Api\V1\Http\Middleware\Photos;
 
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
 
 /**
- * Class DeletePhotoDirectory.
+ * Class DeleteDirectory.
  *
  * @property Storage storage
- * @package Api\V1\Http\Middleware
+ * @package Api\V1\Http\Middleware\Photos
  */
-class DeletePhotoDirectory
+class DeleteDirectory
 {
     /**
-     * DeletePhotoDirectory constructor.
+     * DeleteDirectory constructor.
      *
      * @param Storage $storage
      */

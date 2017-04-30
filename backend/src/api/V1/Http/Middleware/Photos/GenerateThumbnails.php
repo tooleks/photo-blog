@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\V1\Http\Middleware;
+namespace Api\V1\Http\Middleware\Photos;
 
 use Closure;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -13,7 +13,7 @@ use Lib\ThumbnailsGenerator\Contracts\ThumbnailsGenerator;
  *
  * @property Storage storage
  * @property ThumbnailsGenerator thumbnailsGenerator
- * @package Api\V1\Http\Middleware
+ * @package Api\V1\Http\Middleware\Photos
  */
 class GenerateThumbnails
 {
@@ -57,9 +57,9 @@ class GenerateThumbnails
 
         $storageAbsPath = $this->storage->getDriver()->getAdapter()->getPathPrefix();
 
-        $photoAbsPath = $storageAbsPath . $request->get('path');
+        $fileAbsPath = $storageAbsPath . $request->get('path');
 
-        $metaData = $this->thumbnailsGenerator->generateThumbnails($photoAbsPath);
+        $metaData = $this->thumbnailsGenerator->generateThumbnails($fileAbsPath);
 
         foreach ($metaData as $metaDataItem) {
             $relativeThumbnailPath = str_replace($storageAbsPath, '', $metaDataItem['path']);

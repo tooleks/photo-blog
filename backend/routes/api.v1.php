@@ -1,11 +1,11 @@
 <?php
 
 use Api\V1\Http\Middleware\AppendClientIpAddress;
-use Api\V1\Http\Middleware\DeletePhotoDirectory;
-use Api\V1\Http\Middleware\FetchExifData;
-use Api\V1\Http\Middleware\GenerateAvgColor;
-use Api\V1\Http\Middleware\GenerateThumbnails;
-use Api\V1\Http\Middleware\SaveUploadedPhotoFile;
+use Api\V1\Http\Middleware\Photos\DeleteDirectory;
+use Api\V1\Http\Middleware\Photos\FetchExifData;
+use Api\V1\Http\Middleware\Photos\GenerateAvgColor;
+use Api\V1\Http\Middleware\Photos\GenerateThumbnails;
+use Api\V1\Http\Middleware\Photos\SaveUploadedFile;
 use Api\V1\Presenters\PhotoPresenter;
 use Api\V1\Presenters\PublishedPhotoPresenter;
 use Api\V1\Presenters\SubscriptionPresenter;
@@ -88,7 +88,7 @@ Route::group(['prefix' => 'photos'], function () {
         ->uses('PhotosController@create')
         ->middleware(sprintf('can:create-resource,%s', Photo::class))
         ->middleware(FetchExifData::class)
-        ->middleware(SaveUploadedPhotoFile::class)
+        ->middleware(SaveUploadedFile::class)
         ->middleware(GenerateThumbnails::class)
         ->middleware(GenerateAvgColor::class)
         ->middleware(sprintf('present:%s', PhotoPresenter::class));
@@ -102,7 +102,7 @@ Route::group(['prefix' => 'photos'], function () {
         ->uses('PhotosController@update')
         ->middleware('can:update-resource,photo')
         ->middleware(FetchExifData::class)
-        ->middleware(SaveUploadedPhotoFile::class)
+        ->middleware(SaveUploadedFile::class)
         ->middleware(GenerateThumbnails::class)
         ->middleware(GenerateAvgColor::class)
         ->middleware(sprintf('present:%s', PhotoPresenter::class));
@@ -110,7 +110,7 @@ Route::group(['prefix' => 'photos'], function () {
     Route::delete('/{photo}')
         ->uses('PhotosController@delete')
         ->middleware('can:delete-resource,photo')
-        ->middleware(DeletePhotoDirectory::class)
+        ->middleware(DeleteDirectory::class)
         ->middleware(sprintf('present:%s', PhotoPresenter::class));
 
 });
@@ -143,7 +143,7 @@ Route::group(['prefix' => 'published_photos'], function () {
     Route::delete('/{published_photo}')
         ->uses('PublishedPhotosController@delete')
         ->middleware('can:delete-resource,published_photo')
-        ->middleware(DeletePhotoDirectory::class)
+        ->middleware(DeleteDirectory::class)
         ->middleware(sprintf('present:%s', PublishedPhotoPresenter::class));
 
 });

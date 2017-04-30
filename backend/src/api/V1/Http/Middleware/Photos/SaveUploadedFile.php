@@ -1,25 +1,25 @@
 <?php
 
-namespace Api\V1\Http\Middleware;
+namespace Api\V1\Http\Middleware\Photos;
 
 use Closure;
-use Exception;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
+use RuntimeException;
 
 /**
- * Class SaveUploadedPhotoFile.
+ * Class SaveUploadedFile.
  *
  * @property Storage storage
- * @package Api\V1\Http\Middleware
+ * @package Api\V1\Http\Middleware\Photos
  */
-class SaveUploadedPhotoFile
+class SaveUploadedFile
 {
     use ValidatesRequests;
 
     /**
-     * SaveUploadedPhotoFile constructor.
+     * SaveUploadedFile constructor.
      *
      * @param Storage $storage
      */
@@ -55,21 +55,21 @@ class SaveUploadedPhotoFile
      * @param Request $request
      * @param Closure $next
      * @return mixed
-     * @throws Exception
+     * @throws RuntimeException
      */
     public function handle(Request $request, Closure $next)
     {
         $this->validateRequest($request);
 
-        $photoDirectoryRelPath = sprintf('%s/%s', config('main.storage.photos'), str_random(10));
+        $fileDirectoryRelPath = config('main.storage.photos') . '/' . str_random(10);
 
-        $photoRelPath = $this->storage->put($photoDirectoryRelPath, $request->file('file'));
+        $fileRelPath = $this->storage->put($fileDirectoryRelPath, $request->file('file'));
 
-        if ($photoRelPath === false) {
-            throw new Exception(sprintf('File "%s" saving error.', $photoRelPath));
+        if ($fileRelPath === false) {
+            throw new RuntimeException(sprintf('File "%s" saving error.', $fileRelPath));
         }
 
-        $request->merge(['path' => $photoRelPath, 'relative_url' => $this->storage->url($photoRelPath)]);
+        $request->merge(['path' => $fileRelPath, 'relative_url' => $this->storage->url($fileRelPath)]);
 
         return $next($request);
     }

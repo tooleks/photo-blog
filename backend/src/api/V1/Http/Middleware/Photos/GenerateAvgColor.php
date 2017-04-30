@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\V1\Http\Middleware;
+namespace Api\V1\Http\Middleware\Photos;
 
 use Closure;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
@@ -12,7 +12,7 @@ use Lib\AvgColorPicker\Contracts\AvgColorPicker;
  *
  * @property Storage storage
  * @property AvgColorPicker avgColorPicker
- * @package Api\V1\Http\Middleware
+ * @package Api\V1\Http\Middleware\Photos
  */
 class GenerateAvgColor
 {
@@ -37,12 +37,11 @@ class GenerateAvgColor
      */
     public function handle(Request $request, Closure $next)
     {
-        $photoAbsPath = $this->storage
-                ->getDriver()
-                ->getAdapter()
-                ->getPathPrefix() . $request->get('thumbnails')[1]['path'];
+        $storageAbsPath = $this->storage->getDriver()->getAdapter()->getPathPrefix();
 
-        $request->merge(['avg_color' => $this->avgColorPicker->getImageAvgHexColorByPath($photoAbsPath)]);
+        $fileAbsPath = $storageAbsPath . $request->get('thumbnails')[1]['path'];
+
+        $request->merge(['avg_color' => $this->avgColorPicker->getImageAvgHexColorByPath($fileAbsPath)]);
 
         return $next($request);
     }

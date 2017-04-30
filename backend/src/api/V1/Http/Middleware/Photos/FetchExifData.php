@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\V1\Http\Middleware;
+namespace Api\V1\Http\Middleware\Photos;
 
 use Closure;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
  * Class FetchExifData.
  *
  * @property ExifFetcher exifFetcher
- * @package Api\V1\Http\Middleware
+ * @package Api\V1\Http\Middleware\Photos
  */
 class FetchExifData
 {
