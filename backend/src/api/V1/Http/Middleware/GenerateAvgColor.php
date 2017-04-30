@@ -37,12 +37,12 @@ class GenerateAvgColor
      */
     public function handle(Request $request, Closure $next)
     {
-        $imageAbsPath = $this->storage
+        $photoAbsPath = $this->storage
                 ->getDriver()
                 ->getAdapter()
                 ->getPathPrefix() . $request->get('thumbnails')[1]['path'];
 
-        $request->merge(['avg_color' => $this->avgColorPicker->getImageAvgHexColorByPath($imageAbsPath)]);
+        $request->merge(['avg_color' => $this->avgColorPicker->getImageAvgHexColorByPath($photoAbsPath)]);
 
         return $next($request);
     }
