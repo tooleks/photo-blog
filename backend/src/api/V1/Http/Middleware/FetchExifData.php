@@ -2,10 +2,10 @@
 
 namespace Api\V1\Http\Middleware;
 
+use Closure;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Lib\ExifFetcher\Contracts\ExifFetcher;
 use Illuminate\Http\Request;
-use Closure;
 
 /**
  * Class FetchExifData.

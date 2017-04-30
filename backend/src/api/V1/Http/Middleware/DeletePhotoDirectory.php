@@ -2,8 +2,8 @@
 
 namespace Api\V1\Http\Middleware;
 
-use Illuminate\Http\Request;
 use Closure;
+use Illuminate\Http\Request;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
 
 /**
