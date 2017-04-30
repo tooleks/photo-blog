@@ -23,7 +23,7 @@ class PresentResponses
      * @param string $presenterClass
      * @return Response
      */
-    public function handle($request, Closure $next, string $presenterClass)
+    public function handle(Request $request, Closure $next, string $presenterClass)
     {
         $response = $next($request);
 

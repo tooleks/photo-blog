@@ -57,7 +57,7 @@ class SaveUploadedPhotoFile
      * @return mixed
      * @throws Exception
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
         $this->validateRequest($request);
 

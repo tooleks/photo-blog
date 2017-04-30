@@ -21,7 +21,7 @@ class JsonApi
      * @param Closure $next
      * @return Response
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
         $this->assertRequest($request);
 
