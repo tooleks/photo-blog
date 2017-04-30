@@ -2,8 +2,8 @@
 
 namespace Api\V1\Http\Middleware;
 
-use Illuminate\Http\Request;
 use Closure;
+use Illuminate\Http\Request;
 
 /**
  * Class AppendClientIpAddress.
@@ -34,7 +34,7 @@ class AppendClientIpAddress
      * @param Closure $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
         $request->merge(['client_ip_address' => $this->resolveClientIpAddress($request)]);
 
@@ -44,10 +44,10 @@ class AppendClientIpAddress
     /**
      * Resolve a client IP address from an incoming request.
      *
-     * @param $request
+     * @param Request $request
      * @return string|null
      */
-    private function resolveClientIpAddress($request)
+    protected function resolveClientIpAddress(Request $request)
     {
         foreach ($this->clientIpServerOptions as $option) {
             if ($request->server->get($option)) {
