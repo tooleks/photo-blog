@@ -37,7 +37,7 @@ class DeletePhotoDirectory
 
         if ($response->isSuccessful()) {
             $directoryPath = $request->photo->directory_path ?? $request->published_photo->directory_path ?? null;
-            if (!is_null($directoryPath)) {
+            if ($directoryPath) {
                 $this->storage->deleteDirectory($directoryPath);
             }
         }
