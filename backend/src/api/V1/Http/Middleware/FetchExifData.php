@@ -32,7 +32,7 @@ class FetchExifData
      *
      * @param Request $request
      */
-    public function validateRequest($request)
+    public function validateRequest(Request $request)
     {
         $this->validate($request, [
             'file' => ['required', 'file', 'image'],

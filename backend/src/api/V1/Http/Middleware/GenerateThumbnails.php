@@ -6,7 +6,6 @@ use Closure;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
-use League\Flysystem\FileNotFoundException;
 use Lib\ThumbnailsGenerator\Contracts\ThumbnailsGenerator;
 
 /**
@@ -37,7 +36,7 @@ class GenerateThumbnails
      *
      * @param Request $request
      */
-    public function validateRequest($request)
+    public function validateRequest(Request $request)
     {
         $this->validate($request, [
             'path' => ['required', 'string'],
@@ -50,11 +49,9 @@ class GenerateThumbnails
      *
      * @param Request $request
      * @param Closure $next
-     * @param string|null $guard
      * @return mixed
-     * @throws FileNotFoundException
      */
-    public function handle($request, Closure $next, $guard = null)
+    public function handle(Request $request, Closure $next)
     {
         $this->validateRequest($request);
 

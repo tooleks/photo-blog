@@ -25,7 +25,7 @@ class ThrottleRequests extends IlluminateThrottleRequests
      * @param float|int $decayMinutes
      * @return mixed
      */
-    public function handle($request, Closure $next, $maxAttempts = 60, $decayMinutes = 1)
+    public function handle(Request $request, Closure $next, $maxAttempts = 60, $decayMinutes = 1)
     {
         $key = $this->resolveRequestSignature($request);
 

@@ -33,7 +33,7 @@ class SaveUploadedPhotoFile
      *
      * @param Request $request
      */
-    public function validateRequest($request)
+    public function validateRequest(Request $request)
     {
         $this->validate($request, [
             'file' => [
@@ -54,11 +54,10 @@ class SaveUploadedPhotoFile
      *
      * @param Request $request
      * @param Closure $next
-     * @param string|null $guard
      * @return mixed
      * @throws Exception
      */
-    public function handle($request, Closure $next, $guard = null)
+    public function handle($request, Closure $next)
     {
         $this->validateRequest($request);
 
