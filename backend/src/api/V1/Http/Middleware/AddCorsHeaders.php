@@ -18,10 +18,9 @@ class AddCorsHeaders
      *
      * @param Request $request
      * @param Closure $next
-     * @param string|null $guard
      * @return Response
      */
-    public function handle($request, Closure $next, $guard = null)
+    public function handle($request, Closure $next)
     {
         $response = $next($request);
 
