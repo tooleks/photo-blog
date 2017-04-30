@@ -44,10 +44,9 @@ class FetchExifData
      *
      * @param Request $request
      * @param Closure $next
-     * @param string|null $guard
      * @return mixed
      */
-    public function handle(Request $request, Closure $next, $guard = null)
+    public function handle(Request $request, Closure $next)
     {
         $this->validateRequest($request);
 
