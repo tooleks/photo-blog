@@ -33,18 +33,16 @@ class GenerateAvgColor
      *
      * @param Request $request
      * @param Closure $next
-     * @param string|null $guard
      * @return mixed
      */
-    public function handle($request, Closure $next, $guard = null)
+    public function handle($request, Closure $next)
     {
-        $storageAbsPath = $this->storage->getDriver()->getAdapter()->getPathPrefix();
+        $imageAbsPath = $this->storage
+                ->getDriver()
+                ->getAdapter()
+                ->getPathPrefix() . $request->get('thumbnails')[1]['path'];
 
-        $thumbnailAbsPath = $storageAbsPath . $request->get('thumbnails')[1]['path'];
-
-        $avgColor = $this->avgColorPicker->getImageAvgHexColorByPath($thumbnailAbsPath);
-
-        $request->merge(['avg_color' => $avgColor]);
+        $request->merge(['avg_color' => $this->avgColorPicker->getImageAvgHexColorByPath($imageAbsPath)]);
 
         return $next($request);
     }
