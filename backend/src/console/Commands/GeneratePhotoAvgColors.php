@@ -82,7 +82,7 @@ class GeneratePhotoAvgColors extends Command
     {
         $thumbnail = $photo->thumbnails->first();
 
-        $storageAbsolutePath = $this->storage->disk('public')->getDriver()->getAdapter()->getPathPrefix();
+        $storageAbsolutePath = $this->storage->getDriver()->getAdapter()->getPathPrefix();
 
         $absoluteThumbnailPath = $storageAbsolutePath . $thumbnail->path;
 

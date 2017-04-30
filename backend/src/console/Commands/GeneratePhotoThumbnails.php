@@ -84,7 +84,7 @@ class GeneratePhotoThumbnails extends Command
         $photo->thumbnails->each(function (Thumbnail $thumbnail) use ($photo) {
             $photo->thumbnails()->detach($thumbnail->id);
             $thumbnail->delete();
-            $this->storage->disk('public')->delete($thumbnail->path);
+            $this->storage->delete($thumbnail->path);
         });
     }
 
@@ -95,7 +95,7 @@ class GeneratePhotoThumbnails extends Command
      */
     public function generatePhotoThumbnails(Photo $photo)
     {
-        $storageAbsolutePath = $this->storage->disk('public')->getDriver()->getAdapter()->getPathPrefix();
+        $storageAbsolutePath = $this->storage->getDriver()->getAdapter()->getPathPrefix();
 
         $absolutePhotoFilePath = $storageAbsolutePath . $photo->path;
 
@@ -105,7 +105,7 @@ class GeneratePhotoThumbnails extends Command
             $relativeThumbnailPath = str_replace($storageAbsolutePath, '', $metaDataItem['path']);
             $thumbnails[] = [
                 'path' => $relativeThumbnailPath,
-                'relative_url' => $this->storage->disk('public')->url($relativeThumbnailPath),
+                'relative_url' => $this->storage->url($relativeThumbnailPath),
                 'width' => $metaDataItem['width'],
                 'height' => $metaDataItem['height'],
             ];

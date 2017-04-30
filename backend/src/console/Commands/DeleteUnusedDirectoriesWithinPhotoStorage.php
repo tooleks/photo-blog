@@ -50,7 +50,7 @@ class DeleteUnusedDirectoriesWithinPhotoStorage extends Command
     {
         foreach ($this->getDirectoriesToDelete() as $directory) {
             $this->comment(sprintf('Deleting directory (path:%s) ...', $directory));
-            $this->storage->disk('public')->deleteDirectory($directory) && $this->comment(sprintf('Directory was deleted (path:%s).', $directory));
+            $this->storage->deleteDirectory($directory) && $this->comment(sprintf('Directory was deleted (path:%s).', $directory));
         }
     }
 
@@ -75,7 +75,7 @@ class DeleteUnusedDirectoriesWithinPhotoStorage extends Command
      */
     private function getDirectoriesWithinPhotoStorage()
     {
-        return $this->storage->disk('public')->directories(config('main.storage.photos'));
+        return $this->storage->directories(config('main.storage.photos'));
     }
 
     /**

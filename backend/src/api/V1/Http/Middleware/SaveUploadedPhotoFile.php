@@ -64,13 +64,13 @@ class SaveUploadedPhotoFile
 
         $photoDirectoryRelPath = sprintf('%s/%s', config('main.storage.photos'), str_random(10));
 
-        $photoRelPath = $this->storage->disk('public')->put($photoDirectoryRelPath, $request->file('file'));
+        $photoRelPath = $this->storage->put($photoDirectoryRelPath, $request->file('file'));
 
         if ($photoRelPath === false) {
             throw new Exception(sprintf('File "%s" saving error.', $photoRelPath));
         }
 
-        $request->merge(['path' => $photoRelPath, 'relative_url' => $this->storage->disk('public')->url($photoRelPath)]);
+        $request->merge(['path' => $photoRelPath, 'relative_url' => $this->storage->url($photoRelPath)]);
 
         return $next($request);
     }

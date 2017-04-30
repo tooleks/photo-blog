@@ -85,7 +85,7 @@ class DeleteNotPublishedPhotosOlderThanWeek extends Command
             $this->comment(sprintf('Photo was deleted (ID:%s).', $photo->id));
         }
 
-        if ($this->storage->disk('public')->deleteDirectory($photo->directory_path)) {
+        if ($this->storage->deleteDirectory($photo->directory_path)) {
             $this->comment(sprintf('Photo directory was deleted (path:%s).', $photo->directory_path));
         }
     }

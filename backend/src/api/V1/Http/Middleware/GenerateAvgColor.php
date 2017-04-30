@@ -38,7 +38,7 @@ class GenerateAvgColor
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        $storageAbsPath = $this->storage->disk('public')->getDriver()->getAdapter()->getPathPrefix();
+        $storageAbsPath = $this->storage->getDriver()->getAdapter()->getPathPrefix();
 
         $thumbnailAbsPath = $storageAbsPath . $request->get('thumbnails')[1]['path'];
 

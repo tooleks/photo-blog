@@ -58,7 +58,7 @@ class GenerateThumbnails
     {
         $this->validateRequest($request);
 
-        $storageAbsPath = $this->storage->disk('public')->getDriver()->getAdapter()->getPathPrefix();
+        $storageAbsPath = $this->storage->getDriver()->getAdapter()->getPathPrefix();
 
         $photoAbsPath = $storageAbsPath . $request->get('path');
 
@@ -68,7 +68,7 @@ class GenerateThumbnails
             $relativeThumbnailPath = str_replace($storageAbsPath, '', $metaDataItem['path']);
             $thumbnails[] = [
                 'path' => $relativeThumbnailPath,
-                'relative_url' => $this->storage->disk('public')->url($relativeThumbnailPath),
+                'relative_url' => $this->storage->url($relativeThumbnailPath),
                 'width' => $metaDataItem['width'],
                 'height' => $metaDataItem['height'],
             ];
