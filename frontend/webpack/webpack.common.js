@@ -27,16 +27,9 @@ module.exports = {
                 test: /\.html$/,
                 use: 'raw-loader'
             },
-            // Load component css styles.
+            // Load css styles.
             {
                 test: /\.css$/,
-                include: root('./src/app'),
-                use: 'raw-loader'
-            },
-            // Load assets css styles.
-            {
-                test: /\.css$/,
-                exclude: root('./src/app'),
                 use: ['to-string-loader'].concat(ExtractTextPlugin.extract({
                     fallback: 'style-loader',
                     use: 'css-loader'

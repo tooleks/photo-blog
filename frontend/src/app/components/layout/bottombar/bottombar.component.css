@@ -1,4 +1,4 @@
-:host .bottombar {
+bottombar .bottombar {
     display: block;
     position: absolute;
     bottom: 0;
@@ -9,30 +9,30 @@
 }
 
 @media (min-width: 768px) {
-    :host .bottombar {
+    bottombar .bottombar {
         margin-left: 220px;
     }
 }
 
-:host .bottombar-item {
+bottombar .bottombar-item {
     padding-right: 5px;
     line-height: 40px;
 }
 
-:host .bottombar-item:first-child {
+bottombar .bottombar-item:first-child {
     padding-left: 20px;
 }
 
-:host .bottombar-item:last-child {
+bottombar .bottombar-item:last-child {
     padding-right: 20px;
 }
 
-:host .bottombar-desktop-screen {
+bottombar .bottombar-desktop-screen {
     display: none;
 }
 
 @media (min-width: 468px) {
-    :host .bottombar-desktop-screen {
+    bottombar .bottombar-desktop-screen {
         display: initial;
     }
 }

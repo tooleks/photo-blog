@@ -1,4 +1,4 @@
-:host .app-wrapper {
+app .app-wrapper {
     min-width: 320px;
     min-height: 101%;
     width: 100%;
@@ -7,12 +7,12 @@
     background-color: #f3f3f4;
 }
 
-:host .app-content {
+app .app-content {
     padding: 80px 20px 60px 20px;
 }
 
 @media (min-width: 768px) {
-    :host .app-content {
+    app .app-content {
         padding-top: 20px;
         margin-left: 220px;
     }
