@@ -10,7 +10,7 @@ export class PhotoDataProviderService {
         return this.api.post('/published_photos', attributes);
     };
 
-    upload = (file:FileList):Promise<any> => {
+    upload = (file:any):Promise<any> => {
         let form = new FormData;
         form.append('file', file);
         return this.api.post('/photos', form);
@@ -20,7 +20,7 @@ export class PhotoDataProviderService {
         return this.api.put('/published_photos/' + id, attributes);
     };
 
-    uploadById = (id:number, file:FileList):Promise<any> => {
+    uploadById = (id:number, file:any):Promise<any> => {
         let form = new FormData;
         form.append('file', file);
         return this.api.post('/photos/' + id, form);

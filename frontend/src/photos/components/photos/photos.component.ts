@@ -1,8 +1,9 @@
 import {Component, OnInit, AfterViewInit} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
-import {MetaTagsService} from '../../../core'
+import {LinkedDataService, MetaTagsService} from '../../../core'
 import {GalleryImage} from '../../../lib';
 import {
+    AppService,
     TitleService,
     AuthProviderService,
     NavigatorServiceProvider,
@@ -22,19 +23,32 @@ export class PhotosComponent extends AbstractPhotosComponent implements OnInit, 
                 protected photoDataProvider:PhotoDataProviderService,
                 router:Router,
                 route:ActivatedRoute,
+                app:AppService,
                 title:TitleService,
                 metaTags:MetaTagsService,
+                linkedData:LinkedDataService,
                 navigatorProvider:NavigatorServiceProvider,
                 pagerProvider:PagerServiceProvider,
                 processLockerProvider:ProcessLockerServiceProvider,
                 scrollFreezer:ScrollFreezerService) {
-        super(router, route, title, metaTags, navigatorProvider, pagerProvider, processLockerProvider, scrollFreezer);
+        super(
+            router,
+            route,
+            app,
+            title,
+            metaTags,
+            linkedData,
+            navigatorProvider,
+            pagerProvider,
+            processLockerProvider,
+            scrollFreezer
+        );
     }
 
     ngOnInit():void {
         super.ngOnInit();
         this.title.setTitle('All Photos');
-        this.metaTags.setTitle(this.title.getPageName());
+        this.metaTags.setTitle('All Photos');
     }
 
     ngAfterViewInit():void {

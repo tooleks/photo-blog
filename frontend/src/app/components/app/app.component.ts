@@ -1,14 +1,9 @@
 import {Component, OnInit} from '@angular/core'
-import {Router, NavigationEnd} from '@angular/router';
+import {Router, NavigationStart, NavigationEnd} from '@angular/router';
 import {MetaTagsService, GoogleAnalyticsService} from '../../../core';
 import {TransferState} from '../../../sys';
-import {ScreenDetectorService} from '../../../core';
-import {
-    AppService,
-    TitleService,
-    AuthProviderService,
-    ScrollFreezerService,
-} from '../../../shared';
+import {LinkedDataService, ScreenDetectorService} from '../../../core';
+import {AppService, TitleService, AuthProviderService, ScrollFreezerService} from '../../../shared';
 import '../../../../assets/static/img/meta_image.jpg'
 
 @Component({
@@ -17,13 +12,14 @@ import '../../../../assets/static/img/meta_image.jpg'
     styleUrls: ['app.component.css'],
 })
 export class AppComponent implements OnInit {
-    protected appContentStyles:{overflow:string} = {overflow: ''};
+    appContentStyles:{overflow:string} = {overflow: ''};
 
     constructor(protected cache:TransferState,
                 protected router:Router,
                 protected app:AppService,
                 protected title:TitleService,
                 protected metaTags:MetaTagsService,
+                protected linkedData:LinkedDataService,
                 protected authProvider:AuthProviderService,
                 protected screenDetector:ScreenDetectorService,
                 protected scrollFreezer:ScrollFreezerService,
@@ -38,34 +34,49 @@ export class AppComponent implements OnInit {
         this.googleAnalytics.init();
     }
 
-    protected initMeta = ():void => {
+    protected initMeta():void {
         this.metaTags.setWebsiteName(this.app.getName());
         this.metaTags.setUrl(this.app.getUrl());
         this.metaTags.setTitle(this.title.getPageName());
         this.metaTags.setDescription(this.app.getDescription());
-        this.metaTags.setImage(this.app.getUrl() + '/assets/static/meta_image.jpg');
-    };
+        this.metaTags.setImage(this.app.getImage());
+    }
 
-    protected initRouterSubscribers = ():void => {
+    protected initLinkedData():void {
+        this.linkedData.setItems([
+            {
+                '@context': 'http://schema.org',
+                '@type': 'WebSite',
+                'name': this.app.getName(),
+                'url': this.app.getUrl(),
+            }
+        ]);
+    }
+
+    protected initRouterSubscribers():void {
         this.router.events
             .filter((event:any) => event instanceof NavigationEnd)
             .subscribe((event:NavigationEnd) => this.metaTags.setUrl(this.app.getUrl() + event.urlAfterRedirects));
-    };
 
-    protected initScrollFreezerSubscribers = ():void => {
+        this.router.events
+            .filter((event:any) => event instanceof NavigationStart)
+            .subscribe((event:NavigationStart) => this.initLinkedData());
+    }
+
+    protected initScrollFreezerSubscribers():void {
         this.scrollFreezer.freezed.subscribe(() => this.appContentStyles.overflow = 'hidden');
         this.scrollFreezer.unfreezed.subscribe(() => this.appContentStyles.overflow = '');
-    };
+    }
 
-    protected onShowSideBar = (event:any):void => {
+    onShowSideBar(event:any):void {
         this.screenDetector.isSmallScreen() && this.scrollFreezer.freeze()
-    };
+    }
 
-    protected onHideSideBar = (event:any):void => {
+    onHideSideBar(event:any):void {
         this.scrollFreezer.unfreeze();
-    };
+    }
 
-    protected onToggleSideBar = (event:any):void => {
+    onToggleSideBar(event:any):void {
         event.isVisible ? this.onShowSideBar(event) : this.onHideSideBar(event);
-    };
+    }
 }

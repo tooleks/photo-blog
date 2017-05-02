@@ -25,4 +25,12 @@ export class AppService {
     getDescription = ():string => {
         return String(this.info.get('appDescription'));
     };
+
+    getAuthor = ():string => {
+        return String(this.info.get('appAuthor'));
+    };
+
+    getImage = ():string => {
+        return String(this.info.get('appImage'));
+    };
 }
