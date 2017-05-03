@@ -17,6 +17,6 @@ export class TopBarComponent {
     };
 
     protected getPageName = ():string => {
-        return this.title.getPageName();
+        return this.title.getPageNameSegment();
     };
 }

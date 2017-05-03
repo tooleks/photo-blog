@@ -16,11 +16,11 @@ export class AboutMeComponent implements OnInit {
     }
 
     protected initTitle = ():void => {
-        this.title.setTitle('About Me');
+        this.title.setPageNameSegment('About Me');
     };
 
     protected initMeta = ():void => {
-        this.metaTags.setTitle(this.title.getPageName());
+        this.metaTags.setTitle(this.title.getPageNameSegment());
     };
 
     getContent = ():string => {

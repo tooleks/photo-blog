@@ -24,11 +24,11 @@ export class PageNotFoundComponent implements OnInit {
     }
 
     protected initTitle = ():void => {
-        this.title.setTitle('Page Not Found');
+        this.title.setPageNameSegment('Page Not Found');
     };
 
     protected initMeta = ():void => {
-        this.metaTags.setTitle(this.title.getPageName());
+        this.metaTags.setTitle(this.title.getPageNameSegment());
     };
 
     protected navigateTo404Page = () => {

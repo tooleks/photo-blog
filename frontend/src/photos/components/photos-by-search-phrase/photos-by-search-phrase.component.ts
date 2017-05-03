@@ -35,23 +35,14 @@ export class PhotosBySearchPhraseComponent extends AbstractPhotosComponent imple
                 pagerProvider:PagerServiceProvider,
                 processLockerProvider:ProcessLockerServiceProvider,
                 scrollFreezer:ScrollFreezerService) {
-        super(
-            router,
-            route,
-            app,
-            title,
-            metaTags,
-            navigatorProvider,
-            pagerProvider,
-            processLockerProvider,
-            scrollFreezer
-        );
+        super(router, route, app, title, metaTags, navigatorProvider, pagerProvider, processLockerProvider, scrollFreezer);
+        this.defaults['title'] = 'Search Photos';
     }
 
     ngOnInit():void {
         super.ngOnInit();
-        this.title.setTitle('Search Photos');
-        this.metaTags.setTitle(this.title.getPageName());
+        this.title.setPageNameSegment(this.defaults['title']);
+        this.metaTags.setTitle(this.defaults['title']);
     }
 
     ngAfterViewInit():void {
@@ -90,8 +81,8 @@ export class PhotosBySearchPhraseComponent extends AbstractPhotosComponent imple
     onSearchPhraseChange(searchPhrase:string):void {
         this.reset();
         this.queryParams['search_phrase'] = searchPhrase;
-        this.title.setTitle(`Search "${searchPhrase}"`);
-        this.metaTags.setTitle(this.title.getPageName());
+        this.title.setPageNameSegment(`Search "${searchPhrase}"`);
+        this.metaTags.setTitle(this.title.getPageNameSegment());
         const perPageOffset = this.queryParams['page'] * this.pager.getPerPage();
         this.loadImages(this.defaults.page, perPageOffset, searchPhrase);
     }

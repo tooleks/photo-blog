@@ -2,7 +2,8 @@ import {Input, Component} from '@angular/core';
 
 @Component({
     selector: 'json-ld',
-    template: `<div [style.display]="'none'" [innerHtml]="getContent() | safeHtml"></div>`,
+    templateUrl: 'json-ld.component.html',
+    styleUrls: ['json-ld.component.css'],
 })
 export class JsonLdComponent {
     @Input() data:any = {};

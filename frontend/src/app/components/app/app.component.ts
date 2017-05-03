@@ -34,11 +34,12 @@ export class AppComponent implements OnInit {
     }
 
     protected initMeta():void {
-        this.metaTags.setWebsiteName(this.app.getName());
-        this.metaTags.setUrl(this.app.getUrl());
-        this.metaTags.setTitle(this.title.getPageName());
-        this.metaTags.setDescription(this.app.getDescription());
-        this.metaTags.setImage(this.app.getImage());
+        this.metaTags
+            .setUrl(this.app.getUrl())
+            .setWebsiteName(this.app.getName())
+            .setTitle(this.title.getPageNameSegment())
+            .setDescription(this.app.getDescription())
+            .setImage(this.app.getImage());
     }
 
     protected initRouterSubscribers():void {

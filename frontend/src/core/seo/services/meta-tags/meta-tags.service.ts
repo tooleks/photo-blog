@@ -3,11 +3,11 @@ import {Meta, MetaDefinition} from '@angular/platform-browser';
 
 @Injectable()
 export class MetaTagsService {
-    constructor(protected meta:Meta) {
+    constructor(protected documentMeta:Meta) {
         this.initDefaults();
     }
 
-    protected initDefaults = ():void => {
+    protected initDefaults():void {
         const tags:Array<MetaDefinition> = [
             // General meta tags.
             {name: 'description', content: ''},
@@ -23,29 +23,34 @@ export class MetaTagsService {
             {name: 'twitter:title', content: ''},
             {name: 'twitter:image', content: ''},
         ];
-        this.meta.addTags(tags);
-    };
+        this.documentMeta.addTags(tags);
+    }
 
-    setWebsiteName = (content:string):void => {
-        this.meta.updateTag({property: 'og:site_name', content: content}, 'property="og:site_name"');
-    };
+    setWebsiteName(content:string):this {
+        this.documentMeta.updateTag({property: 'og:site_name', content: content}, 'property="og:site_name"');
+        return this;
+    }
 
-    setUrl = (content:string):void => {
-        this.meta.updateTag({property: 'og:url', content: content}, 'property="og:url"');
-    };
+    setUrl(content:string):this {
+        this.documentMeta.updateTag({property: 'og:url', content: content}, 'property="og:url"');
+        return this;
+    }
 
-    setTitle = (content:string):void => {
-        this.meta.updateTag({property: 'og:title', content: content}, 'property="og:title"');
-        this.meta.updateTag({name: 'twitter:title', content: content}, 'name="twitter:title"');
-    };
+    setTitle(content:string):this {
+        this.documentMeta.updateTag({property: 'og:title', content: content}, 'property="og:title"');
+        this.documentMeta.updateTag({name: 'twitter:title', content: content}, 'name="twitter:title"');
+        return this;
+    }
 
-    setDescription = (content:string):void => {
-        this.meta.updateTag({name: 'description', content: content}, 'name="description"');
-        this.meta.updateTag({property: 'og:description', content: content}, 'property="og:description"');
-    };
+    setDescription(content:string):this {
+        this.documentMeta.updateTag({name: 'description', content: content}, 'name="description"');
+        this.documentMeta.updateTag({property: 'og:description', content: content}, 'property="og:description"');
+        return this;
+    }
 
-    setImage = (content:string):void => {
-        this.meta.updateTag({property: 'og:image', content: content}, 'property="og:image"');
-        this.meta.updateTag({name: 'twitter:image', content: content}, 'name="twitter:image"');
-    };
+    setImage(content:string):this {
+        this.documentMeta.updateTag({property: 'og:image', content: content}, 'property="og:image"');
+        this.documentMeta.updateTag({name: 'twitter:image', content: content}, 'name="twitter:image"');
+        return this;
+    }
 }

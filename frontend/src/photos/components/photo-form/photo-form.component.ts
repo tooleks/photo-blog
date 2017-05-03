@@ -35,7 +35,7 @@ export class PhotoFormComponent implements OnInit {
 
     ngOnInit():void {
         this.photo = new Photo;
-        this.title.setTitle('Add Photo');
+        this.title.setPageNameSegment('Add Photo');
         this.initParamsSubscribers();
 
     }
@@ -56,7 +56,7 @@ export class PhotoFormComponent implements OnInit {
     loadById = (id:number):Promise<any> => {
         return this.processLocker.lock(this.processLoadById, [id]).then((photo:any) => {
             this.photo.setSavedPhotoAttributes(photo);
-            this.title.setTitle('Edit Photo');
+            this.title.setPageNameSegment('Edit Photo');
             return photo;
         });
     };

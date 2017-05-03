@@ -30,7 +30,7 @@ export class UnsubscriptionComponent implements OnInit {
     }
 
     ngOnInit():void {
-        this.title.setTitle('Unsubscription');
+        this.title.setPageNameSegment('Unsubscription');
         this.initParamsSubscribers();
     }
 

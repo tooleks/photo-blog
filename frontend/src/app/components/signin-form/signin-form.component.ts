@@ -32,8 +32,8 @@ export class SignInFormComponent implements OnInit {
 
     ngOnInit():void {
         this.model = new Model;
-        this.title.setTitle('Sing In');
-        this.metaTags.setTitle(this.title.getPageName());
+        this.title.setPageNameSegment('Sing In');
+        this.metaTags.setTitle(this.title.getPageNameSegment());
     }
 
     signIn = ():Promise<any> => {

@@ -32,8 +32,8 @@ export class SubscriptionFormComponent implements OnInit {
 
     ngOnInit():void {
         this.model = new Model;
-        this.title.setTitle('Subscription');
-        this.metaTags.setTitle(this.title.getPageName());
+        this.title.setPageNameSegment('Subscription');
+        this.metaTags.setTitle(this.title.getPageNameSegment());
     }
 
     subscribe = ():Promise<any> => {

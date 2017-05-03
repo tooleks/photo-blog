@@ -3,52 +3,45 @@ import {Title} from '@angular/platform-browser';
 
 @Injectable()
 export class TitleService {
-    protected segments:Array<string> = [];
+    protected pageNameSegment:string = '';
 
-    constructor(protected title:Title, protected defaultSegment:string = null, protected segmentsSeparator:string = ' / ') {
-        this.setTitle();
+    constructor(protected clientTitle:Title, protected defaultSegment:string = '', protected segmentsSeparator:string = ' | ') {
+        this.init();
     }
 
-    setTitle = (title:any = []):void => {
-        const segments:Array<string> = this.prepareSegments(title);
-        this.setSegments(segments);
-        this.renderSegments(this.segments);
-    };
+    init():void {
+        let newTitle:string = this.getPageNameSegment() + this.getSegmentsSeparator() + this.getDefaultSegment();
+        this.clientTitle.setTitle(newTitle);
+    }
 
-    getTitle = ():string => {
-        return this.title.getTitle();
-    };
+    setDefaultSegment(newDefaultSegment:string):void {
+        this.defaultSegment = newDefaultSegment;
+        this.init();
+    }
 
-    getPageName = ():string => {
-        return this.segments.length ? this.segments[this.segments.length - 1] : '';
-    };
+    getDefaultSegment():string {
+        return this.defaultSegment;
+    }
 
-    setDynamicTitle = (title:any = []):void => {
-        const segments:Array<string> = this.prepareSegments(title);
-        this.renderSegments([].concat(this.segments).concat(segments));
-    };
+    setPageNameSegment(newPageNameSegment:string):void {
+        this.pageNameSegment = newPageNameSegment;
+        this.init();
+    }
 
-    unsetDynamicTitle = ():void => {
-        this.renderSegments(this.segments);
-    };
+    getPageNameSegment():string {
+        return this.pageNameSegment;
+    }
 
-    protected setSegments = (segments:Array<string>):void => {
-        const defaultSegments:Array<string> = this.prepareSegments(this.defaultSegment);
-        this.segments = [].concat(defaultSegments).concat(segments);
-    };
+    setSegmentsSeparator(newSegmentsSeparator:string):void {
+        this.segmentsSeparator = newSegmentsSeparator;
+        this.init();
+    }
 
-    protected prepareSegments = (segments:any):Array<string> => {
-        if (segments instanceof Array) {
-            return [].concat(segments).map((segment:any) => String(segment));
-        } else if (segments) {
-            return [String(segments)];
-        } else {
-            return [];
-        }
-    };
+    getSegmentsSeparator():string {
+        return this.segmentsSeparator;
+    }
 
-    protected renderSegments = (segments:Array<string>):void => {
-        const title:string = [].concat(segments).reverse().join(this.segmentsSeparator);
-        this.title.setTitle(title);
-    };
+    getFullTitle():string {
+        return this.clientTitle.getTitle();
+    }
 }

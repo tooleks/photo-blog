@@ -17,7 +17,7 @@ import {
 } from '../../../shared';
 
 export abstract class PhotosComponent implements OnInit, AfterViewInit {
-    protected defaults:any = {page: 1, perPage: 20, show: null};
+    protected defaults:any = {title: '', page: 1, perPage: 20, show: null};
     protected queryParams:any = {};
     protected pager:PagerService;
     protected navigator:NavigatorService;
@@ -28,15 +28,10 @@ export abstract class PhotosComponent implements OnInit, AfterViewInit {
     protected hasMoreImages:boolean = true;
     protected linkedData:Array<any> = [];
 
-    constructor(protected router:Router,
-                protected route:ActivatedRoute,
-                protected app:AppService,
-                protected title:TitleService,
-                protected metaTags:MetaTagsService,
-                protected navigatorProvider:NavigatorServiceProvider,
-                protected pagerProvider:PagerServiceProvider,
-                protected processLockerProvider:ProcessLockerServiceProvider,
-                protected scrollFreezer:ScrollFreezerService) {
+    constructor(protected router:Router, protected route:ActivatedRoute,
+                protected app:AppService, protected title:TitleService, protected metaTags:MetaTagsService,
+                protected navigatorProvider:NavigatorServiceProvider, protected pagerProvider:PagerServiceProvider,
+                protected processLockerProvider:ProcessLockerServiceProvider, protected scrollFreezer:ScrollFreezerService) {
         this.pager = this.pagerProvider.getInstance(this.defaults.page, this.defaults.perPage);
         this.navigator = this.navigatorProvider.getInstance();
         this.processLocker = this.processLockerProvider.getInstance();
@@ -109,7 +104,7 @@ export abstract class PhotosComponent implements OnInit, AfterViewInit {
         }
         return this.processLocker
             .lock(callback)
-            .then(this.onLoadImagesSuccess.bind(this));
+            .then((response:any) => this.onLoadImagesSuccess(response));
     }
 
     protected onLoadImagesSuccess(response:any):Array<GalleryImage> {
@@ -139,16 +134,15 @@ export abstract class PhotosComponent implements OnInit, AfterViewInit {
 
     onShowPhoto(image:GalleryImage):void {
         this.scrollFreezer.freeze();
-        this.title.setDynamicTitle(image.getDescription());
-        this.metaTags.setImage(image.getLargeSizeUrl());
-        this.metaTags.setTitle(image.getDescription());
+        this.title.setPageNameSegment(image.getDescription());
+        this.metaTags.setTitle(image.getDescription()).setImage(image.getLargeSizeUrl());
         this.navigator.setQueryParam('show', image.getId());
     }
 
     onHidePhoto(image:GalleryImage):void {
         this.scrollFreezer.unfreeze();
         this.navigator.unsetQueryParam('show');
-        this.title.unsetDynamicTitle();
+        this.title.setPageNameSegment(this.defaults['title']);
     }
 
     onEditPhoto(image:GalleryImage):void {

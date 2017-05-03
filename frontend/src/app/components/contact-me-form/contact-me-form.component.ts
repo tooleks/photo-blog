@@ -32,8 +32,8 @@ export class ContactMeFormComponent implements OnInit {
 
     ngOnInit():void {
         this.model = new Model;
-        this.title.setTitle('Contact Me');
-        this.metaTags.setTitle(this.title.getPageName());
+        this.title.setPageNameSegment('Contact Me');
+        this.metaTags.setTitle(this.title.getPageNameSegment());
     }
 
     contactMe = ():Promise<any> => {
