@@ -1,18 +1,13 @@
-import {Component} from '@angular/core';
-import {LinkedDataService} from '../../services/linked-data';
+import {Input, Component} from '@angular/core';
 
 @Component({
     selector: 'json-ld',
-    template: `<div [style.display]="'none'" [innerHtml]="getInnerHtml() | safeHtml"></div>`,
+    template: `<div [style.display]="'none'" [innerHtml]="getContent() | safeHtml"></div>`,
 })
 export class JsonLdComponent {
-    constructor(protected linkedData:LinkedDataService) {
-    }
+    @Input() data:any = {};
 
-    getInnerHtml():string {
-        return this.linkedData
-            .getItems()
-            .map((item:any) => `<script type="application/ld+json">${JSON.stringify(item)}</script>`)
-            .join('');
+    getContent():string {
+        return `<script type="application/ld+json">${JSON.stringify(this.data)}</script>`;
     }
 }

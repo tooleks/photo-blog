@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {HtmlModule} from '../html';
 import {JsonLdComponent} from './components';
-import {LinkedDataService, MetaTagsService} from './services';
+import {MetaTagsService} from './services';
 
 @NgModule({
     imports: [
@@ -20,7 +20,6 @@ import {LinkedDataService, MetaTagsService} from './services';
         JsonLdComponent,
     ],
     providers: [
-        LinkedDataService,
         MetaTagsService,
     ],
 })

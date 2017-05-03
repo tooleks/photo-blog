@@ -1,6 +1,6 @@
 import {Component, OnInit, AfterViewInit} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
-import {LinkedDataService, MetaTagsService} from '../../../core'
+import {MetaTagsService} from '../../../core'
 import {GalleryImage} from '../../../lib';
 import {
     AppService,
@@ -26,7 +26,6 @@ export class PhotosComponent extends AbstractPhotosComponent implements OnInit, 
                 app:AppService,
                 title:TitleService,
                 metaTags:MetaTagsService,
-                linkedData:LinkedDataService,
                 navigatorProvider:NavigatorServiceProvider,
                 pagerProvider:PagerServiceProvider,
                 processLockerProvider:ProcessLockerServiceProvider,
@@ -37,7 +36,6 @@ export class PhotosComponent extends AbstractPhotosComponent implements OnInit, 
             app,
             title,
             metaTags,
-            linkedData,
             navigatorProvider,
             pagerProvider,
             processLockerProvider,
@@ -57,11 +55,11 @@ export class PhotosComponent extends AbstractPhotosComponent implements OnInit, 
         this.loadImages(this.defaults.page, perPageOffset);
     }
 
-    protected loadImages(page:number, perPage:number):Promise<Array<GalleryImage>> {
+    loadImages(page:number, perPage:number):Promise<Array<GalleryImage>> {
         return this.processLoadImages(() => this.photoDataProvider.getAll(page, perPage));
     }
 
-    protected loadMoreImages():Promise<Array<GalleryImage>> {
+    loadMoreImages():Promise<Array<GalleryImage>> {
         return this.loadImages(this.pager.getNextPage(), this.pager.getPerPage());
     }
 }

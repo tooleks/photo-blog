@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
-import {LinkedDataService, MetaTagsService} from '../../../core'
+import {MetaTagsService} from '../../../core'
 import {GalleryComponent, GalleryImage} from '../../../lib';
 import {
     AppService,
@@ -29,7 +29,6 @@ export class PhotosByTagComponent extends AbstractPhotosComponent implements OnI
                 app:AppService,
                 title:TitleService,
                 metaTags:MetaTagsService,
-                linkedData:LinkedDataService,
                 navigatorProvider:NavigatorServiceProvider,
                 pagerProvider:PagerServiceProvider,
                 processLockerProvider:ProcessLockerServiceProvider,
@@ -40,7 +39,6 @@ export class PhotosByTagComponent extends AbstractPhotosComponent implements OnI
             app,
             title,
             metaTags,
-            linkedData,
             navigatorProvider,
             pagerProvider,
             processLockerProvider,
@@ -60,23 +58,23 @@ export class PhotosByTagComponent extends AbstractPhotosComponent implements OnI
             .map((params:any) => params['tag'])
             .filter((tag:any) => tag && tag != this.queryParams['tag'])
             .map((tag:any) => String(tag))
-            .subscribe(this.onTagChange.bind(this));
+            .subscribe((tag:string) => this.onTagChange(tag));
     }
 
-    protected reset():void {
+    reset():void {
         super.reset();
         this.galleryComponent.reset();
     }
 
-    protected loadImages(page:number, perPage:number, tag:string):Promise<Array<GalleryImage>> {
+    loadImages(page:number, perPage:number, tag:string):Promise<Array<GalleryImage>> {
         return this.processLoadImages(() => this.photoDataProvider.getByTag(page, perPage, tag));
     }
 
-    protected loadMoreImages():Promise<Array<GalleryImage>> {
+    loadMoreImages():Promise<Array<GalleryImage>> {
         return this.loadImages(this.pager.getNextPage(), this.pager.getPerPage(), this.queryParams['tag']);
     }
 
-    protected onTagChange(tag:string):void {
+    onTagChange(tag:string):void {
         this.reset();
         this.queryParams['tag'] = tag;
         this.title.setTitle(`Tag #${tag}`);
