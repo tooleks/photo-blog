@@ -1,34 +1,34 @@
 export class ExifToStringMapper {
-    static map(item:any):any {
-        return (item instanceof Array)
-            ? ExifToStringMapper.mapMultiple(item)
-            : ExifToStringMapper.mapSingle(item);
+    static map(object:any):any {
+        return (object instanceof Array)
+            ? ExifToStringMapper.mapMultiple(object)
+            : ExifToStringMapper.mapSingle(object);
     }
 
-    protected static mapSingle(item:any):string {
+    protected static mapSingle(object:any):string {
         const exif:Array<string> = [];
-        if (String(item.manufacturer).trim()) {
-            exif.push('Manufacturer: ' + item.manufacturer);
+        if (String(object.manufacturer).trim()) {
+            exif.push('Manufacturer: ' + object.manufacturer);
         }
-        if (String(item.model).trim()) {
-            exif.push('Model: ' + item.model);
+        if (String(object.model).trim()) {
+            exif.push('Model: ' + object.model);
         }
-        if (String(item.exposure_time).trim()) {
-            exif.push('Exposure Time: ' + item.exposure_time);
+        if (String(object.exposure_time).trim()) {
+            exif.push('Exposure Time: ' + object.exposure_time);
         }
-        if (String(item.aperture).trim()) {
-            exif.push('Aperture: ' + item.aperture);
+        if (String(object.aperture).trim()) {
+            exif.push('Aperture: ' + object.aperture);
         }
-        if (String(item.iso).trim()) {
-            exif.push('Iso: ' + item.iso);
+        if (String(object.iso).trim()) {
+            exif.push('Iso: ' + object.iso);
         }
-        if (String(item.taken_at).trim()) {
-            exif.push('Taken At: ' + item.taken_at);
+        if (String(object.taken_at).trim()) {
+            exif.push('Taken At: ' + object.taken_at);
         }
         return exif.join(', ');
     }
 
-    protected static mapMultiple(items:Array<any>):Array<string> {
-        return items.map(ExifToStringMapper.mapSingle);
+    protected static mapMultiple(objects:Array<any>):Array<string> {
+        return objects.map(ExifToStringMapper.mapSingle);
     }
 }

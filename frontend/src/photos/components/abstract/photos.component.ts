@@ -109,7 +109,7 @@ export abstract class PhotosComponent implements OnInit, AfterViewInit {
     }
 
     protected onLoadImagesSuccess(response:any):Array<GalleryImage> {
-        const images = this.mapImages(response.data);
+        const images = PhotoToGalleryImageMapper.map(response.data);
         this.hasMoreImages = !(response.data.length < this.defaults.perPage);
         if (response.data.length) {
             this.pager.setPage(response.current_page);
@@ -119,14 +119,6 @@ export abstract class PhotosComponent implements OnInit, AfterViewInit {
             this.initLinkedData();
         }
         return images;
-    }
-
-    protected mapImages(images:Array<any>):Array<GalleryImage> {
-        return PhotoToGalleryImageMapper.map(images).map((image:GalleryImage) => {
-            return image.setViewUrl(
-                this.router.createUrlTree(['photos'], {queryParams: {show: image.getId()}}).toString()
-            );
-        });
     }
 
     protected isEmpty():boolean {

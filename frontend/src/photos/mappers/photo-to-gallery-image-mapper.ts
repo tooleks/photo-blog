@@ -2,29 +2,30 @@ import {GalleryImage} from '../../lib';
 import {ExifToStringMapper} from './exif-to-string-mapper';
 
 export class PhotoToGalleryImageMapper {
-    static map(item:any):any {
-        return (item instanceof Array)
-            ? PhotoToGalleryImageMapper.mapMultiple(item)
-            : PhotoToGalleryImageMapper.mapSingle(item);
+    static map(object:any):any {
+        return (object instanceof Array)
+            ? PhotoToGalleryImageMapper.mapMultiple(object)
+            : PhotoToGalleryImageMapper.mapSingle(object);
     }
 
-    protected static mapSingle(item:any):GalleryImage {
+    protected static mapSingle(object:any):GalleryImage {
         return new GalleryImage({
-            id: item.id,
-            fullSizeUrl: item.url,
-            smallSizeUrl: item.thumbnails.medium.url,
-            smallSizeHeight: item.thumbnails.medium.height,
-            smallSizeWidth: item.thumbnails.medium.width,
-            largeSizeUrl: item.thumbnails.large.url,
-            largeSizeHeight: item.thumbnails.large.height,
-            largeSizeWidth: item.thumbnails.large.width,
-            avgColor: item.avg_color,
-            description: item.description,
-            exif: ExifToStringMapper.map(item.exif),
+            id: object.id,
+            viewUrl: `/photos?show=${object.id}`,
+            fullSizeUrl: object.url,
+            smallSizeUrl: object.thumbnails.medium.url,
+            smallSizeHeight: object.thumbnails.medium.height,
+            smallSizeWidth: object.thumbnails.medium.width,
+            largeSizeUrl: object.thumbnails.large.url,
+            largeSizeHeight: object.thumbnails.large.height,
+            largeSizeWidth: object.thumbnails.large.width,
+            avgColor: object.avg_color,
+            description: object.description,
+            exif: ExifToStringMapper.map(object.exif),
         });
     }
 
-    protected static mapMultiple(items:Array<any>):Array<GalleryImage> {
-        return items.map(PhotoToGalleryImageMapper.mapSingle);
+    protected static mapMultiple(objects:Array<any>):Array<GalleryImage> {
+        return objects.map(PhotoToGalleryImageMapper.mapSingle);
     }
 }
