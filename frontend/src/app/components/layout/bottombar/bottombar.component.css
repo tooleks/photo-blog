@@ -31,7 +31,7 @@ bottombar .bottombar-desktop-screen {
     display: none;
 }
 
-@media (min-width: 468px) {
+@media (min-width: 768px) {
     bottombar .bottombar-desktop-screen {
         display: initial;
     }
