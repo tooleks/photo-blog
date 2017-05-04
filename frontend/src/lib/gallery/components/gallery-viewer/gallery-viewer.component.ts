@@ -57,7 +57,7 @@ export class GalleryViewerComponent implements OnChanges {
         }
     };
 
-    protected processImageLoading = ():void => {
+    protected processImageLoading():void {
         var loadedImage;
         this.loadedImage = loadedImage = false;
         loadImage(this.image.getLargeSizeUrl(), () => {
@@ -68,35 +68,35 @@ export class GalleryViewerComponent implements OnChanges {
         if (typeof (window) !== 'undefined') {
             setTimeout(() => (this.loadedImage = loadedImage), this.loaderDelay);
         }
-    };
+    }
 
-    protected clickPrevImage = ():void => {
+    clickPrevImage():void {
         this.onPrevImage.emit(this.image);
-    };
+    }
 
-    protected clickNextImage = ():void => {
+    clickNextImage():void {
         this.onNextImage.emit(this.image);
-    };
+    }
 
-    protected clickCloseImage = ():void => {
+    clickCloseImage():void {
         this.onCloseImage.emit(this.image);
-    };
+    }
 
-    protected clickEditImage = ():void => {
+    clickEditImage():void {
         this.onEditImage.emit(this.image);
-    };
+    }
 
-    protected clickDeleteImage = ():void => {
+    clickDeleteImage():void {
         this.onDeleteImage.emit(this.image);
-    };
+    }
 
-    protected clickImageInfo = ():void => {
+    clickImageInfo():void {
         this.visibleImageInfo = !this.visibleImageInfo;
         this.visibleImageInfoChange.emit(this.visibleImageInfo);
         this.onImageInfo.emit(this.image);
     };
 
-    protected isVisibleImageInfo = ():boolean => {
+    isVisibleImageInfo = ():boolean => {
         // #browser-specific
         if (typeof (window) !== 'undefined') {
             return this.loadedImage && this.visibleImageInfo;
@@ -105,7 +105,7 @@ export class GalleryViewerComponent implements OnChanges {
         }
     };
 
-    protected isLoadedImage = ():boolean => {
+    isLoadedImage():boolean {
         return this.loadedImage;
     };
 }

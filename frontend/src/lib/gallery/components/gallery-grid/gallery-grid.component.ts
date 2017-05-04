@@ -54,7 +54,7 @@ export class GalleryGridComponent implements OnChanges, AfterContentInit, OnDest
     ngAfterContentInit() {
         // #browser-specific
         if (typeof (window) !== 'undefined') {
-            this.elementSizeCheck = setInterval(this.elementSizeCheckCallback, this.elementSizeCheckInterval);
+            this.elementSizeCheck = setInterval(() => this.elementSizeCheckCallback(), this.elementSizeCheckInterval);
         }
     }
 
@@ -64,7 +64,7 @@ export class GalleryGridComponent implements OnChanges, AfterContentInit, OnDest
         }
     }
 
-    elementSizeCheckCallback = ():void => {
+    elementSizeCheckCallback():void {
         let height = this.elementRef.nativeElement.offsetHeight;
         let width = this.elementRef.nativeElement.offsetWidth;
         if (width !== this.getElementSize().width) {
@@ -73,55 +73,55 @@ export class GalleryGridComponent implements OnChanges, AfterContentInit, OnDest
             this.setGridRows([]);
             this.renderGrid(this.images);
         }
-    };
+    }
 
-    setElementSize = (width:number, height:number):void => {
+    setElementSize(width:number, height:number):void {
         this.elementSize = {width: width, height: height};
-    };
+    }
 
-    getElementSize = ():{width:number, height:number} => {
+    getElementSize():{width:number, height:number} {
         return this.elementSize;
-    };
+    }
 
-    setGridRowMaxHeight = (gridRowMaxHeight:number):void => {
+    setGridRowMaxHeight(gridRowMaxHeight:number):void {
         this.gridRowMaxHeight = gridRowMaxHeight;
-    };
+    }
 
-    getGridRowMaxHeight = ():number => {
+    getGridRowMaxHeight():number {
         return this.gridRowMaxHeight;
-    };
+    }
 
-    setGridRowMaxWidth = (gridRowMaxWidth:number):void => {
+    setGridRowMaxWidth(gridRowMaxWidth:number):void {
         this.gridRowMaxWidth = gridRowMaxWidth;
-    };
+    }
 
-    getGridRowMaxWidth = ():number => {
+    getGridRowMaxWidth():number {
         return this.gridRowMaxWidth;
-    };
+    }
 
-    setGridRows = (gridRows:Array<Array<GalleryImage>>):void => {
+    setGridRows(gridRows:Array<Array<GalleryImage>>):void {
         this.gridRows = gridRows;
-    };
+    }
 
-    getGridRows = ():Array<Array<GalleryImage>> => {
+    getGridRows():Array<Array<GalleryImage>> {
         return this.gridRows;
-    };
+    }
 
-    setActiveRowImages = (activeRowImages:Array<GalleryImage>):void => {
+    setActiveRowImages(activeRowImages:Array<GalleryImage>):void {
         this.activeRowImages = activeRowImages;
-    };
+    }
 
-    getActiveRowImages = ():Array<GalleryImage> => {
+    getActiveRowImages():Array<GalleryImage> {
         return this.activeRowImages;
-    };
+    }
 
-    reset = ():void => {
+    reset():void {
         this.gridRows = [];
         this.activeRowImages = [];
         this.images = [];
-    };
+    }
 
-    renderGrid = (images:Array<GalleryImage>):void => {
+    renderGrid(images:Array<GalleryImage>):void {
         const newImages = images.filter((image:GalleryImage) => !this.existsInGrid(image));
         // Get the array of the new grid images concatenated with the array of the last row images.
         const processImages = this.getGridRows().length ? this.getGridRows().pop().concat(newImages) : newImages;
@@ -129,20 +129,20 @@ export class GalleryGridComponent implements OnChanges, AfterContentInit, OnDest
             this.pushImageToActiveRow(image);
             this.renderActiveRowIfFilled(index == processImages.length - 1);
         });
-    };
+    }
 
-    protected existsInGrid = (image:GalleryImage):boolean => {
+    existsInGrid(image:GalleryImage):boolean {
         // Note: Convert multi-dimensional array (of rows of images) into single-dimensional array (of images).
         return [].concat.apply([], this.getGridRows())
             .some((gridImage:GalleryImage) => gridImage.getId() == image.getId());
-    };
+    }
 
-    protected pushImageToActiveRow = (image:GalleryImage):void => {
+    pushImageToActiveRow(image:GalleryImage):void {
         const scaledImage = scaleImageSmallSizeToHeight(image, this.getGridRowMaxHeight());
         this.getActiveRowImages().push(scaledImage);
-    };
+    }
 
-    protected renderActiveRowIfFilled = (force:boolean = false):void => {
+    renderActiveRowIfFilled(force:boolean = false):void {
         let renderedImages:Array<GalleryImage> = [];
         // If the active row width is bigger than the max row width, scale the active row to the max row width.
         if (sumImagesSmallSizeWidth(this.getActiveRowImages()) > this.getGridRowMaxWidth()) {
@@ -157,5 +157,5 @@ export class GalleryGridComponent implements OnChanges, AfterContentInit, OnDest
             this.setActiveRowImages([]);
             this.getGridRows().push(renderedImages);
         }
-    };
+    }
 }

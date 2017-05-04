@@ -16,8 +16,8 @@ export class GalleryComponent implements OnInit, OnChanges {
 
     @Input() defaultImageId:any = null;
 
-    @Input() loadMoreCallback:any = null;
-    protected loadingNextImages:boolean = false;
+    @Output() onLoadMoreImages:EventEmitter<any> = new EventEmitter<any>();
+    protected loadingNextImage:boolean = false;
 
     @Output() onOpenImage:EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
 
@@ -54,30 +54,30 @@ export class GalleryComponent implements OnInit, OnChanges {
             this.openImageById(this.defaultImageId);
         }
 
-        if (this.openedImage && this.loadingNextImages && changes['images'] && !changes['images'].firstChange &&
+        if (this.openedImage && this.loadingNextImage && changes['images'] && !changes['images'].firstChange &&
             changes['images'].previousValue.length < changes['images'].currentValue.length) {
-            this.loadingNextImages = false;
+            this.loadingNextImage = false;
             this.openNextImage(false);
         }
     }
 
-    reset = ():void => {
+    reset():void {
         this.images = [];
         this.unsetOpenedImage();
         this.galleryGridComponent.reset();
-    };
+    }
 
-    setOpenedImage = (image:GalleryImage, index:number):void => {
+    setOpenedImage(image:GalleryImage, index:number):void {
         this.openedImage = image;
         this.openedImageIndex = index;
-    };
+    }
 
-    unsetOpenedImage = ():void => {
+    unsetOpenedImage():void {
         this.openedImage = null;
         this.openedImageIndex = null;
-    };
+    }
 
-    openImageById = (imageId:any):void => {
+    openImageById(imageId:any):void {
         this.images.some((image:GalleryImage, index:number) => {
             const isAlreadyOpened = (index === this.openedImageIndex);
             const isLastImage = (index === this.images.length - 1);
@@ -85,15 +85,15 @@ export class GalleryComponent implements OnInit, OnChanges {
                 this.setOpenedImage(image, index);
                 return true;
             } else if (isLastImage) {
-                this.loadMoreImages();
+                this.onLoadMoreImages.emit();
                 return false;
             } else {
                 return false;
             }
         });
-    };
+    }
 
-    openImage = (image:GalleryImage):void => {
+    openImage(image:GalleryImage):void {
         const imageId = image.getId();
         this.images.some((image:GalleryImage, index:number) => {
             const isAlreadyOpened = (index === this.openedImageIndex);
@@ -104,63 +104,55 @@ export class GalleryComponent implements OnInit, OnChanges {
                 return false;
             }
         });
-    };
+    }
 
-    openPrevImage = ():void => {
+    openPrevImage():void {
         const prevImageIndex = this.openedImageIndex - 1;
         if (this.images[prevImageIndex]) {
             const image:GalleryImage = this.images[prevImageIndex];
             this.onPrevImage.emit(image);
             this.openImage(image);
         }
-    };
+    }
 
-    openNextImage = (loadMoreImages:boolean):void => {
+    openNextImage(loadMoreImages:boolean):void {
         const nextImageIndex = this.openedImageIndex + 1;
         if (this.images[nextImageIndex]) {
             const image:GalleryImage = this.images[nextImageIndex];
             this.onNextImage.emit(image);
             this.openImage(image);
         } else if (loadMoreImages) {
-            this.loadingNextImages = true;
-            this.loadMoreImages();
+            this.loadingNextImage = true;
+            this.onLoadMoreImages.emit();
         }
-    };
+    }
 
-    loadMoreImages = ():Promise<any> => {
-        return new Promise((resolve, reject) => {
-            typeof (this.loadMoreCallback) === 'function'
-                ? resolve(this.loadMoreCallback())
-                : reject(new Error('Type of the "loadMoreCallback" parameter should be a function.'));
-        });
-    };
-
-    onImageLoaded = (image:GalleryImage):void => {
+    onImageLoaded(image:GalleryImage):void {
         this.onOpenImage.emit(image);
-    };
+    }
 
-    clickPrevImage = (image:GalleryImage):void => {
+    clickPrevImage(image:GalleryImage):void {
         this.openPrevImage();
-    };
+    }
 
-    clickNextImage = (image:GalleryImage):void => {
+    clickNextImage(image:GalleryImage):void {
         this.openNextImage(true);
-    };
+    }
 
-    clickCloseImage = (image:GalleryImage):void => {
+    clickCloseImage(image:GalleryImage):void {
         this.onCloseImage.emit(image);
         this.unsetOpenedImage();
-    };
+    }
 
-    clickEditImage = (image:GalleryImage):void => {
+    clickEditImage(image:GalleryImage):void {
         this.onEditImage.emit(image);
-    };
+    }
 
-    clickDeleteImage = (image:GalleryImage):void => {
+    clickDeleteImage(image:GalleryImage):void {
         this.onDeleteImage.emit(image);
-    };
+    }
 
-    clickImageInfo = (image:GalleryImage):void => {
+    clickImageInfo(image:GalleryImage):void {
         this.onImageInfo.emit(image);
-    };
+    }
 }
