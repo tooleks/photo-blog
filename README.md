@@ -1,4 +1,4 @@
-## Photo Blog Application based on Laravel 5 and Angular 2
+## Photo Blog Application based on Laravel 5 and Angular 4
 
 ### Backend
 
@@ -65,7 +65,7 @@ npm install
 
 Create the `./frontend/env.ts` file from the example `./frontend/env.ts.example`. Setup API connection credentials.
 
-Run the following command (within the `./frontend` directory) to build distribution (it will appear in the `./frontend/dist` directory).
+Run the following command (within the `./frontend` directory) to start a web-server.
 
 ```
 npm run start
