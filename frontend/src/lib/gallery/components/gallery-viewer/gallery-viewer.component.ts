@@ -71,7 +71,7 @@ export class GalleryViewerComponent implements OnChanges {
 
     isLoadedImage():boolean {
         return this.loadedImage;
-    };
+    }
 
     isVisibleImageInfo():boolean {
         // #browser-specific
@@ -106,5 +106,5 @@ export class GalleryViewerComponent implements OnChanges {
         this.visibleImageInfo = !this.visibleImageInfo;
         this.visibleImageInfoChange.emit(this.visibleImageInfo);
         this.onImageInfo.emit(this.image);
-    };
+    }
 }
