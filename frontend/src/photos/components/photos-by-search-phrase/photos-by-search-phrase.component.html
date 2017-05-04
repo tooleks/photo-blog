@@ -48,4 +48,4 @@
         {{ !isProcessing() ? 'Load More' : 'Loading...' }}
     </button>
 </div>
-<json-ld *ngFor="let linkedData of getLinkedData()" [data]="linkedData"></json-ld>
+<json-ld *ngFor="let data of linkedData" [data]="data"></json-ld>
