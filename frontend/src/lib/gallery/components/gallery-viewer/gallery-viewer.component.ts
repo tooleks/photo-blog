@@ -73,14 +73,14 @@ export class GalleryViewerComponent implements OnChanges {
         return this.loadedImage;
     };
 
-    isVisibleImageInfo = ():boolean => {
+    isVisibleImageInfo():boolean {
         // #browser-specific
         if (typeof (window) !== 'undefined') {
             return this.loadedImage && this.visibleImageInfo;
         } else {
             return true;
         }
-    };
+    }
 
     clickPrevImage():void {
         this.onPrevImage.emit(this.image);
