@@ -38,13 +38,18 @@ export class PhotosComponent extends AbstractPhotosComponent implements OnInit, 
     ngOnInit():void {
         super.ngOnInit();
         this.title.setPageNameSegment(this.defaults['title']);
-        this.metaTags.setTitle(this.defaults['title']);
+        this.metaTags.setTitle(this.title.getPageNameSegment());
     }
 
     ngAfterViewInit():void {
         super.ngAfterViewInit();
-        const perPageOffset = this.queryParams['page'] * this.pager.getPerPage();
-        this.loadImages(this.defaults.page, perPageOffset);
+        this.initImages(this.defaults.page, this.queryParams['page'], this.defaults.perPage);
+    }
+
+    initImages(fromPage:number, toPage:number, perPage:number):void {
+        if (fromPage <= toPage) {
+            this.loadImages(fromPage, perPage).then(() => this.initImages(++fromPage, toPage, perPage));
+        }
     }
 
     loadImages(page:number, perPage:number):Promise<Array<GalleryImage>> {

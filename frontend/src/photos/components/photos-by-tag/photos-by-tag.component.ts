@@ -41,7 +41,7 @@ export class PhotosByTagComponent extends AbstractPhotosComponent implements OnI
     ngOnInit():void {
         super.ngOnInit();
         this.title.setPageNameSegment(this.defaults['title']);
-        this.metaTags.setTitle(this.defaults['title']);
+        this.metaTags.setTitle(this.title.getPageNameSegment());
     }
 
     protected initParamsSubscribers() {
@@ -58,6 +58,12 @@ export class PhotosByTagComponent extends AbstractPhotosComponent implements OnI
         this.galleryComponent.reset();
     }
 
+    initImages(fromPage:number, toPage:number, perPage:number, tag:string):void {
+        if (fromPage <= toPage) {
+            this.loadImages(fromPage, perPage, tag).then(() => this.initImages(++fromPage, toPage, perPage, tag));
+        }
+    }
+
     loadImages(page:number, perPage:number, tag:string):Promise<Array<GalleryImage>> {
         return this.processLoadImages(() => this.photoDataProvider.getByTag(page, perPage, tag));
     }
@@ -71,7 +77,6 @@ export class PhotosByTagComponent extends AbstractPhotosComponent implements OnI
         this.queryParams['tag'] = tag;
         this.title.setPageNameSegment(`Tag #${tag}`);
         this.metaTags.setTitle(this.title.getPageNameSegment());
-        const perPageOffset = this.queryParams['page'] * this.pager.getPerPage();
-        this.loadImages(this.defaults.page, perPageOffset, tag);
+        this.initImages(this.defaults.page, this.queryParams['page'], this.defaults.perPage, tag);
     }
 }
