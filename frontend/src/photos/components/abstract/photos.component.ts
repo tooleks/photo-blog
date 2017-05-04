@@ -18,7 +18,7 @@ import {
 import {PhotoToGalleryImageMapper} from '../../mappers';
 
 export abstract class PhotosComponent implements OnInit, AfterViewInit {
-    protected defaults:any = {title: '', page: 1, perPage: 20, show: null};
+    protected defaults:any = {title: '', page: 1, perPage: 40, show: null};
     protected queryParams:any = {};
     protected pager:PagerService;
     protected navigator:NavigatorService;
