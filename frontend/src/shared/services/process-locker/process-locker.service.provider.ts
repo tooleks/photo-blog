@@ -7,7 +7,7 @@ export class ProcessLockerServiceProvider {
     constructor(protected lockerProvider:LockerServiceProvider) {
     }
 
-    getInstance = ():ProcessLockerService => {
+    getInstance():ProcessLockerService {
         return new ProcessLockerService(this.lockerProvider.getInstance());
-    };
+    }
 }

@@ -2,7 +2,7 @@
            [identifyBy]="'value'"
            [displayBy]="'value'"
            [maxItems]="20"
-           [transform]="transform"
+           [transform]="transform.bind(this)"
            (onAdd)="onAdd($event)"
            (onRemove)="onRemove($event)"
            theme="minimal"

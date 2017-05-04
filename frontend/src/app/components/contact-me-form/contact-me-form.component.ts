@@ -36,19 +36,19 @@ export class ContactMeFormComponent implements OnInit {
         this.metaTags.setTitle(this.title.getPageNameSegment());
     }
 
-    contactMe = ():Promise<any> => {
+    contactMe():Promise<any> {
         return this.processLocker
             .lock(() => this.api.post('/contact_messages', this.model))
-            .then(this.onContactMeSuccess);
-    };
+            .then((data:any) => this.onContactMeSuccess(data));
+    }
 
-    onContactMeSuccess = (data:any):any => {
+    onContactMeSuccess(data:any):any {
         this.notices.success('Your message has been successfully sent.');
         this.navigator.navigate(['/']);
         return data;
-    };
+    }
 
-    isProcessing = ():boolean => {
+    isProcessing():boolean {
         return this.processLocker.isLocked();
-    };
+    }
 }

@@ -15,7 +15,7 @@ export class GoogleAnalyticsService {
         }
     };
 
-    protected initScript = ():void => {
+    protected initScript():void {
         let script:any, ref = document.getElementsByTagName('script')[0];
         script = document.createElement('script');
         script.async = true;
@@ -28,14 +28,14 @@ export class GoogleAnalyticsService {
             ga('create', '${this.config['trackingId']}', 'auto');
         `;
         ref.parentNode.insertBefore(script, ref);
-    };
+    }
 
-    protected initRouterSubscribers = ():void => {
+    protected initRouterSubscribers():void {
         this.router.events
             .filter((event:any) => event instanceof NavigationEnd)
             .subscribe((event:NavigationEnd) => {
                 ga('set', 'page', event.urlAfterRedirects);
                 ga('send', 'pageview');
             });
-    };
+    }
 }

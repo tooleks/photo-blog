@@ -18,22 +18,14 @@ export class PageNotFoundComponent implements OnInit {
     }
 
     ngOnInit():void {
-        this.initTitle();
-        this.initMeta();
+        this.title.setPageNameSegment('Page Not Found');
+        this.metaTags.setTitle(this.title.getPageNameSegment());
         this.navigateTo404Page();
     }
 
-    protected initTitle = ():void => {
-        this.title.setPageNameSegment('Page Not Found');
-    };
-
-    protected initMeta = ():void => {
-        this.metaTags.setTitle(this.title.getPageNameSegment());
-    };
-
-    protected navigateTo404Page = () => {
+    navigateTo404Page():void {
         if (this.router.url !== '/404') {
             this.navigator.navigate(['/404']);
         }
-    };
+    }
 }

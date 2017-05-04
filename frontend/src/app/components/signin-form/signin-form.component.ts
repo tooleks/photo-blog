@@ -36,19 +36,19 @@ export class SignInFormComponent implements OnInit {
         this.metaTags.setTitle(this.title.getPageNameSegment());
     }
 
-    signIn = ():Promise<any> => {
+    signIn():Promise<any> {
         return this.processLocker
             .lock(() => this.auth.signIn(this.model.email, this.model.password))
-            .then(this.onSignInSuccess);
-    };
+            .then((user:any) => this.onSignInSuccess(user));
+    }
 
-    onSignInSuccess = (user:any):any => {
+    onSignInSuccess(user:any):any {
         this.notices.success('Hello, ' + user.name + '!');
         this.navigator.navigate(['/']);
         return user;
-    };
+    }
 
-    isProcessing = ():boolean => {
+    isProcessing():boolean {
         return this.processLocker.isLocked();
-    };
+    }
 }

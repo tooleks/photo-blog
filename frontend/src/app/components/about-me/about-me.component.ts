@@ -11,19 +11,11 @@ export class AboutMeComponent implements OnInit {
     }
 
     ngOnInit():void {
-        this.initTitle();
-        this.initMeta();
+        this.title.setPageNameSegment('About Me');
+        this.metaTags.setTitle(this.title.getPageNameSegment());
     }
 
-    protected initTitle = ():void => {
-        this.title.setPageNameSegment('About Me');
-    };
-
-    protected initMeta = ():void => {
-        this.metaTags.setTitle(this.title.getPageNameSegment());
-    };
-
-    getContent = ():string => {
+    getContent():string {
         return this.env.get('pageAboutMe');
-    };
+    }
 }

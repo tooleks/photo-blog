@@ -58,36 +58,36 @@ export class SideBarComponent implements OnInit {
         this.reset();
     }
 
-    reset = ():void => {
+    reset():void {
         this.screenDetector.isLargeScreen() ? this.show() : this.hide();
-    };
+    }
 
-    show = ():void => {
+    show():void {
         this.animationState = 'in';
         this.emitChange('onShow');
-    };
+    }
 
-    hide = ():void => {
+    hide():void {
         if (this.screenDetector.isSmallScreen()) {
             this.animationState = 'out';
         }
         this.emitChange('onHide');
-    };
+    }
 
-    toggle = ():void => {
+    toggle():void {
         this.isVisible() ? this.hide() : this.show();
         this.emitChange('onToggle');
-    };
+    }
 
-    isVisible = ():boolean => {
+    isVisible():boolean {
         return this.animationState === 'in';
-    };
+    }
 
-    emitChange = (event:string):void => {
+    emitChange(event:string):void {
         this[event].emit({isVisible: this.isVisible()});
-    };
+    }
 
-    protected loadTags = ():void => {
+    protected loadTags():void {
         this.api.get('/tags', {params: {page: 1, per_page: 7}}).then((response:any) => this.tags = response.data);
-    };
+    }
 }

@@ -9,18 +9,18 @@ export class ScrollFreezerService {
     constructor(protected environmentDetector:EnvironmentDetectorService) {
     }
 
-    freeze = ():void => {
+    freeze():void {
         if (this.environmentDetector.isBrowser()) {
             const top = window.scrollY;
             window.onscroll = () => window.scroll(0, top);
             this.freezed.emit(true);
         }
-    };
+    }
 
-    unfreeze = ():void => {
+    unfreeze():void {
         if (this.environmentDetector.isBrowser()) {
             window.onscroll = null;
             this.unfreezed.emit(true);
         }
-    };
+    }
 }

@@ -12,11 +12,11 @@ export class TopBarComponent {
     constructor(protected title:TitleService) {
     }
 
-    protected navClick = () => {
+    navClick():void {
         this.onNavClick.emit(null);
-    };
+    }
 
-    protected getPageName = ():string => {
+    getPageName():string {
         return this.title.getPageNameSegment();
-    };
+    }
 }

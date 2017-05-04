@@ -6,31 +6,31 @@ export class AppService {
     constructor(protected info:Info) {
     }
 
-    inDebugMode = ():boolean => {
+    inDebugMode():boolean {
         return Boolean(this.info.get('debugMode'));
-    };
+    }
 
-    getApiUrl = ():string => {
+    getApiUrl():string {
         return String(this.info.get('apiUrl'));
-    };
+    }
 
-    getUrl = ():string => {
+    getUrl():string {
         return String(this.info.get('appUrl'));
-    };
+    }
 
-    getName = ():string => {
+    getName():string {
         return String(this.info.get('appName'));
-    };
+    }
 
-    getDescription = ():string => {
+    getDescription():string {
         return String(this.info.get('appDescription'));
-    };
+    }
 
-    getAuthor = ():string => {
+    getAuthor():string {
         return String(this.info.get('appAuthor'));
-    };
+    }
 
-    getImage = ():string => {
+    getImage():string {
         return String(this.info.get('appImage'));
-    };
+    }
 }

@@ -40,29 +40,29 @@ export class UnsubscriptionComponent implements OnInit {
             .subscribe((token:string) => this.token = String(token));
     };
 
-    unsubscribe = ():Promise<any> => {
+    unsubscribe():Promise<any> {
         return this.processLocker
             .lock(() => this.api.delete(`/subscriptions/${this.token}`))
-            .then(this.onUnsubscribeSuccess)
-            .catch(this.onUnsubscribeError);
-    };
+            .then((data:any) => this.onUnsubscribeSuccess(data))
+            .catch((error:any) => this.onUnsubscribeError(error));
+    }
 
-    onUnsubscribeSuccess = (data:any):any => {
+    onUnsubscribeSuccess(data:any):any {
         this.notices.success('You have been successfully unsubscribed from the website updates.');
         this.navigator.navigate(['/']);
         return data;
-    };
+    }
 
-    onUnsubscribeError = (error:any):any => {
+    onUnsubscribeError(error:any):any {
         this.navigator.navigate(['/']);
         throw error;
-    };
+    }
 
-    navigateToHomePage = ():void => {
+    navigateToHomePage():void {
         this.navigator.navigate(['/']);
-    };
+    }
 
-    isProcessing = ():boolean => {
+    isProcessing():boolean {
         return this.processLocker.isLocked();
-    };
+    }
 }

@@ -36,19 +36,19 @@ export class SubscriptionFormComponent implements OnInit {
         this.metaTags.setTitle(this.title.getPageNameSegment());
     }
 
-    subscribe = ():Promise<any> => {
+    subscribe():Promise<any> {
         return this.processLocker
             .lock(() => this.api.post('/subscriptions', this.model))
-            .then(this.onSubscribeSuccess);
-    };
+            .then((data:any) => this.onSubscribeSuccess(data));
+    }
 
-    onSubscribeSuccess = (data:any):any => {
+    onSubscribeSuccess(data:any):any {
         this.notices.success('You have been successfully subscribed to the website updates.');
         this.navigator.navigate(['/']);
         return data;
-    };
+    }
 
-    isProcessing = ():boolean => {
+    isProcessing():boolean {
         return this.processLocker.isLocked();
-    };
+    }
 }

@@ -10,31 +10,31 @@ export class PagerService {
         this.setPerPage(perPage);
     }
 
-    setPage = (page:any):this => {
+    setPage(page:any):this {
         page = parseInt(page);
         this.page = page > 0 ? page : 1;
         return this;
-    };
+    }
 
-    getPage = ():number => {
+    getPage():number {
         return this.page;
-    };
+    }
 
-    getNextPage = ():number => {
+    getNextPage():number {
         return this.page + 1;
-    };
+    }
 
-    getPrevPage = ():number => {
+    getPrevPage():number {
         return this.page > 1 ? this.page - 1 : null;
-    };
+    }
 
-    setPerPage = (perPage:any):this => {
+    setPerPage(perPage:any):this {
         perPage = parseInt(perPage);
         this.perPage = perPage;
         return this;
-    };
+    }
 
-    getPerPage = ():number => {
+    getPerPage():number {
         return this.perPage;
-    };
+    }
 }

@@ -7,31 +7,31 @@ export class ProcessLockerService {
     }
 
     lock = (callback:any, args?:any):Promise<any> => {
-        return this.startProcess(callback, args)
-            .then(this.endProcess)
-            .catch(this.handleProcessErrors);
+        return this.process(callback, args)
+            .then((result:any) => this.onProcessSuccess(result))
+            .catch((error:any) => this.onProcessError(error));
     };
 
     isLocked = ():boolean => {
         return this.locker.isLocked();
     };
 
-    protected startProcess = (callback:any, args?:any):Promise<any> => {
+    protected process(callback:any, args?:any):Promise<any> {
         return new Promise((resolve, reject) => {
             if (!this.locker.isLocked()) {
                 this.locker.lock();
                 resolve(callback(...args));
             }
         });
-    };
+    }
 
-    protected endProcess = (result:any):any => {
+    protected onProcessSuccess(result:any):any {
         this.locker.unlock();
         return result;
-    };
+    }
 
-    protected handleProcessErrors = (error:any):any => {
+    protected onProcessError(error:any):any {
         this.locker.unlock();
         throw error;
-    };
+    }
 }

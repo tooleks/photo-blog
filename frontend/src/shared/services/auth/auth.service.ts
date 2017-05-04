@@ -10,9 +10,9 @@ export class AuthService {
     signIn = (email:string, password:string):Promise<any> => {
         return this.userDataProvider
             .getAuthByCredentials(email, password)
-            .then(this.authProvider.setAuth)
+            .then((auth:any) => this.authProvider.setAuth(auth))
             .then((auth:any):Promise<any> => this.userDataProvider.getById(auth.user_id))
-            .then(this.authProvider.setUser);
+            .then((user:any) => this.authProvider.setUser(user));
     };
 
     signOut = ():Promise<any> => {

@@ -37,74 +37,73 @@ export class PhotoFormComponent implements OnInit {
         this.photo = new Photo;
         this.title.setPageNameSegment('Add Photo');
         this.initParamsSubscribers();
-
     }
 
-    protected initParamsSubscribers = ():void => {
+    protected initParamsSubscribers():void {
         this.route.params
             .map((params) => params['id'])
             .filter((id:any) => id)
-            .subscribe(this.loadById);
-    };
+            .subscribe((id:any) => this.loadById(id));
+    }
 
-    protected processLoadById = (id:number):Promise<any> => {
+    protected processLoadById(id:number):Promise<any> {
         return id
             ? this.photoDataProvider.getById(id)
             : Promise.reject(new Error('Photo ID is not provided.'));
-    };
+    }
 
-    loadById = (id:number):Promise<any> => {
-        return this.processLocker.lock(this.processLoadById, [id]).then((photo:any) => {
+    loadById(id:number):Promise<any> {
+        return this.processLocker.lock(() => this.processLoadById(id)).then((photo:any) => {
             this.photo.setSavedPhotoAttributes(photo);
             this.title.setPageNameSegment('Edit Photo');
             return photo;
         });
-    };
+    }
 
-    protected processSavePhoto = ():Promise<any> => {
+    protected processSavePhoto():Promise<any> {
         return this.photo.id
             ? this.photoDataProvider.updateById(this.photo.id, this.photo)
             : this.photoDataProvider.create(this.photo);
-    };
+    }
 
-    save = ():Promise<any> => {
-        return this.processLocker.lock(this.processSavePhoto).then((photo:any) => {
+    save():Promise<any> {
+        return this.processLocker.lock(() => this.processSavePhoto()).then((photo:any) => {
             this.photo.setSavedPhotoAttributes(photo);
             this.notices.success('Photo was successfully saved.');
             this.navigator.navigate(['/photos']);
             return photo;
         });
-    };
+    }
 
-    protected processUploadPhoto = (file:FileList):Promise<any> => {
+    protected processUploadPhoto(file:FileList):Promise<any> {
         return this.photo.id
             ? this.photoDataProvider.uploadById(this.photo.id, file)
             : this.photoDataProvider.upload(file);
-    };
+    }
 
-    upload = (file:FileList):Promise<any> => {
-        return this.processLocker.lock(this.processUploadPhoto, [file]).then((photo:any) => {
+    upload(file:any):Promise<any> {
+        return this.processLocker.lock(() => this.processUploadPhoto(file)).then((photo:any) => {
             this.photo.setUploadedPhotoAttributes(photo);
             this.notices.success('File was successfully uploaded.');
             return photo;
         });
-    };
+    }
 
-    protected processDeletePhoto = ():Promise<any> => {
+    protected processDeletePhoto():Promise<any> {
         return this.photo.id
             ? this.photoDataProvider.deleteById(this.photo.id)
             : Promise.reject(new Error('Photo ID is not provided.'));
-    };
+    }
 
-    deletePhoto = ():Promise<any> => {
-        return this.processLocker.lock(this.processDeletePhoto).then((result:any) => {
+    deletePhoto():Promise<any> {
+        return this.processLocker.lock(() => this.processDeletePhoto()).then((result:any) => {
             this.notices.success('Photo was successfully deleted.');
             this.navigator.navigate(['/photos']);
             return result;
         });
-    };
+    }
 
-    isProcessing = ():boolean => {
+    isProcessing():boolean {
         return this.processLocker.isLocked();
-    };
+    }
 }

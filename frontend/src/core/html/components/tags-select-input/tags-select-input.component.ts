@@ -8,17 +8,17 @@ export class TagsSelectInputComponent {
     @Input() tags:Array<any> = [];
     @Output() tagsChange:EventEmitter<Array<any>> = new EventEmitter<Array<any>>();
 
-    onAdd = (addedTag:any):void => {
+    onAdd(addedTag:any):void {
         this.tags.push(addedTag);
         this.tagsChange.emit(this.tags);
-    };
+    }
 
-    onRemove = (removedTag:any):void => {
+    onRemove(removedTag:any):void {
         this.tags = this.tags.filter((tag:any) => tag.value !== removedTag.value);
         this.tagsChange.emit(this.tags);
-    };
+    }
 
-    transform = (value:string):string => {
+    transform(value:string):string {
         return value.split(' ').join('_').toLowerCase();
-    };
+    }
 }

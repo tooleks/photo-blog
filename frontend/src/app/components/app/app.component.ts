@@ -29,7 +29,7 @@ export class AppComponent implements OnInit {
         this.initMeta();
         this.initRouterSubscribers();
         this.initScrollFreezerSubscribers();
-        this.cache.set('state-transfer', true);
+        this.cache.set('state-transfer', true); // Just for testing purposes.
         this.googleAnalytics.init();
     }
 

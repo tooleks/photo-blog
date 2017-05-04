@@ -7,7 +7,7 @@ export class NavigatorServiceProvider {
     constructor(protected route:ActivatedRoute, protected router:Router) {
     }
 
-    getInstance = ():NavigatorService => {
+    getInstance():NavigatorService {
         return new NavigatorService(this.route, this.router);
-    };
+    }
 }

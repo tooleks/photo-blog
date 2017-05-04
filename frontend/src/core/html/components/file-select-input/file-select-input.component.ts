@@ -11,17 +11,17 @@ export class FileSelectInputComponent {
     constructor(protected elementRef:ElementRef) {
     }
 
-    protected onChange = ():void => {
+    protected onChange():void {
         if (this.isFile()) {
             this.onSelect.emit(this.getFile());
         }
-    };
+    }
 
-    protected getFile = ():File => {
+    protected getFile():File {
         return this.elementRef.nativeElement.firstElementChild.files[0];
-    };
+    }
 
-    protected isFile = ():boolean => {
+    protected isFile():boolean {
         return this.elementRef.nativeElement.firstElementChild.files.length > 0;
-    };
+    }
 }

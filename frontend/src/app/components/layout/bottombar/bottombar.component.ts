@@ -10,11 +10,11 @@ export class BottomBarComponent {
     constructor(protected app:AppService) {
     }
 
-    getCurrentYear = ():number => {
+    getCurrentYear():number {
         return (new Date).getFullYear();
-    };
+    }
 
-    getAppName = ():string => {
+    getAppName():string {
         return this.app.getName();
-    };
+    }
 }
