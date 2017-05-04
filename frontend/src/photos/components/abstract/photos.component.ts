@@ -1,6 +1,7 @@
 import {OnInit, AfterViewInit, EventEmitter} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/filter';
 import {MetaTagsService, EnvironmentDetectorService} from '../../../core'
 import {GalleryImage} from '../../../lib';
 import {
@@ -55,11 +56,15 @@ export abstract class PhotosComponent implements OnInit, AfterViewInit {
     protected initParamsSubscribers():void {
         this.route.queryParams
             .map((queryParams:any) => queryParams['page'])
-            .subscribe((page:any) => this.queryParams['page'] = page ? Number(page) : this.defaults.page);
+            .filter((page:any) => page)
+            .map((page:any) => Number(page))
+            .subscribe((page:number) => this.queryParams['page'] = page);
 
         this.route.queryParams
             .map((queryParams:any) => queryParams['show'])
-            .subscribe((show:any) => this.queryParams['show'] = show ? Number(show) : this.defaults.show);
+            .filter((show:any) => show)
+            .map((show:any) => Number(show))
+            .subscribe((show:number) => this.queryParams['show'] = show);
 
         this.originalImagesChange
             .subscribe((originalImages:Array<any>) => this.onOriginalImagesChange(originalImages));
@@ -148,6 +153,7 @@ export abstract class PhotosComponent implements OnInit, AfterViewInit {
     onHidePhoto(image:GalleryImage):void {
         this.scrollFreezer.unfreeze();
         this.navigator.unsetQueryParam('show');
+        this.queryParams['show'] = this.defaults.show;
         this.title.setPageNameSegment(this.defaults['title']);
     }
 
