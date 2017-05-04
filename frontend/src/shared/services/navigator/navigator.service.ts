@@ -21,7 +21,7 @@ export class NavigatorService {
     unsetQueryParam(name:string):Promise<boolean> {
         delete this.queryParams[name];
         return this.navigate([], {queryParams: this.queryParams});
-    };
+    }
 
     navigate(route:any = [], extras:any = {}):Promise<boolean> {
         return this.router.navigate(route, extras);

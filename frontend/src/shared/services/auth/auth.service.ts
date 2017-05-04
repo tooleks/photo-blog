@@ -7,15 +7,15 @@ export class AuthService {
     constructor(protected userDataProvider:UserDataProviderService, protected authProvider:AuthProviderService) {
     }
 
-    signIn = (email:string, password:string):Promise<any> => {
+    signIn(email:string, password:string):Promise<any> {
         return this.userDataProvider
             .getAuthByCredentials(email, password)
             .then((auth:any) => this.authProvider.setAuth(auth))
             .then((auth:any):Promise<any> => this.userDataProvider.getById(auth.user_id))
             .then((user:any) => this.authProvider.setUser(user));
-    };
+    }
 
-    signOut = ():Promise<any> => {
+    signOut():Promise<any> {
         return new Promise((resolve, reject) => {
             if (this.authProvider.isAuthenticated()) {
                 let user:any = this.authProvider.getUser();
@@ -26,5 +26,5 @@ export class AuthService {
                 reject();
             }
         });
-    };
+    }
 }

@@ -8,12 +8,12 @@ export class GoogleAnalyticsService {
     constructor(protected router:Router, protected environmentDetector:EnvironmentDetectorService, protected config:any) {
     }
 
-    init = ():void => {
+    init():void {
         if (this.environmentDetector.isBrowser()) {
             this.initScript();
             this.initRouterSubscribers();
         }
-    };
+    }
 
     protected initScript():void {
         let script:any, ref = document.getElementsByTagName('script')[0];

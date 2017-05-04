@@ -6,15 +6,15 @@ export class ProcessLockerService {
     constructor(protected locker:LockerService) {
     }
 
-    lock = (callback:any, args?:any):Promise<any> => {
+    lock(callback:any, args?:any):Promise<any> {
         return this.process(callback, args)
             .then((result:any) => this.onProcessSuccess(result))
             .catch((error:any) => this.onProcessError(error));
-    };
+    }
 
-    isLocked = ():boolean => {
+    isLocked():boolean {
         return this.locker.isLocked();
-    };
+    }
 
     protected process(callback:any, args?:any):Promise<any> {
         return new Promise((resolve, reject) => {

@@ -39,12 +39,12 @@ export class GalleryViewerComponent implements OnChanges {
 
     ngOnChanges(changes:SimpleChanges) {
         if (changes['image'] && changes['image'].currentValue) {
-            this.processImageLoading();
+            this.initImage();
         }
     }
 
     @HostListener('document:keydown', ['$event'])
-    onDocumentKeyDown = (event:KeyboardEvent) => {
+    onDocumentKeyDown(event:KeyboardEvent) {
         if (this.enabledKeyboardEvents && this.image) {
             switch (event.key) {
                 case 'Escape':
@@ -55,9 +55,9 @@ export class GalleryViewerComponent implements OnChanges {
                     return this.clickNextImage();
             }
         }
-    };
+    }
 
-    protected processImageLoading():void {
+    initImage():void {
         var loadedImage:boolean = false;
         loadImage(this.image.getLargeSizeUrl(), () => {
             this.loadedImage = loadedImage = true;

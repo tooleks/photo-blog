@@ -34,11 +34,11 @@ export class UnsubscriptionComponent implements OnInit {
         this.initParamsSubscribers();
     }
 
-    protected initParamsSubscribers = ():void => {
+    protected initParamsSubscribers():void {
         this.route.params
             .map((params:any) => params['token'])
             .subscribe((token:string) => this.token = String(token));
-    };
+    }
 
     unsubscribe():Promise<any> {
         return this.processLocker

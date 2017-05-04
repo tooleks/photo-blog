@@ -6,44 +6,44 @@ export class PhotoDataProviderService {
     constructor(protected api:ApiService) {
     }
 
-    create = (attributes:any):Promise<any> => {
+    create(attributes:any):Promise<any> {
         return this.api.post('/published_photos', attributes);
-    };
+    }
 
-    upload = (file:any):Promise<any> => {
+    upload(file:any):Promise<any> {
         let form = new FormData;
         form.append('file', file);
         return this.api.post('/photos', form);
-    };
+    }
 
-    updateById = (id:number, attributes:any):Promise<any> => {
+    updateById(id:number, attributes:any):Promise<any> {
         return this.api.put('/published_photos/' + id, attributes);
-    };
+    }
 
-    uploadById = (id:number, file:any):Promise<any> => {
+    uploadById(id:number, file:any):Promise<any> {
         let form = new FormData;
         form.append('file', file);
         return this.api.post('/photos/' + id, form);
-    };
+    }
 
-    deleteById = (id:number):Promise<any> => {
+    deleteById(id:number):Promise<any> {
         return this.api.delete('/published_photos/' + id);
-    };
+    }
 
-    getById = (id:number):Promise<any> => {
+    getById(id:number):Promise<any> {
         return this.api.get('/published_photos/' + id);
-    };
+    }
 
-    getAll = (page:number, perPage:number):Promise<any> => {
+    getAll(page:number, perPage:number):Promise<any> {
         return this.api.get('/published_photos', {
             params: {
                 page: page,
                 per_page: perPage,
             }
         });
-    };
+    }
 
-    getByTag = (page:number, perPage:number, tag:string):Promise<any> => {
+    getByTag(page:number, perPage:number, tag:string):Promise<any> {
         return this.api.get('/published_photos', {
             params: {
                 page: page,
@@ -51,9 +51,9 @@ export class PhotoDataProviderService {
                 tag: tag,
             }
         });
-    };
+    }
 
-    getBySearchPhrase = (page:number, perPage:number, searchPhrase:string):Promise<any> => {
+    getBySearchPhrase(page:number, perPage:number, searchPhrase:string):Promise<any> {
         return this.api.get('/published_photos', {
             params: {
                 page: page,
@@ -61,5 +61,5 @@ export class PhotoDataProviderService {
                 search_phrase: searchPhrase,
             }
         });
-    };
+    }
 }
