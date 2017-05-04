@@ -42,7 +42,7 @@ export class PhotosBySearchPhraseComponent extends AbstractPhotosComponent imple
     ngOnInit():void {
         super.ngOnInit();
         this.queryParams['search_phrase'] = this.defaults.search_phrase;
-        this.title.setPageNameSegment(this.defaults['title']);
+        this.title.setPageNameSegment(this.defaults.title);
         this.metaTags.setTitle(this.title.getPageNameSegment());
     }
 

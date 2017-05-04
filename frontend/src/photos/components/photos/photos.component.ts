@@ -37,7 +37,7 @@ export class PhotosComponent extends AbstractPhotosComponent implements OnInit, 
 
     ngOnInit():void {
         super.ngOnInit();
-        this.title.setPageNameSegment(this.defaults['title']);
+        this.title.setPageNameSegment(this.defaults.title);
         this.metaTags.setTitle(this.title.getPageNameSegment());
     }
 

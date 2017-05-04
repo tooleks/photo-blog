@@ -41,7 +41,7 @@ export class PhotosByTagComponent extends AbstractPhotosComponent implements OnI
     ngOnInit():void {
         super.ngOnInit();
         this.queryParams['tag'] = this.defaults.tag;
-        this.title.setPageNameSegment(this.defaults['title']);
+        this.title.setPageNameSegment(this.defaults.title);
         this.metaTags.setTitle(this.title.getPageNameSegment());
     }
 
