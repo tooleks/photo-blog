@@ -58,8 +58,7 @@ export class GalleryViewerComponent implements OnChanges {
     };
 
     protected processImageLoading():void {
-        var loadedImage;
-        this.loadedImage = loadedImage = false;
+        var loadedImage:boolean = false;
         loadImage(this.image.getLargeSizeUrl(), () => {
             this.loadedImage = loadedImage = true;
             this.onImageLoaded.emit(this.image);
@@ -69,6 +68,19 @@ export class GalleryViewerComponent implements OnChanges {
             setTimeout(() => (this.loadedImage = loadedImage), this.loaderDelay);
         }
     }
+
+    isLoadedImage():boolean {
+        return this.loadedImage;
+    };
+
+    isVisibleImageInfo = ():boolean => {
+        // #browser-specific
+        if (typeof (window) !== 'undefined') {
+            return this.loadedImage && this.visibleImageInfo;
+        } else {
+            return true;
+        }
+    };
 
     clickPrevImage():void {
         this.onPrevImage.emit(this.image);
@@ -94,18 +106,5 @@ export class GalleryViewerComponent implements OnChanges {
         this.visibleImageInfo = !this.visibleImageInfo;
         this.visibleImageInfoChange.emit(this.visibleImageInfo);
         this.onImageInfo.emit(this.image);
-    };
-
-    isVisibleImageInfo = ():boolean => {
-        // #browser-specific
-        if (typeof (window) !== 'undefined') {
-            return this.loadedImage && this.visibleImageInfo;
-        } else {
-            return true;
-        }
-    };
-
-    isLoadedImage():boolean {
-        return this.loadedImage;
     };
 }
