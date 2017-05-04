@@ -21,7 +21,6 @@ import {PhotosComponent as AbstractPhotosComponent} from '../abstract';
 export class PhotosBySearchPhraseComponent extends AbstractPhotosComponent implements OnInit, AfterViewInit {
     @ViewChildren('inputSearch') inputSearchComponent:any;
     @ViewChild('galleryComponent') galleryComponent:GalleryComponent;
-    protected queryParams:any = {search_phrase: ''};
 
     constructor(protected authProvider:AuthProviderService,
                 protected photoDataProvider:PhotoDataProviderService,
@@ -36,11 +35,13 @@ export class PhotosBySearchPhraseComponent extends AbstractPhotosComponent imple
                 environmentDetector:EnvironmentDetectorService,
                 scrollFreezer:ScrollFreezerService) {
         super(router, route, app, title, metaTags, navigatorProvider, pagerProvider, processLockerProvider, environmentDetector, scrollFreezer);
+        this.defaults['search_phrase'] = null;
         this.defaults['title'] = 'Search Photos';
     }
 
     ngOnInit():void {
         super.ngOnInit();
+        this.queryParams['search_phrase'] = this.defaults.search_phrase;
         this.title.setPageNameSegment(this.defaults['title']);
         this.metaTags.setTitle(this.title.getPageNameSegment());
     }
@@ -76,8 +77,10 @@ export class PhotosBySearchPhraseComponent extends AbstractPhotosComponent imple
         }
     }
 
-    loadImages(page:number, perPage:number, searchPhrase?:any):Promise<Array<GalleryImage>> {
-        return this.processLoadImages(() => this.photoDataProvider.getBySearchPhrase(page, perPage, searchPhrase));
+    loadImages(page:number, perPage:number, searchPhrase:string):Promise<Array<GalleryImage>> {
+        return searchPhrase
+            ? this.processLoadImages(() => this.photoDataProvider.getBySearchPhrase(page, perPage, searchPhrase))
+            : Promise.reject(new Error);
     }
 
     loadMoreImages():Promise<Array<GalleryImage>> {

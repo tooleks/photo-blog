@@ -20,7 +20,6 @@ import {PhotosComponent as AbstractPhotosComponent} from '../abstract';
 })
 export class PhotosByTagComponent extends AbstractPhotosComponent implements OnInit {
     @ViewChild('galleryComponent') galleryComponent:GalleryComponent;
-    protected queryParams:any = {tag: ''};
 
     constructor(protected authProvider:AuthProviderService,
                 protected photoDataProvider:PhotoDataProviderService,
@@ -35,11 +34,13 @@ export class PhotosByTagComponent extends AbstractPhotosComponent implements OnI
                 environmentDetector:EnvironmentDetectorService,
                 scrollFreezer:ScrollFreezerService) {
         super(router, route, app, title, metaTags, navigatorProvider, pagerProvider, processLockerProvider, environmentDetector, scrollFreezer);
+        this.defaults['tag'] = null;
         this.defaults['title'] = 'Search By Tag';
     }
 
     ngOnInit():void {
         super.ngOnInit();
+        this.queryParams['tag'] = this.defaults.tag;
         this.title.setPageNameSegment(this.defaults['title']);
         this.metaTags.setTitle(this.title.getPageNameSegment());
     }
@@ -65,7 +66,9 @@ export class PhotosByTagComponent extends AbstractPhotosComponent implements OnI
     }
 
     loadImages(page:number, perPage:number, tag:string):Promise<Array<GalleryImage>> {
-        return this.processLoadImages(() => this.photoDataProvider.getByTag(page, perPage, tag));
+        return tag
+            ? this.processLoadImages(() => this.photoDataProvider.getByTag(page, perPage, tag))
+            : Promise.reject(new Error);
     }
 
     loadMoreImages():Promise<Array<GalleryImage>> {
