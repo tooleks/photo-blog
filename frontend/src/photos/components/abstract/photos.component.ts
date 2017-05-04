@@ -1,8 +1,7 @@
 import {OnInit, AfterViewInit, EventEmitter} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import 'rxjs/add/operator/map';
-import {PhotoToGalleryImageMapper} from '../../mappers';
-import {MetaTagsService} from '../../../core'
+import {MetaTagsService, EnvironmentDetectorService} from '../../../core'
 import {GalleryImage} from '../../../lib';
 import {
     AppService,
@@ -15,6 +14,7 @@ import {
     ProcessLockerService,
     ScrollFreezerService,
 } from '../../../shared';
+import {PhotoToGalleryImageMapper} from '../../mappers';
 
 export abstract class PhotosComponent implements OnInit, AfterViewInit {
     protected defaults:any = {title: '', page: 1, perPage: 20, show: null};
@@ -36,6 +36,7 @@ export abstract class PhotosComponent implements OnInit, AfterViewInit {
                 protected navigatorProvider:NavigatorServiceProvider,
                 protected pagerProvider:PagerServiceProvider,
                 protected processLockerProvider:ProcessLockerServiceProvider,
+                protected environmentDetector:EnvironmentDetectorService,
                 protected scrollFreezer:ScrollFreezerService) {
         this.pager = this.pagerProvider.getInstance(this.defaults.page, this.defaults.perPage);
         this.navigator = this.navigatorProvider.getInstance();
@@ -101,38 +102,40 @@ export abstract class PhotosComponent implements OnInit, AfterViewInit {
     }
 
     onOriginalImagesChange(originalImages:Array<any>):void {
-        this.linkedData = originalImages.map((image:any) => {
-            return {
-                '@context': 'http://schema.org',
-                '@type': 'Article',
-                'mainEntityOfPage': {
-                    '@type': 'WebPage',
-                    '@id': `${this.app.getUrl()}/photos?show=${image.id}`,
-                },
-                'headline': image.description,
-                'image': {
-                    '@type': 'ImageObject',
-                    'url': image.thumbnails.large.url,
-                    'height': image.thumbnails.large.height,
-                    'width': image.thumbnails.large.width,
-                },
-                'datePublished': image.created_at,
-                'dateModified': image.updated_at,
-                'author': {
-                    '@type': 'Person',
-                    'name': this.app.getAuthor(),
-                },
-                "publisher": {
-                    "@type": "Organization",
-                    "name": this.app.getName(),
-                    "logo": {
-                        "@type": "ImageObject",
-                        "url": this.app.getImage(),
-                    }
-                },
-                'description': image.description,
-            };
-        });
+        if (this.environmentDetector.isServer()) {
+            this.linkedData = originalImages.map((image:any) => {
+                return {
+                    '@context': 'http://schema.org',
+                    '@type': 'Article',
+                    'mainEntityOfPage': {
+                        '@type': 'WebPage',
+                        '@id': `${this.app.getUrl()}/photos?show=${image.id}`,
+                    },
+                    'headline': image.description,
+                    'image': {
+                        '@type': 'ImageObject',
+                        'url': image.thumbnails.large.url,
+                        'height': image.thumbnails.large.height,
+                        'width': image.thumbnails.large.width,
+                    },
+                    'datePublished': image.created_at,
+                    'dateModified': image.updated_at,
+                    'author': {
+                        '@type': 'Person',
+                        'name': this.app.getAuthor(),
+                    },
+                    "publisher": {
+                        "@type": "Organization",
+                        "name": this.app.getName(),
+                        "logo": {
+                            "@type": "ImageObject",
+                            "url": this.app.getImage(),
+                        }
+                    },
+                    'description': image.description,
+                };
+            });
+        }
     }
 
     onShowPhoto(image:GalleryImage):void {

@@ -23,8 +23,7 @@ export class PhotosBySearchPhraseComponent extends AbstractPhotosComponent imple
     @ViewChild('galleryComponent') galleryComponent:GalleryComponent;
     protected queryParams:any = {search_phrase: ''};
 
-    constructor(protected environmentDetector:EnvironmentDetectorService,
-                protected authProvider:AuthProviderService,
+    constructor(protected authProvider:AuthProviderService,
                 protected photoDataProvider:PhotoDataProviderService,
                 router:Router,
                 route:ActivatedRoute,
@@ -34,8 +33,9 @@ export class PhotosBySearchPhraseComponent extends AbstractPhotosComponent imple
                 navigatorProvider:NavigatorServiceProvider,
                 pagerProvider:PagerServiceProvider,
                 processLockerProvider:ProcessLockerServiceProvider,
+                environmentDetector:EnvironmentDetectorService,
                 scrollFreezer:ScrollFreezerService) {
-        super(router, route, app, title, metaTags, navigatorProvider, pagerProvider, processLockerProvider, scrollFreezer);
+        super(router, route, app, title, metaTags, navigatorProvider, pagerProvider, processLockerProvider, environmentDetector, scrollFreezer);
         this.defaults['title'] = 'Search Photos';
     }
 

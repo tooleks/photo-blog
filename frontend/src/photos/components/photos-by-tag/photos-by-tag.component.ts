@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
-import {MetaTagsService} from '../../../core'
+import {MetaTagsService, EnvironmentDetectorService} from '../../../core'
 import {GalleryComponent, GalleryImage} from '../../../lib';
 import {
     AppService,
@@ -32,8 +32,9 @@ export class PhotosByTagComponent extends AbstractPhotosComponent implements OnI
                 navigatorProvider:NavigatorServiceProvider,
                 pagerProvider:PagerServiceProvider,
                 processLockerProvider:ProcessLockerServiceProvider,
+                environmentDetector:EnvironmentDetectorService,
                 scrollFreezer:ScrollFreezerService) {
-        super(router, route, app, title, metaTags, navigatorProvider, pagerProvider, processLockerProvider, scrollFreezer);
+        super(router, route, app, title, metaTags, navigatorProvider, pagerProvider, processLockerProvider, environmentDetector, scrollFreezer);
         this.defaults['title'] = 'Search By Tag';
     }
 

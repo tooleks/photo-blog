@@ -1,6 +1,6 @@
 import {Component, OnInit, AfterViewInit} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
-import {MetaTagsService} from '../../../core'
+import {MetaTagsService, EnvironmentDetectorService} from '../../../core'
 import {GalleryImage} from '../../../lib';
 import {
     AppService,
@@ -29,8 +29,9 @@ export class PhotosComponent extends AbstractPhotosComponent implements OnInit, 
                 navigatorProvider:NavigatorServiceProvider,
                 pagerProvider:PagerServiceProvider,
                 processLockerProvider:ProcessLockerServiceProvider,
+                environmentDetector:EnvironmentDetectorService,
                 scrollFreezer:ScrollFreezerService) {
-        super(router, route, app, title, metaTags, navigatorProvider, pagerProvider, processLockerProvider, scrollFreezer);
+        super(router, route, app, title, metaTags, navigatorProvider, pagerProvider, processLockerProvider, environmentDetector, scrollFreezer);
         this.defaults['title'] = 'All Photos';
     }
 
