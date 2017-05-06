@@ -20,7 +20,7 @@ export class AuthProviderService {
     }
 
     getAuthApiToken():string {
-        let auth = this.getAuth();
+        const auth = this.getAuth();
         return auth ? auth.api_token : null;
     }
 
