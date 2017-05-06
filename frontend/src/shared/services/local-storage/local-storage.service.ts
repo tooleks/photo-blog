@@ -6,7 +6,7 @@ export class LocalStorageService {
     constructor(protected environmentDetector:EnvironmentDetectorService) {
     }
 
-    set(name:string, value:Object):void {
+    set(name:string, value:any):void {
         if (this.environmentDetector.isBrowser()) {
             localStorage.setItem(name, JSON.stringify(value));
         }
