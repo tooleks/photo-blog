@@ -12,11 +12,11 @@ use Illuminate\Database\Eloquent\Builder;
 class ThumbnailBuilder extends Builder
 {
     /**
-     * Delete all models with no relations.
+     * Delete all detached models.
      *
      * @return int
      */
-    public function deleteAllWithNoRelations() : int
+    public function deleteAllDetached() : int
     {
         return $this
             ->getQuery()

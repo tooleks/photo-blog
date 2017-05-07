@@ -69,9 +69,9 @@ class Photo extends Model
         static::deleting(function (Photo $photo) {
             $photo->exif()->delete();
             $photo->tags()->detach();
-            Tag::deleteAllWithNoRelations();
+            Tag::deleteAllDetached();
             $photo->thumbnails()->detach();
-            Thumbnail::deleteAllWithNoRelations();
+            Thumbnail::deleteAllDetached();
         });
     }
 
