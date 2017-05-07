@@ -60,7 +60,7 @@ class UsersController extends Controller
 
         $user->setPassword($request->get('password'))
             ->generateApiToken()
-            ->setCustomerRole();
+            ->setCustomerRoleId();
 
         $this->userDataProvider->save($user, $request->all());
 

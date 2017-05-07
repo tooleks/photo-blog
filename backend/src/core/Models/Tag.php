@@ -2,6 +2,7 @@
 
 namespace Core\Models;
 
+use Core\Models\Builders\TagBuilder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
@@ -28,12 +29,20 @@ class Tag extends Model
     public $timestamps = false;
 
     /**
+     * @inheritdoc
+     */
+    public function newEloquentBuilder($query)
+    {
+        return new TagBuilder($query);
+    }
+
+    /**
      * Setter for the 'value' attribute.
      *
      * @param string $value
      * @return $this
      */
-    public function setValueAttribute($value)
+    public function setValueAttribute(string $value)
     {
         $this->attributes['value'] = str_replace(' ', '_', strtolower($value));
 
@@ -56,20 +65,5 @@ class Tag extends Model
     public function photos()
     {
         return $this->belongsToMany(Photo::class, 'photo_tags');
-    }
-
-    /**
-     * Delete all models without relations.
-     */
-    public static function deleteAllWithoutRelations()
-    {
-        $model = new static;
-
-        $model
-            ->getConnection()
-            ->table($model->getTable())
-            ->leftJoin('photo_tags', 'photo_tags.tag_id', '=', 'tags.id')
-            ->whereNull('photo_tags.photo_id')
-            ->delete();
     }
 }

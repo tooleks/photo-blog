@@ -53,7 +53,7 @@ class CreateAdministratorUser extends Command
         $user->email = $this->ask('Enter user\'s email:');
         $user->password = $this->hasher->make($this->ask('Enter user\'s password:'));
         $user->generateApiToken();
-        $user->setAdministratorRole();
+        $user->setAdministratorRoleId();
 
         $user->saveOrFail();
 

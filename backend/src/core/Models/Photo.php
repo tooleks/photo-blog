@@ -69,9 +69,9 @@ class Photo extends Model
         static::deleting(function (Photo $photo) {
             $photo->exif()->delete();
             $photo->tags()->detach();
-            Tag::deleteAllWithoutRelations();
+            Tag::deleteAllWithNoRelations();
             $photo->thumbnails()->detach();
-            Thumbnail::deleteAllWithoutRelations();
+            Thumbnail::deleteAllWithNoRelations();
         });
     }
 
@@ -81,9 +81,9 @@ class Photo extends Model
      * @param int $createdByUserId
      * @return $this
      */
-    public function setCreatedByUserIdAttribute($createdByUserId)
+    public function setCreatedByUserIdAttribute(int $createdByUserId)
     {
-        $this->attributes['created_by_user_id'] = (int)$createdByUserId;
+        $this->attributes['created_by_user_id'] = $createdByUserId;
 
         return $this;
     }
@@ -94,9 +94,9 @@ class Photo extends Model
      * @param bool $isPublished
      * @return $this
      */
-    public function setIsPublishedAttribute($isPublished)
+    public function setIsPublishedAttribute(bool $isPublished)
     {
-        $this->attributes['is_published'] = (bool)$isPublished;
+        $this->attributes['is_published'] = $isPublished;
 
         return $this;
     }
@@ -107,7 +107,7 @@ class Photo extends Model
      * @param string $description
      * @return $this
      */
-    public function setDescriptionAttribute($description)
+    public function setDescriptionAttribute(string $description)
     {
         $this->attributes['description'] = trim($description);
 

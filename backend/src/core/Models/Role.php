@@ -2,21 +2,19 @@
 
 namespace Core\Models;
 
-use Illuminate\Database\Query\Builder;
+use Core\Models\Builders\RoleBuilder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Role.
  *
  * @property string name
- * @method static Role administrator()
- * @method static Role customer()
  * @package Core\Models
  */
 class Role extends Model
 {
-    const NAME_ADMINISTRATOR = 'Administrator';
     const NAME_CUSTOMER = 'Customer';
+    const NAME_ADMINISTRATOR = 'Administrator';
 
     /**
      * @inheritdoc
@@ -31,24 +29,10 @@ class Role extends Model
     public $timestamps = false;
 
     /**
-     * Scope a query to only include 'Administrator' role name.
-     *
-     * @param Builder $queryBuilder
-     * @return Builder
+     * @inheritdoc
      */
-    public function scopeAdministrator($queryBuilder)
+    public function newEloquentBuilder($query)
     {
-        return $queryBuilder->where('name', static::NAME_ADMINISTRATOR);
-    }
-
-    /**
-     * Scope a query to only include 'Customer' role name.
-     *
-     * @param Builder $queryBuilder
-     * @return Builder
-     */
-    public function scopeCustomer($queryBuilder)
-    {
-        return $queryBuilder->where('name', static::NAME_CUSTOMER);
+        return new RoleBuilder($query);
     }
 }

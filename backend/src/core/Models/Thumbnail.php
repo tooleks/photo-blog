@@ -2,6 +2,7 @@
 
 namespace Core\Models;
 
+use Core\Models\Builders\ThumbnailBuilder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -10,8 +11,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int id
  * @property string path
  * @property string relative_url
- * @property string width
- * @property string height
+ * @property float width
+ * @property float height
  * @package Core\Models
  */
 class Thumbnail extends Model
@@ -32,25 +33,18 @@ class Thumbnail extends Model
     public $timestamps = false;
 
     /**
+     * @inheritdoc
+     */
+    public function newEloquentBuilder($query)
+    {
+        return new ThumbnailBuilder($query);
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function photos()
     {
         return $this->belongsToMany(Photo::class, 'photo_thumbnails');
-    }
-
-    /**
-     * Delete all models without relations.
-     */
-    public static function deleteAllWithoutRelations()
-    {
-        $model = new static;
-
-        $model
-            ->getConnection()
-            ->table($model->getTable())
-            ->leftJoin('photo_thumbnails', 'photo_thumbnails.thumbnail_id', '=', 'thumbnails.id')
-            ->whereNull('photo_thumbnails.photo_id')
-            ->delete();
     }
 }

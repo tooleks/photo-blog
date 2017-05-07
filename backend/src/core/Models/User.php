@@ -19,8 +19,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property Carbon created_at
  * @property Carbon updated_at
  * @property Role role
- * @method static User whereEmail($email)
- * @method static User whereId($id)
  * @package Core\Models
  */
 class User extends Authenticatable
@@ -63,7 +61,7 @@ class User extends Authenticatable
      */
     public function setPassword(string $password)
     {
-        $this->password = $password;
+        $this->attributes['password'] = $password;
 
         return $this;
     }
@@ -85,9 +83,9 @@ class User extends Authenticatable
      *
      * @return $this
      */
-    public function setCustomerRole()
+    public function setCustomerRoleId()
     {
-        $this->role_id = Role::customer()->first()->id;
+        $this->role_id = Role::whereNameCustomer()->first()->id;
 
         return $this;
     }
@@ -97,9 +95,9 @@ class User extends Authenticatable
      *
      * @return $this
      */
-    public function setAdministratorRole()
+    public function setAdministratorRoleId()
     {
-        $this->role_id = Role::administrator()->first()->id;
+        $this->role_id = Role::whereNameAdministrator()->first()->id;
 
         return $this;
     }
@@ -107,21 +105,21 @@ class User extends Authenticatable
     /**
      * Check if user is 'Administrator'.
      *
-     * @return string
+     * @return bool
      */
     public function isAdministrator()
     {
-        return $this->role->name === Role::NAME_ADMINISTRATOR;
+        return $this->role ? $this->role->name === Role::NAME_ADMINISTRATOR : false;
     }
 
     /**
      * Check if user is 'Customer'.
      *
-     * @return string
+     * @return bool
      */
     public function isCustomer()
     {
-        return $this->role->name === Role::NAME_CUSTOMER;
+        return $this->role ? $this->role->name === Role::NAME_CUSTOMER : false;
     }
 
     /**

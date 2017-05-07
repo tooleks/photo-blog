@@ -50,7 +50,7 @@ abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
      */
     protected function createTestUser(array $attributes = [])
     {
-        $defaultAttributes = ['role_id' => Role::administrator()->first()->id ?? null];
+        $defaultAttributes = ['role_id' => Role::whereNameAdministrator()->first()->id ?? null];
 
         if (array_key_exists('password', $attributes)) {
             $attributes['password'] = Hash::make($attributes['password']);

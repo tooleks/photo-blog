@@ -130,7 +130,7 @@ class PhotoDataProviderSubscriber
 
         $photo->thumbnails = new Collection($thumbnails);
 
-        Thumbnail::deleteAllWithoutRelations();
+        Thumbnail::deleteAllWithNoRelations();
     }
 
     /**
@@ -157,6 +157,6 @@ class PhotoDataProviderSubscriber
 
         $photo->tags = (new Collection($newTags))->merge($existingTags ?? []);
 
-        Tag::deleteAllWithoutRelations();
+        Tag::deleteAllWithNoRelations();
     }
 }
