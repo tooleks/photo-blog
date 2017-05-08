@@ -7,13 +7,13 @@ import {ApiServiceInterface} from './interfaces';
 export class ApiService implements ApiServiceInterface {
     constructor(protected http:Http,
                 protected apiUrl:string,
-                protected onResponseSuccess:any,
-                protected onResponseError:any,
-                protected provideDefaultHeaders:any = null,
-                protected provideDefaultSearchParams:any = null) {
+                protected onResponseSuccess,
+                protected onResponseError,
+                protected provideDefaultHeaders = null,
+                protected provideDefaultSearchParams = null) {
     }
 
-    get(relativeUrl:string, options?:any):Promise<any> {
+    get(relativeUrl:string, options?):Promise<any> {
         return this.http
             .get(this.getApiAbsoluteUrl(relativeUrl), this.initializeOptions(options))
             .toPromise()
@@ -21,7 +21,7 @@ export class ApiService implements ApiServiceInterface {
             .catch(this.onResponseError);
     }
 
-    post(relativeUrl:string, body?:any, options?:any):Promise<any> {
+    post(relativeUrl:string, body?, options?):Promise<any> {
         return this.http
             .post(this.getApiAbsoluteUrl(relativeUrl), this.initializeBody(body), this.initializeOptions(options))
             .toPromise()
@@ -29,7 +29,7 @@ export class ApiService implements ApiServiceInterface {
             .catch(this.onResponseError);
     }
 
-    put(relativeUrl:string, body?:any, options?:any):Promise<any> {
+    put(relativeUrl:string, body?, options?):Promise<any> {
         return this.http
             .put(this.getApiAbsoluteUrl(relativeUrl), this.initializeBody(body), this.initializeOptions(options))
             .toPromise()
@@ -37,7 +37,7 @@ export class ApiService implements ApiServiceInterface {
             .catch(this.onResponseError);
     }
 
-    delete(relativeUrl:string, options?:any):Promise<any> {
+    delete(relativeUrl:string, options?):Promise<any> {
         return this.http
             .delete(this.getApiAbsoluteUrl(relativeUrl), this.initializeOptions(options))
             .toPromise()
@@ -49,7 +49,7 @@ export class ApiService implements ApiServiceInterface {
         return this.apiUrl + relativeUrl;
     }
 
-    protected initializeOptions(options?:any) {
+    protected initializeOptions(options?) {
         options = options || {};
         return {
             headers: this.initializeHeaders(options.headers),
@@ -57,7 +57,7 @@ export class ApiService implements ApiServiceInterface {
         };
     }
 
-    protected initializeHeaders(headers?:any):Headers {
+    protected initializeHeaders(headers?):Headers {
         const initializedHeaders = this.getDefaultHeaders();
         headers = headers || {};
         for (let name in headers) {
@@ -79,13 +79,13 @@ export class ApiService implements ApiServiceInterface {
         return defaultHeaders;
     }
 
-    protected getRawDefaultHeaders():any {
+    protected getRawDefaultHeaders() {
         return typeof (this.provideDefaultHeaders) === 'function'
             ? this.provideDefaultHeaders()
             : {};
     }
 
-    protected initializeSearchParams(searchParams?:any):URLSearchParams {
+    protected initializeSearchParams(searchParams?):URLSearchParams {
         const initializedSearchParams = this.getDefaultSearchParams();
         searchParams = searchParams || {};
         for (let name in searchParams) {
@@ -107,13 +107,13 @@ export class ApiService implements ApiServiceInterface {
         return defaultSearchParams;
     }
 
-    protected getRawDefaultSearchParams():any {
+    protected getRawDefaultSearchParams() {
         return typeof (this.provideDefaultSearchParams) === 'function'
             ? this.provideDefaultSearchParams()
             : {};
     }
 
-    protected initializeBody(body?:any) {
+    protected initializeBody(body?) {
         return body || {};
     }
 }

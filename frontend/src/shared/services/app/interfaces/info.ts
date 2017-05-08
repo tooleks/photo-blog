@@ -1,4 +1,4 @@
 export interface Info {
-    get(variable:string):any;
+    get(variable:string);
     has(variable:string):boolean;
 }

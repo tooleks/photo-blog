@@ -29,8 +29,8 @@ export class AppComponent implements OnInit {
         this.initMeta();
         this.initRouterSubscribers();
         this.initScrollFreezerSubscribers();
-        this.cache.set('state-transfer', true); // Just for testing purposes.
         this.googleAnalytics.init();
+        this.cache.set('state-transfer', true); // Just for testing purposes.
     }
 
     protected initMeta():void {
@@ -53,7 +53,7 @@ export class AppComponent implements OnInit {
         this.scrollFreezer.unfreezed.subscribe(() => this.appContentStyles.overflow = '');
     }
 
-    getLinkedData():any {
+    getLinkedData() {
         return {
             '@context': 'http://schema.org',
             '@type': 'WebSite',
@@ -62,17 +62,17 @@ export class AppComponent implements OnInit {
         };
     }
 
-    onShowSideBar(event:any):void {
+    onShowSideBar(event):void {
         if (this.screenDetector.isSmallScreen()) {
             this.scrollFreezer.freeze()
         }
     }
 
-    onHideSideBar(event:any):void {
+    onHideSideBar(event):void {
         this.scrollFreezer.unfreeze();
     }
 
-    onToggleSideBar(event:any):void {
+    onToggleSideBar(event):void {
         event.isVisible ? this.onShowSideBar(event) : this.onHideSideBar(event);
     }
 }

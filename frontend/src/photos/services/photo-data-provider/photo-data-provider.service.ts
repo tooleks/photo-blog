@@ -6,21 +6,21 @@ export class PhotoDataProviderService {
     constructor(protected api:ApiService) {
     }
 
-    create(attributes:any):Promise<any> {
+    create(attributes):Promise<any> {
         return this.api.post('/published_photos', attributes);
     }
 
-    upload(file:any):Promise<any> {
+    upload(file):Promise<any> {
         let form = new FormData;
         form.append('file', file);
         return this.api.post('/photos', form);
     }
 
-    updateById(id:number, attributes:any):Promise<any> {
+    updateById(id:number, attributes):Promise<any> {
         return this.api.put('/published_photos/' + id, attributes);
     }
 
-    uploadById(id:number, file:any):Promise<any> {
+    uploadById(id:number, file):Promise<any> {
         let form = new FormData;
         form.append('file', file);
         return this.api.post('/photos/' + id, form);

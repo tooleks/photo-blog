@@ -1,4 +1,5 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
+import 'rxjs/add/operator/filter';
 
 @Component({
     selector: 'tags-select-input',
@@ -8,13 +9,13 @@ export class TagsSelectInputComponent {
     @Input() tags:Array<any> = [];
     @Output() tagsChange:EventEmitter<Array<any>> = new EventEmitter<Array<any>>();
 
-    onAdd(addedTag:any):void {
+    onAdd(addedTag):void {
         this.tags.push(addedTag);
         this.tagsChange.emit(this.tags);
     }
 
-    onRemove(removedTag:any):void {
-        this.tags = this.tags.filter((tag:any) => tag.value !== removedTag.value);
+    onRemove(removedTag):void {
+        this.tags = this.tags.filter((tag) => tag.value !== removedTag.value);
         this.tagsChange.emit(this.tags);
     }
 

@@ -6,7 +6,7 @@ export class ProcessLockerService {
     constructor(protected locker:LockerService) {
     }
 
-    lock(callback:any, args?:any):Promise<any> {
+    lock(callback, args?):Promise<any> {
         return this.process(callback, args)
             .then((result) => this.onProcessSuccess(result))
             .catch((error) => this.onProcessError(error));
@@ -16,7 +16,7 @@ export class ProcessLockerService {
         return this.locker.isLocked();
     }
 
-    protected process(callback:any, args?:any):Promise<any> {
+    protected process(callback, args?):Promise<any> {
         return new Promise((resolve, reject) => {
             if (!this.locker.isLocked()) {
                 this.locker.lock();
@@ -25,12 +25,12 @@ export class ProcessLockerService {
         });
     }
 
-    protected onProcessSuccess(result:any):any {
+    protected onProcessSuccess(result) {
         this.locker.unlock();
         return result;
     }
 
-    protected onProcessError(error:any):any {
+    protected onProcessError(error) {
         this.locker.unlock();
         throw error;
     }

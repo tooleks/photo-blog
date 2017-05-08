@@ -13,7 +13,7 @@ export class ServerTransferState extends TransferState {
      */
     inject() {
         try {
-            const document:any = this.state.getDocument();
+            const document = this.state.getDocument();
             const transferStateString = JSON.stringify(this.toJson());
             const renderer = this.rendererFactory.createRenderer(document, {
                 id: '-1',

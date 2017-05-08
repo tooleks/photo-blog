@@ -31,7 +31,7 @@ export class TransferHttp {
     /**
      * Performs a request with `post` http method.
      */
-    post(url:string, body:any, options?:RequestOptionsArgs):Observable<any> {
+    post(url:string, body, options?:RequestOptionsArgs):Observable<any> {
         return this.getPostData(url, body, options, (url:string, options:RequestOptionsArgs) => {
             return this.http.post(url, body.options);
         });
@@ -40,7 +40,7 @@ export class TransferHttp {
     /**
      * Performs a request with `put` http method.
      */
-    put(url:string, body:any, options?:RequestOptionsArgs):Observable<any> {
+    put(url:string, body, options?:RequestOptionsArgs):Observable<any> {
         return this.getData(url, options, (url:string, options:RequestOptionsArgs) => {
             return this.http.put(url, options);
         });
@@ -58,7 +58,7 @@ export class TransferHttp {
     /**
      * Performs a request with `patch` http method.
      */
-    patch(url:string, body:any, options?:RequestOptionsArgs):Observable<any> {
+    patch(url:string, body, options?:RequestOptionsArgs):Observable<any> {
         return this.getPostData(url, body, options, (url:string, options:RequestOptionsArgs) => {
             return this.http.patch(url, body.options);
         });
@@ -104,7 +104,7 @@ export class TransferHttp {
         }
     }
 
-    protected getPostData(uri:string | Request, body:any, options:RequestOptionsArgs, callback:(uri:string | Request, body:any, options?:RequestOptionsArgs) => Observable<Response>) {
+    protected getPostData(uri:string | Request, body, options:RequestOptionsArgs, callback:(uri:string | Request, body, options?:RequestOptionsArgs) => Observable<Response>) {
 
         let url = uri;
 
@@ -141,7 +141,7 @@ export class TransferHttp {
         return this.transferState.set(key, data);
     }
 
-    protected getFromCache(key):any {
+    protected getFromCache(key) {
         return this.transferState.get(key);
     }
 }

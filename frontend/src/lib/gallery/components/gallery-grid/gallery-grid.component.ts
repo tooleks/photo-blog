@@ -18,8 +18,8 @@ import {GalleryImage} from '../../models';
     styleUrls: ['gallery-grid.component.css'],
 })
 export class GalleryGridComponent implements OnChanges, AfterContentInit, OnDestroy {
-    protected elementSize:any = {width: 0, height: 0};
-    protected elementSizeCheck:any = null;
+    protected elementSize = {width: 0, height: 0};
+    protected elementSizeCheck = null;
 
     @Input() elementSizeCheckInterval:number = 250;
 

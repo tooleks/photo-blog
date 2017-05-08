@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
+import 'rxjs/add/operator/map';
 import {NoticesService} from '../../../lib';
 import {
     ApiService,
@@ -47,13 +48,13 @@ export class UnsubscriptionComponent implements OnInit {
             .catch((error) => this.onUnsubscribeError(error));
     }
 
-    onUnsubscribeSuccess(data:any):any {
+    onUnsubscribeSuccess(data) {
         this.notices.success('You have been successfully unsubscribed from the website updates.');
         this.navigator.navigate(['/']);
         return data;
     }
 
-    onUnsubscribeError(error:any):any {
+    onUnsubscribeError(error) {
         this.navigator.navigate(['/']);
         throw error;
     }

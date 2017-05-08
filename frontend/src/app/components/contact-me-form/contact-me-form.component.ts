@@ -39,10 +39,10 @@ export class ContactMeFormComponent implements OnInit {
     contactMe():Promise<any> {
         return this.processLocker
             .lock(() => this.api.post('/contact_messages', this.model))
-            .then((data:any) => this.onContactMeSuccess(data));
+            .then((data) => this.onContactMeSuccess(data));
     }
 
-    onContactMeSuccess(data:any):any {
+    onContactMeSuccess(data) {
         this.notices.success('Your message has been successfully sent.');
         this.navigator.navigate(['/']);
         return data;

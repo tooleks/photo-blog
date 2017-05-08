@@ -14,7 +14,7 @@ export class GalleryComponent implements OnInit, OnChanges {
 
     @Input() images:Array<GalleryImage> = [];
 
-    @Input() defaultImageId:any = null;
+    @Input() defaultImageId = null;
 
     @Output() onLoadMoreImages:EventEmitter<any> = new EventEmitter<any>();
     protected loadingNextImage:boolean = false;
@@ -77,7 +77,7 @@ export class GalleryComponent implements OnInit, OnChanges {
         this.openedImageIndex = null;
     }
 
-    openImageById(imageId:any):void {
+    openImageById(imageId):void {
         this.images.some((image:GalleryImage, index:number) => {
             const isAlreadyOpened = (index === this.openedImageIndex);
             const isLastImage = (index === this.images.length - 1);

@@ -6,7 +6,7 @@ import {Input, Component} from '@angular/core';
     styleUrls: ['json-ld.component.css'],
 })
 export class JsonLdComponent {
-    @Input() data:any = {};
+    @Input() data = {};
 
     getContent():string {
         return `<script type="application/ld+json">${JSON.stringify(this.data)}</script>`;

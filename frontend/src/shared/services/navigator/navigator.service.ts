@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 
 @Injectable()
 export class NavigatorService {
-    protected queryParams:any = {};
+    protected queryParams = {};
 
     constructor(protected route:ActivatedRoute, protected router:Router) {
         this.route.queryParams.subscribe((queryParams) => {
@@ -13,7 +13,7 @@ export class NavigatorService {
         });
     }
 
-    setQueryParam(name:string, value:any):Promise<boolean> {
+    setQueryParam(name:string, value):Promise<boolean> {
         this.queryParams[name] = value;
         return this.navigate([], {queryParams: this.queryParams});
     }
@@ -23,7 +23,7 @@ export class NavigatorService {
         return this.navigate([], {queryParams: this.queryParams});
     }
 
-    navigate(route:any = [], extras:any = {}):Promise<boolean> {
+    navigate(route = [], extras = {}):Promise<boolean> {
         return this.router.navigate(route, extras);
     }
 }

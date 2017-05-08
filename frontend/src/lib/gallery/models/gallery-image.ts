@@ -3,7 +3,7 @@ import {GalleryImageAttributes} from './gallery-image-attributes';
 export class GalleryImage {
     protected attributes:GalleryImageAttributes = new GalleryImageAttributes;
 
-    constructor(attributes:any = {}) {
+    constructor(attributes = {}) {
         this.setAttributes(attributes);
     }
 
@@ -13,13 +13,13 @@ export class GalleryImage {
         return cloned;
     }
 
-    protected callMethod(methodName:string, parameters:any) {
+    protected callMethod(methodName:string, parameters) {
         if (typeof this[methodName] === 'function') {
             this[methodName](...parameters);
         }
     }
 
-    setAttributes(attributes:any):this {
+    setAttributes(attributes):this {
         for (let attributeName in attributes) {
             if (attributes.hasOwnProperty(attributeName)) {
                 let setterName = 'set' + attributeName.charAt(0).toUpperCase() + attributeName.slice(1);

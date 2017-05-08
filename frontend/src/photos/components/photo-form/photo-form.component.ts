@@ -81,7 +81,7 @@ export class PhotoFormComponent implements OnInit {
             : this.photoDataProvider.upload(file);
     }
 
-    upload(file:any):Promise<any> {
+    upload(file):Promise<any> {
         return this.processLocker.lock(() => this.processUploadPhoto(file)).then((photo) => {
             this.photo.setUploadedPhotoAttributes(photo);
             this.notices.success('File was successfully uploaded.');

@@ -5,12 +5,12 @@ export class PagerService {
     protected page:number;
     protected perPage:number;
 
-    constructor(page:any, perPage:any) {
+    constructor(page, perPage) {
         this.setPage(page);
         this.setPerPage(perPage);
     }
 
-    setPage(page:any):this {
+    setPage(page):this {
         page = parseInt(page);
         this.page = page > 0 ? page : 1;
         return this;
@@ -28,7 +28,7 @@ export class PagerService {
         return this.page > 1 ? this.page - 1 : null;
     }
 
-    setPerPage(perPage:any):this {
+    setPerPage(perPage):this {
         perPage = parseInt(perPage);
         this.perPage = perPage;
         return this;

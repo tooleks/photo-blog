@@ -79,7 +79,7 @@ export class PhotosByTagComponent extends AbstractPhotosComponent implements OnI
         }
     }
 
-    loadImages(page:number, perPage:number, tag:string):any {
+    loadImages(page:number, perPage:number, tag:string) {
         if (tag)
             return this.processLocker
                 .lock(() => this.photoDataProvider.getByTag(page, perPage, tag))
@@ -88,7 +88,7 @@ export class PhotosByTagComponent extends AbstractPhotosComponent implements OnI
             return Promise.reject(new Error);
     }
 
-    loadMoreImages():any {
+    loadMoreImages():Promise<any> {
         return this.loadImages(this.pager.getNextPage(), this.pager.getPerPage(), this.queryParams['tag']);
     }
 

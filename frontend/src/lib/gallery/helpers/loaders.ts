@@ -6,7 +6,7 @@
  * @param {string} imageUrl
  * @param {function} callback
  */
-export function loadImage(imageUrl:string, callback:any) {
+export function loadImage(imageUrl:string, callback) {
     // #browser-specific
     if (typeof (window) !== 'undefined') {
         const image = new Image;

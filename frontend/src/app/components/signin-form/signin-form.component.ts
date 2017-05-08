@@ -39,10 +39,10 @@ export class SignInFormComponent implements OnInit {
     signIn():Promise<any> {
         return this.processLocker
             .lock(() => this.auth.signIn(this.model.email, this.model.password))
-            .then((user:any) => this.onSignInSuccess(user));
+            .then((user) => this.onSignInSuccess(user));
     }
 
-    onSignInSuccess(user:any):any {
+    onSignInSuccess(user) {
         this.notices.success('Hello, ' + user.name + '!');
         this.navigator.navigate(['/']);
         return user;

@@ -26,9 +26,9 @@ export abstract class PhotosComponent implements OnInit, AfterViewInit {
     protected hasMoreImages:boolean = true;
 
     protected linkedData:Array<any> = [];
-    protected queryParams:any = {};
+    protected queryParams = {};
 
-    protected defaults:any = {
+    protected defaults = {
         page: 1,
         perPage: 40,
         show: null,

@@ -2,10 +2,10 @@ import {Injectable} from '@angular/core';
 
 @Injectable()
 export class EnvService {
-    constructor(protected variables:any) {
+    constructor(protected variables) {
     }
 
-    get(variable:string):any {
+    get(variable:string) {
         return this.has(variable) ? this.variables[variable] : null;
     }
 

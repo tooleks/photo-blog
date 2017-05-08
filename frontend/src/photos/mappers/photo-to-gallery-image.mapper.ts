@@ -8,7 +8,7 @@ export class PhotoToGalleryImageMapper {
     constructor(protected exifMapper:ExifToStringMapper, protected app:AppService) {
     }
 
-    map(object:any):GalleryImage {
+    map(object):GalleryImage {
         return new GalleryImage({
             id: object.id,
             viewUrl: `/photos?show=${object.id}`,

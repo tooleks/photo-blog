@@ -6,12 +6,12 @@ export class AuthProviderService {
     constructor(protected localStorage:LocalStorageService) {
     }
 
-    setAuth(auth:any):any {
+    setAuth(auth) {
         this.localStorage.set('auth', auth);
         return auth;
     }
 
-    getAuth():any {
+    getAuth() {
         return this.localStorage.get('auth');
     }
 
@@ -24,12 +24,12 @@ export class AuthProviderService {
         return auth ? auth.api_token : null;
     }
 
-    setUser(user:any):any {
+    setUser(user) {
         this.localStorage.set('user', user);
         return user;
     }
 
-    getUser():any {
+    getUser() {
         return this.localStorage.get('user');
     }
 

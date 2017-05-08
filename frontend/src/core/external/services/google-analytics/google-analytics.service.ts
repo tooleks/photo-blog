@@ -1,11 +1,12 @@
 import {Injectable} from '@angular/core';
 import {Router, NavigationEnd} from '@angular/router';
+import 'rxjs/add/operator/filter';
 import {EnvironmentDetectorService} from '../../../detector';
 declare let ga:Function;
 
 @Injectable()
 export class GoogleAnalyticsService {
-    constructor(protected router:Router, protected environmentDetector:EnvironmentDetectorService, protected config:any) {
+    constructor(protected router:Router, protected environmentDetector:EnvironmentDetectorService, protected config) {
     }
 
     init():void {
@@ -16,7 +17,7 @@ export class GoogleAnalyticsService {
     }
 
     protected initScript():void {
-        let script:any, ref = document.getElementsByTagName('script')[0];
+        let script, ref = document.getElementsByTagName('script')[0];
         script = document.createElement('script');
         script.async = true;
         script.text = `

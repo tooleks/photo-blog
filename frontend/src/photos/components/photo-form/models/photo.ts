@@ -7,11 +7,11 @@ export class Photo {
     description:string;
     created_at:string;
     updated_at:string;
-    exif:any;
+    exif;
     thumbnails:Array<any> = [];
     tags:Array<any> = [];
 
-    setUploadedPhotoAttributes(attributes:any):void {
+    setUploadedPhotoAttributes(attributes):void {
         this.photo_id = attributes.id;
         this.created_by_user_id = attributes.created_by_user_id;
         this.url = attributes.url;
@@ -22,7 +22,7 @@ export class Photo {
         this.thumbnails = attributes.thumbnails;
     }
 
-    setSavedPhotoAttributes(attributes:any):void {
+    setSavedPhotoAttributes(attributes):void {
         this.id = attributes.id;
         this.created_by_user_id = attributes.created_by_user_id;
         this.url = attributes.url;

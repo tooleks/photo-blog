@@ -54,7 +54,7 @@ export class SideBarComponent implements OnInit {
     }
 
     @HostListener('window:resize', ['$event'])
-    onWindowResize(event:any) {
+    onWindowResize(event) {
         this.reset();
     }
 
@@ -88,6 +88,6 @@ export class SideBarComponent implements OnInit {
     }
 
     protected loadTags():void {
-        this.api.get('/tags', {params: {page: 1, per_page: 7}}).then((response:any) => this.tags = response.data);
+        this.api.get('/tags', {params: {page: 1, per_page: 7}}).then((response) => this.tags = response.data);
     }
 }

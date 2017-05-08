@@ -11,15 +11,15 @@ export class TransferState {
         return this._map.keys();
     }
 
-    get(key:string):any {
+    get(key:string) {
         return this._map.get(key);
     }
 
-    set(key:string, value:any):Map<string, any> {
+    set(key:string, value):Map<string, any> {
         return this._map.set(key, value);
     }
 
-    toJson():any {
+    toJson() {
         const obj = {};
         Array.from(this.keys())
             .forEach(key => {
@@ -28,7 +28,7 @@ export class TransferState {
         return obj;
     }
 
-    initialize(obj:any):void {
+    initialize(obj):void {
         Object.keys(obj)
             .forEach(key => {
                 this.set(key, obj[key]);

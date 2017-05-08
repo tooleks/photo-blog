@@ -6,7 +6,7 @@ export class PhotoToLinkedDataMapper {
     constructor(protected app:AppService) {
     }
 
-    map(object:any):any {
+    map(object) {
         return {
             '@context': 'http://schema.org',
             '@type': 'Article',
