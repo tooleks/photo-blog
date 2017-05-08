@@ -59,9 +59,9 @@ export class PhotosByTagComponent extends AbstractPhotosComponent implements OnI
     protected initParamsSubscribers() {
         super.initParamsSubscribers();
         this.route.params
-            .map((params:any) => params['tag'])
-            .filter((tag:any) => tag && tag != this.queryParams['tag'])
-            .map((tag:any) => String(tag))
+            .map((params) => params['tag'])
+            .filter((tag) => tag && tag != this.queryParams['tag'])
+            .map((tag) => String(tag))
             .subscribe((tag:string) => this.onTagChange(tag));
     }
 
@@ -77,9 +77,12 @@ export class PhotosByTagComponent extends AbstractPhotosComponent implements OnI
     }
 
     loadImages(page:number, perPage:number, tag:string):Promise<Array<GalleryImage>> {
-        return tag
-            ? this.processLoadImages(() => this.photoDataProvider.getByTag(page, perPage, tag))
-            : Promise.reject(new Error);
+        if (tag)
+            return this.processLocker
+                .lock(() => this.photoDataProvider.getByTag(page, perPage, tag))
+                .then(response => this.onLoadImagesSuccess(response));
+        else
+            return Promise.reject(new Error);
     }
 
     loadMoreImages():Promise<Array<GalleryImage>> {

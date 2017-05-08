@@ -36,15 +36,15 @@ export class UnsubscriptionComponent implements OnInit {
 
     protected initParamsSubscribers():void {
         this.route.params
-            .map((params:any) => params['token'])
+            .map((params) => params['token'])
             .subscribe((token:string) => this.token = String(token));
     }
 
     unsubscribe():Promise<any> {
         return this.processLocker
             .lock(() => this.api.delete(`/subscriptions/${this.token}`))
-            .then((data:any) => this.onUnsubscribeSuccess(data))
-            .catch((error:any) => this.onUnsubscribeError(error));
+            .then((data) => this.onUnsubscribeSuccess(data))
+            .catch((error) => this.onUnsubscribeError(error));
     }
 
     onUnsubscribeSuccess(data:any):any {

@@ -44,7 +44,7 @@ export class AppComponent implements OnInit {
 
     protected initRouterSubscribers():void {
         this.router.events
-            .filter((event:any) => event instanceof NavigationEnd)
+            .filter((event) => event instanceof NavigationEnd)
             .subscribe((event:NavigationEnd) => this.metaTags.setUrl(this.app.getUrl() + event.urlAfterRedirects));
     }
 

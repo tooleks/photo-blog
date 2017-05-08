@@ -10,15 +10,15 @@ export class AuthService {
     signIn(email:string, password:string):Promise<any> {
         return this.userDataProvider
             .getAuthByCredentials(email, password)
-            .then((auth:any) => this.authProvider.setAuth(auth))
-            .then((auth:any):Promise<any> => this.userDataProvider.getById(auth.user_id))
-            .then((user:any) => this.authProvider.setUser(user));
+            .then((auth) => this.authProvider.setAuth(auth))
+            .then((auth) => this.userDataProvider.getById(auth.user_id))
+            .then((user) => this.authProvider.setUser(user));
     }
 
     signOut():Promise<any> {
         return new Promise((resolve, reject) => {
             if (this.authProvider.isAuthenticated()) {
-                let user:any = this.authProvider.getUser();
+                let user = this.authProvider.getUser();
                 this.authProvider.setAuth(null);
                 this.authProvider.setUser(null);
                 resolve(user);

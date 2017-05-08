@@ -64,7 +64,9 @@ export class PhotosComponent extends AbstractPhotosComponent implements OnInit, 
     }
 
     loadImages(page:number, perPage:number):Promise<Array<GalleryImage>> {
-        return this.processLoadImages(() => this.photoDataProvider.getAll(page, perPage));
+        return this.processLocker
+            .lock(() => this.photoDataProvider.getAll(page, perPage))
+            .then(response => this.onLoadImagesSuccess(response));
     }
 
     loadMoreImages():Promise<Array<GalleryImage>> {

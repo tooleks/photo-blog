@@ -15,7 +15,7 @@ import {
     ProcessLockerService,
     ScrollFreezerService,
 } from '../../../shared';
-import {PhotoToGalleryImageMapper} from '../../mappers';
+import {OriginalImageToGalleryImageMapper as Mapper} from '../../mappers';
 
 export abstract class PhotosComponent implements OnInit, AfterViewInit {
     protected defaults:any = {page: 1, perPage: 40, show: null, title: null};
@@ -79,15 +79,15 @@ export abstract class PhotosComponent implements OnInit, AfterViewInit {
 
     protected initParamsSubscribers():void {
         this.route.queryParams
-            .map((queryParams:any) => queryParams['page'])
-            .filter((page:any) => page)
-            .map((page:any) => Number(page))
+            .map((queryParams) => queryParams['page'])
+            .filter((page) => page)
+            .map((page) => Number(page))
             .subscribe((page:number) => this.queryParams['page'] = page);
 
         this.route.queryParams
-            .map((queryParams:any) => queryParams['show'])
-            .filter((show:any) => show)
-            .map((show:any) => Number(show))
+            .map((queryParams) => queryParams['show'])
+            .filter((show) => show)
+            .map((show) => Number(show))
             .subscribe((show:number) => this.queryParams['show'] = show);
 
         this.originalImagesChange
@@ -107,23 +107,12 @@ export abstract class PhotosComponent implements OnInit, AfterViewInit {
         return this.processLocker.isLocked();
     }
 
-    protected processLoadImages(callback:any):Promise<Array<GalleryImage>> {
-        if (typeof (callback) !== 'function') {
-            throw new Error('Type of the "callback" parameter should be a function.');
-        }
-
-        // Lock the load images process for other async calls.
-        return this.processLocker
-            .lock(callback)
-            .then((response:any) => this.onLoadImagesSuccess(response));
-    }
-
     protected onLoadImagesSuccess(response:any):Array<GalleryImage> {
         let images:Array<GalleryImage> = [];
 
         if (response.data.length) {
             // Map the response data into the gallery images.
-            images = PhotoToGalleryImageMapper.map(response.data);
+            images = Mapper.map(response.data);
 
             // Concatenate loaded images with the existing ones.
             this.setOriginalImages(this.getOriginalImages().concat(response.data));
@@ -143,7 +132,7 @@ export abstract class PhotosComponent implements OnInit, AfterViewInit {
 
     protected onOriginalImagesChange(originalImages:Array<any>):void {
         if (this.environmentDetector.isServer()) {
-            this.linkedData = originalImages.map((image:any) => {
+            this.linkedData = originalImages.map((image) => {
                 return {
                     '@context': 'http://schema.org',
                     '@type': 'Article',

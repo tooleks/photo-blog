@@ -1,11 +1,11 @@
 import {GalleryImage} from '../../lib';
 import {ExifToStringMapper} from './exif-to-string-mapper';
 
-export class PhotoToGalleryImageMapper {
+export class OriginalImageToGalleryImageMapper {
     static map(object:any):any {
         return (object instanceof Array)
-            ? PhotoToGalleryImageMapper.mapMultiple(object)
-            : PhotoToGalleryImageMapper.mapSingle(object);
+            ? OriginalImageToGalleryImageMapper.mapMultiple(object)
+            : OriginalImageToGalleryImageMapper.mapSingle(object);
     }
 
     protected static mapSingle(object:any):GalleryImage {
@@ -26,6 +26,6 @@ export class PhotoToGalleryImageMapper {
     }
 
     protected static mapMultiple(objects:Array<any>):Array<GalleryImage> {
-        return objects.map(PhotoToGalleryImageMapper.mapSingle);
+        return objects.map(OriginalImageToGalleryImageMapper.mapSingle);
     }
 }

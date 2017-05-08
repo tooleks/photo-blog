@@ -32,7 +32,7 @@ export class GoogleAnalyticsService {
 
     protected initRouterSubscribers():void {
         this.router.events
-            .filter((event:any) => event instanceof NavigationEnd)
+            .filter((event) => event instanceof NavigationEnd)
             .subscribe((event:NavigationEnd) => {
                 ga('set', 'page', event.urlAfterRedirects);
                 ga('send', 'pageview');

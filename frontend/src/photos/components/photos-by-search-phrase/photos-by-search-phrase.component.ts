@@ -71,9 +71,9 @@ export class PhotosBySearchPhraseComponent extends AbstractPhotosComponent imple
     protected initParamsSubscribers() {
         super.initParamsSubscribers();
         this.route.queryParams
-            .map((queryParams:any) => queryParams['search_phrase'])
-            .filter((searchPhrase:any) => searchPhrase && searchPhrase != this.queryParams['search_phrase'])
-            .map((searchPhrase:any) => String(searchPhrase))
+            .map((queryParams) => queryParams['search_phrase'])
+            .filter((searchPhrase) => searchPhrase && searchPhrase != this.queryParams['search_phrase'])
+            .map((searchPhrase) => String(searchPhrase))
             .subscribe((searchPhrase:string) => this.onSearchPhraseChange(searchPhrase));
     }
 
@@ -89,9 +89,12 @@ export class PhotosBySearchPhraseComponent extends AbstractPhotosComponent imple
     }
 
     loadImages(page:number, perPage:number, searchPhrase:string):Promise<Array<GalleryImage>> {
-        return searchPhrase
-            ? this.processLoadImages(() => this.photoDataProvider.getBySearchPhrase(page, perPage, searchPhrase))
-            : Promise.reject(new Error);
+        if (searchPhrase)
+            return this.processLocker
+                .lock(() => this.photoDataProvider.getBySearchPhrase(page, perPage, searchPhrase))
+                .then(response => this.onLoadImagesSuccess(response));
+        else
+            return Promise.reject(new Error);
     }
 
     loadMoreImages():Promise<Array<GalleryImage>> {

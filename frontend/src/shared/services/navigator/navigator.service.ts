@@ -6,8 +6,8 @@ export class NavigatorService {
     protected queryParams:any = {};
 
     constructor(protected route:ActivatedRoute, protected router:Router) {
-        this.route.queryParams.subscribe((queryParams:any) => {
-            Object.keys(queryParams).forEach((key:any) => {
+        this.route.queryParams.subscribe((queryParams) => {
+            Object.keys(queryParams).forEach((key) => {
                 this.queryParams[key] = queryParams[key];
             });
         });

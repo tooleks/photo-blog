@@ -42,8 +42,8 @@ export class PhotoFormComponent implements OnInit {
     protected initParamsSubscribers():void {
         this.route.params
             .map((params) => params['id'])
-            .filter((id:any) => id)
-            .subscribe((id:any) => this.loadById(id));
+            .filter((id) => id)
+            .subscribe((id) => this.loadById(id));
     }
 
     protected processLoadById(id:number):Promise<any> {
@@ -53,7 +53,7 @@ export class PhotoFormComponent implements OnInit {
     }
 
     loadById(id:number):Promise<any> {
-        return this.processLocker.lock(() => this.processLoadById(id)).then((photo:any) => {
+        return this.processLocker.lock(() => this.processLoadById(id)).then((photo) => {
             this.photo.setSavedPhotoAttributes(photo);
             this.title.setPageNameSegment('Edit Photo');
             return photo;
@@ -67,7 +67,7 @@ export class PhotoFormComponent implements OnInit {
     }
 
     save():Promise<any> {
-        return this.processLocker.lock(() => this.processSavePhoto()).then((photo:any) => {
+        return this.processLocker.lock(() => this.processSavePhoto()).then((photo) => {
             this.photo.setSavedPhotoAttributes(photo);
             this.notices.success('Photo was successfully saved.');
             this.navigator.navigate(['/photos']);
@@ -82,7 +82,7 @@ export class PhotoFormComponent implements OnInit {
     }
 
     upload(file:any):Promise<any> {
-        return this.processLocker.lock(() => this.processUploadPhoto(file)).then((photo:any) => {
+        return this.processLocker.lock(() => this.processUploadPhoto(file)).then((photo) => {
             this.photo.setUploadedPhotoAttributes(photo);
             this.notices.success('File was successfully uploaded.');
             return photo;
@@ -96,7 +96,7 @@ export class PhotoFormComponent implements OnInit {
     }
 
     deletePhoto():Promise<any> {
-        return this.processLocker.lock(() => this.processDeletePhoto()).then((result:any) => {
+        return this.processLocker.lock(() => this.processDeletePhoto()).then((result) => {
             this.notices.success('Photo was successfully deleted.');
             this.navigator.navigate(['/photos']);
             return result;

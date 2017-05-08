@@ -39,7 +39,7 @@ export class SubscriptionFormComponent implements OnInit {
     subscribe():Promise<any> {
         return this.processLocker
             .lock(() => this.api.post('/subscriptions', this.model))
-            .then((data:any) => this.onSubscribeSuccess(data));
+            .then((data) => this.onSubscribeSuccess(data));
     }
 
     onSubscribeSuccess(data:any):any {
