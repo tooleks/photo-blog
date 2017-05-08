@@ -50,12 +50,12 @@ export class PhotosByTagComponent extends AbstractPhotosComponent implements OnI
             galleryImageMapper,
             linkedDataMapper
         );
+        this.defaults['title'] = 'Search By Tag';
+        this.defaults['tag'] = null;
     }
 
     reset():void {
         super.reset();
-        this.defaults['title'] = 'Search By Tag';
-        this.defaults['tag'] = null;
         this.galleryComponent.reset();
     }
 
