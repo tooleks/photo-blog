@@ -80,12 +80,13 @@ export class PhotosByTagComponent extends AbstractPhotosComponent implements OnI
     }
 
     loadImages(page:number, perPage:number, tag:string) {
-        if (tag)
+        if (tag) {
             return this.processLocker
                 .lock(() => this.photoDataProvider.getByTag(page, perPage, tag))
                 .then((response) => this.onLoadImagesSuccess(response));
-        else
+        } else {
             return Promise.reject(new Error);
+        }
     }
 
     loadMoreImages():Promise<any> {

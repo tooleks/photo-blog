@@ -93,12 +93,13 @@ export class PhotosBySearchPhraseComponent extends AbstractPhotosComponent imple
     }
 
     loadImages(page:number, perPage:number, searchPhrase:string):Promise<any> {
-        if (searchPhrase)
+        if (searchPhrase) {
             return this.processLocker
                 .lock(() => this.photoDataProvider.getBySearchPhrase(page, perPage, searchPhrase))
                 .then((response) => this.onLoadImagesSuccess(response));
-        else
+        } else {
             return Promise.reject(new Error);
+        }
     }
 
     loadMoreImages():Promise<any> {
