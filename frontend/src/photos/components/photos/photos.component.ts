@@ -31,19 +31,30 @@ export class PhotosComponent extends AbstractPhotosComponent implements OnInit, 
                 processLockerProvider:ProcessLockerServiceProvider,
                 environmentDetector:EnvironmentDetectorService,
                 scrollFreezer:ScrollFreezerService) {
-        super(router, route, app, title, metaTags, navigatorProvider, pagerProvider, processLockerProvider, environmentDetector, scrollFreezer);
+        super(
+            router,
+            route,
+            app,
+            title,
+            metaTags,
+            navigatorProvider,
+            pagerProvider,
+            processLockerProvider,
+            environmentDetector,
+            scrollFreezer
+        );
         this.defaults['title'] = 'All Photos';
     }
 
     ngOnInit():void {
         super.ngOnInit();
-        this.title.setPageNameSegment(this.defaults.title);
+        this.title.setPageNameSegment(this.defaults['title']);
         this.metaTags.setTitle(this.title.getPageNameSegment());
     }
 
     ngAfterViewInit():void {
         super.ngAfterViewInit();
-        this.initImages(this.defaults.page, this.queryParams['page'], this.defaults.perPage);
+        this.initImages(this.defaults['page'], this.queryParams['page'], this.defaults['perPage']);
     }
 
     initImages(fromPage:number, toPage:number, perPage:number):void {

@@ -33,15 +33,26 @@ export class PhotosByTagComponent extends AbstractPhotosComponent implements OnI
                 processLockerProvider:ProcessLockerServiceProvider,
                 environmentDetector:EnvironmentDetectorService,
                 scrollFreezer:ScrollFreezerService) {
-        super(router, route, app, title, metaTags, navigatorProvider, pagerProvider, processLockerProvider, environmentDetector, scrollFreezer);
+        super(
+            router,
+            route,
+            app,
+            title,
+            metaTags,
+            navigatorProvider,
+            pagerProvider,
+            processLockerProvider,
+            environmentDetector,
+            scrollFreezer
+        );
         this.defaults['tag'] = null;
         this.defaults['title'] = 'Search By Tag';
     }
 
     ngOnInit():void {
         super.ngOnInit();
-        this.queryParams['tag'] = this.defaults.tag;
-        this.title.setPageNameSegment(this.defaults.title);
+        this.queryParams['tag'] = this.defaults['tag'];
+        this.title.setPageNameSegment(this.defaults['title']);
         this.metaTags.setTitle(this.title.getPageNameSegment());
     }
 
@@ -80,6 +91,6 @@ export class PhotosByTagComponent extends AbstractPhotosComponent implements OnI
         this.queryParams['tag'] = tag;
         this.title.setPageNameSegment(`Tag #${tag}`);
         this.metaTags.setTitle(this.title.getPageNameSegment());
-        this.initImages(this.defaults.page, this.queryParams['page'], this.defaults.perPage, tag);
+        this.initImages(this.defaults['page'], this.queryParams['page'], this.defaults['perPage'], tag);
     }
 }

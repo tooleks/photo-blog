@@ -18,15 +18,21 @@ import {
 import {PhotoToGalleryImageMapper} from '../../mappers';
 
 export abstract class PhotosComponent implements OnInit, AfterViewInit {
-    protected defaults:any = {title: '', page: 1, perPage: 40, show: null};
+    protected defaults:any = {page: 1, perPage: 40, show: null, title: null};
     protected queryParams:any = {};
+
     protected pager:PagerService;
     protected navigator:NavigatorService;
     protected processLocker:ProcessLockerService;
+
     protected originalImages:Array<any> = [];
     protected originalImagesChange:EventEmitter<Array<any>> = new EventEmitter<Array<any>>();
+
     protected images:Array<GalleryImage> = [];
+    protected imagesChange:EventEmitter<Array<GalleryImage>> = new EventEmitter<Array<GalleryImage>>();
+
     protected hasMoreImages:boolean = true;
+
     protected linkedData:Array<any> = [];
 
     constructor(protected router:Router,
@@ -39,14 +45,32 @@ export abstract class PhotosComponent implements OnInit, AfterViewInit {
                 protected processLockerProvider:ProcessLockerServiceProvider,
                 protected environmentDetector:EnvironmentDetectorService,
                 protected scrollFreezer:ScrollFreezerService) {
-        this.pager = this.pagerProvider.getInstance(this.defaults.page, this.defaults.perPage);
+        this.pager = this.pagerProvider.getInstance(this.defaults['page'], this.defaults['perPage']);
         this.navigator = this.navigatorProvider.getInstance();
         this.processLocker = this.processLockerProvider.getInstance();
     }
 
+    setOriginalImages(originalImages:Array<any>):void {
+        this.originalImages = originalImages;
+        this.originalImagesChange.emit(this.originalImages);
+    }
+
+    getOriginalImages():Array<any> {
+        return this.originalImages;
+    }
+
+    setImages(images:Array<GalleryImage>):void {
+        this.images = images;
+        this.imagesChange.emit(this.images);
+    }
+
+    getImages():Array<GalleryImage> {
+        return this.images;
+    }
+
     ngOnInit():void {
-        this.queryParams['page'] = this.defaults.page;
-        this.queryParams['show'] = this.defaults.show;
+        this.queryParams['page'] = this.defaults['page'];
+        this.queryParams['show'] = this.defaults['show'];
     }
 
     ngAfterViewInit():void {
@@ -71,31 +95,8 @@ export abstract class PhotosComponent implements OnInit, AfterViewInit {
     }
 
     reset():void {
-        this.images = [];
-        this.originalImages = [];
-        this.originalImagesChange.emit(this.originalImages);
-    }
-
-    protected processLoadImages(callback:any):Promise<Array<GalleryImage>> {
-        if (typeof (callback) !== 'function') {
-            throw new Error('Type of the "callback" parameter should be a function.');
-        }
-        return this.processLocker
-            .lock(callback)
-            .then((response:any) => this.onLoadImagesSuccess(response));
-    }
-
-    protected onLoadImagesSuccess(response:any):Array<GalleryImage> {
-        const images:Array<GalleryImage> = PhotoToGalleryImageMapper.map(response.data);
-        this.hasMoreImages = !(response.data.length < this.defaults.perPage);
-        if (response.data.length) {
-            this.pager.setPage(response.current_page);
-            this.navigator.setQueryParam('page', this.pager.getPage());
-            this.originalImages = this.originalImages.concat(response.data);
-            this.originalImagesChange.emit(this.originalImages);
-            this.images = this.images.concat(images);
-        }
-        return images;
+        this.setImages([]);
+        this.setOriginalImages([]);
     }
 
     isEmpty():boolean {
@@ -106,7 +107,41 @@ export abstract class PhotosComponent implements OnInit, AfterViewInit {
         return this.processLocker.isLocked();
     }
 
-    onOriginalImagesChange(originalImages:Array<any>):void {
+    protected processLoadImages(callback:any):Promise<Array<GalleryImage>> {
+        if (typeof (callback) !== 'function') {
+            throw new Error('Type of the "callback" parameter should be a function.');
+        }
+
+        // Lock the load images process for other async calls.
+        return this.processLocker
+            .lock(callback)
+            .then((response:any) => this.onLoadImagesSuccess(response));
+    }
+
+    protected onLoadImagesSuccess(response:any):Array<GalleryImage> {
+        let images:Array<GalleryImage> = [];
+
+        if (response.data.length) {
+            // Map the response data into the gallery images.
+            images = PhotoToGalleryImageMapper.map(response.data);
+
+            // Concatenate loaded images with the existing ones.
+            this.setOriginalImages(this.getOriginalImages().concat(response.data));
+            this.setImages(this.getImages().concat(images));
+
+            // Change the page query parameter value.
+            this.pager.setPage(response.current_page);
+            this.navigator.setQueryParam('page', this.pager.getPage());
+        }
+
+        // Change the has more images flag.
+        this.hasMoreImages = !(response.data.length < this.defaults['perPage']);
+
+        // Return just loaded gallery images.
+        return images;
+    }
+
+    protected onOriginalImagesChange(originalImages:Array<any>):void {
         if (this.environmentDetector.isServer()) {
             this.linkedData = originalImages.map((image:any) => {
                 return {
@@ -153,7 +188,7 @@ export abstract class PhotosComponent implements OnInit, AfterViewInit {
     onHidePhoto(image:GalleryImage):void {
         this.scrollFreezer.unfreeze();
         this.navigator.unsetQueryParam('show');
-        this.queryParams['show'] = this.defaults.show;
+        this.queryParams['show'] = this.defaults['show'];
         this.title.setPageNameSegment(this.defaults['title']);
     }
 
