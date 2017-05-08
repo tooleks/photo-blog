@@ -1,7 +1,9 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
-import {MetaTagsService, EnvironmentDetectorService} from '../../../core'
-import {GalleryComponent, GalleryImage} from '../../../lib';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/filter';
+import {MetaTagsService} from '../../../core'
+import {GalleryComponent} from '../../../lib';
 import {
     AppService,
     TitleService,
@@ -12,6 +14,7 @@ import {
     ScrollFreezerService,
 } from '../../../shared';
 import {PhotoDataProviderService} from '../../services';
+import {PhotoToLinkedDataMapper, PhotoToGalleryImageMapper} from '../../mappers';
 import {PhotosComponent as AbstractPhotosComponent} from '../abstract';
 
 @Component({
@@ -31,8 +34,9 @@ export class PhotosByTagComponent extends AbstractPhotosComponent implements OnI
                 navigatorProvider:NavigatorServiceProvider,
                 pagerProvider:PagerServiceProvider,
                 processLockerProvider:ProcessLockerServiceProvider,
-                environmentDetector:EnvironmentDetectorService,
-                scrollFreezer:ScrollFreezerService) {
+                scrollFreezer:ScrollFreezerService,
+                galleryImageMapper:PhotoToGalleryImageMapper,
+                linkedDataMapper:PhotoToLinkedDataMapper) {
         super(
             router,
             route,
@@ -42,18 +46,22 @@ export class PhotosByTagComponent extends AbstractPhotosComponent implements OnI
             navigatorProvider,
             pagerProvider,
             processLockerProvider,
-            environmentDetector,
-            scrollFreezer
+            scrollFreezer,
+            galleryImageMapper,
+            linkedDataMapper
         );
-        this.defaults['tag'] = null;
+    }
+
+    reset():void {
+        super.reset();
         this.defaults['title'] = 'Search By Tag';
+        this.defaults['tag'] = null;
+        this.galleryComponent.reset();
     }
 
     ngOnInit():void {
         super.ngOnInit();
         this.queryParams['tag'] = this.defaults['tag'];
-        this.title.setPageNameSegment(this.defaults['title']);
-        this.metaTags.setTitle(this.title.getPageNameSegment());
     }
 
     protected initParamsSubscribers() {
@@ -65,18 +73,13 @@ export class PhotosByTagComponent extends AbstractPhotosComponent implements OnI
             .subscribe((tag:string) => this.onTagChange(tag));
     }
 
-    reset():void {
-        super.reset();
-        this.galleryComponent.reset();
-    }
-
     initImages(fromPage:number, toPage:number, perPage:number, tag:string):void {
         if (fromPage <= toPage) {
             this.loadImages(fromPage, perPage, tag).then(() => this.initImages(++fromPage, toPage, perPage, tag));
         }
     }
 
-    loadImages(page:number, perPage:number, tag:string):Promise<Array<GalleryImage>> {
+    loadImages(page:number, perPage:number, tag:string):any {
         if (tag)
             return this.processLocker
                 .lock(() => this.photoDataProvider.getByTag(page, perPage, tag))
@@ -85,14 +88,15 @@ export class PhotosByTagComponent extends AbstractPhotosComponent implements OnI
             return Promise.reject(new Error);
     }
 
-    loadMoreImages():Promise<Array<GalleryImage>> {
+    loadMoreImages():any {
         return this.loadImages(this.pager.getNextPage(), this.pager.getPerPage(), this.queryParams['tag']);
     }
 
     onTagChange(tag:string):void {
         this.reset();
         this.queryParams['tag'] = tag;
-        this.title.setPageNameSegment(`Tag #${tag}`);
+        this.defaults['title'] = `Tag #${tag}`;
+        this.title.setPageNameSegment(this.defaults['title']);
         this.metaTags.setTitle(this.title.getPageNameSegment());
         this.initImages(this.defaults['page'], this.queryParams['page'], this.defaults['perPage'], tag);
     }

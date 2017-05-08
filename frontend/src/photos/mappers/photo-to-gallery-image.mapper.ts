@@ -1,14 +1,14 @@
+import {Injectable} from '@angular/core';
 import {GalleryImage} from '../../lib';
-import {ExifToStringMapper} from './exif-to-string-mapper';
+import {ExifToStringMapper} from './exif-to-string.mapper';
+import {AppService} from '../../shared';
 
-export class OriginalImageToGalleryImageMapper {
-    static map(object:any):any {
-        return (object instanceof Array)
-            ? OriginalImageToGalleryImageMapper.mapMultiple(object)
-            : OriginalImageToGalleryImageMapper.mapSingle(object);
+@Injectable()
+export class PhotoToGalleryImageMapper {
+    constructor(protected exifMapper:ExifToStringMapper, protected app:AppService) {
     }
 
-    protected static mapSingle(object:any):GalleryImage {
+    map(object:any):GalleryImage {
         return new GalleryImage({
             id: object.id,
             viewUrl: `/photos?show=${object.id}`,
@@ -21,11 +21,7 @@ export class OriginalImageToGalleryImageMapper {
             largeSizeWidth: object.thumbnails.large.width,
             avgColor: object.avg_color,
             description: object.description,
-            exif: ExifToStringMapper.map(object.exif),
+            exif: this.exifMapper.map(object.exif),
         });
-    }
-
-    protected static mapMultiple(objects:Array<any>):Array<GalleryImage> {
-        return objects.map(OriginalImageToGalleryImageMapper.mapSingle);
     }
 }

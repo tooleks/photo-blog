@@ -5,6 +5,7 @@ import {SharedModule} from '../shared';
 import {PhotoDataProviderService} from './services';
 import {PhotosRouting, PhotosRoutingProviders} from './photos.routing';
 import {PhotoFormComponent, PhotosComponent, PhotosBySearchPhraseComponent, PhotosByTagComponent} from './components';
+import {ExifToStringMapper, PhotoToGalleryImageMapper, PhotoToLinkedDataMapper} from './mappers';
 
 @NgModule({
     imports: [
@@ -22,6 +23,9 @@ import {PhotoFormComponent, PhotosComponent, PhotosBySearchPhraseComponent, Phot
     providers: [
         PhotoDataProviderService,
         PhotosRoutingProviders,
+        ExifToStringMapper,
+        PhotoToGalleryImageMapper,
+        PhotoToLinkedDataMapper,
     ],
 })
 export class PhotosModule {

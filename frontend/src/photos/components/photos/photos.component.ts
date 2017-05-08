@@ -1,7 +1,6 @@
-import {Component, OnInit, AfterViewInit} from '@angular/core';
+import {Component, AfterViewInit} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
-import {MetaTagsService, EnvironmentDetectorService} from '../../../core'
-import {GalleryImage} from '../../../lib';
+import {MetaTagsService} from '../../../core'
 import {
     AppService,
     TitleService,
@@ -12,13 +11,14 @@ import {
     ScrollFreezerService,
 } from '../../../shared';
 import {PhotoDataProviderService} from '../../services';
+import {PhotoToLinkedDataMapper, PhotoToGalleryImageMapper} from '../../mappers';
 import {PhotosComponent as AbstractPhotosComponent} from '../abstract';
 
 @Component({
     selector: 'photos',
     templateUrl: 'photos.component.html',
 })
-export class PhotosComponent extends AbstractPhotosComponent implements OnInit, AfterViewInit {
+export class PhotosComponent extends AbstractPhotosComponent implements AfterViewInit {
     constructor(protected authProvider:AuthProviderService,
                 protected photoDataProvider:PhotoDataProviderService,
                 router:Router,
@@ -29,8 +29,9 @@ export class PhotosComponent extends AbstractPhotosComponent implements OnInit, 
                 navigatorProvider:NavigatorServiceProvider,
                 pagerProvider:PagerServiceProvider,
                 processLockerProvider:ProcessLockerServiceProvider,
-                environmentDetector:EnvironmentDetectorService,
-                scrollFreezer:ScrollFreezerService) {
+                scrollFreezer:ScrollFreezerService,
+                galleryImageMapper:PhotoToGalleryImageMapper,
+                linkedDataMapper:PhotoToLinkedDataMapper) {
         super(
             router,
             route,
@@ -40,16 +41,11 @@ export class PhotosComponent extends AbstractPhotosComponent implements OnInit, 
             navigatorProvider,
             pagerProvider,
             processLockerProvider,
-            environmentDetector,
-            scrollFreezer
+            scrollFreezer,
+            galleryImageMapper,
+            linkedDataMapper
         );
         this.defaults['title'] = 'All Photos';
-    }
-
-    ngOnInit():void {
-        super.ngOnInit();
-        this.title.setPageNameSegment(this.defaults['title']);
-        this.metaTags.setTitle(this.title.getPageNameSegment());
     }
 
     ngAfterViewInit():void {
@@ -63,13 +59,13 @@ export class PhotosComponent extends AbstractPhotosComponent implements OnInit, 
         }
     }
 
-    loadImages(page:number, perPage:number):Promise<Array<GalleryImage>> {
+    loadImages(page:number, perPage:number):Promise<any> {
         return this.processLocker
             .lock(() => this.photoDataProvider.getAll(page, perPage))
             .then((response) => this.onLoadImagesSuccess(response));
     }
 
-    loadMoreImages():Promise<Array<GalleryImage>> {
+    loadMoreImages():Promise<any> {
         return this.loadImages(this.pager.getNextPage(), this.pager.getPerPage());
     }
 }

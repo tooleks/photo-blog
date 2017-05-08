@@ -1,7 +1,7 @@
-import {Component, OnInit, AfterViewInit, ViewChildren, ViewChild} from '@angular/core';
+import {Component, OnInit, AfterViewInit, ViewChildren, ViewChild, QueryList, ElementRef} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {MetaTagsService, EnvironmentDetectorService} from '../../../core'
-import {GalleryComponent, GalleryImage} from '../../../lib';
+import {GalleryComponent} from '../../../lib';
 import {
     AppService,
     TitleService,
@@ -12,6 +12,7 @@ import {
     ScrollFreezerService,
 } from '../../../shared';
 import {PhotoDataProviderService} from '../../services';
+import {PhotoToLinkedDataMapper, PhotoToGalleryImageMapper} from '../../mappers';
 import {PhotosComponent as AbstractPhotosComponent} from '../abstract';
 
 @Component({
@@ -19,11 +20,12 @@ import {PhotosComponent as AbstractPhotosComponent} from '../abstract';
     templateUrl: 'photos-by-search-phrase.component.html',
 })
 export class PhotosBySearchPhraseComponent extends AbstractPhotosComponent implements OnInit, AfterViewInit {
-    @ViewChildren('inputSearch') inputSearchComponent:any;
+    @ViewChildren('inputSearch') inputSearchComponent:QueryList<ElementRef>;
     @ViewChild('galleryComponent') galleryComponent:GalleryComponent;
 
     constructor(protected authProvider:AuthProviderService,
                 protected photoDataProvider:PhotoDataProviderService,
+                protected environmentDetector:EnvironmentDetectorService,
                 router:Router,
                 route:ActivatedRoute,
                 app:AppService,
@@ -32,8 +34,9 @@ export class PhotosBySearchPhraseComponent extends AbstractPhotosComponent imple
                 navigatorProvider:NavigatorServiceProvider,
                 pagerProvider:PagerServiceProvider,
                 processLockerProvider:ProcessLockerServiceProvider,
-                environmentDetector:EnvironmentDetectorService,
-                scrollFreezer:ScrollFreezerService) {
+                scrollFreezer:ScrollFreezerService,
+                galleryImageMapper:PhotoToGalleryImageMapper,
+                linkedDataMapper:PhotoToLinkedDataMapper) {
         super(
             router,
             route,
@@ -43,18 +46,22 @@ export class PhotosBySearchPhraseComponent extends AbstractPhotosComponent imple
             navigatorProvider,
             pagerProvider,
             processLockerProvider,
-            environmentDetector,
-            scrollFreezer
+            scrollFreezer,
+            galleryImageMapper,
+            linkedDataMapper
         );
-        this.defaults['search_phrase'] = null;
         this.defaults['title'] = 'Search Photos';
+        this.defaults['search_phrase'] = null;
+    }
+
+    reset():void {
+        super.reset();
+        this.galleryComponent.reset();
     }
 
     ngOnInit():void {
         super.ngOnInit();
         this.queryParams['search_phrase'] = this.defaults['search_phrase'];
-        this.title.setPageNameSegment(this.defaults['title']);
-        this.metaTags.setTitle(this.title.getPageNameSegment());
     }
 
     ngAfterViewInit():void {
@@ -77,18 +84,13 @@ export class PhotosBySearchPhraseComponent extends AbstractPhotosComponent imple
             .subscribe((searchPhrase:string) => this.onSearchPhraseChange(searchPhrase));
     }
 
-    reset():void {
-        super.reset();
-        this.galleryComponent.reset();
-    }
-
     initImages(fromPage:number, toPage:number, perPage:number, searchPhrase:string):void {
         if (fromPage <= toPage) {
             this.loadImages(fromPage, perPage, searchPhrase).then(() => this.initImages(++fromPage, toPage, perPage, searchPhrase));
         }
     }
 
-    loadImages(page:number, perPage:number, searchPhrase:string):Promise<Array<GalleryImage>> {
+    loadImages(page:number, perPage:number, searchPhrase:string):Promise<any> {
         if (searchPhrase)
             return this.processLocker
                 .lock(() => this.photoDataProvider.getBySearchPhrase(page, perPage, searchPhrase))
@@ -97,14 +99,15 @@ export class PhotosBySearchPhraseComponent extends AbstractPhotosComponent imple
             return Promise.reject(new Error);
     }
 
-    loadMoreImages():Promise<Array<GalleryImage>> {
+    loadMoreImages():Promise<any> {
         return this.loadImages(this.pager.getNextPage(), this.pager.getPerPage(), this.queryParams['search_phrase']);
     }
 
     onSearchPhraseChange(searchPhrase:string):void {
         this.reset();
         this.queryParams['search_phrase'] = searchPhrase;
-        this.title.setPageNameSegment(`Search "${searchPhrase}"`);
+        this.defaults['title'] = `Search "${searchPhrase}"`;
+        this.title.setPageNameSegment(this.defaults['title']);
         this.metaTags.setTitle(this.title.getPageNameSegment());
         this.initImages(this.defaults['page'], this.queryParams['page'], this.defaults['perPage'], searchPhrase);
     }

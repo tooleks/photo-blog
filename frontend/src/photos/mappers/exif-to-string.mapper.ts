@@ -1,11 +1,8 @@
-export class ExifToStringMapper {
-    static map(object:any):any {
-        return (object instanceof Array)
-            ? ExifToStringMapper.mapMultiple(object)
-            : ExifToStringMapper.mapSingle(object);
-    }
+import {Injectable} from '@angular/core';
 
-    protected static mapSingle(object:any):string {
+@Injectable()
+export class ExifToStringMapper {
+    map(object:any):string {
         const exif:Array<string> = [];
         if (String(object.manufacturer).trim()) {
             exif.push('Manufacturer: ' + object.manufacturer);
@@ -26,9 +23,5 @@ export class ExifToStringMapper {
             exif.push('Taken At: ' + object.taken_at);
         }
         return exif.join(', ');
-    }
-
-    protected static mapMultiple(objects:Array<any>):Array<string> {
-        return objects.map(ExifToStringMapper.mapSingle);
     }
 }
