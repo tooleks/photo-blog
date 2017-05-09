@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, AfterViewInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import 'rxjs/add/operator/map';
 import {NoticesService} from '../../../lib';
@@ -15,7 +15,7 @@ import {
     selector: 'unsubscription',
     templateUrl: 'unsubscription.component.html',
 })
-export class UnsubscriptionComponent implements OnInit {
+export class UnsubscriptionComponent implements OnInit, AfterViewInit {
     protected token:string = null;
     protected navigator:NavigatorService;
     protected processLocker:ProcessLockerService;
@@ -32,6 +32,9 @@ export class UnsubscriptionComponent implements OnInit {
 
     ngOnInit():void {
         this.title.setPageNameSegment('Unsubscription');
+    }
+
+    ngAfterViewInit():void {
         this.initParamsSubscribers();
     }
 

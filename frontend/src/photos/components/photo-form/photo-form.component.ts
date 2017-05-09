@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, AfterViewInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
@@ -19,7 +19,7 @@ import {Photo} from './models';
     templateUrl: 'photo-form.component.html',
     styleUrls: ['photo-form.component.css'],
 })
-export class PhotoFormComponent implements OnInit {
+export class PhotoFormComponent implements OnInit, AfterViewInit {
     protected photo:Photo;
     protected navigator:NavigatorService;
     protected processLocker:ProcessLockerService;
@@ -38,6 +38,9 @@ export class PhotoFormComponent implements OnInit {
     ngOnInit():void {
         this.photo = new Photo;
         this.title.setPageNameSegment('Add Photo');
+    }
+
+    ngAfterViewInit():void {
         this.initParamsSubscribers();
     }
 
@@ -51,15 +54,19 @@ export class PhotoFormComponent implements OnInit {
     protected processLoadById(id:number):Promise<any> {
         return id
             ? this.photoDataProvider.getById(id)
-            : Promise.reject(new Error('Photo ID is not provided.'));
+            : Promise.reject(new Error('Invalid value of a id parameter.'));
     }
 
     loadById(id:number):Promise<any> {
-        return this.processLocker.lock(() => this.processLoadById(id)).then((photo) => {
-            this.photo.setSavedPhotoAttributes(photo);
-            this.title.setPageNameSegment('Edit Photo');
-            return photo;
-        });
+        return this.processLocker
+            .lock(() => this.processLoadById(id))
+            .then((photo) => this.onLoadByIdSuccess(photo));
+    }
+
+    protected onLoadByIdSuccess(photo) {
+        this.photo.setSavedPhotoAttributes(photo);
+        this.title.setPageNameSegment('Edit Photo');
+        return photo;
     }
 
     protected processSavePhoto():Promise<any> {
@@ -69,12 +76,16 @@ export class PhotoFormComponent implements OnInit {
     }
 
     save():Promise<any> {
-        return this.processLocker.lock(() => this.processSavePhoto()).then((photo) => {
-            this.photo.setSavedPhotoAttributes(photo);
-            this.notices.success('Photo was successfully saved.');
-            this.navigator.navigate(['/photos']);
-            return photo;
-        });
+        return this.processLocker
+            .lock(() => this.processSavePhoto())
+            .then((photo) => this.onSaveSuccess(photo));
+    }
+
+    protected onSaveSuccess(photo) {
+        this.photo.setSavedPhotoAttributes(photo);
+        this.notices.success('Photo was successfully saved.');
+        this.navigator.navigate(['/photos']);
+        return photo;
     }
 
     protected processUploadPhoto(file:FileList):Promise<any> {
@@ -84,25 +95,33 @@ export class PhotoFormComponent implements OnInit {
     }
 
     upload(file):Promise<any> {
-        return this.processLocker.lock(() => this.processUploadPhoto(file)).then((photo) => {
-            this.photo.setUploadedPhotoAttributes(photo);
-            this.notices.success('File was successfully uploaded.');
-            return photo;
-        });
+        return this.processLocker
+            .lock(() => this.processUploadPhoto(file))
+            .then((photo) => this.onUploadSuccess(photo));
+    }
+
+    protected onUploadSuccess(photo) {
+        this.photo.setUploadedPhotoAttributes(photo);
+        this.notices.success('File was successfully uploaded.');
+        return photo;
     }
 
     protected processDeletePhoto():Promise<any> {
         return this.photo.id
             ? this.photoDataProvider.deleteById(this.photo.id)
-            : Promise.reject(new Error('Photo ID is not provided.'));
+            : Promise.reject(new Error('Invalid value of a id parameter.'));
     }
 
     deletePhoto():Promise<any> {
-        return this.processLocker.lock(() => this.processDeletePhoto()).then((result) => {
-            this.notices.success('Photo was successfully deleted.');
-            this.navigator.navigate(['/photos']);
-            return result;
-        });
+        return this.processLocker
+            .lock(() => this.processDeletePhoto())
+            .then((response) => this.onDeletePhotoSuccess(response));
+    }
+
+    protected onDeletePhotoSuccess(response) {
+        this.notices.success('Photo was successfully deleted.');
+        this.navigator.navigate(['/photos']);
+        return response;
     }
 
     isProcessing():boolean {
