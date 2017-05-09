@@ -11,7 +11,7 @@ module.exports = {
         'browser': root('./src/main.browser.ts')
     },
     output: {
-        filename: '[name].js'
+        filename: '[name].js?v=[hash]'
     },
     target: 'web'
 };

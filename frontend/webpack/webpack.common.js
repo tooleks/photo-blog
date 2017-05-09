@@ -52,7 +52,7 @@ module.exports = {
         ]
     },
     plugins: [
-        new ExtractTextPlugin('[name].css'),
+        new ExtractTextPlugin('[name].css?v=[hash]'),
         new HtmlWebpackPlugin({
             template: root('./src/index.html'),
             output: root('./dist'),
