@@ -1,5 +1,7 @@
 const {root} = require('./helpers');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ScriptExtPlugin = require('script-ext-html-webpack-plugin');
 
 /**
  * This is a common webpack config which is the base for all builds
@@ -50,6 +52,15 @@ module.exports = {
         ]
     },
     plugins: [
-        new ExtractTextPlugin('[name].css')
+        new ExtractTextPlugin('[name].css'),
+        new HtmlWebpackPlugin({
+            template: root('./src/index.html'),
+            output: root('./dist'),
+            inject: 'body',
+            favicon: root('./assets/static/img/favicon.ico')
+        }),
+        new ScriptExtPlugin({
+            defaultAttribute: 'defer'
+        })
     ]
 };
