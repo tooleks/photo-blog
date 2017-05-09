@@ -86,7 +86,7 @@ export class PhotosByTagComponent extends AbstractPhotosComponent implements OnI
                 .lock(() => this.photoDataProvider.getByTag(page, perPage, tag))
                 .then((response) => this.onLoadImagesSuccess(response));
         } else {
-            return Promise.reject(new Error);
+            return Promise.reject(new Error('Invalid value of a tag parameter.'));
         }
     }
 

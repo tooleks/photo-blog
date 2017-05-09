@@ -99,7 +99,7 @@ export class PhotosBySearchPhraseComponent extends AbstractPhotosComponent imple
                 .lock(() => this.photoDataProvider.getBySearchPhrase(page, perPage, searchPhrase))
                 .then((response) => this.onLoadImagesSuccess(response));
         } else {
-            return Promise.reject(new Error);
+            return Promise.reject(new Error('Invalid value of a search phrase parameter.'));
         }
     }
 
