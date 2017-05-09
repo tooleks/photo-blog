@@ -71,13 +71,13 @@ export abstract class PhotosComponent implements OnInit, AfterViewInit {
     protected initParamsSubscribers():void {
         this.route.queryParams
             .map((queryParams) => queryParams['page'])
-            .filter((page) => page)
+            .filter((page) => typeof (page) !== 'undefined')
             .map((page) => Number(page))
             .subscribe((page:number) => this.queryParams['page'] = page);
 
         this.route.queryParams
             .map((queryParams) => queryParams['show'])
-            .filter((show) => show)
+            .filter((show) => typeof (show) !== 'undefined')
             .map((show) => Number(show))
             .subscribe((show:number) => this.queryParams['show'] = show);
     }

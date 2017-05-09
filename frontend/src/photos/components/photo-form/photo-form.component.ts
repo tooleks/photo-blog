@@ -42,7 +42,7 @@ export class PhotoFormComponent implements OnInit {
     protected initParamsSubscribers():void {
         this.route.params
             .map((params) => params['id'])
-            .filter((id) => id)
+            .filter((id) => typeof (id) !== 'undefined')
             .subscribe((id) => this.loadById(id));
     }
 

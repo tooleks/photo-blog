@@ -68,8 +68,9 @@ export class PhotosByTagComponent extends AbstractPhotosComponent implements OnI
         super.initParamsSubscribers();
         this.route.params
             .map((params) => params['tag'])
-            .filter((tag) => tag && tag != this.queryParams['tag'])
+            .filter((tag) => typeof (tag) !== 'undefined')
             .map((tag) => String(tag))
+            .filter((tag:string) => tag !== this.queryParams['tag'])
             .subscribe((tag:string) => this.onTagChange(tag));
     }
 

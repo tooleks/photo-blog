@@ -38,7 +38,8 @@ export class UnsubscriptionComponent implements OnInit {
     protected initParamsSubscribers():void {
         this.route.params
             .map((params) => params['token'])
-            .subscribe((token:string) => this.token = String(token));
+            .map((token) => String(token))
+            .subscribe((token:string) => this.token = token);
     }
 
     unsubscribe():Promise<any> {
