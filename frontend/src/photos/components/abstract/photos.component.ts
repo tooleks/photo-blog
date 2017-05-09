@@ -90,7 +90,7 @@ export abstract class PhotosComponent implements OnInit, AfterViewInit {
         return this.processLocker.isLocked();
     }
 
-    protected onLoadImagesSuccess(response) {
+    onLoadImagesSuccess(response) {
         if (response.data.length) {
             let images = response.data.map((item) => this.galleryImageMapper.map(item));
             this.images = this.images.concat(images);

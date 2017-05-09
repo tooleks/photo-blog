@@ -79,6 +79,7 @@ export class PhotosBySearchPhraseComponent extends AbstractPhotosComponent imple
 
     protected initParamsSubscribers() {
         super.initParamsSubscribers();
+        
         this.route.queryParams
             .map((queryParams) => queryParams['search_phrase'])
             .filter((searchPhrase) => typeof (searchPhrase) !== 'undefined')
