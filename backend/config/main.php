@@ -75,13 +75,13 @@ return [
         'thumbnails' => [
             [
                 'mode' => 'inset',
-                'quality' => 90,    // percentage
+                'quality' => 95,    // percentage
                 'width' => 1500,     // pixels
                 'height' => 1500,    // pixels
             ],
             [
                 'mode' => 'inset',
-                'quality' => 55,    // percentage
+                'quality' => 70,    // percentage
                 'width' => 600,     // pixels
                 'height' => 600,    // pixels
             ],
