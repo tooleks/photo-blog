@@ -6,12 +6,12 @@
     "type": "project",
     "require": {
         "php": "^7.0",
-        "ext-gd": "*",
         "laravel/framework": "5.4.*",
         "doctrine/dbal": "~2.3",
         "imagine/imagine": "^0.6.3",
         "tooleks/laravel-presenter": "^1.0",
-        "guzzlehttp/guzzle": "^6.2"
+        "guzzlehttp/guzzle": "^6.2",
+        "tooleks/php-avg-color-picker": "^1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

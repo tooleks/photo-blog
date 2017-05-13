@@ -7,7 +7,7 @@ use Core\Models\Photo;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
 use Illuminate\Database\Eloquent\Collection;
-use Lib\AvgColorPicker\Contracts\AvgColorPicker;
+use Tooleks\Php\AvgColorPicker\Contracts\AvgColorPicker;
 
 /**
  * Class GeneratePhotoAvgColors.

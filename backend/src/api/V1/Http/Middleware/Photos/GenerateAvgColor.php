@@ -5,7 +5,7 @@ namespace Api\V1\Http\Middleware\Photos;
 use Closure;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
 use Illuminate\Http\Request;
-use Lib\AvgColorPicker\Contracts\AvgColorPicker;
+use Tooleks\Php\AvgColorPicker\Contracts\AvgColorPicker;
 
 /**
  * Class GenerateAvgColor.
