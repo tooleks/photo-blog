@@ -1,13 +1,10 @@
 /node_modules/
 /vendor/
 /dist/
-
-npm-debug.log
-
 /public/storage
-/public/storage/
-/public/api/v1/storage
-/public/api/v1/storage/
+
 Homestead.json
 Homestead.yaml
 .env
+npm-debug.log
+www.pid
