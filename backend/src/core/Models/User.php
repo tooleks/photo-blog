@@ -85,7 +85,7 @@ class User extends Authenticatable
      */
     public function setCustomerRoleId()
     {
-        $this->role_id = Role::whereNameCustomer()->first()->id;
+        $this->role_id = Role::whereNameCustomer()->firstOrFail()->id;
 
         return $this;
     }
@@ -97,7 +97,7 @@ class User extends Authenticatable
      */
     public function setAdministratorRoleId()
     {
-        $this->role_id = Role::whereNameAdministrator()->first()->id;
+        $this->role_id = Role::whereNameAdministrator()->firstOrFail()->id;
 
         return $this;
     }
