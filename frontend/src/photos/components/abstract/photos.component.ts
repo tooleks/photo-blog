@@ -114,7 +114,7 @@ export abstract class PhotosComponent implements OnInit, AfterViewInit {
     onShowPhoto(image:GalleryImage):void {
         this.scrollFreezer.freeze();
         this.title.setPageNameSegment(image.getDescription());
-        this.metaTags.setTitle(image.getDescription()).setImage(image.getLargeSizeUrl());
+        this.metaTags.setTitle(image.getDescription()).setImage(image.getViewerSizeUrl());
         this.navigator.setQueryParam('show', image.getId());
     }
 

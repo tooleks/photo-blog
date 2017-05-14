@@ -59,7 +59,7 @@ export class GalleryViewerComponent implements OnChanges {
 
     initImage():void {
         var loadedImage:boolean = false;
-        loadImage(this.image.getLargeSizeUrl(), () => {
+        loadImage(this.image.getViewerSizeUrl(), () => {
             this.loadedImage = loadedImage = true;
             this.onImageLoaded.emit(this.image);
         });

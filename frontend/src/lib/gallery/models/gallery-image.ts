@@ -51,31 +51,31 @@ export class GalleryImage {
         return this.attributes.viewUrl;
     }
 
-    setSmallSizeUrl(smallSizeUrl:string):this {
-        this.attributes.smallSizeUrl = String(smallSizeUrl);
+    setGridSizeUrl(gridSizeUrl:string):this {
+        this.attributes.gridSizeUrl = String(gridSizeUrl);
         return this;
     }
 
-    getSmallSizeUrl():string {
-        return this.attributes.smallSizeUrl;
+    getGridSizeUrl():string {
+        return this.attributes.gridSizeUrl;
     }
 
-    setSmallSizeHeight(smallSizeHeight:number):this {
-        this.attributes.smallSizeHeight = Number(smallSizeHeight);
+    setGridSizeHeight(gridSizeHeight:number):this {
+        this.attributes.gridSizeHeight = Number(gridSizeHeight);
         return this;
     }
 
-    getSmallSizeHeight():number {
-        return this.attributes.smallSizeHeight;
+    getGridSizeHeight():number {
+        return this.attributes.gridSizeHeight;
     }
 
-    setSmallSizeWidth(smallSizeWidth:number):this {
-        this.attributes.smallSizeWidth = Number(smallSizeWidth);
+    setGridSizeWidth(gridSizeWidth:number):this {
+        this.attributes.gridSizeWidth = Number(gridSizeWidth);
         return this;
     }
 
-    getSmallSizeWidth():number {
-        return this.attributes.smallSizeWidth;
+    getGridSizeWidth():number {
+        return this.attributes.gridSizeWidth;
     }
 
     setFullSizeUrl(fullSizeUrl:string):this {
@@ -87,31 +87,31 @@ export class GalleryImage {
         return this.attributes.fullSizeUrl;
     }
 
-    setLargeSizeUrl(largeSizeUrl:string):this {
-        this.attributes.largeSizeUrl = String(largeSizeUrl);
+    setViewerSizeUrl(viewerSizeUrl:string):this {
+        this.attributes.viewerSizeUrl = String(viewerSizeUrl);
         return this;
     }
 
-    getLargeSizeUrl():string {
-        return this.attributes.largeSizeUrl;
+    getViewerSizeUrl():string {
+        return this.attributes.viewerSizeUrl;
     }
 
-    setLargeSizeHeight(largeSizeHeight:number):this {
-        this.attributes.largeSizeHeight = Number(largeSizeHeight);
+    setViewerSizeHeight(viewerSizeHeight:number):this {
+        this.attributes.viewerSizeHeight = Number(viewerSizeHeight);
         return this;
     }
 
-    getLargeSizeHeight():number {
-        return this.attributes.largeSizeHeight;
+    getViewerSizeHeight():number {
+        return this.attributes.viewerSizeHeight;
     }
 
-    setLargeSizeWidth(largeSizeWidth:number):this {
-        this.attributes.largeSizeWidth = Number(largeSizeWidth);
+    setViewerSizeWidth(viewerSizeWidth:number):this {
+        this.attributes.viewerSizeWidth = Number(viewerSizeWidth);
         return this;
     }
 
-    getLargeSizeWidth():number {
-        return this.attributes.largeSizeWidth;
+    getViewerSizeWidth():number {
+        return this.attributes.viewerSizeWidth;
     }
 
     setAvgColor(avgColor:string):this {

@@ -2,12 +2,12 @@ export class GalleryImageAttributes {
     id;
     viewUrl:string;
     fullSizeUrl:string;
-    smallSizeUrl:string;
-    smallSizeHeight:number;
-    smallSizeWidth:number;
-    largeSizeUrl:string;
-    largeSizeHeight:number;
-    largeSizeWidth:number;
+    gridSizeUrl:string;
+    gridSizeHeight:number;
+    gridSizeWidth:number;
+    viewerSizeUrl:string;
+    viewerSizeHeight:number;
+    viewerSizeWidth:number;
     avgColor:string;
     description:string;
     exif:string;

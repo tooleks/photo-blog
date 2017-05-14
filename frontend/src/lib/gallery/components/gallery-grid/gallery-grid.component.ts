@@ -9,7 +9,7 @@ import {
     AfterContentInit,
     OnDestroy
 } from '@angular/core';
-import {scaleImageSmallSizeToHeight, scaleImagesSmallSizeToWidth, sumImagesSmallSizeWidth} from '../../helpers';
+import {scaleImageGridSizeToHeight, scaleImagesGridSizeToWidth, sumImagesGridSizeWidth} from '../../helpers';
 import {GalleryImage} from '../../models';
 
 @Component({
@@ -138,15 +138,15 @@ export class GalleryGridComponent implements OnChanges, AfterContentInit, OnDest
     }
 
     pushImageToActiveRow(image:GalleryImage):void {
-        const scaledImage = scaleImageSmallSizeToHeight(image, this.getGridRowMaxHeight());
+        const scaledImage = scaleImageGridSizeToHeight(image, this.getGridRowMaxHeight());
         this.getActiveRowImages().push(scaledImage);
     }
 
     renderActiveRowIfFilled(force:boolean = false):void {
         let renderedImages:Array<GalleryImage> = [];
         // If the active row width is bigger than the max row width, scale the active row to the max row width.
-        if (sumImagesSmallSizeWidth(this.getActiveRowImages()) > this.getGridRowMaxWidth()) {
-            renderedImages = scaleImagesSmallSizeToWidth(this.getActiveRowImages(), this.getGridRowMaxWidth());
+        if (sumImagesGridSizeWidth(this.getActiveRowImages()) > this.getGridRowMaxWidth()) {
+            renderedImages = scaleImagesGridSizeToWidth(this.getActiveRowImages(), this.getGridRowMaxWidth());
         }
         // If the force flag is enabled and there are no rendered images, set active row images as rendered images.
         if (force && !renderedImages.length) {

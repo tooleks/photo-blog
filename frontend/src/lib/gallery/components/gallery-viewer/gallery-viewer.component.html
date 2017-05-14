@@ -9,7 +9,7 @@
              class="gallery-view">
             <div *ngIf="isLoadedImage()" class="gallery-img-container">
                 <img (click)="clickNextImage()"
-                     [src]="image.getLargeSizeUrl()"
+                     [src]="image.getViewerSizeUrl()"
                      [alt]="image.getDescription()"
                      [title]="image.getDescription()"
                      class="gallery-img">
