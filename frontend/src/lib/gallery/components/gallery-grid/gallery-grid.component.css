@@ -1,10 +1,10 @@
-gallery-grid {
+gallery-grid,
+gallery-grid .gallery-grid-row {
     display: block;
     width: 100%;
 }
 
 gallery-grid .gallery-grid-cell-wrapper {
-    display: block;
     float: left;
 }
 
