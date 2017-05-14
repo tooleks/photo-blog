@@ -1,4 +1,5 @@
 export class GalleryImageAttributes {
+    source;
     id;
     viewUrl:string;
     fullSizeUrl:string;

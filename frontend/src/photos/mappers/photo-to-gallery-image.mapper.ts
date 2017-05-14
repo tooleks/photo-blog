@@ -10,6 +10,7 @@ export class PhotoToGalleryImageMapper {
 
     map(object):GalleryImage {
         return new GalleryImage({
+            source: object,
             id: object.id,
             viewUrl: `/photos?show=${object.id}`,
             fullSizeUrl: object.url,

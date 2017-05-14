@@ -33,6 +33,15 @@ export class GalleryImage {
         return this.attributes;
     }
 
+    setSource(source):this {
+        this.attributes.source = source;
+        return this;
+    }
+
+    getSource() {
+        return this.attributes.source;
+    }
+
     setId(id:number):this {
         this.attributes.id = Number(id);
         return this;
