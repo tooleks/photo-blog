@@ -54,7 +54,7 @@ export class GalleryGridComponent implements OnChanges, AfterContentInit, OnDest
     ngAfterContentInit() {
         // #browser-specific
         if (typeof (window) !== 'undefined') {
-            this.elementSizeCheck = setInterval(() => this.elementSizeCheckCallback(), this.elementSizeCheckInterval);
+            this.elementSizeCheck = setInterval(() => this.onElementSizeChange(), this.elementSizeCheckInterval);
         }
     }
 
@@ -64,19 +64,19 @@ export class GalleryGridComponent implements OnChanges, AfterContentInit, OnDest
         }
     }
 
-    elementSizeCheckCallback():void {
-        let height = this.elementRef.nativeElement.offsetHeight;
-        let width = this.elementRef.nativeElement.offsetWidth;
+    onElementSizeChange():void {
+        let height = Math.floor(this.elementRef.nativeElement.offsetHeight);
+        let width = Math.floor(this.elementRef.nativeElement.offsetWidth);
         if (width !== this.getElementSize().width) {
             this.setElementSize(width, height);
-            this.setGridRowMaxWidth(this.elementRef.nativeElement.offsetWidth);
+            this.setGridRowMaxWidth(width);
             this.setGridRows([]);
             this.renderGrid(this.images);
         }
     }
 
     setElementSize(width:number, height:number):void {
-        this.elementSize = {width: width, height: height};
+        this.elementSize = {width: Math.floor(width), height: Math.floor(height)};
     }
 
     getElementSize():{width:number, height:number} {
@@ -84,7 +84,7 @@ export class GalleryGridComponent implements OnChanges, AfterContentInit, OnDest
     }
 
     setGridRowMaxHeight(gridRowMaxHeight:number):void {
-        this.gridRowMaxHeight = gridRowMaxHeight;
+        this.gridRowMaxHeight = Math.floor(gridRowMaxHeight);
     }
 
     getGridRowMaxHeight():number {
@@ -92,7 +92,7 @@ export class GalleryGridComponent implements OnChanges, AfterContentInit, OnDest
     }
 
     setGridRowMaxWidth(gridRowMaxWidth:number):void {
-        this.gridRowMaxWidth = gridRowMaxWidth;
+        this.gridRowMaxWidth = Math.floor(gridRowMaxWidth);
     }
 
     getGridRowMaxWidth():number {
@@ -126,8 +126,9 @@ export class GalleryGridComponent implements OnChanges, AfterContentInit, OnDest
         // Get the array of the new grid images concatenated with the array of the last row images.
         const processImages = this.getGridRows().length ? this.getGridRows().pop().concat(newImages) : newImages;
         processImages.forEach((image:GalleryImage, index:number) => {
+            const isLastImage = index == processImages.length - 1;
             this.pushImageToActiveRow(image);
-            this.renderActiveRowIfFilled(index == processImages.length - 1);
+            this.renderActiveRowIfFilled(isLastImage);
         });
     }
 
