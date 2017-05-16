@@ -2,8 +2,8 @@ import {Injectable} from '@angular/core';
 
 @Injectable()
 export class ExifToStringMapper {
-    map(object):string {
-        const exif:Array<string> = [];
+    map(object): string {
+        const exif: Array<string> = [];
         if (String(object.manufacturer).trim()) {
             exif.push('Manufacturer: ' + object.manufacturer);
         }

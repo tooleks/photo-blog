@@ -7,24 +7,24 @@ import {platformServer, platformDynamicServer, PlatformState, INITIAL_CONFIG} fr
  * These are the allowed options for the engine
  */
 export interface NgSetupOptions {
-    aot?:boolean;
-    bootstrap:Type<{}> | NgModuleFactory<{}>;
-    providers?:Provider[];
+    aot?: boolean;
+    bootstrap: Type<{}> | NgModuleFactory<{}>;
+    providers?: Provider[];
 }
 
 /**
  * This holds a cached version of each index used.
  */
-const templateCache:{[key:string]:string} = {};
+const templateCache: { [key: string]: string } = {};
 
 /**
  * This is an express engine for handling Angular Applications
  */
-export function ngExpressEngine(setupOptions:NgSetupOptions) {
+export function ngExpressEngine(setupOptions: NgSetupOptions) {
 
     setupOptions.providers = setupOptions.providers || [];
 
-    return function (filePath, options:{ req:Request, res?:Response }, callback:Send) {
+    return function (filePath, options: { req: Request, res?: Response }, callback: Send) {
         try {
             const moduleFactory = setupOptions.bootstrap;
 
@@ -48,7 +48,7 @@ export function ngExpressEngine(setupOptions:NgSetupOptions) {
                 platformServer(extraProviders).bootstrapModuleFactory(<NgModuleFactory<{}>>moduleFactory) :
                 platformDynamicServer(extraProviders).bootstrapModule(<Type<{}>>moduleFactory);
 
-            moduleRefPromise.then((moduleRef:NgModuleRef<{}>) => {
+            moduleRefPromise.then((moduleRef: NgModuleRef<{}>) => {
                 handleModuleRef(moduleRef, callback);
             });
 
@@ -58,8 +58,8 @@ export function ngExpressEngine(setupOptions:NgSetupOptions) {
     }
 }
 
-function getReqResProviders(req:Request, res:Response):Provider[] {
-    const providers:Provider[] = [
+function getReqResProviders(req: Request, res: Response): Provider[] {
+    const providers: Provider[] = [
         {
             provide: 'REQUEST',
             useValue: req
@@ -77,19 +77,19 @@ function getReqResProviders(req:Request, res:Response):Provider[] {
 /**
  * Get the document at the file path
  */
-function getDocument(filePath:string):string {
+function getDocument(filePath: string): string {
     return templateCache[filePath] = templateCache[filePath] || fs.readFileSync(filePath).toString();
 }
 
 /**
  * Handle the request with a given NgModuleRef
  */
-function handleModuleRef(moduleRef:NgModuleRef<{}>, callback:Send) {
+function handleModuleRef(moduleRef: NgModuleRef<{}>, callback: Send) {
     const state = moduleRef.injector.get(PlatformState);
     const appRef = moduleRef.injector.get(ApplicationRef);
 
     appRef.isStable
-        .filter((isStable:boolean) => isStable)
+        .filter((isStable: boolean) => isStable)
         .first()
         .subscribe((stable) => {
             const bootstrap = moduleRef.instance['ngOnBootstrap'];

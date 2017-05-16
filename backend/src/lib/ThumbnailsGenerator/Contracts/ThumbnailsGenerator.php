@@ -15,5 +15,5 @@ interface ThumbnailsGenerator
      * @param string $originalImageFilePath
      * @return array
      */
-    public function generateThumbnails(string $originalImageFilePath) : array;
+    public function generateThumbnails(string $originalImageFilePath): array;
 }

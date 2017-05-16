@@ -1,7 +1,7 @@
 import {GalleryImage} from '../models';
 import {scale, sum} from './value';
 
-export function scaleImageGridSize(image:GalleryImage, scaleRate:number):GalleryImage {
+export function scaleImageGridSize(image: GalleryImage, scaleRate: number): GalleryImage {
     let gridImageScaledSizeWidth = scale(image.getGridSizeWidth(), scaleRate);
     let gridImageScaledSizeHeight = scale(image.getGridSizeHeight(), scaleRate);
 
@@ -11,16 +11,16 @@ export function scaleImageGridSize(image:GalleryImage, scaleRate:number):Gallery
         .setGridSizeHeight(Math.floor(gridImageScaledSizeHeight));
 }
 
-export function scaleImagesGridSize(images:Array<GalleryImage>, scaleRate:number):Array<GalleryImage> {
-    return images.map((image:GalleryImage) => scaleImageGridSize(image, scaleRate));
+export function scaleImagesGridSize(images: Array<GalleryImage>, scaleRate: number): Array<GalleryImage> {
+    return images.map((image: GalleryImage) => scaleImageGridSize(image, scaleRate));
 }
 
-export function scaleImageGridSizeToHeight(image:GalleryImage, height:number):GalleryImage {
+export function scaleImageGridSizeToHeight(image: GalleryImage, height: number): GalleryImage {
     const scaleRate = image.getGridSizeHeight() * 100 / height;
     return scaleImageGridSize(image, scaleRate);
 }
 
-export function scaleImagesGridSizeToWidth(images:Array<GalleryImage>, width:number):Array<GalleryImage> {
+export function scaleImagesGridSizeToWidth(images: Array<GalleryImage>, width: number): Array<GalleryImage> {
     const scaleRate = sumImagesGridSizeWidth(images) * 100 / width;
     const scaledImages = scaleImagesGridSize(images, scaleRate);
 
@@ -35,6 +35,6 @@ export function scaleImagesGridSizeToWidth(images:Array<GalleryImage>, width:num
     return scaledImages;
 }
 
-export function sumImagesGridSizeWidth(images:Array<GalleryImage>):number {
-    return sum(images.map((image:GalleryImage) => image.getGridSizeWidth()));
+export function sumImagesGridSizeWidth(images: Array<GalleryImage>): number {
+    return sum(images.map((image: GalleryImage) => image.getGridSizeWidth()));
 }

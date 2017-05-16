@@ -6,20 +6,20 @@ import 'rxjs/add/operator/filter';
     templateUrl: 'tags-select-input.component.html',
 })
 export class TagsSelectInputComponent {
-    @Input() tags:Array<any> = [];
-    @Output() tagsChange:EventEmitter<Array<any>> = new EventEmitter<Array<any>>();
+    @Input() tags: Array<any> = [];
+    @Output() tagsChange: EventEmitter<Array<any>> = new EventEmitter<Array<any>>();
 
-    onAdd(addedTag):void {
+    onAdd(addedTag): void {
         this.tags.push(addedTag);
         this.tagsChange.emit(this.tags);
     }
 
-    onRemove(removedTag):void {
+    onRemove(removedTag): void {
         this.tags = this.tags.filter((tag) => tag.value !== removedTag.value);
         this.tagsChange.emit(this.tags);
     }
 
-    transform(value:string):string {
+    transform(value: string): string {
         return value.split(' ').join('_').toLowerCase();
     }
 }

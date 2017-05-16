@@ -8,43 +8,43 @@ import {loadImage} from '../../helpers';
     styleUrls: ['gallery-viewer.component.css'],
 })
 export class GalleryViewerComponent implements OnChanges {
-    @Input() enabledKeyboardEvents:boolean = true;
-    @Input() loaderDelay:number = 400;
+    @Input() enabledKeyboardEvents: boolean = true;
+    @Input() loaderDelay: number = 400;
 
-    @Input() image:GalleryImage = null;
+    @Input() image: GalleryImage = null;
 
-    protected loadedImage:boolean = false;
+    protected loadedImage: boolean = false;
 
-    @Output() onImageLoaded:EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
+    @Output() onImageLoaded: EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
 
-    @Input() showPrevImageButton:boolean = true;
-    @Output() onPrevImage:EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
+    @Input() showPrevImageButton: boolean = true;
+    @Output() onPrevImage: EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
 
-    @Input() showNextImageButton:boolean = true;
-    @Output() onNextImage:EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
+    @Input() showNextImageButton: boolean = true;
+    @Output() onNextImage: EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
 
-    @Input() showCloseImageButton:boolean = true;
-    @Output() onCloseImage:EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
+    @Input() showCloseImageButton: boolean = true;
+    @Output() onCloseImage: EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
 
-    @Input() showEditImageButton:boolean = true;
-    @Output() onEditImage:EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
+    @Input() showEditImageButton: boolean = true;
+    @Output() onEditImage: EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
 
-    @Input() showDeleteImageButton:boolean = true;
-    @Output() onDeleteImage:EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
+    @Input() showDeleteImageButton: boolean = true;
+    @Output() onDeleteImage: EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
 
-    @Input() showImageInfoButton:boolean = true;
-    @Output() onImageInfo:EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
-    @Input() visibleImageInfo:boolean = false;
-    @Output() visibleImageInfoChange:EventEmitter<boolean> = new EventEmitter<boolean>();
+    @Input() showImageInfoButton: boolean = true;
+    @Output() onImageInfo: EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
+    @Input() visibleImageInfo: boolean = false;
+    @Output() visibleImageInfoChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-    ngOnChanges(changes:SimpleChanges) {
+    ngOnChanges(changes: SimpleChanges) {
         if (changes['image'] && changes['image'].currentValue) {
             this.initImage();
         }
     }
 
     @HostListener('document:keydown', ['$event'])
-    onDocumentKeyDown(event:KeyboardEvent) {
+    onDocumentKeyDown(event: KeyboardEvent) {
         if (this.enabledKeyboardEvents && this.image) {
             switch (event.key) {
                 case 'Escape':
@@ -57,8 +57,8 @@ export class GalleryViewerComponent implements OnChanges {
         }
     }
 
-    initImage():void {
-        var loadedImage:boolean = false;
+    initImage(): void {
+        var loadedImage: boolean = false;
         loadImage(this.image.getViewerSizeUrl(), () => {
             this.loadedImage = loadedImage = true;
             this.onImageLoaded.emit(this.image);
@@ -69,11 +69,11 @@ export class GalleryViewerComponent implements OnChanges {
         }
     }
 
-    isLoadedImage():boolean {
+    isLoadedImage(): boolean {
         return this.loadedImage;
     }
 
-    isVisibleImageInfo():boolean {
+    isVisibleImageInfo(): boolean {
         // #browser-specific
         if (typeof (window) !== 'undefined') {
             return this.loadedImage && this.visibleImageInfo;
@@ -82,27 +82,27 @@ export class GalleryViewerComponent implements OnChanges {
         }
     }
 
-    clickPrevImage():void {
+    clickPrevImage(): void {
         this.onPrevImage.emit(this.image);
     }
 
-    clickNextImage():void {
+    clickNextImage(): void {
         this.onNextImage.emit(this.image);
     }
 
-    clickCloseImage():void {
+    clickCloseImage(): void {
         this.onCloseImage.emit(this.image);
     }
 
-    clickEditImage():void {
+    clickEditImage(): void {
         this.onEditImage.emit(this.image);
     }
 
-    clickDeleteImage():void {
+    clickDeleteImage(): void {
         this.onDeleteImage.emit(this.image);
     }
 
-    clickImageInfo():void {
+    clickImageInfo(): void {
         this.visibleImageInfo = !this.visibleImageInfo;
         this.visibleImageInfoChange.emit(this.visibleImageInfo);
         this.onImageInfo.emit(this.image);

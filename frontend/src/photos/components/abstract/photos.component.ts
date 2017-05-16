@@ -18,14 +18,14 @@ import {
 import {PhotoToLinkedDataMapper, PhotoToGalleryImageMapper} from '../../mappers';
 
 export abstract class PhotosComponent implements OnInit, AfterViewInit {
-    protected pager:PagerService;
-    protected navigator:NavigatorService;
-    protected processLocker:ProcessLockerService;
+    protected pager: PagerService;
+    protected navigator: NavigatorService;
+    protected processLocker: ProcessLockerService;
 
-    protected images:Array<GalleryImage> = [];
-    protected hasMoreImages:boolean = true;
+    protected images: Array<GalleryImage> = [];
+    protected hasMoreImages: boolean = true;
 
-    protected linkedData:Array<any> = [];
+    protected linkedData: Array<any> = [];
     protected queryParams = {};
 
     protected defaults = {
@@ -35,58 +35,58 @@ export abstract class PhotosComponent implements OnInit, AfterViewInit {
         title: null,
     };
 
-    constructor(protected router:Router,
-                protected route:ActivatedRoute,
-                protected app:AppService,
-                protected title:TitleService,
-                protected metaTags:MetaTagsService,
-                protected navigatorProvider:NavigatorServiceProvider,
-                protected pagerProvider:PagerServiceProvider,
-                protected processLockerProvider:ProcessLockerServiceProvider,
-                protected scrollFreezer:ScrollFreezerService,
-                protected galleryImageMapper:PhotoToGalleryImageMapper,
-                protected linkedDataMapper:PhotoToLinkedDataMapper) {
+    constructor(protected router: Router,
+                protected route: ActivatedRoute,
+                protected app: AppService,
+                protected title: TitleService,
+                protected metaTags: MetaTagsService,
+                protected navigatorProvider: NavigatorServiceProvider,
+                protected pagerProvider: PagerServiceProvider,
+                protected processLockerProvider: ProcessLockerServiceProvider,
+                protected scrollFreezer: ScrollFreezerService,
+                protected galleryImageMapper: PhotoToGalleryImageMapper,
+                protected linkedDataMapper: PhotoToLinkedDataMapper) {
         this.pager = this.pagerProvider.getInstance(this.defaults['page'], this.defaults['perPage']);
         this.navigator = this.navigatorProvider.getInstance();
         this.processLocker = this.processLockerProvider.getInstance();
     }
 
-    reset():void {
+    reset(): void {
         this.images = [];
         this.hasMoreImages = true;
         this.linkedData = [];
     }
 
-    ngOnInit():void {
+    ngOnInit(): void {
         this.title.setPageNameSegment(this.defaults['title']);
         this.metaTags.setTitle(this.title.getPageNameSegment());
         this.queryParams['page'] = this.defaults['page'];
         this.queryParams['show'] = this.defaults['show'];
     }
 
-    ngAfterViewInit():void {
+    ngAfterViewInit(): void {
         this.initParamsSubscribers();
     }
 
-    protected initParamsSubscribers():void {
+    protected initParamsSubscribers(): void {
         this.route.queryParams
             .map((queryParams) => queryParams['page'])
             .filter((page) => typeof (page) !== 'undefined')
             .map((page) => Number(page))
-            .subscribe((page:number) => this.queryParams['page'] = page);
+            .subscribe((page: number) => this.queryParams['page'] = page);
 
         this.route.queryParams
             .map((queryParams) => queryParams['show'])
             .filter((show) => typeof (show) !== 'undefined')
             .map((show) => Number(show))
-            .subscribe((show:number) => this.queryParams['show'] = show);
+            .subscribe((show: number) => this.queryParams['show'] = show);
     }
 
-    isEmpty():boolean {
+    isEmpty(): boolean {
         return !this.images.length && !this.processLocker.isLocked();
     }
 
-    isProcessing():boolean {
+    isProcessing(): boolean {
         return this.processLocker.isLocked();
     }
 
@@ -111,21 +111,21 @@ export abstract class PhotosComponent implements OnInit, AfterViewInit {
         return response;
     }
 
-    onShowPhoto(image:GalleryImage):void {
+    onShowPhoto(image: GalleryImage): void {
         this.scrollFreezer.freeze();
         this.title.setPageNameSegment(image.getDescription());
         this.metaTags.setTitle(image.getDescription()).setImage(image.getViewerSizeUrl());
         this.navigator.setQueryParam('show', image.getId());
     }
 
-    onHidePhoto(image:GalleryImage):void {
+    onHidePhoto(image: GalleryImage): void {
         this.scrollFreezer.unfreeze();
         this.navigator.unsetQueryParam('show');
         this.queryParams['show'] = this.defaults['show'];
         this.title.setPageNameSegment(this.defaults['title']);
     }
 
-    onEditPhoto(image:GalleryImage):void {
+    onEditPhoto(image: GalleryImage): void {
         this.scrollFreezer.unfreeze();
         this.navigator.navigate(['photo/edit', image.getId()]);
     }

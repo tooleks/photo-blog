@@ -3,20 +3,20 @@ import {LockerService} from '../locker';
 
 @Injectable()
 export class ProcessLockerService {
-    constructor(protected locker:LockerService) {
+    constructor(protected locker: LockerService) {
     }
 
-    lock(callback, args?):Promise<any> {
+    lock(callback, args?): Promise<any> {
         return this.process(callback, args)
             .then((result) => this.onProcessSuccess(result))
             .catch((error) => this.onProcessError(error));
     }
 
-    isLocked():boolean {
+    isLocked(): boolean {
         return this.locker.isLocked();
     }
 
-    protected process(callback, args?):Promise<any> {
+    protected process(callback, args?): Promise<any> {
         return new Promise((resolve, reject) => {
             if (!this.locker.isLocked()) {
                 this.locker.lock();

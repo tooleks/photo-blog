@@ -15,7 +15,7 @@ class PhotoDataProvider extends DataProvider implements PhotoDataProviderContrac
     /**
      * @inheritdoc
      */
-    public function getModelClass() : string
+    public function getModelClass(): string
     {
         return \Core\Models\Photo::class;
     }

@@ -64,14 +64,14 @@ import {
 export class SharedModule {
 }
 
-export function getApiService(http:Http, app:AppService, errorHandler:ApiErrorHandler, authProvider:AuthProviderService) {
+export function getApiService(http: Http, app: AppService, errorHandler: ApiErrorHandler, authProvider: AuthProviderService) {
     return new ApiService(
         http,
         app.getApiUrl(),
-        function onResponseSuccess(response:Response) {
+        function onResponseSuccess(response: Response) {
             return response.json() || {};
         },
-        function onResponseError(response:Response) {
+        function onResponseError(response: Response) {
             return errorHandler.onResponseError(response);
         },
         function provideDefaultHeaders() {
@@ -87,10 +87,10 @@ export function getApiService(http:Http, app:AppService, errorHandler:ApiErrorHa
     );
 }
 
-export function getAppService(env:EnvService) {
+export function getAppService(env: EnvService) {
     return new AppService(env);
 }
 
-export function getTitleService(title:Title, app:AppService) {
+export function getTitleService(title: Title, app: AppService) {
     return new TitleService(title, app.getName());
 }

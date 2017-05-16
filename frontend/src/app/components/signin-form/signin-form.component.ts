@@ -16,27 +16,27 @@ import {SignIn as Model} from './models';
     templateUrl: 'signin-form.component.html',
 })
 export class SignInFormComponent implements OnInit {
-    protected model:Model;
-    protected navigator:NavigatorService;
-    protected processLocker:ProcessLockerService;
+    protected model: Model;
+    protected navigator: NavigatorService;
+    protected processLocker: ProcessLockerService;
 
-    constructor(protected auth:AuthService,
-                protected title:TitleService,
-                protected metaTags:MetaTagsService,
-                protected notices:NoticesService,
-                navigatorProvider:NavigatorServiceProvider,
-                processLockerServiceProvider:ProcessLockerServiceProvider) {
+    constructor(protected auth: AuthService,
+                protected title: TitleService,
+                protected metaTags: MetaTagsService,
+                protected notices: NoticesService,
+                navigatorProvider: NavigatorServiceProvider,
+                processLockerServiceProvider: ProcessLockerServiceProvider) {
         this.navigator = navigatorProvider.getInstance();
         this.processLocker = processLockerServiceProvider.getInstance();
     }
 
-    ngOnInit():void {
+    ngOnInit(): void {
         this.model = new Model;
         this.title.setPageNameSegment('Sing In');
         this.metaTags.setTitle(this.title.getPageNameSegment());
     }
 
-    signIn():Promise<any> {
+    signIn(): Promise<any> {
         return this.processLocker
             .lock(() => this.auth.signIn(this.model.email, this.model.password))
             .then((user) => this.onSignInSuccess(user));
@@ -48,7 +48,7 @@ export class SignInFormComponent implements OnInit {
         return user;
     }
 
-    isProcessing():boolean {
+    isProcessing(): boolean {
         return this.processLocker.isLocked();
     }
 }

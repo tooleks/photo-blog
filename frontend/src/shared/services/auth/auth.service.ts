@@ -4,10 +4,10 @@ import {AuthProviderService} from './auth-provider.service';
 
 @Injectable()
 export class AuthService {
-    constructor(protected userDataProvider:UserDataProviderService, protected authProvider:AuthProviderService) {
+    constructor(protected userDataProvider: UserDataProviderService, protected authProvider: AuthProviderService) {
     }
 
-    signIn(email:string, password:string):Promise<any> {
+    signIn(email: string, password: string): Promise<any> {
         return this.userDataProvider
             .getAuthByCredentials(email, password)
             .then((auth) => this.authProvider.setAuth(auth))
@@ -15,7 +15,7 @@ export class AuthService {
             .then((user) => this.authProvider.setUser(user));
     }
 
-    signOut():Promise<any> {
+    signOut(): Promise<any> {
         return new Promise((resolve, reject) => {
             if (this.authProvider.isAuthenticated()) {
                 let user = this.authProvider.getUser();

@@ -35,21 +35,21 @@ import {ApiService, AuthProviderService, AppService} from '../../../../shared';
     ],
 })
 export class SideBarComponent implements OnInit {
-    @Output() onToggle:EventEmitter<any> = new EventEmitter<any>();
-    @Output() onShow:EventEmitter<any> = new EventEmitter<any>();
-    @Output() onHide:EventEmitter<any> = new EventEmitter<any>();
-    protected animationState:string;
-    protected tags:Array<any> = [];
+    @Output() onToggle: EventEmitter<any> = new EventEmitter<any>();
+    @Output() onShow: EventEmitter<any> = new EventEmitter<any>();
+    @Output() onHide: EventEmitter<any> = new EventEmitter<any>();
+    protected animationState: string;
+    protected tags: Array<any> = [];
 
-    constructor(protected app:AppService,
-                protected api:ApiService,
-                protected authProvider:AuthProviderService,
-                protected screenDetector:ScreenDetectorService) {
+    constructor(protected app: AppService,
+                protected api: ApiService,
+                protected authProvider: AuthProviderService,
+                protected screenDetector: ScreenDetectorService) {
         this.reset();
         this.loadTags();
     }
 
-    ngOnInit():void {
+    ngOnInit(): void {
         this.reset();
     }
 
@@ -58,36 +58,36 @@ export class SideBarComponent implements OnInit {
         this.reset();
     }
 
-    reset():void {
+    reset(): void {
         this.screenDetector.isLargeScreen() ? this.show() : this.hide();
     }
 
-    show():void {
+    show(): void {
         this.animationState = 'in';
         this.emitChange('onShow');
     }
 
-    hide():void {
+    hide(): void {
         if (this.screenDetector.isSmallScreen()) {
             this.animationState = 'out';
         }
         this.emitChange('onHide');
     }
 
-    toggle():void {
+    toggle(): void {
         this.isVisible() ? this.hide() : this.show();
         this.emitChange('onToggle');
     }
 
-    isVisible():boolean {
+    isVisible(): boolean {
         return this.animationState === 'in';
     }
 
-    emitChange(event:string):void {
+    emitChange(event: string): void {
         this[event].emit({isVisible: this.isVisible()});
     }
 
-    protected loadTags():void {
+    protected loadTags(): void {
         this.api.get('/tags', {params: {page: 1, per_page: 7}}).then((response) => this.tags = response.data);
     }
 }

@@ -6,13 +6,13 @@ import {AuthService, NavigatorServiceProvider, NavigatorService} from '../../../
     template: '',
 })
 export class SignOutComponent implements OnInit {
-    protected navigator:NavigatorService;
+    protected navigator: NavigatorService;
 
-    constructor(protected auth:AuthService, navigatorProvider:NavigatorServiceProvider) {
+    constructor(protected auth: AuthService, navigatorProvider: NavigatorServiceProvider) {
         this.navigator = navigatorProvider.getInstance();
     }
 
-    ngOnInit():void {
+    ngOnInit(): void {
         this.auth
             .signOut()
             .then(() => this.navigator.navigate(['/signin']))

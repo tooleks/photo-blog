@@ -27,7 +27,7 @@ class HasSearchPhrase implements Criteria
      *
      * @return array
      */
-    protected function getSearchPhraseWords() : array
+    protected function getSearchPhraseWords(): array
     {
         return explode(' ', $this->searchPhrase);
     }
@@ -37,7 +37,7 @@ class HasSearchPhrase implements Criteria
      *
      * @return int
      */
-    protected function countSearchPhraseWords() : int
+    protected function countSearchPhraseWords(): int
     {
         return count($this->getSearchPhraseWords());
     }

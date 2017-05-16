@@ -16,7 +16,7 @@ interface DataProvider
      *
      * @return string
      */
-    public function getModelClass() : string;
+    public function getModelClass(): string;
 
     /**
      * Reset data service to its initial state.
@@ -93,7 +93,7 @@ interface DataProvider
      * @param array $options
      * @return mixed
      */
-    public function count(array $options = []) : int;
+    public function count(array $options = []): int;
 
     /**
      * Save model.
@@ -112,5 +112,5 @@ interface DataProvider
      * @param array $options
      * @return bool
      */
-    public function delete($model, array $options = []) : bool;
+    public function delete($model, array $options = []): bool;
 }

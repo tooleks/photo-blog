@@ -10,7 +10,7 @@ import {
     UnsubscriptionComponent,
 } from './components';
 
-const AppRoutes:Routes = [
+const AppRoutes: Routes = [
     {
         path: '',
         redirectTo: '/photos',
@@ -50,6 +50,6 @@ const AppRoutes:Routes = [
     }
 ];
 
-export const AppRoutingProviders:any[] = [];
+export const AppRoutingProviders: any[] = [];
 
-export const AppRouting:ModuleWithProviders = RouterModule.forRoot(AppRoutes);
+export const AppRouting: ModuleWithProviders = RouterModule.forRoot(AppRoutes);

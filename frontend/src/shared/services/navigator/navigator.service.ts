@@ -5,7 +5,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 export class NavigatorService {
     protected queryParams = {};
 
-    constructor(protected route:ActivatedRoute, protected router:Router) {
+    constructor(protected route: ActivatedRoute, protected router: Router) {
         this.route.queryParams.subscribe((queryParams) => {
             Object.keys(queryParams).forEach((key) => {
                 this.queryParams[key] = queryParams[key];
@@ -13,17 +13,17 @@ export class NavigatorService {
         });
     }
 
-    setQueryParam(name:string, value):Promise<boolean> {
+    setQueryParam(name: string, value): Promise<boolean> {
         this.queryParams[name] = value;
         return this.navigate([], {queryParams: this.queryParams});
     }
 
-    unsetQueryParam(name:string):Promise<boolean> {
+    unsetQueryParam(name: string): Promise<boolean> {
         delete this.queryParams[name];
         return this.navigate([], {queryParams: this.queryParams});
     }
 
-    navigate(route = [], extras = {}):Promise<boolean> {
+    navigate(route = [], extras = {}): Promise<boolean> {
         return this.router.navigate(route, extras);
     }
 }

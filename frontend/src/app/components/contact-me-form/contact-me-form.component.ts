@@ -16,27 +16,27 @@ import {ContactMe as Model} from './models';
     templateUrl: 'contact-me-form.component.html',
 })
 export class ContactMeFormComponent implements OnInit {
-    protected model:Model;
-    protected navigator:NavigatorService;
-    protected processLocker:ProcessLockerService;
+    protected model: Model;
+    protected navigator: NavigatorService;
+    protected processLocker: ProcessLockerService;
 
-    constructor(protected api:ApiService,
-                protected title:TitleService,
-                protected metaTags:MetaTagsService,
-                protected notices:NoticesService,
-                navigatorProvider:NavigatorServiceProvider,
-                processLockerServiceProvider:ProcessLockerServiceProvider) {
+    constructor(protected api: ApiService,
+                protected title: TitleService,
+                protected metaTags: MetaTagsService,
+                protected notices: NoticesService,
+                navigatorProvider: NavigatorServiceProvider,
+                processLockerServiceProvider: ProcessLockerServiceProvider) {
         this.navigator = navigatorProvider.getInstance();
         this.processLocker = processLockerServiceProvider.getInstance();
     }
 
-    ngOnInit():void {
+    ngOnInit(): void {
         this.model = new Model;
         this.title.setPageNameSegment('Contact Me');
         this.metaTags.setTitle(this.title.getPageNameSegment());
     }
 
-    contactMe():Promise<any> {
+    contactMe(): Promise<any> {
         return this.processLocker
             .lock(() => this.api.post('/contact_messages', this.model))
             .then((data) => this.onContactMeSuccess(data));
@@ -48,7 +48,7 @@ export class ContactMeFormComponent implements OnInit {
         return data;
     }
 
-    isProcessing():boolean {
+    isProcessing(): boolean {
         return this.processLocker.isLocked();
     }
 }

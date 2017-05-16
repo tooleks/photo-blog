@@ -34,7 +34,7 @@ class UserDataProvider extends DataProvider implements UserDataProviderContract
     /**
      * @inheritdoc
      */
-    public function getModelClass() : string
+    public function getModelClass(): string
     {
         return \Core\Models\User::class;
     }

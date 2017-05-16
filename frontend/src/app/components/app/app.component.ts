@@ -13,20 +13,20 @@ import '../../../../assets/static/img/meta_image.jpg'
     styleUrls: ['app.component.css'],
 })
 export class AppComponent implements OnInit {
-    appContentStyles:{overflow:string} = {overflow: ''};
+    appContentStyles: { overflow: string } = {overflow: ''};
 
-    constructor(protected cache:TransferState,
-                protected router:Router,
-                protected app:AppService,
-                protected title:TitleService,
-                protected metaTags:MetaTagsService,
-                protected authProvider:AuthProviderService,
-                protected screenDetector:ScreenDetectorService,
-                protected scrollFreezer:ScrollFreezerService,
-                protected googleAnalytics:GoogleAnalyticsService) {
+    constructor(protected cache: TransferState,
+                protected router: Router,
+                protected app: AppService,
+                protected title: TitleService,
+                protected metaTags: MetaTagsService,
+                protected authProvider: AuthProviderService,
+                protected screenDetector: ScreenDetectorService,
+                protected scrollFreezer: ScrollFreezerService,
+                protected googleAnalytics: GoogleAnalyticsService) {
     }
 
-    ngOnInit():void {
+    ngOnInit(): void {
         this.initMeta();
         this.initRouterSubscribers();
         this.initScrollFreezerSubscribers();
@@ -34,7 +34,7 @@ export class AppComponent implements OnInit {
         this.cache.set('state-transfer', true); // Just for testing purposes.
     }
 
-    protected initMeta():void {
+    protected initMeta(): void {
         this.metaTags
             .setUrl(this.app.getUrl())
             .setWebsiteName(this.app.getName())
@@ -43,13 +43,13 @@ export class AppComponent implements OnInit {
             .setImage(this.app.getImage());
     }
 
-    protected initRouterSubscribers():void {
+    protected initRouterSubscribers(): void {
         this.router.events
             .filter((event) => event instanceof NavigationEnd)
-            .subscribe((event:NavigationEnd) => this.metaTags.setUrl(this.app.getUrl() + event.urlAfterRedirects));
+            .subscribe((event: NavigationEnd) => this.metaTags.setUrl(this.app.getUrl() + event.urlAfterRedirects));
     }
 
-    protected initScrollFreezerSubscribers():void {
+    protected initScrollFreezerSubscribers(): void {
         this.scrollFreezer.freezed.subscribe(() => this.appContentStyles.overflow = 'hidden');
         this.scrollFreezer.unfreezed.subscribe(() => this.appContentStyles.overflow = '');
     }
@@ -63,17 +63,17 @@ export class AppComponent implements OnInit {
         };
     }
 
-    onShowSideBar(event):void {
+    onShowSideBar(event): void {
         if (this.screenDetector.isSmallScreen()) {
             this.scrollFreezer.freeze()
         }
     }
 
-    onHideSideBar(event):void {
+    onHideSideBar(event): void {
         this.scrollFreezer.unfreeze();
     }
 
-    onToggleSideBar(event):void {
+    onToggleSideBar(event): void {
         event.isVisible ? this.onShowSideBar(event) : this.onHideSideBar(event);
     }
 }

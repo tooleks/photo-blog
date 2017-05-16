@@ -20,7 +20,7 @@ class UserPresenter extends Presenter
     /**
      * @inheritdoc
      */
-    protected function getAttributesMap() : array
+    protected function getAttributesMap(): array
     {
         return [
             'id' => 'id',

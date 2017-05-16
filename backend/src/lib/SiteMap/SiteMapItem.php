@@ -45,7 +45,7 @@ class SiteMapItem implements SiteMapItemContract
     /**
      * @inheritdoc
      */
-    public function getLocation() : string
+    public function getLocation(): string
     {
         return $this->location;
     }
@@ -53,7 +53,7 @@ class SiteMapItem implements SiteMapItemContract
     /**
      * @inheritdoc
      */
-    public function hasLocation() : bool
+    public function hasLocation(): bool
     {
         return (bool)strlen($this->location);
     }
@@ -71,7 +71,7 @@ class SiteMapItem implements SiteMapItemContract
     /**
      * @inheritdoc
      */
-    public function getLastModified() : string
+    public function getLastModified(): string
     {
         return $this->lastModified;
     }
@@ -79,7 +79,7 @@ class SiteMapItem implements SiteMapItemContract
     /**
      * @inheritdoc
      */
-    public function hasLastModified() : bool
+    public function hasLastModified(): bool
     {
         return (bool)strlen($this->lastModified);
     }
@@ -97,7 +97,7 @@ class SiteMapItem implements SiteMapItemContract
     /**
      * @inheritdoc
      */
-    public function getChangeFrequency() : string
+    public function getChangeFrequency(): string
     {
         return $this->changeFrequency;
     }
@@ -105,7 +105,7 @@ class SiteMapItem implements SiteMapItemContract
     /**
      * @inheritdoc
      */
-    public function hasChangeFrequency() : bool
+    public function hasChangeFrequency(): bool
     {
         return (bool)strlen($this->changeFrequency);
     }
@@ -123,7 +123,7 @@ class SiteMapItem implements SiteMapItemContract
     /**
      * @inheritdoc
      */
-    public function getPriority() : string
+    public function getPriority(): string
     {
         return $this->priority;
     }
@@ -131,7 +131,7 @@ class SiteMapItem implements SiteMapItemContract
     /**
      * @inheritdoc
      */
-    public function hasPriority() : bool
+    public function hasPriority(): bool
     {
         return (bool)strlen($this->priority);
     }

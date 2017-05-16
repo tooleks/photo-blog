@@ -18,5 +18,5 @@ interface ExifFetcher
      * @return array
      * @throws ExifFetcherException
      */
-    public function fetch(string $filePath) : array;
+    public function fetch(string $filePath): array;
 }

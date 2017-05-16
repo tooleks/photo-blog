@@ -16,7 +16,7 @@ class SubscriptionPresenter extends Presenter
     /**
      * @inheritdoc
      */
-    protected function getAttributesMap() : array
+    protected function getAttributesMap(): array
     {
         return [
             'email' => 'email',

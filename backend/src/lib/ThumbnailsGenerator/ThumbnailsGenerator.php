@@ -73,7 +73,7 @@ class ThumbnailsGenerator implements ThumbnailsGeneratorContract
     /**
      * @inheritdoc
      */
-    public function generateThumbnails(string $originalImageFilePath) : array
+    public function generateThumbnails(string $originalImageFilePath): array
     {
         $metaData = [];
 
@@ -121,7 +121,7 @@ class ThumbnailsGenerator implements ThumbnailsGeneratorContract
      * @param string $height
      * @return string
      */
-    private function generateThumbnailFilePath(string $originalImageFilePath, string $width, string $height) : string
+    private function generateThumbnailFilePath(string $originalImageFilePath, string $width, string $height): string
     {
         return sprintf(
             '%s/%s_%sx%s.%s',

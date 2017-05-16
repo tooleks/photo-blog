@@ -3,14 +3,14 @@ import {EnvironmentDetectorService} from '../environment-detector';
 
 @Injectable()
 export class ScreenDetectorService {
-    constructor(protected environmentDetector:EnvironmentDetectorService) {
+    constructor(protected environmentDetector: EnvironmentDetectorService) {
     }
 
-    isLargeScreen():boolean {
+    isLargeScreen(): boolean {
         return this.environmentDetector.isBrowser() ? window.innerWidth > 767 : true;
     }
 
-    isSmallScreen():boolean {
+    isSmallScreen(): boolean {
         return !this.isLargeScreen();
     }
 }

@@ -1,17 +1,17 @@
 export class Photo {
-    id:number;
-    photo_id:number;
-    created_by_user_id:number;
-    url:string;
-    avg_color:string;
-    description:string;
-    created_at:string;
-    updated_at:string;
+    id: number;
+    photo_id: number;
+    created_by_user_id: number;
+    url: string;
+    avg_color: string;
+    description: string;
+    created_at: string;
+    updated_at: string;
     exif;
-    thumbnails:Array<any> = [];
-    tags:Array<any> = [];
+    thumbnails: Array<any> = [];
+    tags: Array<any> = [];
 
-    setUploadedPhotoAttributes(attributes):void {
+    setUploadedPhotoAttributes(attributes): void {
         this.photo_id = attributes.id;
         this.created_by_user_id = attributes.created_by_user_id;
         this.url = attributes.url;
@@ -22,7 +22,7 @@ export class Photo {
         this.thumbnails = attributes.thumbnails;
     }
 
-    setSavedPhotoAttributes(attributes):void {
+    setSavedPhotoAttributes(attributes): void {
         this.id = attributes.id;
         this.created_by_user_id = attributes.created_by_user_id;
         this.url = attributes.url;

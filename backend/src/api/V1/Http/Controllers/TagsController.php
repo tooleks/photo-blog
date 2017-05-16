@@ -59,7 +59,7 @@ class TagsController extends Controller
      * @param FindTagsRequest $request
      * @return AbstractPaginator
      */
-    public function find(FindTagsRequest $request) : AbstractPaginator
+    public function find(FindTagsRequest $request): AbstractPaginator
     {
         $paginator = $this->tagDataProvider
             ->applyCriteria((new SortByPhotosCount)->desc())

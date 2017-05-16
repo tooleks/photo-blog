@@ -8,7 +8,7 @@ import {Input, Component} from '@angular/core';
 export class JsonLdComponent {
     @Input() data = {};
 
-    getContent():string {
+    getContent(): string {
         return `<script type="application/ld+json">${JSON.stringify(this.data)}</script>`;
     }
 }

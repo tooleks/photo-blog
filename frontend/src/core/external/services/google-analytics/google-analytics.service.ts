@@ -2,21 +2,21 @@ import {Injectable} from '@angular/core';
 import {Router, NavigationEnd} from '@angular/router';
 import 'rxjs/add/operator/filter';
 import {EnvironmentDetectorService} from '../../../detector';
-declare let ga:Function;
+declare let ga: Function;
 
 @Injectable()
 export class GoogleAnalyticsService {
-    constructor(protected router:Router, protected environmentDetector:EnvironmentDetectorService, protected config) {
+    constructor(protected router: Router, protected environmentDetector: EnvironmentDetectorService, protected config) {
     }
 
-    init():void {
+    init(): void {
         if (this.environmentDetector.isBrowser()) {
             this.initScript();
             this.initRouterSubscribers();
         }
     }
 
-    protected initScript():void {
+    protected initScript(): void {
         let script, ref = document.getElementsByTagName('script')[0];
         script = document.createElement('script');
         script.async = true;
@@ -31,10 +31,10 @@ export class GoogleAnalyticsService {
         ref.parentNode.insertBefore(script, ref);
     }
 
-    protected initRouterSubscribers():void {
+    protected initRouterSubscribers(): void {
         this.router.events
             .filter((event) => event instanceof NavigationEnd)
-            .subscribe((event:NavigationEnd) => {
+            .subscribe((event: NavigationEnd) => {
                 ga('set', 'page', event.urlAfterRedirects);
                 ga('send', 'pageview');
             });

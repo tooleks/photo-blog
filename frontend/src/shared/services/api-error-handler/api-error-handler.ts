@@ -5,13 +5,13 @@ import {NoticesService} from '../../../lib';
 
 @Injectable()
 export class ApiErrorHandler {
-    protected navigator:NavigatorService;
+    protected navigator: NavigatorService;
 
-    constructor(protected notices:NoticesService, protected navigatorProvider:NavigatorServiceProvider) {
+    constructor(protected notices: NoticesService, protected navigatorProvider: NavigatorServiceProvider) {
         this.navigator = navigatorProvider.getInstance();
     }
 
-    onResponseError(response:Response) {
+    onResponseError(response: Response) {
         switch (response.status) {
             case 0:
                 return this.onResponseUnknownError(response);
@@ -24,30 +24,30 @@ export class ApiErrorHandler {
         }
     }
 
-    protected onResponseUnknownError(response:Response) {
+    protected onResponseUnknownError(response: Response) {
         const body = response.json();
         this.notices.error(body.message, 'Remote server connection error. Try again later.');
         throw new Error(body.message);
     }
 
-    protected onResponseUnauthorizedError(response:Response) {
+    protected onResponseUnauthorizedError(response: Response) {
         const body = response.json();
         this.navigator.navigate(['/signout']);
         throw new Error(body.message);
     }
 
-    protected onResponseValidationError(response:Response) {
+    protected onResponseValidationError(response: Response) {
         const body = response.json();
         body.errors = body.errors || {};
         for (var attribute in body.errors) {
             if (body.errors.hasOwnProperty(attribute)) {
-                body.errors[attribute].forEach((message:string) => this.notices.warning(message));
+                body.errors[attribute].forEach((message: string) => this.notices.warning(message));
             }
         }
         throw new Error(body.message);
     }
 
-    protected onResponseHttpError(response:Response) {
+    protected onResponseHttpError(response: Response) {
         const body = response.json();
         this.notices.error(body.message, `${response.status} Error`);
         throw new Error(body.message);

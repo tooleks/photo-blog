@@ -7,15 +7,15 @@ import {TitleService} from '../../../shared';
     templateUrl: 'about-me.component.html',
 })
 export class AboutMeComponent implements OnInit {
-    constructor(protected title:TitleService, protected metaTags:MetaTagsService, protected env:EnvService) {
+    constructor(protected title: TitleService, protected metaTags: MetaTagsService, protected env: EnvService) {
     }
 
-    ngOnInit():void {
+    ngOnInit(): void {
         this.title.setPageNameSegment('About Me');
         this.metaTags.setTitle(this.title.getPageNameSegment());
     }
 
-    getContent():string {
+    getContent(): string {
         return this.env.get('pageAboutMe');
     }
 }

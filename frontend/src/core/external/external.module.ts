@@ -24,6 +24,6 @@ import {GoogleAnalyticsService} from './services'
 export class ExternalModule {
 }
 
-export function getGoogleAnalyticsService(router:Router, environmentDetector:EnvironmentDetectorService, env:EnvService) {
+export function getGoogleAnalyticsService(router: Router, environmentDetector: EnvironmentDetectorService, env: EnvService) {
     return new GoogleAnalyticsService(router, environmentDetector, {trackingId: env.get('googleAnalyticsTrackingId')});
 }

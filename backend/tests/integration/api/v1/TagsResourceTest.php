@@ -36,7 +36,7 @@ class TagsResourceTest extends IntegrationApiV1TestCase
                 'data' => [
                     [
                         'value' => $tag->value,
-                    ]
+                    ],
                 ],
             ]);
     }

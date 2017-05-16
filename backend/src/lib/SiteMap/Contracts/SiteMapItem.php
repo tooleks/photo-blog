@@ -33,12 +33,12 @@ interface SiteMapItem
     /**
      * @return string
      */
-    public function getLocation() : string;
+    public function getLocation(): string;
 
     /**
      * @return bool
      */
-    public function hasLocation() : bool;
+    public function hasLocation(): bool;
 
     /**
      * @param string $value
@@ -49,12 +49,12 @@ interface SiteMapItem
     /**
      * @return string
      */
-    public function getLastModified() : string;
+    public function getLastModified(): string;
 
     /**
      * @return bool
      */
-    public function hasLastModified() : bool;
+    public function hasLastModified(): bool;
 
     /**
      * @param string $value
@@ -65,12 +65,12 @@ interface SiteMapItem
     /**
      * @return string
      */
-    public function getChangeFrequency() : string;
+    public function getChangeFrequency(): string;
 
     /**
      * @return bool
      */
-    public function hasChangeFrequency() : bool;
+    public function hasChangeFrequency(): bool;
 
     /**
      * @param string $value
@@ -81,10 +81,10 @@ interface SiteMapItem
     /**
      * @return string
      */
-    public function getPriority() : string;
+    public function getPriority(): string;
 
     /**
      * @return bool
      */
-    public function hasPriority() : bool;
+    public function hasPriority(): bool;
 }

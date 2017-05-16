@@ -124,7 +124,7 @@ abstract class DataProvider implements DataProviderContract
     /**
      * @inheritdoc
      */
-    abstract public function getModelClass() : string;
+    abstract public function getModelClass(): string;
 
     /**
      * @inheritdoc
@@ -237,7 +237,7 @@ abstract class DataProvider implements DataProviderContract
     /**
      * @inheritdoc
      */
-    public function count(array $options = []) : int
+    public function count(array $options = []): int
     {
         $this->dispatchEvent('beforeCount', $this->query, $options);
 
@@ -287,7 +287,7 @@ abstract class DataProvider implements DataProviderContract
     /**
      * @inheritdoc
      */
-    public function delete($model, array $options = []) : bool
+    public function delete($model, array $options = []): bool
     {
         $this->assertModel($model);
 

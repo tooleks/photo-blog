@@ -86,7 +86,7 @@ class PublishedPhotosController extends Controller
      * @param CreatePublishedPhotoRequest $request
      * @return Photo
      */
-    public function create(CreatePublishedPhotoRequest $request) : Photo
+    public function create(CreatePublishedPhotoRequest $request): Photo
     {
         $photo = $this->photoDataProvider
             ->applyCriteria(new IsPublished(false))
@@ -149,7 +149,7 @@ class PublishedPhotosController extends Controller
      * @param Photo $photo
      * @return Photo
      */
-    public function get(Photo $photo) : Photo
+    public function get(Photo $photo): Photo
     {
         return $photo;
     }
@@ -219,7 +219,7 @@ class PublishedPhotosController extends Controller
      * @param FindPublishedPhotosRequest $request
      * @return AbstractPaginator
      */
-    public function find(FindPublishedPhotosRequest $request) : AbstractPaginator
+    public function find(FindPublishedPhotosRequest $request): AbstractPaginator
     {
         $paginator = $this->photoDataProvider
             ->applyCriteria(new IsPublished(true))
@@ -288,7 +288,7 @@ class PublishedPhotosController extends Controller
      * @param Photo $photo
      * @return Photo
      */
-    public function update(UpdatePublishedPhotoRequest $request, Photo $photo) : Photo
+    public function update(UpdatePublishedPhotoRequest $request, Photo $photo): Photo
     {
         $this->photoDataProvider->save($photo, $request->all(), ['save' => ['tags']]);
 

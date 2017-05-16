@@ -4,10 +4,10 @@ import {ProcessLockerService} from './process-locker.service';
 
 @Injectable()
 export class ProcessLockerServiceProvider {
-    constructor(protected lockerProvider:LockerServiceProvider) {
+    constructor(protected lockerProvider: LockerServiceProvider) {
     }
 
-    getInstance():ProcessLockerService {
+    getInstance(): ProcessLockerService {
         return new ProcessLockerService(this.lockerProvider.getInstance());
     }
 }

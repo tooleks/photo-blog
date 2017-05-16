@@ -20,44 +20,44 @@ import {Photo} from './models';
     styleUrls: ['photo-form.component.css'],
 })
 export class PhotoFormComponent implements OnInit, AfterViewInit {
-    protected photo:Photo;
-    protected navigator:NavigatorService;
-    protected processLocker:ProcessLockerService;
+    protected photo: Photo;
+    protected navigator: NavigatorService;
+    protected processLocker: ProcessLockerService;
 
-    constructor(protected route:ActivatedRoute,
-                protected title:TitleService,
-                protected authProvider:AuthProviderService,
-                protected photoDataProvider:PhotoDataProviderService,
-                protected notices:NoticesService,
-                navigatorServiceProvider:NavigatorServiceProvider,
-                processLockerServiceProvider:ProcessLockerServiceProvider) {
+    constructor(protected route: ActivatedRoute,
+                protected title: TitleService,
+                protected authProvider: AuthProviderService,
+                protected photoDataProvider: PhotoDataProviderService,
+                protected notices: NoticesService,
+                navigatorServiceProvider: NavigatorServiceProvider,
+                processLockerServiceProvider: ProcessLockerServiceProvider) {
         this.navigator = navigatorServiceProvider.getInstance();
         this.processLocker = processLockerServiceProvider.getInstance();
     }
 
-    ngOnInit():void {
+    ngOnInit(): void {
         this.photo = new Photo;
         this.title.setPageNameSegment('Add Photo');
     }
 
-    ngAfterViewInit():void {
+    ngAfterViewInit(): void {
         this.initParamsSubscribers();
     }
 
-    protected initParamsSubscribers():void {
+    protected initParamsSubscribers(): void {
         this.route.params
             .map((params) => params['id'])
             .filter((id) => typeof (id) !== 'undefined')
             .subscribe((id) => this.loadById(id));
     }
 
-    protected processLoadById(id:number):Promise<any> {
+    protected processLoadById(id: number): Promise<any> {
         return id
             ? this.photoDataProvider.getById(id)
             : Promise.reject(new Error('Invalid value of a id parameter.'));
     }
 
-    loadById(id:number):Promise<any> {
+    loadById(id: number): Promise<any> {
         return this.processLocker
             .lock(() => this.processLoadById(id))
             .then((photo) => this.onLoadByIdSuccess(photo));
@@ -69,13 +69,13 @@ export class PhotoFormComponent implements OnInit, AfterViewInit {
         return photo;
     }
 
-    protected processSavePhoto():Promise<any> {
+    protected processSavePhoto(): Promise<any> {
         return this.photo.id
             ? this.photoDataProvider.updateById(this.photo.id, this.photo)
             : this.photoDataProvider.create(this.photo);
     }
 
-    save():Promise<any> {
+    save(): Promise<any> {
         return this.processLocker
             .lock(() => this.processSavePhoto())
             .then((photo) => this.onSaveSuccess(photo));
@@ -88,13 +88,13 @@ export class PhotoFormComponent implements OnInit, AfterViewInit {
         return photo;
     }
 
-    protected processUploadPhoto(file:FileList):Promise<any> {
+    protected processUploadPhoto(file: FileList): Promise<any> {
         return this.photo.id
             ? this.photoDataProvider.uploadById(this.photo.id, file)
             : this.photoDataProvider.upload(file);
     }
 
-    upload(file):Promise<any> {
+    upload(file): Promise<any> {
         return this.processLocker
             .lock(() => this.processUploadPhoto(file))
             .then((photo) => this.onUploadSuccess(photo));
@@ -106,13 +106,13 @@ export class PhotoFormComponent implements OnInit, AfterViewInit {
         return photo;
     }
 
-    protected processDeletePhoto():Promise<any> {
+    protected processDeletePhoto(): Promise<any> {
         return this.photo.id
             ? this.photoDataProvider.deleteById(this.photo.id)
             : Promise.reject(new Error('Invalid value of a id parameter.'));
     }
 
-    deletePhoto():Promise<any> {
+    deletePhoto(): Promise<any> {
         return this.processLocker
             .lock(() => this.processDeletePhoto())
             .then((response) => this.onDeletePhotoSuccess(response));
@@ -124,7 +124,7 @@ export class PhotoFormComponent implements OnInit, AfterViewInit {
         return response;
     }
 
-    isProcessing():boolean {
+    isProcessing(): boolean {
         return this.processLocker.isLocked();
     }
 }

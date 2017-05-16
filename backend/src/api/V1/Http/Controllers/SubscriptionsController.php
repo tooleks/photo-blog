@@ -47,7 +47,7 @@ class SubscriptionsController extends Controller
      * @param CreateSubscriptionRequest $request
      * @return Subscription
      */
-    public function create(CreateSubscriptionRequest $request) : Subscription
+    public function create(CreateSubscriptionRequest $request): Subscription
     {
         $subscription = new Subscription;
 

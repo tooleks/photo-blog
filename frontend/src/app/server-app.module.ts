@@ -17,7 +17,7 @@ import {BrowserModule} from '@angular/platform-browser';
     ]
 })
 export class ServerAppModule {
-    constructor(protected transferState:TransferState) {
+    constructor(protected transferState: TransferState) {
     }
 
     // Gotcha

@@ -16,7 +16,7 @@ class TokenPresenter extends Presenter
     /**
      * @inheritdoc
      */
-    protected function getAttributesMap() : array
+    protected function getAttributesMap(): array
     {
         return [
             'user_id' => 'id',

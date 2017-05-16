@@ -1,4 +1,4 @@
-export const ROUTES:string[] = [
+export const ROUTES: string[] = [
     // Root.
     '/',
     // App module.

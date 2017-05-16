@@ -3,7 +3,7 @@ import {LockerService} from './locker.service';
 
 @Injectable()
 export class LockerServiceProvider {
-    getInstance():LockerService {
+    getInstance(): LockerService {
         return new LockerService;
     }
 }

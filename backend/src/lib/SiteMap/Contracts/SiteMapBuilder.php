@@ -34,7 +34,7 @@ interface SiteMapBuilder extends Arrayable
      *
      * @return array
      */
-    public function getItems() : array;
+    public function getItems(): array;
 
     /**
      * Erase the site-map items.

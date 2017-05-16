@@ -4,7 +4,7 @@ import {PlatformState} from '@angular/platform-server';
 
 @Injectable()
 export class ServerTransferState extends TransferState {
-    constructor(protected state:PlatformState, protected rendererFactory:RendererFactory2) {
+    constructor(protected state: PlatformState, protected rendererFactory: RendererFactory2) {
         super();
     }
 

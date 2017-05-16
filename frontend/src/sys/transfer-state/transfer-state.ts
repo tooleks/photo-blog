@@ -11,11 +11,11 @@ export class TransferState {
         return this._map.keys();
     }
 
-    get(key:string) {
+    get(key: string) {
         return this._map.get(key);
     }
 
-    set(key:string, value):Map<string, any> {
+    set(key: string, value): Map<string, any> {
         return this._map.set(key, value);
     }
 
@@ -28,13 +28,13 @@ export class TransferState {
         return obj;
     }
 
-    initialize(obj):void {
+    initialize(obj): void {
         Object.keys(obj)
             .forEach(key => {
                 this.set(key, obj[key]);
             });
     }
 
-    inject():void {
+    inject(): void {
     }
 }

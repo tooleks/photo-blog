@@ -8,14 +8,14 @@ import {Notice} from '../models';
     styleUrls: ['notices.component.css'],
 })
 export class NoticesComponent {
-    constructor(protected notices:NoticesService) {
+    constructor(protected notices: NoticesService) {
     }
 
-    getNotices():Array<Notice> {
+    getNotices(): Array<Notice> {
         return this.notices.get();
     }
 
-    deleteNotice(index:number):void {
+    deleteNotice(index: number): void {
         this.notices.deleteByIndex(index);
     }
 }

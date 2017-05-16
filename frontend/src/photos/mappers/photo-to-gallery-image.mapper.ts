@@ -5,10 +5,10 @@ import {AppService} from '../../shared';
 
 @Injectable()
 export class PhotoToGalleryImageMapper {
-    constructor(protected exifMapper:ExifToStringMapper, protected app:AppService) {
+    constructor(protected exifMapper: ExifToStringMapper, protected app: AppService) {
     }
 
-    map(object):GalleryImage {
+    map(object): GalleryImage {
         return new GalleryImage({
             source: object,
             id: object.id,

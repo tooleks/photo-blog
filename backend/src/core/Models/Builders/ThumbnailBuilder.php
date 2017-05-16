@@ -16,7 +16,7 @@ class ThumbnailBuilder extends Builder
      *
      * @return int
      */
-    public function deleteAllDetached() : int
+    public function deleteAllDetached(): int
     {
         return $this
             ->getQuery()

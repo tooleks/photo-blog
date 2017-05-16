@@ -3,7 +3,7 @@ import {LocalStorageService} from '../local-storage';
 
 @Injectable()
 export class AuthProviderService {
-    constructor(protected localStorage:LocalStorageService) {
+    constructor(protected localStorage: LocalStorageService) {
     }
 
     setAuth(auth) {
@@ -15,11 +15,11 @@ export class AuthProviderService {
         return this.localStorage.get('auth');
     }
 
-    hasAuth():boolean {
+    hasAuth(): boolean {
         return this.getAuth() !== null;
     }
 
-    getAuthApiToken():string {
+    getAuthApiToken(): string {
         const auth = this.getAuth();
         return auth ? auth.api_token : null;
     }
@@ -33,11 +33,11 @@ export class AuthProviderService {
         return this.localStorage.get('user');
     }
 
-    hasUser():boolean {
+    hasUser(): boolean {
         return this.getUser() !== null;
     }
 
-    isAuthenticated():boolean {
+    isAuthenticated(): boolean {
         return this.hasAuth() && this.hasUser();
     }
 }

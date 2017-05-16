@@ -8,22 +8,22 @@ import {TitleService, NavigatorServiceProvider, NavigatorService} from '../../..
     templateUrl: 'page-not-found.component.html',
 })
 export class PageNotFoundComponent implements OnInit {
-    protected navigator:NavigatorService;
+    protected navigator: NavigatorService;
 
-    constructor(protected title:TitleService,
-                protected metaTags:MetaTagsService,
-                protected router:Router,
-                navigatorProvider:NavigatorServiceProvider) {
+    constructor(protected title: TitleService,
+                protected metaTags: MetaTagsService,
+                protected router: Router,
+                navigatorProvider: NavigatorServiceProvider) {
         this.navigator = navigatorProvider.getInstance();
     }
 
-    ngOnInit():void {
+    ngOnInit(): void {
         this.title.setPageNameSegment('Page Not Found');
         this.metaTags.setTitle(this.title.getPageNameSegment());
         this.navigateTo404Page();
     }
 
-    navigateTo404Page():void {
+    navigateTo404Page(): void {
         if (this.router.url !== '/404') {
             this.navigator.navigate(['/404']);
         }

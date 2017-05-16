@@ -36,7 +36,7 @@ class SiteMapBuilder implements SiteMapBuilderContract
     /**
      * @inheritdoc
      */
-    public function getItems() : array
+    public function getItems(): array
     {
         return $this->items;
     }

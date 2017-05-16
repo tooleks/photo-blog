@@ -3,9 +3,9 @@ import {Notice} from '../models';
 
 @Injectable()
 export class NoticesService {
-    protected notices:Array<Notice> = [];
-    public deleteTimeout:number = 4000;
-    public deleteInterval:number = 42;
+    protected notices: Array<Notice> = [];
+    public deleteTimeout: number = 4000;
+    public deleteInterval: number = 42;
 
     constructor() {
         // #browser-specific
@@ -14,35 +14,35 @@ export class NoticesService {
         }
     }
 
-    success(title:string, text?:string):void {
+    success(title: string, text?: string): void {
         this.notices.push(new Notice(Math.floor(Date.now()), 'success', title, text))
     }
 
-    warning(title:string, text?:string):void {
+    warning(title: string, text?: string): void {
         this.notices.push(new Notice(Math.floor(Date.now()), 'warning', title, text))
     }
 
-    error(title:string, text?:string):void {
+    error(title: string, text?: string): void {
         this.notices.push(new Notice(Math.floor(Date.now()), 'error', title, text))
     }
 
-    info(title:string, text?:string):void {
+    info(title: string, text?: string): void {
         this.notices.push(new Notice(Math.floor(Date.now()), 'info', title, text))
     }
 
-    get():Array<Notice> {
+    get(): Array<Notice> {
         return this.notices;
     }
 
-    deleteByIndex(index:number):void {
+    deleteByIndex(index: number): void {
         this.notices = this.notices.filter((element, elementIndex) => elementIndex !== index);
     }
 
-    deleteAll():void {
+    deleteAll(): void {
         this.notices = [];
     }
 
-    shiftAfterDeleteTimeout():void {
+    shiftAfterDeleteTimeout(): void {
         if (this.notices.length && this.notices[0].timestampCreated + this.deleteTimeout < Math.floor(Date.now())) {
             this.notices.shift();
         }

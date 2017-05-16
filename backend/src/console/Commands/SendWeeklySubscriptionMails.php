@@ -51,7 +51,7 @@ class SendWeeklySubscriptionMails extends Command
      *
      * @return bool
      */
-    protected function isAvailableWeeklySubscription() : bool
+    protected function isAvailableWeeklySubscription(): bool
     {
         $query = (new Photo)->newQuery();
 
@@ -101,7 +101,7 @@ class SendWeeklySubscriptionMails extends Command
      * @param Subscription $subscription
      * @return array
      */
-    protected function extractSubscriptionData(Subscription $subscription) : array
+    protected function extractSubscriptionData(Subscription $subscription): array
     {
         $data = $subscription->toArray();
 

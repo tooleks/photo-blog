@@ -5,15 +5,15 @@ import {ApiServiceInterface} from './interfaces';
 
 @Injectable()
 export class ApiService implements ApiServiceInterface {
-    constructor(protected http:Http,
-                protected apiUrl:string,
+    constructor(protected http: Http,
+                protected apiUrl: string,
                 protected onResponseSuccess,
                 protected onResponseError,
                 protected provideDefaultHeaders = null,
                 protected provideDefaultSearchParams = null) {
     }
 
-    get(relativeUrl:string, options?):Promise<any> {
+    get(relativeUrl: string, options?): Promise<any> {
         return this.http
             .get(this.getApiAbsoluteUrl(relativeUrl), this.initializeOptions(options))
             .toPromise()
@@ -21,7 +21,7 @@ export class ApiService implements ApiServiceInterface {
             .catch(this.onResponseError);
     }
 
-    post(relativeUrl:string, body?, options?):Promise<any> {
+    post(relativeUrl: string, body?, options?): Promise<any> {
         return this.http
             .post(this.getApiAbsoluteUrl(relativeUrl), this.initializeBody(body), this.initializeOptions(options))
             .toPromise()
@@ -29,7 +29,7 @@ export class ApiService implements ApiServiceInterface {
             .catch(this.onResponseError);
     }
 
-    put(relativeUrl:string, body?, options?):Promise<any> {
+    put(relativeUrl: string, body?, options?): Promise<any> {
         return this.http
             .put(this.getApiAbsoluteUrl(relativeUrl), this.initializeBody(body), this.initializeOptions(options))
             .toPromise()
@@ -37,7 +37,7 @@ export class ApiService implements ApiServiceInterface {
             .catch(this.onResponseError);
     }
 
-    delete(relativeUrl:string, options?):Promise<any> {
+    delete(relativeUrl: string, options?): Promise<any> {
         return this.http
             .delete(this.getApiAbsoluteUrl(relativeUrl), this.initializeOptions(options))
             .toPromise()
@@ -45,7 +45,7 @@ export class ApiService implements ApiServiceInterface {
             .catch(this.onResponseError);
     }
 
-    protected getApiAbsoluteUrl(relativeUrl:string):string {
+    protected getApiAbsoluteUrl(relativeUrl: string): string {
         return this.apiUrl + relativeUrl;
     }
 
@@ -57,7 +57,7 @@ export class ApiService implements ApiServiceInterface {
         };
     }
 
-    protected initializeHeaders(headers?):Headers {
+    protected initializeHeaders(headers?): Headers {
         const initializedHeaders = this.getDefaultHeaders();
         headers = headers || {};
         for (let name in headers) {
@@ -68,7 +68,7 @@ export class ApiService implements ApiServiceInterface {
         return initializedHeaders;
     }
 
-    protected getDefaultHeaders():Headers {
+    protected getDefaultHeaders(): Headers {
         const defaultHeaders = new Headers;
         const rawDefaultHeaders = this.getRawDefaultHeaders();
         for (let name in rawDefaultHeaders) {
@@ -85,7 +85,7 @@ export class ApiService implements ApiServiceInterface {
             : {};
     }
 
-    protected initializeSearchParams(searchParams?):URLSearchParams {
+    protected initializeSearchParams(searchParams?): URLSearchParams {
         const initializedSearchParams = this.getDefaultSearchParams();
         searchParams = searchParams || {};
         for (let name in searchParams) {
@@ -96,7 +96,7 @@ export class ApiService implements ApiServiceInterface {
         return initializedSearchParams;
     }
 
-    protected getDefaultSearchParams():URLSearchParams {
+    protected getDefaultSearchParams(): URLSearchParams {
         const defaultSearchParams = new URLSearchParams;
         const rawDefaultSearchParams = this.getRawDefaultSearchParams();
         for (let name in rawDefaultSearchParams) {

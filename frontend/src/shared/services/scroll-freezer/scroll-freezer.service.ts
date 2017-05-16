@@ -3,13 +3,13 @@ import {EnvironmentDetectorService} from '../../../core';
 
 @Injectable()
 export class ScrollFreezerService {
-    freezed:EventEmitter<boolean> = new EventEmitter<boolean>();
-    unfreezed:EventEmitter<boolean> = new EventEmitter<boolean>();
+    freezed: EventEmitter<boolean> = new EventEmitter<boolean>();
+    unfreezed: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-    constructor(protected environmentDetector:EnvironmentDetectorService) {
+    constructor(protected environmentDetector: EnvironmentDetectorService) {
     }
 
-    freeze():void {
+    freeze(): void {
         if (this.environmentDetector.isBrowser()) {
             const top = window.scrollY;
             window.onscroll = () => window.scroll(0, top);
@@ -17,7 +17,7 @@ export class ScrollFreezerService {
         }
     }
 
-    unfreeze():void {
+    unfreeze(): void {
         if (this.environmentDetector.isBrowser()) {
             window.onscroll = null;
             this.unfreezed.emit(true);

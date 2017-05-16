@@ -2,7 +2,7 @@ import {ModuleWithProviders} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
 import {PhotoFormComponent, PhotosComponent, PhotosByTagComponent, PhotosBySearchPhraseComponent} from './components';
 
-const PhotosRoutes:Routes = [
+const PhotosRoutes: Routes = [
     {
         path: 'photo/add',
         component: PhotoFormComponent,
@@ -25,6 +25,6 @@ const PhotosRoutes:Routes = [
     },
 ];
 
-export const PhotosRoutingProviders:any[] = [];
+export const PhotosRoutingProviders: any[] = [];
 
-export const PhotosRouting:ModuleWithProviders = RouterModule.forRoot(PhotosRoutes);
+export const PhotosRouting: ModuleWithProviders = RouterModule.forRoot(PhotosRoutes);

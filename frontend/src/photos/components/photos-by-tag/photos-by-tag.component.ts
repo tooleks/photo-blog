@@ -22,21 +22,21 @@ import {PhotosComponent as AbstractPhotosComponent} from '../abstract';
     templateUrl: 'photos-by-tag.component.html',
 })
 export class PhotosByTagComponent extends AbstractPhotosComponent implements OnInit {
-    @ViewChild('galleryComponent') galleryComponent:GalleryComponent;
+    @ViewChild('galleryComponent') galleryComponent: GalleryComponent;
 
-    constructor(protected authProvider:AuthProviderService,
-                protected photoDataProvider:PhotoDataProviderService,
-                router:Router,
-                route:ActivatedRoute,
-                app:AppService,
-                title:TitleService,
-                metaTags:MetaTagsService,
-                navigatorProvider:NavigatorServiceProvider,
-                pagerProvider:PagerServiceProvider,
-                processLockerProvider:ProcessLockerServiceProvider,
-                scrollFreezer:ScrollFreezerService,
-                galleryImageMapper:PhotoToGalleryImageMapper,
-                linkedDataMapper:PhotoToLinkedDataMapper) {
+    constructor(protected authProvider: AuthProviderService,
+                protected photoDataProvider: PhotoDataProviderService,
+                router: Router,
+                route: ActivatedRoute,
+                app: AppService,
+                title: TitleService,
+                metaTags: MetaTagsService,
+                navigatorProvider: NavigatorServiceProvider,
+                pagerProvider: PagerServiceProvider,
+                processLockerProvider: ProcessLockerServiceProvider,
+                scrollFreezer: ScrollFreezerService,
+                galleryImageMapper: PhotoToGalleryImageMapper,
+                linkedDataMapper: PhotoToLinkedDataMapper) {
         super(
             router,
             route,
@@ -54,12 +54,12 @@ export class PhotosByTagComponent extends AbstractPhotosComponent implements OnI
         this.defaults['tag'] = null;
     }
 
-    reset():void {
+    reset(): void {
         super.reset();
         this.galleryComponent.reset();
     }
 
-    ngOnInit():void {
+    ngOnInit(): void {
         super.ngOnInit();
         this.queryParams['tag'] = this.defaults['tag'];
     }
@@ -70,17 +70,17 @@ export class PhotosByTagComponent extends AbstractPhotosComponent implements OnI
             .map((params) => params['tag'])
             .filter((tag) => typeof (tag) !== 'undefined')
             .map((tag) => String(tag))
-            .filter((tag:string) => tag !== this.queryParams['tag'])
-            .subscribe((tag:string) => this.onTagChange(tag));
+            .filter((tag: string) => tag !== this.queryParams['tag'])
+            .subscribe((tag: string) => this.onTagChange(tag));
     }
 
-    initImages(fromPage:number, toPage:number, perPage:number, tag:string):void {
+    initImages(fromPage: number, toPage: number, perPage: number, tag: string): void {
         if (fromPage <= toPage) {
             this.loadImages(fromPage, perPage, tag).then(() => this.initImages(++fromPage, toPage, perPage, tag));
         }
     }
 
-    loadImages(page:number, perPage:number, tag:string) {
+    loadImages(page: number, perPage: number, tag: string) {
         if (tag) {
             return this.processLocker
                 .lock(() => this.photoDataProvider.getByTag(page, perPage, tag))
@@ -90,11 +90,11 @@ export class PhotosByTagComponent extends AbstractPhotosComponent implements OnI
         }
     }
 
-    loadMoreImages():Promise<any> {
+    loadMoreImages(): Promise<any> {
         return this.loadImages(this.pager.getNextPage(), this.pager.getPerPage(), this.queryParams['tag']);
     }
 
-    onTagChange(tag:string):void {
+    onTagChange(tag: string): void {
         this.reset();
         this.queryParams['tag'] = tag;
         this.defaults['title'] = `Tag #${tag}`;

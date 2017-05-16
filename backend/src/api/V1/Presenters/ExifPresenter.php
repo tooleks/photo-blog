@@ -21,7 +21,7 @@ class ExifPresenter extends Presenter
     /**
      * @inheritdoc
      */
-    protected function getAttributesMap() : array
+    protected function getAttributesMap(): array
     {
         return [
             'manufacturer' => 'data.Make',

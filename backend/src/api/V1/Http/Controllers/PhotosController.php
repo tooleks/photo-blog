@@ -76,7 +76,7 @@ class PhotosController extends Controller
      * @param CreatePhotoRequest $request
      * @return Photo
      */
-    public function create(CreatePhotoRequest $request) : Photo
+    public function create(CreatePhotoRequest $request): Photo
     {
         $photo = new Photo;
 
@@ -133,7 +133,7 @@ class PhotosController extends Controller
      * @param Photo $photo
      * @return Photo
      */
-    public function get(Photo $photo) : Photo
+    public function get(Photo $photo): Photo
     {
         return $photo;
     }
@@ -186,7 +186,7 @@ class PhotosController extends Controller
      * @param Photo $photo
      * @return Photo
      */
-    public function update(UpdatePhotoRequest $request, Photo $photo) : Photo
+    public function update(UpdatePhotoRequest $request, Photo $photo): Photo
     {
         $this->photoDataProvider->save($photo, $request->all(), ['save' => ['exif', 'thumbnails']]);
 

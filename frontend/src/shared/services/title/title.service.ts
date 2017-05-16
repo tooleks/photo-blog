@@ -3,45 +3,45 @@ import {Title} from '@angular/platform-browser';
 
 @Injectable()
 export class TitleService {
-    protected pageNameSegment:string = '';
+    protected pageNameSegment: string = '';
 
-    constructor(protected clientTitle:Title, protected defaultSegment:string = '', protected segmentsSeparator:string = ' | ') {
+    constructor(protected clientTitle: Title, protected defaultSegment: string = '', protected segmentsSeparator: string = ' | ') {
         this.init();
     }
 
-    init():void {
-        let newTitle:string = this.getPageNameSegment() + this.getSegmentsSeparator() + this.getDefaultSegment();
+    init(): void {
+        let newTitle: string = this.getPageNameSegment() + this.getSegmentsSeparator() + this.getDefaultSegment();
         this.clientTitle.setTitle(newTitle);
     }
 
-    setDefaultSegment(newDefaultSegment:string):void {
+    setDefaultSegment(newDefaultSegment: string): void {
         this.defaultSegment = newDefaultSegment;
         this.init();
     }
 
-    getDefaultSegment():string {
+    getDefaultSegment(): string {
         return this.defaultSegment;
     }
 
-    setPageNameSegment(newPageNameSegment:string):void {
+    setPageNameSegment(newPageNameSegment: string): void {
         this.pageNameSegment = newPageNameSegment;
         this.init();
     }
 
-    getPageNameSegment():string {
+    getPageNameSegment(): string {
         return this.pageNameSegment;
     }
 
-    setSegmentsSeparator(newSegmentsSeparator:string):void {
+    setSegmentsSeparator(newSegmentsSeparator: string): void {
         this.segmentsSeparator = newSegmentsSeparator;
         this.init();
     }
 
-    getSegmentsSeparator():string {
+    getSegmentsSeparator(): string {
         return this.segmentsSeparator;
     }
 
-    getFullTitle():string {
+    getFullTitle(): string {
         return this.clientTitle.getTitle();
     }
 }

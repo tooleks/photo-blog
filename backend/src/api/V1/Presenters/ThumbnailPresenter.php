@@ -17,7 +17,7 @@ class ThumbnailPresenter extends Presenter
     /**
      * @inheritdoc
      */
-    protected function getAttributesMap() : array
+    protected function getAttributesMap(): array
     {
         return [
             'url' => function () {

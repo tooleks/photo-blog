@@ -16,27 +16,27 @@ import {Subscription as Model} from './models';
     templateUrl: 'subscription-form.component.html',
 })
 export class SubscriptionFormComponent implements OnInit {
-    protected model:Model;
-    protected navigator:NavigatorService;
-    protected processLocker:ProcessLockerService;
+    protected model: Model;
+    protected navigator: NavigatorService;
+    protected processLocker: ProcessLockerService;
 
-    constructor(protected api:ApiService,
-                protected title:TitleService,
-                protected metaTags:MetaTagsService,
-                protected notices:NoticesService,
-                navigatorProvider:NavigatorServiceProvider,
-                processLockerServiceProvider:ProcessLockerServiceProvider) {
+    constructor(protected api: ApiService,
+                protected title: TitleService,
+                protected metaTags: MetaTagsService,
+                protected notices: NoticesService,
+                navigatorProvider: NavigatorServiceProvider,
+                processLockerServiceProvider: ProcessLockerServiceProvider) {
         this.navigator = navigatorProvider.getInstance();
         this.processLocker = processLockerServiceProvider.getInstance();
     }
 
-    ngOnInit():void {
+    ngOnInit(): void {
         this.model = new Model;
         this.title.setPageNameSegment('Subscription');
         this.metaTags.setTitle(this.title.getPageNameSegment());
     }
 
-    subscribe():Promise<any> {
+    subscribe(): Promise<any> {
         return this.processLocker
             .lock(() => this.api.post('/subscriptions', this.model))
             .then((data) => this.onSubscribeSuccess(data));
@@ -48,7 +48,7 @@ export class SubscriptionFormComponent implements OnInit {
         return data;
     }
 
-    isProcessing():boolean {
+    isProcessing(): boolean {
         return this.processLocker.isLocked();
     }
 }

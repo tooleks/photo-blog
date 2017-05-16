@@ -16,36 +16,36 @@ import {
     templateUrl: 'unsubscription.component.html',
 })
 export class UnsubscriptionComponent implements OnInit, AfterViewInit {
-    protected token:string = null;
-    protected navigator:NavigatorService;
-    protected processLocker:ProcessLockerService;
+    protected token: string = null;
+    protected navigator: NavigatorService;
+    protected processLocker: ProcessLockerService;
 
-    constructor(protected route:ActivatedRoute,
-                protected api:ApiService,
-                protected title:TitleService,
-                protected notices:NoticesService,
-                navigatorProvider:NavigatorServiceProvider,
-                processLockerServiceProvider:ProcessLockerServiceProvider) {
+    constructor(protected route: ActivatedRoute,
+                protected api: ApiService,
+                protected title: TitleService,
+                protected notices: NoticesService,
+                navigatorProvider: NavigatorServiceProvider,
+                processLockerServiceProvider: ProcessLockerServiceProvider) {
         this.navigator = navigatorProvider.getInstance();
         this.processLocker = processLockerServiceProvider.getInstance();
     }
 
-    ngOnInit():void {
+    ngOnInit(): void {
         this.title.setPageNameSegment('Unsubscription');
     }
 
-    ngAfterViewInit():void {
+    ngAfterViewInit(): void {
         this.initParamsSubscribers();
     }
 
-    protected initParamsSubscribers():void {
+    protected initParamsSubscribers(): void {
         this.route.params
             .map((params) => params['token'])
             .map((token) => String(token))
-            .subscribe((token:string) => this.token = token);
+            .subscribe((token: string) => this.token = token);
     }
 
-    unsubscribe():Promise<any> {
+    unsubscribe(): Promise<any> {
         return this.processLocker
             .lock(() => this.api.delete(`/subscriptions/${this.token}`))
             .then((data) => this.onUnsubscribeSuccess(data))
@@ -63,11 +63,11 @@ export class UnsubscriptionComponent implements OnInit, AfterViewInit {
         throw error;
     }
 
-    navigateToHomePage():void {
+    navigateToHomePage(): void {
         this.navigator.navigate(['/']);
     }
 
-    isProcessing():boolean {
+    isProcessing(): boolean {
         return this.processLocker.isLocked();
     }
 }

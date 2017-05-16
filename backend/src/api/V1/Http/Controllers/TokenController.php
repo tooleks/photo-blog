@@ -52,7 +52,7 @@ class TokenController extends Controller
      * @param CreateTokenRequest $request
      * @return User
      */
-    public function create(CreateTokenRequest $request) : User
+    public function create(CreateTokenRequest $request): User
     {
         $user = $this->userDataProvider->getByCredentials($request->get('email'), $request->get('password'));
 

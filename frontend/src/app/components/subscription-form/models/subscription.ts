@@ -1,3 +1,3 @@
 export class Subscription {
-    email:string;
+    email: string;
 }

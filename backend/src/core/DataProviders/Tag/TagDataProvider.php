@@ -15,7 +15,7 @@ class TagDataProvider extends DataProvider implements TagDataProviderContract
     /**
      * @inheritdoc
      */
-    public function getModelClass() : string
+    public function getModelClass(): string
     {
         return \Core\Models\Tag::class;
     }

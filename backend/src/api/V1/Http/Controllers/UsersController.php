@@ -54,7 +54,7 @@ class UsersController extends Controller
      * @param CreateUserRequest $request
      * @return User
      */
-    public function create(CreateUserRequest $request) : User
+    public function create(CreateUserRequest $request): User
     {
         $user = new User;
 
@@ -92,7 +92,7 @@ class UsersController extends Controller
      * @param User $user
      * @return User
      */
-    public function get(User $user) : User
+    public function get(User $user): User
     {
         return $user;
     }
@@ -127,7 +127,7 @@ class UsersController extends Controller
      * @param User $user
      * @return User
      */
-    public function update(UpdateUserRequest $request, User $user) : User
+    public function update(UpdateUserRequest $request, User $user): User
     {
         if ($request->has('password')) {
             $user->setPassword($request->get('password'));

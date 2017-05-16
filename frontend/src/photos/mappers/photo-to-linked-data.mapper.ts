@@ -3,7 +3,7 @@ import {AppService} from '../../shared';
 
 @Injectable()
 export class PhotoToLinkedDataMapper {
-    constructor(protected app:AppService) {
+    constructor(protected app: AppService) {
     }
 
     map(object) {

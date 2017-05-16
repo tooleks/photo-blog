@@ -2,12 +2,12 @@ import {Injectable} from '@angular/core';
 
 @Injectable()
 export class EnvironmentDetectorService {
-    isBrowser():boolean {
+    isBrowser(): boolean {
         // #browser-specific
         return typeof (window) !== 'undefined';
     }
 
-    isServer():boolean {
+    isServer(): boolean {
         return !this.isBrowser();
     }
 }

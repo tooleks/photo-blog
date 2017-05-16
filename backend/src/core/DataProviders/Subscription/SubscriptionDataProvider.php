@@ -16,7 +16,7 @@ class SubscriptionDataProvider extends DataProvider implements SubscriptionDataP
     /**
      * @inheritdoc
      */
-    public function getModelClass() : string
+    public function getModelClass(): string
     {
         return \Core\Models\Subscription::class;
     }

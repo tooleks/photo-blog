@@ -31,13 +31,13 @@ class DeleteUnusedDirectoriesWithinPhotoStorage extends Command
 
     /**
      * DeleteUnusedDirectoriesWithinPhotoStorage constructor.
-     * 
+     *
      * @param Storage $storage
      */
     public function __construct(Storage $storage)
     {
         parent::__construct();
-        
+
         $this->storage = $storage;
     }
 

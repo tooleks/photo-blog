@@ -10,11 +10,11 @@ import 'rxjs/add/observable/fromPromise';
 
 @Injectable()
 export class TransferHttp {
-    constructor(protected http:Http, protected transferState:TransferState) {
+    constructor(protected http: Http, protected transferState: TransferState) {
     }
 
-    request(uri:string | Request, options?:RequestOptionsArgs):Observable<any> {
-        return this.getData(uri, options, (url:string, options:RequestOptionsArgs) => {
+    request(uri: string | Request, options?: RequestOptionsArgs): Observable<any> {
+        return this.getData(uri, options, (url: string, options: RequestOptionsArgs) => {
             return this.http.request(url, options);
         });
     }
@@ -22,8 +22,8 @@ export class TransferHttp {
     /**
      * Performs a request with `get` http method.
      */
-    get(url:string, options?:RequestOptionsArgs):Observable<any> {
-        return this.getData(url, options, (url:string, options:RequestOptionsArgs) => {
+    get(url: string, options?: RequestOptionsArgs): Observable<any> {
+        return this.getData(url, options, (url: string, options: RequestOptionsArgs) => {
             return this.http.get(url, options);
         });
     }
@@ -31,8 +31,8 @@ export class TransferHttp {
     /**
      * Performs a request with `post` http method.
      */
-    post(url:string, body, options?:RequestOptionsArgs):Observable<any> {
-        return this.getPostData(url, body, options, (url:string, options:RequestOptionsArgs) => {
+    post(url: string, body, options?: RequestOptionsArgs): Observable<any> {
+        return this.getPostData(url, body, options, (url: string, options: RequestOptionsArgs) => {
             return this.http.post(url, body.options);
         });
     }
@@ -40,8 +40,8 @@ export class TransferHttp {
     /**
      * Performs a request with `put` http method.
      */
-    put(url:string, body, options?:RequestOptionsArgs):Observable<any> {
-        return this.getData(url, options, (url:string, options:RequestOptionsArgs) => {
+    put(url: string, body, options?: RequestOptionsArgs): Observable<any> {
+        return this.getData(url, options, (url: string, options: RequestOptionsArgs) => {
             return this.http.put(url, options);
         });
     }
@@ -49,8 +49,8 @@ export class TransferHttp {
     /**
      * Performs a request with `delete` http method.
      */
-    delete(url:string, options?:RequestOptionsArgs):Observable<any> {
-        return this.getData(url, options, (url:string, options:RequestOptionsArgs) => {
+    delete(url: string, options?: RequestOptionsArgs): Observable<any> {
+        return this.getData(url, options, (url: string, options: RequestOptionsArgs) => {
             return this.http.delete(url, options);
         });
     }
@@ -58,8 +58,8 @@ export class TransferHttp {
     /**
      * Performs a request with `patch` http method.
      */
-    patch(url:string, body, options?:RequestOptionsArgs):Observable<any> {
-        return this.getPostData(url, body, options, (url:string, options:RequestOptionsArgs) => {
+    patch(url: string, body, options?: RequestOptionsArgs): Observable<any> {
+        return this.getPostData(url, body, options, (url: string, options: RequestOptionsArgs) => {
             return this.http.patch(url, body.options);
         });
     }
@@ -67,8 +67,8 @@ export class TransferHttp {
     /**
      * Performs a request with `head` http method.
      */
-    head(url:string, options?:RequestOptionsArgs):Observable<any> {
-        return this.getData(url, options, (url:string, options:RequestOptionsArgs) => {
+    head(url: string, options?: RequestOptionsArgs): Observable<any> {
+        return this.getData(url, options, (url: string, options: RequestOptionsArgs) => {
             return this.http.head(url, options);
         });
     }
@@ -76,13 +76,13 @@ export class TransferHttp {
     /**
      * Performs a request with `options` http method.
      */
-    options(url:string, options?:RequestOptionsArgs):Observable<any> {
-        return this.getData(url, options, (url:string, options:RequestOptionsArgs) => {
+    options(url: string, options?: RequestOptionsArgs): Observable<any> {
+        return this.getData(url, options, (url: string, options: RequestOptionsArgs) => {
             return this.http.options(url, options);
         });
     }
 
-    protected getData(uri:string | Request, options:RequestOptionsArgs, callback:(uri:string | Request, options?:RequestOptionsArgs) => Observable<Response>) {
+    protected getData(uri: string | Request, options: RequestOptionsArgs, callback: (uri: string | Request, options?: RequestOptionsArgs) => Observable<Response>) {
 
         let url = uri;
 
@@ -104,7 +104,7 @@ export class TransferHttp {
         }
     }
 
-    protected getPostData(uri:string | Request, body, options:RequestOptionsArgs, callback:(uri:string | Request, body, options?:RequestOptionsArgs) => Observable<Response>) {
+    protected getPostData(uri: string | Request, body, options: RequestOptionsArgs, callback: (uri: string | Request, body, options?: RequestOptionsArgs) => Observable<Response>) {
 
         let url = uri;
 
@@ -127,7 +127,7 @@ export class TransferHttp {
         }
     }
 
-    protected resolveData(key:string) {
+    protected resolveData(key: string) {
         const data = this.getFromCache(key);
 
         if (!data) {
