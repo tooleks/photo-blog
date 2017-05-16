@@ -20,6 +20,6 @@ export class TagsSelectInputComponent {
     }
 
     transform(value: string): string {
-        return value.split(' ').join('_').toLowerCase();
+        return value.trim().split(' ').join('_').toLowerCase();
     }
 }
