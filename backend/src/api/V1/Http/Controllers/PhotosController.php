@@ -6,13 +6,13 @@ use Api\V1\Http\Requests\CreatePhotoRequest;
 use Api\V1\Http\Requests\UpdatePhotoRequest;
 use Core\Models\Photo;
 use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
-use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Contracts\Auth\Guard as Auth;
 use Illuminate\Routing\Controller;
 
 /**
  * Class PhotosController.
  *
- * @property Guard guard
+ * @property Auth $auth
  * @property PhotoDataProvider photoDataProvider
  * @package Api\V1\Http\Controllers
  */
@@ -21,12 +21,12 @@ class PhotosController extends Controller
     /**
      * PhotosController constructor.
      *
-     * @param Guard $guard
+     * @param Auth $auth
      * @param PhotoDataProvider $photoDataProvider
      */
-    public function __construct(Guard $guard, PhotoDataProvider $photoDataProvider)
+    public function __construct(Auth $auth, PhotoDataProvider $photoDataProvider)
     {
-        $this->guard = $guard;
+        $this->auth = $auth;
         $this->photoDataProvider = $photoDataProvider;
     }
 
@@ -80,7 +80,7 @@ class PhotosController extends Controller
     {
         $photo = new Photo;
 
-        $photo->setCreatedByUserIdAttribute($this->guard->user()->id)
+        $photo->setCreatedByUserIdAttribute($this->auth->user()->id)
             ->setIsPublishedAttribute(false);
 
         $this->photoDataProvider->save($photo, $request->all(), ['save' => ['exif', 'thumbnails']]);

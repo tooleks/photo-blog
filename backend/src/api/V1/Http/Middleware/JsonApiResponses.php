@@ -8,11 +8,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
- * Class JsonApi.
+ * Class JsonApiResponses.
  *
  * @package Api\V1\Http\Middleware
  */
-class JsonApi
+class JsonApiResponses
 {
     /**
      * Handle an incoming request.

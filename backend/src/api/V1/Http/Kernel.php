@@ -50,7 +50,8 @@ class Kernel extends HttpKernel
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'throttle' => \Api\V1\Http\Middleware\ThrottleRequests::class,
-        'json_api' => \Api\V1\Http\Middleware\JsonApi::class,
+        'json_api' => \Api\V1\Http\Middleware\JsonApiResponses::class,
         'present' => \Api\V1\Http\Middleware\PresentResponses::class,
+        'cache' => \Api\V1\Http\Middleware\CacheResponses::class,
     ];
 }

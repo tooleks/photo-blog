@@ -5,13 +5,13 @@ namespace Api\V1\Http\Controllers;
 use Api\V1\Http\Requests\CreateTokenRequest;
 use Core\Models\User;
 use Core\DataProviders\User\Contracts\UserDataProvider;
-use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Contracts\Auth\Guard as Auth;
 use Illuminate\Routing\Controller;
 
 /**
  * Class TokenController.
  *
- * @property Guard guard
+ * @property Auth auth
  * @property UserDataProvider userDataProvider
  * @package Api\V1\Http\Controllers
  */
@@ -20,12 +20,12 @@ class TokenController extends Controller
     /**
      * TokenController constructor.
      *
-     * @param Guard $guard
+     * @param Auth $auth
      * @param UserDataProvider $userDataProvider
      */
-    public function __construct(Guard $guard, UserDataProvider $userDataProvider)
+    public function __construct(Auth $auth, UserDataProvider $userDataProvider)
     {
-        $this->guard = $guard;
+        $this->auth = $auth;
         $this->userDataProvider = $userDataProvider;
     }
 
@@ -60,7 +60,7 @@ class TokenController extends Controller
 
         $this->userDataProvider->save($user);
 
-        $this->guard->setUser($user);
+        $this->auth->setUser($user);
 
         return $user;
     }
