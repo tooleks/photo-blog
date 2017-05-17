@@ -58,7 +58,7 @@ class GeneratePhotoAvgColors extends Command
         $this->photoDataProvider->each(function (Photo $photo) {
             $this->comment("Generating average photo color (id:{$photo->id}) ...");
             $this->generatePhotoAvgColor($photo);
-            $this->comment("Average photo color successfully generated (id:{$photo->id}).");
+            $this->comment("Average photo color was successfully generated (id:{$photo->id}).");
         });
     }
 

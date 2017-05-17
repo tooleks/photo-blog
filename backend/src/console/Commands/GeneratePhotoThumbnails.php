@@ -2,12 +2,10 @@
 
 namespace Console\Commands;
 
-use Closure;
+use Core\DataProviders\Photo\PhotoDataProvider;
 use Core\Models\Photo;
-use Core\Models\Thumbnail;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
-use Illuminate\Database\Eloquent\Collection;
 use Lib\ThumbnailsGenerator\Contracts\ThumbnailsGenerator;
 
 /**
@@ -15,6 +13,7 @@ use Lib\ThumbnailsGenerator\Contracts\ThumbnailsGenerator;
  *
  * @property Storage storage
  * @property ThumbnailsGenerator thumbnailsGenerator
+ * @property PhotoDataProvider photoDataProvider
  * @package Console\Commands
  */
 class GeneratePhotoThumbnails extends Command
@@ -38,53 +37,28 @@ class GeneratePhotoThumbnails extends Command
      *
      * @param Storage $storage
      * @param ThumbnailsGenerator $thumbnailsGenerator
+     * @param PhotoDataProvider $photoDataProvider
      */
-    public function __construct(Storage $storage, ThumbnailsGenerator $thumbnailsGenerator)
+    public function __construct(Storage $storage, ThumbnailsGenerator $thumbnailsGenerator, PhotoDataProvider $photoDataProvider)
     {
         parent::__construct();
 
         $this->storage = $storage;
         $this->thumbnailsGenerator = $thumbnailsGenerator;
+        $this->photoDataProvider = $photoDataProvider;
     }
 
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      */
     public function handle()
     {
-        $this->eachPhoto(function (Photo $photo) {
-            $this->comment(sprintf('Generating thumbnails for photo (ID:%s) ...', $photo->id));
-            $this->deletePhotoThumbnails($photo);
+        $this->photoDataProvider->each(function (Photo $photo) {
+            $this->comment("Generating photo thumbnails (id:{$photo->id}) ...");
             $this->generatePhotoThumbnails($photo);
-        });
-    }
-
-    /**
-     * Apply callback function on each photo.
-     *
-     * @param Closure $callback
-     * @return void
-     */
-    public function eachPhoto(Closure $callback)
-    {
-        Photo::with('thumbnails')->chunk(100, function (Collection $photos) use ($callback) {
-            $photos->each($callback);
-        });
-    }
-
-    /**
-     * Delete photo thumbnails
-     *
-     * @param Photo $photo
-     */
-    public function deletePhotoThumbnails(Photo $photo)
-    {
-        $photo->thumbnails->each(function (Thumbnail $thumbnail) use ($photo) {
-            $photo->thumbnails()->detach($thumbnail->id);
-            $thumbnail->delete();
-            $this->storage->delete($thumbnail->path);
+            $this->comment("Photo thumbnails was successfully generated (id:{$photo->id}).");
         });
     }
 
@@ -95,14 +69,14 @@ class GeneratePhotoThumbnails extends Command
      */
     public function generatePhotoThumbnails(Photo $photo)
     {
-        $storageAbsolutePath = $this->storage->getDriver()->getAdapter()->getPathPrefix();
+        $storageAbsPath = $this->storage->getDriver()->getAdapter()->getPathPrefix();
 
-        $absolutePhotoFilePath = $storageAbsolutePath . $photo->path;
+        $photoAbsPath = $storageAbsPath . $photo->path;
 
-        $metaData = $this->thumbnailsGenerator->generateThumbnails($absolutePhotoFilePath);
+        $metaData = $this->thumbnailsGenerator->generateThumbnails($photoAbsPath);
 
         foreach ($metaData as $metaDataItem) {
-            $relativeThumbnailPath = str_replace($storageAbsolutePath, '', $metaDataItem['path']);
+            $relativeThumbnailPath = str_replace($storageAbsPath, '', $metaDataItem['path']);
             $thumbnails[] = [
                 'path' => $relativeThumbnailPath,
                 'relative_url' => $this->storage->url($relativeThumbnailPath),
@@ -111,6 +85,6 @@ class GeneratePhotoThumbnails extends Command
             ];
         }
 
-        $photo->thumbnails()->createMany($thumbnails ?? []);
+        $this->photoDataProvider->save($photo, ['thumbnails' => $thumbnails ?? []], ['save' => ['thumbnails']]);
     }
 }
