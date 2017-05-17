@@ -2,15 +2,18 @@
 
 namespace Console\Commands;
 
+use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
 use Core\Models\Photo;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Config\Repository as Config;
 
 /**
  * Class DeleteUnusedDirectoriesWithinPhotoStorage.
  *
+ * @property Config config
  * @property Storage storage
+ * @property PhotoDataProvider photoDataProvider
  * @package Console\Commands
  */
 class DeleteUnusedDirectoriesWithinPhotoStorage extends Command
@@ -32,26 +35,31 @@ class DeleteUnusedDirectoriesWithinPhotoStorage extends Command
     /**
      * DeleteUnusedDirectoriesWithinPhotoStorage constructor.
      *
+     * @param Config $config
      * @param Storage $storage
+     * @param PhotoDataProvider $photoDataProvider
      */
-    public function __construct(Storage $storage)
+    public function __construct(Config $config, Storage $storage, PhotoDataProvider $photoDataProvider)
     {
         parent::__construct();
 
+        $this->config = $config;
         $this->storage = $storage;
+        $this->photoDataProvider = $photoDataProvider;
     }
 
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      */
     public function handle()
     {
-        foreach ($this->getDirectoriesToDelete() as $directory) {
-            $this->comment(sprintf('Deleting directory (path:%s) ...', $directory));
-            $this->storage->deleteDirectory($directory) && $this->comment(sprintf('Directory was deleted (path:%s).', $directory));
-        }
+        array_map(function ($directory) {
+            $this->comment("Deleting directory 'path:{$directory}' ...");
+            $this->storage->deleteDirectory($directory);
+            $this->comment("Directory 'path:{$directory}' was successfully deleted.");
+        }, $this->getDirectoriesToDelete());
     }
 
     /**
@@ -59,13 +67,11 @@ class DeleteUnusedDirectoriesWithinPhotoStorage extends Command
      *
      * @return array
      */
-    private function getDirectoriesToDelete()
+    private function getDirectoriesToDelete(): array
     {
         $directories = array_diff($this->getDirectoriesWithinPhotoStorage(), $this->getDirectoriesUsedByPhotoModels());
 
-        return array_filter(array_unique($directories), function ($directory) {
-            return (bool)$directory;
-        });
+        return array_filter(array_unique($directories), 'boolval');
     }
 
     /**
@@ -73,9 +79,9 @@ class DeleteUnusedDirectoriesWithinPhotoStorage extends Command
      *
      * @return array
      */
-    private function getDirectoriesWithinPhotoStorage()
+    private function getDirectoriesWithinPhotoStorage(): array
     {
-        return $this->storage->directories(config('main.storage.photos'));
+        return $this->storage->directories($this->config->get('main.storage.photos'));
     }
 
     /**
@@ -83,12 +89,10 @@ class DeleteUnusedDirectoriesWithinPhotoStorage extends Command
      *
      * @return array
      */
-    private function getDirectoriesUsedByPhotoModels()
+    private function getDirectoriesUsedByPhotoModels(): array
     {
-        Photo::chunk(500, function (Collection $photos) use (&$directories) {
-            foreach ($photos as $photo) {
-                $directories[] = $photo->directory_path;
-            }
+        $this->photoDataProvider->each(function (Photo $photo) use (&$directories) {
+            $directories[] = $photo->directory_path;
         });
 
         return $directories ?? [];

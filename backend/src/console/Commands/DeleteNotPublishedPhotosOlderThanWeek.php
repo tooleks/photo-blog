@@ -2,7 +2,6 @@
 
 namespace Console\Commands;
 
-use Closure;
 use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
 use Core\DataProviders\Photo\Criterias\IsPublished;
 use Core\Models\Photo;
