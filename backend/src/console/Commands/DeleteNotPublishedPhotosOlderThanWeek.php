@@ -58,10 +58,10 @@ class DeleteNotPublishedPhotosOlderThanWeek extends Command
             ->applyCriteria(new IsPublished(false))
             ->applyCriteria(new WhereUpdatedAtLessThan((new Carbon)->addWeek('-1')))
             ->each(function (Photo $photo) {
-                $this->comment("Deleting photo 'id:{$photo->id}' ...");
+                $this->comment("Deleting photo (id:{$photo->id}) ...");
                 $this->photoDataProvider->delete($photo);
                 $this->storage->deleteDirectory($photo->directory_path);
-                $this->comment("Photo 'id:{$photo->id}' was successfully deleted.");
+                $this->comment("Photo (id:{$photo->id}) was successfully deleted.");
             });
     }
 }

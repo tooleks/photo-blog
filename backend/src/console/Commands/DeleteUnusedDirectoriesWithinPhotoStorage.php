@@ -56,9 +56,9 @@ class DeleteUnusedDirectoriesWithinPhotoStorage extends Command
     public function handle()
     {
         array_map(function ($directory) {
-            $this->comment("Deleting directory 'path:{$directory}' ...");
+            $this->comment("Deleting directory (path:{$directory}) ...");
             $this->storage->deleteDirectory($directory);
-            $this->comment("Directory 'path:{$directory}' was successfully deleted.");
+            $this->comment("Directory (path:{$directory}) was successfully deleted.");
         }, $this->getDirectoriesToDelete());
     }
 

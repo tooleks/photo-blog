@@ -2,11 +2,10 @@
 
 namespace Console\Commands;
 
-use Closure;
+use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
 use Core\Models\Photo;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
-use Illuminate\Database\Eloquent\Collection;
 use Tooleks\Php\AvgColorPicker\Contracts\AvgColorPicker;
 
 /**
@@ -14,6 +13,7 @@ use Tooleks\Php\AvgColorPicker\Contracts\AvgColorPicker;
  *
  * @property Storage storage
  * @property AvgColorPicker avgColorPicker
+ * @property PhotoDataProvider photoDataProvider
  * @package Console\Commands
  */
 class GeneratePhotoAvgColors extends Command
@@ -37,13 +37,15 @@ class GeneratePhotoAvgColors extends Command
      *
      * @param Storage $storage
      * @param AvgColorPicker $avgColorPicker
+     * @param PhotoDataProvider $photoDataProvider
      */
-    public function __construct(Storage $storage, AvgColorPicker $avgColorPicker)
+    public function __construct(Storage $storage, AvgColorPicker $avgColorPicker, PhotoDataProvider $photoDataProvider)
     {
         parent::__construct();
 
         $this->storage = $storage;
         $this->avgColorPicker = $avgColorPicker;
+        $this->photoDataProvider = $photoDataProvider;
     }
 
     /**
@@ -53,22 +55,10 @@ class GeneratePhotoAvgColors extends Command
      */
     public function handle()
     {
-        $this->eachPhoto(function (Photo $photo) {
-            $this->comment(sprintf('Generating average colors for photo (ID:%s) ...', $photo->id));
+        $this->photoDataProvider->each(function (Photo $photo) {
+            $this->comment("Generating average photo color (id:{$photo->id}) ...");
             $this->generatePhotoAvgColor($photo);
-        });
-    }
-
-    /**
-     * Apply callback function on each photo.
-     *
-     * @param Closure $callback
-     * @return void
-     */
-    public function eachPhoto(Closure $callback)
-    {
-        Photo::with('thumbnails')->chunk(100, function (Collection $photos) use ($callback) {
-            $photos->each($callback);
+            $this->comment("Average photo color successfully generated (id:{$photo->id}).");
         });
     }
 
@@ -80,16 +70,12 @@ class GeneratePhotoAvgColors extends Command
      */
     public function generatePhotoAvgColor(Photo $photo)
     {
-        $thumbnail = $photo->thumbnails->first();
+        $storageAbsPath = $this->storage->getDriver()->getAdapter()->getPathPrefix();
 
-        $storageAbsolutePath = $this->storage->getDriver()->getAdapter()->getPathPrefix();
+        $thumbnailAbsPath = $storageAbsPath . $photo->thumbnails->first()->path;
 
-        $absoluteThumbnailPath = $storageAbsolutePath . $thumbnail->path;
+        $photo->avg_color = $this->avgColorPicker->getImageAvgHexColorByPath($thumbnailAbsPath);
 
-        $photo->avg_color = $this->avgColorPicker->getImageAvgHexColorByPath($absoluteThumbnailPath);
-
-        $this->comment(sprintf('Photo average color %s.', $photo->avg_color));
-
-        $photo->saveOrFail();
+        $this->photoDataProvider->save($photo);
     }
 }
