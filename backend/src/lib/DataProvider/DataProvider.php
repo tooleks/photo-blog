@@ -207,6 +207,22 @@ abstract class DataProvider implements DataProviderContract
     /**
      * @inheritdoc
      */
+    public function exists(array $options = []): bool
+    {
+        $this->dispatchEvent('beforeExists', $this->query, $options);
+
+        $exists = $this->query->exists();
+
+        $this->dispatchEvent('afterExists', $exists, $options);
+
+        $this->reset();
+
+        return $exists;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function each(Closure $callback, int $chunkSize = 100, array $options = [])
     {
         $this->query->chunk($chunkSize, function ($models) use ($callback, &$options) {
@@ -216,6 +232,8 @@ abstract class DataProvider implements DataProviderContract
                 $this->dispatchEvent('afterEach', $model, $options);
             }
         });
+
+        $this->reset();
     }
 
     /**

@@ -7,7 +7,7 @@ use Lib\DataProvider\Contracts\Criteria;
 /**
  * Class HasTagWithValue.
  *
- * @property string tagValue
+ * @property string value
  * @package Core\DataProviders\Photo\Criterias
  */
 class HasTagWithValue implements Criteria
@@ -15,11 +15,11 @@ class HasTagWithValue implements Criteria
     /**
      * HasTagWithValue constructor.
      *
-     * @param string $tagValue
+     * @param string $value
      */
-    public function __construct($tagValue)
+    public function __construct($value)
     {
-        $this->tagValue = $tagValue;
+        $this->value = $value;
     }
 
     /**
@@ -28,7 +28,7 @@ class HasTagWithValue implements Criteria
     public function apply($query)
     {
         $query->whereHas('tags', function ($query) {
-            $query->where('tags.value', $this->tagValue);
+            $query->where('tags.value', $this->value);
         });
     }
 }

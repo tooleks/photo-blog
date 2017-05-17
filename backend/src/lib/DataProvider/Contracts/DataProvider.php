@@ -68,6 +68,14 @@ interface DataProvider
     public function get(array $options = []);
 
     /**
+     * Determine if model exists.
+     *
+     * @param array $options
+     * @return bool
+     */
+    public function exists(array $options = []): bool;
+
+    /**
      * Apply callback function on each model.
      *
      * @param Closure $callback

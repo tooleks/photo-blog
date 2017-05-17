@@ -4,16 +4,22 @@ namespace Console\Commands;
 
 use Api\V1\Mail\WeeklySubscription;
 use Carbon\Carbon;
-use Closure;
-use Core\Models\Photo;
+use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
+use Core\DataProviders\Photo\Criterias\IsPublished;
+use Core\DataProviders\Subscription\Contracts\SubscriptionDataProvider;
+use Core\DataProviders\Subscription\Criterias\WhereEmailIn;
 use Core\Models\Subscription;
+use Illuminate\Config\Repository as Config;
 use Illuminate\Console\Command;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Mail;
+use Lib\DataProvider\Criterias\WhereCreatedAtGreaterThan;
 
 /**
  * Class SendWeeklySubscriptionMails.
  *
+ * @property Config config
+ * @property SubscriptionDataProvider subscriptionDataProvider
+ * @property PhotoDataProvider photoDataProvider
  * @package Console\Commands
  */
 class SendWeeklySubscriptionMails extends Command
@@ -33,16 +39,36 @@ class SendWeeklySubscriptionMails extends Command
     protected $description = 'Send weekly subscription mails';
 
     /**
+     * SendWeeklySubscriptionMails constructor.
+     *
+     * @param Config $config
+     * @param SubscriptionDataProvider $subscriptionDataProvider
+     * @param PhotoDataProvider $photoDataProvider
+     */
+    public function __construct(Config $config, SubscriptionDataProvider $subscriptionDataProvider, PhotoDataProvider $photoDataProvider)
+    {
+        parent::__construct();
+
+        $this->config = $config;
+        $this->subscriptionDataProvider = $subscriptionDataProvider;
+        $this->photoDataProvider = $photoDataProvider;
+    }
+
+    /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      */
     public function handle()
     {
         if ($this->isAvailableWeeklySubscription()) {
-            $this->eachSubscriptionByEmailFilter(function (Subscription $subscription) {
-                $this->sendWeeklySubscriptionMail($subscription);
-            });
+            $this->subscriptionDataProvider
+                ->applyCriteriaWhen($this->hasArgument('email_filter'), new WhereEmailIn($this->argument('email_filter')))
+                ->each(function (Subscription $subscription) {
+                    $this->comment("Sending subscription mail (email:{$subscription->email}) ...");
+                    Mail::send(new WeeklySubscription($this->extractSubscriptionData($subscription)));
+                    $this->comment("Subscription mail was successfully sent (email:{$subscription->email}).");
+                });
         }
     }
 
@@ -53,46 +79,10 @@ class SendWeeklySubscriptionMails extends Command
      */
     protected function isAvailableWeeklySubscription(): bool
     {
-        $query = (new Photo)->newQuery();
-
-        return $query
-            ->whereIsPublished(true)
-            ->where('created_at', '>', (new Carbon)->addWeek('-1'))
+        return $this->photoDataProvider
+            ->applyCriteria(new IsPublished(true))
+            ->applyCriteria(new WhereCreatedAtGreaterThan((new Carbon)->addWeek('-1')))
             ->exists();
-    }
-
-    /**
-     * Apply callback function on each subscription in database.
-     *
-     * @param Closure $callback
-     * @return void
-     */
-    protected function eachSubscriptionByEmailFilter(Closure $callback)
-    {
-        $query = (new Subscription)->newQuery();
-
-        if ($this->argument('email_filter')) {
-            $query->whereIn('email', $this->argument('email_filter'));
-        }
-
-        $query->chunk(100, function (Collection $subscription) use ($callback) {
-            $subscription->each($callback);
-        });
-    }
-
-    /**
-     * Send weekly subscription mail.
-     *
-     * @param Subscription $subscription
-     * @return void
-     */
-    protected function sendWeeklySubscriptionMail(Subscription $subscription)
-    {
-        $this->comment(sprintf('Sending mail to subscription (email:%s) ...', $subscription->email));
-
-        $data = $this->extractSubscriptionData($subscription);
-
-        Mail::send(new WeeklySubscription($data));
     }
 
     /**
@@ -105,8 +95,8 @@ class SendWeeklySubscriptionMails extends Command
     {
         $data = $subscription->toArray();
 
-        $data['website_url'] = config('main.frontend.url');
-        $data['unsubscribe_url'] = sprintf('%s/%s', config('main.frontend.unsubscribe_url'), $data['token']);
+        $data['website_url'] = $this->config->get('main.frontend.url');
+        $data['unsubscribe_url'] = sprintf('%s/%s', $this->config->get('main.frontend.unsubscribe_url'), $data['token']);
 
         return $data;
     }

@@ -7,7 +7,7 @@ use Lib\DataProvider\Contracts\Criteria;
 /**
  * Class IsPublished.
  *
- * @property bool isPublished
+ * @property bool value
  * @package Core\DataProviders\Photo\Criterias
  */
 class IsPublished implements Criteria
@@ -15,11 +15,11 @@ class IsPublished implements Criteria
     /**
      * IsPublished constructor.
      *
-     * @param bool $isPublished
+     * @param bool $value
      */
-    public function __construct(bool $isPublished)
+    public function __construct(bool $value)
     {
-        $this->isPublished = $isPublished;
+        $this->value = $value;
     }
 
     /**
@@ -27,6 +27,6 @@ class IsPublished implements Criteria
      */
     public function apply($query)
     {
-        $query->where('photos.is_published', $this->isPublished);
+        $query->where('photos.is_published', $this->value);
     }
 }
