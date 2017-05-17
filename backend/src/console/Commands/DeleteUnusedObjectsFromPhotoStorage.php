@@ -130,7 +130,7 @@ class DeleteUnusedObjectsFromPhotoStorage extends Command
     }
 
     /**
-     * Get all files from a data provider..
+     * Get all files from a data provider.
      *
      * @return array
      */
