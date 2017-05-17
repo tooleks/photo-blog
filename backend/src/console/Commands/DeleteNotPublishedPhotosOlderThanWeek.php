@@ -55,36 +55,14 @@ class DeleteNotPublishedPhotosOlderThanWeek extends Command
      */
     public function handle()
     {
-        $this->eachNotPublishedPhotoOlderThanWeek(function (Photo $photo) {
-            $this->comment("Deleting photo 'id:{$photo->id}' ...");
-            $this->deletePhotoWithDirectory($photo);
-            $this->comment("Photo 'id:{$photo->id}' was successfully deleted.");
-        });
-    }
-
-    /**
-     * Apply callback function on each not published photo older than week.
-     *
-     * @param Closure $callback
-     * @return void
-     */
-    public function eachNotPublishedPhotoOlderThanWeek(Closure $callback)
-    {
         $this->photoDataProvider
             ->applyCriteria(new IsPublished(false))
             ->applyCriteria(new WhereUpdatedAtLessThan((new Carbon)->addWeek('-1')))
-            ->each($callback);
-    }
-
-    /**
-     * Delete photo with directory.
-     *
-     * @param Photo $photo
-     * @return void
-     */
-    private function deletePhotoWithDirectory(Photo $photo)
-    {
-        $this->photoDataProvider->delete($photo);
-        $this->storage->deleteDirectory($photo->directory_path);
+            ->each(function (Photo $photo) {
+                $this->comment("Deleting photo 'id:{$photo->id}' ...");
+                $this->photoDataProvider->delete($photo);
+                $this->storage->deleteDirectory($photo->directory_path);
+                $this->comment("Photo 'id:{$photo->id}' was successfully deleted.");
+            });
     }
 }
