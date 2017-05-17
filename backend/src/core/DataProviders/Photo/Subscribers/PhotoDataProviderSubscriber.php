@@ -52,6 +52,11 @@ class PhotoDataProviderSubscriber
         );
 
         $events->listen(
+            PhotoDataProvider::class . '@beforeEach',
+            static::class . '@onBeforeGet'
+        );
+
+        $events->listen(
             PhotoDataProvider::class . '@beforePaginate',
             static::class . '@onBeforeGet'
         );

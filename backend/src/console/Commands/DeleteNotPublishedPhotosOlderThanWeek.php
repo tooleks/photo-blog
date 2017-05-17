@@ -3,16 +3,19 @@
 namespace Console\Commands;
 
 use Closure;
+use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
+use Core\DataProviders\Photo\Criterias\IsPublished;
 use Core\Models\Photo;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
-use Illuminate\Database\Eloquent\Collection;
+use Lib\DataProvider\Criterias\WhereUpdatedAtLessThan;
 
 /**
  * Class DeleteNotPublishedPhotosOlderThanWeek.
  *
  * @property Storage storage
+ * @property PhotoDataProvider photoDataProvider
  * @package Console\Commands
  */
 class DeleteNotPublishedPhotosOlderThanWeek extends Command
@@ -35,24 +38,27 @@ class DeleteNotPublishedPhotosOlderThanWeek extends Command
      * DeleteNotPublishedPhotosOlderThanWeek constructor.
      *
      * @param Storage $storage
+     * @param PhotoDataProvider $photoDataProvider
      */
-    public function __construct(Storage $storage)
+    public function __construct(Storage $storage, PhotoDataProvider $photoDataProvider)
     {
         parent::__construct();
 
         $this->storage = $storage;
+        $this->photoDataProvider = $photoDataProvider;
     }
 
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      */
     public function handle()
     {
         $this->eachNotPublishedPhotoOlderThanWeek(function (Photo $photo) {
-            $this->comment(sprintf('Deleting photo (ID:%s) ...', $photo->id));
+            $this->comment("Deleting photo 'id:{$photo->id}' ...");
             $this->deletePhotoWithDirectory($photo);
+            $this->comment("Photo 'id:{$photo->id}' was successfully deleted.");
         });
     }
 
@@ -64,13 +70,10 @@ class DeleteNotPublishedPhotosOlderThanWeek extends Command
      */
     public function eachNotPublishedPhotoOlderThanWeek(Closure $callback)
     {
-        Photo::with('tags')
-            ->with('thumbnails')
-            ->whereIsPublished(false)
-            ->where('updated_at', '<', (new Carbon())->addWeek('-1'))
-            ->chunk(100, function (Collection $photos) use ($callback) {
-                $photos->each($callback);
-            });
+        $this->photoDataProvider
+            ->applyCriteria(new IsPublished(false))
+            ->applyCriteria(new WhereUpdatedAtLessThan((new Carbon)->addWeek('-1')))
+            ->each($callback);
     }
 
     /**
@@ -81,12 +84,7 @@ class DeleteNotPublishedPhotosOlderThanWeek extends Command
      */
     private function deletePhotoWithDirectory(Photo $photo)
     {
-        if ($photo->delete()) {
-            $this->comment(sprintf('Photo was deleted (ID:%s).', $photo->id));
-        }
-
-        if ($this->storage->deleteDirectory($photo->directory_path)) {
-            $this->comment(sprintf('Photo directory was deleted (path:%s).', $photo->directory_path));
-        }
+        $this->photoDataProvider->delete($photo);
+        $this->storage->deleteDirectory($photo->directory_path);
     }
 }
