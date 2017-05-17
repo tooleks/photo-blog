@@ -10,21 +10,21 @@ use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
 
 /**
- * Class DeleteUnusedObjectsWithinPhotoStorage.
+ * Class DeleteUnusedObjectsFromPhotoStorage.
  *
  * @property Config config
  * @property Storage storage
  * @property PhotoDataProvider photoDataProvider
  * @package Console\Commands
  */
-class DeleteUnusedObjectsWithinPhotoStorage extends Command
+class DeleteUnusedObjectsFromPhotoStorage extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'delete:unused_objects_within_photo_storage';
+    protected $signature = 'delete:unused_objects_from_photo_storage';
 
     /**
      * The console command description.
@@ -34,7 +34,7 @@ class DeleteUnusedObjectsWithinPhotoStorage extends Command
     protected $description = 'Delete unused directories within photo storage';
 
     /**
-     * DeleteUnusedObjectsWithinPhotoStorage constructor.
+     * DeleteUnusedObjectsFromPhotoStorage constructor.
      *
      * @param Config $config
      * @param Storage $storage
