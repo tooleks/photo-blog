@@ -31,7 +31,7 @@ class DeleteUnusedObjectsFromPhotoStorage extends Command
      *
      * @var string
      */
-    protected $description = 'Delete unused directories within photo storage';
+    protected $description = 'Delete unused objects from photo storage';
 
     /**
      * DeleteUnusedObjectsFromPhotoStorage constructor.
