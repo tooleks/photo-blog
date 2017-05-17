@@ -6,7 +6,7 @@ use Console\Commands\ChangeUserPassword;
 use Console\Commands\ConfigApp;
 use Console\Commands\CreateAdministratorUser;
 use Console\Commands\DeleteNotPublishedPhotosOlderThanWeek;
-use Console\Commands\DeleteUnusedDirectoriesWithinPhotoStorage;
+use Console\Commands\DeleteUnusedObjectsWithinPhotoStorage;
 use Console\Commands\CreateRoles;
 use Console\Commands\GeneratePhotoAvgColors;
 use Console\Commands\GeneratePhotoThumbnails;
@@ -33,7 +33,7 @@ class Kernel extends ConsoleKernel
         CreateAdministratorUser::class,
         CreateRoles::class,
         DeleteNotPublishedPhotosOlderThanWeek::class,
-        DeleteUnusedDirectoriesWithinPhotoStorage::class,
+        DeleteUnusedObjectsWithinPhotoStorage::class,
         GeneratePhotoAvgColors::class,
         GeneratePhotoThumbnails::class,
         GenerateRestApiDocumentation::class,
@@ -51,7 +51,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('delete:not_published_photos_older_than_week')
             ->dailyAt('00:00');
 
-        $schedule->command('delete:unused_directories_within_photo_storage')
+        $schedule->command('delete:unused_objects_within_photo_storage')
             ->dailyAt('00:10');
 
         $schedule->command('send:weekly_subscription_mails')
