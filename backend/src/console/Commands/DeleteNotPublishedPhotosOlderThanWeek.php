@@ -2,10 +2,10 @@
 
 namespace Console\Commands;
 
+use Carbon\Carbon;
 use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
 use Core\DataProviders\Photo\Criterias\IsPublished;
 use Core\Models\Photo;
-use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
 use Lib\DataProvider\Criterias\WhereUpdatedAtLessThan;

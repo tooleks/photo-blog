@@ -4,9 +4,9 @@ namespace Console\Commands;
 
 use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
 use Core\Models\Photo;
+use Illuminate\Config\Repository as Config;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
-use Illuminate\Config\Repository as Config;
 
 /**
  * Class DeleteUnusedDirectoriesWithinPhotoStorage.
