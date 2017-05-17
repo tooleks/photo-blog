@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
 use Core\DataProviders\Photo\Criterias\IsPublished;
 use Core\Models\Photo;
+use Closure;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
 use Lib\DataProvider\Criterias\WhereUpdatedAtLessThan;
@@ -54,14 +55,25 @@ class DeleteNotPublishedPhotosOlderThanWeek extends Command
      */
     public function handle()
     {
+        $this->eachNotPublishedPhotoOlderThanWeek(function (Photo $photo) {
+            $this->comment("Deleting photo (id:{$photo->id}) ...");
+            $this->photoDataProvider->delete($photo);
+            $this->storage->deleteDirectory($photo->directory_path);
+            $this->comment("Photo (id:{$photo->id}) was successfully deleted.");
+        });
+    }
+
+    /**
+     * Apply callback function on each not published photo older than week.
+     *
+     * @param Closure $callback
+     * @return void
+     */
+    protected function eachNotPublishedPhotoOlderThanWeek(Closure $callback)
+    {
         $this->photoDataProvider
             ->applyCriteria(new IsPublished(false))
             ->applyCriteria(new WhereUpdatedAtLessThan((new Carbon)->addWeek('-1')))
-            ->each(function (Photo $photo) {
-                $this->comment("Deleting photo (id:{$photo->id}) ...");
-                $this->photoDataProvider->delete($photo);
-                $this->storage->deleteDirectory($photo->directory_path);
-                $this->comment("Photo (id:{$photo->id}) was successfully deleted.");
-            });
+            ->each($callback);
     }
 }
