@@ -9,6 +9,7 @@ use Core\DataProviders\Photo\Criterias\IsPublished;
 use Core\DataProviders\Subscription\Contracts\SubscriptionDataProvider;
 use Core\DataProviders\Subscription\Criterias\WhereEmailIn;
 use Core\Models\Subscription;
+use Closure;
 use Illuminate\Config\Repository as Config;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
@@ -62,13 +63,11 @@ class SendWeeklySubscriptionMails extends Command
     public function handle()
     {
         if ($this->isAvailableWeeklySubscription()) {
-            $this->subscriptionDataProvider
-                ->applyCriteriaWhen($this->hasArgument('email_filter'), new WhereEmailIn($this->argument('email_filter')))
-                ->each(function (Subscription $subscription) {
-                    $this->comment("Sending subscription mail (email:{$subscription->email}) ...");
-                    Mail::send(new WeeklySubscription($this->extractSubscriptionData($subscription)));
-                    $this->comment("Subscription mail was successfully sent (email:{$subscription->email}).");
-                });
+            $this->eachSubscriptionByEmailFilterArgument(function (Subscription $subscription) {
+                $this->comment("Sending subscription mail (email:{$subscription->email}) ...");
+                $this->sendMail($subscription);
+                $this->comment("Subscription mail was successfully sent (email:{$subscription->email}).");
+            });
         }
     }
 
@@ -83,6 +82,30 @@ class SendWeeklySubscriptionMails extends Command
             ->applyCriteria(new IsPublished(true))
             ->applyCriteria(new WhereCreatedAtGreaterThan((new Carbon)->addWeek('-1')))
             ->exists();
+    }
+
+    /**
+     *
+     *
+     * @param Closure $closure
+     */
+    protected function eachSubscriptionByEmailFilterArgument(Closure $closure)
+    {
+        $this->subscriptionDataProvider
+            ->applyCriteriaWhen($this->hasArgument('email_filter'), new WhereEmailIn($this->argument('email_filter')))
+            ->each($closure);
+    }
+
+    /**
+     * Send mail.
+     *
+     * @param Subscription $subscription
+     */
+    protected function sendMail(Subscription $subscription)
+    {
+        $mail = new WeeklySubscription($this->extractSubscriptionData($subscription));
+
+        Mail::send($mail);
     }
 
     /**
