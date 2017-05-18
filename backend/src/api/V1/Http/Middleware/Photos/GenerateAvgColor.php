@@ -41,7 +41,7 @@ class GenerateAvgColor
 
         $fileAbsPath = $storageAbsPath . $request->get('thumbnails')[1]['path'];
 
-        $request->merge(['avg_color' => $this->avgColorPicker->getImageAvgHexColorByPath($fileAbsPath)]);
+        $request->merge(['avg_color' => $this->avgColorPicker->getImageAvgHexByPath($fileAbsPath)]);
 
         return $next($request);
     }
