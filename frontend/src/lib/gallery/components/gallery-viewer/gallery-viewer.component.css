@@ -68,7 +68,7 @@ gallery-viewer .gallery-action:hover {
 gallery-viewer .gallery-actions .gallery-action {
     position: absolute;
     top: 50%;
-    margin-top: -10px;
+    transform: translate(0px, -50%);
     z-index: 20020;
 }
 
@@ -97,11 +97,12 @@ gallery-viewer .gallery-navbar .gallery-left {
     float: left;
 }
 
-gallery-viewer .gallery-spinner {
+gallery-viewer .gallery-loader {
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, 0);
+    transform: translate(-50%, -50%);
+    font-size: 20px;
 }
 
 gallery-viewer .gallery-info {

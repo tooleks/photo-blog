@@ -1,9 +1,7 @@
 <div *ngIf="image">
     <div class="gallery-backdrop"></div>
     <div class="gallery-container">
-        <i class="gallery-spinner"
-           [ngClass]="!isLoadedImage() ? 'fa fa-circle-o-notch fa-spin fa-2x' : ''"
-           aria-hidden="true"></i>
+        <div class="gallery-loader">{{ 'Loading...' }}</div>
         <div (swiperight)="clickPrevImage()"
              (swipeleft)="clickNextImage()"
              class="gallery-view">
