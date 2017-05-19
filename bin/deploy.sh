@@ -52,7 +52,10 @@ step_publish_backend_application() {
     printf_pwd &&
     mkdir dist >> /dev/null 2>&1 || rm -r dist/backend >> /dev/null 2>&1
     #
-    rsync -avq --exclude="storage" backend/ dist/backend &&ln -s "$root_path/backend/storage" dist/backend/storage
+    rsync -avq --exclude="storage" backend/ dist/backend &&
+    # Generate storage symlinks.
+    ln -s "$root_path/backend/storage" dist/backend/storage &&
+    ln -s "$root_path/backend/storage/app/public" dist/backend/public/storage
 }
 
 step_generate_rest_api_documentation() {
