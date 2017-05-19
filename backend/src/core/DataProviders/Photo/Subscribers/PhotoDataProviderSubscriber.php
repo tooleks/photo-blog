@@ -77,15 +77,15 @@ class PhotoDataProviderSubscriber
     public function onBeforeFetch(Builder $query, array $options)
     {
         if (array_key_exists('with', $options)) {
-            // Select with exif.
+            // Fetch with exif.
             if (in_array('exif', $options['with'])) {
                 $query->with('exif');
             }
-            // Select with thumbnails.
+            // Fetch with thumbnails.
             if (in_array('thumbnails', $options['with'])) {
                 $query->with('thumbnails');
             }
-            // Select with tags.
+            // Fetch with tags.
             if (in_array('tags', $options['with'])) {
                 $query->with('tags');
             }
