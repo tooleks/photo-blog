@@ -59,7 +59,7 @@ class GeneratePhotoThumbnails extends Command
             $this->comment("Generating photo thumbnails (id:{$photo->id}) ...");
             $this->generatePhotoThumbnails($photo);
             $this->comment("Photo thumbnails was successfully generated (id:{$photo->id}).");
-        });
+        }, ['with' => ['thumbnails']]);
     }
 
     /**
@@ -85,6 +85,6 @@ class GeneratePhotoThumbnails extends Command
             ];
         }
 
-        $this->photoDataProvider->save($photo, ['thumbnails' => $thumbnails ?? []], ['save' => ['thumbnails']]);
+        $this->photoDataProvider->save($photo, ['thumbnails' => $thumbnails ?? []], ['with' => ['thumbnails']]);
     }
 }

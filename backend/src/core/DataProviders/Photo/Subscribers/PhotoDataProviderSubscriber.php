@@ -38,27 +38,27 @@ class PhotoDataProviderSubscriber
     {
         $events->listen(
             PhotoDataProvider::class . '@beforeGetById',
-            static::class . '@onBeforeGet'
+            static::class . '@onBeforeFetch'
         );
 
         $events->listen(
             PhotoDataProvider::class . '@beforeGetFirst',
-            static::class . '@onBeforeGet'
+            static::class . '@onBeforeFetch'
         );
 
         $events->listen(
             PhotoDataProvider::class . '@beforeGet',
-            static::class . '@onBeforeGet'
+            static::class . '@onBeforeFetch'
         );
 
         $events->listen(
             PhotoDataProvider::class . '@beforeEach',
-            static::class . '@onBeforeGet'
+            static::class . '@onBeforeFetch'
         );
 
         $events->listen(
             PhotoDataProvider::class . '@beforePaginate',
-            static::class . '@onBeforeGet'
+            static::class . '@onBeforeFetch'
         );
 
         $events->listen(
@@ -68,15 +68,28 @@ class PhotoDataProviderSubscriber
     }
 
     /**
-     * Handle before get event.
+     * Handle before fetch event.
      *
      * @param $query
      * @param array $options
      * @return void
      */
-    public function onBeforeGet(Builder $query, array $options)
+    public function onBeforeFetch(Builder $query, array $options)
     {
-        $query->with('exif', 'thumbnails', 'tags');
+        if (array_key_exists('with', $options)) {
+            // Select with exif.
+            if (in_array('exif', $options['with'])) {
+                $query->with('exif');
+            }
+            // Select with thumbnails.
+            if (in_array('thumbnails', $options['with'])) {
+                $query->with('thumbnails');
+            }
+            // Select with tags.
+            if (in_array('tags', $options['with'])) {
+                $query->with('tags');
+            }
+        }
     }
 
     /**
@@ -89,20 +102,19 @@ class PhotoDataProviderSubscriber
      */
     public function onAfterSave(Photo $photo, array $attributes = [], array $options = [])
     {
-        if (!array_key_exists('save', $options)) {
-            return;
-        }
-
-        if (in_array('exif', $options['save']) && array_key_exists('exif', $attributes)) {
-            $this->savePhotoExif($photo, $attributes['exif']);
-        }
-
-        if (in_array('thumbnails', $options['save']) && array_key_exists('thumbnails', $attributes)) {
-            $this->savePhotoThumbnails($photo, $attributes['thumbnails']);
-        }
-
-        if (in_array('tags', $options['save']) && array_key_exists('tags', $attributes)) {
-            $this->savePhotoTags($photo, $attributes['tags']);
+        if (array_key_exists('with', $options)) {
+            // Save with exif.
+            if (in_array('exif', $options['with']) && array_key_exists('exif', $attributes)) {
+                $this->savePhotoExif($photo, $attributes['exif']);
+            }
+            // Save with thumbnails.
+            if (in_array('thumbnails', $options['with']) && array_key_exists('thumbnails', $attributes)) {
+                $this->savePhotoThumbnails($photo, $attributes['thumbnails']);
+            }
+            // Save with tags.
+            if (in_array('tags', $options['with']) && array_key_exists('tags', $attributes)) {
+                $this->savePhotoTags($photo, $attributes['tags']);
+            }
         }
     }
 

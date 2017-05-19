@@ -143,7 +143,7 @@ class DeleteUnusedObjectsFromPhotoStorage extends Command
             $photo->thumbnails->each(function (Thumbnail $thumbnail) use (&$files) {
                 array_push($files, $thumbnail->path);
             });
-        });
+        }, ['with' => ['thumbnails']]);
 
         return $files;
     }
