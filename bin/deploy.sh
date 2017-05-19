@@ -2,7 +2,7 @@
 
 root_path="$PWD/.."
 
-isProdMode() {
+is_prod_mode() {
     if [ "$1" == "prod" ]; then
         return 0
     else
@@ -10,78 +10,89 @@ isProdMode() {
     fi
 }
 
-printfPWD() {
+printf_pwd() {
     printf "$PWD\n"
 }
 
-printfStepHeader() {
-    printf ">> $1\n"
+printf_step_header() {
+    printf "\n>> $1\n"
 }
 
-printfStepFooter() {
-    printf "\n\n"
-}
-
-printfStepHeader "Updating Sources"
-cd "$root_path"
-printfPWD
-git pull
-printfStepFooter
-
-printfStepHeader "Updating Backend Application Dependencies"
-cd "$root_path/backend"
-printfPWD
-composer install
-composer dump-autoload
-printfStepFooter
-
-printfStepHeader "Migrating Database"
-cd "$root_path/backend"
-printfPWD
-php artisan migrate --force
-printfStepFooter
-
-printfStepHeader "Generating REST API Documentation"
-cd "$root_path/backend"
-printfPWD
-php artisan generate:rest_api_documentation
-printfStepFooter
-
-if isProdMode $1; then
-    printfStepHeader "Restarting Backend Application"
+step_update_sources() {
+    printf_step_header "Updating Sources"
     cd "$root_path"
-    printfPWD
+    printf_pwd
+    git pull
+}
+
+step_update_backend_dependencies() {
+    printf_step_header "Updating Backend Application Dependencies"
+    cd "$root_path/backend"
+    printf_pwd
+    composer install && composer dump-autoload
+}
+
+step_migrate_database() {
+    printf_step_header "Migrating Database"
+    cd "$root_path/backend"
+    printf_pwd
+    php artisan migrate --force
+}
+
+step_generate_rest_api_documentation() {
+    printf_step_header "Generating REST API Documentation"
+    cd "$root_path/backend"
+    printf_pwd
+    php artisan generate:rest_api_documentation
+}
+
+step_restart_backend_application() {
+    printf_step_header "Restarting Backend Application"
+    cd "$root_path"
+    printf_pwd
     sudo systemctl restart nginx php7.0-fpm
-    printfStepFooter
-fi
+}
 
-printfStepHeader "Updating Frontend Application Dependencies"
-cd "$root_path/frontend"
-printfPWD
-yarn install
-printfStepFooter
+step_update_frontend_application() {
+    printf_step_header "Updating Frontend Application Dependencies"
+    cd "$root_path/frontend"
+    printf_pwd
+    yarn install
+}
 
-printfStepHeader "Building Frontend Application"
-cd "$root_path/frontend"
-printfPWD
-if isProdMode $1; then
-    npm run build:prod
-else
-    npm run build
-fi
-printfStepFooter
+step_build_frontend_application() {
+    printf_step_header "Building Frontend Application"
+    cd "$root_path/frontend"
+    printf_pwd
+    if is_prod_mode $1; then
+        npm run build:prod
+    else
+        npm run build
+    fi
+}
 
-printfStepHeader "Publishing Frontend Application"
-cd "$root_path/frontend"
-printfPWD
-rm -r public
-cp -r dist public
-printfStepFooter
+step_publish_frontend_application() {
+    printf_step_header "Publishing Frontend Application"
+    cd "$root_path/frontend"
+    printf_pwd
+    rm -r public && cp -r dist public || cp -r dist public
+}
 
-if isProdMode $1; then
-    printfStepHeader "Restarting Frontend Application"
+step_restart_frontend_application() {
+    printf_step_header "Restarting Frontend Application"
     cd "$root_path/frontend/public"
-    printfPWD
+    printf_pwd
     pm2 restart server.js
-    printfStepFooter
-fi
+}
+
+########################################################################################################################
+
+step_update_sources &&
+step_update_backend_dependencies &&
+step_migrate_database &&
+step_generate_rest_api_documentation &&
+step_restart_backend_application &&
+step_update_frontend_application &&
+step_build_frontend_application $1 &&
+step_publish_frontend_application &&
+step_restart_frontend_application
