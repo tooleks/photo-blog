@@ -119,8 +119,8 @@ step_restart_frontend_application() {
 
 step_update_sources &&
 step_update_backend_dependencies &&
-step_migrate_database &&
 step_run_backend_tests &&
+step_migrate_database &&
 step_publish_backend_application &&
 step_generate_rest_api_documentation &&
 step_publish_rest_api_documentation &&
