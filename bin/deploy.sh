@@ -107,7 +107,7 @@ step_publish_frontend_application() {
 
 step_restart_frontend_application() {
     printf_step_header "Restarting Frontend Application" &&
-    cd "$root_path/frontend/public" &&
+    cd "$root_path/dist/frontend" &&
     printf_pwd &&
     pm2 restart server.js
 }
