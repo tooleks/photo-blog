@@ -73,6 +73,11 @@ class GeneratePhotoThumbnails extends Command
 
         $photoAbsPath = $storageAbsPath . $photo->path;
 
+        if (!file_exists($photoAbsPath)) {
+            $this->comment("File '{$photoAbsPath}' does not exists.");
+            return;
+        }
+
         $metaData = $this->thumbnailsGenerator->generateThumbnails($photoAbsPath);
 
         foreach ($metaData as $metaDataItem) {
