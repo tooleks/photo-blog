@@ -105,7 +105,7 @@ step_publish_frontend_application() {
     printf_pwd &&
     mkdir dist >> /dev/null 2>&1 || rm -r dist/frontend >> /dev/null 2>&1
     #
-    rsync -avq frontend/dist/ dist/frontend
+    rsync -avq frontend/ dist/frontend
 }
 
 step_restart_frontend_application() {
