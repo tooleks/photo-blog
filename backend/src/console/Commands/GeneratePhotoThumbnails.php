@@ -69,19 +69,19 @@ class GeneratePhotoThumbnails extends Command
      */
     public function generatePhotoThumbnails(Photo $photo)
     {
-        $storageAbsPath = $this->storage->getDriver()->getAdapter()->getPathPrefix();
+        $fileRelPath = $photo->path;
 
-        $photoAbsPath = $storageAbsPath . $photo->path;
+        $fileAbsPath = $this->storage->getDriver()->getAdapter()->getPathPrefix() . $fileRelPath;
 
-        if (!file_exists($photoAbsPath)) {
-            $this->comment("File '{$photoAbsPath}' does not exists.");
+        if (!file_exists($fileAbsPath)) {
+            $this->comment("File '{$fileAbsPath}' does not exists.");
             return;
         }
 
-        $metaData = $this->thumbnailsGenerator->generateThumbnails($photoAbsPath);
+        $metaData = $this->thumbnailsGenerator->generateThumbnails($fileAbsPath);
 
         foreach ($metaData as $metaDataItem) {
-            $relativeThumbnailPath = str_replace($storageAbsPath, '', $metaDataItem['path']);
+            $relativeThumbnailPath = pathinfo($fileRelPath, PATHINFO_DIRNAME) . '/' . pathinfo($metaDataItem['path'], PATHINFO_BASENAME);
             $thumbnails[] = [
                 'path' => $relativeThumbnailPath,
                 'relative_url' => $this->storage->url($relativeThumbnailPath),

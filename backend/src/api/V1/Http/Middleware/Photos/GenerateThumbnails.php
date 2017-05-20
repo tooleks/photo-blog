@@ -55,14 +55,14 @@ class GenerateThumbnails
     {
         $this->validateRequest($request);
 
-        $storageAbsPath = $this->storage->getDriver()->getAdapter()->getPathPrefix();
+        $fileRelPath = $request->get('path');
 
-        $fileAbsPath = $storageAbsPath . $request->get('path');
+        $fileAbsPath = $this->storage->getDriver()->getAdapter()->getPathPrefix() . $fileRelPath;
 
         $metaData = $this->thumbnailsGenerator->generateThumbnails($fileAbsPath);
 
         foreach ($metaData as $metaDataItem) {
-            $relativeThumbnailPath = str_replace($storageAbsPath, '', $metaDataItem['path']);
+            $relativeThumbnailPath = pathinfo($fileRelPath, PATHINFO_DIRNAME) . '/' . pathinfo($metaDataItem['path'], PATHINFO_BASENAME);
             $thumbnails[] = [
                 'path' => $relativeThumbnailPath,
                 'relative_url' => $this->storage->url($relativeThumbnailPath),
