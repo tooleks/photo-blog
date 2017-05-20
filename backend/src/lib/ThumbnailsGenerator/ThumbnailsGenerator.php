@@ -73,62 +73,58 @@ class ThumbnailsGenerator implements ThumbnailsGeneratorContract
     /**
      * @inheritdoc
      */
-    public function generateThumbnails(string $originalImageFilePath): array
+    public function generateThumbnails(string $originalImageAbsPath): array
     {
-        $metaData = [];
-
-        $originalImage = (new Imagine)->open($originalImageFilePath);
+        $originalImage = (new Imagine)->open($originalImageAbsPath);
 
         $this->eachThumbnailConfig(function ($config) use ($originalImage, &$metaData) {
             // Generate thumbnail image.
             $thumbnailImage = $originalImage->thumbnail(new Box($config['width'], $config['height']), $config['mode']);
             // Generate thumbnail file path.
-            $thumbnailFilePath = $this->generateThumbnailFilePath(
+            $thumbnailImageAbsPath = $this->generateThumbnailImageAbsPath(
                 $originalImage->metadata()->get('filepath'),
                 $thumbnailImage->getSize()->getWidth(),
                 $thumbnailImage->getSize()->getHeight()
             );
             // Save thumbnail file.
-            $thumbnailImage->save($thumbnailFilePath, ['quality' => $config['quality']]);
-            // Append thumbnail metadata.
+            $thumbnailImage->save($thumbnailImageAbsPath, ['quality' => $config['quality']]);
+            // Store thumbnail metadata.
             $metaData[] = [
-                'path' => $thumbnailFilePath,
+                'path' => $thumbnailImageAbsPath,
                 'width' => $thumbnailImage->getSize()->getWidth(),
                 'height' => $thumbnailImage->getSize()->getHeight(),
             ];
         });
 
-        return $metaData;
+        return $metaData ?? [];
     }
 
     /**
      * Apply callback function on each thumbnail config.
      *
-     * @param Closure $closure
+     * @param Closure $callback
      */
-    private function eachThumbnailConfig(Closure $closure)
+    private function eachThumbnailConfig(Closure $callback)
     {
-        foreach ($this->thumbnailsConfig as $config) {
-            $closure($config);
-        }
+        array_map($callback, $this->thumbnailsConfig);
     }
 
     /**
-     * Generate thumbnail file path.
+     * Generate thumbnail image absolute path.
      *
-     * @param string $originalImageFilePath
+     * @param string $originalImageAbsPath
      * @param string $width
      * @param string $height
      * @return string
      */
-    private function generateThumbnailFilePath(string $originalImageFilePath, string $width, string $height): string
+    private function generateThumbnailImageAbsPath(string $originalImageAbsPath, string $width, string $height): string
     {
         return sprintf(
             '%s/%s_%sx%s.%s',
-            pathinfo($originalImageFilePath, PATHINFO_DIRNAME),     // Subdirectory.
-            pathinfo($originalImageFilePath, PATHINFO_FILENAME),    // File name.
+            pathinfo($originalImageAbsPath, PATHINFO_DIRNAME),     // Subdirectory.
+            pathinfo($originalImageAbsPath, PATHINFO_FILENAME),    // File name.
             $width,                                                 // Width suffix.
             $height,                                                // Height suffix.
-            pathinfo($originalImageFilePath, PATHINFO_EXTENSION));  // Extension.
+            pathinfo($originalImageAbsPath, PATHINFO_EXTENSION));  // Extension.
     }
 }

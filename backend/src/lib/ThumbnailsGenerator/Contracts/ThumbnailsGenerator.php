@@ -12,8 +12,8 @@ interface ThumbnailsGenerator
     /**
      * Generate thumbnail files for original image file and return thumbnails metadata.
      *
-     * @param string $originalImageFilePath
+     * @param string $originalImageAbsPath
      * @return array
      */
-    public function generateThumbnails(string $originalImageFilePath): array;
+    public function generateThumbnails(string $originalImageAbsPath): array;
 }

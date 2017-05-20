@@ -69,22 +69,20 @@ class GeneratePhotoThumbnails extends Command
      */
     public function generatePhotoThumbnails(Photo $photo)
     {
-        $fileRelPath = $photo->path;
+        $photoRelPath = $photo->path;
+        $photoAbsPath = $this->storage->getDriver()->getAdapter()->getPathPrefix() . $photoRelPath;
 
-        $fileAbsPath = $this->storage->getDriver()->getAdapter()->getPathPrefix() . $fileRelPath;
-
-        if (!file_exists($fileAbsPath)) {
-            $this->comment("File '{$fileAbsPath}' does not exists.");
+        if (!file_exists($photoAbsPath)) {
+            $this->comment("File '{$photoAbsPath}' does not exists.");
             return;
         }
 
-        $metaData = $this->thumbnailsGenerator->generateThumbnails($fileAbsPath);
-
+        $metaData = $this->thumbnailsGenerator->generateThumbnails($photoAbsPath);
         foreach ($metaData as $metaDataItem) {
-            $relativeThumbnailPath = pathinfo($fileRelPath, PATHINFO_DIRNAME) . '/' . pathinfo($metaDataItem['path'], PATHINFO_BASENAME);
+            $thumbnailRelPath = pathinfo($photoRelPath, PATHINFO_DIRNAME) . '/' . pathinfo($metaDataItem['path'], PATHINFO_BASENAME);
             $thumbnails[] = [
-                'path' => $relativeThumbnailPath,
-                'relative_url' => $this->storage->url($relativeThumbnailPath),
+                'path' => $thumbnailRelPath,
+                'relative_url' => $this->storage->url($thumbnailRelPath),
                 'width' => $metaDataItem['width'],
                 'height' => $metaDataItem['height'],
             ];
