@@ -9,17 +9,18 @@ server {
     server_name backend.{{server.name}};
 
     root /var/www/photo-blog/backend/public;
-
-    location / {
-        try_files /index.php =404;
-        fastcgi_pass php7.0-fpm;
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        include fastcgi_params;
-    }
+    index index.php index.html index.htm;
 
     location /api/v1/ {
-        try_files /api/v1/index.php =404;
-        fastcgi_pass php7.0-fpm;
+        try_files $uri $uri/ /api/v1/index.php?$query_string;
+    }
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+		fastcgi_pass php7.0-fpm;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         include fastcgi_params;
     }
