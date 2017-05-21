@@ -20,7 +20,7 @@ server {
     }
 
     location ~ \.php$ {
-		fastcgi_pass php7.0-fpm;
+        fastcgi_pass php7.0-fpm;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         include fastcgi_params;
     }
