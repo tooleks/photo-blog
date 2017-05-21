@@ -46,6 +46,33 @@ step_generate_rest_api_documentation() {
     php artisan generate:rest_api_documentation
 }
 
+step_update_frontend_application() {
+    printf_step_header "Updating Frontend Application Dependencies" &&
+    cd "$root_path/frontend" &&
+    printf_pwd &&
+    yarn install
+}
+
+step_build_frontend_application() {
+    printf_step_header "Building Frontend Application" &&
+    cd "$root_path/frontend" &&
+    printf_pwd &&
+    if is_prod_mode $1; then
+        npm run build:prod
+    else
+        npm run build
+    fi
+}
+
+step_publish_rest_api_documentation() {
+    printf_step_header "Publishing REST API Documentation" &&
+    cd "$root_path" &&
+    printf_pwd &&
+    mkdir dist >> /dev/null 2>&1 || rm -r dist/rest_api_documentation >> /dev/null 2>&1
+    #
+    rsync -avq docs/rest_api/dist/ dist/rest_api_documentation
+}
+
 step_migrate_database() {
     printf_step_header "Migrating Database" &&
     cd "$root_path/backend" &&
@@ -65,38 +92,11 @@ step_publish_backend_application() {
     ln -s "$root_path/backend/storage/app/public" dist/backend/public/storage
 }
 
-step_publish_rest_api_documentation() {
-    printf_step_header "Publishing REST API Documentation" &&
-    cd "$root_path" &&
-    printf_pwd &&
-    mkdir dist >> /dev/null 2>&1 || rm -r dist/rest_api_documentation >> /dev/null 2>&1
-    #
-    rsync -avq docs/rest_api/dist/ dist/rest_api_documentation
-}
-
 step_restart_backend_application() {
     printf_step_header "Restarting Backend Application" &&
     cd "$root_path" &&
     printf_pwd &&
     sudo systemctl restart nginx php7.0-fpm
-}
-
-step_update_frontend_application() {
-    printf_step_header "Updating Frontend Application Dependencies" &&
-    cd "$root_path/frontend" &&
-    printf_pwd &&
-    yarn install
-}
-
-step_build_frontend_application() {
-    printf_step_header "Building Frontend Application" &&
-    cd "$root_path/frontend" &&
-    printf_pwd &&
-    if is_prod_mode $1; then
-        npm run build:prod
-    else
-        npm run build
-    fi
 }
 
 step_publish_frontend_application() {
@@ -121,11 +121,11 @@ step_update_sources &&
 step_update_backend_dependencies &&
 step_run_backend_tests &&
 step_generate_rest_api_documentation &&
-step_migrate_database &&
-step_publish_backend_application &&
-step_publish_rest_api_documentation &&
-step_restart_backend_application &&
 step_update_frontend_application &&
 step_build_frontend_application $1 &&
+step_publish_rest_api_documentation &&
+step_migrate_database &&
+step_publish_backend_application &&
+step_restart_backend_application &&
 step_publish_frontend_application &&
 step_restart_frontend_application
