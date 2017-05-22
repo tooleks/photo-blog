@@ -38,6 +38,9 @@ export class PhotoFormComponent implements OnInit, AfterViewInit {
     ngOnInit(): void {
         this.photo = new Photo;
         this.title.setPageNameSegment('Add Photo');
+        if (!this.authProvider.isAuthenticated()) {
+            this.navigator.navigate(['/signin']);
+        }
     }
 
     ngAfterViewInit(): void {
