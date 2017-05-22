@@ -45,3 +45,7 @@ button, a {
 .ng2-tag-input:focus {
     border-color: #1ab394 !important;
 }
+
+.ng2-tag-input__text-input {
+    background: #fff !important;
+}
