@@ -70,11 +70,9 @@ class GeneratePhotoAvgColors extends Command
      */
     public function generatePhotoAvgColor(Photo $photo)
     {
-        $storageAbsPath = $this->storage->getDriver()->getAdapter()->getPathPrefix();
+        $photoAbsPath = $this->storage->getDriver()->getAdapter()->getPathPrefix() . $photo->path;
 
-        $thumbnailAbsPath = $storageAbsPath . $photo->thumbnails->first()->path;
-
-        $photo->avg_color = $this->avgColorPicker->getImageAvgHexByPath($thumbnailAbsPath);
+        $photo->avg_color = $this->avgColorPicker->getImageAvgHexByPath($photoAbsPath);
 
         $this->photoDataProvider->save($photo);
     }
