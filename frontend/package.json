@@ -8,6 +8,7 @@
     "build": "webpack",
     "build:prod": "NODE_ENV='production' webpack -p",
     "build:aot": "webpack --env.aot --env.client & webpack --env.aot --env.server",
+    "build:aot:prod": "NODE_ENV='production' webpack -p --env.aot --env.client & NODE_ENV='production' webpack -p --env.aot --env.server",
     "prebuild": "npm run clean",
     "prebuild:prod": "npm run clean",
     "prebuild:aot": "npm run clean",
