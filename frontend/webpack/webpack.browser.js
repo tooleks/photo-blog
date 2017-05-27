@@ -7,7 +7,6 @@ const webpack = require('webpack');
  */
 module.exports = {
     entry: {
-        'vendor': root('./src/vendor.ts'),
         'browser': root('./src/main.browser.ts')
     },
     output: {
