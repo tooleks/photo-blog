@@ -16,7 +16,7 @@ import {SignIn as Model} from './models';
     templateUrl: 'signin-form.component.html',
 })
 export class SignInFormComponent implements OnInit {
-    protected model: Model;
+    model: Model;
     protected navigator: NavigatorService;
     protected processLocker: ProcessLockerService;
 

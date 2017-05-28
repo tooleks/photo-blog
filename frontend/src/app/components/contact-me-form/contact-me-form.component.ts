@@ -16,7 +16,7 @@ import {ContactMe as Model} from './models';
     templateUrl: 'contact-me-form.component.html',
 })
 export class ContactMeFormComponent implements OnInit {
-    protected model: Model;
+    model: Model;
     protected navigator: NavigatorService;
     protected processLocker: ProcessLockerService;
 

@@ -19,7 +19,7 @@ import {PhotosComponent as AbstractPhotosComponent} from '../abstract';
     templateUrl: 'photos.component.html',
 })
 export class PhotosComponent extends AbstractPhotosComponent implements AfterViewInit {
-    constructor(protected authProvider: AuthProviderService,
+    constructor(public authProvider: AuthProviderService,
                 protected photoDataProvider: PhotoDataProviderService,
                 router: Router,
                 route: ActivatedRoute,

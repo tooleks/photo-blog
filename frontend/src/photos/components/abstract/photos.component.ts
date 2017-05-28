@@ -22,11 +22,11 @@ export abstract class PhotosComponent implements OnInit, AfterViewInit {
     protected navigator: NavigatorService;
     protected processLocker: ProcessLockerService;
 
-    protected images: Array<GalleryImage> = [];
-    protected hasMoreImages: boolean = true;
+    images: Array<GalleryImage> = [];
+    hasMoreImages: boolean = true;
 
-    protected linkedData: Array<any> = [];
-    protected queryParams = {};
+    linkedData: Array<any> = [];
+    queryParams = {};
 
     protected defaults = {
         page: 1,

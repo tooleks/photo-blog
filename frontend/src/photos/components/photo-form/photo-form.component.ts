@@ -20,7 +20,7 @@ import {Photo} from './models';
     styleUrls: ['photo-form.component.css'],
 })
 export class PhotoFormComponent implements OnInit, AfterViewInit {
-    protected photo: Photo;
+    photo: Photo;
     protected navigator: NavigatorService;
     protected processLocker: ProcessLockerService;
 

@@ -19,7 +19,7 @@ export class GalleryComponent implements OnInit, OnChanges {
     @Output() onLoadMoreImages: EventEmitter<any> = new EventEmitter<any>();
     protected loadingNextImage: boolean = false;
 
-    @Output() onOpenImage: EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
+    @Output() onOpenImage: EventEmitter<any> = new EventEmitter<any>();
 
     @Input() enabledKeyboardEvents: boolean = true;
 
@@ -41,8 +41,8 @@ export class GalleryComponent implements OnInit, OnChanges {
     @Input() showImageInfoButton: boolean = true;
     @Output() onImageInfo: EventEmitter<any> = new EventEmitter<any>();
 
-    protected openedImage: GalleryImage;
-    protected openedImageIndex: number;
+    openedImage: GalleryImage;
+    openedImageIndex: number;
 
     ngOnInit(): void {
         this.reset();

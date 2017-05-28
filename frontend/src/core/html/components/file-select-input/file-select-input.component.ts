@@ -11,7 +11,7 @@ export class FileSelectInputComponent {
     constructor(protected elementRef: ElementRef) {
     }
 
-    protected onChange(): void {
+    onChange(): void {
         if (this.isFile()) {
             this.onSelect.emit(this.getFile());
         }

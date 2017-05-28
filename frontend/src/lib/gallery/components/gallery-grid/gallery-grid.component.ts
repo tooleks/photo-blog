@@ -32,7 +32,7 @@ export class GalleryGridComponent implements OnChanges, AfterContentInit, OnDest
 
     @Output() onClickGridImage: EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
 
-    protected gridRows: Array<Array<GalleryImage>> = [];
+    gridRows: Array<Array<GalleryImage>> = [];
     protected activeRowImages: Array<GalleryImage> = [];
 
     constructor(protected elementRef: ElementRef) {

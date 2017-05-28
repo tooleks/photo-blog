@@ -24,7 +24,7 @@ import {PhotosComponent as AbstractPhotosComponent} from '../abstract';
 export class PhotosByTagComponent extends AbstractPhotosComponent implements OnInit {
     @ViewChild('galleryComponent') galleryComponent: GalleryComponent;
 
-    constructor(protected authProvider: AuthProviderService,
+    constructor(public authProvider: AuthProviderService,
                 protected photoDataProvider: PhotoDataProviderService,
                 router: Router,
                 route: ActivatedRoute,

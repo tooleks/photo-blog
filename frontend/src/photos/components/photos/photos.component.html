@@ -6,7 +6,7 @@
         <gallery #galleryComponent
                  [images]="images"
                  [defaultImageId]="queryParams['show']"
-                 (onLoadMoreImages)="loadMoreImages($event)"
+                 (onLoadMoreImages)="loadMoreImages()"
                  (onOpenImage)="onShowPhoto($event)"
                  (onCloseImage)="onHidePhoto($event)"
                  [showEditImageButton]="authProvider.isAuthenticated()"

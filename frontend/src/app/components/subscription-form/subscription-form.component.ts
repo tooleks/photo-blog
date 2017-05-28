@@ -16,7 +16,7 @@ import {Subscription as Model} from './models';
     templateUrl: 'subscription-form.component.html',
 })
 export class SubscriptionFormComponent implements OnInit {
-    protected model: Model;
+    model: Model;
     protected navigator: NavigatorService;
     protected processLocker: ProcessLockerService;
 

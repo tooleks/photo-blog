@@ -38,12 +38,12 @@ export class SideBarComponent implements OnInit {
     @Output() onToggle: EventEmitter<any> = new EventEmitter<any>();
     @Output() onShow: EventEmitter<any> = new EventEmitter<any>();
     @Output() onHide: EventEmitter<any> = new EventEmitter<any>();
-    protected animationState: string;
-    protected tags: Array<any> = [];
+    animationState: string;
+    tags: Array<any> = [];
 
     constructor(protected app: AppService,
                 protected api: ApiService,
-                protected authProvider: AuthProviderService,
+                public authProvider: AuthProviderService,
                 protected screenDetector: ScreenDetectorService) {
         this.reset();
         this.loadTags();

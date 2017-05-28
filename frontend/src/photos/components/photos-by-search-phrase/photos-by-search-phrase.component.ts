@@ -25,7 +25,7 @@ export class PhotosBySearchPhraseComponent extends AbstractPhotosComponent imple
     @ViewChildren('inputSearch') inputSearchComponent: QueryList<ElementRef>;
     @ViewChild('galleryComponent') galleryComponent: GalleryComponent;
 
-    constructor(protected authProvider: AuthProviderService,
+    constructor(public authProvider: AuthProviderService,
                 protected photoDataProvider: PhotoDataProviderService,
                 protected environmentDetector: EnvironmentDetectorService,
                 router: Router,
