@@ -93,6 +93,20 @@ sidebar .sidebar-backdrop {
 
 @media (min-width: 768px) {
     sidebar .sidebar-backdrop {
-        display: none !important;
+        display: none !important; /* "!important" is needed to override the animation state styles */
+    }
+}
+
+sidebar .sidebar-swipe-area {
+    display: block;
+    position: fixed;
+    width: 20px;
+    height: 100%;
+    z-index: 1030;
+}
+
+@media (min-width: 768px) {
+    sidebar .sidebar-swipe-area {
+        display: none;
     }
 }

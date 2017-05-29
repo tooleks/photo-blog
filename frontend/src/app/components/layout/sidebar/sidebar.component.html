@@ -1,4 +1,4 @@
-<div class="sidebar" [@slideInOut]="animationState">
+<div (swipeleft)="hide()" [@slideInOut]="animationState" class="sidebar">
     <ul>
         <li>
             <a [routerLink]="['/']"
@@ -68,4 +68,5 @@
         </li>
     </ul>
 </div>
-<div (click)="toggle()" [@appearInOut]="animationState" class="sidebar-backdrop"></div>
+<div (swipeleft)="hide()" (click)="toggle()" [@appearInOut]="animationState" class="sidebar-backdrop"></div>
+<div (swiperight)="show()" class="sidebar-swipe-area"></div>
