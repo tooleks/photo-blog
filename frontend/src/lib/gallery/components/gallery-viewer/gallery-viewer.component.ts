@@ -5,7 +5,7 @@ import {loadImage} from '../../helpers';
 @Component({
     selector: 'gallery-viewer',
     templateUrl: 'gallery-viewer.component.html',
-    styleUrls: ['gallery-viewer.component.css'],
+    styles: [require('./gallery-viewer.component.css').toString()],
 })
 export class GalleryViewerComponent implements OnChanges {
     @Input() enabledKeyboardEvents: boolean = true;

@@ -15,7 +15,7 @@ import {GalleryImage} from '../../models';
 @Component({
     selector: 'gallery-grid',
     templateUrl: 'gallery-grid.component.html',
-    styleUrls: ['gallery-grid.component.css'],
+    styles: [require('./gallery-grid.component.css').toString()],
 })
 export class GalleryGridComponent implements OnChanges, AfterContentInit, OnDestroy {
     protected elementSize = {width: 0, height: 0};

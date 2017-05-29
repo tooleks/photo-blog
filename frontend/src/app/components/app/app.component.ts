@@ -10,7 +10,7 @@ import '../../../../assets/static/img/meta_image.jpg'
 @Component({
     selector: 'app',
     templateUrl: 'app.component.html',
-    styleUrls: ['app.component.css'],
+    styles: [require('./app.component.css').toString()],
 })
 export class AppComponent implements OnInit {
     appContentStyles: { overflow: string } = {overflow: ''};

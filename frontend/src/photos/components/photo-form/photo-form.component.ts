@@ -17,7 +17,7 @@ import {Photo} from './models';
 @Component({
     selector: 'photo-form',
     templateUrl: 'photo-form.component.html',
-    styleUrls: ['photo-form.component.css'],
+    styles: [require('./photo-form.component.css').toString()],
 })
 export class PhotoFormComponent implements OnInit, AfterViewInit {
     photo: Photo;

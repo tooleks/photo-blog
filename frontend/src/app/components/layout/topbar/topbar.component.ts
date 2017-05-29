@@ -4,7 +4,7 @@ import {TitleService} from '../../../../shared';
 @Component({
     selector: 'topbar',
     templateUrl: 'topbar.component.html',
-    styleUrls: ['topbar.component.css'],
+    styles: [require('./topbar.component.css').toString()],
 })
 export class TopBarComponent {
     @Output() onNavClick: EventEmitter<any> = new EventEmitter<any>();

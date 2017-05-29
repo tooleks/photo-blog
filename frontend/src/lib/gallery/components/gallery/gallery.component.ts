@@ -6,7 +6,7 @@ import {GalleryViewerComponent} from '../gallery-viewer';
 @Component({
     selector: 'gallery',
     templateUrl: 'gallery.component.html',
-    styleUrls: ['gallery.component.css'],
+    styles: [require('./gallery.component.css').toString()],
 })
 export class GalleryComponent implements OnInit, OnChanges {
     @ViewChild('galleryGridComponent') galleryGridComponent: GalleryGridComponent;

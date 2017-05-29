@@ -3,7 +3,7 @@ import {Input, Component} from '@angular/core';
 @Component({
     selector: 'json-ld',
     templateUrl: 'json-ld.component.html',
-    styleUrls: ['json-ld.component.css'],
+    styles: [require('./json-ld.component.css').toString()],
 })
 export class JsonLdComponent {
     @Input() data = {};

@@ -4,7 +4,7 @@ import {AppService} from '../../../../shared';
 @Component({
     selector: 'bottombar',
     templateUrl: 'bottombar.component.html',
-    styleUrls: ['bottombar.component.css'],
+    styles: [require('./bottombar.component.css').toString()],
 })
 export class BottomBarComponent {
     constructor(protected app: AppService) {

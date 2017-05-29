@@ -5,7 +5,7 @@ import {Notice} from '../models';
 @Component({
     selector: 'notices',
     templateUrl: 'notices.component.html',
-    styleUrls: ['notices.component.css'],
+    styles: [require('./notices.component.css').toString()],
 })
 export class NoticesComponent {
     constructor(protected notices: NoticesService) {

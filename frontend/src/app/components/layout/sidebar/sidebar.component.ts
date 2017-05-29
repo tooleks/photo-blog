@@ -6,7 +6,7 @@ import {ApiService, AuthProviderService, AppService} from '../../../../shared';
 @Component({
     selector: 'sidebar',
     templateUrl: 'sidebar.component.html',
-    styleUrls: ['sidebar.component.css'],
+    styles: [require('./sidebar.component.css').toString()],
     animations: [
         trigger('slideInOut', [
             state('in', style({

@@ -19,31 +19,26 @@ module.exports = {
     },
     module: {
         rules: [
-            // Load ts scripts.
             {
                 test: /\.ts$/,
                 use: '@ngtools/webpack'
             },
-            // Load html templates.
             {
                 test: /\.html$/,
                 use: 'raw-loader'
             },
-            // Load css styles.
             {
                 test: /\.css$/,
-                use: ['to-string-loader'].concat(ExtractTextPlugin.extract({
+                use: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
-                    use: 'css-loader'
-                }))
+                    use: ['css-loader?sourceMap', 'sass-loader?sourceMap']
+                })
             },
-            // Load assets resources.
             {
                 test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
                 exclude: root('./assets/static'),
                 use: 'file-loader?name=assets/[name].[hash].[ext]'
             },
-            // Load static assets resources.
             {
                 test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
                 include: root('./assets/static'),
