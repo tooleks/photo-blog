@@ -68,7 +68,7 @@ step_stop_backend_application() {
     printf_step_header "Stopping Backend Application" &&
     cd "$root_path" &&
     printf_pwd &&
-    sudo systemctl stop nginx php7.0-fpm
+    sudo systemctl stop php7.0-fpm
 }
 
 step_migrate_database() {
@@ -103,11 +103,11 @@ step_start_backend_application() {
     printf_step_header "Restarting Backend Application" &&
     cd "$root_path" &&
     printf_pwd &&
-    sudo systemctl start nginx php7.0-fpm
+    sudo systemctl start php7.0-fpm
 }
 
 step_stop_frontend_application() {
-    printf_step_header "Restarting Frontend Application" &&
+    printf_step_header "Stopping Frontend Application" &&
     cd "$root_path/dist/frontend" &&
     printf_pwd &&
     pm2 stop dist/server.js
@@ -123,7 +123,7 @@ step_publish_frontend_application() {
 }
 
 step_start_frontend_application() {
-    printf_step_header "Restarting Frontend Application" &&
+    printf_step_header "Starting Frontend Application" &&
     cd "$root_path/dist/frontend" &&
     printf_pwd &&
     pm2 start dist/server.js
