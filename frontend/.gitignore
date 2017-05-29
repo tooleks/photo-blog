@@ -3,4 +3,4 @@
 /lib/
 *.log
 
-/env.ts
+/.env

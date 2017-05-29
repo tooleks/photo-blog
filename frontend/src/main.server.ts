@@ -7,7 +7,6 @@ import {ServerAppModule} from './app/server-app.module';
 import {ngExpressEngine} from './sys/ng-express-engine/express-engine';
 import {ROUTES} from './routes';
 import {enableProdMode} from '@angular/core';
-import {env} from '../env';
 
 if (process.env.NODE_ENV === 'production') {
     enableProdMode();
@@ -27,7 +26,7 @@ app.set('views', 'src');
 app.use('/', express.static('dist', {index: false}));
 
 app.get('/sitemap.xml', (req, res) => {
-    res.redirect(301, `${env.backendUrl}/sitemap.xml`);
+    res.redirect(301, `${process.env.BACKEND_URL}/sitemap.xml`);
 });
 
 ROUTES.forEach(route => {

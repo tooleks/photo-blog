@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {EnvService, MetaTagsService} from '../../../core';
+import {MetaTagsService} from '../../../core';
 import {TitleService} from '../../../shared';
 
 @Component({
@@ -7,7 +7,7 @@ import {TitleService} from '../../../shared';
     templateUrl: 'about-me.component.html',
 })
 export class AboutMeComponent implements OnInit {
-    constructor(protected title: TitleService, protected metaTags: MetaTagsService, protected env: EnvService) {
+    constructor(protected title: TitleService, protected metaTags: MetaTagsService) {
     }
 
     ngOnInit(): void {
@@ -16,6 +16,6 @@ export class AboutMeComponent implements OnInit {
     }
 
     getContent(): string {
-        return this.env.get('pageAboutMe');
+        return process.env.PAGE_ABOUT_ME;
     }
 }

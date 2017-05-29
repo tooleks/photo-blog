@@ -1,36 +1,32 @@
 import {Injectable} from '@angular/core';
-import {Info} from './interfaces';
 
 @Injectable()
 export class AppService {
-    constructor(protected info: Info) {
-    }
-
     inDebugMode(): boolean {
         return process.env.NODE_ENV !== 'production';
     }
 
     getApiUrl(): string {
-        return String(this.info.get('apiUrl'));
+        return String(process.env.API_URL);
     }
 
     getUrl(): string {
-        return String(this.info.get('appUrl'));
+        return String(process.env.APP_URL);
     }
 
     getName(): string {
-        return String(this.info.get('appName'));
+        return String(process.env.APP_NAME);
     }
 
     getDescription(): string {
-        return String(this.info.get('appDescription'));
+        return String(process.env.APP_DESCRIPTION);
     }
 
     getAuthor(): string {
-        return String(this.info.get('appAuthor'));
+        return String(process.env.APP_AUTHOR);
     }
 
     getImage(): string {
-        return String(this.info.get('appImage'));
+        return String(process.env.APP_IMAGE_URL);
     }
 }

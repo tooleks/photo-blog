@@ -4,7 +4,7 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {Http} from '@angular/http';
 import {Title} from '@angular/platform-browser';
-import {CoreModule, EnvService} from '../core';
+import {CoreModule} from '../core';
 import {GalleryModule, NoticesModule} from '../lib';
 import {
     ApiService,
@@ -48,7 +48,7 @@ import {
             deps: [Http, AppService, ApiErrorHandler, AuthProviderService],
         },
         ApiErrorHandler,
-        {provide: AppService, useFactory: getAppService, deps: [EnvService]},
+        AppService,
         AuthService,
         AuthProviderService,
         LocalStorageService,
@@ -85,10 +85,6 @@ export function getApiService(http: Http, app: AppService, errorHandler: ApiErro
             return app.inDebugMode() ? {'XDEBUG_SESSION_START': 'START'} : {};
         }
     );
-}
-
-export function getAppService(env: EnvService) {
-    return new AppService(env);
 }
 
 export function getTitleService(title: Title, app: AppService) {

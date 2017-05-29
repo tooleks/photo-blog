@@ -1,5 +1,6 @@
 const {root} = require('./helpers');
 const webpack = require('webpack');
+const Dotenv = require('dotenv-webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ScriptExtPlugin = require('script-ext-html-webpack-plugin');
@@ -48,6 +49,10 @@ module.exports = {
         ]
     },
     plugins: [
+        new Dotenv({
+            path: root('./.env'),
+            safe: true
+        }),
         new ExtractTextPlugin('[name].css?v=[hash]'),
         new HtmlWebpackPlugin({
             template: root('./src/index.html'),
