@@ -2075,9 +2075,9 @@ nested-error-stacks@^1.0.0:
   dependencies:
     inherits "~2.0.1"
 
-ng2-go-top-button@^2.0.7:
-  version "2.0.7"
-  resolved "https://registry.yarnpkg.com/ng2-go-top-button/-/ng2-go-top-button-2.0.7.tgz#cdd82702d7925c14f09eb4c2f484f493a21c8fb0"
+ng2-go-top-button@^2.0.8:
+  version "2.0.8"
+  resolved "https://registry.yarnpkg.com/ng2-go-top-button/-/ng2-go-top-button-2.0.8.tgz#75602f64b9e5e88f0684ec53d1b0b543ac663eb1"
   dependencies:
     "@angular/animations" "^4.0.1"
     "@angular/common" "^4.0.1"
