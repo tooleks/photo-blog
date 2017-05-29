@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npm run build && npm run server",
     "build": "webpack",
-    "build:prod": "webpack -p",
+    "build:production": "webpack -p",
     "prebuild": "npm run clean",
     "clean": "rimraf dist",
     "server": "nodemon dist/server.js",

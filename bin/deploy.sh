@@ -2,8 +2,8 @@
 
 root_path="$PWD/.."
 
-is_prod_mode() {
-    if [ "$1" == "prod" ]; then
+is_production_mode() {
+    if [ "$1" == "production" ]; then
         return 0
     else
         return 1
@@ -57,8 +57,8 @@ step_build_frontend_application() {
     printf_step_header "Building Frontend Application" &&
     cd "$root_path/frontend" &&
     printf_pwd &&
-    if is_prod_mode $1; then
-        npm run build:prod
+    if is_production_mode $1; then
+        npm run build:production
     else
         npm run build
     fi
