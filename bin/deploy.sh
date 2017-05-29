@@ -64,13 +64,11 @@ step_build_frontend_application() {
     fi
 }
 
-step_publish_rest_api_documentation() {
-    printf_step_header "Publishing REST API Documentation" &&
+step_stop_backend_application() {
+    printf_step_header "Stopping Backend Application" &&
     cd "$root_path" &&
     printf_pwd &&
-    mkdir dist >> /dev/null 2>&1 || rm -r dist/rest_api_documentation >> /dev/null 2>&1
-    #
-    rsync -avq docs/rest_api/dist/ dist/rest_api_documentation
+    sudo systemctl stop nginx php7.0-fpm
 }
 
 step_migrate_database() {
@@ -92,11 +90,27 @@ step_publish_backend_application() {
     ln -s "$root_path/backend/storage/app/public" dist/backend/public/storage
 }
 
-step_restart_backend_application() {
+step_publish_rest_api_documentation() {
+    printf_step_header "Publishing REST API Documentation" &&
+    cd "$root_path" &&
+    printf_pwd &&
+    mkdir dist >> /dev/null 2>&1 || rm -r dist/rest_api_documentation >> /dev/null 2>&1
+    #
+    rsync -avq docs/rest_api/dist/ dist/rest_api_documentation
+}
+
+step_start_backend_application() {
     printf_step_header "Restarting Backend Application" &&
     cd "$root_path" &&
     printf_pwd &&
-    sudo systemctl restart nginx php7.0-fpm
+    sudo systemctl start nginx php7.0-fpm
+}
+
+step_stop_frontend_application() {
+    printf_step_header "Restarting Frontend Application" &&
+    cd "$root_path/dist/frontend" &&
+    printf_pwd &&
+    pm2 stop dist/server.js
 }
 
 step_publish_frontend_application() {
@@ -108,11 +122,11 @@ step_publish_frontend_application() {
     rsync -avq frontend/ dist/frontend
 }
 
-step_restart_frontend_application() {
+step_start_frontend_application() {
     printf_step_header "Restarting Frontend Application" &&
     cd "$root_path/dist/frontend" &&
     printf_pwd &&
-    pm2 restart dist/server.js
+    pm2 start dist/server.js
 }
 
 ########################################################################################################################
@@ -123,9 +137,11 @@ step_run_backend_tests &&
 step_generate_rest_api_documentation &&
 step_update_frontend_application &&
 step_build_frontend_application $1 &&
-step_publish_rest_api_documentation &&
+step_stop_backend_application &&
 step_migrate_database &&
 step_publish_backend_application &&
-step_restart_backend_application &&
+step_publish_rest_api_documentation &&
+step_start_backend_application &&
+step_stop_frontend_application &&
 step_publish_frontend_application &&
-step_restart_frontend_application
+step_start_frontend_application
