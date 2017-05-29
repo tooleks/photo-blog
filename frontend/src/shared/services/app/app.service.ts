@@ -7,26 +7,26 @@ export class AppService {
     }
 
     getApiUrl(): string {
-        return String(process.env.API_URL);
+        return process.env.API_URL;
     }
 
     getUrl(): string {
-        return String(process.env.APP_URL);
+        return process.env.APP_URL;
     }
 
     getName(): string {
-        return String(process.env.APP_NAME);
+        return process.env.APP_NAME;
     }
 
     getDescription(): string {
-        return String(process.env.APP_DESCRIPTION);
+        return process.env.APP_DESCRIPTION;
     }
 
     getAuthor(): string {
-        return String(process.env.APP_AUTHOR);
+        return process.env.APP_AUTHOR;
     }
 
     getImage(): string {
-        return String(process.env.APP_IMAGE_URL);
+        return process.env.APP_IMAGE_URL;
     }
 }
