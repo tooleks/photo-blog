@@ -63,7 +63,7 @@ Run the following command (within the `./frontend` directory) to install applica
 npm install
 ```
 
-Create the `./frontend/env.ts` file from the example `./frontend/env.ts.example`. Setup API connection credentials.
+Create the `./frontend/.env` file from the example `./frontend/.env.example`. Setup API connection credentials.
 
 Run the following command (within the `./frontend` directory) to start a web-server:
 
