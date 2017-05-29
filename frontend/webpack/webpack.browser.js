@@ -1,6 +1,6 @@
 const {root} = require('./helpers');
-const {AotPlugin} = require('@ngtools/webpack');
 const webpack = require('webpack');
+const {AotPlugin} = require('@ngtools/webpack');
 
 /**
  * This is a client config which should be merged on top of common config

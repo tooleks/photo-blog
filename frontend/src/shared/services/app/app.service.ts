@@ -7,7 +7,7 @@ export class AppService {
     }
 
     inDebugMode(): boolean {
-        return Boolean(this.info.get('debugMode'));
+        return process.env.NODE_ENV !== 'production';
     }
 
     getApiUrl(): string {
