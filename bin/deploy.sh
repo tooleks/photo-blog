@@ -100,7 +100,7 @@ step_publish_rest_api_documentation() {
 }
 
 step_start_backend_application() {
-    printf_step_header "Restarting Backend Application" &&
+    printf_step_header "Starting Backend Application" &&
     cd "$root_path" &&
     printf_pwd &&
     sudo systemctl start php7.0-fpm
