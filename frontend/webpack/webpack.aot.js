@@ -8,7 +8,7 @@ const tsconfigs = {
 
 const aotTsconfigs = {
     client: root('./src/tsconfig.browser.json'),
-    server: root('./src/tsconfig.server.aot.json')
+    server: root('./src/tsconfig.server.json')
 };
 
 /**
