@@ -59,15 +59,15 @@
                [routerLinkActiveOptions]="{ exact: true }"
             ><i class="fa fa-envelope" aria-hidden="true"></i> {{ 'Subscription' }}</a>
         </li>
+        <li>
+            <a href="/rss" target="_blank"><i class="fa fa-rss" aria-hidden="true"></i> {{ 'RSS Feed' }}</a>
+        </li>
         <li *ngIf="authProvider.isAuthenticated()">
             <a [routerLink]="['/signout']"
                (click)="toggle()"
                routerLinkActive="active"
                [routerLinkActiveOptions]="{ exact: true }"
             ><i class="fa fa-sign-out" aria-hidden="true"></i> {{ 'Sign Out' }}</a>
-        </li>
-        <li>
-            <a href="/rss" target="_blank"><i class="fa fa-rss" aria-hidden="true"></i> {{ 'RSS Feed' }}</a>
         </li>
     </ul>
 </div>
