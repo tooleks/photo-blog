@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return redirect(config('main.frontend.url'));
+    return redirect(config('main.frontend.url'), 301);
 });
 
 Route::get('sitemap.xml')
