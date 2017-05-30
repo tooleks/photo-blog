@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\V1\Http\Middleware;
+namespace Core\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
@@ -11,7 +11,7 @@ use Illuminate\Contracts\Cache\Factory as CacheManager;
  * Class CacheResponses.
  *
  * @property CacheManager cacheManager
- * @package Api\V1\Http\Middleware
+ * @package Core\Http\Middleware
  */
 class CacheResponses
 {
