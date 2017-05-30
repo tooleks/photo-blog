@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Core\Rss\Contracts\RssFeed;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 
 /**
@@ -24,7 +25,7 @@ class RssController extends Controller
     }
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Response
      */
     public function index()
     {

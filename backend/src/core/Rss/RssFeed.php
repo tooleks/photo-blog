@@ -50,7 +50,7 @@ class RssFeed implements RssFeedContract
      *
      * @return RssChannel
      */
-    protected function provideChannel()
+    protected function provideChannel(): RssChannel
     {
         return (new RssChannel)
             ->setTitle(config('app.name'))
