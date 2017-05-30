@@ -7,6 +7,7 @@ use Core\DataProviders\Photo\Criterias\IsPublished;
 use Core\Models\Photo;
 use Core\Models\Tag;
 use Core\Rss\Contracts\RssFeed as RssFeedContract;
+use Lib\DataProvider\Criterias\SortByCreatedAt;
 use Lib\DataProvider\Criterias\Take;
 use Lib\Rss\Contracts\RssBuilder;
 use Lib\Rss\RssCategory;
@@ -67,6 +68,7 @@ class RssFeed implements RssFeedContract
     {
         return $this->photoDataProvider
             ->applyCriteria(new IsPublished(true))
+            ->applyCriteria((new SortByCreatedAt)->desc())
             ->applyCriteria(new Take(50))
             ->get(['with' => ['thumbnails', 'tags']])
             ->map(function (Photo $photo) {
