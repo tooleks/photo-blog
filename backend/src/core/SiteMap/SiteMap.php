@@ -21,6 +21,13 @@ use Lib\SiteMap\SiteMapItem;
  */
 class SiteMap implements SiteMapContract
 {
+    /**
+     * SiteMap constructor.
+     *
+     * @param SiteMapBuilder $siteMapBuilder
+     * @param PhotoDataProvider $photoDataProvider
+     * @param TagDataProvider $tagDataProvider
+     */
     public function __construct(
         SiteMapBuilder $siteMapBuilder,
         PhotoDataProvider $photoDataProvider,
