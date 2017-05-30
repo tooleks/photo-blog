@@ -9,8 +9,8 @@ use Illuminate\Routing\Controller;
 /**
  * Class SiteMapController.
  *
- * @package App\Http\Controllers
  * @property SiteMap siteMap
+ * @package App\Http\Controllers
  */
 class SiteMapController extends Controller
 {
