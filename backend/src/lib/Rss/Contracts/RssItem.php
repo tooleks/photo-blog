@@ -43,6 +43,17 @@ interface RssItem
     public function setDescription(string $description);
 
     /**
+     * @return string
+     */
+    public function getGuid(): string;
+
+    /**
+     * @param string $guid
+     * @return $this
+     */
+    public function setGuid(string $guid);
+
+    /**
      * @return RssEnclosure
      */
     public function getEnclosure(): RssEnclosure;

@@ -2,15 +2,17 @@
 
 namespace Core\Rss\Presenters;
 
+use Illuminate\Support\Facades\Storage;
 use Tooleks\Laravel\Presenter\Presenter;
 
 /**
  * Class PhotoPresenter.
  *
- * @property string link
+ * @property string url
  * @property string title
  * @property string description
- * @property string url
+ * @property string file_url
+ * @property string file_size
  * @property array categories
  * @package Core\Rss\Presenters
  */
@@ -22,7 +24,7 @@ class PhotoPresenter extends Presenter
     protected function getAttributesMap(): array
     {
         return [
-            'link' => function () {
+            'url' => function () {
                 return sprintf(config('format.frontend.url.photo_page'), $this->getPresenteeAttribute('id'));
             },
             'title' => 'description',
@@ -48,9 +50,12 @@ class PhotoPresenter extends Presenter
                 }
                 return implode(', ', $values ?? []);
             },
-            'url' => function () {
+            'file_url' => function () {
                 $relativeUrl = $this->getPresenteeAttribute('thumbnails')->first()->relative_url ?? null;
                 return $relativeUrl ? sprintf(config('format.storage.url.path'), $relativeUrl) : '';
+            },
+            'file_size' => function () {
+                return Storage::size($this->getPresenteeAttribute('thumbnails')->first()->path);
             },
             'categories' => function () {
                 $categories = $this->getPresenteeAttribute('tags')->pluck('value')->toArray();

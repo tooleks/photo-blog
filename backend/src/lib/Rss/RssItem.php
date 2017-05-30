@@ -28,6 +28,11 @@ class RssItem implements RssItemContract
     protected $description = '';
 
     /**
+     * @var string
+     */
+    protected $guid = '';
+
+    /**
      * @var RssEnclosure
      */
     protected $enclosure;
@@ -87,6 +92,24 @@ class RssItem implements RssItemContract
     public function setDescription(string $description)
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getGuid(): string
+    {
+        return $this->guid;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setGuid(string $guid)
+    {
+        $this->guid = $guid;
 
         return $this;
     }

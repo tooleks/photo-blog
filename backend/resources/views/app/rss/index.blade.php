@@ -9,6 +9,7 @@
                 <title>{{ $item->getTitle() }}</title>
                 <link>{{ $item->getLink() }}</link>
                 <description>{{ $item->getDescription() }}</description>
+                <guid>{{ $item->getGuid() }}</guid>
                 @if ($item->getEnclosure())
                     <enclosure url="{{ $item->getEnclosure()->getUrl() }}"
                                type="{{ $item->getEnclosure()->getType() }}"

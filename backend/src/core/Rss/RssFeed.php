@@ -75,11 +75,13 @@ class RssFeed implements RssFeedContract
                 return (new RssItem)
                     ->setTitle($photo->title)
                     ->setDescription($photo->description)
-                    ->setLink($photo->link)
+                    ->setLink($photo->url)
+                    ->setGuid($photo->url)
                     ->setEnclosure(
                         (new RssEnclosure)
-                            ->setUrl($photo->url)
+                            ->setUrl($photo->file_url)
                             ->setType('image/jpeg')
+                            ->setLength($photo->file_size)
                     )
                     ->setCategories(
                         array_map(function ($value) {
