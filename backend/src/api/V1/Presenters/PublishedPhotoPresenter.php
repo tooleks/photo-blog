@@ -32,7 +32,7 @@ class PublishedPhotoPresenter extends Presenter
             'created_by_user_id' => 'created_by_user_id',
             'url' => function () {
                 $relativeUrl = $this->getPresenteeAttribute('relative_url');
-                return $relativeUrl ? url(config('main.storage.url')) . $relativeUrl : null;
+                return $relativeUrl ? sprintf(config('format.storage.url.path'), $relativeUrl) : null;
             },
             'avg_color' => 'avg_color',
             'description' => 'description',

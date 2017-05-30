@@ -53,21 +53,21 @@ class SiteMapController extends Controller
 
         $this->siteMapBuilder->addItem(
             (new SiteMapItem)
-                ->setLocation(sprintf('%s/%s', config('main.frontend.url'), 'about-me'))
+                ->setLocation(sprintf(config('format.frontend.url.path'), 'about-me'))
                 ->setChangeFrequency('weekly')
                 ->setPriority('0.6')
         );
 
         $this->siteMapBuilder->addItem(
             (new SiteMapItem)
-                ->setLocation(sprintf('%s/%s', config('main.frontend.url'), 'contact-me'))
+                ->setLocation(sprintf(config('format.frontend.url.path'), 'contact-me'))
                 ->setChangeFrequency('weekly')
                 ->setPriority('0.6')
         );
 
         $this->siteMapBuilder->addItem(
             (new SiteMapItem)
-                ->setLocation(sprintf('%s/%s', config('main.frontend.url'), 'subscription'))
+                ->setLocation(sprintf(config('format.frontend.url.path'), 'subscription'))
                 ->setChangeFrequency('weekly')
                 ->setPriority('0.5')
         );
@@ -77,7 +77,7 @@ class SiteMapController extends Controller
             ->each(function (Photo $photo) {
                 $this->siteMapBuilder->addItem(
                     (new SiteMapItem)
-                        ->setLocation(sprintf('%s/photos?show=%s', config('main.frontend.url'), $photo->id))
+                        ->setLocation(sprintf(config('format.frontend.url.photo_page'), $photo->id))
                         ->setLastModified($photo->updated_at->tz('UTC')->toAtomString())
                         ->setChangeFrequency('weekly')
                         ->setPriority('0.8')
@@ -88,7 +88,7 @@ class SiteMapController extends Controller
             ->each(function (Tag $tag) {
                 $this->siteMapBuilder->addItem(
                     (new SiteMapItem)
-                        ->setLocation(sprintf('%s/photos/tag/%s', config('main.frontend.url'), $tag->value))
+                        ->setLocation(sprintf(config('format.frontend.url.tag_page'), $tag->value))
                         ->setChangeFrequency('daily')
                         ->setPriority('0.7')
                 );

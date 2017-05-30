@@ -18,10 +18,10 @@ interface SiteMapItem
      * @param string $priority
      */
     public function __construct(
-        string $location = null,
-        string $lastModified = null,
-        string $changeFrequency = null,
-        string $priority = null
+        string $location = '',
+        string $lastModified = '',
+        string $changeFrequency = '',
+        string $priority = ''
     );
 
     /**

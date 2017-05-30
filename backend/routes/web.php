@@ -13,3 +13,6 @@
 
 Route::get('sitemap.xml')
     ->uses('SiteMapController@index');
+
+Route::get('rss')
+    ->uses('RssController@index');

@@ -40,5 +40,15 @@ class AppServiceProvider extends ServiceProvider
             \Lib\SiteMap\Contracts\SiteMapBuilder::class,
             \Lib\SiteMap\SiteMapBuilder::class
         );
+
+        $this->app->bind(
+            \Lib\Rss\Contracts\RssBuilder::class,
+            \Lib\Rss\RssBuilder::class
+        );
+
+        $this->app->bind(
+            \Core\Rss\Contracts\RssFeed::class,
+            \Core\Rss\RssFeed::class
+        );
     }
 }

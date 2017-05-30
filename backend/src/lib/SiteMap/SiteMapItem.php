@@ -55,7 +55,7 @@ class SiteMapItem implements SiteMapItemContract
      */
     public function hasLocation(): bool
     {
-        return (bool)strlen($this->location);
+        return !!$this->location;
     }
 
     /**
@@ -81,7 +81,7 @@ class SiteMapItem implements SiteMapItemContract
      */
     public function hasLastModified(): bool
     {
-        return (bool)strlen($this->lastModified);
+        return !!$this->lastModified;
     }
 
     /**
@@ -107,7 +107,7 @@ class SiteMapItem implements SiteMapItemContract
      */
     public function hasChangeFrequency(): bool
     {
-        return (bool)strlen($this->changeFrequency);
+        return !!$this->changeFrequency;
     }
 
     /**
@@ -133,6 +133,6 @@ class SiteMapItem implements SiteMapItemContract
      */
     public function hasPriority(): bool
     {
-        return (bool)strlen($this->priority);
+        return !!$this->priority;
     }
 }
