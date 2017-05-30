@@ -11,6 +11,10 @@
 |
 */
 
+Route::get('/', function () {
+    return redirect(config('main.frontend.url'));
+});
+
 Route::get('sitemap.xml')
     ->uses('SiteMapController@index');
 
