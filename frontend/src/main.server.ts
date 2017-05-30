@@ -29,6 +29,10 @@ app.get('/sitemap.xml', (req, res) => {
     res.redirect(301, `${process.env.BACKEND_URL}/sitemap.xml`);
 });
 
+app.get('/rss', (req, res) => {
+    res.redirect(301, `${process.env.BACKEND_URL}/rss`);
+});
+
 ROUTES.forEach(route => {
     app.get(route, (req, res) => {
         console.time(`GET: ${req.originalUrl}`);
