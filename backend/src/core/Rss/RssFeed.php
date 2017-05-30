@@ -4,9 +4,8 @@ namespace Core\Rss;
 
 use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
 use Core\DataProviders\Photo\Criterias\IsPublished;
-use Core\Models\Photo;
-use Core\Models\Tag;
 use Core\Rss\Contracts\RssFeed as RssFeedContract;
+use Core\Rss\Presenters\PhotoPresenter;
 use Lib\DataProvider\Criterias\SortByCreatedAt;
 use Lib\DataProvider\Criterias\Take;
 use Lib\Rss\Contracts\RssBuilder;
@@ -70,23 +69,22 @@ class RssFeed implements RssFeedContract
             ->applyCriteria(new IsPublished(true))
             ->applyCriteria((new SortByCreatedAt)->desc())
             ->applyCriteria(new Take(50))
-            ->get(['with' => ['thumbnails', 'tags']])
-            ->map(function (Photo $photo) {
+            ->get(['with' => ['exif', 'thumbnails', 'tags']])
+            ->present(PhotoPresenter::class)
+            ->map(function (PhotoPresenter $photo) {
                 return (new RssItem)
-                    ->setTitle($photo->description)
-                    ->setDescription('')
-                    ->setLink(sprintf(config('format.frontend.url.photo_page'), $photo->id))
+                    ->setTitle($photo->title)
+                    ->setDescription($photo->description)
+                    ->setLink($photo->link)
                     ->setEnclosure(
                         (new RssEnclosure)
-                            ->setUrl(sprintf(config('format.storage.url.path'), $photo->thumbnails->first()->relative_url))
+                            ->setUrl($photo->url)
                             ->setType('image/jpeg')
                     )
                     ->setCategories(
-                        $photo->tags
-                            ->map(function (Tag $tag) {
-                                return (new RssCategory)->setValue($tag->value);
-                            })
-                            ->toArray()
+                        array_map(function ($value) {
+                            return (new RssCategory)->setValue($value);
+                        }, $photo->categories)
                     );
             })
             ->toArray();
