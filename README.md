@@ -4,7 +4,7 @@
 
 #### Development Configuration
 
-NGINX 1.10, MySQL 5.7, PHP 7.0 (ext-openssl, ext-pdo, ext-mbstring, ext-tokenizer, ext-xml, ext-gd), Laravel 5.4, Node.js 7.5, Angular 4.0.
+NGINX 1.10, MySQL 5.7, Redis 3.0, PHP 7.0 (ext-openssl, ext-pdo, ext-mbstring, ext-tokenizer, ext-xml, ext-gd), Laravel 5.4, Node.js 7.5, Angular 4.0.
 
 #### Installation
 
@@ -70,3 +70,4 @@ Run the following command (within the `./frontend` directory) to start a web-ser
 ```
 npm run start
 ```
+See the `scripts` section of the `./frontend/package.json` file for other options.
