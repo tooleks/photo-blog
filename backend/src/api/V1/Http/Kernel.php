@@ -52,6 +52,5 @@ class Kernel extends HttpKernel
         'throttle' => \Api\V1\Http\Middleware\ThrottleRequests::class,
         'json_api' => \Api\V1\Http\Middleware\JsonApiResponses::class,
         'present' => \Api\V1\Http\Middleware\PresentResponses::class,
-        'cache' => \Core\Http\Middleware\CacheResponses::class,
     ];
 }

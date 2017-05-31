@@ -10,6 +10,7 @@ use Core\DataProviders\Photo\Criterias\IsPublished;
 use Core\DataProviders\Photo\Criterias\HasSearchPhrase;
 use Core\DataProviders\Photo\Criterias\HasTagWithValue;
 use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
+use Illuminate\Contracts\Cache\Factory as CacheManager;
 use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Routing\Controller;
 use Lib\DataProvider\Criterias\SortByCreatedAt;
@@ -17,6 +18,7 @@ use Lib\DataProvider\Criterias\SortByCreatedAt;
 /**
  * Class PublishedPhotosController.
  *
+ * @property CacheManager cacheManager
  * @property PhotoDataProvider photoDataProvider
  * @package Api\V1\Http\Controllers
  */
@@ -25,10 +27,12 @@ class PublishedPhotosController extends Controller
     /**
      * PublishedPhotosController constructor.
      *
+     * @param CacheManager $cacheManager
      * @param PhotoDataProvider $photoDataProvider
      */
-    public function __construct(PhotoDataProvider $photoDataProvider)
+    public function __construct(CacheManager $cacheManager, PhotoDataProvider $photoDataProvider)
     {
+        $this->cacheManager = $cacheManager;
         $this->photoDataProvider = $photoDataProvider;
     }
 
@@ -221,16 +225,15 @@ class PublishedPhotosController extends Controller
      */
     public function find(FindPublishedPhotosRequest $request): AbstractPaginator
     {
-        $paginator = $this->photoDataProvider
-            ->applyCriteria(new IsPublished(true))
-            ->applyCriteriaWhen($request->has('tag'), new HasTagWithValue($request->get('tag')))
-            ->applyCriteriaWhen($request->has('search_phrase'), new HasSearchPhrase($request->get('search_phrase')))
-            ->applyCriteria((new SortByCreatedAt)->desc())
-            ->getPaginator($request->get('page', 1), $request->get('per_page', 20), [
-                'with' => ['exif', 'thumbnails', 'tags']
-            ]);
-
-        $paginator->appends($request->query());
+        $paginator = $this->cacheManager->remember("request:{$request->getRequestUri()}", 3, function () use ($request) {
+            return $this->photoDataProvider
+                ->applyCriteria(new IsPublished(true))
+                ->applyCriteriaWhen($request->has('tag'), new HasTagWithValue($request->get('tag')))
+                ->applyCriteriaWhen($request->has('search_phrase'), new HasSearchPhrase($request->get('search_phrase')))
+                ->applyCriteria((new SortByCreatedAt)->desc())
+                ->getPaginator($request->get('page', 1), $request->get('per_page', 20), ['with' => ['exif', 'thumbnails', 'tags']])
+                ->appends($request->query());
+        });
 
         return $paginator;
     }

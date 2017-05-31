@@ -129,7 +129,6 @@ Route::group(['prefix' => 'published_photos'], function () {
 
     Route::get('/')
         ->uses('PublishedPhotosController@find')
-        ->middleware('cache:1')
         ->middleware(sprintf('present:%s', PublishedPhotoPresenter::class));
 
     Route::get('/{published_photo}')
