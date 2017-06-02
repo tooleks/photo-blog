@@ -27,18 +27,18 @@ class ExifPresenter extends Presenter
             'manufacturer' => 'data.Make',
             'model' => 'data.Model',
             'exposure_time' => function () {
-                $exposureTime = $this->getPresenteeAttribute('data.ExposureTime');
+                $exposureTime = $this->getWrappedModelAttribute('data.ExposureTime');
                 if ($exposureTime) {
                     list($numerator, $denominator) = explode('/', $exposureTime);
-                    $exposureTime = '1/' . (int)($denominator / $numerator);
+                    $exposureTime = '1/' . (int) ($denominator / $numerator);
                 }
                 return $exposureTime ?? null;
             },
             'aperture' => 'data.COMPUTED.ApertureFNumber',
             'iso' => 'data.ISOSpeedRatings',
             'taken_at' => function () {
-                $takenAt = $this->getPresenteeAttribute('data.DateTimeOriginal');
-                return $takenAt ? (string)(new Carbon($takenAt)) : null;
+                $takenAt = $this->getWrappedModelAttribute('data.DateTimeOriginal');
+                return $takenAt ? (string) (new Carbon($takenAt)) : null;
             },
         ];
     }

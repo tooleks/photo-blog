@@ -2,6 +2,7 @@
 
 namespace Api\V1\Presenters;
 
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\Collection;
 use Tooleks\Laravel\Presenter\Presenter;
 
@@ -23,6 +24,23 @@ use Tooleks\Laravel\Presenter\Presenter;
 class PublishedPhotoPresenter extends Presenter
 {
     /**
+     * The container implementation.
+     *
+     * @var Container
+     */
+    protected $container;
+
+    /**
+     * PublishedPhotoPresenter constructor.
+     *
+     * @param Container $container
+     */
+    public function __construct(Container $container)
+    {
+        $this->container = $container;
+    }
+
+    /**
      * @inheritdoc
      */
     protected function getAttributesMap(): array
@@ -31,32 +49,31 @@ class PublishedPhotoPresenter extends Presenter
             'id' => 'id',
             'created_by_user_id' => 'created_by_user_id',
             'url' => function () {
-                $relativeUrl = $this->getPresenteeAttribute('relative_url');
+                $relativeUrl = $this->getWrappedModelAttribute('relative_url');
                 return $relativeUrl ? sprintf(config('format.storage.url.path'), $relativeUrl) : null;
             },
             'avg_color' => 'avg_color',
             'description' => 'description',
             'created_at' => function () {
-                $createdAt = $this->getPresenteeAttribute('created_at');
-                return (string)$createdAt ?? null;
+                return (string) $this->getWrappedModelAttribute('created_at') ?? null;
             },
             'updated_at' => function () {
-                $updatedAt = $this->getPresenteeAttribute('updated_at');
-                return (string)$updatedAt ?? null;
+                return (string) $this->getWrappedModelAttribute('updated_at') ?? null;
             },
             'exif' => function () {
-                return new ExifPresenter($this->getPresenteeAttribute('exif'));
+                return $this->container
+                    ->make(ExifPresenter::class)
+                    ->setWrappedModel($this->getWrappedModelAttribute('exif'));
             },
             'thumbnails' => function () {
-                $thumbnails = collect($this->getPresenteeAttribute('thumbnails'));
+                $thumbnails = collect($this->getWrappedModelAttribute('thumbnails'))->present(ThumbnailPresenter::class);
                 return [
-                    'medium' => new ThumbnailPresenter($thumbnails->get(0, [])),
-                    'large' => new ThumbnailPresenter($thumbnails->get(1, [])),
+                    'medium' => $thumbnails->get(0, []),
+                    'large' => $thumbnails->get(1, []),
                 ];
             },
             'tags' => function () {
-                $tags = collect($this->getPresenteeAttribute('tags'));
-                return $tags->present(TagPresenter::class);
+                return collect($this->getWrappedModelAttribute('tags'))->present(TagPresenter::class);
             },
         ];
     }

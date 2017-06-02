@@ -18,9 +18,7 @@ class TagPresenter extends Presenter
     protected function getAttributesMap(): array
     {
         return [
-            'value' => function () {
-                return $this->getPresenteeAttribute('value');
-            },
+            'value' => 'value',
         ];
     }
 }

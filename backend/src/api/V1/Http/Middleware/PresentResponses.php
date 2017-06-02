@@ -3,6 +3,7 @@
 namespace Api\V1\Http\Middleware;
 
 use Closure;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Pagination\AbstractPaginator;
@@ -11,10 +12,21 @@ use Illuminate\Support\Collection;
 /**
  * Class PresentResponses.
  *
+ * @property Container container
  * @package Api\V1\Http\Middleware
  */
 class PresentResponses
 {
+    /**
+     * PresentResponses constructor.
+     *
+     * @param Container $container
+     */
+    public function __construct(Container $container)
+    {
+        $this->container = $container;
+    }
+
     /**
      * Handle an incoming request.
      *
@@ -61,7 +73,9 @@ class PresentResponses
 
         // If the data is an object or an array, present it with a presenter class.
         if (is_object($data) || is_array($data)) {
-            return new $presenterClass($data);
+            return $this->container
+                ->make($presenterClass)
+                ->setWrappedModel($data);
         }
 
         // Otherwise, return the data "as it".

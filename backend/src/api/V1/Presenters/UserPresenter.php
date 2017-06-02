@@ -27,12 +27,10 @@ class UserPresenter extends Presenter
             'name' => 'name',
             'email' => 'email',
             'created_at' => function () {
-                $createdAt = $this->getPresenteeAttribute('created_at');
-                return (string)$createdAt ?? null;
+                return (string) $this->getWrappedModelAttribute('created_at') ?? null;
             },
             'updated_at' => function () {
-                $updatedAt = $this->getPresenteeAttribute('updated_at');
-                return (string)$updatedAt ?? null;
+                return (string) $this->getWrappedModelAttribute('updated_at') ?? null;
             },
             'role' => 'role.name',
         ];
