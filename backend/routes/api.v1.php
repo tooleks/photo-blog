@@ -1,7 +1,6 @@
 <?php
 
 use Api\V1\Http\Middleware\AppendClientIpAddress;
-use Api\V1\Http\Middleware\Photos\DeleteDirectory;
 use Api\V1\Http\Middleware\Photos\FetchExifData;
 use Api\V1\Http\Middleware\Photos\GenerateAvgColor;
 use Api\V1\Http\Middleware\Photos\GenerateThumbnails;
@@ -110,7 +109,6 @@ Route::group(['prefix' => 'photos'], function () {
     Route::delete('/{photo}')
         ->uses('PhotosController@delete')
         ->middleware('can:delete-resource,photo')
-        ->middleware(DeleteDirectory::class)
         ->middleware(sprintf('present:%s', PhotoPresenter::class));
 
 });
@@ -143,7 +141,6 @@ Route::group(['prefix' => 'published_photos'], function () {
     Route::delete('/{published_photo}')
         ->uses('PublishedPhotosController@delete')
         ->middleware('can:delete-resource,published_photo')
-        ->middleware(DeleteDirectory::class)
         ->middleware(sprintf('present:%s', PublishedPhotoPresenter::class));
 
 });
