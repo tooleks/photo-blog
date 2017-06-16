@@ -108,15 +108,13 @@ abstract class DataProvider implements DataProviderContract
     }
 
     /**
-     * Dispatch an event.
-     *
-     * Dispatches events with name 'NameSpace\Path\To\DataProvider@eventName'.
+     * Dispatch an event with name 'NameSpace\Path\To\DataProvider@eventName'.
      *
      * @param string $eventName
      * @param array $data
      * @return void
      */
-    protected function dispatchEvent(string $eventName, ...$data)
+    protected function dispatchEvent(string $eventName, &...$data)
     {
         $this->events->dispatch(static::class . '@' . $eventName, $data);
     }
