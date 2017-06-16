@@ -223,7 +223,7 @@ abstract class DataProvider implements DataProviderContract
      */
     public function each(Closure $callback, int $chunkSize = 100, array $options = [])
     {
-        $this->query->chunk($chunkSize, function ($models) use ($callback, &$options) {
+        $this->query->chunk($chunkSize, function ($models) use ($callback, $options) {
             foreach ($models as $model) {
                 $this->dispatchEvent('beforeEach', $this->query, $options);
                 $callback($model);
