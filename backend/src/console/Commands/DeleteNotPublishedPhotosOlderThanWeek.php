@@ -14,7 +14,6 @@ use Lib\DataProvider\Criterias\WhereUpdatedAtLessThan;
 /**
  * Class DeleteNotPublishedPhotosOlderThanWeek.
  *
- * @property Storage storage
  * @property PhotoDataProvider photoDataProvider
  * @package Console\Commands
  */
@@ -37,14 +36,12 @@ class DeleteNotPublishedPhotosOlderThanWeek extends Command
     /**
      * DeleteNotPublishedPhotosOlderThanWeek constructor.
      *
-     * @param Storage $storage
      * @param PhotoDataProvider $photoDataProvider
      */
-    public function __construct(Storage $storage, PhotoDataProvider $photoDataProvider)
+    public function __construct(PhotoDataProvider $photoDataProvider)
     {
         parent::__construct();
 
-        $this->storage = $storage;
         $this->photoDataProvider = $photoDataProvider;
     }
 
@@ -56,10 +53,8 @@ class DeleteNotPublishedPhotosOlderThanWeek extends Command
     public function handle()
     {
         $this->eachNotPublishedPhotoOlderThanWeek(function (Photo $photo) {
-            $this->comment("Deleting photo (id:{$photo->id}) ...");
+            $this->comment("Deleting photo [id:{$photo->id}] ...");
             $this->photoDataProvider->delete($photo);
-            $this->storage->deleteDirectory($photo->directory_path);
-            $this->comment("Photo (id:{$photo->id}) was successfully deleted.");
         });
     }
 
