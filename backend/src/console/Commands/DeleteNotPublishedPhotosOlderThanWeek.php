@@ -8,7 +8,6 @@ use Core\DataProviders\Photo\Criterias\IsPublished;
 use Core\Models\Photo;
 use Closure;
 use Illuminate\Console\Command;
-use Illuminate\Contracts\Filesystem\Factory as Storage;
 use Lib\DataProvider\Criterias\WhereUpdatedAtLessThan;
 
 /**

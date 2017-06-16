@@ -57,12 +57,12 @@ class DeleteUnusedObjectsFromPhotoStorage extends Command
     public function handle()
     {
         foreach ($this->getDirectoriesToDelete() as $directory) {
-            $this->comment("Deleting [directory:{$directory}] ...");
+            $this->comment("Deleting [directory:'{$directory}'] ...");
             $this->storage->deleteDirectory($directory);
         }
 
         foreach ($this->getFilesToDelete() as $file) {
-            $this->comment("Deleting [file:{$file}] ...");
+            $this->comment("Deleting [file:'{$file}'] ...");
             $this->storage->delete($file);
         }
     }
@@ -118,13 +118,11 @@ class DeleteUnusedObjectsFromPhotoStorage extends Command
      */
     protected function getAllDirectoriesFromDataProvider(): array
     {
-        $directories = [];
-
         $this->photoDataProvider->each(function (Photo $photo) use (&$directories) {
-            array_push($directories, $photo->directory_path);
+            $directories[] = $photo->directory_path;
         });
 
-        return $directories;
+        return $directories ?? [];
     }
 
     /**
@@ -134,15 +132,13 @@ class DeleteUnusedObjectsFromPhotoStorage extends Command
      */
     protected function getAllFilesFromDataProvider(): array
     {
-        $files = [];
-
         $this->photoDataProvider->each(function (Photo $photo) use (&$files) {
-            array_push($files, $photo->path);
+            $files[] = $photo->path;
             $photo->thumbnails->each(function (Thumbnail $thumbnail) use (&$files) {
-                array_push($files, $thumbnail->path);
+                $files[] = $thumbnail->path;
             });
-        }, 100, ['with' => ['thumbnails']]);
+        });
 
-        return $files;
+        return $files ?? [];
     }
 }
