@@ -110,7 +110,7 @@ class PhotosController extends Controller
         $exif = $this->exifFetcher->run($request->file('file'));
         $thumbnails = $this->thumbnailsGenerator->run($photo);
 
-        $this->photoDataProvider->save($photo, array_merge($request->all(), compact('exif', 'thumbnails')));
+        $this->photoDataProvider->save($photo, compact('exif', 'thumbnails'));
 
         return $photo;
     }
@@ -220,7 +220,7 @@ class PhotosController extends Controller
         $exif = $this->exifFetcher->run($request->file('file'));
         $thumbnails = $this->thumbnailsGenerator->run($photo);
 
-        $this->photoDataProvider->save($photo, array_merge($request->all(), compact('exif', 'thumbnails')));
+        $this->photoDataProvider->save($photo, compact('exif', 'thumbnails'));
 
         return $photo;
     }
