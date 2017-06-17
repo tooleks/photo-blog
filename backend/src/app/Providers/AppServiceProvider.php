@@ -37,8 +37,8 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->app->bind(
-            \Lib\SiteMap\Contracts\SiteMapBuilder::class,
-            \Lib\SiteMap\SiteMapBuilder::class
+            \Lib\SiteMap\Contracts\Builder::class,
+            \Lib\SiteMap\Builder::class
         );
 
         $this->app->bind(

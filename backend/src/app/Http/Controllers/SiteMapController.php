@@ -30,17 +30,12 @@ class SiteMapController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $data = $this->cacheManager->remember("request:{$request->getRequestUri()}", 15, function () {
-            return ['siteMap' => $this->siteMap->build()];
-        });
-
         return response()
-            ->view('app.site-map.index', $data)
+            ->view('app.site-map.index', ['siteMap' => $this->siteMap->build()])
             ->header('Content-Type', 'text/xml');
     }
 }

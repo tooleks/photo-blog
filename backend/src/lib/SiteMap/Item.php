@@ -2,14 +2,14 @@
 
 namespace Lib\SiteMap;
 
-use Lib\SiteMap\Contracts\SiteMapItem as SiteMapItemContract;
+use Lib\SiteMap\Contracts\Item as ItemContract;
 
 /**
  * Class SiteMapItem.
  *
  * @package Lib\SiteMap
  */
-class SiteMapItem implements SiteMapItemContract
+class Item implements ItemContract
 {
     protected $location;
     protected $lastModified;

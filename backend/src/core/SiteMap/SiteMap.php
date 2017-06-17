@@ -8,13 +8,13 @@ use Core\DataProviders\Tag\Contracts\TagDataProvider;
 use Core\Models\Photo;
 use Core\Models\Tag;
 use Core\SiteMap\Contracts\SiteMap as SiteMapContract;
-use Lib\SiteMap\Contracts\SiteMapBuilder;
-use Lib\SiteMap\SiteMapItem;
+use Lib\SiteMap\Contracts\Builder;
+use Lib\SiteMap\Item;
 
 /**
  * Class SiteMap.
  *
- * @property SiteMapBuilder siteMapBuilder
+ * @property Builder siteMapBuilder
  * @property PhotoDataProvider photoDataProvider
  * @property TagDataProvider tagDataProvider
  * @package Core\SiteMap
@@ -24,12 +24,12 @@ class SiteMap implements SiteMapContract
     /**
      * SiteMap constructor.
      *
-     * @param SiteMapBuilder $siteMapBuilder
+     * @param Builder $siteMapBuilder
      * @param PhotoDataProvider $photoDataProvider
      * @param TagDataProvider $tagDataProvider
      */
     public function __construct(
-        SiteMapBuilder $siteMapBuilder,
+        Builder $siteMapBuilder,
         PhotoDataProvider $photoDataProvider,
         TagDataProvider $tagDataProvider
     )
@@ -42,31 +42,31 @@ class SiteMap implements SiteMapContract
     /**
      * @inheritdoc
      */
-    public function build(): SiteMapBuilder
+    public function build(): Builder
     {
         $this->siteMapBuilder->addItem(
-            (new SiteMapItem)
+            (new Item)
                 ->setLocation(config('main.frontend.url'))
                 ->setChangeFrequency('daily')
                 ->setPriority('1')
         );
 
         $this->siteMapBuilder->addItem(
-            (new SiteMapItem)
+            (new Item)
                 ->setLocation(sprintf(config('format.frontend.url.path'), 'about-me'))
                 ->setChangeFrequency('weekly')
                 ->setPriority('0.6')
         );
 
         $this->siteMapBuilder->addItem(
-            (new SiteMapItem)
+            (new Item)
                 ->setLocation(sprintf(config('format.frontend.url.path'), 'contact-me'))
                 ->setChangeFrequency('weekly')
                 ->setPriority('0.6')
         );
 
         $this->siteMapBuilder->addItem(
-            (new SiteMapItem)
+            (new Item)
                 ->setLocation(sprintf(config('format.frontend.url.path'), 'subscription'))
                 ->setChangeFrequency('weekly')
                 ->setPriority('0.5')
@@ -76,7 +76,7 @@ class SiteMap implements SiteMapContract
             ->applyCriteria(new IsPublished(true))
             ->each(function (Photo $photo) {
                 $this->siteMapBuilder->addItem(
-                    (new SiteMapItem)
+                    (new Item)
                         ->setLocation(sprintf(config('format.frontend.url.photo_page'), $photo->id))
                         ->setLastModified($photo->updated_at->tz('UTC')->toAtomString())
                         ->setChangeFrequency('weekly')
@@ -87,7 +87,7 @@ class SiteMap implements SiteMapContract
         $this->tagDataProvider
             ->each(function (Tag $tag) {
                 $this->siteMapBuilder->addItem(
-                    (new SiteMapItem)
+                    (new Item)
                         ->setLocation(sprintf(config('format.frontend.url.tag_page'), $tag->value))
                         ->setChangeFrequency('daily')
                         ->setPriority('0.7')

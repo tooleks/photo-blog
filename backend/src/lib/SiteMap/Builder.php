@@ -3,22 +3,22 @@
 namespace Lib\SiteMap;
 
 use Closure;
-use Lib\SiteMap\Contracts\SiteMapItem as SiteMapItemContract;
-use Lib\SiteMap\Contracts\SiteMapBuilder as SiteMapBuilderContract;
+use Lib\SiteMap\Contracts\Item as ItemContract;
+use Lib\SiteMap\Contracts\Builder as BuilderContract;
 
 /**
  * Class SiteMapBuilder.
  *
  * @package Lib\SiteMap
  */
-class SiteMapBuilder implements SiteMapBuilderContract
+class Builder implements BuilderContract
 {
     protected $items = [];
 
     /**
      * @inheritdoc
      */
-    public function addItem(SiteMapItemContract $item)
+    public function addItem(ItemContract $item)
     {
         array_push($this->items, $item);
 

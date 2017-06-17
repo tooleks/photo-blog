@@ -4,22 +4,22 @@ namespace Lib\SiteMap\Contracts;
 
 use Closure;
 use Illuminate\Contracts\Support\Arrayable;
-use Lib\SiteMap\Contracts\SiteMapItem as SiteMapItemContract;
+use Lib\SiteMap\Contracts\Item as ItemContract;
 
 /**
- * Interface SiteMapBuilder.
+ * Interface Builder.
  *
  * @package Lib\SiteMap\Contracts
  */
-interface SiteMapBuilder extends Arrayable
+interface Builder extends Arrayable
 {
     /**
      * Add item to the site-map.
      *
-     * @param SiteMapItem $item
+     * @param Item $item
      * @return $this
      */
-    public function addItem(SiteMapItemContract $item);
+    public function addItem(ItemContract $item);
 
     /**
      * Filter the site-map items.

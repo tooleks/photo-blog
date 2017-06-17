@@ -2,7 +2,7 @@
 
 namespace Core\SiteMap\Contracts;
 
-use Lib\SiteMap\Contracts\SiteMapBuilder;
+use Lib\SiteMap\Contracts\Builder;
 
 /**
  * Interface SiteMap.
@@ -14,7 +14,7 @@ interface SiteMap
     /**
      * Build the site map.
      *
-     * @return SiteMapBuilder
+     * @return Builder
      */
-    public function build(): SiteMapBuilder;
+    public function build(): Builder;
 }
