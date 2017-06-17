@@ -91,7 +91,8 @@ class SendWeeklySubscriptionMails extends Command
     protected function eachSubscriptionByEmailFilterArgument(Closure $closure)
     {
         $this->subscriptionDataProvider
-            ->applyCriteriaWhen($this->hasArgument('email_filter'), new WhereEmailIn($this->argument('email_filter')))
+            // Note: The $this->hasArgument('email_filter') method call not working properly.
+            ->applyCriteriaWhen((bool) $this->argument('email_filter'), new WhereEmailIn($this->argument('email_filter')))
             ->each($closure);
     }
 
