@@ -8,7 +8,6 @@ use Console\Commands\CreateAdministratorUser;
 use Console\Commands\DeleteNotPublishedPhotosOlderThanWeek;
 use Console\Commands\DeleteUnusedObjectsFromPhotoStorage;
 use Console\Commands\CreateRoles;
-use Console\Commands\GeneratePhotoAvgColors;
 use Console\Commands\GeneratePhotoThumbnails;
 use Console\Commands\GenerateRestApiDocumentation;
 use Console\Commands\SendWeeklySubscriptionMails;
@@ -34,7 +33,6 @@ class Kernel extends ConsoleKernel
         CreateRoles::class,
         DeleteNotPublishedPhotosOlderThanWeek::class,
         DeleteUnusedObjectsFromPhotoStorage::class,
-        GeneratePhotoAvgColors::class,
         GeneratePhotoThumbnails::class,
         GenerateRestApiDocumentation::class,
         SendWeeklySubscriptionMails::class,
