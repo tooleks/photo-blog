@@ -30,11 +30,12 @@ class GenerateRestApiDocumentation extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      */
     public function handle()
     {
         $process = new Process('apidoc -i ./src/api/ -o ../docs/rest_api/dist');
+
         $process->run();
 
         if (!$process->isSuccessful()) {
