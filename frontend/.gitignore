@@ -2,8 +2,6 @@
 /dist/
 /lib/
 *.log
-
+/src/**/*.js
+/src/**/*.js.map
 /.env
-
-*.js
-*.js.map
