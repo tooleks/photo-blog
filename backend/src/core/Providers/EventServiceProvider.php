@@ -22,6 +22,7 @@ class EventServiceProvider extends ServiceProvider
      * @inheritdoc
      */
     protected $subscribe = [
+        \Core\DataProviders\Photo\Subscribers\AvgColorAttributeSubscriber::class,
         \Core\DataProviders\Photo\Subscribers\StorageSubscriber::class,
         \Core\DataProviders\Photo\Subscribers\PhotoDataProviderSubscriber::class,
         \Core\DataProviders\User\Events\UserDataProviderSubscriber::class,

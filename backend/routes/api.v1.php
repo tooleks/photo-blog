@@ -2,7 +2,6 @@
 
 use Api\V1\Http\Middleware\AppendClientIpAddress;
 use Api\V1\Http\Middleware\Photos\FetchExifData;
-use Api\V1\Http\Middleware\Photos\GenerateAvgColor;
 use Api\V1\Http\Middleware\Photos\GenerateThumbnails;
 use Api\V1\Http\Middleware\Photos\SaveUploadedFile;
 use Api\V1\Presenters\PhotoPresenter;
@@ -89,7 +88,6 @@ Route::group(['prefix' => 'photos'], function () {
         ->middleware(FetchExifData::class)
         ->middleware(SaveUploadedFile::class)
         ->middleware(GenerateThumbnails::class)
-        ->middleware(GenerateAvgColor::class)
         ->middleware(sprintf('present:%s', PhotoPresenter::class));
 
     Route::get('/{photo}')
@@ -103,7 +101,6 @@ Route::group(['prefix' => 'photos'], function () {
         ->middleware(FetchExifData::class)
         ->middleware(SaveUploadedFile::class)
         ->middleware(GenerateThumbnails::class)
-        ->middleware(GenerateAvgColor::class)
         ->middleware(sprintf('present:%s', PhotoPresenter::class));
 
     Route::delete('/{photo}')

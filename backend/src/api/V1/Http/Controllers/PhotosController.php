@@ -83,7 +83,10 @@ class PhotosController extends Controller
         $photo->setCreatedByUserIdAttribute($this->auth->user()->id)
             ->setIsPublishedAttribute(false);
 
-        $this->photoDataProvider->save($photo, $request->all(), ['with' => ['exif', 'thumbnails']]);
+        $this->photoDataProvider->save($photo, $request->all(), [
+            'with' => ['exif', 'thumbnails'],
+            'generate' => ['avg_color_attribute'],
+        ]);
 
         return $photo;
     }
@@ -188,7 +191,10 @@ class PhotosController extends Controller
      */
     public function update(UpdatePhotoRequest $request, Photo $photo): Photo
     {
-        $this->photoDataProvider->save($photo, $request->all(), ['with' => ['exif', 'thumbnails']]);
+        $this->photoDataProvider->save($photo, $request->all(), [
+            'with' => ['exif', 'thumbnails'],
+            'generate' => ['avg_color_attribute'],
+        ]);
 
         return $photo;
     }
