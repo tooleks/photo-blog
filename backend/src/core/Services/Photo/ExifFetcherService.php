@@ -15,6 +15,7 @@ class ExifFetcherService implements ExifFetcherServiceContract
 {
     /**
      * ExifFetcherService constructor.
+     *
      * @param ExifFetcher $exifFetcher
      */
     public function __construct(ExifFetcher $exifFetcher)
