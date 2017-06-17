@@ -2,7 +2,7 @@
 
 namespace Core\Services\Photo;
 
-use Core\Services\Contracts\Service;
+use Core\Services\Photo\Contracts\AvgColorGeneratorService as AvgColorGeneratorServiceContract;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
 use RuntimeException;
 use Tooleks\Php\AvgColorPicker\Contracts\AvgColorPicker;
@@ -14,7 +14,7 @@ use Tooleks\Php\AvgColorPicker\Contracts\AvgColorPicker;
  * @property AvgColorPicker avgColorPicker
  * @package Core\Services\Photo
  */
-class AvgColorGeneratorService implements Service
+class AvgColorGeneratorService implements AvgColorGeneratorServiceContract
 {
     /**
      * AvgColorGeneratorService constructor.

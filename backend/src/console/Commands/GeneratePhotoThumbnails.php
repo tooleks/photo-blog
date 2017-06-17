@@ -4,7 +4,7 @@ namespace Console\Commands;
 
 use Core\DataProviders\Photo\PhotoDataProvider;
 use Core\Models\Photo;
-use Core\Services\Photo\ThumbnailsGeneratorService;
+use Core\Services\Photo\Contracts\ThumbnailsGeneratorService;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
 

@@ -2,7 +2,7 @@
 
 namespace Core\Services\Photo;
 
-use Core\Services\Contracts\Service;
+use Core\Services\Photo\Contracts\ThumbnailsGeneratorService as ThumbnailsGeneratorServiceContract;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
 use Lib\ThumbnailsGenerator\Contracts\ThumbnailsGenerator;
 use RuntimeException;
@@ -14,7 +14,7 @@ use RuntimeException;
  * @property ThumbnailsGenerator thumbnailsGenerator
  * @package Core\Services\Photo
  */
-class ThumbnailsGeneratorService implements Service
+class ThumbnailsGeneratorService implements ThumbnailsGeneratorServiceContract
 {
     /**
      * ThumbnailsGeneratorService constructor.

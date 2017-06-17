@@ -2,7 +2,7 @@
 
 namespace Core\Services\Photo;
 
-use Core\Services\Contracts\Service;
+use Core\Services\Photo\Contracts\ExifFetcherService as ExifFetcherServiceContract;
 use Lib\ExifFetcher\Contracts\ExifFetcher;
 
 /**
@@ -11,7 +11,7 @@ use Lib\ExifFetcher\Contracts\ExifFetcher;
  * @property ExifFetcher exifFetcher
  * @package Core\Services\Photo
  */
-class ExifFetcherService implements Service
+class ExifFetcherService implements ExifFetcherServiceContract
 {
     /**
      * ExifFetcherService constructor.

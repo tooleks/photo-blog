@@ -46,5 +46,25 @@ class CoreServiceProvider extends ServiceProvider
             \Core\DataProviders\User\Contracts\UserDataProvider::class,
             \Core\DataProviders\User\UserDataProvider::class
         );
+
+        $this->app->bind(
+            \Core\Services\Photo\Contracts\AvgColorGeneratorService::class,
+            \Core\Services\Photo\AvgColorGeneratorService::class
+        );
+
+        $this->app->bind(
+            \Core\Services\Photo\Contracts\ExifFetcherService::class,
+            \Core\Services\Photo\ExifFetcherService::class
+        );
+
+        $this->app->bind(
+            \Core\Services\Photo\Contracts\FileSaverService::class,
+            \Core\Services\Photo\FileSaverService::class
+        );
+
+        $this->app->bind(
+            \Core\Services\Photo\Contracts\ThumbnailsGeneratorService::class,
+            \Core\Services\Photo\ThumbnailsGeneratorService::class
+        );
     }
 }

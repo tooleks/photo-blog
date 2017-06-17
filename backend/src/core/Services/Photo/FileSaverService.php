@@ -2,9 +2,8 @@
 
 namespace Core\Services\Photo;
 
-use Core\Services\Contracts\Service;
+use Core\Services\Photo\Contracts\FileSaverService as FileSaverServiceContract;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
-use Illuminate\Validation\ValidationException;
 use RuntimeException;
 
 /**
@@ -13,7 +12,7 @@ use RuntimeException;
  * @property Storage storage
  * @package Core\Services\Photo
  */
-class FileSaverService implements Service
+class FileSaverService implements FileSaverServiceContract
 {
     /**
      * FileSaverService constructor.
@@ -32,9 +31,9 @@ class FileSaverService implements Service
     {
         list($photo, $file) = $parameters;
 
-        $fileDirectoryRelPath = $photo->directory_path ?? config('main.storage.photos') . '/' . str_random(10);
+        $directoryRelPath = $photo->directory_path ?? config('main.storage.photos') . '/' . str_random(10);
 
-        if (($fileRelPath = $this->storage->put($fileDirectoryRelPath, $file)) === false) {
+        if (($fileRelPath = $this->storage->put($directoryRelPath, $file)) === false) {
             throw new RuntimeException(sprintf('File "%s" saving error.', $fileRelPath));
         }
 

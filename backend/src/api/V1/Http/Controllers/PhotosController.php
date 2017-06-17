@@ -6,10 +6,10 @@ use Api\V1\Http\Requests\CreatePhotoRequest;
 use Api\V1\Http\Requests\UpdatePhotoRequest;
 use Core\Models\Photo;
 use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
-use Core\Services\Photo\AvgColorGeneratorService;
-use Core\Services\Photo\ExifFetcherService;
-use Core\Services\Photo\FileSaverService;
-use Core\Services\Photo\ThumbnailsGeneratorService;
+use Core\Services\Photo\Contracts\AvgColorGeneratorService;
+use Core\Services\Photo\Contracts\ExifFetcherService;
+use Core\Services\Photo\Contracts\FileSaverService;
+use Core\Services\Photo\Contracts\ThumbnailsGeneratorService;
 use Illuminate\Contracts\Auth\Guard as Auth;
 use Illuminate\Routing\Controller;
 
