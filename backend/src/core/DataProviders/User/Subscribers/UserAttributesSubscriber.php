@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\DataProviders\User\Events;
+namespace Core\DataProviders\User\Subscribers;
 
 use Core\DataProviders\User\UserDataProvider;
 use Core\Models\User;
@@ -11,15 +11,15 @@ use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 /**
- * Class UserDataProviderSubscriber.
+ * Class UserAttributesSubscriber.
  *
  * @property Hasher hasher
- * @package Core\DataProviders\User\Events
+ * @package Core\DataProviders\User\Subscribers
  */
-class UserDataProviderSubscriber
+class UserAttributesSubscriber
 {
     /**
-     * UserDataProviderSubscriber constructor.
+     * UserAttributesSubscriber constructor.
      *
      * @param Hasher $hasher
      */

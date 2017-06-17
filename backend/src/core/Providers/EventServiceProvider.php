@@ -22,8 +22,8 @@ class EventServiceProvider extends ServiceProvider
      * @inheritdoc
      */
     protected $subscribe = [
-        \Core\DataProviders\Photo\Subscribers\PhotoDataProviderSubscriber::class,
-        \Core\DataProviders\User\Events\UserDataProviderSubscriber::class,
+        \Core\DataProviders\Photo\Subscribers\PhotoRelationsSubscriber::class,
+        \Core\DataProviders\User\Subscribers\UserAttributesSubscriber::class,
     ];
 
     /**

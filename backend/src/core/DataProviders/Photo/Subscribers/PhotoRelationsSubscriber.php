@@ -12,15 +12,15 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
- * Class PhotoDataProviderSubscriber.
+ * Class PhotoRelationsSubscriber.
  *
  * @property ConnectionInterface dbConnection
  * @package Core\DataProviders\Photo\Subscribers
  */
-class PhotoDataProviderSubscriber
+class PhotoRelationsSubscriber
 {
     /**
-     * PhotoDataProviderSubscriber constructor.
+     * PhotoRelationsSubscriber constructor.
      *
      * @param ConnectionInterface $dbConnection
      */
