@@ -94,7 +94,7 @@ class PublishedPhotosController extends Controller
 
         $photo->setIsPublishedAttribute(true);
 
-        $this->photoDataProvider->save($photo, $request->all());
+        $this->photoDataProvider->save($photo, $request->all(), ['with' => ['tags']]);
 
         return $photo;
     }
@@ -289,7 +289,7 @@ class PublishedPhotosController extends Controller
      */
     public function update(UpdatePublishedPhotoRequest $request, Photo $photo): Photo
     {
-        $this->photoDataProvider->save($photo, $request->all());
+        $this->photoDataProvider->save($photo, $request->all(), ['with' => ['tags']]);
 
         return $photo;
     }

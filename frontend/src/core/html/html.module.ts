@@ -1,7 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {TagInputModule} from 'ng2-tag-input';
 import {FileSelectInputComponent, TagsSelectInputComponent} from './components';
 import {SafeHtmlPipe} from './pipes';
 
@@ -9,7 +8,6 @@ import {SafeHtmlPipe} from './pipes';
     imports: [
         CommonModule,
         FormsModule,
-        TagInputModule,
     ],
     declarations: [
         FileSelectInputComponent,

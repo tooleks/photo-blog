@@ -1,25 +1,31 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core';
+import {Component, Input, Output, EventEmitter, SimpleChanges, OnChanges} from '@angular/core';
 import 'rxjs/add/operator/filter';
 
 @Component({
     selector: 'tags-select-input',
     templateUrl: 'tags-select-input.component.html',
 })
-export class TagsSelectInputComponent {
+export class TagsSelectInputComponent implements OnChanges {
+    inputValue: string = '';
+    @Input() inputClass: string = '';
     @Input() tags: Array<any> = [];
     @Output() tagsChange: EventEmitter<Array<any>> = new EventEmitter<Array<any>>();
 
-    onAdd(addedTag): void {
-        this.tags.push(addedTag);
-        this.tagsChange.emit(this.tags);
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['tags']) {
+            this.inputValue = this.tags.map(tag => tag.value).join(',');
+        }
     }
 
-    onRemove(removedTag): void {
-        this.tags = this.tags.filter((tag) => tag.value !== removedTag.value);
-        this.tagsChange.emit(this.tags);
+    getInputValue(): string {
+        return this.inputValue;
     }
 
-    transform(value: string): string {
-        return value.trim().split(' ').join('_').toLowerCase();
+    onChangeInputValue(newInputValue: string): void {
+        this.inputValue = newInputValue.trim().split(' ').join('_').toLowerCase();
+        this.tags = this.inputValue.split(',').map(value => {
+            return {value: value};
+        });
+        this.tagsChange.emit(this.tags);
     }
 }

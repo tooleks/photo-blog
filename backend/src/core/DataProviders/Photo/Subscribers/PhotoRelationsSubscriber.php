@@ -89,16 +89,19 @@ class PhotoRelationsSubscriber
      */
     public function onAfterSave(Photo $photo, array $attributes = [], array $options = [])
     {
-        if (isset($attributes['exif'])) {
-            $this->savePhotoExif($photo, $attributes['exif']);
-        }
-
-        if (isset($attributes['thumbnails'])) {
-            $this->savePhotoThumbnails($photo, $attributes['thumbnails']);
-        }
-
-        if (isset($attributes['tags'])) {
-            $this->savePhotoTags($photo, $attributes['tags']);
+        if (array_key_exists('with', $options)) {
+            // Save with exif.
+            if (in_array('exif', $options['with']) && isset($attributes['exif'])) {
+                $this->savePhotoExif($photo, $attributes['exif']);
+            }
+            // Save with thumbnails.
+            if (in_array('thumbnails', $options['with']) && isset($attributes['thumbnails'])) {
+                $this->savePhotoThumbnails($photo, $attributes['thumbnails']);
+            }
+            // Save with tags.
+            if (in_array('tags', $options['with']) && isset($attributes['tags'])) {
+                $this->savePhotoTags($photo, $attributes['tags']);
+            }
         }
     }
 

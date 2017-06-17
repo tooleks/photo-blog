@@ -4,3 +4,6 @@
 *.log
 
 /.env
+
+*.js
+*.js.map

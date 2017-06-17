@@ -1,9 +1,4 @@
-<tag-input [ngModel]="tags"
-           [identifyBy]="'value'"
-           [displayBy]="'value'"
-           [maxItems]="20"
-           [transform]="transform.bind(this)"
-           (onAdd)="onAdd($event)"
-           (onRemove)="onRemove($event)"
-           theme="minimal"
-></tag-input>
+<input [ngModel]="getInputValue()" (ngModelChange)="onChangeInputValue($event)"
+       [ngClass]="inputClass"
+       type="text"
+       name="tags">
