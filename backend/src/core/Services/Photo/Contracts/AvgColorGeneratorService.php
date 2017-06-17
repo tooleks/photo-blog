@@ -11,4 +11,5 @@ use Core\Services\Contracts\Service;
  */
 interface AvgColorGeneratorService extends Service
 {
+
 }
