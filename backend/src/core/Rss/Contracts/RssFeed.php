@@ -2,7 +2,7 @@
 
 namespace Core\Rss\Contracts;
 
-use Lib\Rss\Contracts\RssBuilder;
+use Lib\Rss\Contracts\Builder;
 
 /**
  * Interface RssFeed.
@@ -14,7 +14,7 @@ interface RssFeed
     /**
      * Build the RSS feed.
      *
-     * @return RssBuilder
+     * @return Builder
      */
-    public function build(): RssBuilder;
+    public function build(): Builder;
 }

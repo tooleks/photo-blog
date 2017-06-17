@@ -2,18 +2,18 @@
 
 namespace Lib\Rss;
 
-use Lib\Rss\Contracts\RssBuilder as RssBuilderContract;
-use Lib\Rss\Contracts\RssChannel;
+use Lib\Rss\Contracts\Builder as BuilderContract;
+use Lib\Rss\Contracts\Channel;
 
 /**
- * Class RssBuilder.
+ * Class Builder.
  *
  * @package Lib\Rss
  */
-class RssBuilder implements RssBuilderContract
+class Builder implements BuilderContract
 {
     /**
-     * @var RssChannel
+     * @var Channel
      */
     protected $channel;
 
@@ -25,7 +25,7 @@ class RssBuilder implements RssBuilderContract
     /**
      * @inheritdoc
      */
-    public function getChannel(): RssChannel
+    public function getChannel(): Channel
     {
         return $this->channel;
     }
@@ -33,7 +33,7 @@ class RssBuilder implements RssBuilderContract
     /**
      * @inheritdoc
      */
-    public function setChannel(RssChannel $channel)
+    public function setChannel(Channel $channel)
     {
         $this->channel = $channel;
 

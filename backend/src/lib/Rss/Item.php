@@ -2,15 +2,15 @@
 
 namespace Lib\Rss;
 
-use Lib\Rss\Contracts\RssItem as RssItemContract;
-use Lib\Rss\Contracts\RssEnclosure;
+use Lib\Rss\Contracts\Item as ItemContract;
+use Lib\Rss\Contracts\Enclosure;
 
 /**
- * Class RssItem.
+ * Class Item.
  *
  * @package Lib\Rss
  */
-class RssItem implements RssItemContract
+class Item implements ItemContract
 {
     /**
      * @var string
@@ -33,7 +33,12 @@ class RssItem implements RssItemContract
     protected $guid = '';
 
     /**
-     * @var RssEnclosure
+     * @var string
+     */
+    protected $pubDate = '';
+
+    /**
+     * @var Enclosure
      */
     protected $enclosure;
 
@@ -117,7 +122,25 @@ class RssItem implements RssItemContract
     /**
      * @inheritdoc
      */
-    public function getEnclosure(): RssEnclosure
+    public function getPubDate(): string
+    {
+        return $this->pubDate;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setPubDate(string $pubDate)
+    {
+        $this->pubDate = $pubDate;
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getEnclosure(): Enclosure
     {
         return $this->enclosure;
     }
@@ -125,7 +148,7 @@ class RssItem implements RssItemContract
     /**
      * @inheritdoc
      */
-    public function setEnclosure(RssEnclosure $enclosure)
+    public function setEnclosure(Enclosure $enclosure)
     {
         $this->enclosure = $enclosure;
 

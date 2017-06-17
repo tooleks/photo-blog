@@ -2,14 +2,14 @@
 
 namespace Lib\Rss;
 
-use Lib\Rss\Contracts\RssChannel as RssChannelContract;
+use Lib\Rss\Contracts\Channel as ChannelContract;
 
 /**
- * Class RssChannel.
+ * Class Channel.
  *
  * @package Lib\Rss
  */
-class RssChannel implements RssChannelContract
+class Channel implements ChannelContract
 {
     /**
      * @var string

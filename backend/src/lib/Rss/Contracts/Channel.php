@@ -3,11 +3,11 @@
 namespace Lib\Rss\Contracts;
 
 /**
- * Interface RssChannel.
+ * Interface Channel.
  *
  * @package Lib\Rss\Contracts
  */
-interface RssChannel
+interface Channel
 {
     /**
      * @return string

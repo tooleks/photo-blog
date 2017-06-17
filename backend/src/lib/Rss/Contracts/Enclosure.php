@@ -3,11 +3,11 @@
 namespace Lib\Rss\Contracts;
 
 /**
- * Interface RssEnclosure.
+ * Interface Enclosure.
  *
  * @package Lib\Rss\Contracts
  */
-interface RssEnclosure
+interface Enclosure
 {
     /**
      * @return string

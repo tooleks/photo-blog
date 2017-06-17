@@ -8,16 +8,16 @@ use Core\Rss\Contracts\RssFeed as RssFeedContract;
 use Core\Rss\Presenters\PhotoPresenter;
 use Lib\DataProvider\Criterias\SortByCreatedAt;
 use Lib\DataProvider\Criterias\Take;
-use Lib\Rss\Contracts\RssBuilder;
-use Lib\Rss\RssCategory;
-use Lib\Rss\RssChannel;
-use Lib\Rss\RssItem;
-use Lib\Rss\RssEnclosure;
+use Lib\Rss\Contracts\Builder;
+use Lib\Rss\Category;
+use Lib\Rss\Channel;
+use Lib\Rss\Item;
+use Lib\Rss\Enclosure;
 
 /**
  * Class RssService.
  *
- * @property RssBuilder rssBuilder
+ * @property Builder rssBuilder
  * @property PhotoDataProvider photoDataProvider
  * @package Core\Rss
  */
@@ -26,10 +26,10 @@ class RssFeed implements RssFeedContract
     /**
      * RssService constructor.
      *
-     * @param RssBuilder $rssBuilder
+     * @param Builder $rssBuilder
      * @param PhotoDataProvider $photoDataProvider
      */
-    public function __construct(RssBuilder $rssBuilder, PhotoDataProvider $photoDataProvider)
+    public function __construct(Builder $rssBuilder, PhotoDataProvider $photoDataProvider)
     {
         $this->rssBuilder = $rssBuilder;
         $this->photoDataProvider = $photoDataProvider;
@@ -38,7 +38,7 @@ class RssFeed implements RssFeedContract
     /**
      * @inheritdoc
      */
-    public function build(): RssBuilder
+    public function build(): Builder
     {
         return $this->rssBuilder
             ->setChannel($this->provideChannel())
@@ -48,11 +48,11 @@ class RssFeed implements RssFeedContract
     /**
      * Provide the RSS channel.
      *
-     * @return RssChannel
+     * @return Channel
      */
-    protected function provideChannel(): RssChannel
+    protected function provideChannel(): Channel
     {
-        return (new RssChannel)
+        return (new Channel)
             ->setTitle(config('app.name'))
             ->setDescription(config('app.description'))
             ->setLink(url('/'));
@@ -72,20 +72,21 @@ class RssFeed implements RssFeedContract
             ->get(['with' => ['exif', 'thumbnails', 'tags']])
             ->present(PhotoPresenter::class)
             ->map(function (PhotoPresenter $photo) {
-                return (new RssItem)
+                return (new Item)
                     ->setTitle($photo->title)
                     ->setDescription($photo->description)
                     ->setLink($photo->url)
                     ->setGuid($photo->url)
+                    ->setPubDate($photo->published_date)
                     ->setEnclosure(
-                        (new RssEnclosure)
+                        (new Enclosure)
                             ->setUrl($photo->file_url)
                             ->setType('image/jpeg')
                             ->setLength($photo->file_size)
                     )
                     ->setCategories(
                         array_map(function ($value) {
-                            return (new RssCategory)->setValue($value);
+                            return (new Category)->setValue($value);
                         }, $photo->categories)
                     );
             })

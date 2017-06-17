@@ -15,6 +15,7 @@ use Tooleks\Laravel\Presenter\Presenter;
  * @property string file_url
  * @property string file_size
  * @property array categories
+ * @property string published_date
  * @package Core\Rss\Presenters
  */
 class PhotoPresenter extends Presenter
@@ -95,6 +96,9 @@ class PhotoPresenter extends Presenter
             },
             'categories' => function () {
                 return $this->getWrappedModelAttribute('tags')->pluck('value')->toArray() ?? [];
+            },
+            'published_date' => function () {
+                return $this->getWrappedModelAttribute('created_at')->toAtomString();
             },
         ];
     }

@@ -3,22 +3,22 @@
 namespace Lib\Rss\Contracts;
 
 /**
- * Interface RssBuilder.
+ * Interface Builder.
  *
  * @package Lib\Rss\Contracts
  */
-interface RssBuilder
+interface Builder
 {
     /**
-     * @return RssChannel
+     * @return Channel
      */
-    public function getChannel(): RssChannel;
+    public function getChannel(): Channel;
 
     /**
-     * @param RssChannel $channel
+     * @param Channel $channel
      * @return $this
      */
-    public function setChannel(RssChannel $channel);
+    public function setChannel(Channel $channel);
 
     /**
      * @return array

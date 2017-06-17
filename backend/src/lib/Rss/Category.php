@@ -2,14 +2,14 @@
 
 namespace Lib\Rss;
 
-use Lib\Rss\Contracts\RssCategory as RssCategoryContract;
+use Lib\Rss\Contracts\Category as CategoryContract;
 
 /**
- * Class RssCategory.
+ * Class Category.
  *
  * @package Lib\Rss
  */
-class RssCategory implements RssCategoryContract
+class Category implements CategoryContract
 {
     /**
      * @var string

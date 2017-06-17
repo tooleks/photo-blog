@@ -2,14 +2,14 @@
 
 namespace Lib\Rss;
 
-use Lib\Rss\Contracts\RssEnclosure as RssEnclosureContract;
+use Lib\Rss\Contracts\Enclosure as EnclosureContract;
 
 /**
- * Class RssEnclosure.
+ * Class Enclosure.
  *
  * @package Lib\Rss
  */
-class RssEnclosure implements RssEnclosureContract
+class Enclosure implements EnclosureContract
 {
     /**
      * @var string

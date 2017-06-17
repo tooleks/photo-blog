@@ -30,17 +30,12 @@ class RssController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $data = $this->cacheManager->remember("request:{$request->getRequestUri()}", 15, function () {
-            return ['rss' => $this->rssFeed->build()];
-        });
-
         return response()
-            ->view('app.rss.index', $data)
+            ->view('app.rss.index', ['rss' => $this->rssFeed->build()])
             ->header('Content-Type', 'text/xml');
     }
 }

@@ -10,6 +10,7 @@
                 <link>{{ $item->getLink() }}</link>
                 <description>{{ $item->getDescription() }}</description>
                 <guid>{{ $item->getGuid() }}</guid>
+                <pubDate>{{ $item->getPubDate() }}</pubDate>
                 @if ($item->getEnclosure())
                     <enclosure url="{{ $item->getEnclosure()->getUrl() }}"
                                type="{{ $item->getEnclosure()->getType() }}"

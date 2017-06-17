@@ -47,8 +47,8 @@ class AppServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
-            \Lib\Rss\Contracts\RssBuilder::class,
-            \Lib\Rss\RssBuilder::class
+            \Lib\Rss\Contracts\Builder::class,
+            \Lib\Rss\Builder::class
         );
 
         $this->app->bind(

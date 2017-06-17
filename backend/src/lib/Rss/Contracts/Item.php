@@ -3,11 +3,11 @@
 namespace Lib\Rss\Contracts;
 
 /**
- * Interface RssItem.
+ * Interface Item.
  *
  * @package Lib\Rss\Contracts
  */
-interface RssItem
+interface Item
 {
     /**
      * @return string
@@ -54,15 +54,15 @@ interface RssItem
     public function setGuid(string $guid);
 
     /**
-     * @return RssEnclosure
+     * @return Enclosure
      */
-    public function getEnclosure(): RssEnclosure;
+    public function getEnclosure(): Enclosure;
 
     /**
-     * @param RssEnclosure $enclosure
+     * @param Enclosure $enclosure
      * @return $this
      */
-    public function setEnclosure(RssEnclosure $enclosure);
+    public function setEnclosure(Enclosure $enclosure);
 
     /**
      * @return array

@@ -3,11 +3,11 @@
 namespace Lib\Rss\Contracts;
 
 /**
- * Interface RssCategory.
+ * Interface Category.
  *
  * @package Lib\Rss\Contracts
  */
-interface RssCategory
+interface Category
 {
     /**
      * @return string
