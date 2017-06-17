@@ -37,6 +37,5 @@ class CreateRoles extends Command
             ['name' => Role::NAME_ADMINISTRATOR],
             ['name' => Role::NAME_CUSTOMER],
         ]);
-        $this->comment('Roles were created.');
     }
 }

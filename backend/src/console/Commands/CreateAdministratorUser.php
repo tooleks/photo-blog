@@ -56,7 +56,5 @@ class CreateAdministratorUser extends Command
         $user->setAdministratorRoleId();
 
         $user->saveOrFail();
-
-        $this->comment(sprintf('Administrator user "%s" was created.', $user->name));
     }
 }

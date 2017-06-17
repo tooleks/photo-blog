@@ -64,9 +64,8 @@ class SendWeeklySubscriptionMails extends Command
     {
         if ($this->isAvailableWeeklySubscription()) {
             $this->eachSubscriptionByEmailFilterArgument(function (Subscription $subscription) {
-                $this->comment("Sending subscription mail (email:{$subscription->email}) ...");
+                $this->comment("Sending subscription mail [recipient:{$subscription->email}] ...");
                 $this->sendMail($subscription);
-                $this->comment("Subscription mail was successfully sent (email:{$subscription->email}).");
             });
         }
     }

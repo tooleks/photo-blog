@@ -59,7 +59,5 @@ class ChangeUserPassword extends Command
         $user->password = $this->hasher->make($this->ask('Enter new user\'s password:'));
 
         $user->saveOrFail();
-
-        $this->comment(sprintf('The "%s" user password was changed.', $user->name));
     }
 }
