@@ -29,14 +29,16 @@ class UpdatePhotoRequest extends FormRequest
     public function rules()
     {
         return [
-            'path' => ['required', 'string', 'min:1', 'max:255'],
-            'relative_url' => ['required', 'string', 'min:1', 'max:255'],
-            'exif' => ['required', 'array'],
-            'thumbnails' => ['required', 'array'],
-            'thumbnails.*.width' => ['required', 'int', 'min:1'],
-            'thumbnails.*.height' => ['required', 'int', 'min:1'],
-            'thumbnails.*.path' => ['required', 'string', 'min:1', 'max:255'],
-            'thumbnails.*.relative_url' => ['required', 'string', 'min:1', 'max:255'],
+            'file' => [
+                'required',
+                'filled',
+                'file',
+                'image',
+                'mimes:jpeg,png',
+                sprintf('dimensions:min_width=%s,min_height=%s', config('main.upload.min-image-width'), config('main.upload.min-image-height')),
+                sprintf('min:%s', config('main.upload.min-size')),
+                sprintf('max:%s', config('main.upload.max-size')),
+            ],
         ];
     }
 }

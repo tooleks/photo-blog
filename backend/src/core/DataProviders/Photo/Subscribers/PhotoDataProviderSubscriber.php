@@ -76,20 +76,7 @@ class PhotoDataProviderSubscriber
      */
     public function onBeforeFetch(Builder $query, array $options)
     {
-        if (array_key_exists('with', $options)) {
-            // Fetch with exif.
-            if (in_array('exif', $options['with'])) {
-                $query->with('exif');
-            }
-            // Fetch with thumbnails.
-            if (in_array('thumbnails', $options['with'])) {
-                $query->with('thumbnails');
-            }
-            // Fetch with tags.
-            if (in_array('tags', $options['with'])) {
-                $query->with('tags');
-            }
-        }
+        $query->with('exif', 'thumbnails', 'tags');
     }
 
     /**
@@ -102,19 +89,16 @@ class PhotoDataProviderSubscriber
      */
     public function onAfterSave(Photo $photo, array $attributes = [], array $options = [])
     {
-        if (array_key_exists('with', $options)) {
-            // Save with exif.
-            if (in_array('exif', $options['with']) && array_key_exists('exif', $attributes)) {
-                $this->savePhotoExif($photo, $attributes['exif']);
-            }
-            // Save with thumbnails.
-            if (in_array('thumbnails', $options['with']) && array_key_exists('thumbnails', $attributes)) {
-                $this->savePhotoThumbnails($photo, $attributes['thumbnails']);
-            }
-            // Save with tags.
-            if (in_array('tags', $options['with']) && array_key_exists('tags', $attributes)) {
-                $this->savePhotoTags($photo, $attributes['tags']);
-            }
+        if (isset($attributes['exif'])) {
+            $this->savePhotoExif($photo, $attributes['exif']);
+        }
+
+        if (isset($attributes['thumbnails'])) {
+            $this->savePhotoThumbnails($photo, $attributes['thumbnails']);
+        }
+
+        if (isset($attributes['tags'])) {
+            $this->savePhotoTags($photo, $attributes['tags']);
         }
     }
 

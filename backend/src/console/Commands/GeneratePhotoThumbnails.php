@@ -4,15 +4,15 @@ namespace Console\Commands;
 
 use Core\DataProviders\Photo\PhotoDataProvider;
 use Core\Models\Photo;
+use Core\Services\Photo\ThumbnailsGeneratorService;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
-use Lib\ThumbnailsGenerator\Contracts\ThumbnailsGenerator;
 
 /**
  * Class GeneratePhotoThumbnails.
  *
  * @property Storage storage
- * @property ThumbnailsGenerator thumbnailsGenerator
+ * @property ThumbnailsGeneratorService thumbnailsGenerator
  * @property PhotoDataProvider photoDataProvider
  * @package Console\Commands
  */
@@ -36,10 +36,14 @@ class GeneratePhotoThumbnails extends Command
      * GeneratePhotoThumbnails constructor.
      *
      * @param Storage $storage
-     * @param ThumbnailsGenerator $thumbnailsGenerator
+     * @param ThumbnailsGeneratorService $thumbnailsGenerator
      * @param PhotoDataProvider $photoDataProvider
      */
-    public function __construct(Storage $storage, ThumbnailsGenerator $thumbnailsGenerator, PhotoDataProvider $photoDataProvider)
+    public function __construct(
+        Storage $storage,
+        ThumbnailsGeneratorService $thumbnailsGenerator,
+        PhotoDataProvider $photoDataProvider
+    )
     {
         parent::__construct();
 
@@ -56,10 +60,9 @@ class GeneratePhotoThumbnails extends Command
     public function handle()
     {
         $this->photoDataProvider->each(function (Photo $photo) {
-            $this->comment("Generating photo thumbnails (id:{$photo->id}) ...");
+            $this->comment("Generating photo [id:{$photo->id}] thumbnails ...");
             $this->generatePhotoThumbnails($photo);
-            $this->comment("Photo thumbnails was successfully generated (id:{$photo->id}).");
-        }, 100, ['with' => ['thumbnails']]);
+        });
     }
 
     /**
@@ -69,25 +72,8 @@ class GeneratePhotoThumbnails extends Command
      */
     public function generatePhotoThumbnails(Photo $photo)
     {
-        $photoRelPath = $photo->path;
-        $photoAbsPath = $this->storage->getDriver()->getAdapter()->getPathPrefix() . $photoRelPath;
+        $thumbnails = $this->thumbnailsGenerator->run($photo);
 
-        if (!file_exists($photoAbsPath)) {
-            $this->comment("File '{$photoAbsPath}' does not exists.");
-            return;
-        }
-
-        $metaData = $this->thumbnailsGenerator->generateThumbnails($photoAbsPath);
-        foreach ($metaData as $metaDataItem) {
-            $thumbnailRelPath = pathinfo($photoRelPath, PATHINFO_DIRNAME) . '/' . pathinfo($metaDataItem['path'], PATHINFO_BASENAME);
-            $thumbnails[] = [
-                'path' => $thumbnailRelPath,
-                'relative_url' => $this->storage->url($thumbnailRelPath),
-                'width' => $metaDataItem['width'],
-                'height' => $metaDataItem['height'],
-            ];
-        }
-
-        $this->photoDataProvider->save($photo, ['thumbnails' => $thumbnails ?? []], ['with' => ['thumbnails']]);
+        $this->photoDataProvider->save($photo, compact('thumbnails'));
     }
 }

@@ -90,11 +90,11 @@ class PublishedPhotosController extends Controller
     {
         $photo = $this->photoDataProvider
             ->applyCriteria(new IsPublished(false))
-            ->getById($request->get('photo_id'), ['with' => ['exif', 'thumbnails', 'tags']]);
+            ->getById($request->get('photo_id'));
 
         $photo->setIsPublishedAttribute(true);
 
-        $this->photoDataProvider->save($photo, $request->all(), ['with' => ['tags']]);
+        $this->photoDataProvider->save($photo, $request->all());
 
         return $photo;
     }
@@ -226,7 +226,7 @@ class PublishedPhotosController extends Controller
             ->applyCriteriaWhen($request->has('tag'), new HasTagWithValue($request->get('tag')))
             ->applyCriteriaWhen($request->has('search_phrase'), new HasSearchPhrase($request->get('search_phrase')))
             ->applyCriteria((new SortByCreatedAt)->desc())
-            ->getPaginator($request->get('page', 1), $request->get('per_page', 20), ['with' => ['exif', 'thumbnails', 'tags']])
+            ->getPaginator($request->get('page', 1), $request->get('per_page', 20))
             ->appends($request->query());
 
         return $paginator;
@@ -289,7 +289,7 @@ class PublishedPhotosController extends Controller
      */
     public function update(UpdatePublishedPhotoRequest $request, Photo $photo): Photo
     {
-        $this->photoDataProvider->save($photo, $request->all(), ['with' => ['tags']]);
+        $this->photoDataProvider->save($photo, $request->all());
 
         return $photo;
     }

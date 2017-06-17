@@ -6,6 +6,10 @@ use Api\V1\Http\Requests\CreatePhotoRequest;
 use Api\V1\Http\Requests\UpdatePhotoRequest;
 use Core\Models\Photo;
 use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
+use Core\Services\Photo\AvgColorGeneratorService;
+use Core\Services\Photo\ExifFetcherService;
+use Core\Services\Photo\FileSaverService;
+use Core\Services\Photo\ThumbnailsGeneratorService;
 use Illuminate\Contracts\Auth\Guard as Auth;
 use Illuminate\Routing\Controller;
 
@@ -14,6 +18,10 @@ use Illuminate\Routing\Controller;
  *
  * @property Auth $auth
  * @property PhotoDataProvider photoDataProvider
+ * @property FileSaverService fileSaver
+ * @property AvgColorGeneratorService avgColorGenerator
+ * @property ExifFetcherService exifFetcher
+ * @property ThumbnailsGeneratorService thumbnailsGenerator
  * @package Api\V1\Http\Controllers
  */
 class PhotosController extends Controller
@@ -23,11 +31,26 @@ class PhotosController extends Controller
      *
      * @param Auth $auth
      * @param PhotoDataProvider $photoDataProvider
+     * @param FileSaverService $fileSaver
+     * @param AvgColorGeneratorService $avgColorGenerator
+     * @param ExifFetcherService $exifFetcher
+     * @param ThumbnailsGeneratorService $thumbnailsGenerator
      */
-    public function __construct(Auth $auth, PhotoDataProvider $photoDataProvider)
+    public function __construct(
+        Auth $auth,
+        PhotoDataProvider $photoDataProvider,
+        FileSaverService $fileSaver,
+        AvgColorGeneratorService $avgColorGenerator,
+        ExifFetcherService $exifFetcher,
+        ThumbnailsGeneratorService $thumbnailsGenerator
+    )
     {
         $this->auth = $auth;
         $this->photoDataProvider = $photoDataProvider;
+        $this->fileSaver = $fileSaver;
+        $this->avgColorGenerator = $avgColorGenerator;
+        $this->exifFetcher = $exifFetcher;
+        $this->thumbnailsGenerator = $thumbnailsGenerator;
     }
 
     /**
@@ -78,15 +101,16 @@ class PhotosController extends Controller
      */
     public function create(CreatePhotoRequest $request): Photo
     {
-        $photo = new Photo;
-
-        $photo->setCreatedByUserIdAttribute($this->auth->user()->id)
+        $photo = (new Photo)
+            ->setCreatedByUserIdAttribute($this->auth->user()->id)
             ->setIsPublishedAttribute(false);
 
-        $this->photoDataProvider->save($photo, $request->all(), [
-            'with' => ['exif', 'thumbnails'],
-            'generate' => ['avg_color_attribute'],
-        ]);
+        $this->fileSaver->run($photo, $request->file('file'));
+        $this->avgColorGenerator->run($photo);
+        $exif = $this->exifFetcher->run($request->file('file'));
+        $thumbnails = $this->thumbnailsGenerator->run($photo);
+
+        $this->photoDataProvider->save($photo, array_merge($request->all(), compact('exif', 'thumbnails')));
 
         return $photo;
     }
@@ -191,10 +215,12 @@ class PhotosController extends Controller
      */
     public function update(UpdatePhotoRequest $request, Photo $photo): Photo
     {
-        $this->photoDataProvider->save($photo, $request->all(), [
-            'with' => ['exif', 'thumbnails'],
-            'generate' => ['avg_color_attribute'],
-        ]);
+        $this->fileSaver->run($photo, $request->file('file'));
+        $this->avgColorGenerator->run($photo);
+        $exif = $this->exifFetcher->run($request->file('file'));
+        $thumbnails = $this->thumbnailsGenerator->run($photo);
+
+        $this->photoDataProvider->save($photo, array_merge($request->all(), compact('exif', 'thumbnails')));
 
         return $photo;
     }

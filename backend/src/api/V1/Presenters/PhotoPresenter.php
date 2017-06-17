@@ -60,7 +60,7 @@ class PhotoPresenter extends Presenter
             'exif' => function () {
                 return $this->container
                     ->make(ExifPresenter::class)
-                    ->setWrappedModel($this->getWrappedModelAttribute('exif'));
+                    ->setWrappedModel($this->getWrappedModelAttribute('exif') ?? []);
             },
             'thumbnails' => function () {
                 $thumbnails = collect($this->getWrappedModelAttribute('thumbnails'));

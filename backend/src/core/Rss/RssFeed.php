@@ -69,7 +69,7 @@ class RssFeed implements RssFeedContract
             ->applyCriteria(new IsPublished(true))
             ->applyCriteria((new SortByCreatedAt)->desc())
             ->applyCriteria(new Take(50))
-            ->get(['with' => ['exif', 'thumbnails', 'tags']])
+            ->get()
             ->present(PhotoPresenter::class)
             ->map(function (PhotoPresenter $photo) {
                 return (new Item)

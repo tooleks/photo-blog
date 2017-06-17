@@ -54,9 +54,6 @@ class Photo extends Model
      */
     protected $fillable = [
         'description',
-        'path',
-        'relative_url',
-        'avg_color',
     ];
 
     /**

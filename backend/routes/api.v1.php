@@ -1,9 +1,6 @@
 <?php
 
 use Api\V1\Http\Middleware\AppendClientIpAddress;
-use Api\V1\Http\Middleware\Photos\FetchExifData;
-use Api\V1\Http\Middleware\Photos\GenerateThumbnails;
-use Api\V1\Http\Middleware\Photos\SaveUploadedFile;
 use Api\V1\Presenters\PhotoPresenter;
 use Api\V1\Presenters\PublishedPhotoPresenter;
 use Api\V1\Presenters\SubscriptionPresenter;
@@ -85,9 +82,6 @@ Route::group(['prefix' => 'photos'], function () {
     Route::post('/')
         ->uses('PhotosController@create')
         ->middleware(sprintf('can:create-resource,%s', Photo::class))
-        ->middleware(FetchExifData::class)
-        ->middleware(SaveUploadedFile::class)
-        ->middleware(GenerateThumbnails::class)
         ->middleware(sprintf('present:%s', PhotoPresenter::class));
 
     Route::get('/{photo}')
@@ -98,9 +92,6 @@ Route::group(['prefix' => 'photos'], function () {
     Route::post('/{photo}')
         ->uses('PhotosController@update')
         ->middleware('can:update-resource,photo')
-        ->middleware(FetchExifData::class)
-        ->middleware(SaveUploadedFile::class)
-        ->middleware(GenerateThumbnails::class)
         ->middleware(sprintf('present:%s', PhotoPresenter::class));
 
     Route::delete('/{photo}')
