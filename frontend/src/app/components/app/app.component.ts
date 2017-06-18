@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core'
+import {Component, OnInit, OnDestroy} from '@angular/core'
 import {Router, NavigationEnd} from '@angular/router';
 import 'rxjs/add/operator/filter';
 import {MetaTagsService, GoogleAnalyticsService} from '../../../core';
@@ -12,8 +12,12 @@ import '../../../../assets/static/img/meta_image.jpg'
     templateUrl: 'app.component.html',
     styles: [require('./app.component.css').toString()],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
     appContentStyles: { overflow: string } = {overflow: ''};
+
+    protected metaTagsUrlSubscriber: any = null;
+    protected scrollFreezerFreezedSubscriber: any = null;
+    protected scrollFreezerUnfreezedSubscriber: any = null;
 
     constructor(protected cache: TransferState,
                 protected router: Router,
@@ -34,6 +38,23 @@ export class AppComponent implements OnInit {
         this.cache.set('state-transfer', true); // Just for testing purposes.
     }
 
+    ngOnDestroy(): void {
+        if (this.metaTagsUrlSubscriber !== null) {
+            this.metaTagsUrlSubscriber.unsubscribe();
+            this.metaTagsUrlSubscriber = null;
+        }
+
+        if (this.scrollFreezerFreezedSubscriber !== null) {
+            this.scrollFreezerFreezedSubscriber.unsubscribe();
+            this.scrollFreezerFreezedSubscriber = null;
+        }
+
+        if (this.scrollFreezerUnfreezedSubscriber !== null) {
+            this.scrollFreezerUnfreezedSubscriber.unsubscribe();
+            this.scrollFreezerUnfreezedSubscriber = null;
+        }
+    }
+
     protected initMeta(): void {
         this.metaTags
             .setUrl(this.app.getUrl())
@@ -44,14 +65,14 @@ export class AppComponent implements OnInit {
     }
 
     protected initRouterSubscribers(): void {
-        this.router.events
+        this.metaTagsUrlSubscriber = this.router.events
             .filter((event) => event instanceof NavigationEnd)
             .subscribe((event: NavigationEnd) => this.metaTags.setUrl(this.app.getUrl() + event.urlAfterRedirects));
     }
 
     protected initScrollFreezerSubscribers(): void {
-        this.scrollFreezer.freezed.subscribe(() => this.appContentStyles.overflow = 'hidden');
-        this.scrollFreezer.unfreezed.subscribe(() => this.appContentStyles.overflow = '');
+        this.scrollFreezerFreezedSubscriber = this.scrollFreezer.freezed.subscribe(() => this.appContentStyles.overflow = 'hidden');
+        this.scrollFreezerUnfreezedSubscriber = this.scrollFreezer.unfreezed.subscribe(() => this.appContentStyles.overflow = '');
     }
 
     getLinkedData() {
