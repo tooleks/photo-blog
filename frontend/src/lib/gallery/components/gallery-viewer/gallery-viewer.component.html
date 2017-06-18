@@ -45,6 +45,21 @@
                     type="button"
                     class="gallery-action gallery-left"><i class="fa fa-info gallery-icon" aria-hidden="true"></i>
             </button>
+            <a [href]="'https://www.facebook.com/sharer/sharer.php?u=' + image.getViewUrl()"
+               title="{{ 'Share on Facebook' }}"
+               class="gallery-action gallery-left"
+               target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i>
+            </a>
+            <a [href]="'https://twitter.com/home?status=' + image.getViewUrl()"
+               title="{{ 'Share on Twitter' }}"
+               class="gallery-action gallery-left"
+               target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i>
+            </a>
+            <a [href]="'https://plus.google.com/share?url=' + image.getViewUrl()"
+               title="{{ 'Share on Google+' }}"
+               class="gallery-action gallery-left"
+               target="_blank"><i class="fa fa-google-plus" aria-hidden="true"></i>
+            </a>
             <button *ngIf="showEditImageButton"
                     (click)="clickEditImage()"
                     title="{{ 'Edit' }}"
