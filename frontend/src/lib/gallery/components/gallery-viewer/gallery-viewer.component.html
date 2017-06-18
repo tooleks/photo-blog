@@ -45,17 +45,17 @@
                     type="button"
                     class="gallery-action gallery-left"><i class="fa fa-info gallery-icon" aria-hidden="true"></i>
             </button>
-            <a [href]="'https://www.facebook.com/sharer/sharer.php?u=' + image.getViewUrl()"
+            <a [href]="'https://www.facebook.com/sharer/sharer.php?u=' + document.location.href"
                title="{{ 'Share on Facebook' }}"
                class="gallery-action gallery-left"
                target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i>
             </a>
-            <a [href]="'https://twitter.com/home?status=' + image.getViewUrl()"
+            <a [href]="'https://twitter.com/home?status=' + document.location.href"
                title="{{ 'Share on Twitter' }}"
                class="gallery-action gallery-left"
                target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i>
             </a>
-            <a [href]="'https://plus.google.com/share?url=' + image.getViewUrl()"
+            <a [href]="'https://plus.google.com/share?url=' + document.location.href"
                title="{{ 'Share on Google+' }}"
                class="gallery-action gallery-left"
                target="_blank"><i class="fa fa-google-plus" aria-hidden="true"></i>
