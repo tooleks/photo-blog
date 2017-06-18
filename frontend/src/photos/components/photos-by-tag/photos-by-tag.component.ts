@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
@@ -21,8 +21,10 @@ import {PhotosComponent as AbstractPhotosComponent} from '../abstract';
     selector: 'photos-by-tag',
     templateUrl: 'photos-by-tag.component.html',
 })
-export class PhotosByTagComponent extends AbstractPhotosComponent implements OnInit {
+export class PhotosByTagComponent extends AbstractPhotosComponent implements OnInit, OnDestroy {
     @ViewChild('galleryComponent') galleryComponent: GalleryComponent;
+
+    protected tagQueryParamSubsriber: any = null;
 
     constructor(public authProvider: AuthProviderService,
                 protected photoDataProvider: PhotoDataProviderService,
@@ -64,9 +66,15 @@ export class PhotosByTagComponent extends AbstractPhotosComponent implements OnI
         this.queryParams['tag'] = this.defaults['tag'];
     }
 
+    ngOnDestroy(): void {
+        if (this.tagQueryParamSubsriber !== null) {
+            this.tagQueryParamSubsriber.unsubscribe();
+        }
+    }
+
     protected initParamsSubscribers() {
         super.initParamsSubscribers();
-        this.route.params
+        this.tagQueryParamSubsriber = this.route.params
             .map((params) => params['tag'])
             .filter((tag) => typeof (tag) !== 'undefined')
             .map((tag) => String(tag))
