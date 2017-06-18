@@ -78,8 +78,10 @@ export class PhotosBySearchPhraseComponent extends AbstractPhotosComponent imple
     }
 
     ngOnDestroy(): void {
+        super.ngOnDestroy();
         if (this.searchPhraseQueryParamSubscriber !== null) {
             this.searchPhraseQueryParamSubscriber.unsubscribe();
+            this.searchPhraseQueryParamSubscriber = null;
         }
     }
 

@@ -1,4 +1,4 @@
-import {OnInit, AfterViewInit} from '@angular/core';
+import {OnInit, OnDestroy, AfterViewInit} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
@@ -17,7 +17,7 @@ import {
 } from '../../../shared';
 import {PhotoToLinkedDataMapper, PhotoToGalleryImageMapper} from '../../mappers';
 
-export abstract class PhotosComponent implements OnInit, AfterViewInit {
+export abstract class PhotosComponent implements OnInit, OnDestroy, AfterViewInit {
     protected pager: PagerService;
     protected navigator: NavigatorService;
     protected processLocker: ProcessLockerService;
@@ -27,6 +27,9 @@ export abstract class PhotosComponent implements OnInit, AfterViewInit {
 
     linkedData: Array<any> = [];
     queryParams = {};
+
+    protected showQueryParamSubscriber: any = null;
+    protected pageQueryParamSubscriber: any = null;
 
     protected defaults = {
         page: 1,
@@ -64,18 +67,30 @@ export abstract class PhotosComponent implements OnInit, AfterViewInit {
         this.queryParams['show'] = this.defaults['show'];
     }
 
+    ngOnDestroy(): void {
+        if (this.pageQueryParamSubscriber !== null) {
+            this.pageQueryParamSubscriber.unsubscribe();
+            this.pageQueryParamSubscriber = null;
+        }
+
+        if (this.showQueryParamSubscriber !== null) {
+            this.showQueryParamSubscriber.unsubscribe();
+            this.showQueryParamSubscriber = null;
+        }
+    }
+
     ngAfterViewInit(): void {
         this.initParamsSubscribers();
     }
 
     protected initParamsSubscribers(): void {
-        this.route.queryParams
+        this.pageQueryParamSubscriber = this.route.queryParams
             .map((queryParams) => queryParams['page'])
             .filter((page) => typeof (page) !== 'undefined')
             .map((page) => Number(page))
             .subscribe((page: number) => this.queryParams['page'] = page);
 
-        this.route.queryParams
+        this.showQueryParamSubscriber = this.route.queryParams
             .map((queryParams) => queryParams['show'])
             .filter((show) => typeof (show) !== 'undefined')
             .map((show) => Number(show))

@@ -48,6 +48,7 @@ export class PhotoFormComponent implements OnInit, OnDestroy, AfterViewInit {
     ngOnDestroy(): void {
         if (this.idQueryParamSubscriber !== null) {
             this.idQueryParamSubscriber.unsubscribe();
+            this.idQueryParamSubscriber = null;
         }
     }
 

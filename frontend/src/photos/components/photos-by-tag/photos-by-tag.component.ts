@@ -67,8 +67,10 @@ export class PhotosByTagComponent extends AbstractPhotosComponent implements OnI
     }
 
     ngOnDestroy(): void {
+        super.ngOnDestroy();
         if (this.tagQueryParamSubsriber !== null) {
             this.tagQueryParamSubsriber.unsubscribe();
+            this.tagQueryParamSubsriber = null;
         }
     }
 
