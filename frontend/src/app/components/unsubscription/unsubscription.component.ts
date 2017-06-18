@@ -1,4 +1,4 @@
-import {Component, OnInit, AfterViewInit} from '@angular/core';
+import {Component, OnInit, OnDestroy, AfterViewInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import 'rxjs/add/operator/map';
 import {NoticesService} from '../../../lib';
@@ -15,10 +15,12 @@ import {
     selector: 'unsubscription',
     templateUrl: 'unsubscription.component.html',
 })
-export class UnsubscriptionComponent implements OnInit, AfterViewInit {
+export class UnsubscriptionComponent implements OnInit, OnDestroy, AfterViewInit {
     protected token: string = null;
     protected navigator: NavigatorService;
     protected processLocker: ProcessLockerService;
+
+    protected tokenQueryParamSubscriber: any = null;
 
     constructor(protected route: ActivatedRoute,
                 protected api: ApiService,
@@ -34,12 +36,19 @@ export class UnsubscriptionComponent implements OnInit, AfterViewInit {
         this.title.setPageNameSegment('Unsubscription');
     }
 
+    ngOnDestroy(): void {
+        if (this.tokenQueryParamSubscriber !== null) {
+            this.tokenQueryParamSubscriber.unsubscribe();
+            this.tokenQueryParamSubscriber = null;
+        }
+    }
+
     ngAfterViewInit(): void {
         this.initParamsSubscribers();
     }
 
     protected initParamsSubscribers(): void {
-        this.route.params
+        this.tokenQueryParamSubscriber = this.route.params
             .map((params) => params['token'])
             .map((token) => String(token))
             .subscribe((token: string) => this.token = token);
