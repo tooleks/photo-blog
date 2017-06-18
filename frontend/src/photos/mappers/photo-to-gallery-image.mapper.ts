@@ -12,7 +12,7 @@ export class PhotoToGalleryImageMapper {
         return new GalleryImage({
             source: object,
             id: object.id,
-            viewUrl: `/photos?show=${object.id}`,
+            viewUrl: this.app.getUrl() + `/photos?show=${object.id}`,
             fullSizeUrl: object.url,
             gridSizeUrl: object.thumbnails.medium.url,
             gridSizeHeight: object.thumbnails.medium.height,

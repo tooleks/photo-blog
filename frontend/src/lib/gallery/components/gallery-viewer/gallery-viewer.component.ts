@@ -1,5 +1,4 @@
-import {Component, Input, Inject, Output, OnChanges, SimpleChanges, EventEmitter, HostListener} from '@angular/core';
-import {DOCUMENT} from '@angular/platform-browser';
+import {Component, Input, Output, OnChanges, SimpleChanges, EventEmitter, HostListener} from '@angular/core';
 import {GalleryImage} from '../../models';
 import {loadImage} from '../../helpers';
 
@@ -37,9 +36,6 @@ export class GalleryViewerComponent implements OnChanges {
     @Output() onImageInfo: EventEmitter<GalleryImage> = new EventEmitter<GalleryImage>();
     @Input() visibleImageInfo: boolean = false;
     @Output() visibleImageInfoChange: EventEmitter<boolean> = new EventEmitter<boolean>();
-
-    constructor(@Inject(DOCUMENT) public document: any) {
-    }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['image'] && changes['image'].currentValue) {
