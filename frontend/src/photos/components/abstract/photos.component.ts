@@ -103,7 +103,9 @@ export abstract class PhotosComponent implements OnInit, AfterViewInit {
 
         if (response.data.length) {
             this.pager.setPage(response.current_page);
-            this.navigator.setQueryParam('page', this.pager.getPage());
+            if (this.pager.getPage() > 1) {
+                this.navigator.setQueryParam('page', this.pager.getPage());
+            }
         }
 
         this.hasMoreImages = !(response.data.length < this.defaults['perPage']);
