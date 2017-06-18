@@ -1,4 +1,4 @@
-import {Component, OnInit, AfterViewInit} from '@angular/core';
+import {Component, OnInit, OnDestroy, AfterViewInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
@@ -19,10 +19,12 @@ import {Photo} from './models';
     templateUrl: 'photo-form.component.html',
     styles: [require('./photo-form.component.css').toString()],
 })
-export class PhotoFormComponent implements OnInit, AfterViewInit {
+export class PhotoFormComponent implements OnInit, OnDestroy, AfterViewInit {
     photo: Photo;
     protected navigator: NavigatorService;
     protected processLocker: ProcessLockerService;
+
+    protected idQueryParamSubscriber: any = null;
 
     constructor(protected route: ActivatedRoute,
                 protected title: TitleService,
@@ -43,12 +45,18 @@ export class PhotoFormComponent implements OnInit, AfterViewInit {
         }
     }
 
+    ngOnDestroy(): void {
+        if (this.idQueryParamSubscriber !== null) {
+            this.idQueryParamSubscriber.unsubscribe();
+        }
+    }
+
     ngAfterViewInit(): void {
         this.initParamsSubscribers();
     }
 
     protected initParamsSubscribers(): void {
-        this.route.params
+        this.idQueryParamSubscriber = this.route.params
             .map((params) => params['id'])
             .filter((id) => typeof (id) !== 'undefined')
             .subscribe((id) => this.loadById(id));
