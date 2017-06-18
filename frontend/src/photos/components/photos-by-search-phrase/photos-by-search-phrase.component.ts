@@ -1,4 +1,13 @@
-import {Component, OnInit, AfterViewInit, ViewChildren, ViewChild, QueryList, ElementRef} from '@angular/core';
+import {
+    Component,
+    OnInit,
+    OnDestroy,
+    AfterViewInit,
+    ViewChildren,
+    ViewChild,
+    QueryList,
+    ElementRef
+} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
@@ -21,9 +30,11 @@ import {PhotosComponent as AbstractPhotosComponent} from '../abstract';
     selector: 'photos-by-search-phrase',
     templateUrl: 'photos-by-search-phrase.component.html',
 })
-export class PhotosBySearchPhraseComponent extends AbstractPhotosComponent implements OnInit, AfterViewInit {
+export class PhotosBySearchPhraseComponent extends AbstractPhotosComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChildren('inputSearch') inputSearchComponent: QueryList<ElementRef>;
     @ViewChild('galleryComponent') galleryComponent: GalleryComponent;
+
+    protected searchPhraseQueryParamSubscriber: any = null;
 
     constructor(public authProvider: AuthProviderService,
                 protected photoDataProvider: PhotoDataProviderService,
@@ -66,6 +77,12 @@ export class PhotosBySearchPhraseComponent extends AbstractPhotosComponent imple
         this.queryParams['search_phrase'] = this.defaults['search_phrase'];
     }
 
+    ngOnDestroy(): void {
+        if (this.searchPhraseQueryParamSubscriber !== null) {
+            this.searchPhraseQueryParamSubscriber.unsubscribe();
+        }
+    }
+
     ngAfterViewInit(): void {
         super.ngAfterViewInit();
         this.focusOnSearchInput();
@@ -79,7 +96,7 @@ export class PhotosBySearchPhraseComponent extends AbstractPhotosComponent imple
 
     protected initParamsSubscribers() {
         super.initParamsSubscribers();
-        this.route.queryParams
+        this.searchPhraseQueryParamSubscriber = this.route.queryParams
             .map((queryParams) => queryParams['search_phrase'])
             .filter((searchPhrase) => typeof (searchPhrase) !== 'undefined')
             .map((searchPhrase) => String(searchPhrase))
