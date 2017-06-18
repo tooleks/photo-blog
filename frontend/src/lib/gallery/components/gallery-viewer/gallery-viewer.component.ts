@@ -76,7 +76,7 @@ export class GalleryViewerComponent implements OnChanges {
     isVisibleImageInfo(): boolean {
         // #browser-specific
         if (typeof (window) !== 'undefined') {
-            return this.loadedImage && this.visibleImageInfo;
+            return this.visibleImageInfo;
         } else {
             return true;
         }
