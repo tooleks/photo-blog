@@ -12,6 +12,8 @@ return [
 
             'tag_page' => config('main.frontend.url') . '/photos/tag/%s',
 
+            'unsubscription_page' => config('main.frontend.url') . '/unsubscription/%s',
+
         ],
 
     ],

@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\V1\Mail;
+namespace Core\Mail;
 
 use Illuminate\Mail\Mailable;
 
@@ -8,7 +8,7 @@ use Illuminate\Mail\Mailable;
  * Class ContactMessage.
  *
  * @property array data
- * @package Api\V1\Mail
+ * @package Core\Mail
  */
 class ContactMessage extends Mailable
 {
@@ -33,6 +33,6 @@ class ContactMessage extends Mailable
             ->to(config('mail.address.administrator'))
             ->replyTo($this->data['email'])
             ->subject(sprintf('%s - %s - %s', config('app.name'), trans('mails.contact-message.subject'), $this->data['subject']))
-            ->view('api.v1.mails.contact-message', $this->data);
+            ->view('core.mails.contact-message', $this->data);
     }
 }

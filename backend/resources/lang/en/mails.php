@@ -8,10 +8,10 @@ return [
 
     'weekly-subscription' => [
         'subject' => 'Your Weekly Subscription',
-        'weekly_update' => 'Hi, I have uploaded new photos this week.',
-        'click_on_link' => 'To see them just click on the link below:',
-        'go_to_website' => 'Go to the website',
-        'unsubscribe' => 'Unsubscribe',
+        'updates_message' => 'Hi, I have uploaded new photo(s) this week.',
+        'updates_link_message' => 'Click here to see them all.',
+        'unsubscribe_message' => 'If you don\'t want to receive the website updates just click the link below.',
+        'unsubscribe_link_message' => 'Unsubscribe',
     ],
 
 ];

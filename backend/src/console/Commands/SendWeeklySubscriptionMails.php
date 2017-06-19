@@ -2,12 +2,12 @@
 
 namespace Console\Commands;
 
-use Api\V1\Mail\WeeklySubscription;
 use Carbon\Carbon;
 use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
 use Core\DataProviders\Photo\Criterias\IsPublished;
 use Core\DataProviders\Subscription\Contracts\SubscriptionDataProvider;
 use Core\DataProviders\Subscription\Criterias\WhereEmailIn;
+use Core\Mail\WeeklySubscription;
 use Core\Models\Subscription;
 use Closure;
 use Illuminate\Config\Repository as Config;
@@ -103,24 +103,12 @@ class SendWeeklySubscriptionMails extends Command
      */
     protected function sendMail(Subscription $subscription)
     {
-        $mail = new WeeklySubscription($this->extractSubscriptionData($subscription));
-
-        Mail::send($mail);
-    }
-
-    /**
-     * Extract subscription data.
-     *
-     * @param Subscription $subscription
-     * @return array
-     */
-    protected function extractSubscriptionData(Subscription $subscription): array
-    {
-        $data = $subscription->toArray();
-
         $data['website_url'] = $this->config->get('main.frontend.url');
-        $data['unsubscribe_url'] = sprintf('%s/%s', $this->config->get('main.frontend.unsubscribe_url'), $data['token']);
 
-        return $data;
+        $data['subscriber_email'] = $subscription->email;
+
+        $data['unsubscribe_url'] = sprintf($this->config->get('format.frontend.url.unsubscription_page'), $subscription->token);
+
+        Mail::send(new WeeklySubscription($data));
     }
 }

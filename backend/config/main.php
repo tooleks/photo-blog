@@ -47,7 +47,6 @@ return [
 
     'frontend' => [
         'url' => env('FRONTEND_APP_URL', 'http://localhost:8080'),
-        'unsubscribe_url' => env('FRONTEND_APP_UNSUBSCRIBE_URL', 'http://localhost:8080/unsubscription'),
     ],
 
     /*
@@ -75,7 +74,7 @@ return [
         'thumbnails' => [
             [
                 'mode' => 'inset',
-                'quality' => 95,    // percentage
+                'quality' => 95,     // percentage
                 'width' => 1500,     // pixels
                 'height' => 1500,    // pixels
             ],

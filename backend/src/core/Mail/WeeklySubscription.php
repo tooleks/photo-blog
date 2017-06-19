@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\V1\Mail;
+namespace Core\Mail;
 
 use Illuminate\Mail\Mailable;
 
@@ -8,7 +8,7 @@ use Illuminate\Mail\Mailable;
  * Class WeeklySubscription.
  *
  * @property array data
- * @package Api\V1\Mail
+ * @package Core\Mail
  */
 class WeeklySubscription extends Mailable
 {
@@ -30,8 +30,8 @@ class WeeklySubscription extends Mailable
     public function build()
     {
         return $this
-            ->to($this->data['email'])
+            ->to($this->data['subscriber_email'])
             ->subject(sprintf('%s - %s', config('app.name'), trans('mails.weekly-subscription.subject')))
-            ->view('api.v1.mails.weekly-subscription', $this->data);
+            ->view('core.mails.weekly-subscription', $this->data);
     }
 }

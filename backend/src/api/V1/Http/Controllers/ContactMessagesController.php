@@ -3,7 +3,7 @@
 namespace Api\V1\Http\Controllers;
 
 use Api\V1\Http\Requests\ContactMessageRequest as ContactMessageRequest;
-use Api\V1\Mail\ContactMessage;
+use Core\Mail\ContactMessage;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Mail;
