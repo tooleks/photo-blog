@@ -99,6 +99,12 @@ step_publish_rest_api_documentation() {
     rsync -avq docs/rest_api/dist/ dist/rest_api_documentation
 }
 
+step_flush_cache() {
+    printf_step_header "Flush Cache" &&
+    cd "$root_path" &&
+    redis-cli flushAll
+}
+
 step_start_backend_application() {
     printf_step_header "Starting Backend Application" &&
     cd "$root_path" &&
@@ -141,6 +147,7 @@ step_stop_backend_application &&
 step_migrate_database &&
 step_publish_backend_application &&
 step_publish_rest_api_documentation &&
+step_flush_cache &&
 step_start_backend_application &&
 step_stop_frontend_application &&
 step_publish_frontend_application &&
