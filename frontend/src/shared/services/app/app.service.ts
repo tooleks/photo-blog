@@ -26,6 +26,10 @@ export class AppService {
         return process.env.APP_AUTHOR;
     }
 
+    getAuthorImage(): string {
+        return process.env.APP_AUTHOR_IMAGE_URL;
+    }
+
     getImage(): string {
         return process.env.APP_IMAGE_URL;
     }

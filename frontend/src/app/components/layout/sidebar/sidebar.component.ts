@@ -41,10 +41,10 @@ export class SideBarComponent implements OnInit {
     animationState: string;
     tags: Array<any> = [];
 
-    constructor(protected app: AppService,
-                protected api: ApiService,
+    constructor(public app: AppService,
+                public api: ApiService,
                 public authProvider: AuthProviderService,
-                protected screenDetector: ScreenDetectorService) {
+                public screenDetector: ScreenDetectorService) {
         this.reset();
         this.loadTags();
     }

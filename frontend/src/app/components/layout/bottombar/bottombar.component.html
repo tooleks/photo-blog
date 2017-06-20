@@ -7,13 +7,11 @@
                 [routerLinkActiveOptions]="{ exact: true }">{{ 'Contact Me' }}</a>
         </span>
     <span class="bottombar-item bottombar-desktop-screen">
-             <a [routerLink]="['/about-me']"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }">{{ 'About Me' }}</a>
-        </span>
-    <span class="bottombar-item bottombar-desktop-screen">
              <a [routerLink]="['/subscription']"
                 routerLinkActive="active"
                 [routerLinkActiveOptions]="{ exact: true }">{{ 'Subscription' }}</a>
+        </span>
+    <span class="bottombar-item bottombar-desktop-screen">
+             <a href="/rss" target="_blank">{{ 'RSS Feed' }}</a>
         </span>
 </div>

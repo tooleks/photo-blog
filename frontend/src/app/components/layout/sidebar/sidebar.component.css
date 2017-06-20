@@ -17,8 +17,20 @@ sidebar .sidebar ul {
     padding: 0;
 }
 
-sidebar .sidebar > ul {
-    margin-top: 20px;
+sidebar .sidebar > ul > li.sidebar-brand {
+    text-align: center;
+    height: 85px;
+}
+
+sidebar .sidebar > ul > li.sidebar-brand a {
+    height: 85px;
+    padding: 10px 0;
+}
+
+sidebar .sidebar > ul > li.sidebar-brand img {
+    width: 65px;
+    height: 65px;
+    border-radius: 65px;;
 }
 
 sidebar .sidebar > ul > li:first-child > span,
@@ -60,7 +72,7 @@ sidebar .sidebar li > a:focus {
 
 sidebar .sidebar li > a.active,
 sidebar .sidebar li > a:hover,
-sidebar .sidebar li > a:focus:not(.sidebar-brand) {
+sidebar .sidebar li > a:focus:not(.sidebar-home-link) {
     color: #fff;
 }
 

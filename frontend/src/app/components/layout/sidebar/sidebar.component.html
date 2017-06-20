@@ -1,9 +1,16 @@
 <div [@slideInOut]="animationState" class="sidebar">
     <ul>
+        <li class="sidebar-brand">
+            <a [routerLink]="['/about-me']"
+               (click)="toggle()"
+               [title]="app.getName()">
+                <img [src]="app.getAuthorImage()" [alt]="app.getName()" [title]="app.getName()">
+            </a>
+        </li>
         <li>
             <a [routerLink]="['/']"
                (click)="toggle()"
-               class="sidebar-brand"
+               class="sidebar-home-link"
             ><i class="fa fa-home" aria-hidden="true"></i> {{ 'Home' }}</a>
         </li>
         <li *ngIf="authProvider.isAuthenticated()">
@@ -39,13 +46,6 @@
             </ul>
         </li>
         <li>
-            <a [routerLink]="['/about-me']"
-               (click)="toggle()"
-               routerLinkActive="active"
-               [routerLinkActiveOptions]="{ exact: true }"
-            ><i class="fa fa-user" aria-hidden="true"></i> {{ 'About Me' }}</a>
-        </li>
-        <li>
             <a [routerLink]="['/contact-me']"
                (click)="toggle()"
                routerLinkActive="active"
@@ -58,9 +58,6 @@
                routerLinkActive="active"
                [routerLinkActiveOptions]="{ exact: true }"
             ><i class="fa fa-envelope" aria-hidden="true"></i> {{ 'Subscription' }}</a>
-        </li>
-        <li>
-            <a href="/rss" target="_blank"><i class="fa fa-rss" aria-hidden="true"></i> {{ 'RSS Feed' }}</a>
         </li>
         <li *ngIf="authProvider.isAuthenticated()">
             <a [routerLink]="['/signout']"
