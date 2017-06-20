@@ -10,6 +10,7 @@ use Core\DataProviders\Photo\Criterias\IsPublished;
 use Core\DataProviders\Photo\Criterias\HasSearchPhrase;
 use Core\DataProviders\Photo\Criterias\HasTagWithValue;
 use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
+use Illuminate\Contracts\Cache\Factory as CacheManager;
 use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Routing\Controller;
 use Lib\DataProvider\Criterias\SortByCreatedAt;
@@ -217,17 +218,28 @@ class PublishedPhotosController extends Controller
      * Find photos.
      *
      * @param FindPublishedPhotosRequest $request
+     * @param CacheManager $cacheManager
      * @return AbstractPaginator
      */
-    public function find(FindPublishedPhotosRequest $request): AbstractPaginator
+    public function find(FindPublishedPhotosRequest $request, CacheManager $cacheManager): AbstractPaginator
     {
-        $paginator = $this->photoDataProvider
-            ->applyCriteria(new IsPublished(true))
-            ->applyCriteriaWhen($request->has('tag'), new HasTagWithValue($request->get('tag')))
-            ->applyCriteriaWhen($request->has('search_phrase'), new HasSearchPhrase($request->get('search_phrase')))
-            ->applyCriteria((new SortByCreatedAt)->desc())
-            ->getPaginator($request->get('page', 1), $request->get('per_page', 20))
-            ->appends($request->query());
+        $cacheKey = sprintf(
+            'photos:%s:%s:%s:%s',
+            $request->get('page'),
+            $request->get('per_page'),
+            $request->get('tag'),
+            $request->get('search_phrase')
+        );
+
+        $paginator = $cacheManager->remember($cacheKey, 1, function () use ($request) {
+            return $this->photoDataProvider
+                ->applyCriteria(new IsPublished(true))
+                ->applyCriteriaWhen($request->has('tag'), new HasTagWithValue($request->get('tag')))
+                ->applyCriteriaWhen($request->has('search_phrase'), new HasSearchPhrase($request->get('search_phrase')))
+                ->applyCriteria((new SortByCreatedAt)->desc())
+                ->getPaginator($request->get('page', 1), $request->get('per_page', 20))
+                ->appends($request->query());
+        });
 
         return $paginator;
     }
