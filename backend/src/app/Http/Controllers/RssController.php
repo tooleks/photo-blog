@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Core\Services\Rss\Contracts\RssBuilderService;
+use Illuminate\Contracts\Cache\Factory as CacheManager;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 
@@ -25,12 +26,17 @@ class RssController extends Controller
     }
 
     /**
+     * @param CacheManager $cacheManager
      * @return Response
      */
-    public function index()
+    public function index(CacheManager $cacheManager)
     {
+        $rss = $cacheManager->remember('rss', 10, function () {
+            return $this->rssBuilder->run();
+        });
+
         return response()
-            ->view('app.rss.index', ['rss' => $this->rssBuilder->run()])
+            ->view('app.rss.index', compact('rss'))
             ->header('Content-Type', 'text/xml');
     }
 }

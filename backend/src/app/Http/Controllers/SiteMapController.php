@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Core\Services\SiteMap\Contracts\SiteMapBuilderService;
+use Illuminate\Contracts\Cache\Factory as CacheManager;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 
@@ -25,12 +26,17 @@ class SiteMapController extends Controller
     }
 
     /**
+     * @param CacheManager $cacheManager
      * @return Response
      */
-    public function index()
+    public function index(CacheManager $cacheManager)
     {
+        $siteMap = $cacheManager->remember('siteMap', 10, function () {
+            return $this->siteMapBuilder->run();
+        });
+
         return response()
-            ->view('app.site-map.index', ['siteMap' => $this->siteMapBuilder->run()])
+            ->view('app.site-map.index', compact('siteMap'))
             ->header('Content-Type', 'text/xml');
     }
 }
