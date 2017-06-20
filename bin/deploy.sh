@@ -100,7 +100,7 @@ step_publish_rest_api_documentation() {
 }
 
 step_flush_cache() {
-    printf_step_header "Flush Cache" &&
+    printf_step_header "Flushing Cache" &&
     cd "$root_path" &&
     redis-cli flushAll
 }
