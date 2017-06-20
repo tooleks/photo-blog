@@ -2,14 +2,14 @@
 
 namespace Core\Services\Photo\Contracts;
 
-use Core\Services\Contracts\Service;
+use Core\Services\Contracts\Runnable;
 
 /**
  * Interface AvgColorGeneratorService.
  *
  * @package Core\Services\Photo\Contracts
  */
-interface AvgColorGeneratorService extends Service
+interface AvgColorGeneratorService extends Runnable
 {
 
 }

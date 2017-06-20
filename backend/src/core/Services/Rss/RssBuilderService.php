@@ -1,11 +1,11 @@
 <?php
 
-namespace Core\Rss;
+namespace Core\Services\Rss;
 
 use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
 use Core\DataProviders\Photo\Criterias\IsPublished;
-use Core\Rss\Contracts\RssFeed as RssFeedContract;
-use Core\Rss\Presenters\PhotoPresenter;
+use Core\Services\Rss\Presenters\PhotoPresenter;
+use Core\Services\Rss\Contracts\RssBuilderService as RssBuilderServiceContract;
 use Lib\DataProvider\Criterias\SortByCreatedAt;
 use Lib\DataProvider\Criterias\Take;
 use Lib\Rss\Contracts\Builder;
@@ -15,16 +15,16 @@ use Lib\Rss\Item;
 use Lib\Rss\Enclosure;
 
 /**
- * Class RssService.
+ * Class RssBuilderService.
  *
  * @property Builder rssBuilder
  * @property PhotoDataProvider photoDataProvider
- * @package Core\Rss
+ * @package Core\Services\Rss
  */
-class RssFeed implements RssFeedContract
+class RssBuilderService implements RssBuilderServiceContract
 {
     /**
-     * RssService constructor.
+     * RssBuilderService constructor.
      *
      * @param Builder $rssBuilder
      * @param PhotoDataProvider $photoDataProvider
@@ -33,16 +33,6 @@ class RssFeed implements RssFeedContract
     {
         $this->rssBuilder = $rssBuilder;
         $this->photoDataProvider = $photoDataProvider;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function build(): Builder
-    {
-        return $this->rssBuilder
-            ->setChannel($this->provideChannel())
-            ->setItems($this->provideItems());
     }
 
     /**
@@ -91,5 +81,15 @@ class RssFeed implements RssFeedContract
                     );
             })
             ->toArray();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function run(...$parameters): Builder
+    {
+        return $this->rssBuilder
+            ->setChannel($this->provideChannel())
+            ->setItems($this->provideItems());
     }
 }

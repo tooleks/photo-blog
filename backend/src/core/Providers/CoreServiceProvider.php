@@ -73,5 +73,15 @@ class CoreServiceProvider extends ServiceProvider
                 return new \Core\FileSystem\Trash\Trash($app->make('filesystem'), config('main.storage.path.trash'));
             }
         );
+
+        $this->app->bind(
+            \Core\Services\SiteMap\Contracts\SiteMapBuilderService::class,
+            \Core\Services\SiteMap\SiteMapBuilderService::class
+        );
+
+        $this->app->bind(
+            \Core\Services\Rss\Contracts\RssBuilderService::class,
+            \Core\Services\Rss\RssBuilderService::class
+        );
     }
 }

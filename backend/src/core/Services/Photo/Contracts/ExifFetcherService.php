@@ -2,14 +2,20 @@
 
 namespace Core\Services\Photo\Contracts;
 
-use Core\Services\Contracts\Service;
+use Core\Services\Contracts\Runnable;
 
 /**
  * Interface ExifFetcherService.
  *
  * @package Core\Services\Photo\Contracts
  */
-interface ExifFetcherService extends Service
+interface ExifFetcherService extends Runnable
 {
-
+    /**
+     * Fetch the photo exif values and return record data.
+     *
+     * @param array ...$parameters
+     * @return array
+     */
+    public function run(...$parameters): array;
 }

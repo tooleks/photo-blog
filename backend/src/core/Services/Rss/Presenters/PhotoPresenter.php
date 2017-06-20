@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Rss\Presenters;
+namespace Core\Services\Rss\Presenters;
 
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
@@ -16,7 +16,7 @@ use Tooleks\Laravel\Presenter\Presenter;
  * @property string file_size
  * @property array categories
  * @property string published_date
- * @package Core\Rss\Presenters
+ * @package Core\Services\Rss\Presenters
  */
 class PhotoPresenter extends Presenter
 {

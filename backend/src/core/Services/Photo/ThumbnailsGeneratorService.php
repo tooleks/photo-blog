@@ -31,7 +31,7 @@ class ThumbnailsGeneratorService implements ThumbnailsGeneratorServiceContract
     /**
      * @inheritdoc
      */
-    public function run(...$parameters)
+    public function run(...$parameters): array
     {
         list($photo) = $parameters;
 

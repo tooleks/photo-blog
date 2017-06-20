@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Core\SiteMap\Contracts\SiteMap;
+use Core\Services\SiteMap\Contracts\SiteMapBuilderService;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 
 /**
  * Class SiteMapController.
  *
- * @property SiteMap siteMap
+ * @property SiteMapBuilderService siteMapBuilder
  * @package App\Http\Controllers
  */
 class SiteMapController extends Controller
@@ -17,11 +17,11 @@ class SiteMapController extends Controller
     /**
      * SiteMapController constructor.
      *
-     * @param SiteMap $siteMap
+     * @param SiteMapBuilderService $siteMapBuilder
      */
-    public function __construct(SiteMap $siteMap)
+    public function __construct(SiteMapBuilderService $siteMapBuilder)
     {
-        $this->siteMap = $siteMap;
+        $this->siteMapBuilder = $siteMapBuilder;
     }
 
     /**
@@ -30,7 +30,7 @@ class SiteMapController extends Controller
     public function index()
     {
         return response()
-            ->view('app.site-map.index', ['siteMap' => $this->siteMap->build()])
+            ->view('app.site-map.index', ['siteMap' => $this->siteMapBuilder->run()])
             ->header('Content-Type', 'text/xml');
     }
 }

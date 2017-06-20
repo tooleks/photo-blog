@@ -1,38 +1,34 @@
 <?php
 
-namespace Core\SiteMap;
+namespace Core\Services\SiteMap;
 
 use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
 use Core\DataProviders\Photo\Criterias\IsPublished;
 use Core\DataProviders\Tag\Contracts\TagDataProvider;
 use Core\Models\Photo;
 use Core\Models\Tag;
-use Core\SiteMap\Contracts\SiteMap as SiteMapContract;
+use Core\Services\SiteMap\Contracts\SiteMapBuilderService as SiteMapBuilderServiceContract;
 use Lib\SiteMap\Contracts\Builder;
 use Lib\SiteMap\Item;
 
 /**
- * Class SiteMap.
+ * Class SiteMapBuilderService.
  *
  * @property Builder siteMapBuilder
  * @property PhotoDataProvider photoDataProvider
  * @property TagDataProvider tagDataProvider
- * @package Core\SiteMap
+ * @package Core\Services\SiteMap
  */
-class SiteMap implements SiteMapContract
+class SiteMapBuilderService implements SiteMapBuilderServiceContract
 {
     /**
-     * SiteMap constructor.
+     * SiteMapBuilderService constructor.
      *
      * @param Builder $siteMapBuilder
      * @param PhotoDataProvider $photoDataProvider
      * @param TagDataProvider $tagDataProvider
      */
-    public function __construct(
-        Builder $siteMapBuilder,
-        PhotoDataProvider $photoDataProvider,
-        TagDataProvider $tagDataProvider
-    )
+    public function __construct(Builder $siteMapBuilder, PhotoDataProvider $photoDataProvider, TagDataProvider $tagDataProvider)
     {
         $this->siteMapBuilder = $siteMapBuilder;
         $this->photoDataProvider = $photoDataProvider;
@@ -42,7 +38,7 @@ class SiteMap implements SiteMapContract
     /**
      * @inheritdoc
      */
-    public function build(): Builder
+    public function run(...$parameters): Builder
     {
         $this->siteMapBuilder->addItem(
             (new Item)

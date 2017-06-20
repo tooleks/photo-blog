@@ -3,14 +3,14 @@
 namespace Core\Services\Contracts;
 
 /**
- * Interface Service.
+ * Interface Runnable.
  *
  * @package Core\Services\Contracts
  */
-interface Service
+interface Runnable
 {
     /**
-     * Run the service.
+     * Run the service action.
      *
      * @param array $parameters
      * @return mixed

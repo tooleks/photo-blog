@@ -26,7 +26,7 @@ class ExifFetcherService implements ExifFetcherServiceContract
     /**
      * @inheritdoc
      */
-    public function run(...$parameters)
+    public function run(...$parameters): array
     {
         list($file) = $parameters;
 

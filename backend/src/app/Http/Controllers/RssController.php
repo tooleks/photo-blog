@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Core\Rss\Contracts\RssFeed;
+use Core\Services\Rss\Contracts\RssBuilderService;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 
 /**
  * Class RssController.
  *
- * @property RssFeed rssFeed
+ * @property RssBuilderService rssBuilder
  * @package App\Http\Controllers
  */
 class RssController extends Controller
@@ -17,11 +17,11 @@ class RssController extends Controller
     /**
      * RssController constructor.
      *
-     * @param RssFeed $rssFeed
+     * @param RssBuilderService $rssBuilder
      */
-    public function __construct(RssFeed $rssFeed)
+    public function __construct(RssBuilderService $rssBuilder)
     {
-        $this->rssFeed = $rssFeed;
+        $this->rssBuilder = $rssBuilder;
     }
 
     /**
@@ -30,7 +30,7 @@ class RssController extends Controller
     public function index()
     {
         return response()
-            ->view('app.rss.index', ['rss' => $this->rssFeed->build()])
+            ->view('app.rss.index', ['rss' => $this->rssBuilder->run()])
             ->header('Content-Type', 'text/xml');
     }
 }
