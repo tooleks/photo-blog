@@ -49,20 +49,24 @@ class Trash implements TrashContract
     /**
      * @inheritdoc
      */
-    public function move(string $filePath)
+    public function has(string $objectPath): bool
     {
-        $this->storage->move($filePath, $this->getObjectPath($filePath));
+        return $this->storage->has($this->getObjectPath($objectPath));
     }
 
     /**
      * @inheritdoc
      */
-    public function restore(string $filePath)
+    public function move(string $objectPath)
     {
-        if (!$this->storage->has($this->getObjectPath($filePath))) {
-            throw new RuntimeException(sprintf('The object "%s" not found in the trash.', $filePath));
-        }
+        $this->storage->move($objectPath, $this->getObjectPath($objectPath));
+    }
 
-        $this->storage->move($this->getObjectPath($filePath), $filePath);
+    /**
+     * @inheritdoc
+     */
+    public function restore(string $objectPath)
+    {
+        $this->storage->move($this->getObjectPath($objectPath), $objectPath);
     }
 }

@@ -10,18 +10,26 @@ namespace Core\FileSystem\Trash\Contracts;
 interface Trash
 {
     /**
+     * Determine the trash has object.
+     *
+     * @param string $objectPath
+     * @return bool
+     */
+    public function has(string $objectPath): bool;
+
+    /**
      * Move object into the trash.
      *
-     * @param string $filePath
+     * @param string $objectPath
      * @return void
      */
-    public function move(string $filePath);
+    public function move(string $objectPath);
 
     /**
      * Restore object from the trash.
      *
-     * @param string $filePath
+     * @param string $objectPath
      * @return void
      */
-    public function restore(string $filePath);
+    public function restore(string $objectPath);
 }
