@@ -31,7 +31,7 @@ class FileSaverService implements FileSaverServiceContract
     {
         list($photo, $file) = $parameters;
 
-        $directoryRelPath = $photo->directory_path ?? config('main.storage.photos') . '/' . str_random(10);
+        $directoryRelPath = $photo->directory_path ?? config('main.storage.path.photos') . '/' . str_random(10);
 
         if (($fileRelPath = $this->storage->put($directoryRelPath, $file)) === false) {
             throw new RuntimeException(sprintf('File "%s" saving error.', $fileRelPath));

@@ -70,7 +70,7 @@ class CoreServiceProvider extends ServiceProvider
         $this->app->singleton(
             \Core\FileSystem\Trash\Contracts\Trash::class,
             function ($app) {
-                return new \Core\FileSystem\Trash\Trash($app->make('filesystem'), 'trash');
+                return new \Core\FileSystem\Trash\Trash($app->make('filesystem'), config('main.storage.path.trash'));
             }
         );
     }
