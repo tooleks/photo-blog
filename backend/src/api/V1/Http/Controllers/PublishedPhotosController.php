@@ -19,6 +19,7 @@ use Lib\DataProvider\Criterias\SortByCreatedAt;
  * Class PublishedPhotosController.
  *
  * @property PhotoDataProvider photoDataProvider
+ * @property CacheManager cacheManager
  * @package Api\V1\Http\Controllers
  */
 class PublishedPhotosController extends Controller
@@ -27,10 +28,12 @@ class PublishedPhotosController extends Controller
      * PublishedPhotosController constructor.
      *
      * @param PhotoDataProvider $photoDataProvider
+     * @param CacheManager $cacheManager
      */
-    public function __construct(PhotoDataProvider $photoDataProvider)
+    public function __construct(PhotoDataProvider $photoDataProvider, CacheManager $cacheManager)
     {
         $this->photoDataProvider = $photoDataProvider;
+        $this->cacheManager = $cacheManager;
     }
 
     /**
@@ -96,6 +99,8 @@ class PublishedPhotosController extends Controller
         $photo->setIsPublishedAttribute(true);
 
         $this->photoDataProvider->save($photo, $request->all(), ['with' => ['tags']]);
+
+        $this->cacheManager->tags(['photos', 'tags'])->flush();
 
         return $photo;
     }
@@ -218,10 +223,9 @@ class PublishedPhotosController extends Controller
      * Find photos.
      *
      * @param FindPublishedPhotosRequest $request
-     * @param CacheManager $cacheManager
      * @return AbstractPaginator
      */
-    public function find(FindPublishedPhotosRequest $request, CacheManager $cacheManager): AbstractPaginator
+    public function find(FindPublishedPhotosRequest $request): AbstractPaginator
     {
         $cacheKey = sprintf(
             'photos:%s:%s:%s:%s',
@@ -231,15 +235,17 @@ class PublishedPhotosController extends Controller
             $request->get('search_phrase')
         );
 
-        $paginator = $cacheManager->remember($cacheKey, 1, function () use ($request) {
-            return $this->photoDataProvider
-                ->applyCriteria(new IsPublished(true))
-                ->applyCriteriaWhen($request->has('tag'), new HasTagWithValue($request->get('tag')))
-                ->applyCriteriaWhen($request->has('search_phrase'), new HasSearchPhrase($request->get('search_phrase')))
-                ->applyCriteria((new SortByCreatedAt)->desc())
-                ->getPaginator($request->get('page', 1), $request->get('per_page', 20))
-                ->appends($request->query());
-        });
+        $paginator = $this->cacheManager
+            ->tags(['photos', 'tags'])
+            ->remember($cacheKey, config('cache.lifetime'), function () use ($request) {
+                return $this->photoDataProvider
+                    ->applyCriteria(new IsPublished(true))
+                    ->applyCriteriaWhen($request->has('tag'), new HasTagWithValue($request->get('tag')))
+                    ->applyCriteriaWhen($request->has('search_phrase'), new HasSearchPhrase($request->get('search_phrase')))
+                    ->applyCriteria((new SortByCreatedAt)->desc())
+                    ->getPaginator($request->get('page', 1), $request->get('per_page', 20))
+                    ->appends($request->query());
+            });
 
         return $paginator;
     }
@@ -303,6 +309,8 @@ class PublishedPhotosController extends Controller
     {
         $this->photoDataProvider->save($photo, $request->all(), ['with' => ['tags']]);
 
+        $this->cacheManager->tags(['photos', 'tags'])->flush();
+
         return $photo;
     }
 
@@ -326,5 +334,7 @@ class PublishedPhotosController extends Controller
     public function delete(Photo $photo)
     {
         $this->photoDataProvider->delete($photo);
+
+        $this->cacheManager->tags(['photos', 'tags'])->flush();
     }
 }

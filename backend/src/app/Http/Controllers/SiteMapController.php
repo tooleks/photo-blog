@@ -11,6 +11,7 @@ use Illuminate\Routing\Controller;
  * Class SiteMapController.
  *
  * @property SiteMapBuilderService siteMapBuilder
+ * @property CacheManager cacheManager
  * @package App\Http\Controllers
  */
 class SiteMapController extends Controller
@@ -19,21 +20,24 @@ class SiteMapController extends Controller
      * SiteMapController constructor.
      *
      * @param SiteMapBuilderService $siteMapBuilder
+     * @param CacheManager $cacheManager
      */
-    public function __construct(SiteMapBuilderService $siteMapBuilder)
+    public function __construct(SiteMapBuilderService $siteMapBuilder, CacheManager $cacheManager)
     {
         $this->siteMapBuilder = $siteMapBuilder;
+        $this->cacheManager = $cacheManager;
     }
 
     /**
-     * @param CacheManager $cacheManager
      * @return Response
      */
-    public function index(CacheManager $cacheManager)
+    public function index()
     {
-        $siteMap = $cacheManager->remember('siteMap', 10, function () {
-            return $this->siteMapBuilder->run();
-        });
+        $siteMap = $this->cacheManager
+            ->tags(['siteMap', 'photos', 'tags'])
+            ->remember('siteMap', config('cache.lifetime'), function () {
+                return $this->siteMapBuilder->run();
+            });
 
         return response()
             ->view('app.site-map.index', compact('siteMap'))

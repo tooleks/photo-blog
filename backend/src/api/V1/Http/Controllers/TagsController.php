@@ -5,6 +5,7 @@ namespace Api\V1\Http\Controllers;
 use Api\V1\Http\Requests\FindTagsRequest;
 use Core\DataProviders\Tag\Contracts\TagDataProvider;
 use Core\DataProviders\Tag\Criterias\SortByPhotosCount;
+use Illuminate\Contracts\Cache\Factory as CacheManager;
 use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Routing\Controller;
 
@@ -12,6 +13,7 @@ use Illuminate\Routing\Controller;
  * Class TagsController.
  *
  * @property TagDataProvider tagDataProvider
+ * @property CacheManager cacheManager
  * @package Api\V1\Http\Controllers
  */
 class TagsController extends Controller
@@ -20,10 +22,12 @@ class TagsController extends Controller
      * TagsController constructor.
      *
      * @param TagDataProvider $tagDataProvider
+     * @param CacheManager $cacheManager
      */
-    public function __construct(TagDataProvider $tagDataProvider)
+    public function __construct(TagDataProvider $tagDataProvider, CacheManager $cacheManager)
     {
         $this->tagDataProvider = $tagDataProvider;
+        $this->cacheManager = $cacheManager;
     }
 
     /**
@@ -61,9 +65,19 @@ class TagsController extends Controller
      */
     public function find(FindTagsRequest $request): AbstractPaginator
     {
-        $paginator = $this->tagDataProvider
-            ->applyCriteria((new SortByPhotosCount)->desc())
-            ->getPaginator($request->get('page', 1), $request->get('per_page', 20));
+        $cacheKey = sprintf(
+            'tags:%s:%s',
+            $request->get('page'),
+            $request->get('per_page')
+        );
+
+        $paginator = $this->cacheManager
+            ->tags(['tags'])
+            ->remember($cacheKey, config('cache.lifetime'), function () use ($request) {
+                return $this->tagDataProvider
+                    ->applyCriteria((new SortByPhotosCount)->desc())
+                    ->getPaginator($request->get('page', 1), $request->get('per_page', 20));
+            });
 
         $paginator->appends($request->query());
 

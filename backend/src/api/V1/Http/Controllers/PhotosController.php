@@ -10,6 +10,7 @@ use Core\Services\Photo\Contracts\AvgColorGeneratorService;
 use Core\Services\Photo\Contracts\ExifFetcherService;
 use Core\Services\Photo\Contracts\FileSaverService;
 use Core\Services\Photo\Contracts\ThumbnailsGeneratorService;
+use Illuminate\Contracts\Cache\Factory as CacheManager;
 use Illuminate\Contracts\Auth\Guard as Auth;
 use Illuminate\Routing\Controller;
 
@@ -22,6 +23,7 @@ use Illuminate\Routing\Controller;
  * @property AvgColorGeneratorService avgColorGenerator
  * @property ExifFetcherService exifFetcher
  * @property ThumbnailsGeneratorService thumbnailsGenerator
+ * @property CacheManager cacheManager
  * @package Api\V1\Http\Controllers
  */
 class PhotosController extends Controller
@@ -35,6 +37,7 @@ class PhotosController extends Controller
      * @param AvgColorGeneratorService $avgColorGenerator
      * @param ExifFetcherService $exifFetcher
      * @param ThumbnailsGeneratorService $thumbnailsGenerator
+     * @param CacheManager $cacheManager
      */
     public function __construct(
         Auth $auth,
@@ -42,7 +45,8 @@ class PhotosController extends Controller
         FileSaverService $fileSaver,
         AvgColorGeneratorService $avgColorGenerator,
         ExifFetcherService $exifFetcher,
-        ThumbnailsGeneratorService $thumbnailsGenerator
+        ThumbnailsGeneratorService $thumbnailsGenerator,
+        CacheManager $cacheManager
     )
     {
         $this->auth = $auth;
@@ -51,6 +55,7 @@ class PhotosController extends Controller
         $this->avgColorGenerator = $avgColorGenerator;
         $this->exifFetcher = $exifFetcher;
         $this->thumbnailsGenerator = $thumbnailsGenerator;
+        $this->cacheManager = $cacheManager;
     }
 
     /**
@@ -111,6 +116,8 @@ class PhotosController extends Controller
         $thumbnails = $this->thumbnailsGenerator->run($photo);
 
         $this->photoDataProvider->save($photo, compact('exif', 'thumbnails'), ['with' => ['exif', 'thumbnails']]);
+
+        $this->cacheManager->tags(['photos', 'tags'])->flush();
 
         return $photo;
     }
@@ -222,6 +229,8 @@ class PhotosController extends Controller
 
         $this->photoDataProvider->save($photo, compact('exif', 'thumbnails'), ['with' => ['exif', 'thumbnails']]);
 
+        $this->cacheManager->tags(['photos', 'tags'])->flush();
+
         return $photo;
     }
 
@@ -245,5 +254,7 @@ class PhotosController extends Controller
     public function delete(Photo $photo)
     {
         $this->photoDataProvider->delete($photo);
+
+        $this->cacheManager->tags(['photos', 'tags'])->flush();
     }
 }
