@@ -66,5 +66,12 @@ class CoreServiceProvider extends ServiceProvider
             \Core\Services\Photo\Contracts\ThumbnailsGeneratorService::class,
             \Core\Services\Photo\ThumbnailsGeneratorService::class
         );
+
+        $this->app->singleton(
+            \Core\FileSystem\Trash\Contracts\Trash::class,
+            function ($app) {
+                return new \Core\FileSystem\Trash\Trash($app->make('filesystem'), 'trash');
+            }
+        );
     }
 }
