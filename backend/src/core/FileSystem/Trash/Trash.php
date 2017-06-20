@@ -4,7 +4,6 @@ namespace Core\FileSystem\Trash;
 
 use Core\FileSystem\Trash\Contracts\Trash as TrashContract;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
-use RuntimeException;
 
 /**
  * Class Trash.
