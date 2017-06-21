@@ -72,7 +72,7 @@ class GeneratePhotoThumbnails extends Command
      */
     public function generatePhotoThumbnails(Photo $photo)
     {
-        $thumbnails = $this->thumbnailsGenerator->run($photo);
+        $thumbnails = $this->thumbnailsGenerator->run($photo->path);
 
         $this->photoDataProvider->save($photo, compact('thumbnails'), ['with' => ['thumbnails']]);
     }
