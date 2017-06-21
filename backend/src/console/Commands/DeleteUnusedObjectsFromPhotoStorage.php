@@ -119,7 +119,7 @@ class DeleteUnusedObjectsFromPhotoStorage extends Command
     protected function getAllDirectoriesFromDataProvider(): array
     {
         $this->photoDataProvider->each(function (Photo $photo) use (&$directories) {
-            $directories[] = $photo->directory_path;
+            $directories[] = dirname($photo->path);
         });
 
         return $directories ?? [];

@@ -110,7 +110,7 @@ class PhotosController extends Controller
             ->setCreatedByUserIdAttribute($this->auth->user()->id)
             ->setIsPublishedAttribute(false);
 
-        $photo->path = $this->fileSaver->run($request->file('file'), $photo->directory_path);
+        $photo->path = $this->fileSaver->run($request->file('file'), dirname($photo->path));
         $photo->avg_color = $this->avgColorGenerator->run($photo->path);
         $exif = $this->exifFetcher->run($request->file('file'));
         $thumbnails = $this->thumbnailsGenerator->run($photo->path);
@@ -222,7 +222,7 @@ class PhotosController extends Controller
      */
     public function update(UpdatePhotoRequest $request, Photo $photo): Photo
     {
-        $photo->path = $this->fileSaver->run($request->file('file'), $photo->directory_path);
+        $photo->path = $this->fileSaver->run($request->file('file'), dirname($photo->path));
         $photo->avg_color = $this->avgColorGenerator->run($photo->path);
         $exif = $this->exifFetcher->run($request->file('file'));
         $thumbnails = $this->thumbnailsGenerator->run($photo->path);

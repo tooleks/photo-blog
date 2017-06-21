@@ -17,7 +17,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property bool is_published
  * @property Carbon created_at
  * @property Carbon updated_at
- * @property string directory_path
  * @property User $createdByUser
  * @property Exif $exif
  * @property Collection $tags
@@ -108,16 +107,6 @@ class Photo extends Model
         $this->attributes['description'] = trim($description);
 
         return $this;
-    }
-
-    /**
-     * Getter for the 'directory_path' virtual attribute.
-     *
-     * @return string|null
-     */
-    public function getDirectoryPathAttribute()
-    {
-        return $this->path ? pathinfo($this->path, PATHINFO_DIRNAME) : null;
     }
 
     /**
