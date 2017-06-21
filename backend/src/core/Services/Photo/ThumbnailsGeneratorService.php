@@ -39,20 +39,20 @@ class ThumbnailsGeneratorService implements ThumbnailsGeneratorServiceContract
             throw new RuntimeException('The photo path is not provided.');
         }
 
-        $metaData = $this->thumbnailsGenerator->generateThumbnails(
+        $thumbnails = $this->thumbnailsGenerator->generateThumbnails(
             $this->storage->getDriver()->getAdapter()->getPathPrefix() . $photo->path
         );
 
-        foreach ($metaData as $metaDataItem) {
-            $thumbnailRelPath = pathinfo($photo->path, PATHINFO_DIRNAME) . '/' . pathinfo($metaDataItem['path'], PATHINFO_BASENAME);
-            $thumbnails[] = [
+        foreach ($thumbnails as $thumbnail) {
+            $thumbnailRelPath = pathinfo($photo->path, PATHINFO_DIRNAME) . '/' . pathinfo($thumbnail['path'], PATHINFO_BASENAME);
+            $data[] = [
                 'path' => $thumbnailRelPath,
                 'relative_url' => $this->storage->url($thumbnailRelPath),
-                'width' => $metaDataItem['width'],
-                'height' => $metaDataItem['height'],
+                'width' => $thumbnail['width'],
+                'height' => $thumbnail['height'],
             ];
         }
 
-        return $thumbnails ?? [];
+        return $data ?? [];
     }
 }

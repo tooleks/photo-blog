@@ -30,11 +30,11 @@ class ExifFetcherService implements ExifFetcherServiceContract
     {
         list($file) = $parameters;
 
-        $exif = $this->exifFetcher->fetch($file->getPathname());
+        $data = $this->exifFetcher->fetch($file->getPathname());
 
         // Replace the temporary file name with the original one.
-        $exif['FileName'] = $file->getClientOriginalName();
+        $data['FileName'] = $file->getClientOriginalName();
 
-        return ['data' => $exif];
+        return ['data' => $data];
     }
 }
