@@ -32,7 +32,7 @@ $factory->define(Photo::class, function (Generator $faker) {
         'created_by_user_id' => User::inRandomOrder()->first()->id,
         'description' => $faker->realText(),
         'path' => sprintf('/%s/%s.%s', str_random(12), str_random(5), str_random(3)),
-        'relative_url' => sprintf('/%s/%s/%s.%s', str_random(12), str_random(12), str_random(5), str_random(3)),
+        'avg_color' => $faker->hexColor,
         'is_published' => $faker->boolean(75),
     ];
 });
@@ -53,7 +53,6 @@ $factory->define(Tag::class, function (Generator $faker) {
 $factory->define(Thumbnail::class, function (Generator $faker) {
     return [
         'path' => sprintf('/%s/%s.%s', str_random(12), str_random(5), str_random(3)),
-        'relative_url' => sprintf('/%s/%s/%s.%s', str_random(12), str_random(12), str_random(5), str_random(3)),
         'width' => $faker->randomNumber(4),
         'height' => $faker->randomNumber(3),
     ];

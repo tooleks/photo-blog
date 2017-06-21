@@ -88,8 +88,8 @@ class PhotoPresenter extends Presenter
                 return implode(', ', $values ?? []);
             },
             'file_url' => function () {
-                $relativeUrl = $this->getWrappedModelAttribute('thumbnails')->first()->relative_url ?? null;
-                return $relativeUrl ? sprintf(config('format.storage.url.path'), $relativeUrl) : '';
+                $url = $this->storage->url($this->getWrappedModelAttribute('thumbnails')->first()->path) ?? null;
+                return $url ? sprintf(config('format.storage.url.path'), $url) : '';
             },
             'file_size' => function () {
                 return $this->storage->size($this->getWrappedModelAttribute('thumbnails')->first()->path);

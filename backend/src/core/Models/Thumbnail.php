@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property int id
  * @property string path
- * @property string relative_url
  * @property float width
  * @property float height
  * @package Core\Models
@@ -22,7 +21,6 @@ class Thumbnail extends Model
      */
     protected $fillable = [
         'path',
-        'relative_url',
         'width',
         'height',
     ];

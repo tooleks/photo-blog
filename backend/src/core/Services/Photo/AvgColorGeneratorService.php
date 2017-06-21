@@ -4,7 +4,6 @@ namespace Core\Services\Photo;
 
 use Core\Services\Photo\Contracts\AvgColorGeneratorService as AvgColorGeneratorServiceContract;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
-use RuntimeException;
 use Tooleks\Php\AvgColorPicker\Contracts\AvgColorPicker;
 
 /**
@@ -12,6 +11,7 @@ use Tooleks\Php\AvgColorPicker\Contracts\AvgColorPicker;
  *
  * @property Storage storage
  * @property AvgColorPicker avgColorPicker
+ * @property string path
  * @package Core\Services\Photo
  */
 class AvgColorGeneratorService implements AvgColorGeneratorServiceContract
@@ -29,18 +29,24 @@ class AvgColorGeneratorService implements AvgColorGeneratorServiceContract
     }
 
     /**
+     * Fetch parameters.
+     *
+     * @param array $parameters
+     */
+    protected function fetchParameters(array $parameters)
+    {
+        list($this->path) = $parameters;
+    }
+
+    /**
      * @inheritdoc
      */
-    public function run(...$parameters)
+    public function run(...$parameters): string
     {
-        list($photo) = $parameters;
+        $this->fetchParameters($parameters);
 
-        if (is_null($photo->path)) {
-            throw new RuntimeException('The photo path is not provided.');
-        }
-
-        $photo->avg_color = $this->avgColorPicker->getImageAvgHexByPath(
-            $this->storage->getDriver()->getAdapter()->getPathPrefix() . $photo->path
+        return $this->avgColorPicker->getImageAvgHexByPath(
+            $this->storage->getDriver()->getAdapter()->getPathPrefix() . $this->path
         );
     }
 }

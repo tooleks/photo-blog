@@ -4,12 +4,15 @@ namespace Core\Services\Photo;
 
 use Core\Services\Photo\Contracts\FileSaverService as FileSaverServiceContract;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
+use Illuminate\Http\UploadedFile;
 use RuntimeException;
 
 /**
  * Class FileSaverService.
  *
  * @property Storage storage
+ * @property UploadedFile file
+ * @property string path
  * @package Core\Services\Photo
  */
 class FileSaverService implements FileSaverServiceContract
@@ -25,19 +28,31 @@ class FileSaverService implements FileSaverServiceContract
     }
 
     /**
+     * Fetch parameters.
+     *
+     * @param array $parameters
+     * @return void
+     */
+    protected function fetchParameters(array $parameters)
+    {
+        list($this->file, $this->path) = $parameters;
+    }
+
+    /**
      * @inheritdoc
      */
-    public function run(...$parameters)
+    public function run(...$parameters): string
     {
-        list($photo, $file) = $parameters;
+        $this->fetchParameters($parameters);
 
-        $directoryRelPath = $photo->directory_path ?? config('main.storage.path.photos') . '/' . str_random(10);
+        $directoryPath = $this->path ?? config('main.storage.path.photos') . '/' . str_random(10);
 
-        if (($fileRelPath = $this->storage->put($directoryRelPath, $file)) === false) {
-            throw new RuntimeException(sprintf('File "%s" saving error.', $fileRelPath));
+        $filePath = $this->storage->put($directoryPath, $this->file);
+
+        if ($filePath === false) {
+            throw new RuntimeException(sprintf('File "%s" saving error.', $filePath));
         }
 
-        $photo->path = $fileRelPath;
-        $photo->relative_url = $this->storage->url($fileRelPath);
+        return $filePath;
     }
 }

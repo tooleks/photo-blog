@@ -5,13 +5,13 @@ namespace Core\Services\Photo;
 use Core\Services\Photo\Contracts\ThumbnailsGeneratorService as ThumbnailsGeneratorServiceContract;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
 use Lib\ThumbnailsGenerator\Contracts\ThumbnailsGenerator;
-use RuntimeException;
 
 /**
  * Class ThumbnailsGeneratorService.
  *
  * @property Storage storage
  * @property ThumbnailsGenerator thumbnailsGenerator
+ * @property string path
  * @package Core\Services\Photo
  */
 class ThumbnailsGeneratorService implements ThumbnailsGeneratorServiceContract
@@ -29,25 +29,30 @@ class ThumbnailsGeneratorService implements ThumbnailsGeneratorServiceContract
     }
 
     /**
+     * Fetch parameters.
+     *
+     * @param array $parameters
+     */
+    protected function fetchParameters(array $parameters)
+    {
+        list($this->path) = $parameters;
+    }
+
+    /**
      * @inheritdoc
      */
     public function run(...$parameters): array
     {
-        list($photo) = $parameters;
-
-        if (is_null($photo->path)) {
-            throw new RuntimeException('The photo path is not provided.');
-        }
+        $this->fetchParameters($parameters);
 
         $thumbnails = $this->thumbnailsGenerator->generateThumbnails(
-            $this->storage->getDriver()->getAdapter()->getPathPrefix() . $photo->path
+            $this->storage->getDriver()->getAdapter()->getPathPrefix() . $this->path
         );
 
         foreach ($thumbnails as $thumbnail) {
-            $thumbnailRelPath = pathinfo($photo->path, PATHINFO_DIRNAME) . '/' . pathinfo($thumbnail['path'], PATHINFO_BASENAME);
+            $thumbnailPath = dirname($this->path) . '/' . basename($thumbnail['path']);
             $data[] = [
-                'path' => $thumbnailRelPath,
-                'relative_url' => $this->storage->url($thumbnailRelPath),
+                'path' => $thumbnailPath,
                 'width' => $thumbnail['width'],
                 'height' => $thumbnail['height'],
             ];

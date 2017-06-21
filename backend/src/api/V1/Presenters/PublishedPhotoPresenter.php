@@ -3,6 +3,7 @@
 namespace Api\V1\Presenters;
 
 use Illuminate\Contracts\Container\Container;
+use Illuminate\Contracts\Filesystem\Factory as Storage;
 use Illuminate\Support\Collection;
 use Tooleks\Laravel\Presenter\Presenter;
 
@@ -31,13 +32,22 @@ class PublishedPhotoPresenter extends Presenter
     protected $container;
 
     /**
+     * The storage implementation.
+     *
+     * @var Storage
+     */
+    protected $storage;
+
+    /**
      * PublishedPhotoPresenter constructor.
      *
      * @param Container $container
+     * @param Storage $storage
      */
-    public function __construct(Container $container)
+    public function __construct(Container $container, Storage $storage)
     {
         $this->container = $container;
+        $this->storage = $storage;
     }
 
     /**
@@ -49,8 +59,8 @@ class PublishedPhotoPresenter extends Presenter
             'id' => 'id',
             'created_by_user_id' => 'created_by_user_id',
             'url' => function () {
-                $relativeUrl = $this->getWrappedModelAttribute('relative_url');
-                return $relativeUrl ? sprintf(config('format.storage.url.path'), $relativeUrl) : null;
+                $url = $this->storage->url($this->getWrappedModelAttribute('path'));
+                return $url ? sprintf(config('format.storage.url.path'), $url) : null;
             },
             'avg_color' => 'avg_color',
             'description' => 'description',

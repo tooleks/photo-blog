@@ -110,10 +110,10 @@ class PhotosController extends Controller
             ->setCreatedByUserIdAttribute($this->auth->user()->id)
             ->setIsPublishedAttribute(false);
 
-        $this->fileSaver->run($photo, $request->file('file'));
-        $this->avgColorGenerator->run($photo);
+        $photo->path = $this->fileSaver->run($request->file('file'), $photo->directory_path);
+        $photo->avg_color = $this->avgColorGenerator->run($photo->path);
         $exif = $this->exifFetcher->run($request->file('file'));
-        $thumbnails = $this->thumbnailsGenerator->run($photo);
+        $thumbnails = $this->thumbnailsGenerator->run($photo->path);
 
         $this->photoDataProvider->save($photo, compact('exif', 'thumbnails'), ['with' => ['exif', 'thumbnails']]);
 
@@ -222,10 +222,10 @@ class PhotosController extends Controller
      */
     public function update(UpdatePhotoRequest $request, Photo $photo): Photo
     {
-        $this->fileSaver->run($photo, $request->file('file'));
-        $this->avgColorGenerator->run($photo);
+        $photo->path = $this->fileSaver->run($request->file('file'), $photo->directory_path);
+        $photo->avg_color = $this->avgColorGenerator->run($photo->path);
         $exif = $this->exifFetcher->run($request->file('file'));
-        $thumbnails = $this->thumbnailsGenerator->run($photo);
+        $thumbnails = $this->thumbnailsGenerator->run($photo->path);
 
         $this->photoDataProvider->save($photo, compact('exif', 'thumbnails'), ['with' => ['exif', 'thumbnails']]);
 

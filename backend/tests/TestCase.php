@@ -68,7 +68,14 @@ abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
     {
         parent::setUp();
 
-        $this->artisan('migrate:refresh');
+        $this->artisan('migrate');
         $this->artisan('create:roles');
+    }
+
+    protected function tearDown()
+    {
+        $this->artisan('migrate:rollback');
+
+        parent::tearDown();
     }
 }

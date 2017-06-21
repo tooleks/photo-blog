@@ -11,5 +11,11 @@ use Core\Services\Contracts\Runnable;
  */
 interface FileSaverService extends Runnable
 {
-
+    /**
+     * Save the uploaded photo file and return it's path.
+     *
+     * @param array ...$parameters
+     * @return string
+     */
+    public function run(...$parameters): string;
 }

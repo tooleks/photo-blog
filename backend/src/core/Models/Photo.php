@@ -13,7 +13,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property int created_by_user_id
  * @property string description
  * @property string path
- * @property string relative_url
  * @property string avg_color
  * @property bool is_published
  * @property Carbon created_at

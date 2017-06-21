@@ -2,6 +2,7 @@
 
 namespace Api\V1\Presenters;
 
+use Illuminate\Contracts\Filesystem\Factory as Storage;
 use Tooleks\Laravel\Presenter\Presenter;
 
 /**
@@ -15,14 +16,31 @@ use Tooleks\Laravel\Presenter\Presenter;
 class ThumbnailPresenter extends Presenter
 {
     /**
+     * The storage implementation.
+     *
+     * @var Storage
+     */
+    protected $storage;
+
+    /**
+     * ThumbnailPresenter constructor.
+     *
+     * @param Storage $storage
+     */
+    public function __construct(Storage $storage)
+    {
+        $this->storage = $storage;
+    }
+
+    /**
      * @inheritdoc
      */
     protected function getAttributesMap(): array
     {
         return [
             'url' => function () {
-                $relativeUrl = $this->getWrappedModelAttribute('relative_url');
-                return $relativeUrl ? sprintf(config('format.storage.url.path'), $relativeUrl) : null;
+                $url = $this->storage->url($this->getWrappedModelAttribute('path'));
+                return $url ? sprintf(config('format.storage.url.path'), $url) : null;
             },
             'width' => 'width',
             'height' => 'height',
