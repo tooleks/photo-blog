@@ -2,6 +2,7 @@
 
 namespace Console\Commands;
 
+use Carbon\Carbon;
 use Core\Managers\Trash\Contracts\TrashManager;
 use Illuminate\Console\Command;
 
@@ -49,6 +50,6 @@ class ClearTrash extends Command
      */
     public function handle()
     {
-        $this->trashManager->clearOlderThanDay();
+        $this->trashManager->clear(Carbon::now()->addDay(-1)->timestamp);
     }
 }

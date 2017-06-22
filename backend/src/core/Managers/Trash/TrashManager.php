@@ -4,7 +4,6 @@ namespace Core\Managers\Trash;
 
 use Core\Managers\Trash\Contracts\TrashManager as TrashManagerContract;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
-use Carbon\Carbon;
 
 /**
  * Class TrashManager.
@@ -93,33 +92,17 @@ class TrashManager implements TrashManagerContract
     /**
      * @inheritdoc
      */
-    public function clear()
+    public function clear(int $fromTimestamp = null)
     {
-        foreach ($this->storage->directories($this->getObjectPath()) as $directory) {
-            $this->storage->deleteDirectory($directory);
-        }
-
-        foreach ($this->storage->files($this->getObjectPath()) as $file) {
-            $this->storage->delete($file);
-        }
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function clearOlderThanDay()
-    {
-        $timestamp = Carbon::now()->addDay(-1)->timestamp;
-
         foreach ($this->storage->allDirectories($this->getObjectPath()) as $directory) {
-            if ($this->storage->lastModified($directory) < $timestamp) {
+            if (is_null($fromTimestamp) || $fromTimestamp > $this->storage->lastModified($directory)) {
                 $this->storage->deleteDirectory($directory);
             }
         }
 
         foreach ($this->storage->allFiles($this->getObjectPath()) as $file) {
-            if ($this->storage->lastModified($file) < $timestamp) {
-                $this->storage->file($file);
+            if (is_null($fromTimestamp) || $fromTimestamp > $this->storage->lastModified($file)) {
+                $this->storage->delete($file);
             }
         }
     }

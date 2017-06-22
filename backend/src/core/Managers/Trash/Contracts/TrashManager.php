@@ -52,14 +52,8 @@ interface TrashManager
     /**
      * Clear the trash objects.
      *
+     * @param int|null $fromTimestamp
      * @return void
      */
-    public function clear();
-
-    /**
-     * Clear the trash objects older than day.
-     *
-     * @return void
-     */
-    public function clearOlderThanDay();
+    public function clear(int $fromTimestamp = null);
 }
