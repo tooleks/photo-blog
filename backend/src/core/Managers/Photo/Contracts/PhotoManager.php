@@ -29,7 +29,7 @@ interface PhotoManager
      * @param Closure $callback
      * @return void
      */
-    public function eachNotPublishedPhotoOlderThanWeek(Closure $callback);
+    public function eachNotPublishedOlderThanWeek(Closure $callback);
 
     /**
      * Get the photo by its ID.

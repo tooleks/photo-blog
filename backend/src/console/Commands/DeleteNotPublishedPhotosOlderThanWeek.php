@@ -51,7 +51,7 @@ class DeleteNotPublishedPhotosOlderThanWeek extends Command
      */
     public function handle()
     {
-        $this->photoManager->eachNotPublishedPhotoOlderThanWeek(function (Photo $photo) {
+        $this->photoManager->eachNotPublishedOlderThanWeek(function (Photo $photo) {
             $this->comment("Deleting photo [id:{$photo->id}] ...");
             $this->photoManager->deleteWithRelations($photo);
         });

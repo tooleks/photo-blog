@@ -100,7 +100,7 @@ class PhotoManager implements PhotoManagerContract
     /**
      * @inheritdoc
      */
-    public function eachNotPublishedPhotoOlderThanWeek(Closure $callback)
+    public function eachNotPublishedOlderThanWeek(Closure $callback)
     {
         $this->photoDataProvider
             ->applyCriteria(new IsPublished(false))
