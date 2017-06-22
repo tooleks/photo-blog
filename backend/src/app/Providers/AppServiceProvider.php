@@ -27,11 +27,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(
-            \Tooleks\Php\AvgColorPicker\Contracts\AvgColorPicker::class,
-            \Tooleks\Php\AvgColorPicker\Gd\AvgColorPicker::class
-        );
-
         $this->app->bind(\Lib\ThumbnailsGenerator\Contracts\ThumbnailsGenerator::class, function () {
             return new \Lib\ThumbnailsGenerator\ThumbnailsGenerator(config('main.photo.thumbnails'));
         });

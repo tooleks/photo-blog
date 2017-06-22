@@ -3,7 +3,6 @@
 namespace Lib\ThumbnailsGenerator;
 
 use Closure;
-use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Validator as ValidatorFactory;
 use Illuminate\Validation\Rule;
 use Imagine\Image\Box;
@@ -14,12 +13,12 @@ use Lib\ThumbnailsGenerator\Exceptions\ThumbnailsGeneratorException;
 /**
  * Class ThumbnailsGenerator.
  *
- * @property Filesystem fileSystem
- * @property array thumbnailsConfig
  * @package Lib\ThumbnailsGenerator
  */
 class ThumbnailsGenerator implements ThumbnailsGeneratorContract
 {
+    private $thumbnailsConfig;
+
     /**
      * ThumbnailsGenerator constructor.
      *

@@ -7,11 +7,12 @@ use Lib\DataProvider\Contracts\Criteria;
 /**
  * Class Take.
  *
- * @property int take
  * @package Lib\DataProvider\Criterias
  */
 class Take implements Criteria
 {
+    private $take;
+
     /**
      * Take constructor.
      *

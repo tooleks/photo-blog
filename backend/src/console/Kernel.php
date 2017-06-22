@@ -3,6 +3,7 @@
 namespace Console;
 
 use Console\Commands\ChangeUserPassword;
+use Console\Commands\ClearTrash;
 use Console\Commands\ConfigApp;
 use Console\Commands\CreateAdministratorUser;
 use Console\Commands\DeleteNotPublishedPhotosOlderThanWeek;
@@ -28,6 +29,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         ChangeUserPassword::class,
+        ClearTrash::class,
         ConfigApp::class,
         CreateAdministratorUser::class,
         CreateRoles::class,
@@ -51,6 +53,9 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('delete:unused_objects_from_photo_storage')
             ->dailyAt('00:10');
+
+        $schedule->command('clear:trash')
+            ->dailyAt('00:20');
 
         $schedule->command('send:weekly_subscription_mails')
             ->weekly()->saturdays()->at('09:00');

@@ -13,11 +13,12 @@ use Illuminate\Validation\ValidationException;
 /**
  * Class UserAttributesSubscriber.
  *
- * @property Hasher hasher
  * @package Core\DataProviders\User\Subscribers
  */
 class UserAttributesSubscriber
 {
+    private $hasher;
+
     /**
      * UserAttributesSubscriber constructor.
      *

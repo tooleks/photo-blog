@@ -11,11 +11,15 @@ use Illuminate\Routing\Controller;
 /**
  * Class UsersController.
  *
- * @property UserDataProvider userDataProvider
  * @package Api\V1\Http\Controllers
  */
 class UsersController extends Controller
 {
+    /**
+     * @var UserDataProvider
+     */
+    private $userDataProvider;
+
     /**
      * UsersController constructor.
      *

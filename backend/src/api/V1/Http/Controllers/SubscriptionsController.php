@@ -10,11 +10,15 @@ use Illuminate\Routing\Controller;
 /**
  * Class SubscriptionsController.
  *
- * @property SubscriptionDataProvider subscriptionDataProvider
  * @package Api\V1\Http\Controllers
  */
 class SubscriptionsController extends Controller
 {
+    /**
+     * @var SubscriptionDataProvider
+     */
+    private $subscriptionDataProvider;
+
     /**
      * SubscriptionController constructor.
      *

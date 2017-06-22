@@ -7,11 +7,15 @@ use Illuminate\Mail\Mailable;
 /**
  * Class WeeklySubscription.
  *
- * @property array data
  * @package Core\Mail
  */
 class WeeklySubscription extends Mailable
 {
+    /**
+     * @var array
+     */
+    public $data;
+
     /**
      * ContactMessage constructor.
      *

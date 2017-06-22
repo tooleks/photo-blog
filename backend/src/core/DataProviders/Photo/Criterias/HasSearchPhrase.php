@@ -7,11 +7,12 @@ use Lib\DataProvider\Contracts\Criteria;
 /**
  * Class HasSearchPhrase.
  *
- * @property string searchPhrase
  * @package Core\DataProviders\Photo\Criterias
  */
 class HasSearchPhrase implements Criteria
 {
+    private $searchPhrase;
+
     /**
      * HasSearchPhrase constructor.
      *

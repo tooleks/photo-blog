@@ -7,11 +7,12 @@ use Lib\DataProvider\Contracts\Criteria;
 /**
  * Class IsPublished.
  *
- * @property bool value
  * @package Core\DataProviders\Photo\Criterias
  */
 class IsPublished implements Criteria
 {
+    private $value;
+
     /**
      * IsPublished constructor.
      *

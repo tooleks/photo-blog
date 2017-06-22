@@ -9,13 +9,14 @@ use Lib\ThumbnailsGenerator\Contracts\ThumbnailsGenerator;
 /**
  * Class ThumbnailsGeneratorService.
  *
- * @property Storage storage
- * @property ThumbnailsGenerator thumbnailsGenerator
- * @property string path
  * @package Core\Services\Photo
  */
 class ThumbnailsGeneratorService implements ThumbnailsGeneratorServiceContract
 {
+    private $storage;
+    private $thumbnailsGenerator;
+    private $path;
+
     /**
      * ThumbnailsGeneratorService constructor.
      *

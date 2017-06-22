@@ -12,22 +12,30 @@ use Illuminate\Routing\Controller;
 /**
  * Class TagsController.
  *
- * @property TagDataProvider tagDataProvider
- * @property CacheManager cacheManager
  * @package Api\V1\Http\Controllers
  */
 class TagsController extends Controller
 {
     /**
+     * @var CacheManager
+     */
+    private $cacheManager;
+
+    /**
+     * @var TagDataProvider
+     */
+    private $tagDataProvider;
+
+    /**
      * TagsController constructor.
      *
-     * @param TagDataProvider $tagDataProvider
      * @param CacheManager $cacheManager
+     * @param TagDataProvider $tagDataProvider
      */
-    public function __construct(TagDataProvider $tagDataProvider, CacheManager $cacheManager)
+    public function __construct(CacheManager $cacheManager, TagDataProvider $tagDataProvider)
     {
-        $this->tagDataProvider = $tagDataProvider;
         $this->cacheManager = $cacheManager;
+        $this->tagDataProvider = $tagDataProvider;
     }
 
     /**

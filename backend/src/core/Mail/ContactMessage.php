@@ -7,11 +7,15 @@ use Illuminate\Mail\Mailable;
 /**
  * Class ContactMessage.
  *
- * @property array data
  * @package Core\Mail
  */
 class ContactMessage extends Mailable
 {
+    /**
+     * @var array
+     */
+    public $data;
+
     /**
      * ContactMessage constructor.
      *

@@ -56,14 +56,13 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::bind('published_photo', function ($id) {
             return $this->app
-                ->make(\Core\DataProviders\Photo\Contracts\PhotoDataProvider::class)
-                ->applyCriteria(new IsPublished(true))
-                ->getById($id);
+                ->make(\Core\Managers\Photo\Contracts\PhotoManager::class)
+                ->getPublishedById($id);
         });
 
         Route::bind('photo', function ($id) {
             return $this->app
-                ->make(\Core\DataProviders\Photo\Contracts\PhotoDataProvider::class)
+                ->make(\Core\Managers\Photo\Contracts\PhotoManager::class)
                 ->getById($id);
         });
 

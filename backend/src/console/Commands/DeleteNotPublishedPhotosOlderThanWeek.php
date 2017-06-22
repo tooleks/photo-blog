@@ -2,18 +2,13 @@
 
 namespace Console\Commands;
 
-use Carbon\Carbon;
-use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
-use Core\DataProviders\Photo\Criterias\IsPublished;
+use Core\Managers\Photo\Contracts\PhotoManager;
 use Core\Models\Photo;
-use Closure;
 use Illuminate\Console\Command;
-use Lib\DataProvider\Criterias\WhereUpdatedAtLessThan;
 
 /**
  * Class DeleteNotPublishedPhotosOlderThanWeek.
  *
- * @property PhotoDataProvider photoDataProvider
  * @package Console\Commands
  */
 class DeleteNotPublishedPhotosOlderThanWeek extends Command
@@ -33,15 +28,20 @@ class DeleteNotPublishedPhotosOlderThanWeek extends Command
     protected $description = 'Delete not published photos older than week';
 
     /**
+     * @var PhotoManager
+     */
+    protected $photoManager;
+
+    /**
      * DeleteNotPublishedPhotosOlderThanWeek constructor.
      *
-     * @param PhotoDataProvider $photoDataProvider
+     * @param PhotoManager $photoManager
      */
-    public function __construct(PhotoDataProvider $photoDataProvider)
+    public function __construct(PhotoManager $photoManager)
     {
         parent::__construct();
 
-        $this->photoDataProvider = $photoDataProvider;
+        $this->photoManager = $photoManager;
     }
 
     /**
@@ -51,23 +51,9 @@ class DeleteNotPublishedPhotosOlderThanWeek extends Command
      */
     public function handle()
     {
-        $this->eachNotPublishedPhotoOlderThanWeek(function (Photo $photo) {
+        $this->photoManager->eachNotPublishedPhotoOlderThanWeek(function (Photo $photo) {
             $this->comment("Deleting photo [id:{$photo->id}] ...");
-            $this->photoDataProvider->delete($photo);
+            $this->photoManager->deleteWithRelations($photo);
         });
-    }
-
-    /**
-     * Apply callback function on each not published photo older than week.
-     *
-     * @param Closure $callback
-     * @return void
-     */
-    protected function eachNotPublishedPhotoOlderThanWeek(Closure $callback)
-    {
-        $this->photoDataProvider
-            ->applyCriteria(new IsPublished(false))
-            ->applyCriteria(new WhereUpdatedAtLessThan((new Carbon)->addWeek('-1')))
-            ->each($callback);
     }
 }

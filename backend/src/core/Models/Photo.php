@@ -55,22 +55,6 @@ class Photo extends Model
     ];
 
     /**
-     * @inheritdoc
-     */
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::deleting(function (Photo $photo) {
-            $photo->exif()->delete();
-            $photo->tags()->detach();
-            Tag::deleteAllDetached();
-            $photo->thumbnails()->detach();
-            Thumbnail::deleteAllDetached();
-        });
-    }
-
-    /**
      * Setter for the 'created_by_user_id' attribute.
      *
      * @param int $createdByUserId

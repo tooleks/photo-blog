@@ -17,8 +17,6 @@ use Throwable;
 /**
  * Class DataProvider.
  *
- * @property Connection dbConnection
- * @property Dispatcher events
  * @package Lib\DataProvider
  */
 abstract class DataProvider implements DataProviderContract
@@ -36,6 +34,20 @@ abstract class DataProvider implements DataProviderContract
      * @var mixed
      */
     protected $query;
+
+    /**
+     * Database connection class instance.
+     *
+     * @var mixed
+     */
+    protected $dbConnection;
+
+    /**
+     * Events dispatcher class instance.
+     *
+     * @var mixed
+     */
+    protected $events;
 
     /**
      * DataProvider constructor.

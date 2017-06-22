@@ -10,22 +10,30 @@ use Illuminate\Routing\Controller;
 /**
  * Class SiteMapController.
  *
- * @property SiteMapBuilderService siteMapBuilder
- * @property CacheManager cacheManager
  * @package App\Http\Controllers
  */
 class SiteMapController extends Controller
 {
     /**
+     * @var CacheManager
+     */
+    private $cacheManager;
+
+    /**
+     * @var SiteMapBuilderService
+     */
+    private $siteMapBuilder;
+
+    /**
      * SiteMapController constructor.
      *
-     * @param SiteMapBuilderService $siteMapBuilder
      * @param CacheManager $cacheManager
+     * @param SiteMapBuilderService $siteMapBuilder
      */
-    public function __construct(SiteMapBuilderService $siteMapBuilder, CacheManager $cacheManager)
+    public function __construct(CacheManager $cacheManager, SiteMapBuilderService $siteMapBuilder)
     {
-        $this->siteMapBuilder = $siteMapBuilder;
         $this->cacheManager = $cacheManager;
+        $this->siteMapBuilder = $siteMapBuilder;
     }
 
     /**

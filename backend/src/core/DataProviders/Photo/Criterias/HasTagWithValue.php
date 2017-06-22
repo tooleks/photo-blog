@@ -7,11 +7,12 @@ use Lib\DataProvider\Contracts\Criteria;
 /**
  * Class HasTagWithValue.
  *
- * @property string value
  * @package Core\DataProviders\Photo\Criterias
  */
 class HasTagWithValue implements Criteria
 {
+    private $value;
+
     /**
      * HasTagWithValue constructor.
      *

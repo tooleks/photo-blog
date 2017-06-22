@@ -12,11 +12,12 @@ use Illuminate\Support\Collection;
 /**
  * Class PresentResponses.
  *
- * @property Container container
  * @package Api\V1\Http\Middleware
  */
 class PresentResponses
 {
+    private $container;
+
     /**
      * PresentResponses constructor.
      *

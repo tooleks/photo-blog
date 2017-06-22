@@ -7,11 +7,12 @@ use Lib\DataProvider\Contracts\Criteria;
 /**
  * Class Skip.
  *
- * @property int skip
  * @package Lib\DataProvider\Criterias
  */
 class Skip implements Criteria
 {
+    private $skip;
+
     /**
      * Skip constructor.
      *

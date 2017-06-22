@@ -14,13 +14,14 @@ use Lib\SiteMap\Item;
 /**
  * Class SiteMapBuilderService.
  *
- * @property Builder siteMapBuilder
- * @property PhotoDataProvider photoDataProvider
- * @property TagDataProvider tagDataProvider
  * @package Core\Services\SiteMap
  */
 class SiteMapBuilderService implements SiteMapBuilderServiceContract
 {
+    private $siteMapBuilder;
+    private $photoDataProvider;
+    private $tagDataProvider;
+
     /**
      * SiteMapBuilderService constructor.
      *

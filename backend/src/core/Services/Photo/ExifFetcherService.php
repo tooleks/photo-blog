@@ -3,18 +3,18 @@
 namespace Core\Services\Photo;
 
 use Core\Services\Photo\Contracts\ExifFetcherService as ExifFetcherServiceContract;
-use Illuminate\Http\UploadedFile;
 use Lib\ExifFetcher\Contracts\ExifFetcher;
 
 /**
  * Class ExifFetcherService.
  *
- * @property ExifFetcher exifFetcher
- * @property UploadedFile file
  * @package Core\Services\Photo
  */
 class ExifFetcherService implements ExifFetcherServiceContract
 {
+    private $exifFetcher;
+    private $file;
+
     /**
      * ExifFetcherService constructor.
      *

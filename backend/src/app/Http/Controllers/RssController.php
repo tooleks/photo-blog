@@ -10,22 +10,30 @@ use Illuminate\Routing\Controller;
 /**
  * Class RssController.
  *
- * @property RssBuilderService rssBuilder
- * @property CacheManager cacheManager
  * @package App\Http\Controllers
  */
 class RssController extends Controller
 {
     /**
+     * @var CacheManager
+     */
+    private $cacheManager;
+
+    /**
+     * @var RssBuilderService
+     */
+    private $rssBuilder;
+
+    /**
      * RssController constructor.
      *
-     * @param RssBuilderService $rssBuilder
      * @param CacheManager $cacheManager
+     * @param RssBuilderService $rssBuilder
      */
-    public function __construct(RssBuilderService $rssBuilder, CacheManager $cacheManager)
+    public function __construct(CacheManager $cacheManager, RssBuilderService $rssBuilder)
     {
-        $this->rssBuilder = $rssBuilder;
         $this->cacheManager = $cacheManager;
+        $this->rssBuilder = $rssBuilder;
     }
 
     /**

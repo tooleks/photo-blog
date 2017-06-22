@@ -11,12 +11,20 @@ use Illuminate\Routing\Controller;
 /**
  * Class TokenController.
  *
- * @property Auth auth
- * @property UserDataProvider userDataProvider
  * @package Api\V1\Http\Controllers
  */
 class TokenController extends Controller
 {
+    /**
+     * @var Auth
+     */
+    private $auth;
+
+    /**
+     * @var UserDataProvider
+     */
+    private $userDataProvider;
+
     /**
      * TokenController constructor.
      *

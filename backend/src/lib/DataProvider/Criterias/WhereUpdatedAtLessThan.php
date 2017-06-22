@@ -8,11 +8,12 @@ use Lib\DataProvider\Contracts\Criteria;
 /**
  * Class WhereUpdatedAtLessThan.
  *
- * @property Carbon date
  * @package Lib\DataProvider\Criterias
  */
 class WhereUpdatedAtLessThan implements Criteria
 {
+    private $date;
+
     /**
      * WhereUpdatedAtLessThan constructor.
      *

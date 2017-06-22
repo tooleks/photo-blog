@@ -7,11 +7,12 @@ use Lib\DataProvider\Contracts\Criteria;
 /**
  * Class WhereEmailIn.
  *
- * @property array list
  * @package Core\DataProviders\Subscription\Criterias
  */
 class WhereEmailIn implements Criteria
 {
+    private $list;
+
     /**
      * WhereEmailIn constructor.
      *

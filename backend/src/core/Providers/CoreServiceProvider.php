@@ -27,29 +27,29 @@ class CoreServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(
+        $this->app->singleton(
             \Core\DataProviders\Photo\Contracts\PhotoDataProvider::class,
             \Core\DataProviders\Photo\PhotoDataProvider::class
         );
 
-        $this->app->bind(
+        $this->app->singleton(
             \Core\DataProviders\Subscription\Contracts\SubscriptionDataProvider::class,
             \Core\DataProviders\Subscription\SubscriptionDataProvider::class
         );
 
-        $this->app->bind(
+        $this->app->singleton(
             \Core\DataProviders\Tag\Contracts\TagDataProvider::class,
             \Core\DataProviders\Tag\TagDataProvider::class
         );
 
-        $this->app->bind(
+        $this->app->singleton(
             \Core\DataProviders\User\Contracts\UserDataProvider::class,
             \Core\DataProviders\User\UserDataProvider::class
         );
 
-        $this->app->bind(
-            \Core\Services\Photo\Contracts\AvgColorGeneratorService::class,
-            \Core\Services\Photo\AvgColorGeneratorService::class
+        $this->app->singleton(
+            \Core\Managers\Photo\Contracts\PhotoManager::class,
+            \Core\Managers\Photo\PhotoManager::class
         );
 
         $this->app->bind(
@@ -58,30 +58,39 @@ class CoreServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
-            \Core\Services\Photo\Contracts\FileSaverService::class,
-            \Core\Services\Photo\FileSaverService::class
-        );
-
-        $this->app->bind(
             \Core\Services\Photo\Contracts\ThumbnailsGeneratorService::class,
             \Core\Services\Photo\ThumbnailsGeneratorService::class
         );
 
         $this->app->singleton(
-            \Core\FileSystem\Trash\Contracts\Trash::class,
+            \Core\Managers\Trash\Contracts\TrashManager::class,
             function ($app) {
-                return new \Core\FileSystem\Trash\Trash($app->make('filesystem'), config('main.storage.path.trash'));
+                return new \Core\Managers\Trash\TrashManager($app->make('filesystem'), config('main.storage.path.trash'));
             }
         );
 
-        $this->app->bind(
+        $this->app->singleton(
             \Core\Services\SiteMap\Contracts\SiteMapBuilderService::class,
             \Core\Services\SiteMap\SiteMapBuilderService::class
         );
 
-        $this->app->bind(
+        $this->app->singleton(
             \Core\Services\Rss\Contracts\RssBuilderService::class,
             \Core\Services\Rss\RssBuilderService::class
+        );
+
+        $this->app->bind(
+            \Tooleks\Php\AvgColorPicker\Contracts\AvgColorPicker::class,
+            \Tooleks\Php\AvgColorPicker\Gd\AvgColorPicker::class
+        );
+
+        $this->app->bind(\Lib\ThumbnailsGenerator\Contracts\ThumbnailsGenerator::class, function () {
+            return new \Lib\ThumbnailsGenerator\ThumbnailsGenerator(config('main.photo.thumbnails'));
+        });
+
+        $this->app->bind(
+            \Lib\ExifFetcher\Contracts\ExifFetcher::class,
+            \Lib\ExifFetcher\ExifFetcher::class
         );
     }
 }

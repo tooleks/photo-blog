@@ -5,35 +5,39 @@ namespace Api\V1\Http\Controllers;
 use Api\V1\Http\Requests\CreatePublishedPhotoRequest;
 use Api\V1\Http\Requests\FindPublishedPhotosRequest;
 use Api\V1\Http\Requests\UpdatePublishedPhotoRequest;
+use Core\Managers\Photo\Contracts\PhotoManager;
 use Core\Models\Photo;
-use Core\DataProviders\Photo\Criterias\IsPublished;
-use Core\DataProviders\Photo\Criterias\HasSearchPhrase;
-use Core\DataProviders\Photo\Criterias\HasTagWithValue;
-use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
 use Illuminate\Contracts\Cache\Factory as CacheManager;
 use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Routing\Controller;
-use Lib\DataProvider\Criterias\SortByCreatedAt;
 
 /**
  * Class PublishedPhotosController.
  *
- * @property PhotoDataProvider photoDataProvider
- * @property CacheManager cacheManager
  * @package Api\V1\Http\Controllers
  */
 class PublishedPhotosController extends Controller
 {
     /**
+     * @var CacheManager
+     */
+    private $cacheManager;
+
+    /**
+     * @var PhotoManager
+     */
+    private $photoManager;
+
+    /**
      * PublishedPhotosController constructor.
      *
-     * @param PhotoDataProvider $photoDataProvider
      * @param CacheManager $cacheManager
+     * @param PhotoManager $photoManager
      */
-    public function __construct(PhotoDataProvider $photoDataProvider, CacheManager $cacheManager)
+    public function __construct(CacheManager $cacheManager, PhotoManager $photoManager)
     {
-        $this->photoDataProvider = $photoDataProvider;
         $this->cacheManager = $cacheManager;
+        $this->photoManager = $photoManager;
     }
 
     /**
@@ -92,13 +96,11 @@ class PublishedPhotosController extends Controller
      */
     public function create(CreatePublishedPhotoRequest $request): Photo
     {
-        $photo = $this->photoDataProvider
-            ->applyCriteria(new IsPublished(false))
-            ->getById($request->get('photo_id'));
+        $photo = $this->photoManager->getNotPublishedById($request->get('photo_id'));
 
         $photo->setIsPublishedAttribute(true);
 
-        $this->photoDataProvider->save($photo, $request->all(), ['with' => ['tags']]);
+        $this->photoManager->saveWithAttributes($photo, $request->all());
 
         $this->cacheManager->tags(['photos', 'tags'])->flush();
 
@@ -238,12 +240,8 @@ class PublishedPhotosController extends Controller
         $paginator = $this->cacheManager
             ->tags(['photos', 'tags'])
             ->remember($cacheKey, config('cache.lifetime'), function () use ($request) {
-                return $this->photoDataProvider
-                    ->applyCriteria(new IsPublished(true))
-                    ->applyCriteriaWhen($request->has('tag'), new HasTagWithValue($request->get('tag')))
-                    ->applyCriteriaWhen($request->has('search_phrase'), new HasSearchPhrase($request->get('search_phrase')))
-                    ->applyCriteria((new SortByCreatedAt)->desc())
-                    ->getPaginator($request->get('page', 1), $request->get('per_page', 20))
+                return $this->photoManager
+                    ->paginateOverPublished($request->get('page', 1), $request->get('per_page', 20), $request->all())
                     ->appends($request->query());
             });
 
@@ -307,7 +305,7 @@ class PublishedPhotosController extends Controller
      */
     public function update(UpdatePublishedPhotoRequest $request, Photo $photo): Photo
     {
-        $this->photoDataProvider->save($photo, $request->all(), ['with' => ['tags']]);
+        $this->photoManager->saveWithAttributes($photo, $request->all());
 
         $this->cacheManager->tags(['photos', 'tags'])->flush();
 
@@ -333,7 +331,7 @@ class PublishedPhotosController extends Controller
      */
     public function delete(Photo $photo)
     {
-        $this->photoDataProvider->delete($photo);
+        $this->photoManager->deleteWithRelations($photo);
 
         $this->cacheManager->tags(['photos', 'tags'])->flush();
     }

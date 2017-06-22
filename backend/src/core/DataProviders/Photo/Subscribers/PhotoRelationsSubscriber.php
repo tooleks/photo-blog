@@ -14,11 +14,12 @@ use Illuminate\Database\Eloquent\Collection;
 /**
  * Class PhotoRelationsSubscriber.
  *
- * @property ConnectionInterface dbConnection
  * @package Core\DataProviders\Photo\Subscribers
  */
 class PhotoRelationsSubscriber
 {
+    private $dbConnection;
+
     /**
      * PhotoRelationsSubscriber constructor.
      *
@@ -65,6 +66,11 @@ class PhotoRelationsSubscriber
             PhotoDataProvider::class . '@afterSave',
             static::class . '@onAfterSave'
         );
+
+        $events->listen(
+            PhotoDataProvider::class . '@beforeDelete',
+            static::class . '@onBeforeDelete'
+        );
     }
 
     /**
@@ -103,6 +109,25 @@ class PhotoRelationsSubscriber
                 $this->savePhotoTags($photo, $attributes['tags']);
             }
         }
+    }
+
+    /**
+     * Handle before delete event.
+     *
+     * @param Photo $photo
+     * @param array $options
+     * @return void
+     */
+    public function onBeforeDelete(Photo $photo, array $options = [])
+    {
+        // Delete exif.
+        $photo->exif()->delete();
+        // Delete thumbnails.
+        $photo->thumbnails()->detach();
+        Thumbnail::deleteAllDetached();
+        // Delete tags.
+        $photo->tags()->detach();
+        Tag::deleteAllDetached();
     }
 
     /**

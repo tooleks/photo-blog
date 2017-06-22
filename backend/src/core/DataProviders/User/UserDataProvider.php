@@ -12,11 +12,12 @@ use Lib\DataProvider\DataProvider;
 /**
  * Class UserDataProvider.
  *
- * @property Hasher hasher
  * @package Core\DataProviders
  */
 class UserDataProvider extends DataProvider implements UserDataProviderContract
 {
+    private $hasher;
+
     /**
      * UserDataProvider constructor.
      *

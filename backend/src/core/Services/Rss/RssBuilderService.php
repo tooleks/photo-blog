@@ -17,12 +17,13 @@ use Lib\Rss\Enclosure;
 /**
  * Class RssBuilderService.
  *
- * @property Builder rssBuilder
- * @property PhotoDataProvider photoDataProvider
  * @package Core\Services\Rss
  */
 class RssBuilderService implements RssBuilderServiceContract
 {
+    private $rssBuilder;
+    private $photoDataProvider;
+
     /**
      * RssBuilderService constructor.
      *
