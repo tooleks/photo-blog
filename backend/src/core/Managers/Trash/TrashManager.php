@@ -92,16 +92,16 @@ class TrashManager implements TrashManagerContract
     /**
      * @inheritdoc
      */
-    public function clear(int $fromTimestamp = null)
+    public function clear(int $toTimestamp = null)
     {
         foreach ($this->storage->allDirectories($this->getObjectPath()) as $directory) {
-            if (is_null($fromTimestamp) || $fromTimestamp > $this->storage->lastModified($directory)) {
+            if (is_null($toTimestamp) || $toTimestamp > $this->storage->lastModified($directory)) {
                 $this->storage->deleteDirectory($directory);
             }
         }
 
         foreach ($this->storage->allFiles($this->getObjectPath()) as $file) {
-            if (is_null($fromTimestamp) || $fromTimestamp > $this->storage->lastModified($file)) {
+            if (is_null($toTimestamp) || $toTimestamp > $this->storage->lastModified($file)) {
                 $this->storage->delete($file);
             }
         }

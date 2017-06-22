@@ -52,8 +52,8 @@ interface TrashManager
     /**
      * Clear the trash objects.
      *
-     * @param int|null $fromTimestamp
+     * @param int|null $toTimestamp
      * @return void
      */
-    public function clear(int $fromTimestamp = null);
+    public function clear(int $toTimestamp = null);
 }
