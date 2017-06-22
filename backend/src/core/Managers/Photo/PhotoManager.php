@@ -157,15 +157,17 @@ class PhotoManager implements PhotoManagerContract
             $photo->avg_color = $this->avgColorPicker->getImageAvgHexByPath(
                 $this->storage->getDriver()->getAdapter()->getPathPrefix() . $photo->path
             );
-            $this->photoDataProvider->save($photo, [
-                'exif' => $this->exifFetcher->run($file),
-                'thumbnails' => $this->thumbnailsGenerator->run($photo->path),
-            ], ['with' => ['exif', 'thumbnails']]);
-            $this->trashManager->moveIfExists($oldPhotoDirectoryPath);
+            $this->photoDataProvider->save(
+                $photo,
+                ['exif' => $this->exifFetcher->run($file), 'thumbnails' => $this->thumbnailsGenerator->run($photo->path)],
+                ['with' => ['exif', 'thumbnails']]
+            );
         } catch (Throwable $e) {
             $this->trashManager->moveIfExists($newPhotoDirectoryPath);
             throw $e;
         }
+
+        $this->trashManager->moveIfExists($oldPhotoDirectoryPath);
     }
 
     /**
