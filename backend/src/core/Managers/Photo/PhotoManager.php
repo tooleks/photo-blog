@@ -87,30 +87,6 @@ class PhotoManager implements PhotoManagerContract
     /**
      * @inheritdoc
      */
-    public function paginateOverPublished(int $page, int $perPage, array $attributes = [])
-    {
-        return $this->photoDataProvider
-            ->applyCriteria(new IsPublished(true))
-            ->applyCriteriaWhen(isset($attributes['tag']), new HasTagWithValue($attributes['tag'] ?? null))
-            ->applyCriteriaWhen(isset($attributes['search_phrase']), new HasSearchPhrase($attributes['search_phrase'] ?? null))
-            ->applyCriteria((new SortByCreatedAt)->desc())
-            ->getPaginator($page, $perPage);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function eachNotPublishedOlderThanWeek(Closure $callback)
-    {
-        $this->photoDataProvider
-            ->applyCriteria(new IsPublished(false))
-            ->applyCriteria(new WhereUpdatedAtLessThan((new Carbon)->addWeek('-1')))
-            ->each($callback);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getById(int $id)
     {
         return $this->photoDataProvider->getById($id);
@@ -139,7 +115,31 @@ class PhotoManager implements PhotoManagerContract
     /**
      * @inheritdoc
      */
-    public function saveWithAttributes(Photo $photo, array $attributes)
+    public function paginateOverPublished(int $page, int $perPage, array $attributes = [])
+    {
+        return $this->photoDataProvider
+            ->applyCriteria(new IsPublished(true))
+            ->applyCriteriaWhen(isset($attributes['tag']), new HasTagWithValue($attributes['tag'] ?? null))
+            ->applyCriteriaWhen(isset($attributes['search_phrase']), new HasSearchPhrase($attributes['search_phrase'] ?? null))
+            ->applyCriteria((new SortByCreatedAt)->desc())
+            ->getPaginator($page, $perPage);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function eachNotPublishedOlderThanWeek(Closure $callback)
+    {
+        $this->photoDataProvider
+            ->applyCriteria(new IsPublished(false))
+            ->applyCriteria(new WhereUpdatedAtLessThan((new Carbon)->addWeek('-1')))
+            ->each($callback);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function save(Photo $photo, array $attributes = [])
     {
         $this->photoDataProvider->save($photo, $attributes, ['with' => ['tags']]);
     }
@@ -173,7 +173,7 @@ class PhotoManager implements PhotoManagerContract
     /**
      * @inheritdoc
      */
-    public function deleteWithRelations(Photo $photo)
+    public function deleteWithFiles(Photo $photo)
     {
         try {
             $this->trashManager->moveIfExists(dirname($photo->path));

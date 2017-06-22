@@ -231,7 +231,7 @@ class PhotosController extends Controller
      */
     public function delete(Photo $photo)
     {
-        $this->photoManager->deleteWithRelations($photo);
+        $this->photoManager->deleteWithFiles($photo);
 
         $this->cacheManager->tags(['photos', 'tags'])->flush();
     }

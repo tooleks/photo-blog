@@ -14,24 +14,6 @@ use Illuminate\Http\UploadedFile;
 interface PhotoManager
 {
     /**
-     * Paginate over the published photos.
-     *
-     * @param int $page
-     * @param int $perPage
-     * @param array $attributes
-     * @return mixed
-     */
-    public function paginateOverPublished(int $page, int $perPage, array $attributes = []);
-
-    /**
-     * Apply callback function on each not published photo older than week.
-     *
-     * @param Closure $callback
-     * @return void
-     */
-    public function eachNotPublishedOlderThanWeek(Closure $callback);
-
-    /**
      * Get the photo by its ID.
      *
      * @param int $id
@@ -56,13 +38,31 @@ interface PhotoManager
     public function getNotPublishedById(int $id);
 
     /**
+     * Paginate over the published photos.
+     *
+     * @param int $page
+     * @param int $perPage
+     * @param array $attributes
+     * @return mixed
+     */
+    public function paginateOverPublished(int $page, int $perPage, array $attributes = []);
+
+    /**
+     * Apply callback function on each not published photo older than week.
+     *
+     * @param Closure $callback
+     * @return void
+     */
+    public function eachNotPublishedOlderThanWeek(Closure $callback);
+
+    /**
      * Save the photo filled with the attributes array.
      *
      * @param Photo $photo
      * @param array $attributes
      * @return void
      */
-    public function saveWithAttributes(Photo $photo, array $attributes);
+    public function save(Photo $photo, array $attributes = []);
 
     /**
      * Save the photo associated with the uploaded file.
@@ -74,10 +74,10 @@ interface PhotoManager
     public function saveWithUploadedFile(Photo $photo, UploadedFile $file);
 
     /**
-     * Delete the photo with its relations.
+     * Delete the photo with its files.
      *
      * @param Photo $photo
      * @return void
      */
-    public function deleteWithRelations(Photo $photo);
+    public function deleteWithFiles(Photo $photo);
 }
