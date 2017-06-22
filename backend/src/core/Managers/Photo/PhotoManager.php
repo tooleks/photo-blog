@@ -150,18 +150,13 @@ class PhotoManager implements PhotoManagerContract
     public function saveWithUploadedFile(Photo $photo, UploadedFile $file)
     {
         $oldPhotoDirectoryPath = dirname($photo->path);
-        $newPhotoDirectoryPath = config('main.storage.path.photos') . '/' . str_random(10);
+        $newPhotoDirectoryPath = sprintf('%s/%s', config('main.storage.path.photos'), str_random(10));
 
         try {
             $photo->path = $this->storage->put($newPhotoDirectoryPath, $file);
-            $photo->avg_color = $this->avgColorPicker->getImageAvgHexByPath(
-                $this->storage->getDriver()->getAdapter()->getPathPrefix() . $photo->path
-            );
-            $this->photoDataProvider->save(
-                $photo,
-                ['exif' => $this->exifFetcher->run($file), 'thumbnails' => $this->thumbnailsGenerator->run($photo->path)],
-                ['with' => ['exif', 'thumbnails']]
-            );
+            $photo->avg_color = $this->avgColorPicker->getImageAvgHexByPath($this->storage->getDriver()->getAdapter()->getPathPrefix() . $photo->path);
+            $attributes = ['exif' => $this->exifFetcher->run($file), 'thumbnails' => $this->thumbnailsGenerator->run($photo->path)];
+            $this->photoDataProvider->save($photo, $attributes, ['with' => ['exif', 'thumbnails']]);
         } catch (Throwable $e) {
             $this->trashManager->moveIfExists($newPhotoDirectoryPath);
             throw $e;
@@ -175,11 +170,13 @@ class PhotoManager implements PhotoManagerContract
      */
     public function deleteWithFiles(Photo $photo)
     {
+        $photoDirectoryPath = dirname($photo->path);
+
         try {
-            $this->trashManager->moveIfExists(dirname($photo->path));
+            $this->trashManager->moveIfExists($photoDirectoryPath);
             $this->photoDataProvider->delete($photo);
         } catch (Throwable $e) {
-            $this->trashManager->restoreIfExists(dirname($photo->path));
+            $this->trashManager->restoreIfExists($photoDirectoryPath);
             throw $e;
         }
     }
