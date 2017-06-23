@@ -37,8 +37,7 @@ Route::group(['prefix' => 'token'], function () {
 
     Route::post('/')
         ->uses('TokenController@create')
-        // Allow 20 requests per minute.
-        ->middleware('throttle:20,1')
+        ->middleware('throttle:10,1')
         ->middleware(sprintf('present:%s', TokenPresenter::class));
 
 });
@@ -156,8 +155,7 @@ Route::group(['prefix' => 'contact_messages'], function () {
     Route::post('/')
         ->uses('ContactMessagesController@create')
         ->middleware(AppendClientIpAddress::class)
-        // Allow 5 requests per minute.
-        ->middleware('throttle:5,1');
+        ->middleware('throttle:10,1');
 
 });
 
