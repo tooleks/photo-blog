@@ -14,8 +14,8 @@ export class NoticesService {
         }
     }
 
-    exists(newNotice: Notice) {
-        return this.notices.filter((notice: Notice) => notice.isEqual(newNotice)).length;
+    exists(newNotice: Notice): boolean {
+        return Boolean(this.notices.filter((notice: Notice) => notice.isEqual(newNotice)).length);
     }
 
     success(title: string, text?: string): void {
