@@ -178,6 +178,8 @@ class PhotoManager implements PhotoManagerContract
         try {
             $this->trashManager->moveIfExists($photoDirectoryPath);
             $this->photoDataProvider->delete($photo);
+        } catch (TrashManagerException $e) {
+            throw $e;
         } catch (Throwable $e) {
             $this->trashManager->restoreIfExists($photoDirectoryPath);
             throw $e;
