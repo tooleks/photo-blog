@@ -52,7 +52,11 @@ class TrashManager implements TrashManagerContract
      */
     public function has(string $objectPath): bool
     {
-        return $this->storage->has($this->getObjectPath($objectPath));
+        try {
+            return $this->storage->has($this->getObjectPath($objectPath));
+        } catch (Throwable $e) {
+            throw new TrashManagerException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 
     /**
