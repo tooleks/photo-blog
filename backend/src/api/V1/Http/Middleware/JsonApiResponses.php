@@ -38,7 +38,7 @@ class JsonApiResponses
     protected function assertRequest(Request $request)
     {
         if (!$request->wantsJson()) {
-            throw new HttpException(406, trans('errors.http.406'));
+            throw new HttpException(Response::HTTP_NOT_ACCEPTABLE, Response::$statusTexts[Response::HTTP_NOT_ACCEPTABLE] ?? null);
         }
     }
 

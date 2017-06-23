@@ -3,7 +3,6 @@
 namespace Api\V1\Http\Middleware;
 
 use Closure;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Middleware\ThrottleRequests as IlluminateThrottleRequests;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,58 +29,22 @@ class ThrottleRequests extends IlluminateThrottleRequests
         $key = $this->resolveRequestSignature($request);
 
         if ($this->limiter->tooManyAttempts($key, $maxAttempts, $decayMinutes)) {
-            return $this->throwResponse($key, $maxAttempts);
+            $response = $this->buildResponse($key, $maxAttempts);
+            throw new HttpException(
+                Response::HTTP_TOO_MANY_REQUESTS,
+                Response::$statusTexts[Response::HTTP_TOO_MANY_REQUESTS] ?? null,
+                null,
+                $response->headers->all()
+            );
         }
 
         $this->limiter->hit($key, $decayMinutes);
 
         $response = $next($request);
 
-        $headers = $this->buildHeaders($maxAttempts, $this->calculateRemainingAttempts($key, $maxAttempts));
-
-        $response->headers->add($headers);
-
-        return $response;
-    }
-
-    /**
-     * Build the limit header information.
-     *
-     * @param int $maxAttempts
-     * @param int $remainingAttempts
-     * @param int|null $retryAfter
-     * @return Response
-     */
-    protected function buildHeaders($maxAttempts, $remainingAttempts, $retryAfter = null)
-    {
-        $headers = [
-            'X-RateLimit-Limit' => $maxAttempts,
-            'X-RateLimit-Remaining' => $remainingAttempts,
-        ];
-
-        if (!is_null($retryAfter)) {
-            $headers['Retry-After'] = $retryAfter;
-            $headers['X-RateLimit-Reset'] = Carbon::now()->getTimestamp() + $retryAfter;
-        }
-
-        return $headers;
-    }
-
-    /**
-     * Throw a 'too many attempts' exception.
-     *
-     * @param  string $key
-     * @param  int $maxAttempts
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    protected function throwResponse($key, $maxAttempts)
-    {
-        $retryAfter = $this->limiter->availableIn($key);
-
-        $remainingAttempts = $this->calculateRemainingAttempts($key, $maxAttempts, $retryAfter);
-
-        $headers = $this->buildHeaders($maxAttempts, $remainingAttempts, $retryAfter);
-
-        throw new HttpException(Response::HTTP_TOO_MANY_REQUESTS, trans('errors.http.429'), null, $headers);
+        return $this->addHeaders(
+            $response, $maxAttempts,
+            $this->calculateRemainingAttempts($key, $maxAttempts)
+        );
     }
 }
