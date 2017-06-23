@@ -54,7 +54,7 @@ class Handler extends ExceptionHandler
         } elseif ($e instanceof AuthorizationException) {
             $e = new HttpException(Response::HTTP_FORBIDDEN, $e->getMessage());
         } elseif ($e instanceof HttpException) {
-            $e = new HttpException($e->getStatusCode(), trans("errors.http.{$e->getStatusCode()}"), null, $e->getHeaders());
+            $e = new HttpException($e->getStatusCode(), trans(sprintf('errors.http.%s', $e->getStatusCode())), null, $e->getHeaders());
         }
 
         return $e;

@@ -30,12 +30,7 @@ class ThrottleRequests extends IlluminateThrottleRequests
 
         if ($this->limiter->tooManyAttempts($key, $maxAttempts, $decayMinutes)) {
             $response = $this->buildResponse($key, $maxAttempts);
-            throw new HttpException(
-                Response::HTTP_TOO_MANY_REQUESTS,
-                trans(sprintf('errors.http.%s', Response::HTTP_TOO_MANY_REQUESTS)),
-                null,
-                $response->headers->all()
-            );
+            throw new HttpException(Response::HTTP_TOO_MANY_REQUESTS, null, null, $response->headers->all());
         }
 
         $this->limiter->hit($key, $decayMinutes);
