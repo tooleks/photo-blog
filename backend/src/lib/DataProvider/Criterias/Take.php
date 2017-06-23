@@ -11,6 +11,9 @@ use Lib\DataProvider\Contracts\Criteria;
  */
 class Take implements Criteria
 {
+    /**
+     * @var int
+     */
     private $take;
 
     /**

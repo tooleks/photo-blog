@@ -12,6 +12,9 @@ use Lib\DataProvider\Contracts\Criteria;
  */
 class WhereUpdatedAtLessThan implements Criteria
 {
+    /**
+     * @var Carbon
+     */
     private $date;
 
     /**

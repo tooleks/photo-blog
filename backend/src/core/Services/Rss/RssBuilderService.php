@@ -21,7 +21,14 @@ use Lib\Rss\Enclosure;
  */
 class RssBuilderService implements RssBuilderServiceContract
 {
+    /**
+     * @var Builder
+     */
     private $rssBuilder;
+
+    /**
+     * @var PhotoDataProvider
+     */
     private $photoDataProvider;
 
     /**

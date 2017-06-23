@@ -11,6 +11,9 @@ use Lib\DataProvider\Contracts\Criteria;
  */
 class Skip implements Criteria
 {
+    /**
+     * @var int
+     */
     private $skip;
 
     /**

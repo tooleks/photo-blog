@@ -11,6 +11,9 @@ use Lib\DataProvider\Contracts\Criteria;
  */
 class HasTagWithValue implements Criteria
 {
+    /**
+     * @var string
+     */
     private $value;
 
     /**

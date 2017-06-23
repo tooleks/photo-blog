@@ -13,8 +13,19 @@ use Lib\ThumbnailsGenerator\Contracts\ThumbnailsGenerator;
  */
 class ThumbnailsGeneratorService implements ThumbnailsGeneratorServiceContract
 {
+    /**
+     * @var Storage
+     */
     private $storage;
+
+    /**
+     * @var ThumbnailsGenerator
+     */
     private $thumbnailsGenerator;
+
+    /**
+     * @var string
+     */
     private $path;
 
     /**

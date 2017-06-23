@@ -11,6 +11,9 @@ use Lib\DataProvider\Contracts\Criteria;
  */
 class WhereEmailIn implements Criteria
 {
+    /**
+     * @var array
+     */
     private $list;
 
     /**

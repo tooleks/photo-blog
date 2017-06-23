@@ -12,6 +12,9 @@ use Lib\DataProvider\Contracts\Criteria;
  */
 class WhereCreatedAtGreaterThan implements Criteria
 {
+    /**
+     * @var Carbon
+     */
     private $date;
 
     /**

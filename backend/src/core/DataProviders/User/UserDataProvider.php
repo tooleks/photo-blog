@@ -16,6 +16,9 @@ use Lib\DataProvider\DataProvider;
  */
 class UserDataProvider extends DataProvider implements UserDataProviderContract
 {
+    /**
+     * @var Hasher
+     */
     private $hasher;
 
     /**

@@ -18,8 +18,19 @@ use Lib\SiteMap\Item;
  */
 class SiteMapBuilderService implements SiteMapBuilderServiceContract
 {
+    /**
+     * @var Builder
+     */
     private $siteMapBuilder;
+
+    /**
+     * @var PhotoDataProvider
+     */
     private $photoDataProvider;
+
+    /**
+     * @var TagDataProvider
+     */
     private $tagDataProvider;
 
     /**

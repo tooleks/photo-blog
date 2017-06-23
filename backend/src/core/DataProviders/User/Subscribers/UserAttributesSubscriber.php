@@ -17,6 +17,9 @@ use Illuminate\Validation\ValidationException;
  */
 class UserAttributesSubscriber
 {
+    /**
+     * @var Hasher
+     */
     private $hasher;
 
     /**

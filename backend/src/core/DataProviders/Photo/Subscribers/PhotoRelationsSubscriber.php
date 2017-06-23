@@ -18,6 +18,9 @@ use Illuminate\Database\Eloquent\Collection;
  */
 class PhotoRelationsSubscriber
 {
+    /**
+     * @var ConnectionInterface
+     */
     private $dbConnection;
 
     /**

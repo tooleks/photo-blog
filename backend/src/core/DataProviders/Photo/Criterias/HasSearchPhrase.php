@@ -11,6 +11,9 @@ use Lib\DataProvider\Contracts\Criteria;
  */
 class HasSearchPhrase implements Criteria
 {
+    /**
+     * @var string
+     */
     private $searchPhrase;
 
     /**

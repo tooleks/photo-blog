@@ -16,6 +16,11 @@ use Illuminate\Support\Collection;
  */
 class PresentResponses
 {
+    /**
+     * The container implementation.
+     *
+     * @var Container
+     */
     private $container;
 
     /**

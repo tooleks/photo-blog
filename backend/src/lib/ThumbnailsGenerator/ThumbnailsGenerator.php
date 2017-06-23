@@ -17,13 +17,16 @@ use Lib\ThumbnailsGenerator\Exceptions\ThumbnailsGeneratorException;
  */
 class ThumbnailsGenerator implements ThumbnailsGeneratorContract
 {
-    private $thumbnailsConfig;
+    /**
+     * @var array
+     */
+    private $config;
 
     /**
      * ThumbnailsGenerator constructor.
      *
      * Example of initialization:
-     * $thumbnailsConfig = [
+     * $config = [
      *     [
      *         'mode' => 'inset',
      *         'quality' => 100,    // percentage
@@ -37,25 +40,25 @@ class ThumbnailsGenerator implements ThumbnailsGeneratorContract
      *         'height' => 600,    // pixels
      *     ],
      * ];
-     * new ThumbnailsGenerator($thumbnailsConfig);
+     * new ThumbnailsGenerator($config);
      *
-     * @param array $thumbnailsConfig
+     * @param array $config
      */
-    public function __construct(array $thumbnailsConfig)
+    public function __construct(array $config)
     {
-        $this->assertThumbnailsConfig($thumbnailsConfig);
+        $this->assertConfig($config);
 
-        $this->thumbnailsConfig = $thumbnailsConfig;
+        $this->config = $config;
     }
 
     /**
-     * Assert thumbnails config.
+     * Assert config.
      *
      * @param array $config
      * @throws ThumbnailsGeneratorException
      * @return void
      */
-    private function assertThumbnailsConfig(array $config)
+    private function assertConfig(array $config)
     {
         $validator = ValidatorFactory::make($config, [
             '*.mode' => ['required', Rule::in(['inset', 'outbound'])],
@@ -105,7 +108,7 @@ class ThumbnailsGenerator implements ThumbnailsGeneratorContract
      */
     private function eachThumbnailConfig(Closure $callback)
     {
-        array_map($callback, $this->thumbnailsConfig);
+        array_map($callback, $this->config);
     }
 
     /**

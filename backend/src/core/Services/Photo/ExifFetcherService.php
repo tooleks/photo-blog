@@ -12,7 +12,14 @@ use Lib\ExifFetcher\Contracts\ExifFetcher;
  */
 class ExifFetcherService implements ExifFetcherServiceContract
 {
+    /**
+     * @var ExifFetcher
+     */
     private $exifFetcher;
+
+    /**
+     * @var mixed
+     */
     private $file;
 
     /**
