@@ -3,7 +3,9 @@
 namespace Core\Managers\Trash;
 
 use Core\Managers\Trash\Contracts\TrashManager as TrashManagerContract;
+use Core\Managers\Trash\Exceptions\TrashManagerException;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
+use Throwable;
 
 /**
  * Class TrashManager.
@@ -58,7 +60,11 @@ class TrashManager implements TrashManagerContract
      */
     public function move(string $objectPath)
     {
-        $this->storage->move($objectPath, $this->getObjectPath($objectPath));
+        try {
+            $this->storage->move($objectPath, $this->getObjectPath($objectPath));
+        } catch (Throwable $e) {
+            throw new TrashManagerException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 
     /**
@@ -66,8 +72,12 @@ class TrashManager implements TrashManagerContract
      */
     public function moveIfExists(string $objectPath)
     {
-        if ($this->storage->exists($objectPath)) {
-            $this->storage->move($objectPath, $this->getObjectPath($objectPath));
+        try {
+            if ($this->storage->exists($objectPath)) {
+                $this->storage->move($objectPath, $this->getObjectPath($objectPath));
+            }
+        } catch (Throwable $e) {
+            throw new TrashManagerException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -76,7 +86,11 @@ class TrashManager implements TrashManagerContract
      */
     public function restore(string $objectPath)
     {
-        $this->storage->move($this->getObjectPath($objectPath), $objectPath);
+        try {
+            $this->storage->move($this->getObjectPath($objectPath), $objectPath);
+        } catch (Throwable $e) {
+            throw new TrashManagerException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 
     /**
@@ -84,8 +98,12 @@ class TrashManager implements TrashManagerContract
      */
     public function restoreIfExists(string $objectPath)
     {
-        if ($this->storage->exists($this->getObjectPath($objectPath))) {
-            $this->storage->move($this->getObjectPath($objectPath), $objectPath);
+        try {
+            if ($this->storage->exists($this->getObjectPath($objectPath))) {
+                $this->storage->move($this->getObjectPath($objectPath), $objectPath);
+            }
+        } catch (Throwable $e) {
+            throw new TrashManagerException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -94,16 +112,19 @@ class TrashManager implements TrashManagerContract
      */
     public function clear(int $toTimestamp = null)
     {
-        foreach ($this->storage->allDirectories($this->getObjectPath()) as $directory) {
-            if (is_null($toTimestamp) || $toTimestamp > $this->storage->lastModified($directory)) {
-                $this->storage->deleteDirectory($directory);
+        try {
+            foreach ($this->storage->allDirectories($this->getObjectPath()) as $directory) {
+                if (is_null($toTimestamp) || $toTimestamp > $this->storage->lastModified($directory)) {
+                    $this->storage->deleteDirectory($directory);
+                }
             }
-        }
-
-        foreach ($this->storage->allFiles($this->getObjectPath()) as $file) {
-            if (is_null($toTimestamp) || $toTimestamp > $this->storage->lastModified($file)) {
-                $this->storage->delete($file);
+            foreach ($this->storage->allFiles($this->getObjectPath()) as $file) {
+                if (is_null($toTimestamp) || $toTimestamp > $this->storage->lastModified($file)) {
+                    $this->storage->delete($file);
+                }
             }
+        } catch (Throwable $e) {
+            throw new TrashManagerException($e->getMessage(), $e->getCode(), $e);
         }
     }
 }

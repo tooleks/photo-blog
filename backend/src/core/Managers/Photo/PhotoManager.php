@@ -7,9 +7,10 @@ use Closure;
 use Core\DataProviders\Photo\Criterias\HasSearchPhrase;
 use Core\DataProviders\Photo\Criterias\HasTagWithValue;
 use Core\DataProviders\Photo\Criterias\IsPublished;
-use Core\Managers\Photo\Contracts\PhotoManager as PhotoManagerContract;
-use Core\Managers\Trash\Contracts\TrashManager;
 use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
+use Core\Managers\Photo\Contracts\PhotoManager as PhotoManagerContract;
+use Core\Managers\Trash\Contracts\TrashManagerException;
+use Core\Managers\Trash\Contracts\TrashManager;
 use Core\Models\Photo;
 use Core\Services\Photo\Contracts\ExifFetcherService;
 use Core\Services\Photo\Contracts\ThumbnailsGeneratorService;
@@ -156,8 +157,10 @@ class PhotoManager implements PhotoManagerContract
             $photo->path = $this->storage->put($newPhotoDirectoryPath, $file);
             $photo->avg_color = $this->avgColorPicker->getImageAvgHexByPath($this->storage->getDriver()->getAdapter()->getPathPrefix() . $photo->path);
             $attributes = ['exif' => $this->exifFetcher->run($file), 'thumbnails' => $this->thumbnailsGenerator->run($photo->path)];
-            $this->trashManager->moveIfExists($oldPhotoDirectoryPath);
             $this->photoDataProvider->save($photo, $attributes, ['with' => ['exif', 'thumbnails']]);
+            $this->trashManager->moveIfExists($oldPhotoDirectoryPath);
+        } catch (TrashManagerException $e) {
+            throw $e;
         } catch (Throwable $e) {
             $this->trashManager->restoreIfExists($oldPhotoDirectoryPath);
             $this->trashManager->moveIfExists($newPhotoDirectoryPath);
