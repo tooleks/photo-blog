@@ -168,10 +168,12 @@ Route::group(['prefix' => 'subscriptions'], function () {
 
     Route::post('/')
         ->uses('SubscriptionsController@create')
+        ->middleware('throttle:10,1')
         ->middleware(sprintf('present:%s', SubscriptionPresenter::class));
 
     Route::delete('/{subscription}')
         ->uses('SubscriptionsController@delete')
+        ->middleware('throttle:10,1')
         ->middleware(sprintf('present:%s', SubscriptionPresenter::class));
 
 });
