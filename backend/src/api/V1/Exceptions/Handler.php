@@ -107,7 +107,7 @@ class Handler extends ExceptionHandler
     protected function getDefaultExceptionResponse()
     {
         return response()->json([
-            'message' => Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR] ?? null,
+            'message' => trans(sprintf('errors.http.%s', Response::HTTP_INTERNAL_SERVER_ERROR)),
         ], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 }

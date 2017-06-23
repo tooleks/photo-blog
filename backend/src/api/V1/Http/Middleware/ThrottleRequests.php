@@ -32,7 +32,7 @@ class ThrottleRequests extends IlluminateThrottleRequests
             $response = $this->buildResponse($key, $maxAttempts);
             throw new HttpException(
                 Response::HTTP_TOO_MANY_REQUESTS,
-                Response::$statusTexts[Response::HTTP_TOO_MANY_REQUESTS] ?? null,
+                trans(sprintf('errors.http.%s', Response::HTTP_TOO_MANY_REQUESTS)),
                 null,
                 $response->headers->all()
             );
