@@ -44,7 +44,13 @@ module.exports = {
             {
                 test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
                 include: root('./assets/static'),
+                exclude: root('./assets/static/favicon'),
                 use: 'file-loader?name=assets/static/[name].[ext]'
+            },
+            {
+                test: /\.(png|ico|xml|json)$/,
+                include: root('./assets/static/favicon'),
+                use: 'file-loader?name=[name].[ext]'
             }
         ]
     },
@@ -57,8 +63,7 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: root('./src/index.html'),
             output: root('./dist'),
-            inject: 'body',
-            favicon: root('./assets/static/img/favicon.ico')
+            inject: 'body'
         }),
         new ScriptExtPlugin({
             defaultAttribute: 'defer'

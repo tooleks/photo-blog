@@ -5,7 +5,8 @@ import {MetaTagsService, GoogleAnalyticsService} from '../../../core';
 import {TransferState} from '../../../sys';
 import {ScreenDetectorService} from '../../../core';
 import {AppService, TitleService, AuthProviderService, ScrollFreezerService} from '../../../shared';
-import '../../../../assets/static/img/meta_image.jpg'
+import './meta';
+import './favicon';
 
 @Component({
     selector: 'app',
