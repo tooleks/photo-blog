@@ -3,7 +3,6 @@
 namespace Lib\ExifFetcher;
 
 use Lib\ExifFetcher\Contracts\ExifFetcher as ExifFetcherContract;
-use Lib\ExifFetcher\Exception\ExifFetcherException;
 
 /**
  * Class ExifFetcher.
