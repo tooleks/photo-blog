@@ -8,7 +8,7 @@ class RssTest extends IntegrationAppTestCase
     public function testIndexSuccess()
     {
         $this
-            ->get('/rss')
+            ->get('/rss.xml')
             ->assertStatus(200);
     }
 }
