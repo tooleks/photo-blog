@@ -100,7 +100,7 @@ class PublishedPhotosController extends Controller
 
         $photo->setIsPublishedAttribute(true);
 
-        $this->photoManager->save($photo, $request->all());
+        $this->photoManager->save($photo, $request->all(), ['with' => ['tags']]);
 
         $this->cacheManager->tags(['photos', 'tags'])->flush();
 
@@ -305,7 +305,7 @@ class PublishedPhotosController extends Controller
      */
     public function update(UpdatePublishedPhotoRequest $request, Photo $photo): Photo
     {
-        $this->photoManager->save($photo, $request->all());
+        $this->photoManager->save($photo, $request->all(), ['with' => ['tags']]);
 
         $this->cacheManager->tags(['photos', 'tags'])->flush();
 
@@ -331,7 +331,7 @@ class PublishedPhotosController extends Controller
      */
     public function delete(Photo $photo)
     {
-        $this->photoManager->deleteWithFiles($photo);
+        $this->photoManager->delete($photo);
 
         $this->cacheManager->tags(['photos', 'tags'])->flush();
     }

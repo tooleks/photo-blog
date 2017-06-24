@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 /**
  * Class ChangeUserPassword.
  *
- * @property Hasher hasher
  * @package Console\Commands
  */
 class ChangeUserPassword extends Command
@@ -28,6 +27,11 @@ class ChangeUserPassword extends Command
      * @var string
      */
     protected $description = 'Change user password';
+
+    /**
+     * @var Hasher
+     */
+    private $hasher;
 
     /**
      * Create a new command instance.

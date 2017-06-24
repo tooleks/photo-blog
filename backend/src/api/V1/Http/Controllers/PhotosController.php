@@ -98,7 +98,7 @@ class PhotosController extends Controller
             ->setCreatedByUserIdAttribute($this->auth->user()->id)
             ->setIsPublishedAttribute(false);
 
-        $this->photoManager->saveWithUploadedFile($photo, $request->file('file'));
+        $this->photoManager->saveWithFile($photo, $request->file('file'));
 
         $this->cacheManager->tags(['photos', 'tags'])->flush();
 
@@ -205,7 +205,7 @@ class PhotosController extends Controller
      */
     public function update(UpdatePhotoRequest $request, Photo $photo): Photo
     {
-        $this->photoManager->saveWithUploadedFile($photo, $request->file('file'));
+        $this->photoManager->saveWithFile($photo, $request->file('file'));
 
         $this->cacheManager->tags(['photos', 'tags'])->flush();
 
@@ -231,7 +231,7 @@ class PhotosController extends Controller
      */
     public function delete(Photo $photo)
     {
-        $this->photoManager->deleteWithFiles($photo);
+        $this->photoManager->delete($photo);
 
         $this->cacheManager->tags(['photos', 'tags'])->flush();
     }

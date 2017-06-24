@@ -2,7 +2,7 @@
 
 namespace Console\Commands;
 
-use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
+use Core\Managers\Photo\Contracts\PhotoManager;
 use Core\Models\Photo;
 use Core\Models\Thumbnail;
 use Illuminate\Config\Repository as Config;
@@ -12,9 +12,6 @@ use Illuminate\Contracts\Filesystem\Factory as Storage;
 /**
  * Class DeleteUnusedObjectsFromPhotoStorage.
  *
- * @property Config config
- * @property Storage storage
- * @property PhotoDataProvider photoDataProvider
  * @package Console\Commands
  */
 class DeleteUnusedObjectsFromPhotoStorage extends Command
@@ -34,19 +31,34 @@ class DeleteUnusedObjectsFromPhotoStorage extends Command
     protected $description = 'Delete unused objects from photo storage';
 
     /**
+     * @var Config
+     */
+    private $config;
+
+    /**
+     * @var Storage
+     */
+    private $storage;
+
+    /**
+     * @var PhotoManager
+     */
+    private $photoManager;
+
+    /**
      * DeleteUnusedObjectsFromPhotoStorage constructor.
      *
      * @param Config $config
      * @param Storage $storage
-     * @param PhotoDataProvider $photoDataProvider
+     * @param PhotoManager $photoManager
      */
-    public function __construct(Config $config, Storage $storage, PhotoDataProvider $photoDataProvider)
+    public function __construct(Config $config, Storage $storage, PhotoManager $photoManager)
     {
         parent::__construct();
 
         $this->config = $config;
         $this->storage = $storage;
-        $this->photoDataProvider = $photoDataProvider;
+        $this->photoManager = $photoManager;
     }
 
     /**
@@ -118,7 +130,7 @@ class DeleteUnusedObjectsFromPhotoStorage extends Command
      */
     protected function getAllDirectoriesFromDataProvider(): array
     {
-        $this->photoDataProvider->each(function (Photo $photo) use (&$directories) {
+        $this->photoManager->each(function (Photo $photo) use (&$directories) {
             $directories[] = dirname($photo->path);
         });
 
@@ -132,7 +144,7 @@ class DeleteUnusedObjectsFromPhotoStorage extends Command
      */
     protected function getAllFilesFromDataProvider(): array
     {
-        $this->photoDataProvider->each(function (Photo $photo) use (&$files) {
+        $this->photoManager->each(function (Photo $photo) use (&$files) {
             $files[] = $photo->path;
             $photo->thumbnails->each(function (Thumbnail $thumbnail) use (&$files) {
                 $files[] = $thumbnail->path;

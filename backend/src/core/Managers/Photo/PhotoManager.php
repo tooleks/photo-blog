@@ -17,6 +17,7 @@ use Core\Services\Photo\Contracts\ThumbnailsGeneratorService;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
 use Illuminate\Http\UploadedFile;
 use Lib\DataProvider\Criterias\SortByCreatedAt;
+use Lib\DataProvider\Criterias\WhereCreatedAtGreaterThan;
 use Lib\DataProvider\Criterias\WhereUpdatedAtLessThan;
 use Throwable;
 use Tooleks\Php\AvgColorPicker\Contracts\AvgColorPicker;
@@ -116,7 +117,7 @@ class PhotoManager implements PhotoManagerContract
     /**
      * @inheritdoc
      */
-    public function paginateOverPublished(int $page, int $perPage, array $attributes = [])
+    public function paginateOverPublished(int $page, int $perPage, array $query = [])
     {
         return $this->photoDataProvider
             ->applyCriteria(new IsPublished(true))
@@ -124,6 +125,14 @@ class PhotoManager implements PhotoManagerContract
             ->applyCriteriaWhen(isset($attributes['search_phrase']), new HasSearchPhrase($attributes['search_phrase'] ?? null))
             ->applyCriteria((new SortByCreatedAt)->desc())
             ->paginate($page, $perPage);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function each(Closure $callback)
+    {
+        $this->photoDataProvider->each($callback);
     }
 
     /**
@@ -140,15 +149,26 @@ class PhotoManager implements PhotoManagerContract
     /**
      * @inheritdoc
      */
-    public function save(Photo $photo, array $attributes = [])
+    public function existsPublishedOlderThanWeek()
     {
-        $this->photoDataProvider->save($photo, $attributes, ['with' => ['tags']]);
+        $this->photoDataProvider
+            ->applyCriteria(new IsPublished(true))
+            ->applyCriteria(new WhereCreatedAtGreaterThan((new Carbon)->addWeek('-1')))
+            ->exists();
     }
 
     /**
      * @inheritdoc
      */
-    public function saveWithUploadedFile(Photo $photo, UploadedFile $file)
+    public function save(Photo $photo, array $attributes = [], array $options = [])
+    {
+        $this->photoDataProvider->save($photo, $attributes, $options);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function saveWithFile(Photo $photo, UploadedFile $file)
     {
         $oldPhotoDirectoryPath = dirname($photo->path);
         $newPhotoDirectoryPath = sprintf('%s/%s', config('main.storage.path.photos'), str_random(10));
@@ -171,7 +191,7 @@ class PhotoManager implements PhotoManagerContract
     /**
      * @inheritdoc
      */
-    public function deleteWithFiles(Photo $photo)
+    public function delete(Photo $photo)
     {
         $photoDirectoryPath = dirname($photo->path);
 

@@ -9,7 +9,6 @@ use Illuminate\Contracts\Hashing\Hasher;
 /**
  * Class CreateAdministratorUser.
  *
- * @property Hasher hasher
  * @package Console\Commands
  */
 class CreateAdministratorUser extends Command
@@ -27,6 +26,11 @@ class CreateAdministratorUser extends Command
      * @var string
      */
     protected $description = 'Create administrator user';
+
+    /**
+     * @var Hasher
+     */
+    private $hasher;
 
     /**
      * Create a new command instance.

@@ -2,7 +2,7 @@
 
 namespace Console\Commands;
 
-use Core\DataProviders\Photo\PhotoDataProvider;
+use Core\Managers\Photo\Contracts\PhotoManager;
 use Core\Models\Photo;
 use Core\Services\Photo\Contracts\ThumbnailsGeneratorService;
 use Illuminate\Console\Command;
@@ -11,9 +11,6 @@ use Illuminate\Contracts\Filesystem\Factory as Storage;
 /**
  * Class GeneratePhotoThumbnails.
  *
- * @property Storage storage
- * @property ThumbnailsGeneratorService thumbnailsGenerator
- * @property PhotoDataProvider photoDataProvider
  * @package Console\Commands
  */
 class GeneratePhotoThumbnails extends Command
@@ -33,23 +30,38 @@ class GeneratePhotoThumbnails extends Command
     protected $description = 'Generate photo thumbnails';
 
     /**
+     * @var Storage
+     */
+    private $storage;
+
+    /**
+     * @var ThumbnailsGeneratorService
+     */
+    private $thumbnailsGenerator;
+
+    /**
+     * @var PhotoManager
+     */
+    private $photoManager;
+
+    /**
      * GeneratePhotoThumbnails constructor.
      *
      * @param Storage $storage
      * @param ThumbnailsGeneratorService $thumbnailsGenerator
-     * @param PhotoDataProvider $photoDataProvider
+     * @param PhotoManager $photoManager
      */
     public function __construct(
         Storage $storage,
         ThumbnailsGeneratorService $thumbnailsGenerator,
-        PhotoDataProvider $photoDataProvider
+        PhotoManager $photoManager
     )
     {
         parent::__construct();
 
         $this->storage = $storage;
         $this->thumbnailsGenerator = $thumbnailsGenerator;
-        $this->photoDataProvider = $photoDataProvider;
+        $this->photoManager = $photoManager;
     }
 
     /**
@@ -59,21 +71,10 @@ class GeneratePhotoThumbnails extends Command
      */
     public function handle()
     {
-        $this->photoDataProvider->each(function (Photo $photo) {
+        $this->photoManager->each(function (Photo $photo) {
             $this->comment("Generating photo [id:{$photo->id}] thumbnails ...");
-            $this->generatePhotoThumbnails($photo);
+            $thumbnails = $this->thumbnailsGenerator->run($photo->path);
+            $this->photoManager->save($photo, compact('thumbnails'), ['with' => ['thumbnails']]);
         });
-    }
-
-    /**
-     * Generate photo thumbnails.
-     *
-     * @param Photo $photo
-     */
-    public function generatePhotoThumbnails(Photo $photo)
-    {
-        $thumbnails = $this->thumbnailsGenerator->run($photo->path);
-
-        $this->photoDataProvider->save($photo, compact('thumbnails'), ['with' => ['thumbnails']]);
     }
 }
