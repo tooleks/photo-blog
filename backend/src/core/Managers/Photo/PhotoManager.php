@@ -121,8 +121,8 @@ class PhotoManager implements PhotoManagerContract
     {
         return $this->photoDataProvider
             ->applyCriteria(new IsPublished(true))
-            ->applyCriteriaWhen(isset($attributes['tag']), new HasTagWithValue($attributes['tag'] ?? null))
-            ->applyCriteriaWhen(isset($attributes['search_phrase']), new HasSearchPhrase($attributes['search_phrase'] ?? null))
+            ->applyCriteriaWhen(isset($query['tag']), new HasTagWithValue($query['tag'] ?? null))
+            ->applyCriteriaWhen(isset($query['search_phrase']), new HasSearchPhrase($query['search_phrase'] ?? null))
             ->applyCriteria((new SortByCreatedAt)->desc())
             ->paginate($page, $perPage);
     }
