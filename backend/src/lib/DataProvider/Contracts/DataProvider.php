@@ -86,14 +86,14 @@ interface DataProvider
     public function each(Closure $callback, int $chunkSize = 100, array $options = []);
 
     /**
-     * Get models paginator.
+     * Paginate over models.
      *
      * @param int $page
      * @param int $perPage
      * @param array $options
      * @return mixed
      */
-    public function getPaginator(int $page = 1, int $perPage = 20, array $options = []);
+    public function paginate(int $page = 1, int $perPage = 20, array $options = []);
 
     /**
      * Count models.

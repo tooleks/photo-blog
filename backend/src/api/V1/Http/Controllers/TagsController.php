@@ -84,7 +84,7 @@ class TagsController extends Controller
             ->remember($cacheKey, config('cache.lifetime'), function () use ($request) {
                 return $this->tagDataProvider
                     ->applyCriteria((new SortByPhotosCount)->desc())
-                    ->getPaginator($request->get('page', 1), $request->get('per_page', 20));
+                    ->paginate($request->get('page', 1), $request->get('per_page', 20));
             });
 
         $paginator->appends($request->query());

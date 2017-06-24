@@ -164,15 +164,11 @@ abstract class DataProvider implements DataProviderContract
     public function getById($id, array $options = [])
     {
         $this->dispatchEvent('beforeGetById', $this->query, $options);
-
         $model = $this->query->find($id);
-
         if (is_null($model)) {
             throw new DataProviderNotFoundException(sprintf('%s not found.', class_basename($this->getModelClass())));
         }
-
         $this->dispatchEvent('afterGetById', $model, $options);
-
         $this->reset();
 
         return $model;
@@ -184,15 +180,11 @@ abstract class DataProvider implements DataProviderContract
     public function getFirst(array $options = [])
     {
         $this->dispatchEvent('beforeGetFirst', $this->query, $options);
-
         $model = $this->query->first();
-
         if (is_null($model)) {
             throw new DataProviderNotFoundException(sprintf('%s not found.', class_basename($this->getModelClass())));
         }
-
         $this->dispatchEvent('afterGetFirst', $model, $options);
-
         $this->reset();
 
         return $model;
@@ -204,11 +196,8 @@ abstract class DataProvider implements DataProviderContract
     public function get(array $options = [])
     {
         $this->dispatchEvent('beforeGet', $this->query, $options);
-
         $models = $this->query->get();
-
         $this->dispatchEvent('afterGet', $models, $options);
-
         $this->reset();
 
         return $models;
@@ -220,11 +209,8 @@ abstract class DataProvider implements DataProviderContract
     public function exists(array $options = []): bool
     {
         $this->dispatchEvent('beforeExists', $this->query, $options);
-
         $exists = $this->query->exists();
-
         $this->dispatchEvent('afterExists', $exists, $options);
-
         $this->reset();
 
         return $exists;
@@ -249,14 +235,11 @@ abstract class DataProvider implements DataProviderContract
     /**
      * @inheritdoc
      */
-    public function getPaginator(int $page = 1, int $perPage = 20, array $options = [])
+    public function paginate(int $page = 1, int $perPage = 20, array $options = [])
     {
         $this->dispatchEvent('beforePaginate', $this->query, $options);
-
         $models = $this->query->paginate($perPage, ['*'], 'page', $page);
-
         $this->dispatchEvent('afterPaginate', $models, $options);
-
         $this->reset();
 
         return $models;
@@ -268,11 +251,8 @@ abstract class DataProvider implements DataProviderContract
     public function count(array $options = []): int
     {
         $this->dispatchEvent('beforeCount', $this->query, $options);
-
         $count = $this->query->count();
-
         $this->dispatchEvent('afterCount', $count, $options);
-
         $this->reset();
 
         return $count;
@@ -285,30 +265,18 @@ abstract class DataProvider implements DataProviderContract
     {
         $this->assertModel($model);
 
-        $model->fill($attributes);
-
         try {
-
             $this->dbConnection->beginTransaction();
-
             $this->dispatchEvent('beforeSave', $model, $attributes, $options);
-
+            $model->fill($attributes);
             $model->save();
-
             $this->dispatchEvent('afterSave', $model, $attributes, $options);
-
             $this->dbConnection->commit();
-
         } catch (Throwable $e) {
-
             $this->dbConnection->rollBack();
-
-            throw new DataProviderSavingException($e->getMessage());
-
+            throw new DataProviderSavingException($e->getMessage(), $e->getCode(), $e);
         } finally {
-
             $this->reset();
-
         }
     }
 
@@ -320,27 +288,16 @@ abstract class DataProvider implements DataProviderContract
         $this->assertModel($model);
 
         try {
-
             $this->dbConnection->beginTransaction();
-
             $this->dispatchEvent('beforeDelete', $model, $options);
-
             $deleted = $model->delete();
-
             $this->dispatchEvent('afterDelete', $model, $deleted, $options);
-
             $this->dbConnection->commit();
-
         } catch (Throwable $e) {
-
             $this->dbConnection->rollBack();
-
-            throw new DataProviderDeletingException($e->getMessage());
-
+            throw new DataProviderDeletingException($e->getMessage(), $e->getCode(), $e);
         } finally {
-
             $this->reset();
-
         }
 
         return $deleted ?? false;

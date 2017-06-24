@@ -123,7 +123,7 @@ class PhotoManager implements PhotoManagerContract
             ->applyCriteriaWhen(isset($attributes['tag']), new HasTagWithValue($attributes['tag'] ?? null))
             ->applyCriteriaWhen(isset($attributes['search_phrase']), new HasSearchPhrase($attributes['search_phrase'] ?? null))
             ->applyCriteria((new SortByCreatedAt)->desc())
-            ->getPaginator($page, $perPage);
+            ->paginate($page, $perPage);
     }
 
     /**
