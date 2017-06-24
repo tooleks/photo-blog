@@ -18,5 +18,5 @@ Route::get('/', function () {
 Route::get('sitemap.xml')
     ->uses('SiteMapController@index');
 
-Route::get('rss')
+Route::get('rss.xml')
     ->uses('RssController@index');
