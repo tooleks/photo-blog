@@ -20,7 +20,6 @@ import '../../../../assets/static/favicon/favicon.ico';
 import '../../../../assets/static/favicon/favicon-16x16.png';
 import '../../../../assets/static/favicon/favicon-32x32.png';
 import '../../../../assets/static/favicon/favicon-96x96.png';
-import '../../../../assets/static/favicon/manifest.json';
 import '../../../../assets/static/favicon/ms-icon-70x70.png';
 import '../../../../assets/static/favicon/ms-icon-144x144.png';
 import '../../../../assets/static/favicon/ms-icon-150x150.png';
