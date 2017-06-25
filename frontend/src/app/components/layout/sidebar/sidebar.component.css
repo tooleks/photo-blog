@@ -7,7 +7,7 @@ sidebar .sidebar {
     overflow-x: hidden;
     overflow-y: auto;
     background: #2f4050;
-    z-index: 1020;
+    z-index: 10020;
 }
 
 sidebar .sidebar ul {
@@ -100,7 +100,7 @@ sidebar .sidebar-backdrop {
     width: 100%;
     height: 100%;
     background: black;
-    z-index: 1010;
+    z-index: 10010;
 }
 
 @media (min-width: 768px) {
@@ -114,7 +114,7 @@ sidebar .sidebar-swipe-area {
     position: fixed;
     width: 20px;
     height: 100%;
-    z-index: 1030;
+    z-index: 10030;
 }
 
 @media (min-width: 768px) {
