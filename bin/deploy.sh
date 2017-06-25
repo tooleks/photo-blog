@@ -29,6 +29,7 @@ step_update_backend_dependencies() {
     printf_step_header "Updating Backend Application Dependencies" &&
     cd "$root_path/backend" &&
     printf_pwd &&
+    rm -r "./vendor" &&
     composer install && composer dump-autoload
 }
 
@@ -50,6 +51,7 @@ step_update_frontend_application() {
     printf_step_header "Updating Frontend Application Dependencies" &&
     cd "$root_path/frontend" &&
     printf_pwd &&
+    rm -r "./node_modules" &&
     yarn install
 }
 
@@ -102,6 +104,7 @@ step_publish_rest_api_documentation() {
 step_flush_cache() {
     printf_step_header "Flushing Cache" &&
     cd "$root_path" &&
+    printf_pwd &&
     redis-cli flushAll
 }
 
