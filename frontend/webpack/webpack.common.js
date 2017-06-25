@@ -63,15 +63,17 @@ module.exports = {
         }),
         new ExtractTextPlugin('[name].css?v=[hash]'),
         new HtmlWebpackPlugin({
-            template: root('./src/index.html'),
+            template: root('./src/index.ejs'),
             output: root('./dist'),
-            inject: 'body'
+            inject: 'body',
+            appName: process.env.APP_NAME
         }),
         new ScriptExtPlugin({
             defaultAttribute: 'defer'
         }),
         new GenerateJsonPlugin('manifest.json', {
             "name": process.env.APP_NAME,
+            "author": process.env.APP_AUTHOR,
             "display": "standalone",
             "icons": [
                 {
