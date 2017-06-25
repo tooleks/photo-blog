@@ -152,10 +152,6 @@ amdefine@>=0.0.4:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
 
-angular2-infinite-scroll@^0.3.4:
-  version "0.3.4"
-  resolved "https://registry.yarnpkg.com/angular2-infinite-scroll/-/angular2-infinite-scroll-0.3.4.tgz#d011ab7dc7a85a2ca908540166b679a68d396f53"
-
 ansi-regex@^2.0.0:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/ansi-regex/-/ansi-regex-2.1.1.tgz#c3b33ab5ee360d86e0e628f0468ae7ef27d654df"
@@ -2101,6 +2097,10 @@ ng2-go-top-button@^2.0.8:
     rxjs "^5.0.1"
     typescript "^2.2.1"
     zone.js "^0.8.4"
+
+ngx-infinite-scroll@^0.5.1:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/ngx-infinite-scroll/-/ngx-infinite-scroll-0.5.1.tgz#dd9452c602ff7c3222f0ca168481aa14140286b7"
 
 no-case@^2.2.0:
   version "2.3.1"

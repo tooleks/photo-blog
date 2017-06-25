@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {InfiniteScrollModule} from 'angular2-infinite-scroll';
+import {InfiniteScrollModule} from 'ngx-infinite-scroll';
 import {GalleryModule} from '../lib';
 import {SharedModule} from '../shared';
 import {PhotoDataProviderService} from './services';
