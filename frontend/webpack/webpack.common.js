@@ -72,6 +72,7 @@ module.exports = {
         }),
         new GenerateJsonPlugin('manifest.json', {
             "name": process.env.APP_NAME,
+            "display": "standalone",
             "icons": [
                 {
                     "src": "\/android-icon-36x36.png",
