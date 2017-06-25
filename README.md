@@ -4,7 +4,7 @@
 
 #### Development Configuration
 
-NGINX 1.10, MySQL 5.7, Redis 3.0, PHP 7.0 (ext-openssl, ext-pdo, ext-mbstring, ext-tokenizer, ext-xml, ext-gd), Laravel 5.4, Node.js 7.5, Angular 4.0.
+NGINX 1.10, MySQL 5.7, Redis 3.0, PHP 7.0 (ext-openssl, ext-pdo, ext-mbstring, ext-tokenizer, ext-xml, ext-gd), Laravel 5.4, Node.js 8.0, Angular 4.0.
 
 #### Installation
 
@@ -60,7 +60,7 @@ Run the following command (within the `./backend` directory) to run tests:
 Run the following command (within the `./frontend` directory) to install application dependencies:
 
 ```
-npm install
+yarn install
 ```
 
 Create the `./frontend/.env` file from the example `./frontend/.env.example`. Setup API connection credentials.
