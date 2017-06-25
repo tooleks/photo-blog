@@ -29,7 +29,6 @@ step_update_backend_dependencies() {
     printf_step_header "Updating Backend Application Dependencies" &&
     cd "$root_path/backend" &&
     printf_pwd &&
-    rm -r "./vendor" &&
     composer install && composer dump-autoload
 }
 
@@ -51,7 +50,6 @@ step_update_frontend_application() {
     printf_step_header "Updating Frontend Application Dependencies" &&
     cd "$root_path/frontend" &&
     printf_pwd &&
-    rm -r "./node_modules" &&
     yarn install
 }
 
