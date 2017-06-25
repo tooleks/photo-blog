@@ -11,6 +11,7 @@ export class MetaTagsService {
         const tags: Array<MetaDefinition> = [
             // General meta tags.
             {name: 'description', content: ''},
+            {name: 'keywords', content: ''},
             // Open Graph related meta tags.
             {property: 'og:title', content: ''},
             {property: 'og:type', content: 'article'},
@@ -45,6 +46,11 @@ export class MetaTagsService {
     setDescription(content: string): this {
         this.documentMeta.updateTag({name: 'description', content: content}, 'name="description"');
         this.documentMeta.updateTag({property: 'og:description', content: content}, 'property="og:description"');
+        return this;
+    }
+
+    setKeywords(keywords: string): this {
+        this.documentMeta.updateTag({name: 'keywords', content: keywords});
         return this;
     }
 

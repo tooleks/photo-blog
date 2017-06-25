@@ -62,6 +62,7 @@ export class AppComponent implements OnInit, OnDestroy {
             .setWebsiteName(this.app.getName())
             .setTitle(this.title.getPageNameSegment())
             .setDescription(this.app.getDescription())
+            .setKeywords(this.app.getKeywords())
             .setImage(this.app.getImage());
     }
 

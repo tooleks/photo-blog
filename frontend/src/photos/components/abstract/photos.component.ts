@@ -131,7 +131,7 @@ export abstract class PhotosComponent implements OnInit, OnDestroy, AfterViewIni
     onShowPhoto(image: GalleryImage): void {
         this.scrollFreezer.freeze();
         this.title.setPageNameSegment(image.getDescription());
-        this.metaTags.setTitle(image.getDescription()).setImage(image.getViewerSizeUrl());
+        this.metaTags.setTitle(image.getDescription()).setImage(image.getViewerSizeUrl()).setKeywords(image.getKeywords());
         this.navigator.setQueryParam('show', image.getId());
     }
 

@@ -23,6 +23,7 @@ export class PhotoToGalleryImageMapper {
             avgColor: object.avg_color,
             description: object.description,
             exif: this.exifMapper.map(object.exif),
+            keywords: object.tags.map((tag) => tag.value).join(', ')
         });
     }
 }

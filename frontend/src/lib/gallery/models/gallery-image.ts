@@ -149,4 +149,13 @@ export class GalleryImage {
     getExif(): string {
         return this.attributes.exif;
     }
+
+    setKeywords(keywords: string): this {
+        this.attributes.keywords = String(keywords);
+        return this;
+    }
+
+    getKeywords(): string {
+        return this.attributes.keywords;
+    }
 }

@@ -22,6 +22,10 @@ export class AppService {
         return process.env.APP_DESCRIPTION;
     }
 
+    getKeywords(): string {
+        return process.env.APP_KEYWORDS;
+    }
+
     getAuthor(): string {
         return process.env.APP_AUTHOR;
     }

@@ -12,4 +12,5 @@ export class GalleryImageAttributes {
     avgColor: string;
     description: string;
     exif: string;
+    keywords: string;
 }
