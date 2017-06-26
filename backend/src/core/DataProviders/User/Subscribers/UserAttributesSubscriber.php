@@ -39,7 +39,7 @@ class UserAttributesSubscriber
      */
     public function onBeforeSave(User $user, array $attributes = [], array $options = [])
     {
-        $validator = ValidatorFactory::make(['email' => $user->email], [
+        $validator = ValidatorFactory::make(['email' => $attributes['email'] ?? $user->email], [
             'email' => $user->exists
                 ? Rule::unique('users')->ignore($user->getOriginal('email'), 'email')
                 : Rule::unique('users'),
