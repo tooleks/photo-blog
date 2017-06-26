@@ -62,6 +62,11 @@ class CoreServiceProvider extends ServiceProvider
             \Core\Managers\Tag\TagManager::class
         );
 
+        $this->app->singleton(
+            \Core\Managers\User\Contracts\UserManager::class,
+            \Core\Managers\User\UserManager::class
+        );
+
         $this->app->bind(
             \Core\Services\Photo\Contracts\ExifFetcherService::class,
             \Core\Services\Photo\ExifFetcherService::class

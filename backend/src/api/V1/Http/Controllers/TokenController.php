@@ -3,8 +3,8 @@
 namespace Api\V1\Http\Controllers;
 
 use Api\V1\Http\Requests\CreateTokenRequest;
+use Core\Managers\User\Contracts\UserManager;
 use Core\Models\User;
-use Core\DataProviders\User\Contracts\UserDataProvider;
 use Illuminate\Contracts\Auth\Guard as Auth;
 use Illuminate\Routing\Controller;
 
@@ -21,20 +21,20 @@ class TokenController extends Controller
     private $auth;
 
     /**
-     * @var UserDataProvider
+     * @var UserManager
      */
-    private $userDataProvider;
+    private $userManager;
 
     /**
      * TokenController constructor.
      *
      * @param Auth $auth
-     * @param UserDataProvider $userDataProvider
+     * @param UserManager $userManager
      */
-    public function __construct(Auth $auth, UserDataProvider $userDataProvider)
+    public function __construct(Auth $auth, UserManager $userManager)
     {
         $this->auth = $auth;
-        $this->userDataProvider = $userDataProvider;
+        $this->userManager = $userManager;
     }
 
     /**
@@ -62,11 +62,9 @@ class TokenController extends Controller
      */
     public function create(CreateTokenRequest $request): User
     {
-        $user = $this->userDataProvider->getByCredentials($request->get('email'), $request->get('password'));
+        $user = $this->userManager->getByCredentials($request->get('email'), $request->get('password'));
 
-        $user->generateApiToken();
-
-        $this->userDataProvider->save($user);
+        $this->userManager->reGenerateApiToken($user);
 
         $this->auth->setUser($user);
 

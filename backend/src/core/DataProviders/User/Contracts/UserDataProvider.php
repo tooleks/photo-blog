@@ -11,13 +11,5 @@ use Lib\DataProvider\Contracts\DataProvider;
  */
 interface UserDataProvider extends DataProvider
 {
-    /**
-     * Get user by credentials.
-     *
-     * @param string $email
-     * @param string $password
-     * @param array $options
-     * @return mixed
-     */
-    public function getByCredentials(string $email, string $password, array $options = []);
+
 }
