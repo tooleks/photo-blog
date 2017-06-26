@@ -46,14 +46,14 @@ interface PhotoManager
     public function getLastFiftyPublished(): Collection;
 
     /**
-     * Paginate over published photos.
+     * Paginate over the last published photos.
      *
      * @param int $page
      * @param int $perPage
      * @param array $query
      * @return mixed
      */
-    public function paginateOverPublished(int $page, int $perPage, array $query = []);
+    public function paginateOverLastPublished(int $page, int $perPage, array $query = []);
 
     /**
      * Apply the callback function on each photo.

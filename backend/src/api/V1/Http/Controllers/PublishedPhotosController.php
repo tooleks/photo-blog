@@ -241,7 +241,7 @@ class PublishedPhotosController extends Controller
             ->tags(['photos', 'tags'])
             ->remember($cacheKey, config('cache.lifetime'), function () use ($request) {
                 return $this->photoManager
-                    ->paginateOverPublished($request->get('page', 1), $request->get('per_page', 20), $request->all())
+                    ->paginateOverLastPublished($request->get('page', 1), $request->get('per_page', 20), $request->all())
                     ->appends($request->query());
             });
 

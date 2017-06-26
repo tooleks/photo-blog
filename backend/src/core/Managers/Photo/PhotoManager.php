@@ -131,7 +131,7 @@ class PhotoManager implements PhotoManagerContract
     /**
      * @inheritdoc
      */
-    public function paginateOverPublished(int $page, int $perPage, array $query = [])
+    public function paginateOverLastPublished(int $page, int $perPage, array $query = [])
     {
         return $this->photoDataProvider
             ->applyCriteria(new IsPublished(true))
