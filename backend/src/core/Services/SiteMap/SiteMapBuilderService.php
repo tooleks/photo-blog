@@ -2,8 +2,8 @@
 
 namespace Core\Services\SiteMap;
 
-use Core\DataProviders\Tag\Contracts\TagDataProvider;
 use Core\Managers\Photo\Contracts\PhotoManager;
+use Core\Managers\Tag\Contracts\TagManager;
 use Core\Models\Photo;
 use Core\Models\Tag;
 use Core\Services\SiteMap\Contracts\SiteMapBuilderService as SiteMapBuilderServiceContract;
@@ -28,22 +28,22 @@ class SiteMapBuilderService implements SiteMapBuilderServiceContract
     private $photoManager;
 
     /**
-     * @var TagDataProvider
+     * @var TagManager
      */
-    private $tagDataProvider;
+    private $tagManager;
 
     /**
      * SiteMapBuilderService constructor.
      *
      * @param Builder $siteMapBuilder
      * @param PhotoManager $photoManager
-     * @param TagDataProvider $tagDataProvider
+     * @param TagManager $tagManager
      */
-    public function __construct(Builder $siteMapBuilder, PhotoManager $photoManager, TagDataProvider $tagDataProvider)
+    public function __construct(Builder $siteMapBuilder, PhotoManager $photoManager, TagManager $tagManager)
     {
         $this->siteMapBuilder = $siteMapBuilder;
         $this->photoManager = $photoManager;
-        $this->tagDataProvider = $tagDataProvider;
+        $this->tagManager = $tagManager;
     }
 
     /**
@@ -89,15 +89,14 @@ class SiteMapBuilderService implements SiteMapBuilderServiceContract
             );
         });
 
-        $this->tagDataProvider
-            ->each(function (Tag $tag) {
-                $this->siteMapBuilder->addItem(
-                    (new Item)
-                        ->setLocation(sprintf(config('format.frontend.url.tag_page'), $tag->value))
-                        ->setChangeFrequency('daily')
-                        ->setPriority('0.7')
-                );
-            });
+        $this->tagManager->each(function (Tag $tag) {
+            $this->siteMapBuilder->addItem(
+                (new Item)
+                    ->setLocation(sprintf(config('format.frontend.url.tag_page'), $tag->value))
+                    ->setChangeFrequency('daily')
+                    ->setPriority('0.7')
+            );
+        });
 
         return $this->siteMapBuilder;
     }

@@ -3,8 +3,7 @@
 namespace Api\V1\Http\Controllers;
 
 use Api\V1\Http\Requests\FindTagsRequest;
-use Core\DataProviders\Tag\Contracts\TagDataProvider;
-use Core\DataProviders\Tag\Criterias\SortByPhotosCount;
+use Core\Managers\Tag\Contracts\TagManager;
 use Illuminate\Contracts\Cache\Factory as CacheManager;
 use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Routing\Controller;
@@ -22,20 +21,20 @@ class TagsController extends Controller
     private $cacheManager;
 
     /**
-     * @var TagDataProvider
+     * @var TagManager
      */
-    private $tagDataProvider;
+    private $tagManager;
 
     /**
      * TagsController constructor.
      *
      * @param CacheManager $cacheManager
-     * @param TagDataProvider $tagDataProvider
+     * @param TagManager $tagManager
      */
-    public function __construct(CacheManager $cacheManager, TagDataProvider $tagDataProvider)
+    public function __construct(CacheManager $cacheManager, TagManager $tagManager)
     {
         $this->cacheManager = $cacheManager;
-        $this->tagDataProvider = $tagDataProvider;
+        $this->tagManager = $tagManager;
     }
 
     /**
@@ -82,9 +81,7 @@ class TagsController extends Controller
         $paginator = $this->cacheManager
             ->tags(['tags'])
             ->remember($cacheKey, config('cache.lifetime'), function () use ($request) {
-                return $this->tagDataProvider
-                    ->applyCriteria((new SortByPhotosCount)->desc())
-                    ->paginate($request->get('page', 1), $request->get('per_page', 20));
+                return $this->tagManager->paginateOverMostPopular($request->get('page', 1), $request->get('per_page', 20));
             });
 
         $paginator->appends($request->query());
