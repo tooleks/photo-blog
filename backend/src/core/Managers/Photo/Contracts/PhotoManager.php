@@ -71,6 +71,16 @@ interface PhotoManager
      */
     public function eachPublished(Closure $callback);
 
+
+    /**
+     * Apply the callback function on each photo created by user ID.
+     *
+     * @param Closure $callback
+     * @param int $createdByUserId
+     * @return void
+     */
+    public function eachCreatedByUserId(Closure $callback, int $createdByUserId);
+
     /**
      * Apply the callback function on each not published photo older than week.
      *

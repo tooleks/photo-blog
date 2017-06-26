@@ -41,18 +41,6 @@ class User extends Authenticatable
     ];
 
     /**
-     * @inheritdoc
-     */
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::deleting(function (User $user) {
-            $user->photos()->delete();
-        });
-    }
-
-    /**
      * Set customer role.
      *
      * @return $this

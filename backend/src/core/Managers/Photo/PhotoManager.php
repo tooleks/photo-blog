@@ -8,6 +8,7 @@ use Core\DataProviders\Photo\Criterias\HasSearchPhrase;
 use Core\DataProviders\Photo\Criterias\HasTagWithValue;
 use Core\DataProviders\Photo\Criterias\IsPublished;
 use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
+use Core\DataProviders\Photo\Criterias\WhereCreatedByUserId;
 use Core\Managers\Photo\Contracts\PhotoManager as PhotoManagerContract;
 use Core\Services\Trash\Contracts\TrashServiceException;
 use Core\Services\Trash\Contracts\TrashService;
@@ -156,6 +157,16 @@ class PhotoManager implements PhotoManagerContract
     {
         $this->photoDataProvider
             ->applyCriteria(new IsPublished(true))
+            ->each($callback);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function eachCreatedByUserId(Closure $callback, int $createdByUserId)
+    {
+        $this->photoDataProvider
+            ->applyCriteria(new WhereCreatedByUserId($createdByUserId))
             ->each($callback);
     }
 

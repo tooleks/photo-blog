@@ -11,6 +11,9 @@ use Lib\DataProvider\Contracts\Criteria;
  */
 class IsPublished implements Criteria
 {
+    /**
+     * @var bool
+     */
     private $value;
 
     /**
