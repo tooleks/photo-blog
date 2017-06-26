@@ -73,11 +73,17 @@ class UserManager implements UserManagerContracts
     /**
      * @inheritdoc
      */
-    public function reGenerateApiToken(User $user)
+    public function generateApiToken(User $user)
     {
         $user->api_token = str_random(64);
+    }
 
-        $this->userDataProvider->save($user);
+    /**
+     * @inheritdoc
+     */
+    public function generatePasswordHash(User $user, $password)
+    {
+        $user->password = $this->hasher->make($password);
     }
 
     /**
@@ -87,9 +93,10 @@ class UserManager implements UserManagerContracts
     {
         $user = new User;
 
-        $user->password = $this->hasher->make($attributes['password']);
-        $user->api_token = str_random(64);
         $user->setCustomerRoleId();
+
+        $this->generateApiToken($user);
+        $this->generatePasswordHash($user, $attributes['password']);
 
         $this->userDataProvider->save($user, $attributes);
 
@@ -103,9 +110,10 @@ class UserManager implements UserManagerContracts
     {
         $user = new User;
 
-        $user->password = $this->hasher->make($attributes['password']);
-        $user->api_token = str_random(64);
         $user->setAdministratorRoleId();
+
+        $this->generateApiToken($user);
+        $this->generatePasswordHash($user, $attributes['password']);
 
         $this->userDataProvider->save($user, $attributes);
 
@@ -118,7 +126,7 @@ class UserManager implements UserManagerContracts
     public function save(User $user, array $attributes = [])
     {
         if (isset($attributes['password'])) {
-            $user->password = $this->hasher->make($attributes['password']);
+            $this->generatePasswordHash($user, $attributes['password']);
         }
 
         $this->userDataProvider->save($user, $attributes);

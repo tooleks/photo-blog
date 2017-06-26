@@ -37,12 +37,21 @@ interface UserManager
     public function getByCredentials(string $email, string $password): User;
 
     /**
-     * Re-generate the api token.
+     * Generate the api token.
      *
      * @param User $user
      * @return void
      */
-    public function reGenerateApiToken(User $user);
+    public function generateApiToken(User $user);
+
+    /**
+     * Generate the password hash.
+     *
+     * @param User $user
+     * @param string|null $password
+     * @return mixed
+     */
+    public function generatePasswordHash(User $user, $password);
 
     /**
      * Create the customer user.

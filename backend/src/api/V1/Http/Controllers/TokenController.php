@@ -64,7 +64,8 @@ class TokenController extends Controller
     {
         $user = $this->userManager->getByCredentials($request->get('email'), $request->get('password'));
 
-        $this->userManager->reGenerateApiToken($user);
+        $this->userManager->generateApiToken($user);
+        $this->userManager->save($user);
 
         $this->auth->setUser($user);
 
