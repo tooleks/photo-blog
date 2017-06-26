@@ -15,7 +15,7 @@ export class NoticesComponent {
         return this.notices.get();
     }
 
-    deleteNotice(index: number): void {
-        this.notices.deleteByIndex(index);
+    deleteAllNotices(index: number): void {
+        this.notices.deleteAll();
     }
 }
