@@ -2,9 +2,8 @@
 
 namespace Core\Services\SiteMap;
 
-use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
-use Core\DataProviders\Photo\Criterias\IsPublished;
 use Core\DataProviders\Tag\Contracts\TagDataProvider;
+use Core\Managers\Photo\Contracts\PhotoManager;
 use Core\Models\Photo;
 use Core\Models\Tag;
 use Core\Services\SiteMap\Contracts\SiteMapBuilderService as SiteMapBuilderServiceContract;
@@ -24,9 +23,9 @@ class SiteMapBuilderService implements SiteMapBuilderServiceContract
     private $siteMapBuilder;
 
     /**
-     * @var PhotoDataProvider
+     * @var PhotoManager
      */
-    private $photoDataProvider;
+    private $photoManager;
 
     /**
      * @var TagDataProvider
@@ -37,13 +36,13 @@ class SiteMapBuilderService implements SiteMapBuilderServiceContract
      * SiteMapBuilderService constructor.
      *
      * @param Builder $siteMapBuilder
-     * @param PhotoDataProvider $photoDataProvider
+     * @param PhotoManager $photoManager
      * @param TagDataProvider $tagDataProvider
      */
-    public function __construct(Builder $siteMapBuilder, PhotoDataProvider $photoDataProvider, TagDataProvider $tagDataProvider)
+    public function __construct(Builder $siteMapBuilder, PhotoManager $photoManager, TagDataProvider $tagDataProvider)
     {
         $this->siteMapBuilder = $siteMapBuilder;
-        $this->photoDataProvider = $photoDataProvider;
+        $this->photoManager = $photoManager;
         $this->tagDataProvider = $tagDataProvider;
     }
 
@@ -80,17 +79,15 @@ class SiteMapBuilderService implements SiteMapBuilderServiceContract
                 ->setPriority('0.5')
         );
 
-        $this->photoDataProvider
-            ->applyCriteria(new IsPublished(true))
-            ->each(function (Photo $photo) {
-                $this->siteMapBuilder->addItem(
-                    (new Item)
-                        ->setLocation(sprintf(config('format.frontend.url.photo_page'), $photo->id))
-                        ->setLastModified($photo->updated_at->tz('UTC')->toAtomString())
-                        ->setChangeFrequency('weekly')
-                        ->setPriority('0.8')
-                );
-            });
+        $this->photoManager->eachPublished(function (Photo $photo) {
+            $this->siteMapBuilder->addItem(
+                (new Item)
+                    ->setLocation(sprintf(config('format.frontend.url.photo_page'), $photo->id))
+                    ->setLastModified($photo->updated_at->toAtomString())
+                    ->setChangeFrequency('weekly')
+                    ->setPriority('0.8')
+            );
+        });
 
         $this->tagDataProvider
             ->each(function (Tag $tag) {

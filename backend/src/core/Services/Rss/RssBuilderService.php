@@ -2,12 +2,9 @@
 
 namespace Core\Services\Rss;
 
-use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
-use Core\DataProviders\Photo\Criterias\IsPublished;
+use Core\Managers\Photo\Contracts\PhotoManager;
 use Core\Services\Rss\Presenters\PhotoPresenter;
 use Core\Services\Rss\Contracts\RssBuilderService as RssBuilderServiceContract;
-use Lib\DataProvider\Criterias\SortByCreatedAt;
-use Lib\DataProvider\Criterias\Take;
 use Lib\Rss\Contracts\Builder;
 use Lib\Rss\Category;
 use Lib\Rss\Channel;
@@ -27,20 +24,20 @@ class RssBuilderService implements RssBuilderServiceContract
     private $rssBuilder;
 
     /**
-     * @var PhotoDataProvider
+     * @var PhotoManager
      */
-    private $photoDataProvider;
+    private $photoManager;
 
     /**
      * RssBuilderService constructor.
      *
      * @param Builder $rssBuilder
-     * @param PhotoDataProvider $photoDataProvider
+     * @param PhotoManager $photoManager
      */
-    public function __construct(Builder $rssBuilder, PhotoDataProvider $photoDataProvider)
+    public function __construct(Builder $rssBuilder, PhotoManager $photoManager)
     {
         $this->rssBuilder = $rssBuilder;
-        $this->photoDataProvider = $photoDataProvider;
+        $this->photoManager = $photoManager;
     }
 
     /**
@@ -48,7 +45,7 @@ class RssBuilderService implements RssBuilderServiceContract
      *
      * @return Channel
      */
-    protected function provideChannel(): Channel
+    private function provideChannel(): Channel
     {
         return (new Channel)
             ->setTitle(config('app.name'))
@@ -61,13 +58,10 @@ class RssBuilderService implements RssBuilderServiceContract
      *
      * @return array
      */
-    protected function provideItems(): array
+    private function provideItems(): array
     {
-        return $this->photoDataProvider
-            ->applyCriteria(new IsPublished(true))
-            ->applyCriteria((new SortByCreatedAt)->desc())
-            ->applyCriteria(new Take(50))
-            ->get()
+        return $this->photoManager
+            ->getLastFiftyPublished()
             ->present(PhotoPresenter::class)
             ->map(function (PhotoPresenter $photo) {
                 return (new Item)

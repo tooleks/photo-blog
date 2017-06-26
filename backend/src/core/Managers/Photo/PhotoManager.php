@@ -17,6 +17,7 @@ use Core\Services\Photo\Contracts\ThumbnailsGeneratorService;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
 use Illuminate\Http\UploadedFile;
 use Lib\DataProvider\Criterias\SortByCreatedAt;
+use Lib\DataProvider\Criterias\Take;
 use Lib\DataProvider\Criterias\WhereCreatedAtGreaterThan;
 use Lib\DataProvider\Criterias\WhereUpdatedAtLessThan;
 use Throwable;
@@ -117,6 +118,18 @@ class PhotoManager implements PhotoManagerContract
     /**
      * @inheritdoc
      */
+    public function getLastFiftyPublished()
+    {
+        return $this->photoDataProvider
+            ->applyCriteria(new IsPublished(true))
+            ->applyCriteria((new SortByCreatedAt)->desc())
+            ->applyCriteria(new Take(50))
+            ->get();
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function paginateOverPublished(int $page, int $perPage, array $query = [])
     {
         return $this->photoDataProvider
@@ -133,6 +146,16 @@ class PhotoManager implements PhotoManagerContract
     public function each(Closure $callback)
     {
         $this->photoDataProvider->each($callback);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function eachPublished(Closure $callback)
+    {
+        $this->photoDataProvider
+            ->applyCriteria(new IsPublished(true))
+            ->each($callback);
     }
 
     /**

@@ -5,6 +5,7 @@ namespace Core\Managers\Photo\Contracts;
 use Closure;
 use Core\Models\Photo;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Collection;
 
 /**
  * Interface PhotoManager.
@@ -38,6 +39,13 @@ interface PhotoManager
     public function getNotPublishedById(int $id);
 
     /**
+     * Get last fifty published photos.
+     *
+     * @return Collection
+     */
+    public function getLastFiftyPublished();
+
+    /**
      * Paginate over published photos.
      *
      * @param int $page
@@ -54,6 +62,14 @@ interface PhotoManager
      * @return void
      */
     public function each(Closure $callback);
+
+    /**
+     * Apply the callback function on each published photo.
+     *
+     * @param Closure $callback
+     * @return void
+     */
+    public function eachPublished(Closure $callback);
 
     /**
      * Apply the callback function on each not published photo older than week.
