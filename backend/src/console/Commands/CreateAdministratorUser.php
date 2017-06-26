@@ -2,9 +2,8 @@
 
 namespace Console\Commands;
 
-use Core\Models\User;
+use Core\Managers\User\Contracts\UserManager;
 use Illuminate\Console\Command;
-use Illuminate\Contracts\Hashing\Hasher;
 
 /**
  * Class CreateAdministratorUser.
@@ -28,20 +27,20 @@ class CreateAdministratorUser extends Command
     protected $description = 'Create administrator user';
 
     /**
-     * @var Hasher
+     * @var UserManager
      */
-    private $hasher;
+    private $userManager;
 
     /**
-     * Create a new command instance.
+     * CreateAdministratorUser constructor.
      *
-     * @param Hasher $hasher
+     * @param UserManager $userManager
      */
-    public function __construct(Hasher $hasher)
+    public function __construct(UserManager $userManager)
     {
         parent::__construct();
 
-        $this->hasher = $hasher;
+        $this->userManager = $userManager;
     }
 
     /**
@@ -51,14 +50,10 @@ class CreateAdministratorUser extends Command
      */
     public function handle()
     {
-        $user = new User;
+        $name = $this->ask('Enter user\'s name:');
+        $email = $this->ask('Enter user\'s email:');
+        $password = $this->ask('Enter user\'s password:');
 
-        $user->name = $this->ask('Enter user\'s name:');
-        $user->email = $this->ask('Enter user\'s email:');
-        $user->password = $this->hasher->make($this->ask('Enter user\'s password:'));
-        $user->generateApiToken();
-        $user->setAdministratorRoleId();
-
-        $user->saveOrFail();
+        $this->userManager->createAdministrator(compact('name', 'email', 'password'));
     }
 }

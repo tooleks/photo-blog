@@ -15,7 +15,7 @@ use Illuminate\Support\Collection;
 interface PhotoManager
 {
     /**
-     * Get the photo by its ID.
+     * Get the photo by ID.
      *
      * @param int $id
      * @return Photo
@@ -23,7 +23,7 @@ interface PhotoManager
     public function getById(int $id): Photo;
 
     /**
-     * Get published photo by its ID.
+     * Get published photo by ID.
      *
      * @param int $id
      * @return Photo
@@ -31,7 +31,7 @@ interface PhotoManager
     public function getPublishedById(int $id): Photo;
 
     /**
-     * Get not published photo by its ID.
+     * Get not published photo by ID.
      *
      * @param int $id
      * @return Photo

@@ -12,6 +12,14 @@ use Core\Models\User;
 interface UserManager
 {
     /**
+     * Get the user by ID.
+     *
+     * @param int $id
+     * @return User
+     */
+    public function getById(int $id): User;
+
+    /**
      * Get the user by email.
      *
      * @param string $email
@@ -35,4 +43,37 @@ interface UserManager
      * @return void
      */
     public function reGenerateApiToken(User $user);
+
+    /**
+     * Create the customer user.
+     *
+     * @param array $attributes
+     * @return User
+     */
+    public function createCustomer(array $attributes = []): User;
+
+    /**
+     * Create the administrator user.
+     *
+     * @param array $attributes
+     * @return User
+     */
+    public function createAdministrator(array $attributes = []): User;
+
+    /**
+     * Save the user.
+     *
+     * @param User $user
+     * @param array $attributes
+     * @return void
+     */
+    public function save(User $user, array $attributes = []);
+
+    /**
+     * Delete the user.
+     *
+     * @param User $user
+     * @return mixed
+     */
+    public function delete(User $user);
 }

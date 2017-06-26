@@ -53,32 +53,6 @@ class User extends Authenticatable
     }
 
     /**
-     * Set password.
-     *
-     * @param string $password
-     *
-     * @return $this
-     */
-    public function setPassword(string $password)
-    {
-        $this->attributes['password'] = $password;
-
-        return $this;
-    }
-
-    /**
-     * Generate API token.
-     *
-     * @return $this
-     */
-    public function generateApiToken()
-    {
-        $this->api_token = str_random(64);
-
-        return $this;
-    }
-
-    /**
      * Set customer role.
      *
      * @return $this

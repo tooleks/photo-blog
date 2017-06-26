@@ -4,8 +4,8 @@ namespace Api\V1\Http\Controllers;
 
 use Api\V1\Http\Requests\CreateUserRequest;
 use Api\V1\Http\Requests\UpdateUserRequest;
+use Core\Managers\User\Contracts\UserManager;
 use Core\Models\User;
-use Core\DataProviders\User\Contracts\UserDataProvider;
 use Illuminate\Routing\Controller;
 
 /**
@@ -16,18 +16,18 @@ use Illuminate\Routing\Controller;
 class UsersController extends Controller
 {
     /**
-     * @var UserDataProvider
+     * @var UserManager
      */
-    private $userDataProvider;
+    private $userManager;
 
     /**
      * UsersController constructor.
      *
-     * @param UserDataProvider $userDataProvider
+     * @param UserManager $userManager
      */
-    public function __construct(UserDataProvider $userDataProvider)
+    public function __construct(UserManager $userManager)
     {
-        $this->userDataProvider = $userDataProvider;
+        $this->userManager = $userManager;
     }
 
     /**
@@ -60,13 +60,7 @@ class UsersController extends Controller
      */
     public function create(CreateUserRequest $request): User
     {
-        $user = new User;
-
-        $user->setPassword($request->get('password'))
-            ->generateApiToken()
-            ->setCustomerRoleId();
-
-        $this->userDataProvider->save($user, $request->all());
+        $user = $this->userManager->createCustomer($request->all());
 
         return $user;
     }
@@ -133,11 +127,7 @@ class UsersController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user): User
     {
-        if ($request->has('password')) {
-            $user->setPassword($request->get('password'));
-        }
-
-        $this->userDataProvider->save($user, $request->all());
+        $this->userManager->save($user, $request->all());
 
         return $user;
     }
@@ -161,6 +151,6 @@ class UsersController extends Controller
      */
     public function delete(User $user)
     {
-        $this->userDataProvider->delete($user);
+        $this->userManager->delete($user);
     }
 }

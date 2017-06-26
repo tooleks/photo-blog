@@ -74,7 +74,7 @@ class RouteServiceProvider extends ServiceProvider
 
         Route::bind('user', function ($id) {
             return $this->app
-                ->make(\Core\DataProviders\User\Contracts\UserDataProvider::class)
+                ->make(\Core\Managers\User\Contracts\UserManager::class)
                 ->getById($id);
         });
     }

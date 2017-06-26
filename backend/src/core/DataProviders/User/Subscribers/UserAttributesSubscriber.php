@@ -5,7 +5,6 @@ namespace Core\DataProviders\User\Subscribers;
 use Core\DataProviders\User\UserDataProvider;
 use Core\Models\User;
 use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Support\Facades\Validator as ValidatorFactory;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -17,21 +16,6 @@ use Illuminate\Validation\ValidationException;
  */
 class UserAttributesSubscriber
 {
-    /**
-     * @var Hasher
-     */
-    private $hasher;
-
-    /**
-     * UserAttributesSubscriber constructor.
-     *
-     * @param Hasher $hasher
-     */
-    public function __construct(Hasher $hasher)
-    {
-        $this->hasher = $hasher;
-    }
-
     /**
      * Register the listeners for the subscriber.
      *
@@ -63,10 +47,6 @@ class UserAttributesSubscriber
 
         if ($validator->fails()) {
             throw new ValidationException($validator);
-        }
-
-        if ($user->getOriginal('password') !== $user->password) {
-            $user->password = $this->hasher->make($user->password);
         }
     }
 }

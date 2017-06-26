@@ -41,6 +41,14 @@ class UserManager implements UserManagerContracts
     /**
      * @inheritdoc
      */
+    public function getById(int $id): User
+    {
+        return $this->userDataProvider->getById($id);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getByEmail(string $email): User
     {
         return $this->userDataProvider
@@ -70,5 +78,59 @@ class UserManager implements UserManagerContracts
         $user->api_token = str_random(64);
 
         $this->userDataProvider->save($user);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function createCustomer(array $attributes = []): User
+    {
+        $user = new User;
+
+        $user->password = $this->hasher->make($attributes['password']);
+        $user->api_token = str_random(64);
+        $user->setCustomerRoleId();
+
+        $this->userDataProvider->save($user, $attributes);
+
+        return $user;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function createAdministrator(array $attributes = []): User
+    {
+        $user = new User;
+
+        $user->password = $this->hasher->make($attributes['password']);
+        $user->api_token = str_random(64);
+        $user->setAdministratorRoleId();
+
+        $this->userDataProvider->save($user, $attributes);
+
+        return $user;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function save(User $user, array $attributes = [])
+    {
+        if (isset($attributes['password'])) {
+            $user->password = $this->hasher->make($attributes['password']);
+        }
+
+        $this->userDataProvider->save($user, $attributes);
+
+        return $user;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function delete(User $user)
+    {
+        $this->userDataProvider->delete($user);
     }
 }
