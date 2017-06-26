@@ -1,18 +1,18 @@
 <?php
 
-namespace Core\Managers\Trash;
+namespace Core\Services\Trash;
 
-use Core\Managers\Trash\Contracts\TrashManager as TrashManagerContract;
-use Core\Managers\Trash\Exceptions\TrashManagerException;
+use Core\Services\Trash\Contracts\TrashService as TrashServiceContract;
+use Core\Services\Trash\Exceptions\TrashServiceException;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
 use Throwable;
 
 /**
- * Class TrashManager.
+ * Class TrashService.
  *
- * @package Core\Managers\Trash
+ * @package Core\Services\Trash
  */
-class TrashManager implements TrashManagerContract
+class TrashService implements TrashServiceContract
 {
     /**
      * @var Storage
@@ -55,7 +55,7 @@ class TrashManager implements TrashManagerContract
         try {
             return $this->storage->has($this->getObjectPath($objectPath));
         } catch (Throwable $e) {
-            throw new TrashManagerException($e->getMessage(), $e->getCode(), $e);
+            throw new TrashServiceException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -67,7 +67,7 @@ class TrashManager implements TrashManagerContract
         try {
             $this->storage->move($objectPath, $this->getObjectPath($objectPath));
         } catch (Throwable $e) {
-            throw new TrashManagerException($e->getMessage(), $e->getCode(), $e);
+            throw new TrashServiceException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -81,7 +81,7 @@ class TrashManager implements TrashManagerContract
                 $this->storage->move($objectPath, $this->getObjectPath($objectPath));
             }
         } catch (Throwable $e) {
-            throw new TrashManagerException($e->getMessage(), $e->getCode(), $e);
+            throw new TrashServiceException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -93,7 +93,7 @@ class TrashManager implements TrashManagerContract
         try {
             $this->storage->move($this->getObjectPath($objectPath), $objectPath);
         } catch (Throwable $e) {
-            throw new TrashManagerException($e->getMessage(), $e->getCode(), $e);
+            throw new TrashServiceException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -107,7 +107,7 @@ class TrashManager implements TrashManagerContract
                 $this->storage->move($this->getObjectPath($objectPath), $objectPath);
             }
         } catch (Throwable $e) {
-            throw new TrashManagerException($e->getMessage(), $e->getCode(), $e);
+            throw new TrashServiceException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -128,7 +128,7 @@ class TrashManager implements TrashManagerContract
                 }
             }
         } catch (Throwable $e) {
-            throw new TrashManagerException($e->getMessage(), $e->getCode(), $e);
+            throw new TrashServiceException($e->getMessage(), $e->getCode(), $e);
         }
     }
 }

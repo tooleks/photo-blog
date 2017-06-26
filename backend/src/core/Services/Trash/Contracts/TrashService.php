@@ -1,13 +1,13 @@
 <?php
 
-namespace Core\Managers\Trash\Contracts;
+namespace Core\Services\Trash\Contracts;
 
 /**
- * Interface TrashManager.
+ * Interface TrashService.
  *
- * @package Core\Managers\Trash\Contracts
+ * @package Core\Services\Trash\Contracts
  */
-interface TrashManager
+interface TrashService
 {
     /**
      * Determine the trash has object.

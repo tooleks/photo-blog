@@ -9,8 +9,8 @@ use Core\DataProviders\Photo\Criterias\HasTagWithValue;
 use Core\DataProviders\Photo\Criterias\IsPublished;
 use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
 use Core\Managers\Photo\Contracts\PhotoManager as PhotoManagerContract;
-use Core\Managers\Trash\Contracts\TrashManagerException;
-use Core\Managers\Trash\Contracts\TrashManager;
+use Core\Services\Trash\Contracts\TrashServiceException;
+use Core\Services\Trash\Contracts\TrashService;
 use Core\Models\Photo;
 use Core\Services\Photo\Contracts\ExifFetcherService;
 use Core\Services\Photo\Contracts\ThumbnailsGeneratorService;
@@ -37,9 +37,9 @@ class PhotoManager implements PhotoManagerContract
     private $storage;
 
     /**
-     * @var TrashManager
+     * @var TrashService
      */
-    private $trashManager;
+    private $trashService;
 
     /**
      * @var PhotoDataProvider
@@ -65,7 +65,7 @@ class PhotoManager implements PhotoManagerContract
      * PhotoManager constructor.
      *
      * @param Storage $storage
-     * @param TrashManager $trashManager
+     * @param TrashService $trashService
      * @param PhotoDataProvider $photoDataProvider
      * @param ExifFetcherService $exifFetcher
      * @param ThumbnailsGeneratorService $thumbnailsGenerator
@@ -73,7 +73,7 @@ class PhotoManager implements PhotoManagerContract
      */
     public function __construct(
         Storage $storage,
-        TrashManager $trashManager,
+        TrashService $trashService,
         PhotoDataProvider $photoDataProvider,
         ExifFetcherService $exifFetcher,
         ThumbnailsGeneratorService $thumbnailsGenerator,
@@ -81,7 +81,7 @@ class PhotoManager implements PhotoManagerContract
     )
     {
         $this->storage = $storage;
-        $this->trashManager = $trashManager;
+        $this->trashService = $trashService;
         $this->photoDataProvider = $photoDataProvider;
         $this->exifFetcher = $exifFetcher;
         $this->thumbnailsGenerator = $thumbnailsGenerator;
@@ -202,12 +202,12 @@ class PhotoManager implements PhotoManagerContract
             $photo->avg_color = $this->avgColorPicker->getImageAvgHexByPath($this->storage->getDriver()->getAdapter()->getPathPrefix() . $photo->path);
             $attributes = ['exif' => $this->exifFetcher->fetchFromUploadedFile($file), 'thumbnails' => $this->thumbnailsGenerator->generateByFilePath($photo->path)];
             $this->photoDataProvider->save($photo, $attributes, ['with' => ['exif', 'thumbnails']]);
-            $this->trashManager->moveIfExists($oldDirectoryPath);
-        } catch (TrashManagerException $e) {
+            $this->trashService->moveIfExists($oldDirectoryPath);
+        } catch (TrashServiceException $e) {
             throw $e;
         } catch (Throwable $e) {
-            $this->trashManager->restoreIfExists($oldDirectoryPath);
-            $this->trashManager->moveIfExists($newDirectoryPath);
+            $this->trashService->restoreIfExists($oldDirectoryPath);
+            $this->trashService->moveIfExists($newDirectoryPath);
             throw $e;
         }
     }
@@ -220,12 +220,12 @@ class PhotoManager implements PhotoManagerContract
         $directoryPath = dirname($photo->path);
 
         try {
-            $this->trashManager->moveIfExists($directoryPath);
+            $this->trashService->moveIfExists($directoryPath);
             $this->photoDataProvider->delete($photo);
-        } catch (TrashManagerException $e) {
+        } catch (TrashServiceException $e) {
             throw $e;
         } catch (Throwable $e) {
-            $this->trashManager->restoreIfExists($directoryPath);
+            $this->trashService->restoreIfExists($directoryPath);
             throw $e;
         }
     }

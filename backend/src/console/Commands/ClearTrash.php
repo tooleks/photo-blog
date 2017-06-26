@@ -3,7 +3,7 @@
 namespace Console\Commands;
 
 use Carbon\Carbon;
-use Core\Managers\Trash\Contracts\TrashManager;
+use Core\Services\Trash\Contracts\TrashService;
 use Illuminate\Console\Command;
 
 /**
@@ -28,19 +28,19 @@ class ClearTrash extends Command
     protected $description = 'Clear the trash';
 
     /**
-     * @var TrashManager
+     * @var TrashService
      */
-    protected $trashManager;
+    protected $trashService;
 
     /**
      * Create a new command instance.
-     * @param TrashManager $trashManager
+     * @param TrashService $trashService
      */
-    public function __construct(TrashManager $trashManager)
+    public function __construct(TrashService $trashService)
     {
         parent::__construct();
 
-        $this->trashManager = $trashManager;
+        $this->trashService = $trashService;
     }
 
     /**
@@ -50,6 +50,6 @@ class ClearTrash extends Command
      */
     public function handle()
     {
-        $this->trashManager->clear(Carbon::now()->addDay(-1)->timestamp);
+        $this->trashService->clear(Carbon::now()->addDay(-1)->timestamp);
     }
 }
