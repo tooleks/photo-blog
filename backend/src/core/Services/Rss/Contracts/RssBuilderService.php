@@ -2,7 +2,6 @@
 
 namespace Core\Services\Rss\Contracts;
 
-use Core\Services\Contracts\Runnable;
 use Lib\Rss\Contracts\Builder;
 
 /**
@@ -10,13 +9,12 @@ use Lib\Rss\Contracts\Builder;
  *
  * @package Core\Services\Rss\Contracts
  */
-interface RssBuilderService extends Runnable
+interface RssBuilderService
 {
     /**
      * Build the RSS feed.
      *
-     * @param array ...$parameters
      * @return Builder
      */
-    public function run(...$parameters): Builder;
+    public function build(): Builder;
 }

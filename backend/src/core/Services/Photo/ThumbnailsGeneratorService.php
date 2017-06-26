@@ -24,11 +24,6 @@ class ThumbnailsGeneratorService implements ThumbnailsGeneratorServiceContract
     private $thumbnailsGenerator;
 
     /**
-     * @var string
-     */
-    private $path;
-
-    /**
      * ThumbnailsGeneratorService constructor.
      *
      * @param Storage $storage
@@ -41,28 +36,16 @@ class ThumbnailsGeneratorService implements ThumbnailsGeneratorServiceContract
     }
 
     /**
-     * Fetch parameters.
-     *
-     * @param array $parameters
-     */
-    protected function fetchParameters(array $parameters)
-    {
-        list($this->path) = $parameters;
-    }
-
-    /**
      * @inheritdoc
      */
-    public function run(...$parameters): array
+    public function generateByFilePath(string $filePath): array
     {
-        $this->fetchParameters($parameters);
-
         $thumbnails = $this->thumbnailsGenerator->generateThumbnails(
-            $this->storage->getDriver()->getAdapter()->getPathPrefix() . $this->path
+            $this->storage->getDriver()->getAdapter()->getPathPrefix() . $filePath
         );
 
         foreach ($thumbnails as $thumbnail) {
-            $thumbnailPath = dirname($this->path) . '/' . basename($thumbnail['path']);
+            $thumbnailPath = dirname($filePath) . '/' . basename($thumbnail['path']);
             $data[] = [
                 'path' => $thumbnailPath,
                 'width' => $thumbnail['width'],

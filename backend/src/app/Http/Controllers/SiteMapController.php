@@ -44,7 +44,7 @@ class SiteMapController extends Controller
         $siteMap = $this->cacheManager
             ->tags(['siteMap', 'photos', 'tags'])
             ->remember('siteMap', config('cache.lifetime'), function () {
-                return $this->siteMapBuilder->run();
+                return $this->siteMapBuilder->build();
             });
 
         return response()

@@ -2,20 +2,18 @@
 
 namespace Core\Services\Photo\Contracts;
 
-use Core\Services\Contracts\Runnable;
-
 /**
  * Interface ThumbnailsGeneratorService.
  *
  * @package Core\Services\Photo\Contracts
  */
-interface ThumbnailsGeneratorService extends Runnable
+interface ThumbnailsGeneratorService
 {
     /**
-     * Generate the photo thumbnails and return records data.
+     * Generate the photo thumbnails by the file path and returns the thumbnails metadata.
      *
-     * @param array ...$parameters
+     * @param string $filePath
      * @return array
      */
-    public function run(...$parameters): array;
+    public function generateByFilePath(string $filePath): array;
 }

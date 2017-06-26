@@ -88,7 +88,7 @@ class RssBuilderService implements RssBuilderServiceContract
     /**
      * @inheritdoc
      */
-    public function run(...$parameters): Builder
+    public function build(): Builder
     {
         return $this->rssBuilder
             ->setChannel($this->provideChannel())

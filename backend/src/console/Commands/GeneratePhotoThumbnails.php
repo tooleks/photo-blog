@@ -73,7 +73,7 @@ class GeneratePhotoThumbnails extends Command
     {
         $this->photoManager->each(function (Photo $photo) {
             $this->comment("Generating photo [id:{$photo->id}] thumbnails ...");
-            $thumbnails = $this->thumbnailsGenerator->run($photo->path);
+            $thumbnails = $this->thumbnailsGenerator->generateByFilePath($photo->path);
             $this->photoManager->save($photo, compact('thumbnails'), ['with' => ['thumbnails']]);
         });
     }

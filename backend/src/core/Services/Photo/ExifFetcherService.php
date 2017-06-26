@@ -3,6 +3,7 @@
 namespace Core\Services\Photo;
 
 use Core\Services\Photo\Contracts\ExifFetcherService as ExifFetcherServiceContract;
+use Illuminate\Http\UploadedFile;
 use Lib\ExifFetcher\Contracts\ExifFetcher;
 
 /**
@@ -18,11 +19,6 @@ class ExifFetcherService implements ExifFetcherServiceContract
     private $exifFetcher;
 
     /**
-     * @var mixed
-     */
-    private $file;
-
-    /**
      * ExifFetcherService constructor.
      *
      * @param ExifFetcher $exifFetcher
@@ -33,26 +29,14 @@ class ExifFetcherService implements ExifFetcherServiceContract
     }
 
     /**
-     * Fetch parameters.
-     *
-     * @param array $parameters
-     */
-    protected function fetchParameters(array $parameters)
-    {
-        list($this->file) = $parameters;
-    }
-
-    /**
      * @inheritdoc
      */
-    public function run(...$parameters): array
+    public function fetchFromUploadedFile(UploadedFile $file): array
     {
-        $this->fetchParameters($parameters);
-
-        $data = $this->exifFetcher->fetch($this->file->getPathname());
+        $data = $this->exifFetcher->fetch($file->getPathname());
 
         // Replace the temporary file name with the original one.
-        $data['FileName'] = $this->file->getClientOriginalName();
+        $data['FileName'] = $file->getClientOriginalName();
 
         return ['data' => $data];
     }

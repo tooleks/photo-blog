@@ -2,20 +2,20 @@
 
 namespace Core\Services\Photo\Contracts;
 
-use Core\Services\Contracts\Runnable;
+use Illuminate\Http\UploadedFile;
 
 /**
  * Interface ExifFetcherService.
  *
  * @package Core\Services\Photo\Contracts
  */
-interface ExifFetcherService extends Runnable
+interface ExifFetcherService
 {
     /**
-     * Fetch the photo exif values and return record data.
+     * Fetch the photo exif data values from the uploaded file.
      *
-     * @param array ...$parameters
+     * @param UploadedFile $file
      * @return array
      */
-    public function run(...$parameters): array;
+    public function fetchFromUploadedFile(UploadedFile $file): array;
 }

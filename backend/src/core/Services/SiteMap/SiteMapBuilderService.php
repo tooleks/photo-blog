@@ -49,7 +49,7 @@ class SiteMapBuilderService implements SiteMapBuilderServiceContract
     /**
      * @inheritdoc
      */
-    public function run(...$parameters): Builder
+    public function build(): Builder
     {
         $this->siteMapBuilder->addItem(
             (new Item)
