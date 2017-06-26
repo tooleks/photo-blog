@@ -32,18 +32,18 @@ class TagManager implements TagManagerContract
     /**
      * @inheritdoc
      */
-    public function each(Closure $callback)
-    {
-        $this->tagDataProvider->each($callback);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function paginateOverMostPopular(int $page, int $perPage, array $query = [])
     {
         return $this->tagDataProvider
             ->applyCriteria((new SortByPhotosCount)->desc())
             ->paginate($page, $perPage);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function each(Closure $callback)
+    {
+        $this->tagDataProvider->each($callback);
     }
 }

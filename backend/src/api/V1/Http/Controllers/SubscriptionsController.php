@@ -3,7 +3,7 @@
 namespace Api\V1\Http\Controllers;
 
 use Api\V1\Http\Requests\CreateSubscriptionRequest;
-use Core\DataProviders\Subscription\Contracts\SubscriptionDataProvider;
+use Core\Managers\Subscription\Contracts\SubscriptionManager;
 use Core\Models\Subscription;
 use Illuminate\Routing\Controller;
 
@@ -15,18 +15,18 @@ use Illuminate\Routing\Controller;
 class SubscriptionsController extends Controller
 {
     /**
-     * @var SubscriptionDataProvider
+     * @var SubscriptionManager
      */
-    private $subscriptionDataProvider;
+    private $subscriptionManager;
 
     /**
      * SubscriptionController constructor.
      *
-     * @param SubscriptionDataProvider $subscriptionDataProvider
+     * @param SubscriptionManager $subscriptionManager
      */
-    public function __construct(SubscriptionDataProvider $subscriptionDataProvider)
+    public function __construct(SubscriptionManager $subscriptionManager)
     {
-        $this->subscriptionDataProvider = $subscriptionDataProvider;
+        $this->subscriptionManager = $subscriptionManager;
     }
 
     /**
@@ -53,11 +53,7 @@ class SubscriptionsController extends Controller
      */
     public function create(CreateSubscriptionRequest $request): Subscription
     {
-        $subscription = new Subscription;
-
-        $subscription->generateToken();
-
-        $this->subscriptionDataProvider->save($subscription, $request->all());
+        $subscription = $this->subscriptionManager->generateByEmail($request->get('email'));
 
         return $subscription;
     }
@@ -81,6 +77,6 @@ class SubscriptionsController extends Controller
      */
     public function delete(Subscription $subscription)
     {
-        $this->subscriptionDataProvider->delete($subscription);
+        $this->subscriptionManager->delete($subscription);
     }
 }

@@ -25,16 +25,4 @@ class Subscription extends Model
      * @inheritdoc
      */
     public $timestamps = false;
-
-    /**
-     * Generate token.
-     *
-     * @return $this
-     */
-    public function generateToken()
-    {
-        $this->token = str_random(64);
-
-        return $this;
-    }
 }

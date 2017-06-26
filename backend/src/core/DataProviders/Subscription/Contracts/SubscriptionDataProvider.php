@@ -11,12 +11,5 @@ use Lib\DataProvider\Contracts\DataProvider;
  */
 interface SubscriptionDataProvider extends DataProvider
 {
-    /**
-     * Get model by token.
-     *
-     * @param string $token
-     * @param array $options
-     * @return mixed
-     */
-    public function getByToken($token, array $options = []);
+
 }

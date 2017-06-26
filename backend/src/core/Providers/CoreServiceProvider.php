@@ -53,6 +53,11 @@ class CoreServiceProvider extends ServiceProvider
         );
 
         $this->app->singleton(
+            \Core\Managers\Subscription\Contracts\SubscriptionManager::class,
+            \Core\Managers\Subscription\SubscriptionManager::class
+        );
+
+        $this->app->singleton(
             \Core\Managers\Tag\Contracts\TagManager::class,
             \Core\Managers\Tag\TagManager::class
         );

@@ -2,12 +2,10 @@
 
 namespace Console\Commands;
 
-use Core\DataProviders\Subscription\Contracts\SubscriptionDataProvider;
-use Core\DataProviders\Subscription\Criterias\WhereEmailIn;
 use Core\Mail\WeeklySubscription;
 use Core\Managers\Photo\Contracts\PhotoManager;
+use Core\Managers\Subscription\Contracts\SubscriptionManager;
 use Core\Models\Subscription;
-use Closure;
 use Illuminate\Config\Repository as Config;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
@@ -39,9 +37,9 @@ class SendWeeklySubscriptionMails extends Command
     private $config;
 
     /**
-     * @var SubscriptionDataProvider
+     * @var SubscriptionManager
      */
-    private $subscriptionDataProvider;
+    private $subscriptionManager;
 
     /**
      * @var PhotoManager
@@ -52,15 +50,15 @@ class SendWeeklySubscriptionMails extends Command
      * SendWeeklySubscriptionMails constructor.
      *
      * @param Config $config
-     * @param SubscriptionDataProvider $subscriptionDataProvider
+     * @param SubscriptionManager $subscriptionManager
      * @param PhotoManager $photoManager
      */
-    public function __construct(Config $config, SubscriptionDataProvider $subscriptionDataProvider, PhotoManager $photoManager)
+    public function __construct(Config $config, SubscriptionManager $subscriptionManager, PhotoManager $photoManager)
     {
         parent::__construct();
 
         $this->config = $config;
-        $this->subscriptionDataProvider = $subscriptionDataProvider;
+        $this->subscriptionManager = $subscriptionManager;
         $this->photoManager = $photoManager;
     }
 
@@ -72,24 +70,11 @@ class SendWeeklySubscriptionMails extends Command
     public function handle()
     {
         if ($this->photoManager->existsPublishedOlderThanWeek()) {
-            $this->eachSubscriptionByEmailFilterArgument(function (Subscription $subscription) {
+            $this->subscriptionManager->eachFilteredByEmails(function (Subscription $subscription) {
                 $this->comment("Sending subscription mail [recipient:{$subscription->email}] ...");
                 $this->sendMail($subscription);
-            });
+            }, $this->argument('email_filter'));
         }
-    }
-
-    /**
-     *
-     *
-     * @param Closure $closure
-     */
-    protected function eachSubscriptionByEmailFilterArgument(Closure $closure)
-    {
-        $this->subscriptionDataProvider
-            // Note: The $this->hasArgument('email_filter') method call not working properly.
-            ->applyCriteriaWhen((bool) $this->argument('email_filter'), new WhereEmailIn($this->argument('email_filter')))
-            ->each($closure);
     }
 
     /**

@@ -68,7 +68,7 @@ class RouteServiceProvider extends ServiceProvider
 
         Route::bind('subscription', function ($token) {
             return $this->app
-                ->make(\Core\DataProviders\Subscription\Contracts\SubscriptionDataProvider::class)
+                ->make(\Core\Managers\Subscription\Contracts\SubscriptionManager::class)
                 ->getByToken($token);
         });
 
