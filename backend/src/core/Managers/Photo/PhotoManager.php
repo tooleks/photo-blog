@@ -16,6 +16,7 @@ use Core\Services\Photo\Contracts\ExifFetcherService;
 use Core\Services\Photo\Contracts\ThumbnailsGeneratorService;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Collection;
 use Lib\DataProvider\Criterias\SortByCreatedAt;
 use Lib\DataProvider\Criterias\Take;
 use Lib\DataProvider\Criterias\WhereCreatedAtGreaterThan;
@@ -90,7 +91,7 @@ class PhotoManager implements PhotoManagerContract
     /**
      * @inheritdoc
      */
-    public function getById(int $id)
+    public function getById(int $id): Photo
     {
         return $this->photoDataProvider->getById($id);
     }
@@ -98,7 +99,7 @@ class PhotoManager implements PhotoManagerContract
     /**
      * @inheritdoc
      */
-    public function getPublishedById(int $id)
+    public function getPublishedById(int $id): Photo
     {
         return $this->photoDataProvider
             ->applyCriteria(new IsPublished(true))
@@ -108,7 +109,7 @@ class PhotoManager implements PhotoManagerContract
     /**
      * @inheritdoc
      */
-    public function getNotPublishedById(int $id)
+    public function getNotPublishedById(int $id): Photo
     {
         return $this->photoDataProvider
             ->applyCriteria(new IsPublished(false))
@@ -118,7 +119,7 @@ class PhotoManager implements PhotoManagerContract
     /**
      * @inheritdoc
      */
-    public function getLastFiftyPublished()
+    public function getLastFiftyPublished(): Collection
     {
         return $this->photoDataProvider
             ->applyCriteria(new IsPublished(true))
@@ -193,20 +194,20 @@ class PhotoManager implements PhotoManagerContract
      */
     public function saveWithFile(Photo $photo, UploadedFile $file)
     {
-        $oldPhotoDirectoryPath = dirname($photo->path);
-        $newPhotoDirectoryPath = sprintf('%s/%s', config('main.storage.path.photos'), str_random(10));
+        $oldDirectoryPath = dirname($photo->path);
+        $newDirectoryPath = sprintf('%s/%s', config('main.storage.path.photos'), str_random(10));
 
         try {
-            $photo->path = $this->storage->put($newPhotoDirectoryPath, $file);
+            $photo->path = $this->storage->put($newDirectoryPath, $file);
             $photo->avg_color = $this->avgColorPicker->getImageAvgHexByPath($this->storage->getDriver()->getAdapter()->getPathPrefix() . $photo->path);
             $attributes = ['exif' => $this->exifFetcher->run($file), 'thumbnails' => $this->thumbnailsGenerator->run($photo->path)];
             $this->photoDataProvider->save($photo, $attributes, ['with' => ['exif', 'thumbnails']]);
-            $this->trashManager->moveIfExists($oldPhotoDirectoryPath);
+            $this->trashManager->moveIfExists($oldDirectoryPath);
         } catch (TrashManagerException $e) {
             throw $e;
         } catch (Throwable $e) {
-            $this->trashManager->restoreIfExists($oldPhotoDirectoryPath);
-            $this->trashManager->moveIfExists($newPhotoDirectoryPath);
+            $this->trashManager->restoreIfExists($oldDirectoryPath);
+            $this->trashManager->moveIfExists($newDirectoryPath);
             throw $e;
         }
     }
@@ -216,15 +217,15 @@ class PhotoManager implements PhotoManagerContract
      */
     public function delete(Photo $photo)
     {
-        $photoDirectoryPath = dirname($photo->path);
+        $directoryPath = dirname($photo->path);
 
         try {
-            $this->trashManager->moveIfExists($photoDirectoryPath);
+            $this->trashManager->moveIfExists($directoryPath);
             $this->photoDataProvider->delete($photo);
         } catch (TrashManagerException $e) {
             throw $e;
         } catch (Throwable $e) {
-            $this->trashManager->restoreIfExists($photoDirectoryPath);
+            $this->trashManager->restoreIfExists($directoryPath);
             throw $e;
         }
     }

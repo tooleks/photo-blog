@@ -20,7 +20,7 @@ interface PhotoManager
      * @param int $id
      * @return Photo
      */
-    public function getById(int $id);
+    public function getById(int $id): Photo;
 
     /**
      * Get published photo by its ID.
@@ -28,7 +28,7 @@ interface PhotoManager
      * @param int $id
      * @return Photo
      */
-    public function getPublishedById(int $id);
+    public function getPublishedById(int $id): Photo;
 
     /**
      * Get not published photo by its ID.
@@ -36,14 +36,14 @@ interface PhotoManager
      * @param int $id
      * @return Photo
      */
-    public function getNotPublishedById(int $id);
+    public function getNotPublishedById(int $id): Photo;
 
     /**
      * Get last fifty published photos.
      *
      * @return Collection
      */
-    public function getLastFiftyPublished();
+    public function getLastFiftyPublished(): Collection;
 
     /**
      * Paginate over published photos.
