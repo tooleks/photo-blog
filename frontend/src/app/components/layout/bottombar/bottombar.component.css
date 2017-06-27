@@ -2,7 +2,8 @@ bottombar .bottombar {
     display: block;
     position: absolute;
     bottom: 0;
-    width: 100%;
+    left: 0;
+    right: 0;
     height: 40px;
     background: none repeat scroll 0 0 white;
     border-top: 1px solid #e7eaec;
