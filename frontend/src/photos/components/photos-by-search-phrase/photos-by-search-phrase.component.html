@@ -24,9 +24,7 @@
 </div>
 <div class="row">
     <div class="col-sm-12">
-        <div *ngIf="isEmpty()" class="widget p-sm text-center">
-            <h2 class="m-xs">{{ 'No photos found' }}</h2>
-        </div>
+        <h1 *ngIf="isEmpty()" class="text-center"><small>{{ 'No photos found' }}</small></h1>
         <gallery #galleryComponent
                  [images]="images"
                  [defaultImageId]="queryParams['show']"
