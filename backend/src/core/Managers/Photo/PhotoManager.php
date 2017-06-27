@@ -10,11 +10,11 @@ use Core\DataProviders\Photo\Criterias\IsPublished;
 use Core\DataProviders\Photo\Contracts\PhotoDataProvider;
 use Core\DataProviders\Photo\Criterias\WhereCreatedByUserId;
 use Core\Managers\Photo\Contracts\PhotoManager as PhotoManagerContract;
-use Core\Services\Trash\Contracts\TrashServiceException;
-use Core\Services\Trash\Contracts\TrashService;
 use Core\Models\Photo;
 use Core\Services\Photo\Contracts\ExifFetcherService;
 use Core\Services\Photo\Contracts\ThumbnailsGeneratorService;
+use Core\Services\Trash\Contracts\TrashServiceException;
+use Core\Services\Trash\Contracts\TrashService;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
@@ -33,6 +33,11 @@ use Tooleks\Php\AvgColorPicker\Contracts\AvgColorPicker;
 class PhotoManager implements PhotoManagerContract
 {
     /**
+     * @var PhotoDataProvider
+     */
+    private $photoDataProvider;
+
+    /**
      * @var Storage
      */
     private $storage;
@@ -41,11 +46,6 @@ class PhotoManager implements PhotoManagerContract
      * @var TrashService
      */
     private $trashService;
-
-    /**
-     * @var PhotoDataProvider
-     */
-    private $photoDataProvider;
 
     /**
      * @var ExifFetcherService
@@ -65,25 +65,25 @@ class PhotoManager implements PhotoManagerContract
     /**
      * PhotoManager constructor.
      *
+     * @param PhotoDataProvider $photoDataProvider
      * @param Storage $storage
      * @param TrashService $trashService
-     * @param PhotoDataProvider $photoDataProvider
      * @param ExifFetcherService $exifFetcher
      * @param ThumbnailsGeneratorService $thumbnailsGenerator
      * @param AvgColorPicker $avgColorPicker
      */
     public function __construct(
+        PhotoDataProvider $photoDataProvider,
         Storage $storage,
         TrashService $trashService,
-        PhotoDataProvider $photoDataProvider,
         ExifFetcherService $exifFetcher,
         ThumbnailsGeneratorService $thumbnailsGenerator,
         AvgColorPicker $avgColorPicker
     )
     {
+        $this->photoDataProvider = $photoDataProvider;
         $this->storage = $storage;
         $this->trashService = $trashService;
-        $this->photoDataProvider = $photoDataProvider;
         $this->exifFetcher = $exifFetcher;
         $this->thumbnailsGenerator = $thumbnailsGenerator;
         $this->avgColorPicker = $avgColorPicker;
@@ -195,6 +195,21 @@ class PhotoManager implements PhotoManagerContract
     /**
      * @inheritdoc
      */
+    public function createNotPublishedWithFile(UploadedFile $file, int $createdByUserId = null, array $attributes = [], $options = []): Photo
+    {
+        $photo = new Photo;
+
+        $photo->is_published = false;
+        $photo->created_by_user_id = $createdByUserId;
+
+        $this->saveWithFile($photo, $file, $attributes, $options);
+
+        return $photo;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function save(Photo $photo, array $attributes = [], array $options = [])
     {
         $this->photoDataProvider->save($photo, $attributes, $options);
@@ -203,16 +218,34 @@ class PhotoManager implements PhotoManagerContract
     /**
      * @inheritdoc
      */
-    public function saveWithFile(Photo $photo, UploadedFile $file)
+    public function publish(Photo $photo, array $attributes = [], array $options = [])
+    {
+        $photo->is_published = true;
+
+        $this->photoDataProvider->save($photo, $attributes, $options);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function saveWithFile(Photo $photo, UploadedFile $file, array $attributes = [], $options = [])
     {
         $oldDirectoryPath = dirname($photo->path);
         $newDirectoryPath = sprintf('%s/%s', config('main.storage.path.photos'), str_random(10));
 
         try {
             $photo->path = $this->storage->put($newDirectoryPath, $file);
-            $photo->avg_color = $this->avgColorPicker->getImageAvgHexByPath($this->storage->getDriver()->getAdapter()->getPathPrefix() . $photo->path);
-            $attributes = ['exif' => $this->exifFetcher->fetchFromUploadedFile($file), 'thumbnails' => $this->thumbnailsGenerator->generateByFilePath($photo->path)];
-            $this->photoDataProvider->save($photo, $attributes, ['with' => ['exif', 'thumbnails']]);
+            $photo->avg_color = $this->avgColorPicker->getImageAvgHexByPath(
+                $this->storage->getDriver()->getAdapter()->getPathPrefix() . $photo->path
+            );
+            $attributes = array_merge($attributes, [
+                'exif' => $this->exifFetcher->fetchFromUploadedFile($file),
+                'thumbnails' => $this->thumbnailsGenerator->generateByFilePath($photo->path),
+            ]);
+            $options = array_merge($options, [
+                'with' => ['exif', 'thumbnails'],
+            ]);
+            $this->photoDataProvider->save($photo, $attributes, $options);
             $this->trashService->moveIfExists($oldDirectoryPath);
         } catch (TrashServiceException $e) {
             throw $e;

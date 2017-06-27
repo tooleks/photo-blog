@@ -97,6 +97,17 @@ interface PhotoManager
     public function existsPublishedOlderThanWeek();
 
     /**
+     * Create not published photo associated with the file.
+     *
+     * @param UploadedFile $file
+     * @param int|null $createdByUserId
+     * @param array $attributes
+     * @param array $options
+     * @return Photo
+     */
+    public function createNotPublishedWithFile(UploadedFile $file, int $createdByUserId = null, array $attributes = [], $options = []): Photo;
+
+    /**
      * Save the photo filled with the attributes array.
      *
      * @param Photo $photo
@@ -107,13 +118,25 @@ interface PhotoManager
     public function save(Photo $photo, array $attributes = [], array $options = []);
 
     /**
+     * Publish the photo filled with the attributes array.
+     *
+     * @param Photo $photo
+     * @param array $attributes
+     * @param array $options
+     * @return void
+     */
+    public function publish(Photo $photo, array $attributes = [], array $options = []);
+
+    /**
      * Save the photo associated with the file.
      *
      * @param Photo $photo
      * @param UploadedFile $file
+     * @param array $attributes
+     * @param array $options
      * @return void
      */
-    public function saveWithFile(Photo $photo, UploadedFile $file);
+    public function saveWithFile(Photo $photo, UploadedFile $file, array $attributes = [], $options = []);
 
     /**
      * Delete the photo.

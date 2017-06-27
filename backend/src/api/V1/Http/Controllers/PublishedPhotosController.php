@@ -98,9 +98,7 @@ class PublishedPhotosController extends Controller
     {
         $photo = $this->photoManager->getNotPublishedById($request->get('photo_id'));
 
-        $photo->setIsPublishedAttribute(true);
-
-        $this->photoManager->save($photo, $request->all(), ['with' => ['tags']]);
+        $this->photoManager->publish($photo, $request->all(), ['with' => ['tags']]);
 
         $this->cacheManager->tags(['photos', 'tags'])->flush();
 

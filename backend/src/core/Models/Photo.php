@@ -55,32 +55,6 @@ class Photo extends Model
     ];
 
     /**
-     * Setter for the 'created_by_user_id' attribute.
-     *
-     * @param int $createdByUserId
-     * @return $this
-     */
-    public function setCreatedByUserIdAttribute(int $createdByUserId)
-    {
-        $this->attributes['created_by_user_id'] = $createdByUserId;
-
-        return $this;
-    }
-
-    /**
-     * Setter for the 'is_published' attribute.
-     *
-     * @param bool $isPublished
-     * @return $this
-     */
-    public function setIsPublishedAttribute(bool $isPublished)
-    {
-        $this->attributes['is_published'] = $isPublished;
-
-        return $this;
-    }
-
-    /**
      * Setter for the 'description' attribute.
      *
      * @param string $description

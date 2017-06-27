@@ -94,11 +94,7 @@ class PhotosController extends Controller
      */
     public function create(CreatePhotoRequest $request): Photo
     {
-        $photo = (new Photo)
-            ->setCreatedByUserIdAttribute($this->auth->user()->id)
-            ->setIsPublishedAttribute(false);
-
-        $this->photoManager->saveWithFile($photo, $request->file('file'));
+        $photo = $this->photoManager->createNotPublishedWithFile($request->file('file'), $this->auth->user()->id);
 
         $this->cacheManager->tags(['photos', 'tags'])->flush();
 
