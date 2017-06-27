@@ -8,9 +8,10 @@ import 'rxjs/add/operator/map';
 
 import 'hammerjs';
 
-import '../assets/vendor/font-awesome/css/font-awesome.css';
-import '../assets/vendor/bootstrap/css/bootstrap.css';
-import '../assets/vendor/theme/css/style.css';
+import 'font-awesome/css/font-awesome.css';
+import 'bootstrap/dist/css/bootstrap.css';
+
+import '../assets/app/css/bootstrap.css';
 import '../assets/app/css/overrides.css';
 
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
