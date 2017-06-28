@@ -1,5 +1,5 @@
 upstream php-fpm {
-    server unix:/run/php/php7.0-fpm.sock;
+    server unix:/run/php/php7.1-fpm.sock;
 }
 
 server {
