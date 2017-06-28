@@ -56,10 +56,10 @@ interface UserManager
      * Generate the password hash.
      *
      * @param User $user
-     * @param string|null $password
+     * @param string $password
      * @return mixed
      */
-    public function generatePasswordHash(User $user, $password);
+    public function generatePasswordHash(User $user, string $password);
 
     /**
      * Create the customer user.
