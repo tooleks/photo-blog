@@ -20,6 +20,14 @@ interface UserManager
     public function getById(int $id): User;
 
     /**
+     * Get the user by name.
+     *
+     * @param string $name
+     * @return User
+     */
+    public function getByName(string $name): User;
+
+    /**
      * Get the user by email.
      *
      * @param string $email

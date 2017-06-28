@@ -31,6 +31,6 @@ class WhereToken implements Criteria
      */
     public function apply($query)
     {
-        $query->where('token', $this->token);
+        $query->where('subscriptions.token', $this->token);
     }
 }

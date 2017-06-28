@@ -2,10 +2,8 @@
 
 namespace Console\Commands;
 
-use Core\Models\User;
+use Core\Managers\User\Contracts\UserManager;
 use Illuminate\Console\Command;
-use Illuminate\Contracts\Hashing\Hasher;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 /**
  * Class ChangeUserPassword.
@@ -29,20 +27,20 @@ class ChangeUserPassword extends Command
     protected $description = 'Change user password';
 
     /**
-     * @var Hasher
+     * @var UserManager
      */
-    private $hasher;
+    private $userManager;
 
     /**
      * Create a new command instance.
      *
-     * @param Hasher $hasher
+     * @param UserManager $userManager
      */
-    public function __construct(Hasher $hasher)
+    public function __construct(UserManager $userManager)
     {
         parent::__construct();
 
-        $this->hasher = $hasher;
+        $this->userManager = $userManager;
     }
 
     /**
@@ -54,14 +52,10 @@ class ChangeUserPassword extends Command
     {
         $name = $this->ask('Enter user\'s name to change password:');
 
-        $user = User::whereName($name)->first();
+        $user = $this->userManager->getByName($name);
 
-        if (is_null($user)) {
-            throw new ModelNotFoundException('User not found.');
-        }
+        $password = $this->ask('Enter new user\'s password:');
 
-        $user->password = $this->hasher->make($this->ask('Enter new user\'s password:'));
-
-        $user->saveOrFail();
+        $this->userManager->save($user, compact('password'));
     }
 }

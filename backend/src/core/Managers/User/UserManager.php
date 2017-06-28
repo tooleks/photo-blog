@@ -7,6 +7,7 @@ use Core\Managers\User\Contracts\UserManager as UserManagerContracts;
 use Core\Models\User;
 use Illuminate\Contracts\Hashing\Hasher;
 use Lib\DataProvider\Criterias\WhereEmail;
+use Lib\DataProvider\Criterias\WhereName;
 use Lib\DataProvider\Exceptions\DataProviderNotFoundException;
 
 /**
@@ -44,6 +45,16 @@ class UserManager implements UserManagerContracts
     public function getById(int $id): User
     {
         return $this->userDataProvider->getById($id);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getByName(string $name): User
+    {
+        return $this->userDataProvider
+            ->applyCriteria(new WhereName($name))
+            ->getFirst();
     }
 
     /**
