@@ -61,7 +61,7 @@ interface PhotoManager
      * @param Closure $callback
      * @return void
      */
-    public function each(Closure $callback);
+    public function each(Closure $callback): void;
 
     /**
      * Apply the callback function on each published photo.
@@ -69,7 +69,7 @@ interface PhotoManager
      * @param Closure $callback
      * @return void
      */
-    public function eachPublished(Closure $callback);
+    public function eachPublished(Closure $callback): void;
 
 
     /**
@@ -79,7 +79,7 @@ interface PhotoManager
      * @param int $createdByUserId
      * @return void
      */
-    public function eachCreatedByUserId(Closure $callback, int $createdByUserId);
+    public function eachCreatedByUserId(Closure $callback, int $createdByUserId): void;
 
     /**
      * Apply the callback function on each not published photo older than week.
@@ -87,14 +87,14 @@ interface PhotoManager
      * @param Closure $callback
      * @return void
      */
-    public function eachNotPublishedOlderThanWeek(Closure $callback);
+    public function eachNotPublishedOlderThanWeek(Closure $callback): void;
 
     /**
      * Determine if exists published photos older than week.
      *
      * @return bool
      */
-    public function existsPublishedOlderThanWeek();
+    public function existsPublishedOlderThanWeek(): bool;
 
     /**
      * Create not published photo associated with the file.
@@ -115,7 +115,7 @@ interface PhotoManager
      * @param array $options
      * @return void
      */
-    public function save(Photo $photo, array $attributes = [], array $options = []);
+    public function save(Photo $photo, array $attributes = [], array $options = []): void;
 
     /**
      * Publish the photo filled with the attributes array.
@@ -125,7 +125,7 @@ interface PhotoManager
      * @param array $options
      * @return void
      */
-    public function publish(Photo $photo, array $attributes = [], array $options = []);
+    public function publish(Photo $photo, array $attributes = [], array $options = []): void;
 
     /**
      * Save the photo associated with the file.
@@ -136,7 +136,7 @@ interface PhotoManager
      * @param array $options
      * @return void
      */
-    public function saveWithFile(Photo $photo, UploadedFile $file, array $attributes = [], array $options = []);
+    public function saveWithFile(Photo $photo, UploadedFile $file, array $attributes = [], array $options = []): void;
 
     /**
      * Delete the photo.
@@ -144,5 +144,5 @@ interface PhotoManager
      * @param Photo $photo
      * @return void
      */
-    public function delete(Photo $photo);
+    public function delete(Photo $photo): void;
 }

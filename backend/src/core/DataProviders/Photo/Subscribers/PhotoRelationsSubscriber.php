@@ -83,7 +83,7 @@ class PhotoRelationsSubscriber
      * @param array $options
      * @return void
      */
-    public function onBeforeFetch(Builder $query, array $options)
+    public function onBeforeFetch(Builder $query, array $options): void
     {
         $query->with('exif', 'thumbnails', 'tags');
     }
@@ -96,7 +96,7 @@ class PhotoRelationsSubscriber
      * @param array $options
      * @return void
      */
-    public function onAfterSave(Photo $photo, array $attributes = [], array $options = [])
+    public function onAfterSave(Photo $photo, array $attributes = [], array $options = []): void
     {
         if (array_key_exists('with', $options)) {
             // Save with exif.
@@ -121,7 +121,7 @@ class PhotoRelationsSubscriber
      * @param array $options
      * @return void
      */
-    public function onBeforeDelete(Photo $photo, array $options = [])
+    public function onBeforeDelete(Photo $photo, array $options = []): void
     {
         // Delete exif.
         $photo->exif()->delete();
@@ -138,8 +138,9 @@ class PhotoRelationsSubscriber
      *
      * @param Photo $photo
      * @param array $attributes
+     * @return void
      */
-    private function savePhotoExif(Photo $photo, array $attributes)
+    private function savePhotoExif(Photo $photo, array $attributes): void
     {
         $photo->exif()->delete();
 
@@ -153,8 +154,9 @@ class PhotoRelationsSubscriber
      *
      * @param Photo $photo
      * @param array $records
+     * @return void
      */
-    private function savePhotoThumbnails(Photo $photo, array $records)
+    private function savePhotoThumbnails(Photo $photo, array $records): void
     {
         $photo->thumbnails()->detach();
 
@@ -170,8 +172,9 @@ class PhotoRelationsSubscriber
      *
      * @param Photo $photo
      * @param array $records
+     * @return void
      */
-    private function savePhotoTags(Photo $photo, array $records)
+    private function savePhotoTags(Photo $photo, array $records): void
     {
         $photo->tags()->detach();
 

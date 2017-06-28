@@ -62,7 +62,7 @@ class TrashService implements TrashServiceContract
     /**
      * @inheritdoc
      */
-    public function move(string $objectPath)
+    public function move(string $objectPath): void
     {
         try {
             $this->storage->move($objectPath, $this->getObjectPath($objectPath));
@@ -74,7 +74,7 @@ class TrashService implements TrashServiceContract
     /**
      * @inheritdoc
      */
-    public function moveIfExists(string $objectPath)
+    public function moveIfExists(string $objectPath): void
     {
         try {
             if ($this->storage->exists($objectPath)) {
@@ -88,7 +88,7 @@ class TrashService implements TrashServiceContract
     /**
      * @inheritdoc
      */
-    public function restore(string $objectPath)
+    public function restore(string $objectPath): void
     {
         try {
             $this->storage->move($this->getObjectPath($objectPath), $objectPath);
@@ -100,7 +100,7 @@ class TrashService implements TrashServiceContract
     /**
      * @inheritdoc
      */
-    public function restoreIfExists(string $objectPath)
+    public function restoreIfExists(string $objectPath): void
     {
         try {
             if ($this->storage->exists($this->getObjectPath($objectPath))) {
@@ -114,7 +114,7 @@ class TrashService implements TrashServiceContract
     /**
      * @inheritdoc
      */
-    public function clear(int $toTimestamp = null)
+    public function clear(int $toTimestamp = null): void
     {
         try {
             foreach ($this->storage->allDirectories($this->getObjectPath()) as $directory) {

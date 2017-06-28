@@ -225,7 +225,7 @@ class PhotosController extends Controller
      * @param Photo $photo
      * @return void
      */
-    public function delete(Photo $photo)
+    public function delete(Photo $photo): void
     {
         $this->photoManager->delete($photo);
 

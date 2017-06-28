@@ -26,19 +26,19 @@ class ExifPresenter extends Presenter
         return [
             'manufacturer' => 'data.Make',
             'model' => 'data.Model',
-            'exposure_time' => function () {
+            'exposure_time' => function (): ?string {
                 $exposureTime = $this->getWrappedModelAttribute('data.ExposureTime');
                 if ($exposureTime) {
-                    list($numerator, $denominator) = explode('/', $exposureTime);
+                    [$numerator, $denominator] = explode('/', $exposureTime);
                     $exposureTime = '1/' . (int) ($denominator / $numerator);
                 }
                 return $exposureTime ?? null;
             },
             'aperture' => 'data.COMPUTED.ApertureFNumber',
             'iso' => 'data.ISOSpeedRatings',
-            'taken_at' => function () {
+            'taken_at' => function (): ?string {
                 $takenAt = $this->getWrappedModelAttribute('data.DateTimeOriginal');
-                return $takenAt ? (string) (new Carbon($takenAt)) : null;
+                return $takenAt ? new Carbon($takenAt) : null;
             },
         ];
     }

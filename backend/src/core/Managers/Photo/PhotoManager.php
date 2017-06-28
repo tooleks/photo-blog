@@ -145,7 +145,7 @@ class PhotoManager implements PhotoManagerContract
     /**
      * @inheritdoc
      */
-    public function each(Closure $callback)
+    public function each(Closure $callback): void
     {
         $this->photoDataProvider->each($callback);
     }
@@ -153,7 +153,7 @@ class PhotoManager implements PhotoManagerContract
     /**
      * @inheritdoc
      */
-    public function eachPublished(Closure $callback)
+    public function eachPublished(Closure $callback): void
     {
         $this->photoDataProvider
             ->applyCriteria(new IsPublished(true))
@@ -163,7 +163,7 @@ class PhotoManager implements PhotoManagerContract
     /**
      * @inheritdoc
      */
-    public function eachCreatedByUserId(Closure $callback, int $createdByUserId)
+    public function eachCreatedByUserId(Closure $callback, int $createdByUserId): void
     {
         $this->photoDataProvider
             ->applyCriteria(new WhereCreatedByUserId($createdByUserId))
@@ -173,7 +173,7 @@ class PhotoManager implements PhotoManagerContract
     /**
      * @inheritdoc
      */
-    public function eachNotPublishedOlderThanWeek(Closure $callback)
+    public function eachNotPublishedOlderThanWeek(Closure $callback): void
     {
         $this->photoDataProvider
             ->applyCriteria(new IsPublished(false))
@@ -184,7 +184,7 @@ class PhotoManager implements PhotoManagerContract
     /**
      * @inheritdoc
      */
-    public function existsPublishedOlderThanWeek()
+    public function existsPublishedOlderThanWeek(): bool
     {
         $this->photoDataProvider
             ->applyCriteria(new IsPublished(true))
@@ -210,7 +210,7 @@ class PhotoManager implements PhotoManagerContract
     /**
      * @inheritdoc
      */
-    public function save(Photo $photo, array $attributes = [], array $options = [])
+    public function save(Photo $photo, array $attributes = [], array $options = []): void
     {
         $this->photoDataProvider->save($photo, $attributes, $options);
     }
@@ -218,7 +218,7 @@ class PhotoManager implements PhotoManagerContract
     /**
      * @inheritdoc
      */
-    public function publish(Photo $photo, array $attributes = [], array $options = [])
+    public function publish(Photo $photo, array $attributes = [], array $options = []): void
     {
         $photo->is_published = true;
 
@@ -228,7 +228,7 @@ class PhotoManager implements PhotoManagerContract
     /**
      * @inheritdoc
      */
-    public function saveWithFile(Photo $photo, UploadedFile $file, array $attributes = [], array $options = [])
+    public function saveWithFile(Photo $photo, UploadedFile $file, array $attributes = [], array $options = []): void
     {
         $oldDirectoryPath = dirname($photo->path);
         $newDirectoryPath = sprintf('%s/%s', config('main.storage.path.photos'), str_random(10));
@@ -259,7 +259,7 @@ class PhotoManager implements PhotoManagerContract
     /**
      * @inheritdoc
      */
-    public function delete(Photo $photo)
+    public function delete(Photo $photo): void
     {
         $directoryPath = dirname($photo->path);
 

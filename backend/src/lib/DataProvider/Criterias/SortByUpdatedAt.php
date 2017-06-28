@@ -15,7 +15,7 @@ class SortByUpdatedAt extends SortBy implements Criteria
     /**
      * @inheritdoc
      */
-    public function apply($query)
+    public function apply($query): void
     {
         $query->orderBy('updated_at', $this->order);
     }

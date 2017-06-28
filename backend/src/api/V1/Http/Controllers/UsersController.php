@@ -149,7 +149,7 @@ class UsersController extends Controller
      * @param User $user
      * @return void
      */
-    public function delete(User $user)
+    public function delete(User $user): void
     {
         $this->userManager->delete($user);
     }

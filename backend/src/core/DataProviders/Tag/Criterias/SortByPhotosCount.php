@@ -15,7 +15,7 @@ class SortByPhotosCount extends SortBy implements Criteria
     /**
      * @inheritdoc
      */
-    public function apply($query)
+    public function apply($query): void
     {
         $query
             ->selectRaw('tags.*, COUNT(photo_tags.tag_id) AS count')

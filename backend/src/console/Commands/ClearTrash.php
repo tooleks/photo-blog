@@ -48,7 +48,7 @@ class ClearTrash extends Command
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $this->trashService->clear(Carbon::now()->addDay(-1)->timestamp);
     }

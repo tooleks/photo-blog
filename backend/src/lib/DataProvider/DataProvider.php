@@ -69,7 +69,7 @@ abstract class DataProvider implements DataProviderContract
      * @return void
      * @throws DataProviderException
      */
-    protected function resetModel()
+    protected function resetModel(): void
     {
         $modelClass = $this->getModelClass();
 
@@ -89,7 +89,7 @@ abstract class DataProvider implements DataProviderContract
      *
      * @return void
      */
-    protected function resetQuery()
+    protected function resetQuery(): void
     {
         $this->query = $this->model->newQuery();
     }
@@ -97,7 +97,7 @@ abstract class DataProvider implements DataProviderContract
     /**
      * @inheritdoc
      */
-    public function reset()
+    public function reset(): void
     {
         $this->resetModel();
         $this->resetQuery();
@@ -110,7 +110,7 @@ abstract class DataProvider implements DataProviderContract
      * @return void
      * @throws DataProviderException
      */
-    protected function assertModel($model)
+    protected function assertModel($model): void
     {
         $modelClass = $this->getModelClass();
 
@@ -126,7 +126,7 @@ abstract class DataProvider implements DataProviderContract
      * @param array $data
      * @return void
      */
-    protected function dispatchEvent(string $eventName, &...$data)
+    protected function dispatchEvent(string $eventName, &...$data): void
     {
         $this->events->dispatch(static::class . '@' . $eventName, $data);
     }
@@ -219,7 +219,7 @@ abstract class DataProvider implements DataProviderContract
     /**
      * @inheritdoc
      */
-    public function each(Closure $callback, int $chunkSize = 100, array $options = [])
+    public function each(Closure $callback, int $chunkSize = 100, array $options = []): void
     {
         $this->query->chunk($chunkSize, function ($models) use ($callback, $options) {
             foreach ($models as $model) {
@@ -261,7 +261,7 @@ abstract class DataProvider implements DataProviderContract
     /**
      * @inheritdoc
      */
-    public function save($model, array $attributes = [], array $options = [])
+    public function save($model, array $attributes = [], array $options = []): void
     {
         $this->assertModel($model);
 

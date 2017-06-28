@@ -29,7 +29,7 @@ class WhereEmailIn implements Criteria
     /**
      * @inheritdoc
      */
-    public function apply($query)
+    public function apply($query): void
     {
         $query->whereIn('subscriptions.email', $this->list);
     }

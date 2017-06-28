@@ -13,8 +13,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Role extends Model
 {
-    const NAME_CUSTOMER = 'Customer';
-    const NAME_ADMINISTRATOR = 'Administrator';
+    public const NAME_CUSTOMER = 'Customer';
+    public const NAME_ADMINISTRATOR = 'Administrator';
 
     /**
      * @inheritdoc

@@ -27,7 +27,7 @@ interface SubscriptionManager
      * @param array $emails
      * @return void
      */
-    public function eachFilteredByEmails(Closure $callback, array $emails);
+    public function eachFilteredByEmails(Closure $callback, array $emails): void;
 
     /**
      * Generate the subscription by email.
@@ -43,5 +43,5 @@ interface SubscriptionManager
      * @param Subscription $subscription
      * @return void
      */
-    public function delete(Subscription $subscription);
+    public function delete(Subscription $subscription): void;
 }

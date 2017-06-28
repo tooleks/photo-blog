@@ -48,7 +48,7 @@ class CreateAdministratorUser extends Command
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $name = $this->ask('Enter user\'s name:');
         $email = $this->ask('Enter user\'s email:');

@@ -69,7 +69,7 @@ class GeneratePhotoThumbnails extends Command
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $this->photoManager->each(function (Photo $photo) {
             $this->comment("Generating photo [id:{$photo->id}] thumbnails ...");

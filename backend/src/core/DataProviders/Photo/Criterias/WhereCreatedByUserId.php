@@ -29,7 +29,7 @@ class WhereCreatedByUserId implements Criteria
     /**
      * @inheritdoc
      */
-    public function apply($query)
+    public function apply($query): void
     {
         $query->where('photos.created_by_user_id', $this->createdByUserId);
     }

@@ -30,7 +30,7 @@ class ConfigApp extends Command
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $this->call('storage:link');
         $this->call('migrate');

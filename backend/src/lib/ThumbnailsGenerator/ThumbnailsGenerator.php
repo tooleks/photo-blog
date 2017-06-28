@@ -58,7 +58,7 @@ class ThumbnailsGenerator implements ThumbnailsGeneratorContract
      * @throws ThumbnailsGeneratorException
      * @return void
      */
-    private function assertConfig(array $config)
+    private function assertConfig(array $config): void
     {
         $validator = ValidatorFactory::make($config, [
             '*.mode' => ['required', Rule::in(['inset', 'outbound'])],
@@ -105,8 +105,9 @@ class ThumbnailsGenerator implements ThumbnailsGeneratorContract
      * Apply callback function on each thumbnail config.
      *
      * @param Closure $callback
+     * @return void
      */
-    private function eachThumbnailConfig(Closure $callback)
+    private function eachThumbnailConfig(Closure $callback): void
     {
         array_map($callback, $this->config);
     }

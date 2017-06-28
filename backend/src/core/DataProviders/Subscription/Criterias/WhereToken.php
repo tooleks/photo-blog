@@ -29,7 +29,7 @@ class WhereToken implements Criteria
     /**
      * @inheritdoc
      */
-    public function apply($query)
+    public function apply($query): void
     {
         $query->where('subscriptions.token', $this->token);
     }

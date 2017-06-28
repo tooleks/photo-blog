@@ -49,7 +49,7 @@ class HasSearchPhrase implements Criteria
     /**
      * @inheritdoc
      */
-    public function apply($query)
+    public function apply($query): void
     {
         $whereSearchPhraseScope = function ($query, string $searchPhrase) {
             $query

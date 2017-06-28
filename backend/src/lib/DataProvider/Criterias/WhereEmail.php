@@ -29,7 +29,7 @@ class WhereEmail implements Criteria
     /**
      * @inheritdoc
      */
-    public function apply($query)
+    public function apply($query): void
     {
         $query->where('email', $this->email);
     }

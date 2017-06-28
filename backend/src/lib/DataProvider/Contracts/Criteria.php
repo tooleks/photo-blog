@@ -15,5 +15,5 @@ interface Criteria
      * @param mixed $query
      * @return void
      */
-    public function apply($query);
+    public function apply($query): void;
 }

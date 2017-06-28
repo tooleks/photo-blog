@@ -15,7 +15,7 @@ class SortByCreatedAt extends SortBy implements Criteria
     /**
      * @inheritdoc
      */
-    public function apply($query)
+    public function apply($query): void
     {
         $query->orderBy('created_at', $this->order);
     }

@@ -44,7 +44,7 @@ class SubscriptionManager implements SubscriptionManagerContract
     /**
      * @inheritdoc
      */
-    public function eachFilteredByEmails(Closure $callback, array $emails)
+    public function eachFilteredByEmails(Closure $callback, array $emails): void
     {
         $this->subscriptionDataProvider
             ->applyCriteriaWhen((bool) $emails, new WhereEmailIn($emails))
@@ -68,7 +68,7 @@ class SubscriptionManager implements SubscriptionManagerContract
     /**
      * @inheritdoc
      */
-    public function delete(Subscription $subscription)
+    public function delete(Subscription $subscription): void
     {
         $this->subscriptionDataProvider->delete($subscription);
     }

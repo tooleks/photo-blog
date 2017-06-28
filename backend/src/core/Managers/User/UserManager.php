@@ -84,7 +84,7 @@ class UserManager implements UserManagerContracts
     /**
      * @inheritdoc
      */
-    public function generateApiToken(User $user)
+    public function generateApiToken(User $user): void
     {
         $user->api_token = str_random(64);
     }
@@ -92,7 +92,7 @@ class UserManager implements UserManagerContracts
     /**
      * @inheritdoc
      */
-    public function generatePasswordHash(User $user, string $password)
+    public function generatePasswordHash(User $user, string $password): void
     {
         $user->password = $this->hasher->make($password);
     }
@@ -134,21 +134,19 @@ class UserManager implements UserManagerContracts
     /**
      * @inheritdoc
      */
-    public function save(User $user, array $attributes = [])
+    public function save(User $user, array $attributes = []): void
     {
         if (isset($attributes['password'])) {
             $this->generatePasswordHash($user, $attributes['password']);
         }
 
         $this->userDataProvider->save($user, $attributes);
-
-        return $user;
     }
 
     /**
      * @inheritdoc
      */
-    public function delete(User $user)
+    public function delete(User $user): void
     {
         $this->userDataProvider->delete($user);
     }

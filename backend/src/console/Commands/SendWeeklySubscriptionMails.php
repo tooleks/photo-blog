@@ -67,7 +67,7 @@ class SendWeeklySubscriptionMails extends Command
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         if ($this->photoManager->existsPublishedOlderThanWeek()) {
             $this->subscriptionManager->eachFilteredByEmails(function (Subscription $subscription) {

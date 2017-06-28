@@ -31,7 +31,7 @@ class CreateRoles extends Command
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         Role::insert([
             ['name' => Role::NAME_ADMINISTRATOR],

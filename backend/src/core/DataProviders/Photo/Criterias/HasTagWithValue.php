@@ -29,7 +29,7 @@ class HasTagWithValue implements Criteria
     /**
      * @inheritdoc
      */
-    public function apply($query)
+    public function apply($query): void
     {
         $query->whereHas('tags', function ($query) {
             $query->where('tags.value', $this->value);

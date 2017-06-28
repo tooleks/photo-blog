@@ -23,7 +23,7 @@ interface DataProvider
      *
      * @return void
      */
-    public function reset();
+    public function reset(): void;
 
     /**
      * Apply query criteria.
@@ -83,7 +83,7 @@ interface DataProvider
      * @param array $options
      * @return void
      */
-    public function each(Closure $callback, int $chunkSize = 100, array $options = []);
+    public function each(Closure $callback, int $chunkSize = 100, array $options = []): void;
 
     /**
      * Paginate over models.
@@ -111,7 +111,7 @@ interface DataProvider
      * @param array $options
      * @return mixed
      */
-    public function save($model, array $attributes = [], array $options = []);
+    public function save($model, array $attributes = [], array $options = []): void;
 
     /**
      * Delete model.

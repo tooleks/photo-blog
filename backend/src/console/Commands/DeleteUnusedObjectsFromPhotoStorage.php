@@ -66,7 +66,7 @@ class DeleteUnusedObjectsFromPhotoStorage extends Command
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         foreach ($this->getDirectoriesToDelete() as $directory) {
             $this->comment("Deleting [directory:'{$directory}'] ...");

@@ -52,11 +52,11 @@ class PhotoPresenter extends Presenter
     protected function getAttributesMap(): array
     {
         return [
-            'url' => function () {
+            'url' => function (): ?string {
                 return sprintf(config('format.frontend.url.photo_page'), $this->getWrappedModelAttribute('id'));
             },
             'title' => 'description',
-            'description' => function () {
+            'description' => function (): ?string {
                 $exif = $this->container
                     ->make(ExifPresenter::class)
                     ->setWrappedModel($this->getWrappedModelAttribute('exif'));
@@ -87,17 +87,17 @@ class PhotoPresenter extends Presenter
 
                 return implode(', ', $values ?? []);
             },
-            'file_url' => function () {
+            'file_url' => function (): ?string {
                 $url = $this->storage->url($this->getWrappedModelAttribute('thumbnails')->first()->path) ?? null;
-                return $url ? sprintf(config('format.storage.url.path'), $url) : '';
+                return $url ? sprintf(config('format.storage.url.path'), $url) : null;
             },
-            'file_size' => function () {
+            'file_size' => function (): ?string {
                 return $this->storage->size($this->getWrappedModelAttribute('thumbnails')->first()->path);
             },
-            'categories' => function () {
+            'categories' => function (): array {
                 return $this->getWrappedModelAttribute('tags')->pluck('value')->toArray() ?? [];
             },
-            'published_date' => function () {
+            'published_date' => function (): ?string {
                 return $this->getWrappedModelAttribute('created_at')->toAtomString();
             },
         ];

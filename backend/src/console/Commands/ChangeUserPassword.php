@@ -48,7 +48,7 @@ class ChangeUserPassword extends Command
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $name = $this->ask('Enter user\'s name to change password:');
 

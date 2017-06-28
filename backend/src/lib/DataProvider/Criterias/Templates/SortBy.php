@@ -9,8 +9,8 @@ namespace Lib\DataProvider\Criterias\Templates;
  */
 abstract class SortBy
 {
-    const ORDER_ASC = 'asc';
-    const ORDER_DESC = 'desc';
+    protected const ORDER_ASC = 'asc';
+    protected const ORDER_DESC = 'desc';
 
     /**
      * Sorting order.

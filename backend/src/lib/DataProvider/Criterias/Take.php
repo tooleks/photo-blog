@@ -29,7 +29,7 @@ class Take implements Criteria
     /**
      * @inheritdoc
      */
-    public function apply($query)
+    public function apply($query): void
     {
         $query->take($this->take);
     }

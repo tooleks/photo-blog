@@ -42,7 +42,7 @@ class TagManager implements TagManagerContract
     /**
      * @inheritdoc
      */
-    public function each(Closure $callback)
+    public function each(Closure $callback): void
     {
         $this->tagDataProvider->each($callback);
     }

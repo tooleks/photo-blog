@@ -38,7 +38,7 @@ class ThumbnailPresenter extends Presenter
     protected function getAttributesMap(): array
     {
         return [
-            'url' => function () {
+            'url' => function (): ?string {
                 $url = $this->storage->url($this->getWrappedModelAttribute('path'));
                 return $url ? sprintf(config('format.storage.url.path'), $url) : null;
             },

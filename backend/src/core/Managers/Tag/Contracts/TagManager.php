@@ -27,5 +27,5 @@ interface TagManager
      * @param Closure $callback
      * @return void
      */
-    public function each(Closure $callback);
+    public function each(Closure $callback): void;
 }

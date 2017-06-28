@@ -50,7 +50,7 @@ interface UserManager
      * @param User $user
      * @return void
      */
-    public function generateApiToken(User $user);
+    public function generateApiToken(User $user): void;
 
     /**
      * Generate the password hash.
@@ -59,7 +59,7 @@ interface UserManager
      * @param string $password
      * @return mixed
      */
-    public function generatePasswordHash(User $user, string $password);
+    public function generatePasswordHash(User $user, string $password): void;
 
     /**
      * Create the customer user.
@@ -84,13 +84,13 @@ interface UserManager
      * @param array $attributes
      * @return void
      */
-    public function save(User $user, array $attributes = []);
+    public function save(User $user, array $attributes = []): void;
 
     /**
      * Delete the user.
      *
      * @param User $user
-     * @return mixed
+     * @return void
      */
-    public function delete(User $user);
+    public function delete(User $user): void;
 }

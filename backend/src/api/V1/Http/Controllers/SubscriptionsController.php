@@ -75,7 +75,7 @@ class SubscriptionsController extends Controller
      * @param Subscription $subscription
      * @return void
      */
-    public function delete(Subscription $subscription)
+    public function delete(Subscription $subscription): void
     {
         $this->subscriptionManager->delete($subscription);
     }

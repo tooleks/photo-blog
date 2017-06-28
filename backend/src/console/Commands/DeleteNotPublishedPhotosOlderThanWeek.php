@@ -49,7 +49,7 @@ class DeleteNotPublishedPhotosOlderThanWeek extends Command
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $this->photoManager->eachNotPublishedOlderThanWeek(function (Photo $photo) {
             $this->comment("Deleting photo [id:{$photo->id}] ...");

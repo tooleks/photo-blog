@@ -23,7 +23,7 @@ interface TrashService
      * @param string $objectPath
      * @return void
      */
-    public function move(string $objectPath);
+    public function move(string $objectPath): void;
 
     /**
      * Move object into the trash if it exists.
@@ -31,7 +31,7 @@ interface TrashService
      * @param string $objectPath
      * @return void
      */
-    public function moveIfExists(string $objectPath);
+    public function moveIfExists(string $objectPath): void;
 
     /**
      * Restore object from the trash.
@@ -39,7 +39,7 @@ interface TrashService
      * @param string $objectPath
      * @return void
      */
-    public function restore(string $objectPath);
+    public function restore(string $objectPath): void;
 
     /**
      * Restore object from the trash if it exists.
@@ -47,7 +47,7 @@ interface TrashService
      * @param string $objectPath
      * @return void
      */
-    public function restoreIfExists(string $objectPath);
+    public function restoreIfExists(string $objectPath): void;
 
     /**
      * Clear the trash objects.
@@ -55,5 +55,5 @@ interface TrashService
      * @param int|null $toTimestamp
      * @return void
      */
-    public function clear(int $toTimestamp = null);
+    public function clear(int $toTimestamp = null): void;
 }

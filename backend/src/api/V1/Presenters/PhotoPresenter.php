@@ -56,16 +56,16 @@ class PhotoPresenter extends Presenter
         return [
             'id' => 'id',
             'created_by_user_id' => 'created_by_user_id',
-            'url' => function () {
+            'url' => function (): ?string {
                 $url = $this->storage->url($this->getWrappedModelAttribute('path'));
                 return $url ? sprintf(config('format.storage.url.path'), $url) : null;
             },
             'avg_color' => 'avg_color',
-            'created_at' => function () {
-                return (string) $this->getWrappedModelAttribute('created_at') ?? null;
+            'created_at' => function (): ?string {
+                return $this->getWrappedModelAttribute('created_at');
             },
-            'updated_at' => function () {
-                return (string) $this->getWrappedModelAttribute('updated_at') ?? null;
+            'updated_at' => function (): ?string {
+                return $this->getWrappedModelAttribute('updated_at');
             },
             'exif' => function () {
                 return $this->container

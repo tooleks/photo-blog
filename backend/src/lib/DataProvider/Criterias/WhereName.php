@@ -29,7 +29,7 @@ class WhereName implements Criteria
     /**
      * @inheritdoc
      */
-    public function apply($query)
+    public function apply($query): void
     {
         $query->where('name', $this->name);
     }
