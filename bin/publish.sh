@@ -68,7 +68,7 @@ step_stop_backend_application() {
     printf_step_header "Stopping Backend Application" &&
     cd "$root_path" &&
     printf_pwd &&
-    sudo systemctl stop php7.0-fpm
+    sudo systemctl stop php7.1-fpm
 }
 
 step_migrate_database() {
@@ -110,7 +110,7 @@ step_start_backend_application() {
     printf_step_header "Starting Backend Application" &&
     cd "$root_path" &&
     printf_pwd &&
-    sudo systemctl start php7.0-fpm
+    sudo systemctl start php7.1-fpm
 }
 
 step_stop_frontend_application() {
