@@ -105,7 +105,7 @@ interface PhotoManager
      * @param array $options
      * @return Photo
      */
-    public function createNotPublishedWithFile(UploadedFile $file, int $createdByUserId = null, array $attributes = [], $options = []): Photo;
+    public function createNotPublishedWithFile(UploadedFile $file, int $createdByUserId = null, array $attributes = [], array $options = []): Photo;
 
     /**
      * Save the photo filled with the attributes array.
@@ -136,7 +136,7 @@ interface PhotoManager
      * @param array $options
      * @return void
      */
-    public function saveWithFile(Photo $photo, UploadedFile $file, array $attributes = [], $options = []);
+    public function saveWithFile(Photo $photo, UploadedFile $file, array $attributes = [], array $options = []);
 
     /**
      * Delete the photo.

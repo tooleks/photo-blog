@@ -195,7 +195,7 @@ class PhotoManager implements PhotoManagerContract
     /**
      * @inheritdoc
      */
-    public function createNotPublishedWithFile(UploadedFile $file, int $createdByUserId = null, array $attributes = [], $options = []): Photo
+    public function createNotPublishedWithFile(UploadedFile $file, int $createdByUserId = null, array $attributes = [], array $options = []): Photo
     {
         $photo = new Photo;
 
@@ -228,7 +228,7 @@ class PhotoManager implements PhotoManagerContract
     /**
      * @inheritdoc
      */
-    public function saveWithFile(Photo $photo, UploadedFile $file, array $attributes = [], $options = [])
+    public function saveWithFile(Photo $photo, UploadedFile $file, array $attributes = [], array $options = [])
     {
         $oldDirectoryPath = dirname($photo->path);
         $newDirectoryPath = sprintf('%s/%s', config('main.storage.path.photos'), str_random(10));
