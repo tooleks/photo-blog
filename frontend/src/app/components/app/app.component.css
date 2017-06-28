@@ -1,5 +1,6 @@
 app .app-wrapper {
     min-width: 320px;
+    max-width: 1600px;
     min-height: 101%;
     width: 100%;
     position: relative;
