@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\V1\Presenters;
+namespace Api\V1\Http\Presenters\Response;
 
 use Tooleks\Laravel\Presenter\Presenter;
 
@@ -9,7 +9,7 @@ use Tooleks\Laravel\Presenter\Presenter;
  *
  * @property int user_id
  * @property string api_token
- * @package Api\V1\Presenters
+ * @package Api\V1\Http\Presenters\Response
  */
 class TokenPresenter extends Presenter
 {

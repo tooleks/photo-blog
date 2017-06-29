@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\V1\Presenters;
+namespace Api\V1\Http\Presenters\Response;
 
 use Carbon\Carbon;
 use Tooleks\Laravel\Presenter\Presenter;
@@ -14,7 +14,7 @@ use Tooleks\Laravel\Presenter\Presenter;
  * @property string aperture
  * @property string iso
  * @property string taken_at
- * @package Api\V1\Presenters
+ * @package Api\V1\Http\Presenters\Response
  */
 class ExifPresenter extends Presenter
 {

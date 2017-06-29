@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\V1\Presenters;
+namespace Api\V1\Http\Presenters\Response;
 
 use Illuminate\Contracts\Filesystem\Factory as Storage;
 use Tooleks\Laravel\Presenter\Presenter;
@@ -11,7 +11,7 @@ use Tooleks\Laravel\Presenter\Presenter;
  * @property string absolute_url
  * @property int width
  * @property int height
- * @package Api\V1\Presenters
+ * @package Api\V1\Http\Presenters\Response
  */
 class ThumbnailPresenter extends Presenter
 {

@@ -1,12 +1,12 @@
 <?php
 
 use Api\V1\Http\Middleware\AppendClientIpAddress;
-use Api\V1\Presenters\PhotoPresenter;
-use Api\V1\Presenters\PublishedPhotoPresenter;
-use Api\V1\Presenters\SubscriptionPresenter;
-use Api\V1\Presenters\TagPresenter;
-use Api\V1\Presenters\TokenPresenter;
-use Api\V1\Presenters\UserPresenter;
+use Api\V1\Http\Presenters\Response\PhotoPresenter;
+use Api\V1\Http\Presenters\Response\PublishedPhotoPresenter;
+use Api\V1\Http\Presenters\Response\SubscriptionPresenter;
+use Api\V1\Http\Presenters\Response\TagPresenter;
+use Api\V1\Http\Presenters\Response\TokenPresenter;
+use Api\V1\Http\Presenters\Response\UserPresenter;
 use Core\Models\Photo;
 use Core\Models\User;
 

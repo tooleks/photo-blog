@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\V1\Presenters;
+namespace Api\V1\Http\Presenters\Response;
 
 use Tooleks\Laravel\Presenter\Presenter;
 
@@ -13,7 +13,7 @@ use Tooleks\Laravel\Presenter\Presenter;
  * @property string created_at
  * @property string updated_at
  * @property string role
- * @package Api\V1\Presenters
+ * @package Api\V1\Http\Presenters\Response
  */
 class UserPresenter extends Presenter
 {
