@@ -34,14 +34,14 @@ use Tooleks\Php\AvgColorPicker\Contracts\AvgColorPicker;
 class PhotoManager implements PhotoManagerContract
 {
     /**
-     * @var PhotoDataProvider
-     */
-    private $photoDataProvider;
-
-    /**
      * @var Storage
      */
     private $storage;
+
+    /**
+     * @var PhotoDataProvider
+     */
+    private $photoDataProvider;
 
     /**
      * @var TrashService
@@ -66,24 +66,24 @@ class PhotoManager implements PhotoManagerContract
     /**
      * PhotoManager constructor.
      *
-     * @param PhotoDataProvider $photoDataProvider
      * @param Storage $storage
+     * @param PhotoDataProvider $photoDataProvider
      * @param TrashService $trashService
      * @param ExifFetcherService $exifFetcher
      * @param ThumbnailsGeneratorService $thumbnailsGenerator
      * @param AvgColorPicker $avgColorPicker
      */
     public function __construct(
-        PhotoDataProvider $photoDataProvider,
         Storage $storage,
+        PhotoDataProvider $photoDataProvider,
         TrashService $trashService,
         ExifFetcherService $exifFetcher,
         ThumbnailsGeneratorService $thumbnailsGenerator,
         AvgColorPicker $avgColorPicker
     )
     {
-        $this->photoDataProvider = $photoDataProvider;
         $this->storage = $storage;
+        $this->photoDataProvider = $photoDataProvider;
         $this->trashService = $trashService;
         $this->exifFetcher = $exifFetcher;
         $this->thumbnailsGenerator = $thumbnailsGenerator;
