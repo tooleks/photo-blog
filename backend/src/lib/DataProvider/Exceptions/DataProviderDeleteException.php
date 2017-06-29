@@ -2,15 +2,15 @@
 
 namespace Lib\DataProvider\Exceptions;
 
-use RuntimeException;
 use Lib\DataProvider\Contracts\DataProviderException as DataProviderExceptionContract;
+use RuntimeException;
 
 /**
- * Class DataProviderDeletingException.
+ * Class DataProviderDeleteException.
  *
  * @package Lib\DataProvider\Exceptions
  */
-class DataProviderDeletingException extends RuntimeException implements DataProviderExceptionContract
+class DataProviderDeleteException extends RuntimeException implements DataProviderExceptionContract
 {
 
 }

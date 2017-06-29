@@ -2,15 +2,15 @@
 
 namespace Lib\DataProvider\Exceptions;
 
-use Exception;
 use Lib\DataProvider\Contracts\DataProviderException as DataProviderExceptionContract;
+use RuntimeException;
 
 /**
  * Class DataProviderException.
  *
  * @package Lib\DataProvider\Exceptions
  */
-class DataProviderException extends Exception implements DataProviderExceptionContract
+class DataProviderException extends RuntimeException implements DataProviderExceptionContract
 {
 
 }

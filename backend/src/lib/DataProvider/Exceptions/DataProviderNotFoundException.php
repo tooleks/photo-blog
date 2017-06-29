@@ -2,8 +2,8 @@
 
 namespace Lib\DataProvider\Exceptions;
 
-use RuntimeException;
 use Lib\DataProvider\Contracts\DataProviderException as DataProviderExceptionContract;
+use RuntimeException;
 
 /**
  * Class DataProviderNotFoundException.

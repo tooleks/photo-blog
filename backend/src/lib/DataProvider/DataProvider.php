@@ -8,10 +8,10 @@ use Illuminate\Database\ConnectionInterface as Connection;
 use Illuminate\Database\Eloquent\Model;
 use Lib\DataProvider\Contracts\Criteria;
 use Lib\DataProvider\Contracts\DataProvider as DataProviderContract;
-use Lib\DataProvider\Exceptions\DataProviderDeletingException;
+use Lib\DataProvider\Exceptions\DataProviderDeleteException;
 use Lib\DataProvider\Exceptions\DataProviderException;
 use Lib\DataProvider\Exceptions\DataProviderNotFoundException;
-use Lib\DataProvider\Exceptions\DataProviderSavingException;
+use Lib\DataProvider\Exceptions\DataProviderSaveException;
 use Throwable;
 
 /**
@@ -120,7 +120,7 @@ abstract class DataProvider implements DataProviderContract
     }
 
     /**
-     * Dispatch an event with name 'NameSpace\Path\To\DataProvider@eventName'.
+     * Dispatch an event with name 'NameSpace\ClassName@eventName'.
      *
      * @param string $eventName
      * @param array $data
@@ -274,7 +274,7 @@ abstract class DataProvider implements DataProviderContract
             $this->dbConnection->commit();
         } catch (Throwable $e) {
             $this->dbConnection->rollBack();
-            throw new DataProviderSavingException($e->getMessage(), $e->getCode(), $e);
+            throw new DataProviderSaveException($e->getMessage(), $e->getCode(), $e);
         } finally {
             $this->reset();
         }
@@ -295,7 +295,7 @@ abstract class DataProvider implements DataProviderContract
             $this->dbConnection->commit();
         } catch (Throwable $e) {
             $this->dbConnection->rollBack();
-            throw new DataProviderDeletingException($e->getMessage(), $e->getCode(), $e);
+            throw new DataProviderDeleteException($e->getMessage(), $e->getCode(), $e);
         } finally {
             $this->reset();
         }
