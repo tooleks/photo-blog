@@ -49,7 +49,7 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
         $photo->thumbnails()->save(factory(Thumbnail::class)->make());
         $photo->exif()->save(factory(Exif::class)->make());
 
-        return $photo;
+        return $photo->load('exif', 'thumbnails');
     }
 
     protected function getPathFromUrl($url)
@@ -140,7 +140,7 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
     public function testDeleteSuccess()
     {
         $authUser = $this->createTestUser();
-        $photo = $this->createTestPhoto(['created_by_user_id' => $authUser->id])->load('exif', 'thumbnails');
+        $photo = $this->createTestPhoto(['created_by_user_id' => $authUser->id]);
 
         $this
             ->actingAs($authUser)

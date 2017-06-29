@@ -54,7 +54,7 @@ class PublishedPhotosResourceTest extends IntegrationApiV1TestCase
         $photo->exif()->save(factory(Exif::class)->make());
         $photo->tags()->save(factory(Tag::class)->make());
 
-        return $photo;
+        return $photo->load('exif', 'tags', 'thumbnails');
     }
 
     public function testCreateSuccess()
@@ -188,13 +188,71 @@ class PublishedPhotosResourceTest extends IntegrationApiV1TestCase
             ]);
     }
 
+    public function testGetByTagSuccess()
+    {
+        $user = $this->createTestUser();
+        $photo = $this->createTestPhoto([
+            'created_by_user_id' => $user->id,
+            'is_published' => true,
+        ]);
+
+        $this
+            ->json('GET', sprintf('/%s?tag=%s', $this->resourceName, $photo->tags->first()->value))
+            ->assertStatus(200)
+            ->assertJsonStructure([
+                'data' => [
+                    $this->resourceStructure,
+                ],
+            ])
+            ->assertJson([
+                'data' => [
+                    [
+                        'id' => $photo->id,
+                        'description' => $photo->description,
+                        'tags' => array_map(function ($tag) {
+                            return ['value' => $tag['value']];
+                        }, $photo->tags->toArray()),
+                    ],
+                ],
+            ]);
+    }
+
+    public function testGetBySearchPhraseSuccess()
+    {
+        $user = $this->createTestUser();
+        $photo = $this->createTestPhoto([
+            'created_by_user_id' => $user->id,
+            'is_published' => true,
+        ]);
+
+        $this
+            ->json('GET', sprintf('/%s?search_phrase=%s', $this->resourceName, $photo->description . ' ' . $photo->tags->first()->value))
+            ->assertStatus(200)
+            ->assertJsonStructure([
+                'data' => [
+                    $this->resourceStructure,
+                ],
+            ])
+            ->assertJson([
+                'data' => [
+                    [
+                        'id' => $photo->id,
+                        'description' => $photo->description,
+                        'tags' => array_map(function ($tag) {
+                            return ['value' => $tag['value']];
+                        }, $photo->tags->toArray()),
+                    ],
+                ],
+            ]);
+    }
+
     public function testDeleteSuccess()
     {
         $authUser = $this->createTestUser();
         $photo = $this->createTestPhoto([
             'created_by_user_id' => $authUser->id,
             'is_published' => true,
-        ])->load('exif', 'tags', 'thumbnails');
+        ]);
 
         $this
             ->actingAs($authUser)
