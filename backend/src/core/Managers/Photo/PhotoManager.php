@@ -17,6 +17,7 @@ use Core\Services\Trash\Contracts\TrashServiceException;
 use Core\Services\Trash\Contracts\TrashService;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Support\Collection;
 use Lib\DataProvider\Criterias\SortByCreatedAt;
 use Lib\DataProvider\Criterias\Take;
@@ -120,19 +121,19 @@ class PhotoManager implements PhotoManagerContract
     /**
      * @inheritdoc
      */
-    public function getLastFiftyPublished(): Collection
+    public function getLastPublished(int $take): Collection
     {
         return $this->photoDataProvider
             ->applyCriteria(new IsPublished(true))
             ->applyCriteria((new SortByCreatedAt)->desc())
-            ->applyCriteria(new Take(50))
+            ->applyCriteria(new Take($take))
             ->get();
     }
 
     /**
      * @inheritdoc
      */
-    public function paginateOverLastPublished(int $page, int $perPage, array $query = [])
+    public function paginateOverLastPublished(int $page, int $perPage, array $query = []): AbstractPaginator
     {
         return $this->photoDataProvider
             ->applyCriteria(new IsPublished(true))

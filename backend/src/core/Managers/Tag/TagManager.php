@@ -6,6 +6,7 @@ use Closure;
 use Core\DataProviders\Tag\Contracts\TagDataProvider;
 use Core\DataProviders\Tag\Criterias\SortByPhotosCount;
 use Core\Managers\Tag\Contracts\TagManager as TagManagerContract;
+use Illuminate\Pagination\AbstractPaginator;
 
 /**
  * Class TagManager.
@@ -32,7 +33,7 @@ class TagManager implements TagManagerContract
     /**
      * @inheritdoc
      */
-    public function paginateOverMostPopular(int $page, int $perPage, array $query = [])
+    public function paginateOverMostPopular(int $page, int $perPage, array $query = []): AbstractPaginator
     {
         return $this->tagDataProvider
             ->applyCriteria((new SortByPhotosCount)->desc())

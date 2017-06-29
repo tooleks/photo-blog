@@ -3,6 +3,7 @@
 namespace Core\Managers\Tag\Contracts;
 
 use Closure;
+use Illuminate\Pagination\AbstractPaginator;
 
 /**
  * Interface TagManager.
@@ -19,7 +20,7 @@ interface TagManager
      * @param array $query
      * @return mixed
      */
-    public function paginateOverMostPopular(int $page, int $perPage, array $query = []);
+    public function paginateOverMostPopular(int $page, int $perPage, array $query = []): AbstractPaginator;
 
     /**
      * Apply the callback function on each tag.

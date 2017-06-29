@@ -5,6 +5,7 @@ namespace Core\Managers\Photo\Contracts;
 use Closure;
 use Core\Models\Photo;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Support\Collection;
 
 /**
@@ -41,9 +42,10 @@ interface PhotoManager
     /**
      * Get last fifty published photos.
      *
+     * @param int $take
      * @return Collection
      */
-    public function getLastFiftyPublished(): Collection;
+    public function getLastPublished(int $take): Collection;
 
     /**
      * Paginate over the last published photos.
@@ -51,9 +53,9 @@ interface PhotoManager
      * @param int $page
      * @param int $perPage
      * @param array $query
-     * @return mixed
+     * @return AbstractPaginator
      */
-    public function paginateOverLastPublished(int $page, int $perPage, array $query = []);
+    public function paginateOverLastPublished(int $page, int $perPage, array $query = []): AbstractPaginator;
 
     /**
      * Apply the callback function on each photo.

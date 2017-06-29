@@ -61,7 +61,7 @@ class RssBuilderService implements RssBuilderServiceContract
     private function provideItems(): array
     {
         return $this->photoManager
-            ->getLastFiftyPublished()
+            ->getLastPublished(50)
             ->present(PhotoPresenter::class)
             ->map(function (PhotoPresenter $photo) {
                 return (new Item)
