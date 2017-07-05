@@ -13,8 +13,12 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const app = express();
-const port = 8000;
-const baseUrl = `http://localhost:${port}`;
+
+const frontendPort = process.env.DEFAULT_PORT || 8000;
+const frontendHost = process.env.DEFAULT_HOST || `http://localhost:${frontendPort}`;
+const backendHost = process.env.BACKEND_URL;
+
+app.disable('x-powered-by');
 
 app.engine('html', ngExpressEngine({
     bootstrap: ServerAppModule
@@ -25,13 +29,8 @@ app.set('views', 'src');
 
 app.use('/', express.static('dist', {index: false}));
 
-app.get('/sitemap.xml', (req, res) => {
-    res.redirect(301, `${process.env.BACKEND_URL}/sitemap.xml`);
-});
-
-app.get('/rss.xml', (req, res) => {
-    res.redirect(301, `${process.env.BACKEND_URL}/rss.xml`);
-});
+app.get('/sitemap.xml', (req, res) => res.redirect(301, `${backendHost}/sitemap.xml`));
+app.get('/rss.xml', (req, res) => res.redirect(301, `${backendHost}/rss.xml`));
 
 ROUTES.forEach(route => {
     app.get(route, (req, res) => {
@@ -44,10 +43,8 @@ ROUTES.forEach(route => {
     });
 });
 
-app.get('*', (req, res) => {
-    res.status(404).redirect('/404');
-});
+app.get('*', (req, res) => res.status(404).redirect('/404'));
 
-app.listen(8000, () => {
-    console.log(`Listening at ${baseUrl}`);
+app.listen(frontendPort, () => {
+    console.log(`Listening at ${frontendHost}`);
 });

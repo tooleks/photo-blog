@@ -1,0 +1,60 @@
+version: '3.3'
+
+services:
+  nginx.docker:
+    image: nginx:1.12
+    container_name: nginx
+    restart: always
+    ports:
+      - 8080:80
+    volumes:
+      - ./:/data
+      - ./config/nginx/backend.conf:/etc/nginx/conf.d/backend.conf
+      - ./config/nginx/frontend.conf:/etc/nginx/conf.d/frontend.conf
+      - ./config/nginx/rest_api_documentation.conf:/etc/nginx/conf.d/rest_api_documentation.conf
+      - ./config/nginx/storage.conf:/etc/nginx/conf.d/storage.conf
+
+  backend.docker:
+    environment:
+      - DOCKER_REBUILD=1
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: php:7.1-fpm
+    container_name: backend
+    restart: always
+    volumes:
+      - ./:/data
+      - ./config/php-fpm/php.ini:/usr/local/etc/php/php.ini
+
+  frontend.docker:
+    environment:
+      - DOCKER_ENV=development
+      - DOCKER_REBUILD=1
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: nodejs:8.1
+    container_name: frontend
+    restart: always
+    volumes:
+      - ./:/data
+
+  mysql.docker:
+    image: mysql:5.7
+    container_name: mysql
+    restart: always
+    environment:
+      - MYSQL_DATABASE=photo_blog
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=dev
+      - MYSQL_PASSWORD=dev
+    ports:
+      - 3306:3306
+    volumes:
+      - ./data/mysql.docker/var/lib/mysql:/var/lib/mysql
+
+  redis.docker:
+    image: redis:3.2
+    container_name: redis
+    restart: always

@@ -34,7 +34,7 @@ class CreatePhotoRequest extends FormRequest
                 'filled',
                 'file',
                 'image',
-                'mimes:jpeg,png',
+                'mimes:jpeg',
                 sprintf('dimensions:min_width=%s,min_height=%s', config('main.upload.min-image-width'), config('main.upload.min-image-height')),
                 sprintf('min:%s', config('main.upload.min-size')),
                 sprintf('max:%s', config('main.upload.max-size')),

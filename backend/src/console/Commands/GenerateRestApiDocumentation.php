@@ -34,7 +34,7 @@ class GenerateRestApiDocumentation extends Command
      */
     public function handle(): void
     {
-        $process = new Process('apidoc -i ./src/api/ -o ../docs/rest_api/dist');
+        $process = new Process('apidoc -i ./src/api/ -o ./docs/rest_api/dist');
 
         $process->run();
 

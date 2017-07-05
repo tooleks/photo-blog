@@ -23,7 +23,7 @@
     "title": "Photo Blog REST API Documentation",
     "header": {
       "title": "Information",
-      "filename": "../docs/rest_api/header.md"
+      "filename": "./docs/rest_api/header.md"
     },
     "url": "/api"
   }

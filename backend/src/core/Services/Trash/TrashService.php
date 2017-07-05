@@ -48,10 +48,25 @@ class TrashService implements TrashServiceContract
     }
 
     /**
+     * Check if the object path is valid.
+     *
+     * @param string $objectPath
+     * @return bool
+     */
+    private function isValidObjectPath(string $objectPath): bool
+    {
+        return $this->getObjectPath($objectPath) !== $this->getObjectPath();
+    }
+
+    /**
      * @inheritdoc
      */
     public function has(string $objectPath): bool
     {
+        if (!$this->isValidObjectPath($objectPath)) {
+            return false;
+        }
+
         try {
             return $this->storage->has($this->getObjectPath($objectPath));
         } catch (Throwable $e) {
@@ -64,6 +79,10 @@ class TrashService implements TrashServiceContract
      */
     public function move(string $objectPath): void
     {
+        if (!$this->isValidObjectPath($objectPath)) {
+            return;
+        }
+
         try {
             $this->storage->move($objectPath, $this->getObjectPath($objectPath));
         } catch (Throwable $e) {
@@ -76,6 +95,10 @@ class TrashService implements TrashServiceContract
      */
     public function moveIfExists(string $objectPath): void
     {
+        if (!$this->isValidObjectPath($objectPath)) {
+            return;
+        }
+
         try {
             if ($this->storage->exists($objectPath)) {
                 $this->storage->move($objectPath, $this->getObjectPath($objectPath));
@@ -90,6 +113,10 @@ class TrashService implements TrashServiceContract
      */
     public function restore(string $objectPath): void
     {
+        if (!$this->isValidObjectPath($objectPath)) {
+            return;
+        }
+
         try {
             $this->storage->move($this->getObjectPath($objectPath), $objectPath);
         } catch (Throwable $e) {
@@ -102,6 +129,10 @@ class TrashService implements TrashServiceContract
      */
     public function restoreIfExists(string $objectPath): void
     {
+        if (!$this->isValidObjectPath($objectPath)) {
+            return;
+        }
+
         try {
             if ($this->storage->exists($this->getObjectPath($objectPath))) {
                 $this->storage->move($this->getObjectPath($objectPath), $objectPath);

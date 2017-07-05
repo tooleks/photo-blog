@@ -1,73 +1,30 @@
 ## Photo Blog Application based on Laravel 5 and Angular 4
 
-### Backend
+## Tech Stack
 
-#### Development Configuration
+Docker 17.06, NGINX 1.12, MySQL 5.7, Redis 3.2, PHP 7.1, Laravel 5.4, Node.js 8.1, Angular 4.0.
 
-NGINX 1.10, MySQL 5.7, Redis 3.0, PHP 7.1 (ext-fpm ext-xml ext-mysql ext-mbstring ext-gd), Laravel 5.4, Node.js 8.1, Angular 4.0.
+### Startup
 
-#### Installation
+Create the `./backend/.env` file from the example `./backend/.env.example`.
 
-Create the `./backend/.env` file from the example `./backend/.env.example`. Setup database connection credentials.
+Create the `./frontend/.env` file from the example `./frontend/.env.example`.
 
-Run the following command (within the `./backend` directory) to install application dependencies:
+Create the `./docker-compose.yml` file from the example `./docker-compose.yml.example`.
 
-```
-composer install
-```
-
-Run the following commands to configure application:
+Add the following lines to your `/etc/hosts` file.
 
 ```
-php artisan config:app
-php artisan create:administrator_user
+127.0.0.1 backend.photos.tooleks.local
+127.0.0.1 storage.photos.tooleks.local
+127.0.0.1 rest_api_documentation.photos.tooleks.local
+127.0.0.1 photos.tooleks.local
 ```
 
-Add the following line to your crontab to setup scheduler (replace `/path/to/artisan` with a real path):
+Run the following command (within the `./` directory).
 
 ```
-* * * * * php /path/to/artisan schedule:run >> /dev/null 2>&1
+COMPOSE_HTTP_TIMEOUT=10000 docker-compose up -d
 ```
 
-#### REST API Documentation
-
-Run the following command (within the `./backend` directory) to install development dependencies:
-
-```
-npm install -g api-doc
-```
-
-Run the following command (within the `./backend` directory) to generate REST API documentation:
-
-```
-php artisan create:api_documentation
-```
-
-This command will create `./docs/api/dist` directory. Open the `./docs/api/dist/index.html` file in your favorite web browser to show the REST API documentation.
-
-#### Tests
-
-Run the following command (within the `./backend` directory) to run tests:
-
-```
-./vendor/bin/phpunit
-```
-
-### Frontend
-
-#### Installation
-
-Run the following command (within the `./frontend` directory) to install application dependencies:
-
-```
-yarn install
-```
-
-Create the `./frontend/.env` file from the example `./frontend/.env.example`. Setup API connection credentials.
-
-Run the following command (within the `./frontend` directory) to start a web-server:
-
-```
-npm run start
-```
-See the `scripts` section of the `./frontend/package.json` file for other options.
+Open the [http://photos.tooleks.local:8080](http://photos.tooleks.local:8080) link in a browser.

@@ -4,7 +4,6 @@ namespace Console;
 
 use Console\Commands\ChangeUserPassword;
 use Console\Commands\ClearTrash;
-use Console\Commands\ConfigApp;
 use Console\Commands\CreateAdministratorUser;
 use Console\Commands\DeleteNotPublishedPhotosOlderThanWeek;
 use Console\Commands\DeleteUnusedObjectsFromPhotoStorage;
@@ -30,7 +29,6 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         ChangeUserPassword::class,
         ClearTrash::class,
-        ConfigApp::class,
         CreateAdministratorUser::class,
         CreateRoles::class,
         DeleteNotPublishedPhotosOlderThanWeek::class,
