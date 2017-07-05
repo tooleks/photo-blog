@@ -1,0 +1,2 @@
+CREATE SCHEMA `testing` DEFAULT CHARACTER SET utf8;
+GRANT ALL PRIVILEGES ON `testing`.* TO 'dev'@'%';

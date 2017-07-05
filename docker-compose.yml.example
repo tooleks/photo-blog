@@ -53,6 +53,7 @@ services:
       - 3306:3306
     volumes:
       - ./data/mysql.docker/var/lib/mysql:/var/lib/mysql
+      - ./database/000_create_testing_db.sql:/docker-entrypoint-initdb.d/000_create_testing_db.sql
 
   redis.docker:
     image: redis:3.2
