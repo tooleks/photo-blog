@@ -12,19 +12,10 @@ Create the `./frontend/.env` file from the example `./frontend/.env.example`.
 
 Create the `./docker-compose.yml` file from the example `./docker-compose.yml.example`.
 
-Add the following lines to your `/etc/hosts` file.
-
-```
-127.0.0.1 backend.photos.tooleks.local
-127.0.0.1 storage.photos.tooleks.local
-127.0.0.1 rest_api_documentation.photos.tooleks.local
-127.0.0.1 photos.tooleks.local
-```
-
 Run the following command (within the `./` directory).
 
 ```
 COMPOSE_HTTP_TIMEOUT=10000 docker-compose up -d
 ```
 
-Open the [http://photos.tooleks.local:8080](http://photos.tooleks.local:8080) link in a browser.
+Open the [http://localhost:8080](http://localhost:8080) link in a browser.
