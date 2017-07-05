@@ -27,21 +27,21 @@ RUN apt-get update \
  && rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-install -j$(nproc) mcrypt \
-    && docker-php-ext-install -j$(nproc) curl \
-    && docker-php-ext-install -j$(nproc) mbstring \
-    && docker-php-ext-install -j$(nproc) iconv \
-    && docker-php-ext-install -j$(nproc) interbase \
-    && docker-php-ext-install -j$(nproc) intl \
-    && docker-php-ext-install -j$(nproc) soap \
-    && docker-php-ext-install -j$(nproc) xmlrpc \
-    && docker-php-ext-install -j$(nproc) xsl \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-    && docker-php-ext-install -j$(nproc) gd \
-    && docker-php-ext-install exif \
-    && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
-    && docker-php-ext-install imap \
-    && docker-php-ext-install mysqli pdo pdo_mysql \
-    && docker-php-ext-install zip
+ && docker-php-ext-install -j$(nproc) curl \
+ && docker-php-ext-install -j$(nproc) mbstring \
+ && docker-php-ext-install -j$(nproc) iconv \
+ && docker-php-ext-install -j$(nproc) interbase \
+ && docker-php-ext-install -j$(nproc) intl \
+ && docker-php-ext-install -j$(nproc) soap \
+ && docker-php-ext-install -j$(nproc) xmlrpc \
+ && docker-php-ext-install -j$(nproc) xsl \
+ && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+ && docker-php-ext-install -j$(nproc) gd \
+ && docker-php-ext-install exif \
+ && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
+ && docker-php-ext-install imap \
+ && docker-php-ext-install mysqli pdo pdo_mysql \
+ && docker-php-ext-install zip
 
 # Install composer.
 RUN curl -sS https://getcomposer.org/installer | php \
