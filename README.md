@@ -1,21 +1,35 @@
 ## Photo Blog Application based on Laravel 5 and Angular 4
 
-## Tech Stack
+### Tech Stack
 
 Docker 17.06, NGINX 1.12, MySQL 5.7, Redis 3.2, PHP 7.1, Laravel 5.4, Node.js 8.1, Angular 4.0.
 
-### Startup
+### Installation
 
-Create the `./backend/.env` file from the example `./backend/.env.example`.
-
-Create the `./frontend/.env` file from the example `./frontend/.env.example`.
-
-Create the `./docker-compose.yml` file from the example `./docker-compose.yml.example`.
-
-Run the following command (within the `./` directory).
+Run the following command (within the `./` directory) to create environment files.
 
 ```
-COMPOSE_HTTP_TIMEOUT=10000 docker-compose up -d
+cp ./backend/.env.example ./backend/.env && \
+cp ./frontend/.env.example ./frontend/.env && \
+cp ./docker-compose.yml.example ./docker-compose.yml
 ```
 
-Open the [http://localhost:8080](http://localhost:8080) link in a browser.
+Run the following command (within the `./` directory) to start the docker containers and build the application, wait for a while.
+
+```
+docker-compose up
+```
+
+Run the following command to create the administrator user.
+```
+docker exec -it backend bash -c "php artisan create:administrator_user"
+```
+
+Open the [http://localhost:8080/signin](http://localhost:8080/signin) link in a browser to signin with a newly created administrator account.
+
+### Tests
+
+Run the following command to run the backend tests.
+```
+docker exec -it backend bash -c "./vendor/bin/phpunit"
+```
