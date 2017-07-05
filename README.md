@@ -14,7 +14,7 @@ cp ./frontend/.env.example ./frontend/.env && \
 cp ./docker-compose.yml.example ./docker-compose.yml
 ```
 
-Run the following command (within the `./` directory) to start the docker containers and build the application, wait for a while.
+Run the following command (within the `./` directory) to start the docker containers and build the application.
 
 ```
 docker-compose up
