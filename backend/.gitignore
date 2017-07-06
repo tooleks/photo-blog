@@ -8,3 +8,5 @@ Homestead.yaml
 .env
 npm-debug.log
 www.pid
+
+Dockerfile_local
