@@ -3,8 +3,9 @@ FROM php:7.1-fpm
 # Install system dependencies.
 RUN apt-get update \
  && apt-get install -y \
-    git \
+    supervisor \
     cron \
+    git \
  && apt-get install -y \
     libfreetype6-dev \
     libjpeg62-turbo-dev \
@@ -64,7 +65,10 @@ RUN ["/bin/bash", "-c", "source $NVM_DIR/nvm.sh \
 ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
 ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 
-# Copy the scheduler command code.
+# Copy the supervisor config file.
+COPY ./supervisor.conf /etc/supervisor/conf.d/supervisor.conf
+
+# Copy the scheduler config file.
 COPY ./scheduler /etc/cron.d/
 RUN chmod 0644 /etc/cron.d/scheduler
 
@@ -77,4 +81,4 @@ RUN chmod +x /docker-entrypoint.sh
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
-CMD ["php-fpm"]
+CMD ["/usr/bin/supervisord", "-n"]

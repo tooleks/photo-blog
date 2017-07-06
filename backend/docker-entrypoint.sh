@@ -2,8 +2,6 @@
 
 set -e
 
-cron
-
 if [ "$DOCKER_REBUILD" == "1" ]; then
     composer install --no-interaction
     composer dump-autoload

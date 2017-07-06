@@ -11,6 +11,7 @@ use Console\Commands\CreateRoles;
 use Console\Commands\GeneratePhotoThumbnails;
 use Console\Commands\GenerateRestApiDocumentation;
 use Console\Commands\SendWeeklySubscriptionMails;
+use Console\Commands\TestScheduler;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -36,6 +37,7 @@ class Kernel extends ConsoleKernel
         GeneratePhotoThumbnails::class,
         GenerateRestApiDocumentation::class,
         SendWeeklySubscriptionMails::class,
+        TestScheduler::class,
     ];
 
     /**
@@ -46,17 +48,22 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('delete:not_published_photos_older_than_week')
+        $schedule->command(TestScheduler::class)
+            ->hourly();
+
+        $schedule->command(DeleteNotPublishedPhotosOlderThanWeek::class)
             ->dailyAt('00:00');
 
-        $schedule->command('delete:unused_objects_from_photo_storage')
+        $schedule->command(DeleteUnusedObjectsFromPhotoStorage::class)
             ->dailyAt('00:10');
 
-        $schedule->command('clear:trash')
+        $schedule->command(ClearTrash::class)
             ->dailyAt('00:20');
 
         $schedule->command('send:weekly_subscription_mails')
-            ->weekly()->saturdays()->at('09:00');
+            ->weekly()
+            ->saturdays()
+            ->at('09:00');
     }
 
     /**
