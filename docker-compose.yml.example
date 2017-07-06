@@ -25,7 +25,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
 #      dockerfile: Dockerfile_local
-    image: php:7.1-fpm
+    image: tooleks/php:7.1-fpm
 #    image: tooleks/local-php:7.1-fpm
     container_name: backend
     restart: always
@@ -40,7 +40,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    image: nodejs:8.1
+    image: tooleks/nodejs:8.1
     container_name: frontend
     restart: always
     volumes:
