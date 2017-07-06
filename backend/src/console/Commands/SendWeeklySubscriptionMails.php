@@ -90,6 +90,6 @@ class SendWeeklySubscriptionMails extends Command
 
         $data['unsubscribe_url'] = sprintf($this->config->get('format.frontend.url.unsubscription_page'), $subscription->token);
 
-        Mail::send(new WeeklySubscription($data));
+        Mail::queue(new WeeklySubscription($data));
     }
 }

@@ -39,7 +39,7 @@ class ContactMessagesController extends Controller
      */
     public function create(ContactMessageRequest $request)
     {
-        Mail::send(new ContactMessage($request->all()));
+        Mail::queue(new ContactMessage($request->all()));
 
         return new Response(null, Response::HTTP_CREATED);
     }
