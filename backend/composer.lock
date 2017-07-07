@@ -2322,16 +2322,16 @@
         },
         {
             "name": "tooleks/php-avg-color-picker",
-            "version": "1.0.2",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tooleks/php-avg-color-picker.git",
-                "reference": "a7f8d05658bbe4f98a55ab127065c14b825f1578"
+                "reference": "64e2042def3f0450e04a812dd3dcd8e7236a7fd8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tooleks/php-avg-color-picker/zipball/a7f8d05658bbe4f98a55ab127065c14b825f1578",
-                "reference": "a7f8d05658bbe4f98a55ab127065c14b825f1578",
+                "url": "https://api.github.com/repos/tooleks/php-avg-color-picker/zipball/64e2042def3f0450e04a812dd3dcd8e7236a7fd8",
+                "reference": "64e2042def3f0450e04a812dd3dcd8e7236a7fd8",
                 "shasum": ""
             },
             "require": {
@@ -2370,7 +2370,7 @@
                 "picker",
                 "rgb"
             ],
-            "time": "2017-05-28T13:17:11+00:00"
+            "time": "2017-07-07T11:41:14+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
