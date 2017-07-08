@@ -20,13 +20,10 @@ services:
   backend.docker:
     environment:
       DOCKER_REBUILD: "1"
-      PHP_IDE_CONFIG: "serverName=local"
     build:
       context: ./backend
       dockerfile: Dockerfile
-#      dockerfile: Dockerfile_local
     image: tooleks/php:7.1-fpm
-#    image: tooleks/local-php:7.1-fpm
     container_name: backend
     restart: always
     volumes:
