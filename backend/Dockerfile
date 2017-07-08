@@ -73,6 +73,7 @@ COPY ./scheduler /etc/cron.d/
 RUN chmod 0644 /etc/cron.d/scheduler
 
 # Set the application working directory.
+RUN mkdir -p /data/backend/
 WORKDIR /data/backend/
 
 # Copy the entrypoint script.

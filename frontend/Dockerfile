@@ -4,6 +4,7 @@ FROM node:8.1
 RUN npm install -g pm2
 
 # Set the application working directory.
+RUN mkdir -p /data/frontend/
 WORKDIR /data/frontend/
 
 # Copy the entrypoint script.
