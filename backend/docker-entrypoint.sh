@@ -5,6 +5,7 @@ set -e
 if [ "$DOCKER_REBUILD" == "1" ]; then
     composer install --no-interaction
     composer dump-autoload
+    php artisan key:generate
     php artisan storage:link
     php artisan migrate --force
     php artisan create:roles

@@ -78,7 +78,7 @@ WORKDIR /data/backend/
 
 # Copy the entrypoint script.
 COPY ./docker-entrypoint.sh /
-RUN chmod +x /docker-entrypoint.sh
+RUN chmod 0544 /docker-entrypoint.sh
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 

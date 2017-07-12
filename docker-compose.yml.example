@@ -1,15 +1,17 @@
 version: '3.3'
 
 services:
-  nginx.docker:
+  photo-blog-nginx.docker:
     image: nginx:1.12
-    container_name: nginx
+    container_name: photo-blog-nginx
     restart: always
     ports:
       - 8080:8080
       - 8081:8081
       - 8082:8082
       - 8083:8083
+    depends_on:
+      - photo-blog-frontend.docker
     volumes:
       - ./:/data
       - ./config/nginx/backend.conf:/etc/nginx/conf.d/backend.conf
@@ -17,48 +19,53 @@ services:
       - ./config/nginx/rest_api_documentation.conf:/etc/nginx/conf.d/rest_api_documentation.conf
       - ./config/nginx/storage.conf:/etc/nginx/conf.d/storage.conf
 
-  backend.docker:
+  photo-blog-backend.docker:
     environment:
-      DOCKER_REBUILD: "1"
+      DOCKER_REBUILD: '1'
     build:
       context: ./backend
       dockerfile: Dockerfile
-    image: tooleks/php:7.1-fpm
-    container_name: backend
+    image: photo-blog-php:7.1-fpm
+    container_name: photo-blog-backend
     restart: always
+    depends_on:
+      - photo-blog-mysql.docker
+      - photo-blog-redis.docker
     volumes:
       - ./:/data
       - ./config/php-fpm/php.ini:/usr/local/etc/php/php.ini
 
-  frontend.docker:
+  photo-blog-frontend.docker:
     environment:
-      DOCKER_REBUILD: "1"
-      DOCKER_ENV: "local"
+      DOCKER_REBUILD: '1'
+      DOCKER_ENV: 'local'
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    image: tooleks/nodejs:8.1
-    container_name: frontend
+    image: photo-blog-nodejs:8.1
+    container_name: photo-blog-frontend
     restart: always
+    depends_on:
+      - photo-blog-backend.docker
     volumes:
       - ./:/data
 
-  mysql.docker:
+  photo-blog-mysql.docker:
     image: mysql:5.7
-    container_name: mysql
+    container_name: photo-blog-mysql
     restart: always
     environment:
-      - MYSQL_DATABASE=photo_blog
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_USER=dev
-      - MYSQL_PASSWORD=dev
+      MYSQL_DATABASE: 'photo_blog'
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_USER: 'dev'
+      MYSQL_PASSWORD: 'dev'
     ports:
       - 3306:3306
     volumes:
       - ./data/mysql.docker/var/lib/mysql:/var/lib/mysql
       - ./database/000_create_testing_db.sql:/docker-entrypoint-initdb.d/000_create_testing_db.sql
 
-  redis.docker:
+  photo-blog-redis.docker:
     image: redis:3.2
-    container_name: redis
+    container_name: photo-blog-redis
     restart: always
