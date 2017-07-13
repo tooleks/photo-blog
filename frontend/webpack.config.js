@@ -1,6 +1,5 @@
 const {root} = require('./webpack/helpers');
 require('dotenv').config({path: root('./.env')});
-const ngtools = require('@ngtools/webpack');
 const webpackMerge = require('webpack-merge');
 const commonPartial = require('./webpack/webpack.common');
 const browserPartial = require('./webpack/webpack.browser');
