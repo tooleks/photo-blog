@@ -20,7 +20,7 @@ module.exports = function (options, webpackOptions) {
 
     let browserConfig = webpackMerge({}, commonPartial, browserPartial, {
         plugins: [
-            getAotPlugin('client', !!options.aot)
+            getAotPlugin('browser', !!options.aot)
         ]
     });
 
@@ -31,7 +31,7 @@ module.exports = function (options, webpackOptions) {
     const configs = [];
     if (!options.aot) {
         configs.push(browserConfig, serverConfig);
-    } else if (options.client) {
+    } else if (options.browser) {
         configs.push(browserConfig);
     } else if (options.server) {
         configs.push(serverConfig);
