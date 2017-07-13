@@ -18,21 +18,21 @@ module.exports = function (options, webpackOptions) {
         ]
     });
 
-    let clientConfig = webpackMerge({}, commonPartial, browserPartial, {
+    let browserConfig = webpackMerge({}, commonPartial, browserPartial, {
         plugins: [
             getAotPlugin('client', !!options.aot)
         ]
     });
 
     if (process.env.NODE_ENV === 'production') {
-        clientConfig = webpackMerge({}, clientConfig, productionPartial);
+        browserConfig = webpackMerge({}, browserConfig, productionPartial);
     }
 
     const configs = [];
     if (!options.aot) {
-        configs.push(clientConfig, serverConfig);
+        configs.push(browserConfig, serverConfig);
     } else if (options.client) {
-        configs.push(clientConfig);
+        configs.push(browserConfig);
     } else if (options.server) {
         configs.push(serverConfig);
     }
