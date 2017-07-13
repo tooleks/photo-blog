@@ -1,41 +1,39 @@
+const {root} = require('./webpack/helpers');
+require('dotenv').config({path: root('./.env')});
 const ngtools = require('@ngtools/webpack');
 const webpackMerge = require('webpack-merge');
 const commonPartial = require('./webpack/webpack.common');
-const clientPartial = require('./webpack/webpack.browser');
+const browserPartial = require('./webpack/webpack.browser');
 const serverPartial = require('./webpack/webpack.server');
-const prodPartial = require('./webpack/webpack.prod');
+const productionPartial = require('./webpack/webpack.production');
 const {getAotPlugin} = require('./webpack/webpack.aot');
 
 module.exports = function (options, webpackOptions) {
     options = options || {};
 
-    if (options.aot) {
-        console.log(`Running build for ${options.client ? 'client' : 'server'} with AoT Compilation`)
-    }
+    console.log(`Running build for the ${process.env.NODE_ENV ? process.env.NODE_ENV : 'local'} environment.`);
 
-    const serverConfig = webpackMerge({}, commonPartial, serverPartial, {
+    let serverConfig = webpackMerge({}, commonPartial, serverPartial, {
         plugins: [
             getAotPlugin('server', !!options.aot)
         ]
     });
 
-    let clientConfig = webpackMerge({}, commonPartial, clientPartial, {
+    let clientConfig = webpackMerge({}, commonPartial, browserPartial, {
         plugins: [
             getAotPlugin('client', !!options.aot)
         ]
     });
 
-    if (webpackOptions.p) {
-        clientConfig = webpackMerge({}, clientConfig, prodPartial);
+    if (process.env.NODE_ENV === 'production') {
+        clientConfig = webpackMerge({}, clientConfig, productionPartial);
     }
 
     const configs = [];
     if (!options.aot) {
         configs.push(clientConfig, serverConfig);
-
     } else if (options.client) {
         configs.push(clientConfig);
-
     } else if (options.server) {
         configs.push(serverConfig);
     }

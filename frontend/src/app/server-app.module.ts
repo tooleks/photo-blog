@@ -9,7 +9,7 @@ import {BrowserModule} from '@angular/platform-browser';
     bootstrap: [AppComponent],
     imports: [
         BrowserModule.withServerTransition({
-            appId: 'app-id'
+            appId: process.env.APP_ID
         }),
         ServerModule,
         ServerTransferStateModule,
@@ -20,7 +20,6 @@ export class ServerAppModule {
     constructor(protected transferState: TransferState) {
     }
 
-    // Gotcha
     ngOnBootstrap = () => {
         this.transferState.inject();
     }

@@ -38,7 +38,6 @@ services:
   photo-blog-frontend.docker:
     environment:
       DOCKER_REBUILD: '1'
-      DOCKER_ENV: 'local'
     build:
       context: ./frontend
       dockerfile: Dockerfile
