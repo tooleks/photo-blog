@@ -15,7 +15,6 @@ if (process.env.NODE_ENV === 'production') {
 const app = express();
 
 const frontendPort = process.env.DEFAULT_PORT || 8000;
-const frontendHost = process.env.DEFAULT_HOST || `http://localhost:${frontendPort}`;
 const backendHost = process.env.BACKEND_URL;
 
 app.disable('x-powered-by');
@@ -46,5 +45,5 @@ ROUTES.forEach(route => {
 app.get('*', (req, res) => res.status(404).redirect('/404'));
 
 app.listen(frontendPort, () => {
-    console.log(`Listening at ${frontendHost}`);
+    console.log(`Listening at ${frontendPort} port.`);
 });
