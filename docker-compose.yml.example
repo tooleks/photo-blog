@@ -21,7 +21,7 @@ services:
 
   photo-blog-backend.docker:
     environment:
-      DOCKER_REBUILD: '1'
+      REBUILD_ON_STARTUP: '1'
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -37,7 +37,7 @@ services:
 
   photo-blog-frontend.docker:
     environment:
-      DOCKER_REBUILD: '1'
+      REBUILD_ON_STARTUP: '1'
     build:
       context: ./frontend
       dockerfile: Dockerfile

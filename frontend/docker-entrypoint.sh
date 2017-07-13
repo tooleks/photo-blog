@@ -2,7 +2,7 @@
 
 set -e
 
-if [ "$DOCKER_REBUILD" == "1" ]; then
+if [ "$REBUILD_ON_STARTUP" == "1" ]; then
     yarn install
     npm run build
 fi
