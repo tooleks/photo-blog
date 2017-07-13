@@ -5,7 +5,7 @@
   "repository": {},
   "scripts": {
     "start": "npm run build && npm run server",
-    "build": "webpack",
+    "build": "webpack --env.browser & webpack --env.server",
     "prebuild": "npm run clean",
     "clean": "rimraf dist",
     "server": "nodemon dist/server.js",

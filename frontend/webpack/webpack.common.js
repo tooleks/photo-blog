@@ -2,8 +2,6 @@ const {root} = require('./helpers');
 const webpack = require('webpack');
 const DotenvPlugin = require('dotenv-webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const HtmlPlugin = require('html-webpack-plugin');
-const ScriptExtHtmlPlugin = require('script-ext-html-webpack-plugin');
 
 /**
  * This is a common webpack config which is the base for all builds
@@ -59,15 +57,6 @@ module.exports = {
             path: root('./.env'),
             safe: true
         }),
-        new ExtractTextPlugin('[name].css?v=[hash]'),
-        new HtmlPlugin({
-            template: root('./src/index.ejs'),
-            output: root('./dist'),
-            inject: 'body',
-            appName: process.env.APP_NAME
-        }),
-        new ScriptExtHtmlPlugin({
-            defaultAttribute: 'defer'
-        })
+        new ExtractTextPlugin('[name].css?v=[hash]')
     ]
 };

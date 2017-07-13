@@ -1,5 +1,7 @@
 const {root} = require('./helpers');
 const webpack = require('webpack');
+const HtmlPlugin = require('html-webpack-plugin');
+const ScriptExtHtmlPlugin = require('script-ext-html-webpack-plugin');
 const GenerateJsonPlugin = require('generate-json-webpack-plugin');
 
 /**
@@ -14,6 +16,15 @@ module.exports = {
     },
     target: 'web',
     plugins: [
+        new HtmlPlugin({
+            template: root('./src/index.ejs'),
+            output: root('./dist'),
+            inject: 'body',
+            appName: process.env.APP_NAME
+        }),
+        new ScriptExtHtmlPlugin({
+            defaultAttribute: 'defer'
+        }),
         new GenerateJsonPlugin('manifest.json', {
             "name": process.env.APP_NAME,
             "author": process.env.APP_AUTHOR,

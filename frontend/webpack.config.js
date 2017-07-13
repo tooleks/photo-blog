@@ -10,8 +10,6 @@ const {getAotPlugin} = require('./webpack/webpack.aot');
 module.exports = function (options, webpackOptions) {
     options = options || {};
 
-    console.log(`Running build for the ${process.env.NODE_ENV ? process.env.NODE_ENV : 'local'} environment.`);
-
     let serverConfig = webpackMerge({}, commonPartial, serverPartial, {
         plugins: [
             getAotPlugin('server', !!options.aot)
@@ -29,11 +27,11 @@ module.exports = function (options, webpackOptions) {
     }
 
     const configs = [];
-    if (!options.aot) {
-        configs.push(browserConfig, serverConfig);
-    } else if (options.browser) {
+    if (options.browser) {
+        console.log('> Running build for a browser environment.');
         configs.push(browserConfig);
     } else if (options.server) {
+        console.log('> Running build for a server environment.');
         configs.push(serverConfig);
     }
 
