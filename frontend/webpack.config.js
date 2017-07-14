@@ -28,10 +28,10 @@ module.exports = function (options, webpackOptions) {
 
     const configs = [];
     if (options.browser) {
-        console.log('> Running build for a browser environment.');
+        console.log(`> Running build for a browser environment (${process.env.NODE_ENV}).`);
         configs.push(browserConfig);
     } else if (options.server) {
-        console.log('> Running build for a server environment.');
+        console.log(`> Running build for a server environment (${process.env.NODE_ENV}).`);
         configs.push(serverConfig);
     }
 

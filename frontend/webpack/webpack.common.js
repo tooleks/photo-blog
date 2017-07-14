@@ -36,18 +36,20 @@ module.exports = {
             },
             {
                 test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
-                exclude: root('./assets/static'),
+                exclude: [
+                    root('./assets/static'),
+                    root('./assets/favicon')
+                ],
                 use: 'file-loader?name=assets/[name].[hash].[ext]'
             },
             {
                 test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
                 include: root('./assets/static'),
-                exclude: root('./assets/static/favicon'),
                 use: 'file-loader?name=assets/static/[name].[ext]'
             },
             {
                 test: /\.(png|ico|xml|json)$/,
-                include: root('./assets/static/favicon'),
+                include: root('./assets/favicon'),
                 use: 'file-loader?name=[name].[ext]'
             }
         ]
