@@ -57,6 +57,6 @@ module.exports = {
             path: root('./.env'),
             safe: true
         }),
-        new ExtractTextPlugin('[name].css?v=[hash]')
+        new ExtractTextPlugin('[name].[hash].css')
     ]
 };

@@ -12,7 +12,7 @@ module.exports = {
         'browser': root('./src/main.browser.ts')
     },
     output: {
-        filename: '[name].js?v=[hash]'
+        filename: '[name].[hash].js'
     },
     target: 'web',
     plugins: [
