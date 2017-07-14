@@ -2,6 +2,7 @@ import {Component, OnInit, OnDestroy, AfterViewInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
+import {EnvironmentDetectorService} from '../../../core';
 import {NoticesService} from '../../../lib';
 import {
     TitleService,
@@ -31,6 +32,7 @@ export class PhotoFormComponent implements OnInit, OnDestroy, AfterViewInit {
                 protected authProvider: AuthProviderService,
                 protected photoDataProvider: PhotoDataProviderService,
                 protected notices: NoticesService,
+                protected environmentDetector: EnvironmentDetectorService,
                 navigatorServiceProvider: NavigatorServiceProvider,
                 processLockerServiceProvider: ProcessLockerServiceProvider) {
         this.navigator = navigatorServiceProvider.getInstance();
@@ -125,9 +127,13 @@ export class PhotoFormComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     deletePhoto(): Promise<any> {
-        return this.processLocker
-            .lock(() => this.processDeletePhoto())
-            .then((response) => this.onDeletePhotoSuccess(response));
+        if (this.environmentDetector.isBrowser() && confirm('Confirm photo deleting?')) {
+            return this.processLocker
+                .lock(() => this.processDeletePhoto())
+                .then((response) => this.onDeletePhotoSuccess(response))
+        } else {
+            return Promise.reject(new Error('Photo deleting was canceled.'));
+        }
     }
 
     protected onDeletePhotoSuccess(response) {
