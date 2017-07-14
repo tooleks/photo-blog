@@ -8,6 +8,7 @@ import 'rxjs/add/operator/filter';
 export class TagsSelectInputComponent implements OnChanges {
     inputValue: string = '';
     @Input() inputClass: string = '';
+    @Input() inputRows: number = 5;
     @Input() tags: Array<any> = [];
     @Output() tagsChange: EventEmitter<Array<any>> = new EventEmitter<Array<any>>();
 
