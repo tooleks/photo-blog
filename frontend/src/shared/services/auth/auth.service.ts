@@ -12,14 +12,14 @@ export class AuthService {
         return this.userDataProvider
             .getAuthByCredentials(email, password)
             .then((auth) => this.onGetAuthSuccess(auth))
-            .catch((error) => this.onGetAuthError(error));
+            .catch((error) => this.onGetError(error));
     }
 
     refreshAuth(): Promise<any> {
         return this.userDataProvider
             .getAuthByRefreshToken(this.authProvider.getAuthRefreshToken())
             .then((auth) => this.onGetAuthSuccess(auth))
-            .catch((error) => this.onGetAuthError(error));
+            .catch((error) => this.onGetError(error));
     }
 
     signOut(): Promise<any> {
@@ -38,13 +38,35 @@ export class AuthService {
     protected onGetAuthSuccess(auth): Promise<any> {
         this.authProvider.setAuth(auth);
         return this.userDataProvider.getUser()
-            .then((user) => this.authProvider.setUser(user));
+            .then((user) => this.authProvider.setUser(user))
+            .catch((error) => this.onGetError(error));
     }
 
-    protected onGetAuthError(error): Promise<any> {
-        this.notices.warning(error.message);
+    protected onGetError(response): Promise<any> {
+        const body = response.json() || {};
+
+        switch (response.status) {
+            case 401: {
+                this.notices.warning(body.message);
+                break;
+            }
+            case 422: {
+                for (let attribute in body.errors) {
+                    if (body.errors.hasOwnProperty(attribute)) {
+                        body.errors[attribute].forEach((message: string) => this.notices.warning(message));
+                    }
+                }
+                break;
+            }
+            default: {
+                this.notices.error('Unknown error.');
+                break;
+            }
+        }
+
         this.authProvider.setAuth(null);
         this.authProvider.setUser(null);
-        return Promise.reject(error);
+
+        return Promise.reject(response);
     }
 }

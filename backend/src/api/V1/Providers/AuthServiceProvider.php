@@ -26,7 +26,7 @@ class AuthServiceProvider extends ServiceProvider
 
         $this->registerGates();
 
-        $this->registerTokens();
+        $this->registerOAuth();
     }
 
     /**
@@ -45,11 +45,11 @@ class AuthServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the application's tokens.
+     * Register the application's OAuth server.
      *
      * @return void
      */
-    public function registerTokens()
+    public function registerOAuth()
     {
         Passport::routes();
         Passport::tokensExpireIn(Carbon::now()->addHour());

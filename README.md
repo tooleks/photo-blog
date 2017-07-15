@@ -25,27 +25,18 @@ Run the following command to create the administrator user.
 docker exec -it photo-blog-backend bash -c "php artisan create:administrator_user"
 ```
 
-Run the following commands to create the encryption keys needed to generate secure access tokens.
+Run following commands to create the encryption keys needed to generate secure access tokens.
 ```
 docker exec -it photo-blog-backend bash -c "php artisan passport:install" && \
 docker exec -it photo-blog-backend bash -c "chown www-data:www-data storage/oauth-private.key" && \
 docker exec -it photo-blog-backend bash -c "chown www-data:www-data storage/oauth-public.key"
 ```
 
-
-Insert just generated `Password grant` client ID and the client secret values into the `./frontend/.env` file.
-
-Rerun the following command (within the `./` directory) to restart the docker containers and rebuild the application.
-
-```
-docker-compose up
-```
-
 Open the [http://localhost:8080/signin](http://localhost:8080/signin) link in a browser to signin with a newly created administrator account.
 
 ### Tests
 
-Run the following command to run the backend tests.
+Run the following command to execute the backend application tests.
 ```
 docker exec -it photo-blog-backend bash -c "./vendor/bin/phpunit"
 ```

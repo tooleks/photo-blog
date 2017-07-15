@@ -50,7 +50,7 @@ class JsonApiResponses
      */
     protected function buildResponse(Response $response)
     {
-        if ($response->isSuccessful()) {
+        if (method_exists($response, 'getOriginalContent') && $response->isSuccessful()) {
             $statusCode = $response->getStatusCode();
             $headers = $response->headers->all();
             $content = $response->getOriginalContent();

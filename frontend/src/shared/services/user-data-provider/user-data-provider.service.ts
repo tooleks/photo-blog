@@ -21,42 +21,20 @@ export class UserDataProviderService {
         return this.http
             .get(this.getApiAbsoluteUrl('/users/me'), {headers: headers})
             .toPromise()
-            .then((response) => this.onResponseSuccess(response))
-            .catch((error) => this.onResponseError(error));
+            .then((response) => response.json() || {});
     }
 
     getAuthByCredentials(email: string, password: string): Promise<any> {
         return this.http
-            .post(this.getApiAbsoluteUrl('/oauth/token'), {
-                grant_type: 'password',
-                client_id: process.env.API_OAUTH_CLIENT_ID,
-                client_secret: process.env.API_OAUTH_CLIENT_SECRET,
-                username: email,
-                password: password,
-            })
+            .post(this.getApiAbsoluteUrl('/auth/token'), {email: email, password: password})
             .toPromise()
-            .then((response) => this.onResponseSuccess(response))
-            .catch((error) => this.onResponseError(error));
+            .then((response) => response.json() || {});
     }
 
     getAuthByRefreshToken(refreshToken: string): Promise<any> {
         return this.http
-            .post(this.getApiAbsoluteUrl('/oauth/token'), {
-                grant_type: 'refresh_token',
-                client_id: process.env.API_OAUTH_CLIENT_ID,
-                client_secret: process.env.API_OAUTH_CLIENT_SECRET,
-                refresh_token: refreshToken,
-            })
+            .post(this.getApiAbsoluteUrl('/auth/refresh-token'), {refresh_token: refreshToken})
             .toPromise()
-            .then((response) => this.onResponseSuccess(response))
-            .catch((error) => this.onResponseError(error));
-    }
-
-    protected onResponseSuccess(response) {
-        return response.json() || {};
-    }
-
-    protected onResponseError(response) {
-        return Promise.reject(response.json() || {});
+            .then((response) => response.json() || {});
     }
 }

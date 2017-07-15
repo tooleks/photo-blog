@@ -5,7 +5,6 @@ use Api\V1\Http\Presenters\Response\PhotoPresenter;
 use Api\V1\Http\Presenters\Response\PublishedPhotoPresenter;
 use Api\V1\Http\Presenters\Response\SubscriptionPresenter;
 use Api\V1\Http\Presenters\Response\TagPresenter;
-use Api\V1\Http\Presenters\Response\TokenPresenter;
 use Api\V1\Http\Presenters\Response\UserPresenter;
 use Core\Models\Photo;
 use Core\Models\User;
@@ -26,6 +25,25 @@ Route::get('/', function () {
         'name' => config('app.name'),
         'version' => '1.0.0',
     ];
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| Auth Resource Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::group(['prefix' => 'auth'], function () {
+
+    Route::post('/token')
+        ->uses('AuthController@createToken')
+        ->middleware('throttle:10,1');
+
+    Route::post('/refresh-token')
+        ->uses('AuthController@createRefreshToken')
+        ->middleware('throttle:10,1');
+
 });
 
 /*
