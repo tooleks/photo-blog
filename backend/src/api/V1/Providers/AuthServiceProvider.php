@@ -3,8 +3,10 @@
 namespace Api\V1\Providers;
 
 use Api\V1\Policies\ResourcePolicy;
+use Carbon\Carbon;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Laravel\Passport\Passport;
 
 /**
  * Class AuthServiceProvider.
@@ -23,6 +25,8 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         $this->registerGates();
+
+        $this->registerTokens();
     }
 
     /**
@@ -38,5 +42,17 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('get-resource', [$resourcePolicy, 'get']);
         Gate::define('update-resource', [$resourcePolicy, 'update']);
         Gate::define('delete-resource', [$resourcePolicy, 'delete']);
+    }
+
+    /**
+     * Register the application's tokens.
+     *
+     * @return void
+     */
+    public function registerTokens()
+    {
+        Passport::routes();
+        Passport::tokensExpireIn(Carbon::now()->addSeconds(10));
+        Passport::refreshTokensExpireIn(Carbon::now()->addDays(30));
     }
 }

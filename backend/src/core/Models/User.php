@@ -5,6 +5,7 @@ namespace Core\Models;
 use Carbon\Carbon;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Passport\HasApiTokens;
 
 /**
  * Class User.
@@ -14,7 +15,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property string name
  * @property string email
  * @property string password
- * @property string api_token
  * @property string remember_token
  * @property Carbon created_at
  * @property Carbon updated_at
@@ -23,7 +23,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  */
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, HasApiTokens;
 
     /**
      * @inheritdoc

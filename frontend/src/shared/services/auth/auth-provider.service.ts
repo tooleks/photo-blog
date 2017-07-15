@@ -19,9 +19,19 @@ export class AuthProviderService {
         return this.getAuth() !== null;
     }
 
-    getAuthApiToken(): string {
+    getAuthTokenType(): string {
         const auth = this.getAuth();
-        return auth ? auth.api_token : null;
+        return auth ? auth.token_type : null;
+    }
+
+    getAuthAccessToken(): string {
+        const auth = this.getAuth();
+        return auth ? auth.access_token : null;
+    }
+
+    getAuthRefreshToken(): string {
+        const auth = this.getAuth();
+        return auth ? auth.refresh_token : null;
     }
 
     setUser(user) {

@@ -57,8 +57,16 @@ import {
         NavigatorServiceProvider,
         PagerServiceProvider,
         ScrollFreezerService,
-        {provide: TitleService, useFactory: getTitleService, deps: [Title, AppService]},
-        UserDataProviderService,
+        {
+            provide: TitleService,
+            useFactory: getTitleService,
+            deps: [Title, AppService],
+        },
+        {
+            provide: UserDataProviderService,
+            useFactory: getUserDataProviderService,
+            deps: [Http, AppService, AuthProviderService],
+        },
     ],
 })
 export class SharedModule {
@@ -77,7 +85,7 @@ export function getApiService(http: Http, app: AppService, errorHandler: ApiErro
         function provideDefaultHeaders() {
             const headers = {'Accept': 'application/json'};
             if (authProvider.hasAuth()) {
-                headers['Authorization'] = `Bearer ${authProvider.getAuthApiToken()}`;
+                headers['Authorization'] = `${authProvider.getAuthTokenType()} ${authProvider.getAuthAccessToken()}`;
             }
             return headers;
         },
@@ -89,4 +97,8 @@ export function getApiService(http: Http, app: AppService, errorHandler: ApiErro
 
 export function getTitleService(title: Title, app: AppService) {
     return new TitleService(title, app.getName());
+}
+
+export function getUserDataProviderService(http: Http, app: AppService, authProvider: AuthProviderService) {
+    return new UserDataProviderService(http, app.getApiUrl(), authProvider);
 }

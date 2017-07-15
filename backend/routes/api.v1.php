@@ -30,20 +30,6 @@ Route::get('/', function () {
 
 /*
 |--------------------------------------------------------------------------
-| Token Resource Routes
-|--------------------------------------------------------------------------
-*/
-Route::group(['prefix' => 'token'], function () {
-
-    Route::post('/')
-        ->uses('TokenController@create')
-        ->middleware('throttle:10,1')
-        ->middleware(sprintf('present:%s', TokenPresenter::class));
-
-});
-
-/*
-|--------------------------------------------------------------------------
 | Users Resource Routes
 |--------------------------------------------------------------------------
 */

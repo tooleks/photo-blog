@@ -10,3 +10,6 @@ npm-debug.log
 www.pid
 
 Dockerfile_local
+
+oauth-private.key
+oauth-public.key

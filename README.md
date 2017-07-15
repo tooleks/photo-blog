@@ -25,6 +25,19 @@ Run the following command to create the administrator user.
 docker exec -it backend bash -c "php artisan create:administrator_user"
 ```
 
+Run the following command to create the encryption keys needed to generate secure access tokens.
+```
+docker exec -it backend bash -c "php artisan passport:install"
+```
+
+Insert just generated OAuth client ID and the client secret values into the `./frontend/.env` file.
+
+Rerun the following command (within the `./` directory) to restart the docker containers and rebuild the application.
+
+```
+docker-compose up
+```
+
 Open the [http://localhost:8080/signin](http://localhost:8080/signin) link in a browser to signin with a newly created administrator account.
 
 ### Tests

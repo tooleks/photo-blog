@@ -71,7 +71,7 @@ class UsersController extends Controller
      * @apiName Get
      * @apiGroup Users
      * @apiHeader {String} Accept application/json
-     * @apiParam {Integer{1..N}} :id Unique resource ID.
+     * @apiParam {Integer{1...N}='me'} :id Unique resource ID.
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 20O OK
      * {
@@ -102,7 +102,7 @@ class UsersController extends Controller
      * @apiGroup Users
      * @apiHeader {String} Accept application/json
      * @apiHeader {String} Content-type application/json
-     * @apiParam {Integer{1..N}} :id Unique resource ID.
+     * @apiParam {Integer{1...N}='me'} :id Unique resource ID.
      * @apiParam {String{1..255}} name User name.
      * @apiParam {String{1..255}} email User email address.
      * @apiParam {String{1..255}} password User password.
@@ -138,7 +138,7 @@ class UsersController extends Controller
      * @apiName Delete
      * @apiGroup Users
      * @apiHeader {String} Accept application/json
-     * @apiParam {Integer{1..N}} :id Unique resource ID.
+     * @apiParam {Integer{1...N}='me'} :id Unique resource ID.
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 204 No Content
      */

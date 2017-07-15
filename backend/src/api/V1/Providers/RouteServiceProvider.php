@@ -2,8 +2,8 @@
 
 namespace Api\V1\Providers;
 
-use Core\DataProviders\Photo\Criterias\IsPublished;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -73,6 +73,7 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         Route::bind('user', function ($id) {
+            $id = $id === 'me' ? Auth::user()->id ?? 0 : $id;
             return $this->app
                 ->make(\Core\Managers\User\Contracts\UserManager::class)
                 ->getById($id);

@@ -175,6 +175,7 @@ return [
          * Package Service Providers...
          */
         Tooleks\Laravel\Presenter\Providers\PresenterProvider::class,
+        Laravel\Passport\PassportServiceProvider::class,
 
         /*
          * Core Service Providers...
