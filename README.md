@@ -22,13 +22,16 @@ docker-compose up
 
 Run the following command to create the administrator user.
 ```
-docker exec -it backend bash -c "php artisan create:administrator_user"
+docker exec -it photo-blog-backend bash -c "php artisan create:administrator_user"
 ```
 
-Run the following command to create the encryption keys needed to generate secure access tokens.
+Run the following commands to create the encryption keys needed to generate secure access tokens.
 ```
-docker exec -it backend bash -c "php artisan passport:install"
+docker exec -it photo-blog-backend bash -c "php artisan passport:install" && \
+docker exec -it photo-blog-backend bash -c "chown www-data:www-data storage/oauth-private.key" && \
+docker exec -it photo-blog-backend bash -c "chown www-data:www-data storage/oauth-public.key"
 ```
+
 
 Insert just generated OAuth client ID and the client secret values into the `./frontend/.env` file.
 
@@ -44,5 +47,5 @@ Open the [http://localhost:8080/signin](http://localhost:8080/signin) link in a 
 
 Run the following command to run the backend tests.
 ```
-docker exec -it backend bash -c "./vendor/bin/phpunit"
+docker exec -it photo-blog-backend bash -c "./vendor/bin/phpunit"
 ```
