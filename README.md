@@ -33,7 +33,7 @@ docker exec -it photo-blog-backend bash -c "chown www-data:www-data storage/oaut
 ```
 
 
-Insert just generated OAuth client ID and the client secret values into the `./frontend/.env` file.
+Insert just generated `Password grant` client ID and the client secret values into the `./frontend/.env` file.
 
 Rerun the following command (within the `./` directory) to restart the docker containers and rebuild the application.
 
