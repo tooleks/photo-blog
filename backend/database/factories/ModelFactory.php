@@ -64,7 +64,6 @@ $factory->define(User::class, function (Generator $faker) {
         'role_id' => Role::inRandomOrder()->first()->id,
         'name' => $faker->userName,
         'email' => $faker->safeEmail,
-        'api_token' => str_random(64),
         'password' => $password ?: $password = bcrypt('secret'),
         'remember_token' => str_random(10),
     ];
