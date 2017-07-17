@@ -4,6 +4,7 @@ namespace Api\V1\Http\Controllers;
 
 use Api\V1\Http\Requests\ContactMessageRequest as ContactMessageRequest;
 use Core\Mail\ContactMessage;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Mail;
@@ -15,6 +16,21 @@ use Illuminate\Support\Facades\Mail;
  */
 class ContactMessagesController extends Controller
 {
+    /**
+     * @var ResponseFactory
+     */
+    protected $responseFactory;
+
+    /**
+     * ContactMessagesController constructor.
+     *
+     * @param ResponseFactory $responseFactory
+     */
+    public function __construct(ResponseFactory $responseFactory)
+    {
+        $this->responseFactory = $responseFactory;
+    }
+
     /**
      * @apiVersion 1.0.0
      * @api {post} /v1/contact_message Create
@@ -41,6 +57,6 @@ class ContactMessagesController extends Controller
     {
         Mail::queue(new ContactMessage($request->all()));
 
-        return new Response(null, Response::HTTP_CREATED);
+        return $this->responseFactory->make(null, Response::HTTP_CREATED);
     }
 }

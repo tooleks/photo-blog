@@ -21,7 +21,7 @@ class JsonApiResponses
      * @param Closure $next
      * @return Response
      */
-    public function handle(Request $request, Closure $next)
+    public function handle($request, Closure $next)
     {
         $this->assertRequest($request);
 
@@ -35,7 +35,7 @@ class JsonApiResponses
      *
      * @param Request $request
      */
-    protected function assertRequest(Request $request)
+    protected function assertRequest($request)
     {
         if (!$request->wantsJson()) {
             throw new HttpException(Response::HTTP_NOT_ACCEPTABLE);
@@ -48,7 +48,7 @@ class JsonApiResponses
      * @param Response $response
      * @return Response
      */
-    protected function buildResponse(Response $response)
+    protected function buildResponse($response)
     {
         if (method_exists($response, 'getOriginalContent') && $response->isSuccessful()) {
             $statusCode = $response->getStatusCode();
@@ -66,7 +66,7 @@ class JsonApiResponses
      * @param Response $response
      * @return Response
      */
-    protected function addHeaders(Response $response)
+    protected function addHeaders($response)
     {
         $response->headers->add(['Content-Type' => 'application/json']);
 

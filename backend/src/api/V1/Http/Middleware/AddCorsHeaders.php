@@ -3,6 +3,7 @@
 namespace Api\V1\Http\Middleware;
 
 use Closure;
+use Illuminate\Config\Repository as Config;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -14,33 +15,49 @@ use Symfony\Component\HttpFoundation\Response;
 class AddCorsHeaders
 {
     /**
+     * @var Config
+     */
+    protected $config;
+
+    /**
+     * AddCorsHeaders constructor.
+     *
+     * @param Config $config
+     */
+    public function __construct(Config $config)
+    {
+        $this->config = $config;
+    }
+
+    /**
      * Handle an incoming request.
      *
      * @param Request $request
      * @param Closure $next
      * @return Response
      */
-    public function handle(Request $request, Closure $next)
+    public function handle($request, Closure $next)
     {
         $response = $next($request);
 
-        return $this->addHeaders($response);
+        $this->addCorsHeaders($response);
+
+        return $response;
     }
 
     /**
-     * Add the CORS header information to the given response.
+     * Add the CORS headers to the response.
      *
      * @param Response $response
-     * @return Response
+     * @return void
      */
-    protected function addHeaders(Response $response)
+    protected function addCorsHeaders($response): void
     {
         $response->headers->add([
-            'Access-Control-Allow-Origin' => '*',
-            'Access-Control-Allow-Methods' => 'POST, GET, OPTIONS, PUT, DELETE',
-            'Access-Control-Allow-Headers' => 'Content-Type, Accept, Authorization, X-Requested-With, X-XSRF-TOKEN',
+            'Access-Control-Allow-Origin' => $this->config->get('http.cors.allowed_origins'),
+            'Access-Control-Allow-Methods' => $this->config->get('http.cors.allowed_methods'),
+            'Access-Control-Allow-Headers' => $this->config->get('http.cors.allowed_headers'),
+            'Access-Control-Allow-Credentials' => $this->config->get('http.cors.allowed_credentials'),
         ]);
-
-        return $response;
     }
 }

@@ -34,7 +34,7 @@ class AppendClientIpAddress
      * @param Closure $next
      * @return mixed
      */
-    public function handle(Request $request, Closure $next)
+    public function handle($request, Closure $next)
     {
         $request->merge(['client_ip_address' => $this->resolveClientIpAddress($request)]);
 
@@ -47,7 +47,7 @@ class AppendClientIpAddress
      * @param Request $request
      * @return string|null
      */
-    protected function resolveClientIpAddress(Request $request)
+    protected function resolveClientIpAddress($request)
     {
         foreach ($this->clientIpServerOptions as $option) {
             if ($request->server->get($option)) {

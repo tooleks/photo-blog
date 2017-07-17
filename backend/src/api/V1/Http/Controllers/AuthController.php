@@ -2,12 +2,11 @@
 
 namespace Api\V1\Http\Controllers;
 
+use Api\V1\Http\Proxy\Contracts\AuthorizationProxy;
 use Api\V1\Http\Requests\CreateRefreshTokenRequest;
 use Api\V1\Http\Requests\CreateTokenRequest;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Foundation\Application;
-use Laravel\Passport\ClientRepository as OAuthClientRepository;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class AuthController.
@@ -17,25 +16,18 @@ use Laravel\Passport\ClientRepository as OAuthClientRepository;
 class AuthController extends Controller
 {
     /**
-     * @var Application
+     * @var AuthorizationProxy
      */
-    protected $application;
-
-    /**
-     * @var OAuthClientRepository
-     */
-    protected $oAuthClientRepository;
+    protected $authorizationProxy;
 
     /**
      * AuthController constructor.
      *
-     * @param Application $application
-     * @param OAuthClientRepository $oAuthClientRepository
+     * @param AuthorizationProxy $authorizationProxy
      */
-    public function __construct(Application $application, OAuthClientRepository $oAuthClientRepository)
+    public function __construct(AuthorizationProxy $authorizationProxy)
     {
-        $this->application = $application;
-        $this->oAuthClientRepository = $oAuthClientRepository;
+        $this->authorizationProxy = $authorizationProxy;
     }
 
     /**
@@ -49,32 +41,22 @@ class AuthController extends Controller
      * @apiParam {String{1..255}} password User's password.
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     * {
-     *     "token_type": "Bearer",
-     *     "expires_in": "3600",
-     *     "access_token": "access_token",
-     *     "refresh_token": "refresh_token",
-     * }
+     * {}
      */
 
     /**
      * Create token.
      *
      * @param CreateTokenRequest $request
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function createToken(CreateTokenRequest $request)
     {
-        $proxy = Request::create('oauth/token', 'POST', [
-            'grant_type' => 'password',
-            'client_id' => env('OAUTH_CLIENT_ID'),
-            'client_secret' => $this->oAuthClientRepository->findActive(env('OAUTH_CLIENT_ID'))->secret,
-            'scope' => '*',
-            'username' => $request->get('email'),
-            'password' => $request->get('password'),
-        ]);
-
-        return $this->application->handle($proxy);
+        return $this->authorizationProxy->authorizeWithCredentials(
+            env('OAUTH_CLIENT_ID'),
+            $request->get('email'),
+            $request->get('password')
+        );
     }
 
     /**
@@ -87,30 +69,20 @@ class AuthController extends Controller
      * @apiParam {String{1..N}} refresh_token User's refresh token.
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     * {
-     *     "token_type": "Bearer",
-     *     "expires_in": "3600",
-     *     "access_token": "access_token",
-     *     "refresh_token": "refresh_token",
-     * }
+     * {}
      */
 
     /**
      * Create refresh token.
      *
      * @param CreateRefreshTokenRequest $request
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function createRefreshToken(CreateRefreshTokenRequest $request)
     {
-        $proxy = Request::create('oauth/token', 'POST', [
-            'grant_type' => 'refresh_token',
-            'client_id' => env('OAUTH_CLIENT_ID'),
-            'client_secret' => $this->oAuthClientRepository->findActive(env('OAUTH_CLIENT_ID'))->secret,
-            'scope' => '*',
-            'refresh_token' => $request->get('refresh_token'),
-        ]);
-
-        return $this->application->handle($proxy);
+        return $this->authorizationProxy->authorizeWithRefreshToken(
+            env('OAUTH_CLIENT_ID'),
+            $request->get('refresh_token')
+        );
     }
 }

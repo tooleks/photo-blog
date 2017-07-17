@@ -5,7 +5,7 @@ import {FormsModule} from '@angular/forms';
 import {Http} from '@angular/http';
 import {Title} from '@angular/platform-browser';
 import {CoreModule} from '../core';
-import {GalleryModule, NoticesModule} from '../lib';
+import {GalleryModule, NoticesModule, NoticesService} from '../lib';
 import {
     ApiService,
     ApiErrorHandler,
@@ -45,7 +45,7 @@ import {
         {
             provide: ApiService,
             useFactory: getApiService,
-            deps: [Http, AppService, ApiErrorHandler, AuthProviderService],
+            deps: [Http, AppService, ApiErrorHandler],
         },
         ApiErrorHandler,
         AppService,
@@ -65,14 +65,14 @@ import {
         {
             provide: UserDataProviderService,
             useFactory: getUserDataProviderService,
-            deps: [Http, AppService, AuthProviderService],
+            deps: [Http, AppService, ApiErrorHandler],
         },
     ],
 })
 export class SharedModule {
 }
 
-export function getApiService(http: Http, app: AppService, errorHandler: ApiErrorHandler, authProvider: AuthProviderService) {
+export function getApiService(http: Http, app: AppService, errorHandler: ApiErrorHandler) {
     return new ApiService(
         http,
         app.getApiUrl(),
@@ -83,11 +83,7 @@ export function getApiService(http: Http, app: AppService, errorHandler: ApiErro
             return errorHandler.onResponseError(response);
         },
         function provideDefaultHeaders() {
-            const headers = {'Accept': 'application/json'};
-            if (authProvider.hasAuth()) {
-                headers['Authorization'] = `${authProvider.getAuthTokenType()} ${authProvider.getAuthAccessToken()}`;
-            }
-            return headers;
+            return {'Accept': 'application/json'};
         },
         function provideDefaultSearchParams() {
             return app.inDebugMode() ? {'XDEBUG_SESSION_START': 'START'} : {};
@@ -99,6 +95,15 @@ export function getTitleService(title: Title, app: AppService) {
     return new TitleService(title, app.getName());
 }
 
-export function getUserDataProviderService(http: Http, app: AppService, authProvider: AuthProviderService) {
-    return new UserDataProviderService(http, app.getApiUrl(), authProvider);
+export function getUserDataProviderService(http: Http, app: AppService, errorHandler: ApiErrorHandler) {
+    return new UserDataProviderService(
+        http,
+        app.getApiUrl(),
+        function onResponseSuccess(response: Response) {
+            return response.json() || {};
+        },
+        function onResponseError(response: Response) {
+            return errorHandler.onResponseError(response);
+        }
+    );
 }

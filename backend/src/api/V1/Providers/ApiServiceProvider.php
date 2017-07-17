@@ -27,5 +27,9 @@ class ApiServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->bind(
+            \Api\V1\Http\Proxy\Contracts\AuthorizationProxy::class,
+            \Api\V1\Http\Proxy\CookieAuthorizationProxy::class
+        );
     }
 }

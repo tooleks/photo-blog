@@ -1,40 +1,50 @@
 import {Injectable} from '@angular/core';
 import {Http, Headers} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
-import {AuthProviderService} from '../auth';
 
 @Injectable()
 export class UserDataProviderService {
-    constructor(protected http: Http, protected apiUrl: string, protected authProvider: AuthProviderService) {
+    constructor(protected http: Http, protected apiUrl: string, protected onResponseSuccess, protected onResponseError) {
+    }
+
+    getUser(): Promise<any> {
+        return this.http
+            .get(this.getApiAbsoluteUrl('/users/me'), this.getDefaultOptions())
+            .toPromise()
+            .then((response) => this.onResponseSuccess(response))
+            .catch((response) => this.onResponseError(response));
+    }
+
+    getAuthByCredentials(email: string, password: string): Promise<any> {
+        return this.http
+            .post(this.getApiAbsoluteUrl('/auth/token'), {email: email, password: password}, this.getDefaultOptions())
+            .toPromise()
+            .then((response) => this.onResponseSuccess(response))
+            .catch((response) => this.onResponseError(response));
+    }
+
+    getAuthByRefreshToken(refreshToken: string): Promise<any> {
+        return this.http
+            .post(this.getApiAbsoluteUrl('/auth/refresh-token'), {refresh_token: refreshToken}, this.getDefaultOptions())
+            .toPromise()
+            .then((response) => this.onResponseSuccess(response))
+            .catch((response) => this.onResponseError(response));
     }
 
     protected getApiAbsoluteUrl(relativeUrl: string): string {
         return this.apiUrl + relativeUrl;
     }
 
-    getUser(): Promise<any> {
-        const headers = new Headers;
-        headers.append('Accept', 'application/json');
-        if (this.authProvider.hasAuth()) {
-            headers.append('Authorization', `${this.authProvider.getAuthTokenType()} ${this.authProvider.getAuthAccessToken()}`);
-        }
-        return this.http
-            .get(this.getApiAbsoluteUrl('/users/me'), {headers: headers})
-            .toPromise()
-            .then((response) => response.json() || {});
+    protected getDefaultOptions() {
+        return {
+            withCredentials: true,
+            headers: this.getDefaultHeaders(),
+        };
     }
 
-    getAuthByCredentials(email: string, password: string): Promise<any> {
-        return this.http
-            .post(this.getApiAbsoluteUrl('/auth/token'), {email: email, password: password})
-            .toPromise()
-            .then((response) => response.json() || {});
-    }
-
-    getAuthByRefreshToken(refreshToken: string): Promise<any> {
-        return this.http
-            .post(this.getApiAbsoluteUrl('/auth/refresh-token'), {refresh_token: refreshToken})
-            .toPromise()
-            .then((response) => response.json() || {});
+    protected getDefaultHeaders(): Headers {
+        const defaultHeaders = new Headers;
+        defaultHeaders.append('Accept', 'application/json');
+        return defaultHeaders;
     }
 }

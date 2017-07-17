@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {Http, Headers, URLSearchParams} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import {ApiServiceInterface} from './interfaces';
-import {RetryError} from './retry-error';
 
 @Injectable()
 export class ApiService implements ApiServiceInterface {
@@ -19,8 +18,7 @@ export class ApiService implements ApiServiceInterface {
             .get(this.getApiAbsoluteUrl(relativeUrl), this.initializeOptions(options))
             .toPromise()
             .then(this.onResponseSuccess)
-            .catch(this.onResponseError)
-            .catch((error) => this.onRequestRetry(error, () => this.get(relativeUrl, options)));
+            .catch(this.onResponseError);
     }
 
     post(relativeUrl: string, body?, options?): Promise<any> {
@@ -28,8 +26,7 @@ export class ApiService implements ApiServiceInterface {
             .post(this.getApiAbsoluteUrl(relativeUrl), this.initializeBody(body), this.initializeOptions(options))
             .toPromise()
             .then(this.onResponseSuccess)
-            .catch(this.onResponseError)
-            .catch((error) => this.onRequestRetry(error, () => this.post(relativeUrl, body, options)));
+            .catch(this.onResponseError);
     }
 
     put(relativeUrl: string, body?, options?): Promise<any> {
@@ -37,8 +34,7 @@ export class ApiService implements ApiServiceInterface {
             .put(this.getApiAbsoluteUrl(relativeUrl), this.initializeBody(body), this.initializeOptions(options))
             .toPromise()
             .then(this.onResponseSuccess)
-            .catch(this.onResponseError)
-            .catch((error) => this.onRequestRetry(error, () => this.put(relativeUrl, body, options)));
+            .catch(this.onResponseError);
     }
 
     delete(relativeUrl: string, options?): Promise<any> {
@@ -46,8 +42,7 @@ export class ApiService implements ApiServiceInterface {
             .delete(this.getApiAbsoluteUrl(relativeUrl), this.initializeOptions(options))
             .toPromise()
             .then(this.onResponseSuccess)
-            .catch(this.onResponseError)
-            .catch((error) => this.onRequestRetry(error, () => this.delete(relativeUrl, options)));
+            .catch(this.onResponseError);
     }
 
     protected getApiAbsoluteUrl(relativeUrl: string): string {
@@ -57,6 +52,7 @@ export class ApiService implements ApiServiceInterface {
     protected initializeOptions(options?) {
         options = options || {};
         return {
+            withCredentials: true,
             headers: this.initializeHeaders(options.headers),
             search: this.initializeSearchParams(options.params),
         };
@@ -120,11 +116,5 @@ export class ApiService implements ApiServiceInterface {
 
     protected initializeBody(body?) {
         return body || {};
-    }
-
-    protected onRequestRetry(error, callback) {
-        return error instanceof RetryError
-            ? callback()
-            : Promise.reject(error);
     }
 }
