@@ -40,6 +40,11 @@ Route::group(['prefix' => 'auth'], function () {
         ->uses('AuthController@createToken')
         ->middleware('throttle:10,1');
 
+    Route::delete('/token')
+        ->uses('AuthController@deleteToken')
+        ->middleware('auth:api')
+        ->middleware('throttle:10,1');
+
     Route::post('/refresh-token')
         ->uses('AuthController@createRefreshToken')
         ->middleware('throttle:10,1');

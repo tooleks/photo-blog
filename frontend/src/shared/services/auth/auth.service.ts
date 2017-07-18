@@ -9,20 +9,20 @@ export class AuthService {
 
     signIn(email: string, password: string): Promise<any> {
         return this.userDataProvider
-            .getAuthByCredentials(email, password)
+            .createAuthByCredentials(email, password)
             .then((auth) => this.userDataProvider.getUser())
             .then((user) => this.authProvider.setUser(user));
     }
 
     signOut(): Promise<any> {
-        return new Promise((resolve, reject) => {
-            if (this.authProvider.isAuthenticated()) {
-                const user = this.authProvider.getUser();
-                this.authProvider.setUser(null);
-                resolve(user);
-            } else {
-                reject();
-            }
-        });
+        if (this.authProvider.isAuthenticated()) {
+            const user = this.authProvider.getUser();
+            this.authProvider.setUser(null);
+            return this.userDataProvider
+                .deleteAuth()
+                .then(() => user);
+        } else {
+            return Promise.reject(new Error);
+        }
     }
 }

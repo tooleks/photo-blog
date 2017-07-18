@@ -3,8 +3,9 @@
 namespace Api\V1\Http\Middleware;
 
 use Closure;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
@@ -14,6 +15,16 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  */
 class JsonApiResponses
 {
+    /**
+     * JsonApiResponses constructor.
+     *
+     * @param ResponseFactory $responseFactory
+     */
+    public function __construct(ResponseFactory $responseFactory)
+    {
+        $this->responseFactory = $responseFactory;
+    }
+
     /**
      * Handle an incoming request.
      *
@@ -27,7 +38,10 @@ class JsonApiResponses
 
         $response = $next($request);
 
-        return $this->buildResponse($response);
+        $this->addHeaders($response);
+        $this->setStatusCode($request, $response);
+
+        return $response;
     }
 
     /**
@@ -43,33 +57,41 @@ class JsonApiResponses
     }
 
     /**
-     * Create a response.
+     * Add default headers.
      *
      * @param Response $response
-     * @return Response
+     * @return void
      */
-    protected function buildResponse($response)
+    protected function addHeaders($response): void
     {
-        if (method_exists($response, 'getOriginalContent') && $response->isSuccessful()) {
-            $statusCode = $response->getStatusCode();
-            $headers = $response->headers->all();
-            $content = $response->getOriginalContent();
-            $response = response()->json($content, $statusCode, $headers);
-        }
-
-        return $this->addHeaders($response);
+        $response->headers->set('Content-Type', 'application/json');
     }
 
     /**
-     * Add the JSON API header information to the given response.
+     * Set status code for the response.
      *
+     * @param Request $request
      * @param Response $response
-     * @return Response
+     * @return void
      */
-    protected function addHeaders($response)
+    protected function setStatusCode($request, $response): void
     {
-        $response->headers->add(['Content-Type' => 'application/json']);
+        if (!$response->isSuccessful()) {
+            return;
+        }
 
-        return $response;
+        switch ($request->getMethod()) {
+            case Request::METHOD_POST:
+                $statusCode = Response::HTTP_CREATED;
+                break;
+            case Request::METHOD_DELETE:
+                $statusCode = Response::HTTP_NO_CONTENT;
+                break;
+            default:
+                $statusCode = Response::HTTP_OK;
+                break;
+        }
+
+        $response->setStatusCode($statusCode);
     }
 }

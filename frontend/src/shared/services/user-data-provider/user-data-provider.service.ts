@@ -15,7 +15,7 @@ export class UserDataProviderService {
             .catch((response) => this.onResponseError(response));
     }
 
-    getAuthByCredentials(email: string, password: string): Promise<any> {
+    createAuthByCredentials(email: string, password: string): Promise<any> {
         return this.http
             .post(this.getApiAbsoluteUrl('/auth/token'), {email: email, password: password}, this.getDefaultOptions())
             .toPromise()
@@ -23,9 +23,9 @@ export class UserDataProviderService {
             .catch((response) => this.onResponseError(response));
     }
 
-    getAuthByRefreshToken(refreshToken: string): Promise<any> {
+    deleteAuth(): Promise<any> {
         return this.http
-            .post(this.getApiAbsoluteUrl('/auth/refresh-token'), {refresh_token: refreshToken}, this.getDefaultOptions())
+            .delete(this.getApiAbsoluteUrl('/auth/token'), this.getDefaultOptions())
             .toPromise()
             .then((response) => this.onResponseSuccess(response))
             .catch((response) => this.onResponseError(response));

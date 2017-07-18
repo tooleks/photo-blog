@@ -5,6 +5,7 @@ namespace Api\V1\Http\Controllers;
 use Api\V1\Http\Proxy\Contracts\OAuthProxy;
 use Api\V1\Http\Requests\CreateRefreshTokenRequest;
 use Api\V1\Http\Requests\CreateTokenRequest;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -62,6 +63,28 @@ class AuthController extends Controller
             $request->get('email'),
             $request->get('password')
         );
+    }
+
+    /**
+     * @apiVersion 1.0.0
+     * @api {delete} /v1/users/:id Delete Token
+     * @apiName Delete Token
+     * @apiGroup Auth
+     * @apiHeader {String} Accept application/json
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 204 No Content
+     */
+
+    /**
+     * Delete a token.
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function deleteToken(Request $request): void
+    {
+        $request->user()->token()->revoke();
+        $request->user()->token()->delete();
     }
 
     /**
