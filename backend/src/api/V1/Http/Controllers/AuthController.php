@@ -6,8 +6,8 @@ use Api\V1\Http\Proxy\Contracts\OAuthProxy;
 use Api\V1\Http\Requests\CreateRefreshTokenRequest;
 use Api\V1\Http\Requests\CreateTokenRequest;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class AuthController.
