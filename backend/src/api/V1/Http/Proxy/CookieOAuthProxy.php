@@ -106,7 +106,7 @@ class CookieOAuthProxy implements OAuthProxyContract
 
         foreach ($responseContent as $name => $value) {
             // TODO: Fix dependency from the global variable $_SERVER.
-            $response->headers->setCookie($this->cookieBakery->make($name, $value, 0,
+            $response->headers->setCookie($this->cookieBakery->make($name, $value, $thirtyDays = (60 * 24 * 30),
                 null, null, isset($_SERVER['HTTPS']), true));
         }
 
