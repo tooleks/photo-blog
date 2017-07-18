@@ -67,7 +67,7 @@ class AuthController extends Controller
 
     /**
      * @apiVersion 1.0.0
-     * @api {delete} /v1/users/:id Delete Token
+     * @api {delete} /v1/auth/token Delete Token
      * @apiName Delete Token
      * @apiGroup Auth
      * @apiHeader {String} Accept application/json
