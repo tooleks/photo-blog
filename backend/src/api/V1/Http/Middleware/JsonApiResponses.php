@@ -3,7 +3,6 @@
 namespace Api\V1\Http\Middleware;
 
 use Closure;
-use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -15,16 +14,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  */
 class JsonApiResponses
 {
-    /**
-     * JsonApiResponses constructor.
-     *
-     * @param ResponseFactory $responseFactory
-     */
-    public function __construct(ResponseFactory $responseFactory)
-    {
-        $this->responseFactory = $responseFactory;
-    }
-
     /**
      * Handle an incoming request.
      *
