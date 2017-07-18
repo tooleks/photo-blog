@@ -76,22 +76,15 @@ class JsonApiResponses
      */
     protected function setStatusCode($request, $response): void
     {
-        if (!$response->isSuccessful()) {
-            return;
+        if ($response->isSuccessful()) {
+            switch ($request->getMethod()) {
+                case Request::METHOD_POST:
+                    $response->setStatusCode(Response::HTTP_CREATED);
+                    break;
+                case Request::METHOD_DELETE:
+                    $response->setStatusCode(Response::HTTP_NO_CONTENT);
+                    break;
+            }
         }
-
-        switch ($request->getMethod()) {
-            case Request::METHOD_POST:
-                $statusCode = Response::HTTP_CREATED;
-                break;
-            case Request::METHOD_DELETE:
-                $statusCode = Response::HTTP_NO_CONTENT;
-                break;
-            default:
-                $statusCode = Response::HTTP_OK;
-                break;
-        }
-
-        $response->setStatusCode($statusCode);
     }
 }

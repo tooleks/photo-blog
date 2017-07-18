@@ -47,9 +47,7 @@ class PresentResponses
 
         if ($response->isSuccessful()) {
             $content = $this->present($response->getOriginalContent(), $presenterClass);
-            $statusCode = $this->getStatusCode($request);
             $response->setContent($content);
-            $response->setStatusCode($statusCode);
         }
 
         return $response;
@@ -86,23 +84,5 @@ class PresentResponses
 
         // Otherwise, return the data "as it".
         return $data;
-    }
-
-    /**
-     * Get status code for request method.
-     *
-     * @param Request $request
-     * @return int
-     */
-    protected function getStatusCode($request)
-    {
-        switch ($request->getMethod()) {
-            case Request::METHOD_POST:
-                return Response::HTTP_CREATED;
-            case Request::METHOD_DELETE:
-                return Response::HTTP_NO_CONTENT;
-            default:
-                return Response::HTTP_OK;
-        }
     }
 }
