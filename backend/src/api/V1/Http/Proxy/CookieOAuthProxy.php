@@ -56,7 +56,7 @@ class CookieOAuthProxy implements OAuthProxyContract
     /**
      * @inheritdoc
      */
-    public function requestTokenByCredentials(string $clientId, string $username, string $password)
+    public function requestTokenByCredentials(?string $clientId, ?string $username, ?string $password)
     {
         $proxy = Request::create('oauth/token', 'POST', [
             'grant_type' => 'password',
@@ -77,7 +77,7 @@ class CookieOAuthProxy implements OAuthProxyContract
     /**
      * @inheritdoc
      */
-    public function requestTokenByRefreshToken(string $clientId, string $refreshToken)
+    public function requestTokenByRefreshToken(?string $clientId, ?string $refreshToken)
     {
         $proxy = Request::create('oauth/token', 'POST', [
             'grant_type' => 'refresh_token',
