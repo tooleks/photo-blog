@@ -2,20 +2,20 @@
 
 namespace Api\V1\Http\Proxy;
 
-use Api\V1\Http\Proxy\Contracts\AuthorizationProxy as AuthorizationProxyContract;
+use Api\V1\Http\Proxy\Contracts\OAuthProxy as OAuthProxyContract;
 use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Contracts\Cookie\Factory as CookieFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Foundation\Application;
 use Laravel\Passport\ClientRepository as OAuthClientRepository;
-use Symfony\Component\HttpFoundation\Cookie;
 
 /**
- * Class CookieAuthorizationProxy.
+ * Class OAuthCookieAuthorizationProxy.
  *
  * @package Api\V1\Http\Proxy
  */
-class CookieAuthorizationProxy implements AuthorizationProxyContract
+class CookieOAuthProxy implements OAuthProxyContract
 {
     /**
      * @var Application
@@ -28,28 +28,35 @@ class CookieAuthorizationProxy implements AuthorizationProxyContract
     protected $responseFactory;
 
     /**
+     * @var CookieFactory
+     */
+    protected $cookieBakery;
+
+    /**
      * @var OAuthClientRepository
      */
     protected $oAuthClientRepository;
 
     /**
-     * CookieAuthorizationProxy constructor.
+     * OAuthCookieAuthorizationProxy constructor.
      *
      * @param Application $app
      * @param ResponseFactory $responseFactory
+     * @param CookieFactory $cookieBakery
      * @param OAuthClientRepository $oAuthClientRepository
      */
-    public function __construct(Application $app, ResponseFactory $responseFactory, OAuthClientRepository $oAuthClientRepository)
+    public function __construct(Application $app, ResponseFactory $responseFactory, CookieFactory $cookieBakery, OAuthClientRepository $oAuthClientRepository)
     {
         $this->app = $app;
         $this->responseFactory = $responseFactory;
+        $this->cookieBakery = $cookieBakery;
         $this->oAuthClientRepository = $oAuthClientRepository;
     }
 
     /**
      * @inheritdoc
      */
-    public function authorizeWithCredentials(string $clientId, string $username, string $password)
+    public function requestTokenByCredentials(string $clientId, string $username, string $password)
     {
         $proxy = Request::create('oauth/token', 'POST', [
             'grant_type' => 'password',
@@ -70,7 +77,7 @@ class CookieAuthorizationProxy implements AuthorizationProxyContract
     /**
      * @inheritdoc
      */
-    public function authorizeWithRefreshToken(string $clientId, string $refreshToken)
+    public function requestTokenByRefreshToken(string $clientId, string $refreshToken)
     {
         $proxy = Request::create('oauth/token', 'POST', [
             'grant_type' => 'refresh_token',
@@ -90,20 +97,20 @@ class CookieAuthorizationProxy implements AuthorizationProxyContract
     /**
      * Proxy success authorization response.
      *
-     * @param mixed $originalResponse
+     * @param Response $response
      * @return Response
      */
-    protected function proxyOnSuccessResponse($originalResponse): Response
+    protected function proxyOnSuccessResponse($response)
     {
-        $originalResponseContent = json_decode((string) $originalResponse->getContent(), true);
+        $responseContent = json_decode((string) $response->getContent(), true);
 
-        $originalResponse = $this->responseFactory->make(null, Response::HTTP_CREATED);
-
-        foreach ($originalResponseContent as $name => $value) {
-            $originalResponse->withCookie(new Cookie($name, $value, 0, null, null, isset($_SERVER['HTTPS']), true));
+        foreach ($responseContent as $name => $value) {
+            // TODO: Fix dependency from the global variable $_SERVER.
+            $response->headers->setCookie($this->cookieBakery->make($name, $value, 0,
+                null, null, isset($_SERVER['HTTPS']), true));
         }
 
-        return $originalResponse;
+        return $response;
     }
 
     /**

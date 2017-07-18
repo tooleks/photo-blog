@@ -2,7 +2,6 @@
 
 namespace Api\V1\Providers;
 
-use Api\V1\Policies\ResourcePolicy;
 use Carbon\Carbon;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
@@ -36,7 +35,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function registerGates()
     {
-        $resourcePolicy = new ResourcePolicy;
+        $resourcePolicy = $this->app->make(\Api\V1\Policies\ResourcePolicy::class);
 
         Gate::define('create-resource', [$resourcePolicy, 'create']);
         Gate::define('get-resource', [$resourcePolicy, 'get']);

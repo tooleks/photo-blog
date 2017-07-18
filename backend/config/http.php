@@ -11,13 +11,17 @@ return [
 
     'cors' => [
 
-        'allowed_origins' => config('main.frontend.url'),
+        'headers' => [
 
-        'allowed_methods' => 'POST, GET, OPTIONS, PUT, DELETE',
+            'access-control-allow-origin' => config('main.frontend.url'),
 
-        'allowed_headers' => 'Accept, Content-Type, Authorization, X-Requested-With, X-XSRF-TOKEN',
+            'access-control-allow-methods' => 'POST, GET, OPTIONS, PUT, DELETE',
 
-        'allowed_credentials' => 'true',
+            'access-control-allow-headers' => 'accept, content-type, authorization, x-requested-with, x-xsrf-token, x-csrf-token',
+
+            'access-control-allow-credentials' => 'true',
+
+        ],
 
     ],
 

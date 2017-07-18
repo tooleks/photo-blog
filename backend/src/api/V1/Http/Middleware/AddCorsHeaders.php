@@ -5,7 +5,7 @@ namespace Api\V1\Http\Middleware;
 use Closure;
 use Illuminate\Config\Repository as Config;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Http\Response;
 
 /**
  * Class AddCorsHeaders.
@@ -54,10 +54,10 @@ class AddCorsHeaders
     protected function addCorsHeaders($response): void
     {
         $response->headers->add([
-            'Access-Control-Allow-Origin' => $this->config->get('http.cors.allowed_origins'),
-            'Access-Control-Allow-Methods' => $this->config->get('http.cors.allowed_methods'),
-            'Access-Control-Allow-Headers' => $this->config->get('http.cors.allowed_headers'),
-            'Access-Control-Allow-Credentials' => $this->config->get('http.cors.allowed_credentials'),
+            'Access-Control-Allow-Origin' => $this->config->get('http.cors.headers.access-control-allow-origin'),
+            'Access-Control-Allow-Methods' => $this->config->get('http.cors.headers.access-control-allow-methods'),
+            'Access-Control-Allow-Headers' => $this->config->get('http.cors.headers.access-control-allow-headers'),
+            'Access-Control-Allow-Credentials' => $this->config->get('http.cors.headers.access-control-allow-credentials'),
         ]);
     }
 }

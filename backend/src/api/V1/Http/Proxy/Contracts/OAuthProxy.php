@@ -3,28 +3,28 @@
 namespace Api\V1\Http\Proxy\Contracts;
 
 /**
- * Interface AuthorizationProxy.
+ * Interface OAuthProxy.
  *
  * @package Api\V1\Http\Proxy\Contracts
  */
-interface AuthorizationProxy
+interface OAuthProxy
 {
     /**
-     * Proxy authorize request with credentials.
+     * Request token by the refresh credentials.
      *
      * @param string $clientId
      * @param string $username
      * @param string $password
      * @return mixed
      */
-    public function authorizeWithCredentials(string $clientId, string $username, string $password);
+    public function requestTokenByCredentials(string $clientId, string $username, string $password);
 
     /**
-     * Proxy authorize request with refresh token.
+     * Request token by the refresh token.
      *
      * @param string $clientId
      * @param string $refreshToken
      * @return mixed
      */
-    public function authorizeWithRefreshToken(string $clientId, string $refreshToken);
+    public function requestTokenByRefreshToken(string $clientId, string $refreshToken);
 }
