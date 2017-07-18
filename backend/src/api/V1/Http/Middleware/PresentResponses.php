@@ -46,8 +46,9 @@ class PresentResponses
         $response = $next($request);
 
         if ($response->isSuccessful()) {
-            $content = $this->present($response->getOriginalContent(), $presenterClass);
-            $response->setContent($content);
+            $response->setContent(
+                $this->present($response->getOriginalContent(), $presenterClass)
+            );
         }
 
         return $response;
