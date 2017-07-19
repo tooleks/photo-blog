@@ -26,6 +26,10 @@ export class ApiErrorHandler {
                 this.onResponseValidationError(response);
                 break;
             }
+            case 429: {
+                this.onResponseTooManyAttemptsError(response);
+                break;
+            }
             default: {
                 this.onResponseHttpError(response);
                 break;
@@ -34,17 +38,17 @@ export class ApiErrorHandler {
         return Promise.reject(new Error(body.message));
     }
 
-    protected onResponseUnknownError(response: Response) {
+    protected onResponseUnknownError(response: Response): void {
         const body = response.json();
         this.notices.error(body.message, 'Remote server connection error. Try again later.');
     }
 
-    protected onResponseUnauthorizedError(response: Response) {
+    protected onResponseUnauthorizedError(response: Response): void {
         this.onResponseHttpError(response);
         this.navigator.navigate(['/signout']);
     }
 
-    protected onResponseValidationError(response: Response) {
+    protected onResponseValidationError(response: Response): void {
         const body = response.json();
         body.errors = body.errors || {};
         for (let attribute in body.errors) {
@@ -54,8 +58,12 @@ export class ApiErrorHandler {
         }
     }
 
-    protected onResponseHttpError(response: Response) {
+    protected onResponseTooManyAttemptsError(response: Response): void {
+        this.notices.error('Too Many Requests. Try again later.')
+    }
+
+    protected onResponseHttpError(response: Response): void {
         const body = response.json();
-        this.notices.error(body.message, `${response.status} HTTP Error`);
+        this.notices.error(body.message, `HTTP ${response.status} Error`);
     }
 }
