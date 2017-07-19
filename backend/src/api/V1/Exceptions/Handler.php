@@ -83,9 +83,11 @@ class Handler extends ExceptionHandler
     {
         $e = FlattenException::create($e);
 
-        return response()->json([
-            'message' => $e->getMessage(),
-        ], $e->getStatusCode(), $e->getHeaders());
+        return response()->json(
+            $e->getMessage(),
+            $e->getStatusCode(),
+            $e->getHeaders()
+        );
     }
 
     /**
@@ -94,7 +96,6 @@ class Handler extends ExceptionHandler
     protected function convertValidationExceptionToResponse(ValidationException $e, $request)
     {
         return response()->json([
-            'message' => $e->getMessage(),
             'errors' => $e->validator->errors()->getMessages(),
         ], Response::HTTP_UNPROCESSABLE_ENTITY);
     }
@@ -106,8 +107,9 @@ class Handler extends ExceptionHandler
      */
     protected function getDefaultExceptionResponse()
     {
-        return response()->json([
-            'message' => trans(sprintf('errors.http.%s', Response::HTTP_INTERNAL_SERVER_ERROR)),
-        ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        return response()->json(
+            trans(sprintf('errors.http.%s', Response::HTTP_INTERNAL_SERVER_ERROR)),
+            Response::HTTP_INTERNAL_SERVER_ERROR
+        );
     }
 }

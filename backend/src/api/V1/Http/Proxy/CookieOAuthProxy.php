@@ -3,12 +3,14 @@
 namespace Api\V1\Http\Proxy;
 
 use Api\V1\Http\Proxy\Contracts\OAuthProxy as OAuthProxyContract;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Contracts\Cookie\Factory as CookieFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Foundation\Application;
 use Laravel\Passport\ClientRepository as OAuthClientRepository;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Class OAuthCookieAuthorizationProxy.
@@ -95,7 +97,7 @@ class CookieOAuthProxy implements OAuthProxyContract
     }
 
     /**
-     * Proxy success authorization response.
+     * On success response callback.
      *
      * @param Response $response
      * @return Response
@@ -116,11 +118,19 @@ class CookieOAuthProxy implements OAuthProxyContract
     }
 
     /**
-     * @param mixed $originalResponse
-     * @return mixed
+     * On error response callback.
+     *
+     * @param Response $response
+     * @throws AuthenticationException
      */
-    private function proxyOnErrorResponse($originalResponse)
+    private function proxyOnErrorResponse($response)
     {
-        return $originalResponse;
+        switch ($response->getStatusCode()) {
+            case Response::HTTP_BAD_REQUEST:
+            case Response::HTTP_UNAUTHORIZED:
+                throw new AuthenticationException(trans('auth.failed'));
+        }
+
+        throw new HttpException(Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 }

@@ -26,10 +26,6 @@ export class ApiErrorHandler {
                 this.onResponseValidationError(response);
                 break;
             }
-            case 429: {
-                this.onResponseTooManyAttemptsError(response);
-                break;
-            }
             default: {
                 this.onResponseHttpError(response);
                 break;
@@ -39,8 +35,7 @@ export class ApiErrorHandler {
     }
 
     protected onResponseUnknownError(response: Response): void {
-        const body = response.json();
-        this.notices.error(body.message, 'Remote server connection error. Try again later.');
+        this.notices.error('Remote server connection error. Try again later.');
     }
 
     protected onResponseUnauthorizedError(response: Response): void {
@@ -58,12 +53,9 @@ export class ApiErrorHandler {
         }
     }
 
-    protected onResponseTooManyAttemptsError(response: Response): void {
-        this.notices.error('Too Many Requests. Try again later.')
-    }
-
     protected onResponseHttpError(response: Response): void {
         const body = response.json();
-        this.notices.error(body.message, `HTTP ${response.status} Error`);
+        const title = typeof (body) === 'string' ? body : 'Internal Server Error.';
+        this.notices.error(title, `HTTP ${response.status} Error.`);
     }
 }
