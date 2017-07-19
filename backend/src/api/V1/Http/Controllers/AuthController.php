@@ -41,7 +41,7 @@ class AuthController extends Controller
      * @apiParam {String{1..255}} email User's email address.
      * @apiParam {String{1..255}} password User's password.
      * @apiSuccessExample {json} Success-Response:
-     * HTTP/1.1 200 OK
+     * HTTP/1.1 201 Created
      * {}
      */
 
