@@ -17,7 +17,7 @@ class ContactMessagesResourceTest extends IntegrationApiV1TestCase
         Mail::fake();
 
         $this
-            ->json('POST', sprintf('/%s', $this->resourceName), $body = [
+            ->json('POST', $this->getResourceFullName($this->resourceName), $body = [
                 'email' => $this->fake()->email,
                 'name' => $this->fake()->name,
                 'subject' => $this->fake()->text(50),

@@ -17,7 +17,7 @@ class AddCorsHeaders
     /**
      * @var Config
      */
-    protected $config;
+    private $config;
 
     /**
      * AddCorsHeaders constructor.
@@ -51,7 +51,7 @@ class AddCorsHeaders
      * @param Response $response
      * @return void
      */
-    protected function addCorsHeaders($response): void
+    private function addCorsHeaders($response): void
     {
         $response->headers->add([
             'Access-Control-Allow-Origin' => $this->config->get('http.cors.headers.access-control-allow-origin'),

@@ -3,7 +3,7 @@
 namespace App\Managers\User;
 
 use App\DataProviders\User\Contracts\UserDataProvider;
-use App\Managers\User\Contracts\UserManager as UserManagerContracts;
+use App\Managers\User\Contracts\UserManager as UserManagerContract;
 use App\Models\User;
 use Illuminate\Contracts\Hashing\Hasher;
 use Lib\DataProvider\Criterias\WhereEmail;
@@ -15,7 +15,7 @@ use Lib\DataProvider\Exceptions\DataProviderNotFoundException;
  *
  * @package App\Managers\User
  */
-class UserManager implements UserManagerContracts
+class UserManager implements UserManagerContract
 {
     /**
      * @var UserDataProvider

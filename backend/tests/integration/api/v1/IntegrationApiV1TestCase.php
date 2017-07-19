@@ -5,15 +5,10 @@
  */
 abstract class IntegrationApiV1TestCase extends TestCase
 {
-    /**
-     * @inheritdoc
-     */
-    public function createApplication()
+    protected $resourceBaseName = 'api/v1';
+
+    protected function getResourceFullName(string $resourceName): string
     {
-        $app = require $this->baseTestsDir . '/../bootstrap/api.v1.php';
-
-        $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
-
-        return $app;
+        return sprintf('/%s/%s', $this->resourceBaseName, $resourceName);
     }
 }

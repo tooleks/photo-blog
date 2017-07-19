@@ -39,7 +39,7 @@ class Kernel extends HttpKernel
 
         'api.v1' => [
             \Api\V1\Http\Middleware\CookieOAuthAuthorizer::class,
-            \Api\V1\Http\Middleware\CookieOAuthTokenRefresher::class,
+//            \Api\V1\Http\Middleware\CookieOAuthTokenRefresher::class,
             'json_api',
             'bindings',
         ],

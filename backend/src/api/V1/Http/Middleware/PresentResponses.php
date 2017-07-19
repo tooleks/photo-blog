@@ -61,7 +61,7 @@ class PresentResponses
      * @param $presenterClass
      * @return mixed
      */
-    protected function present($data, string $presenterClass)
+    private function present($data, string $presenterClass)
     {
         // If the data is an instance of a paginator class,
         // present each item in the collection with a presenter class via present macros.

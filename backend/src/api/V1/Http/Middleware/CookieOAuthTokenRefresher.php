@@ -20,17 +20,17 @@ class CookieOAuthTokenRefresher
      *
      * @var bool
      */
-    protected static $hit = false;
+    private static $hit = false;
 
     /**
      * @var Application
      */
-    protected $app;
+    private $app;
 
     /**
      * @var OAuthProxy
      */
-    protected $oAuthProxy;
+    private $oAuthProxy;
 
     /**
      * CookieOAuthTokenRefresher constructor.
@@ -70,7 +70,7 @@ class CookieOAuthTokenRefresher
      * @param Response $response
      * @return Response
      */
-    protected function retryRequestWithRefreshedToken($request, $response)
+    private function retryRequestWithRefreshedToken($request, $response)
     {
         $authorizationResponse = $this->oAuthProxy->requestTokenByRefreshToken(
             env('OAUTH_CLIENT_ID'),

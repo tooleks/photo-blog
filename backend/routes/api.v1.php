@@ -45,10 +45,6 @@ Route::group(['prefix' => 'auth'], function () {
         ->middleware('auth:api')
         ->middleware('throttle:10,1');
 
-    Route::post('/refresh-token')
-        ->uses('AuthController@createRefreshToken')
-        ->middleware('throttle:10,1');
-
 });
 
 /*

@@ -1,4 +1,4 @@
-@extends('core.mails.layout.main')
+@extends('app.mails.layout.main')
 
 @section('content')
     <p>{{ $name }} <a href="mailto:{{ $email }}">{{ $email }}</a> from {{ $client_ip_address ?? 'N/A' }}.</p>

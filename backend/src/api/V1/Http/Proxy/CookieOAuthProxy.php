@@ -20,22 +20,22 @@ class CookieOAuthProxy implements OAuthProxyContract
     /**
      * @var Application
      */
-    protected $app;
+    private $app;
 
     /**
      * @var ResponseFactory
      */
-    protected $responseFactory;
+    private $responseFactory;
 
     /**
      * @var CookieFactory
      */
-    protected $cookieBakery;
+    private $cookieBakery;
 
     /**
      * @var OAuthClientRepository
      */
-    protected $oAuthClientRepository;
+    private $oAuthClientRepository;
 
     /**
      * OAuthCookieAuthorizationProxy constructor.
@@ -100,24 +100,26 @@ class CookieOAuthProxy implements OAuthProxyContract
      * @param Response $response
      * @return Response
      */
-    protected function proxyOnSuccessResponse($response)
+    private function proxyOnSuccessResponse($response)
     {
-        $responseContent = json_decode((string) $response->getContent(), true);
+        $responseContent = \GuzzleHttp\json_decode((string) $response->getContent(), true);
+
+        $proxyResponse = $this->responseFactory->json((object) [], Response::HTTP_CREATED);
 
         foreach ($responseContent as $name => $value) {
             // TODO: Fix dependency from the global variable $_SERVER.
-            $response->headers->setCookie($this->cookieBakery->make($name, $value, $thirtyDays = (60 * 24 * 30),
+            $proxyResponse->headers->setCookie($this->cookieBakery->make($name, $value, $thirtyDays = (60 * 24 * 30),
                 null, null, isset($_SERVER['HTTPS']), true));
         }
 
-        return $response;
+        return $proxyResponse;
     }
 
     /**
      * @param mixed $originalResponse
      * @return mixed
      */
-    protected function proxyOnErrorResponse($originalResponse)
+    private function proxyOnErrorResponse($originalResponse)
     {
         return $originalResponse;
     }

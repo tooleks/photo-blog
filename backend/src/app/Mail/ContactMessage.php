@@ -37,6 +37,6 @@ class ContactMessage extends Mailable
             ->to(config('mail.address.administrator'))
             ->replyTo($this->data['email'])
             ->subject(sprintf('%s - %s - %s', config('app.name'), trans('mails.contact-message.subject'), $this->data['subject']))
-            ->view('core.mails.contact-message', $this->data);
+            ->view('app.mails.contact-message', $this->data);
     }
 }

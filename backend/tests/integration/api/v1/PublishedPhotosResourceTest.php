@@ -67,7 +67,7 @@ class PublishedPhotosResourceTest extends IntegrationApiV1TestCase
 
         $this
             ->actingAs($authUser)
-            ->json('POST', sprintf('/%s', $this->resourceName), $body = [
+            ->json('POST', $this->getResourceFullName($this->resourceName), $body = [
                 'photo_id' => $photo->id,
                 'description' => $this->fake()->realText(),
                 'tags' => [
@@ -94,7 +94,7 @@ class PublishedPhotosResourceTest extends IntegrationApiV1TestCase
         ]);
 
         $this
-            ->json('POST', sprintf('/%s', $this->resourceName))
+            ->json('POST', $this->getResourceFullName($this->resourceName))
             ->assertStatus(401);
     }
 
@@ -108,7 +108,7 @@ class PublishedPhotosResourceTest extends IntegrationApiV1TestCase
 
         $this
             ->actingAs($authUser)
-            ->json('PUT', sprintf('/%s/%s', $this->resourceName, $photo->id), $body = [
+            ->json('PUT', $this->getResourceFullName(sprintf('%s/%s', $this->resourceName, $photo->id)), $body = [
                 'description' => $this->fake()->realText(),
                 'tags' => [
                     ['value' => strtolower($this->fake()->word)],
@@ -134,7 +134,7 @@ class PublishedPhotosResourceTest extends IntegrationApiV1TestCase
         ]);
 
         $this
-            ->json('PUT', sprintf('/%s/%s', $this->resourceName, $photo->id))
+            ->json('PUT', $this->getResourceFullName(sprintf('%s/%s', $this->resourceName, $photo->id)))
             ->assertStatus(401);
     }
 
@@ -147,7 +147,7 @@ class PublishedPhotosResourceTest extends IntegrationApiV1TestCase
         ]);
 
         $this
-            ->json('GET', sprintf('/%s/%s', $this->resourceName, $photo->id))
+            ->json('GET', $this->getResourceFullName(sprintf('%s/%s', $this->resourceName, $photo->id)))
             ->assertStatus(200)
             ->assertJsonStructure($this->resourceStructure)
             ->assertJson([
@@ -168,7 +168,7 @@ class PublishedPhotosResourceTest extends IntegrationApiV1TestCase
         ]);
 
         $this
-            ->json('GET', sprintf('/%s', $this->resourceName))
+            ->json('GET', $this->getResourceFullName($this->resourceName))
             ->assertStatus(200)
             ->assertJsonStructure([
                 'data' => [
@@ -197,7 +197,7 @@ class PublishedPhotosResourceTest extends IntegrationApiV1TestCase
         ]);
 
         $this
-            ->json('GET', sprintf('/%s?tag=%s', $this->resourceName, $photo->tags->first()->value))
+            ->json('GET', $this->getResourceFullName(sprintf('%s?tag=%s', $this->resourceName, $photo->tags->first()->value)))
             ->assertStatus(200)
             ->assertJsonStructure([
                 'data' => [
@@ -226,7 +226,7 @@ class PublishedPhotosResourceTest extends IntegrationApiV1TestCase
         ]);
 
         $this
-            ->json('GET', sprintf('/%s?search_phrase=%s', $this->resourceName, $photo->description . ' ' . $photo->tags->first()->value))
+            ->json('GET', $this->getResourceFullName(sprintf('%s?search_phrase=%s', $this->resourceName, $photo->description . ' ' . $photo->tags->first()->value)))
             ->assertStatus(200)
             ->assertJsonStructure([
                 'data' => [
@@ -256,7 +256,7 @@ class PublishedPhotosResourceTest extends IntegrationApiV1TestCase
 
         $this
             ->actingAs($authUser)
-            ->json('DELETE', sprintf('/%s/%s', $this->resourceName, $photo->id))
+            ->json('DELETE', $this->getResourceFullName(sprintf('%s/%s', $this->resourceName, $photo->id)))
             ->assertStatus(204);
 
         $this->assertFalse(Photo::whereId($photo->id)->exists(), 'The photo was not deleted.');
@@ -278,7 +278,7 @@ class PublishedPhotosResourceTest extends IntegrationApiV1TestCase
         ]);
 
         $this
-            ->json('DELETE', sprintf('/%s/%s', $this->resourceName, $photo->id))
+            ->json('DELETE', $this->getResourceFullName(sprintf('%s/%s', $this->resourceName, $photo->id)))
             ->assertStatus(401);
     }
 }

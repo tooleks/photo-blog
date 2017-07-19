@@ -35,7 +35,7 @@ class CookieOAuthAuthorizer
      * @param Request $request
      * @return void
      */
-    protected function convertAuthorizationCookieToHeader($request): void
+    private function convertAuthorizationCookieToHeader($request): void
     {
         if (
             $request->hasCookie('token_type') &&

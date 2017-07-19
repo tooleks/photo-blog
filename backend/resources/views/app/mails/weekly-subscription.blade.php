@@ -1,4 +1,4 @@
-@extends('core.mails.layout.main')
+@extends('app.mails.layout.main')
 
 @section('content')
     <p>{{ trans('mails.weekly-subscription.updates_message') }}</p>

@@ -24,7 +24,7 @@ class UsersResourceTest extends IntegrationApiV1TestCase
 
         $this
             ->actingAs($authUser)
-            ->json('POST', sprintf('/%s', $this->resourceName), $body = [
+            ->json('POST', $this->getResourceFullName($this->resourceName), $body = [
                 'name' => $this->fake()->userName,
                 'email' => $this->fake()->safeEmail,
                 'password' => $this->fake()->password(),
@@ -43,7 +43,7 @@ class UsersResourceTest extends IntegrationApiV1TestCase
 
         $this
             ->actingAs($authUser)
-            ->json('POST', sprintf('/%s', $this->resourceName), [
+            ->json('POST', $this->getResourceFullName($this->resourceName), [
                 'name' => $this->fake()->userName,
                 'email' => $authUser->email,
                 'password' => $this->fake()->password(),
@@ -59,7 +59,7 @@ class UsersResourceTest extends IntegrationApiV1TestCase
     public function testCreateUnauthorized()
     {
         $this
-            ->json('POST', sprintf('/%s', $this->resourceName), [
+            ->json('POST', $this->getResourceFullName($this->resourceName), [
                 'name' => $this->fake()->userName,
                 'email' => $this->fake()->safeEmail,
                 'password' => $this->fake()->password(),
@@ -74,7 +74,7 @@ class UsersResourceTest extends IntegrationApiV1TestCase
 
         $this
             ->actingAs($authUser)
-            ->json('PUT', sprintf('/%s/%s', $this->resourceName, $user->id), $body = [
+            ->json('PUT', $this->getResourceFullName(sprintf('%s/%s', $this->resourceName, $user->id)), $body = [
                 'name' => $this->fake()->userName,
                 'email' => $this->fake()->safeEmail,
                 'password' => $this->fake()->password(),
@@ -95,7 +95,7 @@ class UsersResourceTest extends IntegrationApiV1TestCase
 
         $this
             ->actingAs($authUser)
-            ->json('PUT', sprintf('/%s/%s', $this->resourceName, $user->id), $body = [
+            ->json('PUT', $this->getResourceFullName(sprintf('%s/%s', $this->resourceName, $user->id)), $body = [
                 'name' => $this->fake()->userName,
                 'email' => $data['email'],
                 'password' => $this->fake()->password(),
@@ -113,7 +113,7 @@ class UsersResourceTest extends IntegrationApiV1TestCase
         $user = $this->createTestUser();
 
         $this
-            ->json('PUT', sprintf('/%s/%s', $this->resourceName, $user->id))
+            ->json('PUT', $this->getResourceFullName(sprintf('%s/%s', $this->resourceName, $user->id)))
             ->assertStatus(401);
     }
 
@@ -124,7 +124,7 @@ class UsersResourceTest extends IntegrationApiV1TestCase
 
         $this
             ->actingAs($authUser)
-            ->json('GET', sprintf('/%s/%s', $this->resourceName, $user->id))
+            ->json('GET', $this->getResourceFullName(sprintf('%s/%s', $this->resourceName, $user->id)))
             ->assertStatus(200)
             ->assertJsonStructure($this->resourceStructure)
             ->assertJson([
@@ -138,7 +138,7 @@ class UsersResourceTest extends IntegrationApiV1TestCase
         $user = $this->createTestUser();
 
         $this
-            ->json('GET', sprintf('/%s/%s', $this->resourceName, $user->id))
+            ->json('GET', $this->getResourceFullName(sprintf('%s/%s', $this->resourceName, $user->id)))
             ->assertStatus(401);
     }
 
@@ -149,7 +149,7 @@ class UsersResourceTest extends IntegrationApiV1TestCase
 
         $this
             ->actingAs($authUser)
-            ->json('DELETE', sprintf('/%s/%s', $this->resourceName, $user->id))
+            ->json('DELETE', $this->getResourceFullName(sprintf('%s/%s', $this->resourceName, $user->id)))
             ->assertStatus(204);
 
         $this->assertFalse(User::whereId($user->id)->exists(), 'The user was not deleted.');
@@ -160,7 +160,7 @@ class UsersResourceTest extends IntegrationApiV1TestCase
         $user = $this->createTestUser();
 
         $this
-            ->json('DELETE', sprintf('/%s/%s', $this->resourceName, $user->id))
+            ->json('DELETE', $this->getResourceFullName(sprintf('%s/%s', $this->resourceName, $user->id)))
             ->assertStatus(401);
     }
 }

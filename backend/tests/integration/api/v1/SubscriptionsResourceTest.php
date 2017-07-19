@@ -24,7 +24,7 @@ class SubscriptionsResourceTest extends IntegrationApiV1TestCase
     public function testCreateSuccess()
     {
         $this
-            ->json('POST', sprintf('/%s', $this->resourceName), $body = [
+            ->json('POST', $this->getResourceFullName($this->resourceName), $body = [
                 'email' => $this->fake()->email,
             ])
             ->assertStatus(201)
@@ -41,7 +41,7 @@ class SubscriptionsResourceTest extends IntegrationApiV1TestCase
         ]);
 
         $this
-            ->json('POST', sprintf('/%s', $this->resourceName), [
+            ->json('POST', $this->getResourceFullName($this->resourceName), [
                 'email' => $data['email'],
             ])
             ->assertStatus(422)
@@ -57,7 +57,7 @@ class SubscriptionsResourceTest extends IntegrationApiV1TestCase
         $subscription = $this->createTestSubscription();
 
         $this
-            ->json('DELETE', sprintf('/%s/%s', $this->resourceName, $subscription->token))
+            ->json('DELETE', $this->getResourceFullName(sprintf('%s/%s', $this->resourceName, $subscription->token)))
             ->assertStatus(204);
 
         $this->assertFalse(Subscription::whereToken($subscription->token)->exists(), 'The subscription was not deleted.');

@@ -25,7 +25,7 @@ class TagsResourceTest extends IntegrationApiV1TestCase
         $tag = $this->createTestTag();
 
         $this
-            ->json('GET', sprintf('/%s', $this->resourceName))
+            ->json('GET', $this->getResourceFullName($this->resourceName))
             ->assertStatus(200)
             ->assertJsonStructure([
                 'data' => [

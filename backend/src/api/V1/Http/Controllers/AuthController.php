@@ -42,12 +42,7 @@ class AuthController extends Controller
      * @apiParam {String{1..255}} password User's password.
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
-     * {
-     *     "token_type": "Bearer",
-     *     "expires_in": "3600",
-     *     "access_token": "access_token",
-     *     "refresh_token": "refresh_token",
-     * }
+     * {}
      */
 
     /**
@@ -85,37 +80,5 @@ class AuthController extends Controller
     {
         $request->user()->token()->revoke();
         $request->user()->token()->delete();
-    }
-
-    /**
-     * @apiVersion 1.0.0
-     * @api {post} /v1/auth/refresh-token Create Refresh Token
-     * @apiName Create Refresh Token
-     * @apiGroup Auth
-     * @apiHeader {String} Accept application/json
-     * @apiHeader {String} Content-Type application/json
-     * @apiParam {String{1..N}} refresh_token User's refresh token.
-     * @apiSuccessExample {json} Success-Response:
-     * HTTP/1.1 200 OK
-     * {
-     *     "token_type": "Bearer",
-     *     "expires_in": "3600",
-     *     "access_token": "access_token",
-     *     "refresh_token": "refresh_token",
-     * }
-     */
-
-    /**
-     * Create refresh token.
-     *
-     * @param CreateRefreshTokenRequest $request
-     * @return Response
-     */
-    public function createRefreshToken(CreateRefreshTokenRequest $request)
-    {
-        return $this->oAuthProxy->requestTokenByRefreshToken(
-            env('OAUTH_CLIENT_ID'),
-            $request->get('refresh_token')
-        );
     }
 }

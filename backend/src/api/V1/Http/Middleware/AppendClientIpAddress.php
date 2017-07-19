@@ -47,7 +47,7 @@ class AppendClientIpAddress
      * @param Request $request
      * @return string|null
      */
-    protected function resolveClientIpAddress($request)
+    private function resolveClientIpAddress($request)
     {
         foreach ($this->clientIpServerOptions as $option) {
             if ($request->server->get($option)) {

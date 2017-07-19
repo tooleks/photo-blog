@@ -5,6 +5,7 @@ namespace Api\V1\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use InvalidArgumentException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
@@ -23,10 +24,13 @@ class JsonApiResponses
      */
     public function handle($request, Closure $next)
     {
-        $this->assertRequest($request);
+        if (!$request->wantsJson()) {
+            throw new HttpException(Response::HTTP_NOT_ACCEPTABLE);
+        }
 
         $response = $next($request);
 
+        $this->encodeContent($response);
         $this->addHeaders($response);
         $this->setStatusCode($request, $response);
 
@@ -34,46 +38,47 @@ class JsonApiResponses
     }
 
     /**
-     * Assert a request.
-     *
      * @param Request $request
+     * @param Response $response
+     * @return void
      */
-    protected function assertRequest($request)
+    private function setStatusCode($request, $response): void
     {
-        if (!$request->wantsJson()) {
-            throw new HttpException(Response::HTTP_NOT_ACCEPTABLE);
+        if ($response->isSuccessful()) {
+            if ($request->getMethod() === Request::METHOD_POST)
+                $response->setStatusCode(Response::HTTP_CREATED);
+            elseif ($request->getMethod() === Request::METHOD_DELETE)
+                $response->setStatusCode(Response::HTTP_NO_CONTENT);
         }
     }
 
     /**
-     * Add default headers.
-     *
      * @param Response $response
      * @return void
      */
-    protected function addHeaders($response): void
+    private function addHeaders($response): void
     {
         $response->headers->set('Content-Type', 'application/json');
     }
 
     /**
-     * Set status code for the response.
-     *
-     * @param Request $request
      * @param Response $response
      * @return void
      */
-    protected function setStatusCode($request, $response): void
+    private function encodeContent($response): void
     {
-        if ($response->isSuccessful()) {
-            switch ($request->getMethod()) {
-                case Request::METHOD_POST:
-                    $response->setStatusCode(Response::HTTP_CREATED);
-                    break;
-                case Request::METHOD_DELETE:
-                    $response->setStatusCode(Response::HTTP_NO_CONTENT);
-                    break;
+        $isValidJson = function (string $json): bool {
+            try {
+                return (bool) \GuzzleHttp\json_decode($json);
+            } catch (InvalidArgumentException $e) {
+                return false;
             }
+        };
+
+        if (!$isValidJson($response->getContent())) {
+            $response->setContent(
+                \GuzzleHttp\json_encode($response->getContent())
+            );
         }
     }
 }

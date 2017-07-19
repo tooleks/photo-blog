@@ -7,6 +7,7 @@ use App\Managers\Photo\Contracts\PhotoManager;
 use App\Models\Photo;
 use App\Models\User;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Facades\Validator as ValidatorFactory;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -19,18 +20,13 @@ use Illuminate\Validation\ValidationException;
 class UserAttributesSubscriber
 {
     /**
-     * @var PhotoManager
+     * @var Application
      */
-    private $photoManager;
+    protected $app;
 
-    /**
-     * UserAttributesSubscriber constructor.
-     *
-     * @param PhotoManager $photoManager
-     */
-    public function __construct(PhotoManager $photoManager)
+    public function __construct(Application $app)
     {
-        $this->photoManager = $photoManager;
+        $this->app = $app;
     }
 
     /**
@@ -82,8 +78,10 @@ class UserAttributesSubscriber
      */
     public function onBeforeDelete(User $user, array $options = [])
     {
-        $this->photoManager->eachCreatedByUserId(function (Photo $photo) {
-            $this->photoManager->delete($photo);
+        $photoManager = $this->app->make(PhotoManager::class);
+
+        $photoManager->eachCreatedByUserId(function (Photo $photo) use ($photoManager) {
+            $photoManager->delete($photo);
         }, $user->id);
     }
 }

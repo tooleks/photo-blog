@@ -67,22 +67,22 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
 
         $response = $this
             ->actingAs($authUser)
-            ->json('POST', sprintf('/%s', $this->resourceName), [
+            ->json('POST', $this->getResourceFullName($this->resourceName), [
                 'file' => UploadedFile::fake()->image('photo.jpg', 1000, 1000)->size(500),
             ])
             ->assertStatus(201)
             ->assertJsonStructure($this->resourceStructure);
 
         Storage::disk('public')->assertExists(
-            $this->getPathFromUrl($response->getData()->url),
+            $this->getPathFromUrl($response->decodeResponseJson()['url']),
             'The photo file was not saved.'
         );
         Storage::disk('public')->assertExists(
-            $this->getPathFromUrl($response->getData()->thumbnails->medium->url),
+            $this->getPathFromUrl($response->decodeResponseJson()['thumbnails']['medium']['url']),
             'The photo thumbnail file was not generated.'
         );
         Storage::disk('public')->assertExists(
-            $this->getPathFromUrl($response->getData()->thumbnails->large->url),
+            $this->getPathFromUrl($response->decodeResponseJson()['thumbnails']['large']['url']),
             'The photo thumbnail file was not generated.'
         );
     }
@@ -92,7 +92,7 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
         Storage::fake('public');
 
         $this
-            ->json('POST', sprintf('/%s', $this->resourceName))
+            ->json('POST', $this->getResourceFullName($this->resourceName))
             ->assertStatus(401);
     }
 
@@ -105,22 +105,22 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
 
         $response = $this
             ->actingAs($authUser)
-            ->json('POST', sprintf('/%s/%s', $this->resourceName, $photo->id), [
+            ->json('POST', $this->getResourceFullName(sprintf('%s/%s', $this->resourceName, $photo->id)), [
                 'file' => UploadedFile::fake()->image('photo.jpg', 1000, 1000)->size(500),
             ])
             ->assertStatus(201)
             ->assertJsonStructure($this->resourceStructure);
 
         Storage::disk('public')->assertExists(
-            $this->getPathFromUrl($response->getData()->url),
+            $this->getPathFromUrl($response->decodeResponseJson()['url']),
             'The photo file was not saved.'
         );
         Storage::disk('public')->assertExists(
-            $this->getPathFromUrl($response->getData()->thumbnails->medium->url),
+            $this->getPathFromUrl($response->decodeResponseJson()['thumbnails']['medium']['url']),
             'The photo thumbnail file was not generated.'
         );
         Storage::disk('public')->assertExists(
-            $this->getPathFromUrl($response->getData()->thumbnails->large->url),
+            $this->getPathFromUrl($response->decodeResponseJson()['thumbnails']['large']['url']),
             'The photo thumbnail file was not generated.'
         );
     }
@@ -133,7 +133,7 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
         $photo = $this->createTestPhoto(['created_by_user_id' => $user->id]);
 
         $this
-            ->json('POST', sprintf('/%s/%s', $this->resourceName, $photo->id))
+            ->json('POST', $this->getResourceFullName(sprintf('%s/%s', $this->resourceName, $photo->id)))
             ->assertStatus(401);
     }
 
@@ -144,7 +144,7 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
 
         $this
             ->actingAs($authUser)
-            ->json('DELETE', sprintf('/%s/%s', $this->resourceName, $photo->id))
+            ->json('DELETE', $this->getResourceFullName(sprintf('%s/%s', $this->resourceName, $photo->id)))
             ->assertStatus(204);
 
         $this->assertFalse(Photo::whereId($photo->id)->exists(), 'The photo was not deleted.');
@@ -160,7 +160,7 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
         $photo = $this->createTestPhoto(['created_by_user_id' => $user->id]);
 
         $this
-            ->json('DELETE', sprintf('/%s/%s', $this->resourceName, $photo->id))
+            ->json('DELETE', $this->getResourceFullName(sprintf('%s/%s', $this->resourceName, $photo->id)))
             ->assertStatus(401);
     }
 
@@ -171,7 +171,7 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
 
         $this
             ->actingAs($authUser)
-            ->json('GET', sprintf('/%s/%s', $this->resourceName, $photo->id))
+            ->json('GET', $this->getResourceFullName(sprintf('%s/%s', $this->resourceName, $photo->id)))
             ->assertStatus(200)
             ->assertJsonStructure($this->resourceStructure);
     }
@@ -182,7 +182,7 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
         $photo = $this->createTestPhoto(['created_by_user_id' => $user->id]);
 
         $this
-            ->json('GET', sprintf('/%s/%s', $this->resourceName, $photo->id))
+            ->json('GET', $this->getResourceFullName(sprintf('%s/%s', $this->resourceName, $photo->id)))
             ->assertStatus(401);
     }
 }

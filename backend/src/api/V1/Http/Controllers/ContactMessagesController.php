@@ -57,6 +57,6 @@ class ContactMessagesController extends Controller
     {
         Mail::queue(new ContactMessage($request->all()));
 
-        return $this->responseFactory->make(null, Response::HTTP_CREATED);
+        return $this->responseFactory->json((object) [], Response::HTTP_CREATED);
     }
 }
