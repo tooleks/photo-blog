@@ -61,7 +61,7 @@ class CookieOAuthProxy implements OAuthProxyContract
         $proxy = Request::create('oauth/token', 'POST', [
             'grant_type' => 'password',
             'client_id' => $clientId,
-            'client_secret' => $this->oAuthClientRepository->findActive($clientId)->secret,
+            'client_secret' => $this->oAuthClientRepository->findActive($clientId)->secret ?? null,
             'scope' => '*',
             'username' => $username,
             'password' => $password,
@@ -82,7 +82,7 @@ class CookieOAuthProxy implements OAuthProxyContract
         $proxy = Request::create('oauth/token', 'POST', [
             'grant_type' => 'refresh_token',
             'client_id' => $clientId,
-            'client_secret' => $this->oAuthClientRepository->findActive($clientId)->secret,
+            'client_secret' => $this->oAuthClientRepository->findActive($clientId)->secret ?? null,
             'scope' => '*',
             'refresh_token' => $refreshToken,
         ]);
