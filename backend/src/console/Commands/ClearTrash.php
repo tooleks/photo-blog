@@ -3,7 +3,7 @@
 namespace Console\Commands;
 
 use Carbon\Carbon;
-use Core\Services\Trash\Contracts\TrashService;
+use App\Services\Trash\Contracts\TrashService;
 use Illuminate\Console\Command;
 
 /**

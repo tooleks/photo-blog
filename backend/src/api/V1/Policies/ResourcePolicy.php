@@ -2,7 +2,7 @@
 
 namespace Api\V1\Policies;
 
-use Core\Models\User;
+use App\Models\User;
 
 /**
  * Class ResourcePolicy.

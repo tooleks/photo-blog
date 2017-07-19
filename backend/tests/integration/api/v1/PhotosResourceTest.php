@@ -1,8 +1,8 @@
 <?php
 
-use Core\Models\Exif;
-use Core\Models\Photo;
-use Core\Models\Thumbnail;
+use App\Models\Exif;
+use App\Models\Photo;
+use App\Models\Thumbnail;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Core\Services\SiteMap\Contracts\SiteMapBuilderService;
+use App\Services\SiteMap\Contracts\SiteMapBuilderService;
 use Illuminate\Contracts\Cache\Factory as CacheManager;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;

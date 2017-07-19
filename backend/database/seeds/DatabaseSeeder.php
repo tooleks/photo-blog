@@ -14,12 +14,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        factory(\Core\Models\Photo::class, 100)->create()->each(function (\Core\Models\Photo $photo) {
-            $photo->thumbnails()->save(factory(\Core\Models\Thumbnail::class)->make());
-            $photo->thumbnails()->save(factory(\Core\Models\Thumbnail::class)->make());
-            $photo->tags()->save(factory(\Core\Models\Tag::class)->make());
-            $photo->tags()->save(factory(\Core\Models\Tag::class)->make());
-            $photo->tags()->save(factory(\Core\Models\Tag::class)->make());
+        factory(\App\Models\Photo::class, 100)->create()->each(function (\App\Models\Photo $photo) {
+            $photo->thumbnails()->save(factory(\App\Models\Thumbnail::class)->make());
+            $photo->thumbnails()->save(factory(\App\Models\Thumbnail::class)->make());
+            $photo->tags()->save(factory(\App\Models\Tag::class)->make());
+            $photo->tags()->save(factory(\App\Models\Tag::class)->make());
+            $photo->tags()->save(factory(\App\Models\Tag::class)->make());
         });
     }
 }

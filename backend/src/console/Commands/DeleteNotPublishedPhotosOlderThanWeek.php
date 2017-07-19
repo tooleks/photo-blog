@@ -2,8 +2,8 @@
 
 namespace Console\Commands;
 
-use Core\Managers\Photo\Contracts\PhotoManager;
-use Core\Models\Photo;
+use App\Managers\Photo\Contracts\PhotoManager;
+use App\Models\Photo;
 use Illuminate\Console\Command;
 
 /**

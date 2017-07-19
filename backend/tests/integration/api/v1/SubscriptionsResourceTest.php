@@ -1,6 +1,6 @@
 <?php
 
-use Core\Models\Subscription;
+use App\Models\Subscription;
 
 /**
  * Class SubscriptionsResourceTest.

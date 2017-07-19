@@ -1,12 +1,12 @@
 <?php
 
-use Core\Models\Exif;
-use Core\Models\Photo;
-use Core\Models\Role;
-use Core\Models\Subscription;
-use Core\Models\Tag;
-use Core\Models\Thumbnail;
-use Core\Models\User;
+use App\Models\Exif;
+use App\Models\Photo;
+use App\Models\Role;
+use App\Models\Subscription;
+use App\Models\Tag;
+use App\Models\Thumbnail;
+use App\Models\User;
 use Faker\Generator;
 
 /*

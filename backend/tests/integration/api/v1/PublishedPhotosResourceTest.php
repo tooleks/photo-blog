@@ -1,9 +1,9 @@
 <?php
 
-use Core\Models\Exif;
-use Core\Models\Photo;
-use Core\Models\Tag;
-use Core\Models\Thumbnail;
+use App\Models\Exif;
+use App\Models\Photo;
+use App\Models\Tag;
+use App\Models\Thumbnail;
 
 /**
  * Class PublishedPhotosResourceTest.

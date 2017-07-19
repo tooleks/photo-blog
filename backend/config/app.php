@@ -177,12 +177,6 @@ return [
         Tooleks\Laravel\Presenter\Providers\PresenterProvider::class,
         Laravel\Passport\PassportServiceProvider::class,
 
-        /*
-         * Core Service Providers...
-         */
-        Core\Providers\CoreServiceProvider::class,
-        Core\Providers\EventServiceProvider::class,
-
     ],
 
     /*

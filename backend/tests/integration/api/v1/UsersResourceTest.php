@@ -1,6 +1,6 @@
 <?php
 
-use Core\Models\User;
+use App\Models\User;
 
 /**
  * Class UsersResourceTest.

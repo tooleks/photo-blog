@@ -6,8 +6,8 @@ use Api\V1\Http\Presenters\Response\PublishedPhotoPresenter;
 use Api\V1\Http\Presenters\Response\SubscriptionPresenter;
 use Api\V1\Http\Presenters\Response\TagPresenter;
 use Api\V1\Http\Presenters\Response\UserPresenter;
-use Core\Models\Photo;
-use Core\Models\User;
+use App\Models\Photo;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------

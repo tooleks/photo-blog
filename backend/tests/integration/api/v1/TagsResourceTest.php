@@ -1,6 +1,6 @@
 <?php
 
-use Core\Models\Tag;
+use App\Models\Tag;
 
 /**
  * Class TagsResourceTest.

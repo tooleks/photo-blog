@@ -3,8 +3,8 @@
 namespace Api\V1\Http\Controllers;
 
 use Api\V1\Http\Requests\CreateSubscriptionRequest;
-use Core\Managers\Subscription\Contracts\SubscriptionManager;
-use Core\Models\Subscription;
+use App\Managers\Subscription\Contracts\SubscriptionManager;
+use App\Models\Subscription;
 use Illuminate\Routing\Controller;
 
 /**

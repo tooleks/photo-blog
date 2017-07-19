@@ -4,8 +4,8 @@ namespace Api\V1\Http\Controllers;
 
 use Api\V1\Http\Requests\CreateUserRequest;
 use Api\V1\Http\Requests\UpdateUserRequest;
-use Core\Managers\User\Contracts\UserManager;
-use Core\Models\User;
+use App\Managers\User\Contracts\UserManager;
+use App\Models\User;
 use Illuminate\Routing\Controller;
 
 /**

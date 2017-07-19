@@ -2,9 +2,9 @@
 
 namespace Console\Commands;
 
-use Core\Managers\Photo\Contracts\PhotoManager;
-use Core\Models\Photo;
-use Core\Services\Photo\Contracts\ThumbnailsGeneratorService;
+use App\Managers\Photo\Contracts\PhotoManager;
+use App\Models\Photo;
+use App\Services\Photo\Contracts\ThumbnailsGeneratorService;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
 

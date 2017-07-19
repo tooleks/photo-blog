@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Core\Services\Rss\Contracts\RssBuilderService;
+use App\Services\Rss\Contracts\RssBuilderService;
 use Illuminate\Contracts\Cache\Factory as CacheManager;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;

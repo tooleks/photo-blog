@@ -2,10 +2,10 @@
 
 namespace Console\Commands;
 
-use Core\Mail\WeeklySubscription;
-use Core\Managers\Photo\Contracts\PhotoManager;
-use Core\Managers\Subscription\Contracts\SubscriptionManager;
-use Core\Models\Subscription;
+use App\Mail\WeeklySubscription;
+use App\Managers\Photo\Contracts\PhotoManager;
+use App\Managers\Subscription\Contracts\SubscriptionManager;
+use App\Models\Subscription;
 use Illuminate\Config\Repository as Config;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;

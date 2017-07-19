@@ -1,6 +1,6 @@
 <?php
 
-use Core\Mail\ContactMessage;
+use App\Mail\ContactMessage;
 use Illuminate\Support\Facades\Mail;
 
 /**

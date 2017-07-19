@@ -2,7 +2,7 @@
 
 namespace Console\Commands;
 
-use Core\Models\Role;
+use App\Models\Role;
 use Illuminate\Console\Command;
 
 /**

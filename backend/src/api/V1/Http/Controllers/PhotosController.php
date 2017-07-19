@@ -4,8 +4,8 @@ namespace Api\V1\Http\Controllers;
 
 use Api\V1\Http\Requests\CreatePhotoRequest;
 use Api\V1\Http\Requests\UpdatePhotoRequest;
-use Core\Managers\Photo\Contracts\PhotoManager;
-use Core\Models\Photo;
+use App\Managers\Photo\Contracts\PhotoManager;
+use App\Models\Photo;
 use Illuminate\Contracts\Cache\Factory as CacheManager;
 use Illuminate\Contracts\Auth\Guard as Auth;
 use Illuminate\Routing\Controller;

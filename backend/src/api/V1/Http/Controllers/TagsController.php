@@ -3,7 +3,7 @@
 namespace Api\V1\Http\Controllers;
 
 use Api\V1\Http\Requests\FindTagsRequest;
-use Core\Managers\Tag\Contracts\TagManager;
+use App\Managers\Tag\Contracts\TagManager;
 use Illuminate\Contracts\Cache\Factory as CacheManager;
 use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Routing\Controller;
