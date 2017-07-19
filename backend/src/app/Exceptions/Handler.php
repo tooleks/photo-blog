@@ -44,6 +44,12 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        // Determine if the request route belongs to the API V1 routes group.
+        if (starts_with($request->route()->uri, 'api/v1')) {
+            $apiV1ExceptionHandler = $this->container->make(\Api\V1\Exceptions\Handler::class);
+            return $apiV1ExceptionHandler->render($request, $exception);
+        }
+
         return parent::render($request, $exception);
     }
 

@@ -22,7 +22,7 @@ class CookieOAuthAuthorizer
      */
     public function handle($request, Closure $next)
     {
-        $this->addAuthorizationHeader($request);
+        $this->convertAuthorizationCookieToHeader($request);
 
         $response = $next($request);
 
@@ -30,18 +30,23 @@ class CookieOAuthAuthorizer
     }
 
     /**
-     * Add the authorization header to the given request from the cookies.
+     * Convert an authorization cookie to a header for a request.
      *
      * @param Request $request
      * @return void
      */
-    protected function addAuthorizationHeader($request): void
+    protected function convertAuthorizationCookieToHeader($request): void
     {
         if (
-            $request->hasCookie('token_type') && $request->hasCookie('expires_in') &&
-            $request->hasCookie('access_token') && $request->hasCookie('refresh_token')
+            $request->hasCookie('token_type') &&
+            $request->hasCookie('expires_in') &&
+            $request->hasCookie('access_token') &&
+            $request->hasCookie('refresh_token')
         ) {
-            $request->headers->set('Authorization', $request->cookie('token_type') . ' ' . $request->cookie('access_token'));
+            $request->headers->set(
+                'Authorization',
+                $request->cookie('token_type') . ' ' . $request->cookie('access_token')
+            );
         }
     }
 }
