@@ -37,14 +37,6 @@ class Handler extends ExceptionHandler
     /**
      * @inheritdoc
      */
-    public function report(Exception $e)
-    {
-        parent::report($e);
-    }
-
-    /**
-     * @inheritdoc
-     */
     protected function prepareException(Exception $e)
     {
         if ($e instanceof ModelNotFoundException || $e instanceof DataProviderNotFoundException) {

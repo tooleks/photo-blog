@@ -25,14 +25,4 @@ class EventServiceProvider extends ServiceProvider
         \App\DataProviders\Photo\Subscribers\PhotoRelationsSubscriber::class,
         \App\DataProviders\User\Subscribers\UserAttributesSubscriber::class,
     ];
-
-    /**
-     * Register any events for your application.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        parent::boot();
-    }
 }
