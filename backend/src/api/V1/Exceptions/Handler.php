@@ -50,11 +50,9 @@ class Handler extends ExceptionHandler
         if ($e instanceof ModelNotFoundException || $e instanceof DataProviderNotFoundException) {
             $e = new NotFoundHttpException($e->getMessage(), $e);
         } elseif ($e instanceof AuthenticationException) {
-            $e = new HttpException(Response::HTTP_UNAUTHORIZED, $e->getMessage());
+            $e = new HttpException(Response::HTTP_UNAUTHORIZED, $e->getMessage(), $e);
         } elseif ($e instanceof AuthorizationException) {
-            $e = new HttpException(Response::HTTP_FORBIDDEN, $e->getMessage());
-        } elseif ($e instanceof HttpException) {
-            $e = new HttpException($e->getStatusCode(), trans(sprintf('errors.http.%s', $e->getStatusCode())), null, $e->getHeaders());
+            $e = new HttpException(Response::HTTP_FORBIDDEN, $e->getMessage(), $e);
         }
 
         return $e;
@@ -84,7 +82,7 @@ class Handler extends ExceptionHandler
         $e = FlattenException::create($e);
 
         return response()->json(
-            $e->getMessage(),
+            $e->getMessage() ? $e->getMessage() : trans(sprintf('errors.http.%s', $e->getStatusCode())),
             $e->getStatusCode(),
             $e->getHeaders()
         );

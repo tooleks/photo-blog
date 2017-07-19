@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Foundation\Application;
 use Laravel\Passport\ClientRepository as OAuthClientRepository;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class OAuthCookieAuthorizationProxy.
@@ -104,11 +104,11 @@ class CookieOAuthProxy implements OAuthProxyContract
      */
     private function proxyOnSuccessResponse($response)
     {
-        $responseContent = \GuzzleHttp\json_decode((string) $response->getContent(), true);
+        $data = $this->decodeResponseContent($response->getContent());
 
-        $proxyResponse = $this->responseFactory->json((object) [], Response::HTTP_CREATED);
+        $proxyResponse = $this->responseFactory->json((object) []);
 
-        foreach ($responseContent as $name => $value) {
+        foreach ($data as $name => $value) {
             // TODO: Fix dependency from the global variable $_SERVER.
             $proxyResponse->headers->setCookie($this->cookieBakery->make($name, $value, $thirtyDays = (60 * 24 * 30),
                 null, null, isset($_SERVER['HTTPS']), true));
@@ -121,16 +121,28 @@ class CookieOAuthProxy implements OAuthProxyContract
      * On error response callback.
      *
      * @param Response $response
+     * @throws NotFoundHttpException
      * @throws AuthenticationException
      */
     private function proxyOnErrorResponse($response)
     {
-        switch ($response->getStatusCode()) {
-            case Response::HTTP_BAD_REQUEST:
-            case Response::HTTP_UNAUTHORIZED:
-                throw new AuthenticationException(trans('auth.failed'));
+        $responseContent = $this->decodeResponseContent($response->getContent());
+
+        if (isset($responseContent['error']) && $responseContent['error'] === 'invalid_credentials') {
+            throw new NotFoundHttpException(trans('auth.failed'));
         }
 
-        throw new HttpException(Response::HTTP_INTERNAL_SERVER_ERROR);
+        throw new AuthenticationException;
+    }
+
+    /**
+     * Decode a response content string.
+     *
+     * @param string $content
+     * @return mixed
+     */
+    private function decodeResponseContent(string $content)
+    {
+        return \GuzzleHttp\json_decode($content, true);
     }
 }
