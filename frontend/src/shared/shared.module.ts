@@ -76,18 +76,10 @@ export function getApiService(http: Http, app: AppService, errorHandler: ApiErro
     return new ApiService(
         http,
         app.getApiUrl(),
-        function onResponseSuccess(response: Response) {
-            return response.json() || {};
-        },
-        function onResponseError(response: Response) {
-            return errorHandler.onResponseError(response);
-        },
-        function provideDefaultHeaders() {
-            return {'Accept': 'application/json'};
-        },
-        function provideDefaultSearchParams() {
-            return app.inDebugMode() ? {'XDEBUG_SESSION_START': 'START'} : {};
-        }
+        getOnResponseSuccessCallback(),
+        getOnResponseErrorCallback(errorHandler),
+        getDefaultHeadersCallback(),
+        getDefaultSearchParamsCallback(app.inDebugMode())
     );
 }
 
@@ -99,11 +91,39 @@ export function getUserDataProviderService(http: Http, app: AppService, errorHan
     return new UserDataProviderService(
         http,
         app.getApiUrl(),
-        function onResponseSuccess(response: Response) {
-            return response.json() || {};
-        },
-        function onResponseError(response: Response) {
-            return errorHandler.onResponseError(response);
-        }
+        getOnResponseSuccessCallback(),
+        getOnResponseErrorCallback(errorHandler),
+        getDefaultHeadersCallback()
     );
+}
+
+function getOnResponseSuccessCallback() {
+    return function (response: Response) {
+        return response.json() || {};
+    };
+}
+
+function getOnResponseErrorCallback(errorHandler: ApiErrorHandler) {
+    return function (response: Response) {
+        return errorHandler.onResponseError(response);
+    };
+}
+
+function getDefaultHeadersCallback() {
+    return function () {
+        const headers = {};
+        headers['X-Requested-With'] = 'XMLHttpRequest';
+        headers['Accept'] = 'application/json';
+        return headers;
+    };
+}
+
+function getDefaultSearchParamsCallback(inDebugMode: boolean) {
+    return function () {
+        const searchParams = {};
+        if (inDebugMode) {
+            searchParams['XDEBUG_SESSION_START'] = 'START';
+        }
+        return searchParams;
+    };
 }

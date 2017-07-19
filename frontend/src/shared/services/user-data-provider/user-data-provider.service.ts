@@ -4,7 +4,11 @@ import 'rxjs/add/operator/toPromise';
 
 @Injectable()
 export class UserDataProviderService {
-    constructor(protected http: Http, protected apiUrl: string, protected onResponseSuccess, protected onResponseError) {
+    constructor(protected http: Http,
+                protected apiUrl: string,
+                protected onResponseSuccess,
+                protected onResponseError,
+                protected provideDefaultHeaders) {
     }
 
     getUser(): Promise<any> {
@@ -44,7 +48,18 @@ export class UserDataProviderService {
 
     protected getDefaultHeaders(): Headers {
         const defaultHeaders = new Headers;
-        defaultHeaders.append('Accept', 'application/json');
+        const rawDefaultHeaders = this.getRawDefaultHeaders();
+        for (let name in rawDefaultHeaders) {
+            if (rawDefaultHeaders.hasOwnProperty(name)) {
+                defaultHeaders.append(name, rawDefaultHeaders[name]);
+            }
+        }
         return defaultHeaders;
+    }
+
+    protected getRawDefaultHeaders() {
+        return typeof (this.provideDefaultHeaders) === 'function'
+            ? this.provideDefaultHeaders()
+            : {};
     }
 }
