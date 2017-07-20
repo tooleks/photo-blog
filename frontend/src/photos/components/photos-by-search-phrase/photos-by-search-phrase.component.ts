@@ -9,8 +9,6 @@ import {
     ElementRef
 } from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/filter';
 import {MetaTagsService, EnvironmentDetectorService} from '../../../core'
 import {GalleryComponent} from '../../../lib';
 import {

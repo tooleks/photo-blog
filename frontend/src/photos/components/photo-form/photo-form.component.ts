@@ -1,7 +1,5 @@
 import {Component, OnInit, OnDestroy, AfterViewInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/filter';
 import {EnvironmentDetectorService} from '../../../core';
 import {NoticesService} from '../../../lib';
 import {

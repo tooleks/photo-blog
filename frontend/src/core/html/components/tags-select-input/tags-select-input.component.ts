@@ -1,5 +1,4 @@
 import {Component, Input, Output, EventEmitter, SimpleChanges, OnChanges} from '@angular/core';
-import 'rxjs/add/operator/filter';
 
 @Component({
     selector: 'tags-select-input',

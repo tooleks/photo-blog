@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {Http, Headers, URLSearchParams} from '@angular/http';
-import 'rxjs/add/operator/toPromise';
 import {ApiServiceInterface} from './interfaces';
 
 @Injectable()

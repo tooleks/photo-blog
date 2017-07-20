@@ -5,6 +5,10 @@ import 'reflect-metadata';
 
 import 'rxjs/Observable';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/toPromise';
+import 'rxjs/add/observable/fromPromise';
 
 import 'hammerjs';
 

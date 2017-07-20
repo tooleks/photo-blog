@@ -1,6 +1,5 @@
 import {Component, OnInit, OnDestroy, AfterViewInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import 'rxjs/add/operator/map';
 import {NoticesService} from '../../../lib';
 import {
     ApiService,

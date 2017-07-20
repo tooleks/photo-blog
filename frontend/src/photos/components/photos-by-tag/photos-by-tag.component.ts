@@ -1,7 +1,5 @@
 import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/filter';
 import {MetaTagsService} from '../../../core'
 import {GalleryComponent} from '../../../lib';
 import {
