@@ -30,15 +30,12 @@
             "Api\\": "src/api/",
             "App\\": "src/app/",
             "Console\\": "src/console/",
-            "Core\\": "src/core/",
             "Lib\\": "src/lib/"
         }
     },
     "autoload-dev": {
         "classmap": [
-            "tests/TestCase.php",
-            "tests/integration/api/v1/IntegrationApiV1TestCase.php",
-            "tests/integration/app/IntegrationAppTestCase.php"
+            "tests"
         ]
     },
     "scripts": {
