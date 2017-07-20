@@ -1,11 +1,11 @@
 {
-    "name": "laravel/laravel",
+    "name": "PhotoBlog",
     "description": "Photo Blog",
     "keywords": ["photo", "blog"],
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": "^7.0",
+        "php": "^7.1",
         "laravel/framework": "5.4.*",
         "doctrine/dbal": "~2.3",
         "imagine/imagine": "^0.6.3",
