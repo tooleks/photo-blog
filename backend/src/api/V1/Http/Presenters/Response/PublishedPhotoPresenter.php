@@ -63,7 +63,9 @@ class PublishedPhotoPresenter extends Presenter
                 return $url ? sprintf(config('format.storage.url.path'), $url) : null;
             },
             'avg_color' => 'avg_color',
-            'description' => 'description',
+            'description' => function (): ?string {
+                return htmlspecialchars($this->getWrappedModelAttribute('description'), ENT_QUOTES);
+            },
             'created_at' => function (): ?string {
                 return $this->getWrappedModelAttribute('created_at');
             },

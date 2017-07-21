@@ -18,7 +18,9 @@ class TagPresenter extends Presenter
     protected function getAttributesMap(): array
     {
         return [
-            'value' => 'value',
+            'value' => function (): ?string {
+                return htmlspecialchars($this->getWrappedModelAttribute('value'), ENT_QUOTES);
+            },
         ];
     }
 }
