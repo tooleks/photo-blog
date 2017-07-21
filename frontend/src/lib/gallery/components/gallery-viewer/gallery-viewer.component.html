@@ -10,7 +10,7 @@
             <div *ngIf="isLoadedImage()" class="gallery-img-container">
                 <img (click)="clickNextImage()"
                      [src]="image.getViewerSizeUrl()"
-                     [alt]="image.getDescription()"
+                     [alt]="image.getDescription() + ' ' + image.getKeywords()"
                      [title]="image.getDescription()"
                      class="gallery-img">
             </div>

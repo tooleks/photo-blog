@@ -9,7 +9,7 @@
                  [src]="image.getGridSizeUrl()"
                  [width]="image.getGridSizeWidth() - 2"
                  [height]="image.getGridSizeHeight() - 2"
-                 [alt]="image.getDescription()"
+                 [alt]="image.getDescription() + ' ' + image.getKeywords()"
                  [title]="image.getDescription()"
                  class="gallery-grid-item">
             <a *ngIf="image.getViewUrl()"
