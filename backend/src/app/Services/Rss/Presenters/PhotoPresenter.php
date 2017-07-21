@@ -55,7 +55,9 @@ class PhotoPresenter extends Presenter
             'url' => function (): ?string {
                 return sprintf(config('format.frontend.url.photo_page'), $this->getWrappedModelAttribute('id'));
             },
-            'title' => 'description',
+            'title' => function (): ?string {
+                return htmlspecialchars($this->getWrappedModelAttribute('description'), ENT_QUOTES);
+            },
             'description' => function (): ?string {
                 $exif = $this->container
                     ->make(ExifPresenter::class)

@@ -24,18 +24,40 @@ class ExifPresenter extends Presenter
     protected function getAttributesMap(): array
     {
         return [
-            'manufacturer' => 'data.Make',
-            'model' => 'data.Model',
+            'manufacturer' => function (): ?string {
+                $manufacturer = $this->getWrappedModelAttribute('data.Make');
+                return is_null($manufacturer)
+                    ? $manufacturer
+                    : htmlspecialchars($manufacturer, ENT_QUOTES);
+            },
+            'model' => function (): ?string {
+                $model = $this->getWrappedModelAttribute('data.Model');
+                return is_null($model)
+                    ? $model
+                    : htmlspecialchars($model, ENT_QUOTES);
+            },
             'exposure_time' => function (): ?string {
                 $exposureTime = $this->getWrappedModelAttribute('data.ExposureTime');
                 if ($exposureTime) {
                     [$numerator, $denominator] = explode('/', $exposureTime);
                     $exposureTime = '1/' . (int) ($denominator / $numerator);
                 }
-                return $exposureTime ?? null;
+                return is_null($exposureTime)
+                    ? $exposureTime
+                    : htmlspecialchars($exposureTime, ENT_QUOTES);
             },
-            'aperture' => 'data.COMPUTED.ApertureFNumber',
-            'iso' => 'data.ISOSpeedRatings',
+            'aperture' => function (): ?string {
+                $aperture = $this->getWrappedModelAttribute('data.COMPUTED.ApertureFNumber');
+                return is_null($aperture)
+                    ? $aperture
+                    : htmlspecialchars($aperture, ENT_QUOTES);
+            },
+            'iso' => function (): ?string {
+                $iso = $this->getWrappedModelAttribute('data.ISOSpeedRatings');
+                return is_null($iso)
+                    ? $iso
+                    : htmlspecialchars($iso, ENT_QUOTES);
+            },
             'taken_at' => function (): ?string {
                 $takenAt = $this->getWrappedModelAttribute('data.DateTimeOriginal');
                 return $takenAt ? new Carbon($takenAt) : null;
