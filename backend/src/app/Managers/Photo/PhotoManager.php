@@ -187,7 +187,7 @@ class PhotoManager implements PhotoManagerContract
      */
     public function existsPublishedOlderThanWeek(): bool
     {
-        $this->photoDataProvider
+        return $this->photoDataProvider
             ->applyCriteria(new IsPublished(true))
             ->applyCriteria(new WhereCreatedAtGreaterThan((new Carbon)->addWeek('-1')))
             ->exists();
