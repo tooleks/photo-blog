@@ -23,6 +23,9 @@
         "symfony/dom-crawler": "3.1.*"
     },
     "autoload": {
+        "files": [
+            "src/app/functions.php"
+        ],
         "classmap": [
             "database"
         ],

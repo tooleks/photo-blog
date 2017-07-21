@@ -2,6 +2,7 @@
 
 namespace App\Services\Rss\Presenters;
 
+use function App\xss_protect;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
 use Tooleks\Laravel\Presenter\Presenter;
@@ -56,7 +57,7 @@ class PhotoPresenter extends Presenter
                 return sprintf(config('format.frontend.url.photo_page'), $this->getWrappedModelAttribute('id'));
             },
             'title' => function (): ?string {
-                return htmlspecialchars($this->getWrappedModelAttribute('description'), ENT_QUOTES);
+                return xss_protect($this->getWrappedModelAttribute('description'));
             },
             'description' => function (): ?string {
                 $exif = $this->container

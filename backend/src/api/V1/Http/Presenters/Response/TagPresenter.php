@@ -2,6 +2,7 @@
 
 namespace Api\V1\Http\Presenters\Response;
 
+use function App\xss_protect;
 use Tooleks\Laravel\Presenter\Presenter;
 
 /**
@@ -19,7 +20,7 @@ class TagPresenter extends Presenter
     {
         return [
             'value' => function (): ?string {
-                return htmlspecialchars($this->getWrappedModelAttribute('value'), ENT_QUOTES);
+                return xss_protect($this->getWrappedModelAttribute('value'));
             },
         ];
     }

@@ -2,6 +2,7 @@
 
 namespace Api\V1\Http\Presenters\Response;
 
+use function App\xss_protect;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
 use Illuminate\Support\Collection;
@@ -64,7 +65,7 @@ class PublishedPhotoPresenter extends Presenter
             },
             'avg_color' => 'avg_color',
             'description' => function (): ?string {
-                return htmlspecialchars($this->getWrappedModelAttribute('description'), ENT_QUOTES);
+                return xss_protect($this->getWrappedModelAttribute('description'));
             },
             'created_at' => function (): ?string {
                 return $this->getWrappedModelAttribute('created_at');
