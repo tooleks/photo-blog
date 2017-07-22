@@ -1,24 +1,4 @@
 <div class="panel panel-default">
-    <div class="panel-heading">
-        <button (click)="save()"
-                [disabled]="isProcessing()"
-                class="btn btn-primary">
-            {{ !isProcessing() ? 'Save' : 'Processing...' }}
-        </button>
-        <label class="btn btn-info btn-file" [class.disabled]="isProcessing()">
-            <i class="fa fa-upload" aria-hidden="true"></i>
-            <span>{{ !isProcessing() ? 'Upload File' : 'Processing...' }}</span>
-            <file-select-input (onSelect)="upload($event)"
-                               [disabled]="isProcessing()">
-            </file-select-input>
-        </label>
-        <button *ngIf="photo.id"
-                (click)="deletePhoto()"
-                [disabled]="isProcessing()"
-                class="btn btn-danger pull-right">
-            <span>{{ !isProcessing() ? 'Delete' : 'Processing...' }}</span>
-        </button>
-    </div>
     <div class="panel-body">
         <div class="row">
             <div class="col-md-4 col-md-push-8">
@@ -69,5 +49,25 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="panel-footer">
+        <button (click)="save()"
+                [disabled]="isProcessing()"
+                class="btn btn-primary">
+            {{ !isProcessing() ? 'Save' : 'Processing...' }}
+        </button>
+        <label class="btn btn-info btn-file" [class.disabled]="isProcessing()">
+            <i class="fa fa-upload" aria-hidden="true"></i>
+            <span>{{ !isProcessing() ? 'Upload File' : 'Processing...' }}</span>
+            <file-select-input (onSelect)="upload($event)"
+                               [disabled]="isProcessing()">
+            </file-select-input>
+        </label>
+        <button *ngIf="photo.id"
+                (click)="deletePhoto()"
+                [disabled]="isProcessing()"
+                class="btn btn-danger pull-right">
+            <span>{{ !isProcessing() ? 'Delete' : 'Processing...' }}</span>
+        </button>
     </div>
 </div>
