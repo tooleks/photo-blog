@@ -1,5 +1,5 @@
 <div [ngClass]="'app-wrapper app-wrapper-' + layout">
-    <sidebar *ngIf="isDefaultLayout()"
+    <sidebar [hidden]="!isDefaultLayout()"
              #sideBarComponent
              (onToggle)="onToggleSideBar($event)"
              (onShow)="onShowSideBar($event)"
