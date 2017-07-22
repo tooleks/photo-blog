@@ -3,6 +3,7 @@ import {MetaTagsService} from '../../../core'
 import {NoticesService} from '../../../lib';
 import {
     AuthService,
+    AuthProviderService,
     TitleService,
     ProcessLockerServiceProvider,
     ProcessLockerService,
@@ -23,6 +24,7 @@ export class SignInFormComponent implements OnInit {
     constructor(protected auth: AuthService,
                 protected title: TitleService,
                 protected metaTags: MetaTagsService,
+                protected authProvider: AuthProviderService,
                 protected notices: NoticesService,
                 navigatorProvider: NavigatorServiceProvider,
                 processLockerServiceProvider: ProcessLockerServiceProvider) {
@@ -34,6 +36,9 @@ export class SignInFormComponent implements OnInit {
         this.model = new Model;
         this.title.setPageNameSegment('Sing In');
         this.metaTags.setTitle(this.title.getPageNameSegment());
+        if (this.authProvider.isAuthenticated()) {
+            this.navigator.navigateToPhotos();
+        }
     }
 
     signIn(): Promise<any> {
