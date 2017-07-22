@@ -66,5 +66,9 @@ landing-page .landing-page-heading-container h1.landing-page-heading {
     padding: 0 20px 25px 20px;
     font-size: 36px;
     color: #fff;
-    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.8);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+landing-page .landing-page-heading-container .landing-page-btn {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
 }
