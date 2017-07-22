@@ -53,7 +53,7 @@ return [
         'thumbnails' => [
             [
                 'mode' => 'inset',
-                'quality' => 75,     // percentage
+                'quality' => 70,     // percentage
                 'width' => 2000,     // pixels
                 'height' => 2000,    // pixels
             ],
