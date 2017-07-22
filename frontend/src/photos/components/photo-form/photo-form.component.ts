@@ -41,7 +41,7 @@ export class PhotoFormComponent implements OnInit, OnDestroy, AfterViewInit {
         this.photo = new Photo;
         this.title.setPageNameSegment('Add Photo');
         if (!this.authProvider.isAuthenticated()) {
-            this.navigator.navigate(['/signin']);
+            this.navigator.navigateToSignIn();
         }
     }
 
@@ -96,7 +96,7 @@ export class PhotoFormComponent implements OnInit, OnDestroy, AfterViewInit {
     protected onSaveSuccess(photo) {
         this.photo.setSavedPhotoAttributes(photo);
         this.notices.success('Photo was successfully saved.');
-        this.navigator.navigate(['/photos']);
+        this.navigator.navigateToPhotos();
         return photo;
     }
 
@@ -136,7 +136,7 @@ export class PhotoFormComponent implements OnInit, OnDestroy, AfterViewInit {
 
     protected onDeletePhotoSuccess(response) {
         this.notices.success('Photo was successfully deleted.');
-        this.navigator.navigate(['/photos']);
+        this.navigator.navigateToPhotos();
         return response;
     }
 

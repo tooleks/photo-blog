@@ -44,7 +44,7 @@ export class SignInFormComponent implements OnInit {
 
     onSignInSuccess(user) {
         this.notices.success('Hello, ' + user.name + '!');
-        this.navigator.navigate(['/photos']);
+        this.navigator.navigateToPhotos();
         return user;
     }
 

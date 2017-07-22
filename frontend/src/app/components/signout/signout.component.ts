@@ -15,7 +15,7 @@ export class SignOutComponent implements OnInit {
     ngOnInit(): void {
         this.auth
             .signOut()
-            .then(() => this.navigator.navigate(['/signin']))
-            .catch(() => this.navigator.navigate(['/signin']));
+            .then(() => this.navigator.navigateToSignIn())
+            .catch(() => this.navigator.navigateToSignIn());
     }
 }

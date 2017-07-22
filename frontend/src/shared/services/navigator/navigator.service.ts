@@ -26,4 +26,16 @@ export class NavigatorService {
     navigate(route = [], extras = {}): Promise<boolean> {
         return this.router.navigate(route, extras);
     }
+
+    navigateToHome(extras = {}): Promise<boolean> {
+        return this.navigate(['/'], extras);
+    }
+
+    navigateToSignIn(extras = {}): Promise<boolean> {
+        return this.navigate(['/signin'], extras);
+    }
+
+    navigateToPhotos(extras = {}): Promise<boolean> {
+        return this.navigate(['/photos'], extras);
+    }
 }

@@ -62,17 +62,17 @@ export class UnsubscriptionComponent implements OnInit, OnDestroy, AfterViewInit
 
     onUnsubscribeSuccess(data) {
         this.notices.success('You have been successfully unsubscribed from the website updates.');
-        this.navigator.navigate(['/photos']);
+        this.navigator.navigateToPhotos();
         return data;
     }
 
     onUnsubscribeError(error) {
-        this.navigator.navigate(['/photos']);
+        this.navigator.navigateToPhotos();
         throw error;
     }
 
     navigateToHomePage(): void {
-        this.navigator.navigate(['/photos']);
+        this.navigator.navigateToPhotos();
     }
 
     isProcessing(): boolean {
