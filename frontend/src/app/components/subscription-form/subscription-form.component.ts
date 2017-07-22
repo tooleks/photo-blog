@@ -44,7 +44,7 @@ export class SubscriptionFormComponent implements OnInit {
 
     onSubscribeSuccess(data) {
         this.notices.success('You have been successfully subscribed to the website updates.');
-        this.navigator.navigate(['/']);
+        this.navigator.navigate(['/photos']);
         return data;
     }
 

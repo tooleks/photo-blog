@@ -44,7 +44,7 @@ export class ContactMeFormComponent implements OnInit {
 
     onContactMeSuccess(data) {
         this.notices.success('Your message has been successfully sent.');
-        this.navigator.navigate(['/']);
+        this.navigator.navigate(['/photos']);
         return data;
     }
 
