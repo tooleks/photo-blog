@@ -6,6 +6,7 @@ export const ROUTES: string[] = [
     '/signout',
     '/about-me',
     '/contact-me',
+    '/home',
     '/subscription',
     '/unsubscription/:token',
     '/404',

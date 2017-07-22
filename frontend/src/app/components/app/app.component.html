@@ -1,17 +1,19 @@
-<div class="app-wrapper">
-    <sidebar #sideBarComponent
+<div [ngClass]="'app-wrapper app-wrapper-' + layout">
+    <sidebar *ngIf="isDefaultLayout()"
+             #sideBarComponent
              (onToggle)="onToggleSideBar($event)"
              (onShow)="onShowSideBar($event)"
              (onHide)="onHideSideBar($event)">
     </sidebar>
-    <topbar (onNavClick)="sideBarComponent.toggle()"></topbar>
-    <div class="app-content" [ngStyle]="appContentStyles">
+    <topbar *ngIf="isDefaultLayout()" (onNavClick)="sideBarComponent.toggle()"></topbar>
+    <div [ngClass]="'app-content app-content-' + layout" [ngStyle]="appContentStyles">
         <router-outlet></router-outlet>
     </div>
-    <bottombar></bottombar>
+    <bottombar *ngIf="isDefaultLayout()"></bottombar>
 </div>
-<notices></notices>
-<go-top-button [html]="'<i class=\'fa fa-arrow-up\'></i>'"
+<notices *ngIf="isDefaultLayout()"></notices>
+<go-top-button *ngIf="isDefaultLayout()"
+               [html]="'<i class=\'fa fa-arrow-up\'></i>'"
                [animate]="false"
                [styles]="{
                     'width': '40px',

@@ -3,6 +3,7 @@ import {Routes, RouterModule} from '@angular/router';
 import {
     AboutMeComponent,
     ContactMeFormComponent,
+    LandingPageComponent,
     PageNotFoundComponent,
     SignInFormComponent,
     SignOutComponent,
@@ -13,7 +14,7 @@ import {
 const AppRoutes: Routes = [
     {
         path: '',
-        redirectTo: '/photos',
+        redirectTo: '/home',
         pathMatch: 'full',
     },
     {
@@ -31,6 +32,10 @@ const AppRoutes: Routes = [
     {
         path: 'contact-me',
         component: ContactMeFormComponent,
+    },
+    {
+        path: 'home',
+        component: LandingPageComponent,
     },
     {
         path: 'subscription',

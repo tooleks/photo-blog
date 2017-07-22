@@ -10,7 +10,14 @@ export class TitleService {
     }
 
     init(): void {
-        let newTitle: string = this.getPageNameSegment() + this.getSegmentsSeparator() + this.getDefaultSegment();
+        let newTitle: string = '';
+        if (this.getPageNameSegment() && this.getDefaultSegment()) {
+            newTitle = this.getPageNameSegment() + this.getSegmentsSeparator() + this.getDefaultSegment();
+        } else if (this.getPageNameSegment()) {
+            newTitle = this.getPageNameSegment();
+        } else if (this.getDefaultSegment()) {
+            newTitle = this.getDefaultSegment();
+        }
         this.clientTitle.setTitle(newTitle);
     }
 

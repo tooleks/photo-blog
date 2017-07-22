@@ -1,0 +1,8 @@
+<div [routerLink]="['/photos']" class="landing-page-container">
+    <div class="landing-page-background" [ngStyle]="getBackgroundStyles()"></div>
+    <div class="landing-page-heading-container">
+        <h1 class="landing-page-heading">{{ getHeading() }}</h1>
+        <a [routerLink]="['/photos']" class="btn btn-warning btn-lg">{{ 'Discover' }}</a>
+        <a [routerLink]="['/about-me']" class="btn btn-primary btn-lg">{{ 'About Me' }}</a>
+    </div>
+</div>

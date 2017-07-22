@@ -37,4 +37,12 @@ export class AppService {
     getImage(): string {
         return process.env.APP_IMAGE_URL;
     }
+
+    getLandingPageImage(): string {
+        return process.env.LANDING_PAGE_IMAGE_URL;
+    }
+
+    getLandingPageColor(): string {
+        return process.env.LANDING_PAGE_COLOR;
+    }
 }

@@ -7,14 +7,19 @@ import {AppService, TitleService, AuthProviderService, ScrollFreezerService} fro
 import './meta';
 import './favicon';
 
+const LAYOUT_DEFAULT = 'default';
+const LAYOUT_PLAIN = 'plain';
+
 @Component({
     selector: 'app',
     templateUrl: 'app.component.html',
     styles: [require('./app.component.css').toString()],
 })
 export class AppComponent implements OnInit, OnDestroy {
-    appContentStyles: { overflow: string } = {overflow: ''};
+    layout: string = LAYOUT_DEFAULT;
+    appContentStyles: any = {};
 
+    protected layoutSubscriber: any = null;
     protected metaTagsUrlSubscriber: any = null;
     protected scrollFreezerFreezedSubscriber: any = null;
     protected scrollFreezerUnfreezedSubscriber: any = null;
@@ -39,6 +44,11 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
+        if (this.layoutSubscriber !== null) {
+            this.layoutSubscriber.unsubscribe();
+            this.layoutSubscriber = null;
+        }
+
         if (this.metaTagsUrlSubscriber !== null) {
             this.metaTagsUrlSubscriber.unsubscribe();
             this.metaTagsUrlSubscriber = null;
@@ -66,14 +76,22 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     protected initRouterSubscribers(): void {
+        this.layoutSubscriber = this.router.events
+            .filter((event) => event instanceof NavigationEnd)
+            .subscribe((event: NavigationEnd) => {
+                this.layout = event.urlAfterRedirects.startsWith('/home')
+                    ? LAYOUT_PLAIN
+                    : LAYOUT_DEFAULT;
+            });
+
         this.metaTagsUrlSubscriber = this.router.events
             .filter((event) => event instanceof NavigationEnd)
             .subscribe((event: NavigationEnd) => this.metaTags.setUrl(this.app.getUrl() + event.urlAfterRedirects));
     }
 
     protected initScrollFreezerSubscribers(): void {
-        this.scrollFreezerFreezedSubscriber = this.scrollFreezer.freezed.subscribe(() => this.appContentStyles.overflow = 'hidden');
-        this.scrollFreezerUnfreezedSubscriber = this.scrollFreezer.unfreezed.subscribe(() => this.appContentStyles.overflow = '');
+        this.scrollFreezerFreezedSubscriber = this.scrollFreezer.freezed.subscribe(() => this.appContentStyles['overflow'] = 'hidden');
+        this.scrollFreezerUnfreezedSubscriber = this.scrollFreezer.unfreezed.subscribe(() => this.appContentStyles['overflow'] = '');
     }
 
     getLinkedData() {
@@ -97,5 +115,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
     onToggleSideBar(event): void {
         event.isVisible ? this.onShowSideBar(event) : this.onHideSideBar(event);
+    }
+
+    isDefaultLayout(): boolean {
+        return this.layout === LAYOUT_DEFAULT;
     }
 }
