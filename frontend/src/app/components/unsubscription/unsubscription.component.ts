@@ -71,7 +71,7 @@ export class UnsubscriptionComponent implements OnInit, OnDestroy, AfterViewInit
         throw error;
     }
 
-    navigateToHomePage(): void {
+    dontUnsubscribe(): void {
         this.navigator.navigateToPhotos();
     }
 
