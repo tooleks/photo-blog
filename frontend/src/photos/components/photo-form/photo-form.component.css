@@ -1,8 +1,6 @@
-photo-form .file-box {
-    width: auto;
-}
-
-photo-form .file .icon,
-photo-form .file .image {
-    height: auto;
+photo-form .img-avg-color {
+    display: block;
+    width: 100%;
+    height: 20px;
+    margin-bottom: 5px;
 }

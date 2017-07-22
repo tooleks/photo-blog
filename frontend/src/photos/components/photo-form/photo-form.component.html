@@ -5,6 +5,9 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div *ngIf="photo.url" class="thumbnail">
+                            <div class="img-avg-color"
+                                 [style.background-color]="photo.avg_color"
+                                 [title]="photo.avg_color"></div>
                             <img [src]="photo.thumbnails.medium.url" class="img-responsive">
                             <div class="caption">
                                 <div *ngIf="photo.exif.manufacturer">
