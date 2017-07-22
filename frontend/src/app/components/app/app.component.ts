@@ -1,5 +1,6 @@
 import {Component, OnInit, OnDestroy} from '@angular/core'
 import {Router, NavigationEnd} from '@angular/router';
+import {NoticesService} from '../../../lib';
 import {MetaTagsService, GoogleAnalyticsService} from '../../../core';
 import {TransferState} from '../../../sys';
 import {ScreenDetectorService} from '../../../core';
@@ -26,6 +27,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     constructor(protected cache: TransferState,
                 protected router: Router,
+                protected notices: NoticesService,
                 protected app: AppService,
                 protected title: TitleService,
                 protected metaTags: MetaTagsService,
@@ -103,6 +105,10 @@ export class AppComponent implements OnInit, OnDestroy {
         };
     }
 
+    isDefaultLayout(): boolean {
+        return this.layout === LAYOUT_DEFAULT;
+    }
+
     onShowSideBar(event): void {
         if (this.screenDetector.isSmallScreen()) {
             this.scrollFreezer.freeze()
@@ -117,7 +123,7 @@ export class AppComponent implements OnInit, OnDestroy {
         event.isVisible ? this.onShowSideBar(event) : this.onHideSideBar(event);
     }
 
-    isDefaultLayout(): boolean {
-        return this.layout === LAYOUT_DEFAULT;
+    onClickWrapper(event): void {
+        this.notices.deleteAll();
     }
 }

@@ -1,4 +1,4 @@
-<div [ngClass]="'app-wrapper app-wrapper-' + layout">
+<div [ngClass]="'app-wrapper app-wrapper-' + layout" (click)="onClickWrapper($event)">
     <sidebar [hidden]="!isDefaultLayout()"
              #sideBarComponent
              (onToggle)="onToggleSideBar($event)"
