@@ -3,7 +3,6 @@
 namespace Api\V1\Http\Controllers;
 
 use Api\V1\Http\Proxy\Contracts\OAuthProxy;
-use Api\V1\Http\Requests\CreateRefreshTokenRequest;
 use Api\V1\Http\Requests\CreateTokenRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
