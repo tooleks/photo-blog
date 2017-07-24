@@ -1,16 +1,16 @@
 <?php
 
-namespace Lib\DataProvider\Criterias;
+namespace Lib\DataProvider\Eloquent\Criterias;
 
 use Carbon\Carbon;
 use Lib\DataProvider\Contracts\Criteria;
 
 /**
- * Class WhereCreatedAtGreaterThan.
+ * Class WhereUpdatedAtLessThan.
  *
- * @package Lib\DataProvider\Criterias
+ * @package Lib\DataProvider\Eloquent\Criterias
  */
-class WhereCreatedAtGreaterThan implements Criteria
+class WhereUpdatedAtLessThan implements Criteria
 {
     /**
      * @var Carbon
@@ -32,6 +32,6 @@ class WhereCreatedAtGreaterThan implements Criteria
      */
     public function apply($query): void
     {
-        $query->where('created_at', '>', $this->date);
+        $query->where('updated_at', '<', $this->date);
     }
 }

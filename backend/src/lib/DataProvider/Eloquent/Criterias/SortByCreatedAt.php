@@ -1,14 +1,14 @@
 <?php
 
-namespace Lib\DataProvider\Criterias;
+namespace Lib\DataProvider\Eloquent\Criterias;
 
 use Lib\DataProvider\Contracts\Criteria;
-use Lib\DataProvider\Criterias\Templates\SortBy;
+use Lib\DataProvider\Eloquent\Criterias\Templates\SortBy;
 
 /**
  * Class SortByCreatedAt.
  *
- * @package Lib\DataProvider\Criterias
+ * @package Lib\DataProvider\Eloquent\Criterias
  */
 class SortByCreatedAt extends SortBy implements Criteria
 {

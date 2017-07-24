@@ -8,9 +8,9 @@ use App\Models\Photo;
 use App\Models\User;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Support\Facades\Validator as ValidatorFactory;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Validation\Factory as ValidatorFactory;
 
 /**
  * Class UserAttributesSubscriber.
@@ -22,11 +22,17 @@ class UserAttributesSubscriber
     /**
      * @var Application
      */
-    protected $app;
+    private $app;
 
-    public function __construct(Application $app)
+    /**
+     * @var ValidatorFactory
+     */
+    private $validatorFactory;
+
+    public function __construct(Application $app, ValidatorFactory $validatorFactory)
     {
         $this->app = $app;
+        $this->validatorFactory = $validatorFactory;
     }
 
     /**
@@ -57,7 +63,7 @@ class UserAttributesSubscriber
      */
     public function onBeforeSave(User $user, array $attributes = [], array $options = [])
     {
-        $validator = ValidatorFactory::make(['email' => $attributes['email'] ?? $user->email], [
+        $validator = $this->validatorFactory->make(['email' => $attributes['email'] ?? $user->email], [
             'email' => $user->exists
                 ? Rule::unique('users')->ignore($user->getOriginal('email'), 'email')
                 : Rule::unique('users'),

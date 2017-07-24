@@ -6,8 +6,8 @@ use App\DataProviders\User\Contracts\UserDataProvider;
 use App\Managers\User\Contracts\UserManager as UserManagerContract;
 use App\Models\User;
 use Illuminate\Contracts\Hashing\Hasher;
-use Lib\DataProvider\Criterias\WhereEmail;
-use Lib\DataProvider\Criterias\WhereName;
+use Lib\DataProvider\Eloquent\Criterias\WhereEmail;
+use Lib\DataProvider\Eloquent\Criterias\WhereName;
 use Lib\DataProvider\Exceptions\DataProviderNotFoundException;
 
 /**
@@ -44,7 +44,7 @@ class UserManager implements UserManagerContract
      */
     public function getById(int $id): User
     {
-        return $this->userDataProvider->getById($id);
+        return $this->userDataProvider->getByKey($id);
     }
 
     /**

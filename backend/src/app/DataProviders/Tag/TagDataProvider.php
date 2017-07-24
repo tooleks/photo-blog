@@ -3,14 +3,14 @@
 namespace App\DataProviders\Tag;
 
 use App\DataProviders\Tag\Contracts\TagDataProvider as TagDataProviderContract;
-use Lib\DataProvider\DataProvider;
+use Lib\DataProvider\Eloquent\EloquentDataProvider;
 
 /**
  * Class TagDataProvider.
  *
  * @package App\DataProviders
  */
-class TagDataProvider extends DataProvider implements TagDataProviderContract
+class TagDataProvider extends EloquentDataProvider implements TagDataProviderContract
 {
     /**
      * @inheritdoc

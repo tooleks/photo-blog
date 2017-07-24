@@ -19,10 +19,10 @@ use Illuminate\Contracts\Filesystem\Factory as Storage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Support\Collection;
-use Lib\DataProvider\Criterias\SortByCreatedAt;
-use Lib\DataProvider\Criterias\Take;
-use Lib\DataProvider\Criterias\WhereCreatedAtGreaterThan;
-use Lib\DataProvider\Criterias\WhereUpdatedAtLessThan;
+use Lib\DataProvider\Eloquent\Criterias\SortByCreatedAt;
+use Lib\DataProvider\Eloquent\Criterias\Take;
+use Lib\DataProvider\Eloquent\Criterias\WhereCreatedAtGreaterThan;
+use Lib\DataProvider\Eloquent\Criterias\WhereUpdatedAtLessThan;
 use Throwable;
 use Tooleks\Php\AvgColorPicker\Contracts\AvgColorPicker;
 
@@ -95,7 +95,7 @@ class PhotoManager implements PhotoManagerContract
      */
     public function getById(int $id): Photo
     {
-        return $this->photoDataProvider->getById($id);
+        return $this->photoDataProvider->getByKey($id);
     }
 
     /**
@@ -105,7 +105,7 @@ class PhotoManager implements PhotoManagerContract
     {
         return $this->photoDataProvider
             ->applyCriteria(new IsPublished(true))
-            ->getById($id);
+            ->getByKey($id);
     }
 
     /**
@@ -115,7 +115,7 @@ class PhotoManager implements PhotoManagerContract
     {
         return $this->photoDataProvider
             ->applyCriteria(new IsPublished(false))
-            ->getById($id);
+            ->getByKey($id);
     }
 
     /**

@@ -3,14 +3,14 @@
 namespace App\DataProviders\Subscription;
 
 use App\DataProviders\Subscription\Contracts\SubscriptionDataProvider as SubscriptionDataProviderContract;
-use Lib\DataProvider\DataProvider;
+use Lib\DataProvider\Eloquent\EloquentDataProvider;
 
 /**
  * Class SubscriptionDataProvider.
  *
  * @package App\DataProviders
  */
-class SubscriptionDataProvider extends DataProvider implements SubscriptionDataProviderContract
+class SubscriptionDataProvider extends EloquentDataProvider implements SubscriptionDataProviderContract
 {
     /**
      * @inheritdoc

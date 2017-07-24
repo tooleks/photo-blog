@@ -43,13 +43,13 @@ interface DataProvider
     public function applyCriteriaWhen(bool $value, Criteria $criteria);
 
     /**
-     * Get model by unique ID.
+     * Get model by unique key.
      *
-     * @param mixed $id
+     * @param mixed $key
      * @param array $options
      * @return mixed
      */
-    public function getById($id, array $options = []);
+    public function getByKey($key, array $options = []);
 
     /**
      * Get first model.
@@ -118,7 +118,7 @@ interface DataProvider
      *
      * @param mixed $model
      * @param array $options
-     * @return bool
+     * @return void
      */
-    public function delete($model, array $options = []): bool;
+    public function delete($model, array $options = []): void;
 }

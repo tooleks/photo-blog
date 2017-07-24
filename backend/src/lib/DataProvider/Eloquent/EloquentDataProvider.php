@@ -1,10 +1,10 @@
 <?php
 
-namespace Lib\DataProvider;
+namespace Lib\DataProvider\Eloquent;
 
 use Closure;
 use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Database\ConnectionInterface as Connection;
+use Illuminate\Database\ConnectionInterface as DbConnection;
 use Illuminate\Database\Eloquent\Model;
 use Lib\DataProvider\Contracts\Criteria;
 use Lib\DataProvider\Contracts\DataProvider as DataProviderContract;
@@ -15,11 +15,11 @@ use Lib\DataProvider\Exceptions\DataProviderSaveException;
 use Throwable;
 
 /**
- * Class DataProvider.
+ * Class EloquentDataProvider.
  *
- * @package Lib\DataProvider
+ * @package Lib\DataProvider\Eloquent
  */
-abstract class DataProvider implements DataProviderContract
+abstract class EloquentDataProvider implements DataProviderContract
 {
     /**
      * Model class instance.
@@ -47,18 +47,18 @@ abstract class DataProvider implements DataProviderContract
      *
      * @var mixed
      */
-    protected $events;
+    protected $dispatcher;
 
     /**
      * DataProvider constructor.
      *
-     * @param Connection $dbConnection
-     * @param Dispatcher $events
+     * @param DbConnection $dbConnection
+     * @param Dispatcher $dispatcher
      */
-    public function __construct(Connection $dbConnection, Dispatcher $events)
+    public function __construct(DbConnection $dbConnection, Dispatcher $dispatcher)
     {
         $this->dbConnection = $dbConnection;
-        $this->events = $events;
+        $this->dispatcher = $dispatcher;
 
         $this->reset();
     }
@@ -128,7 +128,7 @@ abstract class DataProvider implements DataProviderContract
      */
     protected function dispatchEvent(string $eventName, &...$data): void
     {
-        $this->events->dispatch(static::class . '@' . $eventName, $data);
+        $this->dispatcher->dispatch(static::class . '@' . $eventName, $data);
     }
 
     /**
@@ -161,14 +161,14 @@ abstract class DataProvider implements DataProviderContract
     /**
      * @inheritdoc
      */
-    public function getById($id, array $options = [])
+    public function getByKey($key, array $options = [])
     {
-        $this->dispatchEvent('beforeGetById', $this->query, $options);
-        $model = $this->query->find($id);
+        $this->dispatchEvent('beforeGetByKey', $this->query, $options);
+        $model = $this->query->find($key);
         if (is_null($model)) {
             throw new DataProviderNotFoundException(sprintf('%s not found.', class_basename($this->getModelClass())));
         }
-        $this->dispatchEvent('afterGetById', $model, $options);
+        $this->dispatchEvent('afterGetByKey', $model, $options);
         $this->reset();
 
         return $model;
@@ -283,7 +283,7 @@ abstract class DataProvider implements DataProviderContract
     /**
      * @inheritdoc
      */
-    public function delete($model, array $options = []): bool
+    public function delete($model, array $options = []): void
     {
         $this->assertModel($model);
 
@@ -299,7 +299,5 @@ abstract class DataProvider implements DataProviderContract
         } finally {
             $this->reset();
         }
-
-        return $deleted ?? false;
     }
 }

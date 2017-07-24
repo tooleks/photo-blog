@@ -1,11 +1,11 @@
 <?php
 
-namespace Lib\DataProvider\Criterias\Templates;
+namespace Lib\DataProvider\Eloquent\Criterias\Templates;
 
 /**
  * Class SortBy.
  *
- * @package Lib\DataProvider\Criterias\Templates
+ * @package Lib\DataProvider\Eloquent\Criterias\Templates
  */
 abstract class SortBy
 {

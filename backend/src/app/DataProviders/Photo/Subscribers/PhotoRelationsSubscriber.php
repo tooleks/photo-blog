@@ -7,7 +7,7 @@ use App\Models\Photo;
 use App\Models\Tag;
 use App\Models\Thumbnail;
 use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Database\ConnectionInterface;
+use Illuminate\Database\ConnectionInterface as DbConnection;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -19,16 +19,16 @@ use Illuminate\Database\Eloquent\Collection;
 class PhotoRelationsSubscriber
 {
     /**
-     * @var ConnectionInterface
+     * @var DbConnection
      */
     private $dbConnection;
 
     /**
      * PhotoRelationsSubscriber constructor.
      *
-     * @param ConnectionInterface $dbConnection
+     * @param DbConnection $dbConnection
      */
-    public function __construct(ConnectionInterface $dbConnection)
+    public function __construct(DbConnection $dbConnection)
     {
         $this->dbConnection = $dbConnection;
     }
@@ -41,7 +41,7 @@ class PhotoRelationsSubscriber
     public function subscribe(Dispatcher $events)
     {
         $events->listen(
-            PhotoDataProvider::class . '@beforeGetById',
+            PhotoDataProvider::class . '@beforeGetByKey',
             static::class . '@onBeforeFetch'
         );
 
@@ -83,7 +83,7 @@ class PhotoRelationsSubscriber
      * @param array $options
      * @return void
      */
-    public function onBeforeFetch(Builder $query, array $options): void
+    public function onBeforeFetch(Builder $query, array $options = []): void
     {
         $query->with('exif', 'thumbnails', 'tags');
     }

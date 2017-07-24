@@ -1,13 +1,13 @@
 <?php
 
-namespace Lib\DataProvider\Criterias;
+namespace Lib\DataProvider\Eloquent\Criterias;
 
 use Lib\DataProvider\Contracts\Criteria;
 
 /**
  * Class Take.
  *
- * @package Lib\DataProvider\Criterias
+ * @package Lib\DataProvider\Eloquent\Criterias
  */
 class Take implements Criteria
 {

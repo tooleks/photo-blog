@@ -3,7 +3,7 @@
 namespace App\DataProviders\Tag\Criterias;
 
 use Lib\DataProvider\Contracts\Criteria;
-use Lib\DataProvider\Criterias\Templates\SortBy;
+use Lib\DataProvider\Eloquent\Criterias\Templates\SortBy;
 
 /**
  * Class SortByPhotosCount.
