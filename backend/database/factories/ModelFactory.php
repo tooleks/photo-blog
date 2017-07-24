@@ -33,7 +33,7 @@ $factory->define(Photo::class, function (Generator $faker) {
         'description' => $faker->realText(),
         'path' => sprintf('/%s/%s.%s', str_random(12), str_random(5), str_random(3)),
         'avg_color' => $faker->hexColor,
-        'is_published' => $faker->boolean(75),
+        'published_at' => $faker->boolean(75) ? \Carbon\Carbon::now() : null,
     ];
 });
 
