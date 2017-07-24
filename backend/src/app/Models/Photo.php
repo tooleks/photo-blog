@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string description
  * @property string path
  * @property string avg_color
- * @property bool is_published
+ * @property Carbon published_at
  * @property Carbon created_at
  * @property Carbon updated_at
  * @property User $createdByUser
@@ -35,14 +35,8 @@ class Photo extends Model
     /**
      * @inheritdoc
      */
-    protected $casts = [
-        'is_published' => 'boolean',
-    ];
-
-    /**
-     * @inheritdoc
-     */
     protected $dates = [
+        'published_at',
         'created_at',
         'updated_at',
     ];
@@ -65,6 +59,16 @@ class Photo extends Model
         $this->attributes['description'] = trim($description);
 
         return $this;
+    }
+
+    /**
+     * Check if photo is published.
+     *
+     * @return bool
+     */
+    public function isPublished(): bool
+    {
+        return !is_null($this->published_at);
     }
 
     /**

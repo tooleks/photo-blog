@@ -200,7 +200,6 @@ class PhotoManager implements PhotoManagerContract
     {
         $photo = new Photo;
 
-        $photo->is_published = false;
         $photo->created_by_user_id = $createdByUserId;
 
         $this->saveWithFile($photo, $file, $attributes, $options);
@@ -221,7 +220,9 @@ class PhotoManager implements PhotoManagerContract
      */
     public function publish(Photo $photo, array $attributes = [], array $options = []): void
     {
-        $photo->is_published = true;
+        if (!$photo->isPublished()) {
+            $photo->published_at = Carbon::now();
+        }
 
         $this->photoDataProvider->save($photo, $attributes, $options);
     }

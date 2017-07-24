@@ -31,6 +31,8 @@ class IsPublished implements Criteria
      */
     public function apply($query): void
     {
-        $query->where('photos.is_published', $this->value);
+        $this->value
+            ? $query->whereNotNull('photos.published_at')
+            : $query->whereNull('photos.published_at');
     }
 }
