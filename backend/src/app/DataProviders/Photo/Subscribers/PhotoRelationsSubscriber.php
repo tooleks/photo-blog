@@ -100,15 +100,15 @@ class PhotoRelationsSubscriber
     {
         if (array_key_exists('with', $options)) {
             // Save with exif.
-            if (in_array('exif', $options['with']) && isset($attributes['exif'])) {
+            if (in_array('exif', $options['with'], true) && isset($attributes['exif'])) {
                 $this->savePhotoExif($photo, $attributes['exif']);
             }
             // Save with thumbnails.
-            if (in_array('thumbnails', $options['with']) && isset($attributes['thumbnails'])) {
+            if (in_array('thumbnails', $options['with'], true) && isset($attributes['thumbnails'])) {
                 $this->savePhotoThumbnails($photo, $attributes['thumbnails']);
             }
             // Save with tags.
-            if (in_array('tags', $options['with']) && isset($attributes['tags'])) {
+            if (in_array('tags', $options['with'], true) && isset($attributes['tags'])) {
                 $this->savePhotoTags($photo, $attributes['tags']);
             }
         }
