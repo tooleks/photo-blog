@@ -56,7 +56,6 @@ class PublishedPhotosController extends Controller
      * {
      *     "id": 1,
      *     "created_by_user_id" 1,
-     *     "url": "http://path/to/photo/file",
      *     "avg_color": "#000000",
      *     "created_at": "2016-10-24 12:24:33",
      *     "updated_at": "2016-10-24 14:38:05",
@@ -117,7 +116,6 @@ class PublishedPhotosController extends Controller
      * {
      *     "id": 1,
      *     "created_by_user_id" 1,
-     *     "url": "http://path/to/photo/file",
      *     "avg_color": "#000000",
      *     "created_at": "2016-10-24 12:24:33",
      *     "updated_at": "2016-10-24 14:38:05",
@@ -185,7 +183,6 @@ class PublishedPhotosController extends Controller
      *         {
      *             "id": 1,
      *             "created_by_user_id" 1,
-     *             "url": "http://path/to/photo/file",
      *             "avg_color": "#000000",
      *             "created_at": "2016-10-24 12:24:33",
      *             "updated_at": "2016-10-24 14:38:05",
@@ -262,7 +259,6 @@ class PublishedPhotosController extends Controller
      * {
      *     "id": 1,
      *     "created_by_user_id" 1,
-     *     "url": "http://path/to/photo/file",
      *     "avg_color": "#000000",
      *     "created_at": "2016-10-24 12:24:33",
      *     "updated_at": "2016-10-24 14:38:05",
