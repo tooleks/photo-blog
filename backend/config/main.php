@@ -10,7 +10,7 @@ return [
     */
 
     'storage' => [
-        'url' => env('STORAGE_URL', env('APP_URL') . '/' . 'storage'),
+        'url' => env('STORAGE_URL'),
         'path' => [
             'trash' => 'trash',
             'photos' => 'photos',
