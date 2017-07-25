@@ -37,7 +37,7 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 
-        'api.v1' => [
+        'api/v1' => [
             \Api\V1\Http\Middleware\CookieOAuthAuthorizer::class,
             \Api\V1\Http\Middleware\CookieOAuthTokenRefresher::class,
             'json_api',
