@@ -62,6 +62,7 @@ class PublishedPhotosResourceTest extends IntegrationApiV1TestCase
         $authUser = $this->createTestUser();
         $photo = $this->createTestPhoto([
             'created_by_user_id' => $authUser->id,
+            'published_at' => null,
         ]);
 
         $this
@@ -89,6 +90,7 @@ class PublishedPhotosResourceTest extends IntegrationApiV1TestCase
         $user = $this->createTestUser();
         $photo = $this->createTestPhoto([
             'created_by_user_id' => $user->id,
+            'published_at' => null,
         ]);
 
         $this
