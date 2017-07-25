@@ -23,17 +23,15 @@ use App\Models\User;
 Route::get('/', function () {
     return [
         'name' => config('app.name'),
-        'version' => '1.0.0',
+        'version' => '1',
     ];
 });
-
 
 /*
 |--------------------------------------------------------------------------
 | Auth Resource Routes
 |--------------------------------------------------------------------------
 */
-
 Route::group(['prefix' => 'auth'], function () {
 
     Route::post('/token')
