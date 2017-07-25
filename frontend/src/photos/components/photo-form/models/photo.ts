@@ -7,8 +7,8 @@ export class Photo {
     description: string;
     created_at: string;
     updated_at: string;
-    exif;
-    thumbnails: Array<any> = [];
+    exif: any;
+    thumbnails: any;
     tags: Array<any> = [];
 
     setUploadedPhotoAttributes(attributes): void {
@@ -22,7 +22,7 @@ export class Photo {
         this.thumbnails = attributes.thumbnails;
     }
 
-    setSavedPhotoAttributes(attributes): void {
+    setPublishedPhotoAttributes(attributes): void {
         this.id = attributes.id;
         this.created_by_user_id = attributes.created_by_user_id;
         this.url = attributes.url;

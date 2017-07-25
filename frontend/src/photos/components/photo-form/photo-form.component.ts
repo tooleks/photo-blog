@@ -76,7 +76,7 @@ export class PhotoFormComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     protected onLoadByIdSuccess(photo) {
-        this.photo.setSavedPhotoAttributes(photo);
+        this.photo.setPublishedPhotoAttributes(photo);
         this.title.setPageNameSegment('Edit Photo');
         return photo;
     }
@@ -94,7 +94,7 @@ export class PhotoFormComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     protected onSaveSuccess(photo) {
-        this.photo.setSavedPhotoAttributes(photo);
+        this.photo.setPublishedPhotoAttributes(photo);
         this.notices.success('Photo was successfully saved.');
         this.navigator.navigateToPhotos();
         return photo;
