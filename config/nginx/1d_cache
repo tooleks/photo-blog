@@ -1,0 +1,2 @@
+add_header Cache-Control public;
+expires 1d;

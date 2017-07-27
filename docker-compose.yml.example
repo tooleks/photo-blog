@@ -14,10 +14,11 @@ services:
       - photo-blog-frontend.docker
     volumes:
       - ./:/data
-      - ./config/nginx/backend.conf:/etc/nginx/conf.d/backend.conf
-      - ./config/nginx/frontend.conf:/etc/nginx/conf.d/frontend.conf
-      - ./config/nginx/rest_api_documentation.conf:/etc/nginx/conf.d/rest_api_documentation.conf
-      - ./config/nginx/storage.conf:/etc/nginx/conf.d/storage.conf
+      - ./config/nginx/default:/etc/nginx/default
+      - ./config/nginx/1d_cache:/etc/nginx/1d_cache
+      - ./config/nginx/60s_cache:/etc/nginx/60s_cache
+      - ./config/nginx/conf.d/:/etc/nginx/conf.d
+      - ./config/nginx/max_cache/:/etc/nginx/max_cache
 
   photo-blog-backend.docker:
     environment:
