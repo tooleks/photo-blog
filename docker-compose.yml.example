@@ -15,7 +15,7 @@ services:
     volumes:
       - ./:/data
       - ./config/nginx/default:/etc/nginx/default
-      - ./config/nginx/1d_cache:/etc/nginx/1d_cache
+      - ./config/nginx/6h_cache:/etc/nginx/6h_cache
       - ./config/nginx/60s_cache:/etc/nginx/60s_cache
       - ./config/nginx/conf.d/:/etc/nginx/conf.d
       - ./config/nginx/max_cache/:/etc/nginx/max_cache
