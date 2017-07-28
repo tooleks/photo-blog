@@ -6,13 +6,19 @@ Docker 17.06, NGINX 1.12, MySQL 5.7, Redis 3.2, PHP 7.1, Laravel 5.4, Node.js 8.
 
 ### Installation
 
-Run the following command (within the `./` directory).
+Run the following command (within the `./` directory) to create environment files.
 
 ```
 cp ./backend/.env.example ./backend/.env && \
 cp ./frontend/.env.example ./frontend/.env && \
-cp ./docker-compose.yml.example ./docker-compose.yml &&
-cd ./backend/public/ && ln -s ../storage/app/public storage
+cp ./docker-compose.yml.example ./docker-compose.yml
+```
+
+Run the following command (within the `./` directory) to create public storage.
+
+```
+cd ./backend/public/ && \
+ln -s ../storage/app/public storage
 ```
 
 Run the following command (within the `./` directory) to start the docker containers and build the application.
