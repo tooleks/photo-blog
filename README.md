@@ -6,12 +6,13 @@ Docker 17.06, NGINX 1.12, MySQL 5.7, Redis 3.2, PHP 7.1, Laravel 5.4, Node.js 8.
 
 ### Installation
 
-Run the following command (within the `./` directory) to create environment files.
+Run the following command (within the `./` directory).
 
 ```
 cp ./backend/.env.example ./backend/.env && \
 cp ./frontend/.env.example ./frontend/.env && \
-cp ./docker-compose.yml.example ./docker-compose.yml
+cp ./docker-compose.yml.example ./docker-compose.yml &&
+cd ./backend/public/ && ln -s ../storage/app/public storage
 ```
 
 Run the following command (within the `./` directory) to start the docker containers and build the application.
@@ -28,8 +29,7 @@ docker exec -it photo-blog-backend bash -c "php artisan create:administrator_use
 Run following commands to create the encryption keys needed to generate secure access tokens.
 ```
 docker exec -it photo-blog-backend bash -c "php artisan passport:install" && \
-docker exec -it photo-blog-backend bash -c "chown www-data:www-data storage/oauth-private.key" && \
-docker exec -it photo-blog-backend bash -c "chown www-data:www-data storage/oauth-public.key"
+docker exec -it photo-blog-backend bash -c "chown -R www-data:www-data storage"
 ```
 
 Open the [http://localhost:8080/signin](http://localhost:8080/signin) link in a browser to signin with a newly created administrator account.
