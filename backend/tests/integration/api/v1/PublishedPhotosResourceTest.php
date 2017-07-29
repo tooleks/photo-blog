@@ -15,7 +15,6 @@ class PublishedPhotosResourceTest extends IntegrationApiV1TestCase
     protected $resourceStructure = [
         'id',
         'created_by_user_id',
-        'url',
         'avg_color',
         'created_at',
         'updated_at',

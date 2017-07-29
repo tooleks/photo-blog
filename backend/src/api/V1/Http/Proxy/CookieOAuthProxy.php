@@ -104,14 +104,22 @@ class CookieOAuthProxy implements OAuthProxyContract
      */
     private function proxyOnSuccessResponse($response)
     {
-        $data = $this->decodeResponseContent($response->getContent());
+        $responseContent = $this->decodeResponseContent($response->getContent());
 
         $proxyResponse = $this->responseFactory->json((object) []);
 
-        foreach ($data as $name => $value) {
-            // TODO: Fix dependency from the global variable $_SERVER.
-            $proxyResponse->headers->setCookie($this->cookieBakery->make($name, $value, $thirtyDays = (60 * 24 * 30),
-                null, null, isset($_SERVER['HTTPS']), true));
+        foreach ($responseContent as $name => $value) {
+            $proxyResponse->headers->setCookie(
+                $this->cookieBakery->make(
+                    $name,
+                    $value,
+                    60 * 24 * 30, // Thirty days in minutes.
+                    null,
+                    null,
+                    isset($_SERVER['HTTPS']), // TODO: Fix dependency from the global $_SERVER variable.
+                    true
+                )
+            );
         }
 
         return $proxyResponse;

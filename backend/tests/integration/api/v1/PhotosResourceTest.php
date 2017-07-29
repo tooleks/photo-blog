@@ -16,7 +16,6 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
     protected $resourceStructure = [
         'id',
         'created_by_user_id',
-        'url',
         'avg_color',
         'created_at',
         'updated_at',
@@ -74,10 +73,6 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
             ->assertJsonStructure($this->resourceStructure);
 
         Storage::disk('public')->assertExists(
-            $this->getPathFromUrl($response->decodeResponseJson()['url']),
-            'The photo file was not saved.'
-        );
-        Storage::disk('public')->assertExists(
             $this->getPathFromUrl($response->decodeResponseJson()['thumbnails']['medium']['url']),
             'The photo thumbnail file was not generated.'
         );
@@ -111,10 +106,6 @@ class PhotosResourceTest extends IntegrationApiV1TestCase
             ->assertStatus(201)
             ->assertJsonStructure($this->resourceStructure);
 
-        Storage::disk('public')->assertExists(
-            $this->getPathFromUrl($response->decodeResponseJson()['url']),
-            'The photo file was not saved.'
-        );
         Storage::disk('public')->assertExists(
             $this->getPathFromUrl($response->decodeResponseJson()['thumbnails']['medium']['url']),
             'The photo thumbnail file was not generated.'
