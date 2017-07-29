@@ -30,17 +30,12 @@ class ThumbnailsGenerator implements ThumbnailsGeneratorContract
      *     [
      *         'mode' => 'inset',
      *         'quality' => 100,    // percentage
+     *         'name' => 'large',   // name
      *         'width' => 1500,     // pixels
      *         'height' => 1500,    // pixels
      *     ],
-     *     [
-     *         'mode' => 'outbound',
-     *         'quality' => 65,    // percentage
-     *         'width' => 600,     // pixels
-     *         'height' => 600,    // pixels
-     *     ],
      * ];
-     * new ThumbnailsGenerator($config);
+     * $thumbnailsGenerator = new ThumbnailsGenerator($config);
      *
      * @param array $config
      */
@@ -63,6 +58,7 @@ class ThumbnailsGenerator implements ThumbnailsGeneratorContract
         $validator = ValidatorFactory::make($config, [
             '*.mode' => ['required', Rule::in(['inset', 'outbound'])],
             '*.quality' => ['required', 'integer', 'min:0', 'max:100'],
+            '*.name' => ['required', 'string', 'min:1'],
             '*.width' => ['required', 'integer', 'min:1'],
             '*.height' => ['required', 'integer', 'min:1'],
         ]);
@@ -84,9 +80,7 @@ class ThumbnailsGenerator implements ThumbnailsGeneratorContract
             $thumbnailImage = $originalImage->thumbnail(new Box($config['width'], $config['height']), $config['mode']);
             // Generate thumbnail file path.
             $thumbnailImageAbsPath = $this->generateThumbnailImageAbsPath(
-                $originalImage->metadata()->get('filepath'),
-                $thumbnailImage->getSize()->getWidth(),
-                $thumbnailImage->getSize()->getHeight()
+                $originalImage->metadata()->get('filepath'), $config['name']
             );
             // Save thumbnail file.
             $thumbnailImage->save($thumbnailImageAbsPath, ['quality' => $config['quality']]);
@@ -116,18 +110,16 @@ class ThumbnailsGenerator implements ThumbnailsGeneratorContract
      * Generate thumbnail image absolute path.
      *
      * @param string $originalImageAbsPath
-     * @param string $width
-     * @param string $height
+     * @param string $suffix
      * @return string
      */
-    private function generateThumbnailImageAbsPath(string $originalImageAbsPath, string $width, string $height): string
+    private function generateThumbnailImageAbsPath(string $originalImageAbsPath, string $suffix = 'thumbnail'): string
     {
         return sprintf(
-            '%s/%s_%sx%s.%s',
+            '%s/%s_%s.%s',
             pathinfo($originalImageAbsPath, PATHINFO_DIRNAME),     // Subdirectory.
             pathinfo($originalImageAbsPath, PATHINFO_FILENAME),    // File name.
-            $width,                                                 // Width suffix.
-            $height,                                                // Height suffix.
+            $suffix,                                                        // Suffix.
             pathinfo($originalImageAbsPath, PATHINFO_EXTENSION));  // Extension.
     }
 }

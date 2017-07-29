@@ -54,12 +54,14 @@ return [
             [
                 'mode' => 'inset',
                 'quality' => 70,     // percentage
+                'name' => 'large',   // name
                 'width' => 2000,     // pixels
                 'height' => 2000,    // pixels
             ],
             [
                 'mode' => 'inset',
                 'quality' => 70,    // percentage
+                'name' => 'medium', // name
                 'width' => 600,     // pixels
                 'height' => 600,    // pixels
             ],
