@@ -85,26 +85,26 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('published_photo', function ($id) {
             return $this->app
                 ->make(\App\Managers\Photo\Contracts\PhotoManager::class)
-                ->getPublishedById($id);
+                ->getPublishedById((int) $id);
         });
 
         Route::bind('photo', function ($id) {
             return $this->app
                 ->make(\App\Managers\Photo\Contracts\PhotoManager::class)
-                ->getById($id);
+                ->getById((int) $id);
         });
 
         Route::bind('subscription', function ($token) {
             return $this->app
                 ->make(\App\Managers\Subscription\Contracts\SubscriptionManager::class)
-                ->getByToken($token);
+                ->getByToken((string) $token);
         });
 
         Route::bind('user', function ($id) {
             $id = $id === 'me' ? Auth::user()->id ?? 0 : $id;
             return $this->app
                 ->make(\App\Managers\User\Contracts\UserManager::class)
-                ->getById($id);
+                ->getById((int) $id);
         });
     }
 }
