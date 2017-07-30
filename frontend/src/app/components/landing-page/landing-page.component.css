@@ -30,9 +30,7 @@ landing-page .landing-page-background {
     left: 0;
     background-repeat: no-repeat;
     background-position: center;
-    background-image: url("https://storage.photos.tooleks.com/storage/photos/JtykJKQkr1/idkAuNV0ghaj3T1kBnPkp35zSUwYXtGcoLAo5W9J_1500x1000.jpeg");
-    filter: blur(10px);
-    transform: scale(1.1);
+    background-size: cover;
 }
 
 landing-page .landing-page-heading-container {
