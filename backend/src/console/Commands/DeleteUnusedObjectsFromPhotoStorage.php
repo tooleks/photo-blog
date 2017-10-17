@@ -110,7 +110,7 @@ class DeleteUnusedObjectsFromPhotoStorage extends Command
      */
     protected function getAllDirectoriesFromStorage(): array
     {
-        return $this->storage->allDirectories($this->config->get('main.storage.path.photos'));
+        return $this->storage->allDirectories('photos');
     }
 
     /**
@@ -120,7 +120,7 @@ class DeleteUnusedObjectsFromPhotoStorage extends Command
      */
     protected function getAllFilesFromStorage(): array
     {
-        return $this->storage->allFiles($this->config->get('main.storage.path.photos'));
+        return $this->storage->allFiles('photos');
     }
 
     /**
