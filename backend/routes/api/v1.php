@@ -1,11 +1,5 @@
 <?php
 
-use Api\V1\Http\Middleware\AppendClientIpAddress;
-use Api\V1\Http\Presenters\Response\PhotoPresenter;
-use Api\V1\Http\Presenters\Response\PublishedPhotoPresenter;
-use Api\V1\Http\Presenters\Response\SubscriptionPresenter;
-use Api\V1\Http\Presenters\Response\TagPresenter;
-use Api\V1\Http\Presenters\Response\UserPresenter;
 use App\Models\Photo;
 use App\Models\User;
 
@@ -35,11 +29,11 @@ Route::get('/', function () {
 Route::group(['prefix' => 'auth'], function () {
 
     Route::post('/token')
-        ->uses('AuthController@createToken')
+        ->uses('AuthController@create')
         ->middleware('throttle:10,1');
 
     Route::delete('/token')
-        ->uses('AuthController@deleteToken')
+        ->uses('AuthController@delete')
         ->middleware('auth:api')
         ->middleware('throttle:10,1');
 
@@ -55,26 +49,22 @@ Route::group(['prefix' => 'users'], function () {
     Route::post('/')
         ->uses('UsersController@create')
         ->middleware('auth:api')
-        ->middleware(sprintf('can:create-resource,%s', User::class))
-        ->middleware(sprintf('present:%s', UserPresenter::class));
+        ->middleware(sprintf('can:create-resource,%s', User::class));
 
     Route::get('/{user}')
         ->uses('UsersController@get')
         ->middleware('auth:api')
-        ->middleware('can:get-resource,user')
-        ->middleware(sprintf('present:%s', UserPresenter::class));
+        ->middleware('can:get-resource,user');
 
     Route::put('/{user}')
         ->uses('UsersController@update')
         ->middleware('auth:api')
-        ->middleware('can:update-resource,user')
-        ->middleware(sprintf('present:%s', UserPresenter::class));
+        ->middleware('can:update-resource,user');
 
     Route::delete('/{user}')
         ->middleware('auth:api')
         ->uses('UsersController@delete')
-        ->middleware('can:delete-resource,user')
-        ->middleware(sprintf('present:%s', UserPresenter::class));
+        ->middleware('can:delete-resource,user');
 
 });
 
@@ -88,26 +78,22 @@ Route::group(['prefix' => 'photos'], function () {
     Route::post('/')
         ->uses('PhotosController@create')
         ->middleware('auth:api')
-        ->middleware(sprintf('can:create-resource,%s', Photo::class))
-        ->middleware(sprintf('present:%s', PhotoPresenter::class));
+        ->middleware(sprintf('can:create-resource,%s', Photo::class));
 
     Route::get('/{photo}')
         ->uses('PhotosController@get')
         ->middleware('auth:api')
-        ->middleware('can:get-resource,photo')
-        ->middleware(sprintf('present:%s', PhotoPresenter::class));
+        ->middleware('can:get-resource,photo');
 
     Route::post('/{photo}')
         ->uses('PhotosController@update')
         ->middleware('auth:api')
-        ->middleware('can:update-resource,photo')
-        ->middleware(sprintf('present:%s', PhotoPresenter::class));
+        ->middleware('can:update-resource,photo');
 
     Route::delete('/{photo}')
         ->uses('PhotosController@delete')
         ->middleware('auth:api')
-        ->middleware('can:delete-resource,photo')
-        ->middleware(sprintf('present:%s', PhotoPresenter::class));
+        ->middleware('can:delete-resource,photo');
 
 });
 
@@ -121,28 +107,23 @@ Route::group(['prefix' => 'published_photos'], function () {
     Route::post('/')
         ->uses('PublishedPhotosController@create')
         ->middleware('auth:api')
-        ->middleware(sprintf('can:create-resource,%s', Photo::class))
-        ->middleware(sprintf('present:%s', PublishedPhotoPresenter::class));
+        ->middleware(sprintf('can:create-resource,%s', Photo::class));
 
     Route::get('/')
-        ->uses('PublishedPhotosController@find')
-        ->middleware(sprintf('present:%s', PublishedPhotoPresenter::class));
+        ->uses('PublishedPhotosController@find');
 
     Route::get('/{published_photo}')
-        ->uses('PublishedPhotosController@get')
-        ->middleware(sprintf('present:%s', PublishedPhotoPresenter::class));
+        ->uses('PublishedPhotosController@get');
 
     Route::put('/{published_photo}')
         ->uses('PublishedPhotosController@update')
         ->middleware('auth:api')
-        ->middleware('can:update-resource,published_photo')
-        ->middleware(sprintf('present:%s', PublishedPhotoPresenter::class));
+        ->middleware('can:update-resource,published_photo');
 
     Route::delete('/{published_photo}')
         ->uses('PublishedPhotosController@delete')
         ->middleware('auth:api')
-        ->middleware('can:delete-resource,published_photo')
-        ->middleware(sprintf('present:%s', PublishedPhotoPresenter::class));
+        ->middleware('can:delete-resource,published_photo');
 
 });
 
@@ -154,8 +135,7 @@ Route::group(['prefix' => 'published_photos'], function () {
 Route::group(['prefix' => 'tags'], function () {
 
     Route::get('/')
-        ->uses('TagsController@find')
-        ->middleware(sprintf('present:%s', TagPresenter::class));
+        ->uses('TagsController@find');
 
 });
 
@@ -168,7 +148,6 @@ Route::group(['prefix' => 'contact_messages'], function () {
 
     Route::post('/')
         ->uses('ContactMessagesController@create')
-        ->middleware(AppendClientIpAddress::class)
         ->middleware('throttle:10,1');
 
 });
@@ -182,12 +161,10 @@ Route::group(['prefix' => 'subscriptions'], function () {
 
     Route::post('/')
         ->uses('SubscriptionsController@create')
-        ->middleware('throttle:10,1')
-        ->middleware(sprintf('present:%s', SubscriptionPresenter::class));
+        ->middleware('throttle:10,1');
 
     Route::delete('/{subscription}')
         ->uses('SubscriptionsController@delete')
-        ->middleware('throttle:10,1')
-        ->middleware(sprintf('present:%s', SubscriptionPresenter::class));
+        ->middleware('throttle:10,1');
 
 });

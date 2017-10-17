@@ -33,9 +33,17 @@ class Thumbnail extends Model
     /**
      * @inheritdoc
      */
-    public function newEloquentBuilder($query)
+    public function newEloquentBuilder($query): ThumbnailBuilder
     {
         return new ThumbnailBuilder($query);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function newQuery(): ThumbnailBuilder
+    {
+        return parent::newQuery();
     }
 
     /**
@@ -43,6 +51,6 @@ class Thumbnail extends Model
      */
     public function photos()
     {
-        return $this->belongsToMany(Photo::class, 'photo_thumbnails');
+        return $this->belongsToMany(Photo::class, 'photos_thumbnails');
     }
 }

@@ -37,14 +37,12 @@ class CookieOAuthAuthorizer
      */
     private function convertAuthorizationCookieToHeader($request): void
     {
-        if (
-            $request->hasCookie('token_type') &&
-            $request->hasCookie('expires_in') &&
-            $request->hasCookie('access_token') &&
-            $request->hasCookie('refresh_token')
-        ) {
+        $hasHeaders = $request->hasHeader('authorization');
+        $hasCookies = $request->hasCookie('token_type') && $request->hasCookie('access_token');
+
+        if (!$hasHeaders && $hasCookies) {
             $request->headers->set(
-                'Authorization',
+                'authorization',
                 $request->cookie('token_type') . ' ' . $request->cookie('access_token')
             );
         }

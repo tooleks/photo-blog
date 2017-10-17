@@ -61,6 +61,7 @@ services:
     volumes:
       - ./state/photo-blog-mysql.docker/var/lib/mysql:/var/lib/mysql
       - ./config/mysql/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
+      - ./config/mysql/my.cnf:/etc/mysql/my.cnf
 
   photo-blog-redis.docker:
     image: redis:3.2

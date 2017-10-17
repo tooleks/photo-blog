@@ -6,25 +6,28 @@
     "type": "project",
     "require": {
         "php": "^7.1",
-        "laravel/framework": "5.4.*",
+        "laravel/framework": "5.5.*",
         "doctrine/dbal": "~2.3",
         "imagine/imagine": "^0.6.3",
-        "tooleks/laravel-presenter": "^2.0.0",
         "tooleks/php-avg-color-picker": "^1.0.0",
-        "guzzlehttp/guzzle": "^6.2",
+        "guzzlehttp/guzzle": "~6.0",
         "predis/predis": "^1.1",
-        "laravel/passport": "^3.0"
+        "laravel/passport": "^3.0",
+        "huang-yi/laravel-swoole-http": "^2.0",
+        "ezyang/htmlpurifier": "^4.9"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
         "mockery/mockery": "0.9.*",
-        "phpunit/phpunit": "~5.0",
+        "phpunit/phpunit": "~6.0",
         "symfony/css-selector": "3.1.*",
-        "symfony/dom-crawler": "3.1.*"
+        "symfony/dom-crawler": "3.1.*",
+        "filp/whoops": "~2.0"
     },
     "autoload": {
         "files": [
-            "src/app/functions.php"
+            "src/app/functions.php",
+            "src/app/Util/functions.php"
         ],
         "classmap": [
             "database"
@@ -37,9 +40,9 @@
         }
     },
     "autoload-dev": {
-        "classmap": [
-            "tests"
-        ]
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
     },
     "scripts": {
         "post-root-package-install": [
@@ -55,6 +58,10 @@
         "post-update-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",
             "php artisan optimize"
+        ],
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover"
         ]
     },
     "config": {

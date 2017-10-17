@@ -4,8 +4,6 @@ namespace App\Managers\Photo\Contracts;
 
 use Closure;
 use App\Models\Photo;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Support\Collection;
 
 /**
@@ -37,25 +35,26 @@ interface PhotoManager
      * @param int $id
      * @return Photo
      */
-    public function getNotPublishedById(int $id): Photo;
+    public function getUnpublishedById(int $id): Photo;
 
     /**
-     * Get last fifty published photos.
+     * Get newly published photos.
      *
      * @param int $take
+     * @param int $skip
      * @return Collection
      */
-    public function getLastPublished(int $take): Collection;
+    public function getNewlyPublished(int $take = 10, int $skip = 0): Collection;
 
     /**
-     * Paginate over the last published photos.
+     * Paginate over newly published photos.
      *
      * @param int $page
      * @param int $perPage
-     * @param array $query
-     * @return AbstractPaginator
+     * @param array $filters
+     * @return mixed
      */
-    public function paginateOverLastPublished(int $page, int $perPage, array $query = []): AbstractPaginator;
+    public function paginateOverNewlyPublished(int $page, int $perPage, array $filters = []);
 
     /**
      * Apply the callback function on each photo.
@@ -73,72 +72,54 @@ interface PhotoManager
      */
     public function eachPublished(Closure $callback): void;
 
-
     /**
-     * Apply the callback function on each photo created by user ID.
-     *
-     * @param Closure $callback
-     * @param int $createdByUserId
-     * @return void
-     */
-    public function eachCreatedByUserId(Closure $callback, int $createdByUserId): void;
-
-    /**
-     * Apply the callback function on each not published photo older than week.
+     * Apply the callback function on each photo unpublished greater than week ago.
      *
      * @param Closure $callback
      * @return void
      */
-    public function eachNotPublishedOlderThanWeek(Closure $callback): void;
+    public function eachUnpublishedGreaterThanWeekAgo(Closure $callback): void;
 
     /**
-     * Determine if exists published photos older than week.
+     * Determine if exists photos published less than week ago.
      *
      * @return bool
      */
-    public function existsPublishedOlderThanWeek(): bool;
+    public function existsPublishedLessThanWeekAgo(): bool;
 
     /**
-     * Create not published photo associated with the file.
+     * Create the photo by uploaded file.
      *
-     * @param UploadedFile $file
-     * @param int|null $createdByUserId
      * @param array $attributes
-     * @param array $options
      * @return Photo
      */
-    public function createNotPublishedWithFile(UploadedFile $file, int $createdByUserId = null, array $attributes = [], array $options = []): Photo;
+    public function createByFile(array $attributes = []): Photo;
 
     /**
-     * Save the photo filled with the attributes array.
+     * Save the photo by uploaded file.
      *
      * @param Photo $photo
      * @param array $attributes
-     * @param array $options
      * @return void
      */
-    public function save(Photo $photo, array $attributes = [], array $options = []): void;
+    public function saveByFile(Photo $photo, array $attributes = []): void;
 
     /**
-     * Publish the photo filled with the attributes array.
+     * Generate the photo thumbnails.
+     *
+     * @param Photo $photo
+     * @return void
+     */
+    public function generateThumbnails(Photo $photo): void;
+
+    /**
+     * Save the photo by attributes.
      *
      * @param Photo $photo
      * @param array $attributes
-     * @param array $options
      * @return void
      */
-    public function publish(Photo $photo, array $attributes = [], array $options = []): void;
-
-    /**
-     * Save the photo associated with the file.
-     *
-     * @param Photo $photo
-     * @param UploadedFile $file
-     * @param array $attributes
-     * @param array $options
-     * @return void
-     */
-    public function saveWithFile(Photo $photo, UploadedFile $file, array $attributes = [], array $options = []): void;
+    public function saveByAttributes(Photo $photo, array $attributes = []): void;
 
     /**
      * Delete the photo.

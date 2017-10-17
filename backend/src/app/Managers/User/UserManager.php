@@ -2,13 +2,12 @@
 
 namespace App\Managers\User;
 
-use App\DataProviders\User\Contracts\UserDataProvider;
 use App\Managers\User\Contracts\UserManager as UserManagerContract;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Contracts\Hashing\Hasher;
-use Lib\DataProvider\Eloquent\Criterias\WhereEmail;
-use Lib\DataProvider\Eloquent\Criterias\WhereName;
-use Lib\DataProvider\Exceptions\DataProviderNotFoundException;
+use Illuminate\Database\ConnectionInterface as DbConnection;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 /**
  * Class UserManager.
@@ -18,9 +17,9 @@ use Lib\DataProvider\Exceptions\DataProviderNotFoundException;
 class UserManager implements UserManagerContract
 {
     /**
-     * @var UserDataProvider
+     * @var DbConnection
      */
-    private $userDataProvider;
+    private $dbConnection;
 
     /**
      * @var Hasher
@@ -28,15 +27,22 @@ class UserManager implements UserManagerContract
     private $hasher;
 
     /**
+     * @var UserValidator
+     */
+    private $validator;
+
+    /**
      * UserManager constructor.
      *
-     * @param UserDataProvider $userDataProvider
+     * @param DbConnection $dbConnection
      * @param Hasher $hasher
+     * @param UserValidator $validator
      */
-    public function __construct(UserDataProvider $userDataProvider, Hasher $hasher)
+    public function __construct(DbConnection $dbConnection, Hasher $hasher, UserValidator $validator)
     {
-        $this->userDataProvider = $userDataProvider;
+        $this->dbConnection = $dbConnection;
         $this->hasher = $hasher;
+        $this->validator = $validator;
     }
 
     /**
@@ -44,7 +50,11 @@ class UserManager implements UserManagerContract
      */
     public function getById(int $id): User
     {
-        return $this->userDataProvider->getByKey($id);
+        $user = (new User)
+            ->newQuery()
+            ->findOrFail($id);
+
+        return $user;
     }
 
     /**
@@ -52,9 +62,12 @@ class UserManager implements UserManagerContract
      */
     public function getByName(string $name): User
     {
-        return $this->userDataProvider
-            ->applyCriteria(new WhereName($name))
-            ->getFirst();
+        $user = (new User)
+            ->newQuery()
+            ->whereNameEquals($name)
+            ->firstOrFail();
+
+        return $user;
     }
 
     /**
@@ -62,9 +75,12 @@ class UserManager implements UserManagerContract
      */
     public function getByEmail(string $email): User
     {
-        return $this->userDataProvider
-            ->applyCriteria(new WhereEmail($email))
-            ->getFirst();
+        $user = (new User)
+            ->newQuery()
+            ->whereEmailEquals($email)
+            ->firstOrFail();
+
+        return $user;
     }
 
     /**
@@ -75,7 +91,7 @@ class UserManager implements UserManagerContract
         $user = $this->getByEmail($email);
 
         if (!$this->hasher->check($password, $user->password)) {
-            throw new DataProviderNotFoundException('Invalid user password.');
+            throw new ModelNotFoundException('Invalid user password.');
         }
 
         return $user;
@@ -84,23 +100,22 @@ class UserManager implements UserManagerContract
     /**
      * @inheritdoc
      */
-    public function generatePasswordHash(User $user, string $password): void
+    public function create(array $attributes): User
     {
-        $user->password = $this->hasher->make($password);
-    }
+        // Create a customer user by default.
+        if (!isset($attributes['role_id'])) {
+            $attributes['role_id'] = (new Role)->newQuery()->whereNameCustomer()->firstOrFail()->id;
+        }
 
-    /**
-     * @inheritdoc
-     */
-    public function createCustomer(array $attributes = []): User
-    {
-        $user = new User;
+        $attributes = $this->validator->validateForCreate($attributes);
 
-        $user->setCustomerRoleId();
+        $user = (new User)->fill($attributes);
 
-        $this->generatePasswordHash($user, $attributes['password'] ?? '');
+        $user->password = $this->hasher->make($attributes['password']);
 
-        $this->userDataProvider->save($user, $attributes);
+        $this->dbConnection->transaction(function () use ($user) {
+            $user->save();
+        });
 
         return $user;
     }
@@ -108,29 +123,19 @@ class UserManager implements UserManagerContract
     /**
      * @inheritdoc
      */
-    public function createAdministrator(array $attributes = []): User
+    public function save(User $user, array $attributes): void
     {
-        $user = new User;
+        $attributes = $this->validator->validateForSave($user, $attributes);
 
-        $user->setAdministratorRoleId();
+        $user->fill($attributes);
 
-        $this->generatePasswordHash($user, $attributes['password'] ?? '');
-
-        $this->userDataProvider->save($user, $attributes);
-
-        return $user;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function save(User $user, array $attributes = []): void
-    {
         if (isset($attributes['password'])) {
-            $this->generatePasswordHash($user, $attributes['password']);
+            $user->password = $this->hasher->make($attributes['password']);
         }
 
-        $this->userDataProvider->save($user, $attributes);
+        $this->dbConnection->transaction(function () use ($user) {
+            $user->save();
+        });
     }
 
     /**
@@ -138,6 +143,8 @@ class UserManager implements UserManagerContract
      */
     public function delete(User $user): void
     {
-        $this->userDataProvider->delete($user);
+        $this->dbConnection->transaction(function () use ($user) {
+            $user->delete();
+        });
     }
 }

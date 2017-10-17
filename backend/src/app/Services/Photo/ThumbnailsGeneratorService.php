@@ -38,7 +38,7 @@ class ThumbnailsGeneratorService implements ThumbnailsGeneratorServiceContract
     /**
      * @inheritdoc
      */
-    public function generateByFilePath(string $filePath): array
+    public function generate(string $filePath): array
     {
         $thumbnails = $this->thumbnailsGenerator->generateThumbnails(
             $this->storage->getDriver()->getAdapter()->getPathPrefix() . $filePath

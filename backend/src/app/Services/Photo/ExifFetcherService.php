@@ -31,7 +31,7 @@ class ExifFetcherService implements ExifFetcherServiceContract
     /**
      * @inheritdoc
      */
-    public function fetchFromUploadedFile(UploadedFile $file): array
+    public function fetch(UploadedFile $file): array
     {
         $data = $this->exifFetcher->fetch($file->getPathname());
 

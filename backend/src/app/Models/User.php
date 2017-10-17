@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\Builders\UserBuilder;
 use Carbon\Carbon;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Collection;
 use Laravel\Passport\HasApiTokens;
 
 /**
@@ -19,6 +21,7 @@ use Laravel\Passport\HasApiTokens;
  * @property Carbon created_at
  * @property Carbon updated_at
  * @property Role role
+ * @property Collection photos
  * @package App\Models
  */
 class User extends Authenticatable
@@ -29,6 +32,7 @@ class User extends Authenticatable
      * @inheritdoc
      */
     protected $fillable = [
+        'role_id',
         'name',
         'email',
     ];
@@ -41,47 +45,33 @@ class User extends Authenticatable
     ];
 
     /**
-     * Set customer role.
-     *
-     * @return $this
+     * @inheritdoc
      */
-    public function setCustomerRoleId()
+    protected static function boot()
     {
-        $this->role_id = Role::whereNameCustomer()->firstOrFail()->id;
+        parent::boot();
 
-        return $this;
+        static::deleting(function (User $user) {
+            optional($user->photos)->each(function (Photo $photo) {
+                $photo->delete();
+            });
+        });
     }
 
     /**
-     * Set administrator role.
-     *
-     * @return $this
+     * @inheritdoc
      */
-    public function setAdministratorRoleId()
+    public function newEloquentBuilder($query): UserBuilder
     {
-        $this->role_id = Role::whereNameAdministrator()->firstOrFail()->id;
-
-        return $this;
+        return new UserBuilder($query);
     }
 
     /**
-     * Check if user is 'Administrator'.
-     *
-     * @return bool
+     * @inheritdoc
      */
-    public function isAdministrator()
+    public function newQuery(): UserBuilder
     {
-        return $this->role ? $this->role->name === Role::NAME_ADMINISTRATOR : false;
-    }
-
-    /**
-     * Check if user is 'Customer'.
-     *
-     * @return bool
-     */
-    public function isCustomer()
-    {
-        return $this->role ? $this->role->name === Role::NAME_CUSTOMER : false;
+        return parent::newQuery();
     }
 
     /**
@@ -98,5 +88,21 @@ class User extends Authenticatable
     public function photos()
     {
         return $this->hasMany(Photo::class, 'created_by_user_id');
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAdministrator(): bool
+    {
+        return optional($this->role)->name === Role::NAME_ADMINISTRATOR;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCustomer(): bool
+    {
+        return optional($this->role)->name === Role::NAME_CUSTOMER;
     }
 }

@@ -55,7 +55,7 @@ export class ApiErrorHandler {
 
     protected onResponseHttpError(response: Response): void {
         const body = response.json();
-        const title = typeof (body) === 'string' ? body : 'Internal Server Error.';
+        const title = typeof (body.message) === 'string' ? body.message : 'Internal Server Error.';
         this.notices.error(title, `HTTP ${response.status} Error.`);
     }
 }

@@ -45,29 +45,12 @@ interface UserManager
     public function getByCredentials(string $email, string $password): User;
 
     /**
-     * Generate the password hash.
-     *
-     * @param User $user
-     * @param string $password
-     * @return mixed
-     */
-    public function generatePasswordHash(User $user, string $password): void;
-
-    /**
-     * Create the customer user.
+     * Create the user.
      *
      * @param array $attributes
      * @return User
      */
-    public function createCustomer(array $attributes = []): User;
-
-    /**
-     * Create the administrator user.
-     *
-     * @param array $attributes
-     * @return User
-     */
-    public function createAdministrator(array $attributes = []): User;
+    public function create(array $attributes): User;
 
     /**
      * Save the user.
@@ -76,7 +59,7 @@ interface UserManager
      * @param array $attributes
      * @return void
      */
-    public function save(User $user, array $attributes = []): void;
+    public function save(User $user, array $attributes): void;
 
     /**
      * Delete the user.

@@ -12,18 +12,10 @@ use Illuminate\Database\Eloquent\Builder;
 class ThumbnailBuilder extends Builder
 {
     /**
-     * Delete all detached models.
-     *
-     * @return int
+     * @return $this
      */
-    public function deleteAllDetached(): int
+    public function whereHasNoPhotos()
     {
-        return $this
-            ->getQuery()
-            ->getConnection()
-            ->table('thumbnails')
-            ->leftJoin('photo_thumbnails', 'photo_thumbnails.thumbnail_id', '=', 'thumbnails.id')
-            ->whereNull('photo_thumbnails.photo_id')
-            ->delete();
+        return $this->has('photos', '<', 1);
     }
 }

@@ -2,16 +2,23 @@
 
 namespace App\Exceptions;
 
-use Exception;
-use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Exception;
 
+/**
+ * Class Handler.
+ *
+ * @package App\Exceptions
+ */
 class Handler extends ExceptionHandler
 {
     /**
-     * A list of the exception types that should not be reported.
-     *
-     * @var array
+     * @inheritdoc
      */
     protected $dontReport = [
         \Illuminate\Auth\AuthenticationException::class,
@@ -20,52 +27,56 @@ class Handler extends ExceptionHandler
         \Illuminate\Database\Eloquent\ModelNotFoundException::class,
         \Illuminate\Session\TokenMismatchException::class,
         \Illuminate\Validation\ValidationException::class,
+        \League\OAuth2\Server\Exception\OAuthServerException::class,
     ];
 
     /**
-     * Report or log an exception.
-     *
-     * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
-     *
-     * @param  \Exception $exception
-     * @return void
+     * @inheritdoc
      */
-    public function report(Exception $exception)
+    protected function prepareException(Exception $e)
     {
-        parent::report($exception);
+        if ($e instanceof ModelNotFoundException) {
+            $e = $this->modifyModelNotFoundException($e);
+        } elseif ($e instanceof HttpException) {
+            $e = $this->modifyHttpException($e);
+        }
+
+        $e = parent::prepareException($e);
+
+        return $e;
     }
 
     /**
-     * Render an exception into an HTTP response.
+     * Convert exception message from "No query results for model [{$model}]" to "$model not found".
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Exception $exception
-     * @return \Illuminate\Http\Response
+     * @param ModelNotFoundException $e
+     * @return Exception
      */
-    public function render($request, Exception $exception)
+    private function modifyModelNotFoundException(ModelNotFoundException $e)
     {
-        // Determine if the request route belongs to the API V1 routes group.
-        if (starts_with($request->getRequestUri(), '/api/v1')) {
-            $apiV1ExceptionHandler = $this->container->make(\Api\V1\Exceptions\Handler::class);
-            return $apiV1ExceptionHandler->render($request, $exception);
+        preg_match('(\[(.*?)\])', $e->getMessage(), $matches);
+
+        $className = class_basename($matches[1] ?? null);
+
+        if ($className) {
+            $e = new NotFoundHttpException("$className not found", $e);
         }
 
-        return parent::render($request, $exception);
+        return $e;
     }
 
     /**
-     * Convert an authentication exception into an unauthenticated response.
+     * Convert empty exception message to valid HTTP status text.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Illuminate\Auth\AuthenticationException $exception
-     * @return \Illuminate\Http\Response
+     * @param HttpException $e
+     * @return HttpException
      */
-    protected function unauthenticated($request, AuthenticationException $exception)
+    private function modifyHttpException(HttpException $e): HttpException
     {
-        if ($request->expectsJson()) {
-            return response()->json(['error' => 'Unauthenticated.'], 401);
+        if (Str::length($e->getMessage()) === 0) {
+            $e = new HttpException($e->getStatusCode(), Response::$statusTexts[$e->getStatusCode()] ?? null, $e);
         }
 
-        return redirect()->guest('login');
+        return $e;
     }
 }

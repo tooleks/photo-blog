@@ -3,12 +3,15 @@
 namespace Api\V1\Http\Controllers;
 
 use Api\V1\Http\Requests\CreatePublishedPhotoRequest;
-use Api\V1\Http\Requests\FindPublishedPhotosRequest;
-use Api\V1\Http\Requests\UpdatePublishedPhotoRequest;
+use Api\V1\Http\Requests\PaginatedRequest;
+use Api\V1\Http\Resources\PaginatedResource;
+use Api\V1\Http\Resources\PhotoResource;
 use App\Managers\Photo\Contracts\PhotoManager;
 use App\Models\Photo;
-use Illuminate\Contracts\Cache\Factory as CacheManager;
-use Illuminate\Pagination\AbstractPaginator;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 
 /**
@@ -19,9 +22,9 @@ use Illuminate\Routing\Controller;
 class PublishedPhotosController extends Controller
 {
     /**
-     * @var CacheManager
+     * @var ResponseFactory
      */
-    private $cacheManager;
+    private $responseFactory;
 
     /**
      * @var PhotoManager
@@ -31,26 +34,33 @@ class PublishedPhotosController extends Controller
     /**
      * PublishedPhotosController constructor.
      *
-     * @param CacheManager $cacheManager
+     * @param ResponseFactory $responseFactory
      * @param PhotoManager $photoManager
      */
-    public function __construct(CacheManager $cacheManager, PhotoManager $photoManager)
+    public function __construct(ResponseFactory $responseFactory, PhotoManager $photoManager)
     {
-        $this->cacheManager = $cacheManager;
+        $this->responseFactory = $responseFactory;
         $this->photoManager = $photoManager;
     }
 
     /**
      * @apiVersion 1.0.0
-     * @api {post} /v1/published_photos Create
+     * @api {post} /v1/published_photos/:photo_id Create
      * @apiName Create
      * @apiGroup Published Photos
      * @apiHeader {String} Accept application/json
      * @apiHeader {String} Content-type application/json
-     * @apiParam {Integer{1..N}} photo_id Unique resource ID.
-     * @apiParam {Integer{1..65535}} description Description.
-     * @apiParam {Object[]} tags Tags collection.
-     * @apiParam {String{1..255}} tags.value Tag value.
+     * @apiParam {Integer{1..N}} :photo_id Unique resource ID.
+     * @apiParamExample {json} Request-Body-Example:
+     * {
+     *     "photo_id": 1,
+     *     "description": "The message description.",
+     *     "tags": [
+     *         {
+     *             "value": "sky"
+     *         }
+     *     ]
+     * }
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 201 Created
      * {
@@ -81,7 +91,7 @@ class PublishedPhotosController extends Controller
      *     ],
      *     "tags": [
      *         {
-     *             "value": "nature"
+     *             "value": "sky"
      *         }
      *     ]
      * }
@@ -91,26 +101,26 @@ class PublishedPhotosController extends Controller
      * Create a photo.
      *
      * @param CreatePublishedPhotoRequest $request
-     * @return Photo
+     * @return JsonResponse
      */
-    public function create(CreatePublishedPhotoRequest $request): Photo
+    public function create(CreatePublishedPhotoRequest $request): JsonResponse
     {
-        $photo = $this->photoManager->getNotPublishedById($request->get('photo_id'));
+        $photo = $this->photoManager->getUnpublishedById($request->get('photo_id'));
 
-        $this->photoManager->publish($photo, $request->all(), ['with' => ['tags']]);
+        $request->merge(['is_published' => true]);
 
-        $this->cacheManager->tags(['photos', 'tags'])->flush();
+        $this->photoManager->saveByAttributes($photo, $request->all());
 
-        return $photo;
+        return $this->responseFactory->json(new PhotoResource($photo), Response::HTTP_CREATED);
     }
 
     /**
      * @apiVersion 1.0.0
-     * @api {get} /v1/published_photos/:id Get
+     * @api {get} /v1/published_photos/:photo_id Get
      * @apiName Get
      * @apiGroup Published Photos
      * @apiHeader {String} Accept application/json
-     * @apiParam {Integer{1..N}} :id Unique resource ID.
+     * @apiParam {Integer{1..N}} :photo_id Unique resource ID.
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 200 OK
      * {
@@ -141,7 +151,7 @@ class PublishedPhotosController extends Controller
      *     ],
      *     "tags": [
      *         {
-     *             "value": "nature"
+     *             "value": "sky"
      *         }
      *     ]
      * }
@@ -151,11 +161,11 @@ class PublishedPhotosController extends Controller
      * Get a photo.
      *
      * @param Photo $photo
-     * @return Photo
+     * @return JsonResponse
      */
-    public function get(Photo $photo): Photo
+    public function get(Photo $photo): JsonResponse
     {
-        return $photo;
+        return $this->responseFactory->json(new PhotoResource($photo), Response::HTTP_OK);
     }
 
     /**
@@ -208,7 +218,7 @@ class PublishedPhotosController extends Controller
      *             ],
      *             "tags": [
      *                 {
-     *                     "value": "nature"
+     *                     "value": "sky"
      *                 }
      *             ]
      *         }
@@ -219,43 +229,39 @@ class PublishedPhotosController extends Controller
     /**
      * Find photos.
      *
-     * @param FindPublishedPhotosRequest $request
-     * @return AbstractPaginator
+     * @param PaginatedRequest $request
+     * @return JsonResponse
      */
-    public function find(FindPublishedPhotosRequest $request): AbstractPaginator
+    public function find(PaginatedRequest $request): JsonResponse
     {
-        $cacheKey = sprintf(
-            'photos:%s:%s:%s:%s',
-            $request->get('page'),
-            $request->get('per_page'),
-            $request->get('tag'),
-            $request->get('search_phrase')
+        $photos = $this->photoManager->paginateOverNewlyPublished(
+            $request->get('page', 1),
+            $request->get('per_page', 20),
+            $request->all()
         );
 
-        $paginator = $this->cacheManager
-            ->tags(['photos', 'tags'])
-            ->remember($cacheKey, config('cache.lifetime'), function () use ($request) {
-                return $this->photoManager
-                    ->paginateOverLastPublished($request->get('page', 1), $request->get('per_page', 20), $request->all())
-                    ->appends($request->query());
-            });
-
-        return $paginator;
+        return $this->responseFactory->json(new PaginatedResource($photos, PhotoResource::class), Response::HTTP_OK);
     }
 
     /**
      * @apiVersion 1.0.0
-     * @api {put} /v1/published_photos/:id Update
+     * @api {put} /v1/published_photos/:photo_id Update
      * @apiName Update
      * @apiGroup Published Photos
      * @apiHeader {String} Accept application/json
      * @apiHeader {String} Content-type application/json
-     * @apiParam {Integer{1..N}} :id Unique resource ID.
-     * @apiParam {Integer{1..65535}} description Description.
-     * @apiParam {Object[]} tags Tags collection.
-     * @apiParam {String{1..255}} tags.value Tag value.
+     * @apiParam {Integer{1..N}} :photo_id Unique resource ID.
+     * @apiParamExample {json} Request-Body-Example:
+     * {
+     *     "description": "The message description.",
+     *     "tags": [
+     *         {
+     *             "value": "sky"
+     *         }
+     *     ]
+     * }
      * @apiSuccessExample {json} Success-Response:
-     * HTTP/1.1 201 Created
+     * HTTP/1.1 200 OK
      * {
      *     "id": 1,
      *     "created_by_user_id" 1,
@@ -284,7 +290,7 @@ class PublishedPhotosController extends Controller
      *     ],
      *     "tags": [
      *         {
-     *             "value": "nature"
+     *             "value": "sky"
      *         }
      *     ]
      * }
@@ -293,26 +299,24 @@ class PublishedPhotosController extends Controller
     /**
      * Update a photo.
      *
-     * @param UpdatePublishedPhotoRequest $request
+     * @param Request $request
      * @param Photo $photo
-     * @return Photo
+     * @return JsonResponse
      */
-    public function update(UpdatePublishedPhotoRequest $request, Photo $photo): Photo
+    public function update(Request $request, Photo $photo): JsonResponse
     {
-        $this->photoManager->save($photo, $request->all(), ['with' => ['tags']]);
+        $this->photoManager->saveByAttributes($photo, $request->all());
 
-        $this->cacheManager->tags(['photos', 'tags'])->flush();
-
-        return $photo;
+        return $this->responseFactory->json(new PhotoResource($photo), Response::HTTP_OK);
     }
 
     /**
      * @apiVersion 1.0.0
-     * @api {delete} /v1/published_photos/:id Delete
+     * @api {delete} /v1/published_photos/:photo_id Delete
      * @apiName Delete
      * @apiGroup Published Photos
      * @apiHeader {String} Accept application/json
-     * @apiParam {Integer{1..N}} :id Unique resource ID.
+     * @apiParam {Integer{1..N}} :photo_id Unique resource ID.
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 204 No Content
      */
@@ -321,12 +325,12 @@ class PublishedPhotosController extends Controller
      * Delete a photo.
      *
      * @param Photo $photo
-     * @return void
+     * @return JsonResponse
      */
-    public function delete(Photo $photo): void
+    public function delete(Photo $photo): JsonResponse
     {
         $this->photoManager->delete($photo);
 
-        $this->cacheManager->tags(['photos', 'tags'])->flush();
+        return $this->responseFactory->json(null, Response::HTTP_NO_CONTENT);
     }
 }

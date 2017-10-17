@@ -30,9 +30,8 @@ class CreatePublishedPhotoRequest extends FormRequest
     {
         return [
             'photo_id' => ['required', 'integer'],
-            'description' => ['required', 'string', 'min:1', 'max:65535'],
-            'tags' => ['required', 'array'],
-            'tags.*.value' => ['required', 'string', 'min:1', 'max:255'],
+            'description' => ['required'],
+            'tags' => ['required'],
         ];
     }
 }

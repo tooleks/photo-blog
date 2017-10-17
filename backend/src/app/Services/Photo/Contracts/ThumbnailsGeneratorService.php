@@ -15,5 +15,5 @@ interface ThumbnailsGeneratorService
      * @param string $filePath
      * @return array
      */
-    public function generateByFilePath(string $filePath): array;
+    public function generate(string $filePath): array;
 }

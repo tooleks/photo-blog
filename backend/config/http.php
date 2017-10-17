@@ -4,22 +4,26 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | HTTP CORS configuration
+    | HTTP server configurations.
     |--------------------------------------------------------------------------
+    |
+    | @see https://wiki.swoole.com/wiki/page/274.html
     |
     */
 
-    'cors' => [
+    'server' => [
 
-        'headers' => [
+        'host' => env('HTTP_SERVER_HOST', '127.0.0.1'),
 
-            'access-control-allow-origin' => config('main.frontend.url'),
+        'port' => env('HTTP_SERVER_PORT', '1215'),
 
-            'access-control-allow-methods' => 'POST, GET, OPTIONS, PUT, DELETE',
+        'options' => [
 
-            'access-control-allow-headers' => 'accept, content-type, authorization, x-requested-with, x-xsrf-token, x-csrf-token',
+            'pid_file' => env('HTTP_SERVER_OPTIONS_PID_FILE', base_path('storage/logs/http.pid')),
 
-            'access-control-allow-credentials' => 'true',
+            'log_file' => env('HTTP_SERVER_OPTIONS_LOG_FILE', base_path('storage/logs/http.log')),
+
+            'daemonize' => env('HTTP_SERVER_OPTIONS_DAEMONIZE', 1),
 
         ],
 

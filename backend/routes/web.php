@@ -11,6 +11,8 @@
 |
 */
 
+Route::options('/{any}')->where('any', '.*');
+
 Route::get('/', function () {
     return redirect(config('main.frontend.url'), 301);
 });

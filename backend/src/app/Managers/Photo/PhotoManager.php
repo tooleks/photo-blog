@@ -2,28 +2,20 @@
 
 namespace App\Managers\Photo;
 
-use Carbon\Carbon;
-use Closure;
-use App\DataProviders\Photo\Criterias\HasSearchPhrase;
-use App\DataProviders\Photo\Criterias\HasTagWithValue;
-use App\DataProviders\Photo\Criterias\IsPublished;
-use App\DataProviders\Photo\Contracts\PhotoDataProvider;
-use App\DataProviders\Photo\Criterias\WhereCreatedByUserId;
+use function App\Util\str_unique;
 use App\Managers\Photo\Contracts\PhotoManager as PhotoManagerContract;
+use App\Models\Builders\PhotoBuilder;
 use App\Models\Photo;
+use App\Models\Tag;
+use App\Models\Thumbnail;
 use App\Services\Photo\Contracts\ExifFetcherService;
 use App\Services\Photo\Contracts\ThumbnailsGeneratorService;
-use App\Services\Trash\Contracts\TrashServiceException;
-use App\Services\Trash\Contracts\TrashService;
+use Carbon\Carbon;
+use Closure;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Pagination\AbstractPaginator;
+use Illuminate\Database\ConnectionInterface as DbConnection;
 use Illuminate\Support\Collection;
-use Lib\DataProvider\Eloquent\Criterias\SortByCreatedAt;
-use Lib\DataProvider\Eloquent\Criterias\Take;
-use Lib\DataProvider\Eloquent\Criterias\WhereCreatedAtGreaterThan;
-use Lib\DataProvider\Eloquent\Criterias\WhereUpdatedAtLessThan;
-use Throwable;
+use Illuminate\Validation\Factory as ValidatorFactory;
 use Tooleks\Php\AvgColorPicker\Contracts\AvgColorPicker;
 
 /**
@@ -34,19 +26,19 @@ use Tooleks\Php\AvgColorPicker\Contracts\AvgColorPicker;
 class PhotoManager implements PhotoManagerContract
 {
     /**
+     * @var ValidatorFactory
+     */
+    private $validatorFactory;
+
+    /**
+     * @var DbConnection
+     */
+    private $dbConnection;
+
+    /**
      * @var Storage
      */
     private $storage;
-
-    /**
-     * @var PhotoDataProvider
-     */
-    private $photoDataProvider;
-
-    /**
-     * @var TrashService
-     */
-    private $trashService;
 
     /**
      * @var ExifFetcherService
@@ -64,30 +56,38 @@ class PhotoManager implements PhotoManagerContract
     private $avgColorPicker;
 
     /**
+     * @var PhotoValidator
+     */
+    private $validator;
+
+    /**
      * PhotoManager constructor.
      *
+     * @param ValidatorFactory $validatorFactory
+     * @param DbConnection $dbConnection
      * @param Storage $storage
-     * @param PhotoDataProvider $photoDataProvider
-     * @param TrashService $trashService
      * @param ExifFetcherService $exifFetcher
      * @param ThumbnailsGeneratorService $thumbnailsGenerator
      * @param AvgColorPicker $avgColorPicker
+     * @param PhotoValidator $validator
      */
     public function __construct(
+        ValidatorFactory $validatorFactory,
+        DbConnection $dbConnection,
         Storage $storage,
-        PhotoDataProvider $photoDataProvider,
-        TrashService $trashService,
         ExifFetcherService $exifFetcher,
         ThumbnailsGeneratorService $thumbnailsGenerator,
-        AvgColorPicker $avgColorPicker
+        AvgColorPicker $avgColorPicker,
+        PhotoValidator $validator
     )
     {
+        $this->validatorFactory = $validatorFactory;
+        $this->dbConnection = $dbConnection;
         $this->storage = $storage;
-        $this->photoDataProvider = $photoDataProvider;
-        $this->trashService = $trashService;
         $this->exifFetcher = $exifFetcher;
         $this->thumbnailsGenerator = $thumbnailsGenerator;
         $this->avgColorPicker = $avgColorPicker;
+        $this->validator = $validator;
     }
 
     /**
@@ -95,114 +95,9 @@ class PhotoManager implements PhotoManagerContract
      */
     public function getById(int $id): Photo
     {
-        return $this->photoDataProvider->getByKey($id);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getPublishedById(int $id): Photo
-    {
-        return $this->photoDataProvider
-            ->applyCriteria(new IsPublished(true))
-            ->getByKey($id);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getNotPublishedById(int $id): Photo
-    {
-        return $this->photoDataProvider
-            ->applyCriteria(new IsPublished(false))
-            ->getByKey($id);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getLastPublished(int $take): Collection
-    {
-        return $this->photoDataProvider
-            ->applyCriteria(new IsPublished(true))
-            ->applyCriteria((new SortByCreatedAt)->desc())
-            ->applyCriteria(new Take($take))
-            ->get();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function paginateOverLastPublished(int $page, int $perPage, array $query = []): AbstractPaginator
-    {
-        return $this->photoDataProvider
-            ->applyCriteria(new IsPublished(true))
-            ->applyCriteriaWhen(isset($query['tag']), new HasTagWithValue($query['tag'] ?? null))
-            ->applyCriteriaWhen(isset($query['search_phrase']), new HasSearchPhrase($query['search_phrase'] ?? null))
-            ->applyCriteria((new SortByCreatedAt)->desc())
-            ->paginate($page, $perPage);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function each(Closure $callback): void
-    {
-        $this->photoDataProvider->each($callback);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function eachPublished(Closure $callback): void
-    {
-        $this->photoDataProvider
-            ->applyCriteria(new IsPublished(true))
-            ->each($callback);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function eachCreatedByUserId(Closure $callback, int $createdByUserId): void
-    {
-        $this->photoDataProvider
-            ->applyCriteria(new WhereCreatedByUserId($createdByUserId))
-            ->each($callback);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function eachNotPublishedOlderThanWeek(Closure $callback): void
-    {
-        $this->photoDataProvider
-            ->applyCriteria(new IsPublished(false))
-            ->applyCriteria(new WhereUpdatedAtLessThan((new Carbon)->addWeek('-1')))
-            ->each($callback);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function existsPublishedOlderThanWeek(): bool
-    {
-        return $this->photoDataProvider
-            ->applyCriteria(new IsPublished(true))
-            ->applyCriteria(new WhereCreatedAtGreaterThan((new Carbon)->addWeek('-1')))
-            ->exists();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function createNotPublishedWithFile(UploadedFile $file, int $createdByUserId = null, array $attributes = [], array $options = []): Photo
-    {
-        $photo = new Photo;
-
-        $photo->created_by_user_id = $createdByUserId;
-
-        $this->saveWithFile($photo, $file, $attributes, $options);
+        $photo = (new Photo)
+            ->newQuery()
+            ->findOrFail($id);
 
         return $photo;
     }
@@ -210,52 +105,231 @@ class PhotoManager implements PhotoManagerContract
     /**
      * @inheritdoc
      */
-    public function save(Photo $photo, array $attributes = [], array $options = []): void
+    public function getPublishedById(int $id): Photo
     {
-        $this->photoDataProvider->save($photo, $attributes, $options);
+        $photo = (new Photo)
+            ->newQuery()
+            ->wherePublished()
+            ->findOrFail($id);
+
+        return $photo;
     }
 
     /**
      * @inheritdoc
      */
-    public function publish(Photo $photo, array $attributes = [], array $options = []): void
+    public function getUnpublishedById(int $id): Photo
     {
-        if (!$photo->isPublished()) {
-            $photo->published_at = Carbon::now();
-        }
+        $photo = (new Photo)
+            ->newQuery()
+            ->whereUnpublished()
+            ->findOrFail($id);
 
-        $this->photoDataProvider->save($photo, $attributes, $options);
+        return $photo;
     }
 
     /**
      * @inheritdoc
      */
-    public function saveWithFile(Photo $photo, UploadedFile $file, array $attributes = [], array $options = []): void
+    public function getNewlyPublished(int $take = 10, int $skip = 0): Collection
     {
-        $oldDirectoryPath = dirname($photo->path);
-        $newDirectoryPath = sprintf('%s/%s', config('main.storage.path.photos'), str_random(10));
+        $photos = (new Photo)
+            ->newQuery()
+            ->wherePublished()
+            ->withExif()
+            ->withThumbnails()
+            ->withTags()
+            ->orderByCreatedAtDesc()
+            ->take($take)
+            ->skip($skip)
+            ->get();
 
-        try {
-            $photo->path = $this->storage->put($newDirectoryPath, $file);
-            $photo->avg_color = $this->avgColorPicker->getImageAvgHexByPath(
-                $this->storage->getDriver()->getAdapter()->getPathPrefix() . $photo->path
-            );
-            $attributes = array_merge($attributes, [
-                'exif' => $this->exifFetcher->fetchFromUploadedFile($file),
-                'thumbnails' => $this->thumbnailsGenerator->generateByFilePath($photo->path),
-            ]);
-            $options = array_merge($options, [
-                'with' => ['exif', 'thumbnails'],
-            ]);
-            $this->photoDataProvider->save($photo, $attributes, $options);
-            $this->trashService->moveIfExists($oldDirectoryPath);
-        } catch (TrashServiceException $e) {
-            throw $e;
-        } catch (Throwable $e) {
-            $this->trashService->restoreIfExists($oldDirectoryPath);
-            $this->trashService->moveIfExists($newDirectoryPath);
-            throw $e;
-        }
+        return $photos;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function paginateOverNewlyPublished(int $page, int $perPage, array $filters = [])
+    {
+        $query = (new Photo)
+            ->newQuery()
+            ->wherePublished()
+            ->withExif()
+            ->withThumbnails()
+            ->withTags()
+            ->when(isset($filters['tag']), function (PhotoBuilder $query) use ($filters) {
+                $query->whereTagValueEquals($filters['tag']);
+            })
+            ->when(isset($filters['search_phrase']), function (PhotoBuilder $query) use ($filters) {
+                $query->searchPhrase($filters['search_phrase']);
+            })
+            ->orderByCreatedAtDesc();
+
+        $paginator = $query->paginate($perPage, ['*'], 'page', $page)->appends($filters);
+
+        return $paginator;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function each(Closure $callback): void
+    {
+        (new Photo)
+            ->newQuery()
+            ->chunk(10, function (Collection $collection) use ($callback) {
+                $collection->each($callback);
+            });
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function eachPublished(Closure $callback): void
+    {
+        (new Photo)
+            ->newQuery()
+            ->wherePublished()
+            ->chunk(10, function (Collection $collection) use ($callback) {
+                $collection->each($callback);
+            });
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function eachUnpublishedGreaterThanWeekAgo(Closure $callback): void
+    {
+        (new Photo)
+            ->newQuery()
+            ->whereUnpublished()
+            ->whereUpdatedAtLessThan(Carbon::now()->addWeek('-1'))
+            ->chunk(10, function (Collection $collection) use ($callback) {
+                $collection->each($callback);
+            });
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function existsPublishedLessThanWeekAgo(): bool
+    {
+        return (new Photo)
+            ->newQuery()
+            ->wherePublished()
+            ->whereCreatedAtGreaterThan(Carbon::now()->addWeek('-1'))
+            ->exists();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function createByFile(array $attributes = []): Photo
+    {
+        $attributes = $this->validator->validateForCreateByFile($attributes);
+
+        $photo = (new Photo)->fill($attributes);
+
+        $this->saveByFile($photo, $attributes);
+
+        return $photo;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function saveByFile(Photo $photo, array $attributes = []): void
+    {
+        $attributes = $this->validator->validateForSaveByFile($attributes);
+
+        $attributes['avg_color'] = $this->avgColorPicker->getImageAvgHex($attributes['file']->getPathname());
+        $attributes['path'] = $this->storage->put(sprintf('photos/%s', str_unique(20)), $attributes['file']);
+        $attributes['exif'] = $this->exifFetcher->fetch($attributes['file']);
+        $attributes['thumbnails'] = $this->thumbnailsGenerator->generate($attributes['path']);
+
+        $photo->fill($attributes);
+
+        $this->dbConnection->transaction(function () use ($photo, $attributes) {
+            $photo->save();
+            if (isset($attributes['exif'])) {
+                $this->saveExif($photo, $attributes['exif']);
+            }
+            if (isset($attributes['thumbnails'])) {
+                $this->saveThumbnails($photo, $attributes['thumbnails']);
+            }
+        });
+    }
+
+    public function generateThumbnails(Photo $photo): void
+    {
+        $thumbnails = $this->thumbnailsGenerator->generate($photo->path);
+
+        $this->dbConnection->transaction(function () use ($photo, $thumbnails) {
+            $photo->save();
+            $this->saveThumbnails($photo, $thumbnails);
+        });
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function saveByAttributes(Photo $photo, array $attributes = []): void
+    {
+        $attributes = $this->validator->validateForSaveByAttributes($photo, $attributes);
+
+        $photo->fill($attributes);
+
+        $this->dbConnection->transaction(function () use ($photo, $attributes) {
+            $photo->save();
+            if (isset($attributes['tags'])) {
+                $this->saveTags($photo, $attributes['tags']);
+            }
+        });
+    }
+
+    /**
+     * @param Photo $photo
+     * @param array $attributes
+     * @return void
+     */
+    private function saveExif(Photo $photo, array $attributes): void
+    {
+        $photo->exif()->delete();
+
+        $photo->exif = $photo->exif()->create($attributes);
+    }
+
+    /**
+     * @param Photo $photo
+     * @param array $records
+     * @return void
+     */
+    private function saveThumbnails(Photo $photo, array $records): void
+    {
+        $photo->thumbnails()->detach();
+
+        $photo->thumbnails = collect($records)->map(function (array $attributes) use ($photo) {
+            return $photo->thumbnails()->create($attributes);
+        });
+
+        (new Thumbnail)->newQuery()->whereHasNoPhotos()->delete();
+    }
+
+    /**
+     * @param Photo $photo
+     * @param array $records
+     * @return void
+     */
+    private function saveTags(Photo $photo, array $records): void
+    {
+        $photo->tags = collect($records)->map(function (array $attributes) {
+            return (new Tag)->newQuery()->firstOrCreate(['value' => $attributes['value']]);
+        });
+
+        $photo->tags()->sync($photo->tags->pluck('id'));
+
+        (new Tag)->newQuery()->whereHasNoPhotos()->delete();
     }
 
     /**
@@ -263,16 +337,13 @@ class PhotoManager implements PhotoManagerContract
      */
     public function delete(Photo $photo): void
     {
-        $directoryPath = dirname($photo->path);
-
-        try {
-            $this->trashService->moveIfExists($directoryPath);
-            $this->photoDataProvider->delete($photo);
-        } catch (TrashServiceException $e) {
-            throw $e;
-        } catch (Throwable $e) {
-            $this->trashService->restoreIfExists($directoryPath);
-            throw $e;
-        }
+        $this->dbConnection->transaction(function () use ($photo) {
+            $photo->delete();
+            (new Tag)->newQuery()->whereHasNoPhotos()->delete();
+            (new Thumbnail)->newQuery()->whereHasNoPhotos()->delete();
+            if ($photo->directory_path && $this->storage->exists($photo->directory_path)) {
+                $this->storage->deleteDirectory($photo->directory_path);
+            }
+        });
     }
 }

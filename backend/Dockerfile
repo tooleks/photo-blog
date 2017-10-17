@@ -44,6 +44,10 @@ RUN docker-php-ext-install -j$(nproc) mcrypt \
  && docker-php-ext-install mysqli pdo pdo_mysql \
  && docker-php-ext-install zip
 
+# Install swoole.
+RUN yes | pecl install swoole \
+ && echo "extension=$(find /usr/local/lib/php/extensions/ -name swoole.so)" > /usr/local/etc/php/conf.d/swoole.ini
+
 # Install composer.
 RUN curl -sS https://getcomposer.org/installer | php \
  && mv composer.phar /usr/local/bin/composer
@@ -58,9 +62,7 @@ RUN ["/bin/bash", "-c", "source $NVM_DIR/nvm.sh \
                       && nvm install $NODE_VERSION \
                       && nvm alias default $NODE_VERSION \
                       && nvm use default \
-                      && npm install -g \
-                         yarn \
-                         apidoc"]
+                      && npm install -g yarn apidoc"]
 
 ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
 ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH

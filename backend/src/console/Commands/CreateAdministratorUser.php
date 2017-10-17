@@ -3,6 +3,7 @@
 namespace Console\Commands;
 
 use App\Managers\User\Contracts\UserManager;
+use App\Models\Role;
 use Illuminate\Console\Command;
 
 /**
@@ -50,10 +51,11 @@ class CreateAdministratorUser extends Command
      */
     public function handle(): void
     {
-        $name = $this->ask('Enter user\'s name:');
-        $email = $this->ask('Enter user\'s email:');
-        $password = $this->ask('Enter user\'s password:');
-
-        $this->userManager->createAdministrator(compact('name', 'email', 'password'));
+        $this->userManager->create([
+            'role_id' => (new Role)->newQuery()->whereNameAdministrator()->firstOrFail()->id,
+            'name' => $this->ask('Enter user\'s name:'),
+            'email' => $this->ask('Enter user\'s email:'),
+            'password' => $this->ask('Enter user\'s password:'),
+        ]);
     }
 }

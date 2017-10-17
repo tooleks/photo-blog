@@ -11,10 +11,6 @@ return [
 
     'storage' => [
         'url' => env('STORAGE_URL'),
-        'path' => [
-            'trash' => 'trash',
-            'photos' => 'photos',
-        ],
     ],
 
     /*

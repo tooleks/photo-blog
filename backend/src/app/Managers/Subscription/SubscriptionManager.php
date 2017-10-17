@@ -2,12 +2,12 @@
 
 namespace App\Managers\Subscription;
 
+use function App\Util\str_unique;
 use Closure;
-use App\DataProviders\Subscription\Contracts\SubscriptionDataProvider;
-use App\DataProviders\Subscription\Criterias\WhereEmailIn;
-use App\DataProviders\Subscription\Criterias\WhereToken;
 use App\Managers\Subscription\Contracts\SubscriptionManager as SubscriptionManagerContract;
 use App\Models\Subscription;
+use Illuminate\Database\ConnectionInterface as DbConnection;
+use Illuminate\Support\Collection;
 
 /**
  * Class SubscriptionManager.
@@ -17,18 +17,25 @@ use App\Models\Subscription;
 class SubscriptionManager implements SubscriptionManagerContract
 {
     /**
-     * @var SubscriptionDataProvider
+     * @var DbConnection
      */
-    private $subscriptionDataProvider;
+    private $dbConnection;
+
+    /**
+     * @var SubscriptionValidator
+     */
+    private $validator;
 
     /**
      * SubscriptionManager constructor.
      *
-     * @param SubscriptionDataProvider $subscriptionDataProvider
+     * @param DbConnection $dbConnection
+     * @param SubscriptionValidator $validator
      */
-    public function __construct(SubscriptionDataProvider $subscriptionDataProvider)
+    public function __construct(DbConnection $dbConnection, SubscriptionValidator $validator)
     {
-        $this->subscriptionDataProvider = $subscriptionDataProvider;
+        $this->dbConnection = $dbConnection;
+        $this->validator = $validator;
     }
 
     /**
@@ -36,9 +43,12 @@ class SubscriptionManager implements SubscriptionManagerContract
      */
     public function getByToken(string $token): Subscription
     {
-        return $this->subscriptionDataProvider
-            ->applyCriteria(new WhereToken($token))
-            ->getFirst();
+        $subscription = (new Subscription)
+            ->newQuery()
+            ->whereTokenEquals($token)
+            ->firstOrFail();
+
+        return $subscription;
     }
 
     /**
@@ -46,21 +56,26 @@ class SubscriptionManager implements SubscriptionManagerContract
      */
     public function eachFilteredByEmails(Closure $callback, array $emails): void
     {
-        $this->subscriptionDataProvider
-            ->applyCriteriaWhen((bool) $emails, new WhereEmailIn($emails))
-            ->each($closure);
+        (new Subscription)
+            ->newQuery()
+            ->whereEmailIn($emails)
+            ->chunk(10, function (Collection $collection) use ($callback) {
+                $collection->each($callback);
+            });
     }
 
     /**
      * @inheritdoc
      */
-    public function generateByEmail(string $email): Subscription
+    public function create(array $attributes): Subscription
     {
-        $subscription = new Subscription(compact('email'));
+        $attributes = $this->validator->validateForCreate($attributes);
 
-        $subscription->token = str_random(64);
+        $subscription = (new Subscription)->fill($attributes);
 
-        $this->subscriptionDataProvider->save($subscription);
+        $subscription->token = str_unique(64);
+
+        $subscription->save();
 
         return $subscription;
     }
@@ -70,6 +85,6 @@ class SubscriptionManager implements SubscriptionManagerContract
      */
     public function delete(Subscription $subscription): void
     {
-        $this->subscriptionDataProvider->delete($subscription);
+        $subscription->delete();
     }
 }

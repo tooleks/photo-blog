@@ -40,6 +40,32 @@ docker exec -it photo-blog-backend bash -c "chown -R www-data:www-data storage"
 
 Open the [http://localhost:8080/signin](http://localhost:8080/signin) link in a browser to signin with a newly created administrator account.
 
+### Exposed URI's
+
+* [http://localhost:8080](http://localhost:8080) - The Angular application.
+* [http://localhost:8081](http://localhost:8081) - The Laravel application.
+* [http://localhost:8083](http://localhost:8083) - The Laravel application REST API documentation.
+
+### Useful Commands
+
+Generate the Laravel application's REST API documentation.
+
+```bash
+docker exec -it photo-blog-backend bash -c "php artisan generate:rest_api_documentation"
+```
+
+Fetch the Laravel application's log.
+
+```bash
+docker exec -it photo-blog-backend bash -c "tail -n 1000 -f ./storage/logs/laravel.log"
+```
+
+Fetch the MySQL log.
+
+```bash
+docker exec -it photo-blog-mysql bash -c "tail -n 1000 -f /var/log/mysql/general.log"
+```
+
 ### Tests
 
 Run the following command to execute the backend application tests.

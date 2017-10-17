@@ -14,7 +14,7 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middleware = [
-        \Api\V1\Http\Middleware\AddCorsHeaders::class,
+        \App\Http\Middleware\CorsHeaders::class,
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
@@ -39,7 +39,6 @@ class Kernel extends HttpKernel
 
         'api/v1' => [
             \Api\V1\Http\Middleware\CookieOAuthAuthorizer::class,
-            \Api\V1\Http\Middleware\CookieOAuthTokenRefresher::class,
             'json_api',
             'bindings',
         ],
@@ -60,6 +59,5 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'json_api' => \Api\V1\Http\Middleware\JsonApiResponses::class,
-        'present' => \Api\V1\Http\Middleware\PresentResponses::class,
     ];
 }

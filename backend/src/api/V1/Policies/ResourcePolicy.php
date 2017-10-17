@@ -20,12 +20,10 @@ class ResourcePolicy
      */
     public function create(User $authUser, string $resourceClass)
     {
-        // If authenticated user is administrator allow access to resource.
         if ($authUser->isAdministrator()) {
             return true;
         }
 
-        // Otherwise deny access to resource.
         return false;
     }
 
@@ -38,18 +36,7 @@ class ResourcePolicy
      */
     public function get(User $authUser, $resource)
     {
-        // If authenticated user is administrator allow access to resource.
-        if ($authUser->isAdministrator()) {
-            return true;
-        }
-
-        // If authenticated user is resource owner allow access to resource.
-        if ($authUser->id == $resource->user_id) {
-            return true;
-        }
-
-        // Otherwise deny access to resource.
-        return false;
+        return $this->hasAccessToResource($authUser, $resource);
     }
 
     /**
@@ -61,18 +48,7 @@ class ResourcePolicy
      */
     public function update(User $authUser, $resource)
     {
-        // If authenticated user is administrator allow access to resource.
-        if ($authUser->isAdministrator()) {
-            return true;
-        }
-
-        // If authenticated user is resource owner allow access to resource.
-        if ($authUser->id == $resource->user_id) {
-            return true;
-        }
-
-        // Otherwise deny access to resource.
-        return false;
+        return $this->hasAccessToResource($authUser, $resource);
     }
 
     /**
@@ -84,17 +60,30 @@ class ResourcePolicy
      */
     public function delete(User $authUser, $resource)
     {
-        // If authenticated user is administrator allow access to resource.
+        return $this->hasAccessToResource($authUser, $resource);
+    }
+
+    /**
+     * Determine if an authenticated user has access to a resource.
+     *
+     * @param User $authUser
+     * @param $resource
+     * @return bool
+     */
+    private function hasAccessToResource(User $authUser, $resource): bool
+    {
         if ($authUser->isAdministrator()) {
             return true;
         }
 
-        // If authenticated user is resource owner allow access to resource.
-        if ($authUser->id == $resource->user_id) {
+        if ($resource instanceof User && $authUser->id === optional($resource)->id) {
             return true;
         }
 
-        // Otherwise deny access to resource.
+        if ($authUser->id === optional($resource)->user_id) {
+            return true;
+        }
+
         return false;
     }
 }
