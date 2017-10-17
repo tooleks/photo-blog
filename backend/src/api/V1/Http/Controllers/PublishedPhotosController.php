@@ -8,6 +8,7 @@ use Api\V1\Http\Resources\PaginatedResource;
 use Api\V1\Http\Resources\PhotoResource;
 use App\Managers\Photo\Contracts\PhotoManager;
 use App\Models\Photo;
+use Illuminate\Contracts\Cache\Factory as CacheManager;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -32,15 +33,22 @@ class PublishedPhotosController extends Controller
     private $photoManager;
 
     /**
+     * @var CacheManager
+     */
+    private $cacheManager;
+
+    /**
      * PublishedPhotosController constructor.
      *
      * @param ResponseFactory $responseFactory
      * @param PhotoManager $photoManager
+     * @param CacheManager $cacheManager
      */
-    public function __construct(ResponseFactory $responseFactory, PhotoManager $photoManager)
+    public function __construct(ResponseFactory $responseFactory, PhotoManager $photoManager, CacheManager $cacheManager)
     {
         $this->responseFactory = $responseFactory;
         $this->photoManager = $photoManager;
+        $this->cacheManager = $cacheManager;
     }
 
     /**
@@ -110,6 +118,8 @@ class PublishedPhotosController extends Controller
         $request->merge(['is_published' => true]);
 
         $this->photoManager->saveByAttributes($photo, $request->all());
+
+        $this->cacheManager->tags(['photos', 'tags'])->flush();
 
         return $this->responseFactory->json(new PhotoResource($photo), Response::HTTP_CREATED);
     }
@@ -307,6 +317,8 @@ class PublishedPhotosController extends Controller
     {
         $this->photoManager->saveByAttributes($photo, $request->all());
 
+        $this->cacheManager->tags(['photos', 'tags'])->flush();
+
         return $this->responseFactory->json(new PhotoResource($photo), Response::HTTP_OK);
     }
 
@@ -330,6 +342,8 @@ class PublishedPhotosController extends Controller
     public function delete(Photo $photo): JsonResponse
     {
         $this->photoManager->delete($photo);
+
+        $this->cacheManager->tags(['photos', 'tags'])->flush();
 
         return $this->responseFactory->json(null, Response::HTTP_NO_CONTENT);
     }
