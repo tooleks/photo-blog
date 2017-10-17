@@ -313,7 +313,7 @@ class PhotoManager implements PhotoManagerContract
             return $photo->thumbnails()->create($attributes);
         });
 
-        (new Thumbnail)->newQuery()->whereHasNoPhotos()->delete();
+//        (new Thumbnail)->newQuery()->whereHasNoPhotos()->delete();
     }
 
     /**
@@ -329,7 +329,7 @@ class PhotoManager implements PhotoManagerContract
 
         $photo->tags()->sync($photo->tags->pluck('id'));
 
-        (new Tag)->newQuery()->whereHasNoPhotos()->delete();
+//        (new Tag)->newQuery()->whereHasNoPhotos()->delete();
     }
 
     /**
