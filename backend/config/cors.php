@@ -11,7 +11,7 @@ return [
 
     'headers' => [
 
-        'access-control-allow-origin' => config('main.frontend.url'),
+        'access-control-allow-origin' => env('FRONTEND_APP_URL'),
 
         'access-control-allow-methods' => 'POST, GET, OPTIONS, PUT, DELETE',
 
