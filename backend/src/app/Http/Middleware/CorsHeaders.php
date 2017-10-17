@@ -48,7 +48,7 @@ class CorsHeaders
      */
     public function handle($request, Closure $next)
     {
-        $this->assertOriginHeader($request);
+//        $this->assertOriginHeader($request);
 
         $response = $request->getMethod() === 'OPTIONS'
             ? $this->responseFactory->make()
