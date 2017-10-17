@@ -78,6 +78,6 @@ class Exif extends Model
             $parts->push(new Carbon($takenAt));
         }
 
-        return $parts->implode(' / ');
+        return $parts->implode(', ');
     }
 }
