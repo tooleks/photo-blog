@@ -25,6 +25,8 @@ return [
 
             'daemonize' => env('HTTP_SERVER_OPTIONS_DAEMONIZE', 0),
 
+            'package_max_length' => 20 * 1024 * 1024, // 20 MB
+
         ],
 
     ],
