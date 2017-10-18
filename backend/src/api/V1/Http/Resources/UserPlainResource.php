@@ -4,7 +4,7 @@ namespace Api\V1\Http\Resources;
 
 use function App\Util\html_purify;
 use App\Models\User;
-use App\Util\Normalizer;
+use App\Util\CastsValues;
 use Illuminate\Http\Resources\Json\Resource;
 
 /**
@@ -14,7 +14,7 @@ use Illuminate\Http\Resources\Json\Resource;
  */
 class UserPlainResource extends Resource
 {
-    use Normalizer;
+    use CastsValues;
 
     /**
      * @var User
@@ -29,14 +29,14 @@ class UserPlainResource extends Resource
         $isVisibleUserContacts = optional($request->user())->can('get-user-contacts', $this->resource);
 
         return [
-            'id' => $this->normalizeInt(html_purify($this->resource->id)),
-            'name' => $this->normalizeString(html_purify($this->resource->name)),
+            'id' => $this->toIntOrNull(html_purify($this->resource->id)),
+            'name' => $this->toStringOrNull(html_purify($this->resource->name)),
             'email' => $this->when($isVisibleUserContacts, function () {
-                return $this->normalizeString(html_purify($this->resource->email));
+                return $this->toStringOrNull(html_purify($this->resource->email));
             }),
-            'role' => $this->normalizeString(html_purify($this->resource->role->name)),
-            'created_at' => $this->normalizeString(html_purify($this->resource->created_at)),
-            'updated_at' => $this->normalizeString(html_purify($this->resource->updated_at)),
+            'role' => $this->toStringOrNull(html_purify($this->resource->role->name)),
+            'created_at' => $this->toStringOrNull(html_purify($this->resource->created_at)),
+            'updated_at' => $this->toStringOrNull(html_purify($this->resource->updated_at)),
         ];
     }
 }
