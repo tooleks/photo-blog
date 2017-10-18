@@ -2,6 +2,9 @@
 
 namespace App\Services\SiteMap;
 
+use function App\Util\url_frontend;
+use function App\Util\url_frontend_photo;
+use function App\Util\url_frontend_tag;
 use App\Managers\Photo\Contracts\PhotoManager;
 use App\Managers\Tag\Contracts\TagManager;
 use App\Models\Photo;
@@ -51,42 +54,56 @@ class SiteMapBuilderService implements SiteMapBuilderServiceContract
      */
     public function build(): Builder
     {
-        $items[] = (new Item)
-            ->setLocation(config('main.frontend.url'))
-            ->setChangeFrequency('daily')
-            ->setPriority('1');
+        $items = collect();
 
-        $items[] = (new Item)
-            ->setLocation(sprintf(config('format.frontend.url.path'), 'about-me'))
-            ->setChangeFrequency('weekly')
-            ->setPriority('0.6');
+        $items->push(
+            (new Item)
+                ->setLocation(url_frontend())
+                ->setChangeFrequency('daily')
+                ->setPriority('1')
+        );
 
-        $items[] = (new Item)
-            ->setLocation(sprintf(config('format.frontend.url.path'), 'contact-me'))
-            ->setChangeFrequency('weekly')
-            ->setPriority('0.6');
-
-        $items[] = (new Item)
-            ->setLocation(sprintf(config('format.frontend.url.path'), 'subscription'))
-            ->setChangeFrequency('weekly')
-            ->setPriority('0.5');
-
-        $this->photoManager->eachPublished(function (Photo $photo) use (&$items) {
-            $items[] = (new Item)
-                ->setLocation(sprintf(config('format.frontend.url.photo_page'), $photo->id))
-                ->setLastModified($photo->updated_at->toAtomString())
+        $items->push(
+            (new Item)
+                ->setLocation(url_frontend('/about-me'))
                 ->setChangeFrequency('weekly')
-                ->setPriority('0.8');
+                ->setPriority('0.6')
+        );
+
+        $items->push(
+            (new Item)
+                ->setLocation(url_frontend('/contact-me'))
+                ->setChangeFrequency('weekly')
+                ->setPriority('0.6')
+        );
+
+        $items->push(
+            (new Item)
+                ->setLocation(url_frontend('/subscription'))
+                ->setChangeFrequency('weekly')
+                ->setPriority('0.5')
+        );
+
+        $this->photoManager->eachPublished(function (Photo $photo) use ($items) {
+            $items->push(
+                (new Item)
+                    ->setLocation(url_frontend_photo($photo->id))
+                    ->setLastModified($photo->updated_at->toAtomString())
+                    ->setChangeFrequency('weekly')
+                    ->setPriority('0.8')
+            );
         });
 
-        $this->tagManager->each(function (Tag $tag) use (&$items) {
-            $items[] = (new Item)
-                    ->setLocation(sprintf(config('format.frontend.url.tag_page'), $tag->value))
+        $this->tagManager->each(function (Tag $tag) use ($items) {
+            $items->push(
+                (new Item)
+                    ->setLocation(url_frontend_tag($tag->value))
                     ->setChangeFrequency('daily')
-                    ->setPriority('0.7');
+                    ->setPriority('0.7')
+            );
         });
 
-        $this->siteMapBuilder->setItems($items);
+        $this->siteMapBuilder->setItems($items->toArray());
 
         return $this->siteMapBuilder;
     }

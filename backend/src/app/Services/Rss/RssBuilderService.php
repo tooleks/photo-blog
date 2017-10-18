@@ -2,9 +2,12 @@
 
 namespace App\Services\Rss;
 
+use function App\Util\url_frontend_photo;
+use function App\Util\url_storage;
 use App\Managers\Photo\Contracts\PhotoManager;
-use App\Services\Rss\Presenters\PhotoPresenter;
+use App\Models\Photo;
 use App\Services\Rss\Contracts\RssBuilderService as RssBuilderServiceContract;
+use Illuminate\Contracts\Filesystem\Factory as Storage;
 use Lib\Rss\Contracts\Builder;
 use Lib\Rss\Category;
 use Lib\Rss\Channel;
@@ -19,6 +22,11 @@ use Lib\Rss\Enclosure;
 class RssBuilderService implements RssBuilderServiceContract
 {
     /**
+     * @var Storage
+     */
+    private $storage;
+
+    /**
      * @var Builder
      */
     private $rssBuilder;
@@ -31,11 +39,13 @@ class RssBuilderService implements RssBuilderServiceContract
     /**
      * RssBuilderService constructor.
      *
+     * @param Storage $storage
      * @param Builder $rssBuilder
      * @param PhotoManager $photoManager
      */
-    public function __construct(Builder $rssBuilder, PhotoManager $photoManager)
+    public function __construct(Storage $storage, Builder $rssBuilder, PhotoManager $photoManager)
     {
+        $this->storage = $storage;
         $this->rssBuilder = $rssBuilder;
         $this->photoManager = $photoManager;
     }
@@ -61,25 +71,30 @@ class RssBuilderService implements RssBuilderServiceContract
     private function provideItems(): array
     {
         return $this->photoManager
-            ->getLastPublished(50)
-            ->present(PhotoPresenter::class)
-            ->map(function (PhotoPresenter $photo) {
+            ->getNewlyPublished(50)
+            ->map(function (Photo $photo) {
+                $url = url_frontend_photo($photo->id);
+                $enclosureUrl = url_storage($this->storage->url($photo->thumbnails->first()->path));
+                $enclosureSize = $this->storage->size($photo->thumbnails->first()->path);
                 return (new Item)
-                    ->setTitle($photo->title)
-                    ->setDescription($photo->description)
-                    ->setLink($photo->url)
-                    ->setGuid($photo->url)
-                    ->setPubDate($photo->published_date)
+                    ->setTitle($photo->description)
+                    ->setDescription($photo->exif->toString())
+                    ->setLink($url)
+                    ->setGuid($url)
+                    ->setPubDate($photo->created_at)
                     ->setEnclosure(
                         (new Enclosure)
-                            ->setUrl($photo->file_url)
+                            ->setUrl($enclosureUrl)
                             ->setType('image/jpeg')
-                            ->setLength($photo->file_size)
+                            ->setLength($enclosureSize)
                     )
                     ->setCategories(
-                        array_map(function ($value) {
-                            return (new Category)->setValue($value);
-                        }, $photo->categories)
+                        $photo->tags
+                            ->pluck('value')
+                            ->map(function (string $value) {
+                                return (new Category)->setValue($value);
+                            })
+                            ->toArray()
                     );
             })
             ->toArray();

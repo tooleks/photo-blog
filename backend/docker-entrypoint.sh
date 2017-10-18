@@ -3,6 +3,8 @@
 set -e
 
 if [ "$REBUILD_ON_STARTUP" == "1" ]; then
+    chown -R www-data:www-data ./storage/
+    chown -R www-data:www-data ./bootstrap/cache/
     composer install --no-interaction
     composer dump-autoload
     php artisan key:generate

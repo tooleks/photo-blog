@@ -2,9 +2,13 @@
 
 namespace Api\V1\Http\Controllers;
 
-use Api\V1\Http\Requests\CreateSubscriptionRequest;
+use Api\V1\Http\Resources\SubscriptionPlainResource;
 use App\Managers\Subscription\Contracts\SubscriptionManager;
 use App\Models\Subscription;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 
 /**
@@ -15,6 +19,11 @@ use Illuminate\Routing\Controller;
 class SubscriptionsController extends Controller
 {
     /**
+     * @var ResponseFactory
+     */
+    private $responseFactory;
+
+    /**
      * @var SubscriptionManager
      */
     private $subscriptionManager;
@@ -22,10 +31,12 @@ class SubscriptionsController extends Controller
     /**
      * SubscriptionController constructor.
      *
+     * @param ResponseFactory $responseFactory
      * @param SubscriptionManager $subscriptionManager
      */
-    public function __construct(SubscriptionManager $subscriptionManager)
+    public function __construct(ResponseFactory $responseFactory, SubscriptionManager $subscriptionManager)
     {
+        $this->responseFactory = $responseFactory;
         $this->subscriptionManager = $subscriptionManager;
     }
 
@@ -36,7 +47,10 @@ class SubscriptionsController extends Controller
      * @apiGroup Subscriptions
      * @apiHeader {String} Accept application/json
      * @apiHeader {String} Content-Type application/json
-     * @apiParam {String{1..255}} email Subscriber email address.
+     * @apiParamExample {json} Request-Body-Example:
+     * {
+     *     "email": "username@domain.name"
+     * }
      * @apiSuccessExample {json} Success-Response:
      * HTTP/1.1 201 Created
      * {
@@ -48,14 +62,14 @@ class SubscriptionsController extends Controller
     /**
      * Create a subscription.
      *
-     * @param CreateSubscriptionRequest $request
-     * @return Subscription
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function create(CreateSubscriptionRequest $request): Subscription
+    public function create(Request $request): JsonResponse
     {
-        $subscription = $this->subscriptionManager->generateByEmail($request->get('email'));
+        $subscription = $this->subscriptionManager->create($request->all());
 
-        return $subscription;
+        return $this->responseFactory->json(new SubscriptionPlainResource($subscription), Response::HTTP_CREATED);
     }
 
     /**
@@ -73,10 +87,12 @@ class SubscriptionsController extends Controller
      * Delete a subscription.
      *
      * @param Subscription $subscription
-     * @return void
+     * @return JsonResponse
      */
-    public function delete(Subscription $subscription): void
+    public function delete(Subscription $subscription): JsonResponse
     {
         $this->subscriptionManager->delete($subscription);
+
+        return $this->responseFactory->json(null, Response::HTTP_NO_CONTENT);
     }
 }

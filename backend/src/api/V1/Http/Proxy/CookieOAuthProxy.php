@@ -25,6 +25,11 @@ class CookieOAuthProxy implements OAuthProxyContract
     private $app;
 
     /**
+     * @var Request
+     */
+    private $request;
+
+    /**
      * @var ResponseFactory
      */
     private $responseFactory;
@@ -43,13 +48,15 @@ class CookieOAuthProxy implements OAuthProxyContract
      * OAuthCookieAuthorizationProxy constructor.
      *
      * @param Application $app
+     * @param Request $request
      * @param ResponseFactory $responseFactory
      * @param CookieFactory $cookieBakery
      * @param OAuthClientRepository $oAuthClientRepository
      */
-    public function __construct(Application $app, ResponseFactory $responseFactory, CookieFactory $cookieBakery, OAuthClientRepository $oAuthClientRepository)
+    public function __construct(Application $app, Request $request, ResponseFactory $responseFactory, CookieFactory $cookieBakery, OAuthClientRepository $oAuthClientRepository)
     {
         $this->app = $app;
+        $this->request = $request;
         $this->responseFactory = $responseFactory;
         $this->cookieBakery = $cookieBakery;
         $this->oAuthClientRepository = $oAuthClientRepository;
@@ -58,7 +65,7 @@ class CookieOAuthProxy implements OAuthProxyContract
     /**
      * @inheritdoc
      */
-    public function requestTokenByCredentials(?string $clientId, ?string $username, ?string $password)
+    public function requestTokenByCredentials(string $clientId, string $username, string $password)
     {
         $proxy = Request::create('oauth/token', 'POST', [
             'grant_type' => 'password',
@@ -106,7 +113,7 @@ class CookieOAuthProxy implements OAuthProxyContract
     {
         $responseContent = $this->decodeResponseContent($response->getContent());
 
-        $proxyResponse = $this->responseFactory->json((object) []);
+        $proxyResponse = $this->responseFactory->json(null, Response::HTTP_NO_CONTENT);
 
         foreach ($responseContent as $name => $value) {
             $proxyResponse->headers->setCookie(
@@ -116,7 +123,7 @@ class CookieOAuthProxy implements OAuthProxyContract
                     60 * 24 * 30, // Thirty days in minutes.
                     null,
                     null,
-                    isset($_SERVER['HTTPS']), // TODO: Fix dependency from the global $_SERVER variable.
+                    $this->request->isSecure(),
                     true
                 )
             );

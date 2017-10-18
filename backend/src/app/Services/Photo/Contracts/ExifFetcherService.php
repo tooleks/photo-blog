@@ -17,5 +17,5 @@ interface ExifFetcherService
      * @param UploadedFile $file
      * @return array
      */
-    public function fetchFromUploadedFile(UploadedFile $file): array;
+    public function fetch(UploadedFile $file): array;
 }

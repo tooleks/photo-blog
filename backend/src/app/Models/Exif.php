@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use function App\Util\fraction_normalize;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -17,14 +19,14 @@ class Exif extends Model
     /**
      * @inheritdoc
      */
-    protected $attributes = [
-        'data' => [],
-    ];
+    protected $table = 'exif';
 
     /**
      * @inheritdoc
      */
-    protected $table = 'exif';
+    protected $attributes = [
+        'data' => '',
+    ];
 
     /**
      * @inheritdoc
@@ -44,4 +46,38 @@ class Exif extends Model
      * @inheritdoc
      */
     public $timestamps = false;
+
+    /**
+     * @return string
+     */
+    public function toString(): string
+    {
+        $parts = collect();
+
+        if ($manufacturer = data_get($this->data, 'Make')) {
+            $parts->push($manufacturer);
+        }
+
+        if ($model = data_get($this->data, 'Model')) {
+            $parts->push($model);
+        }
+
+        if ($exposure = data_get($this->data, 'ExposureTime')) {
+            $parts->push(fraction_normalize((string) $exposure));
+        }
+
+        if ($aperture = data_get($this->data, 'COMPUTED.ApertureFNumber')) {
+            $parts->push($aperture);
+        }
+
+        if ($iso = data_get($this->data, 'ISOSpeedRatings')) {
+            $parts->push($iso);
+        }
+
+        if ($takenAt = data_get($this->data, 'DateTimeOriginal')) {
+            $parts->push(new Carbon($takenAt));
+        }
+
+        return $parts->implode(', ');
+    }
 }

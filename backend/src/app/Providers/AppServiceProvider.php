@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 
 /**
@@ -48,26 +49,6 @@ class AppServiceProvider extends ServiceProvider
     protected function registerAppServices(): void
     {
         $this->app->bind(
-            \App\DataProviders\Photo\Contracts\PhotoDataProvider::class,
-            \App\DataProviders\Photo\PhotoDataProvider::class
-        );
-
-        $this->app->bind(
-            \App\DataProviders\Subscription\Contracts\SubscriptionDataProvider::class,
-            \App\DataProviders\Subscription\SubscriptionDataProvider::class
-        );
-
-        $this->app->bind(
-            \App\DataProviders\Tag\Contracts\TagDataProvider::class,
-            \App\DataProviders\Tag\TagDataProvider::class
-        );
-
-        $this->app->bind(
-            \App\DataProviders\User\Contracts\UserDataProvider::class,
-            \App\DataProviders\User\UserDataProvider::class
-        );
-
-        $this->app->bind(
             \App\Managers\Photo\Contracts\PhotoManager::class,
             \App\Managers\Photo\PhotoManager::class
         );
@@ -98,13 +79,6 @@ class AppServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
-            \App\Services\Trash\Contracts\TrashService::class,
-            function ($app) {
-                return new \App\Services\Trash\TrashService($app->make('filesystem'), config('main.storage.path.trash'));
-            }
-        );
-
-        $this->app->bind(
             \App\Services\SiteMap\Contracts\SiteMapBuilderService::class,
             \App\Services\SiteMap\SiteMapBuilderService::class
         );
@@ -126,6 +100,17 @@ class AppServiceProvider extends ServiceProvider
             \Tooleks\Php\AvgColorPicker\Contracts\AvgColorPicker::class,
             \Tooleks\Php\AvgColorPicker\Gd\AvgColorPicker::class
         );
+
+        $this->app->singleton('HTMLPurifier', function (Application $app) {
+            $fileSystem = $app->make('filesystem')->disk('local');
+            $cacheDirectory = 'cache/HTMLPurifier_DefinitionCache';
+            if (!$fileSystem->exists($cacheDirectory)) {
+                $fileSystem->makeDirectory($cacheDirectory);
+            }
+            $config = \HTMLPurifier_Config::createDefault();
+            $config->set('Cache.SerializerPath', storage_path("app/{$cacheDirectory}"));
+            return new \HTMLPurifier($config);
+        });
     }
 
     /**

@@ -4,6 +4,7 @@ namespace App\Models\Builders;
 
 use App\Models\Role;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 
 /**
  * Class RoleBuilder.
@@ -13,26 +14,35 @@ use Illuminate\Database\Eloquent\Builder;
 class RoleBuilder extends Builder
 {
     /**
-     * Scope where model name is Role::NAME_CUSTOMER.
+     * @var string
+     */
+    private $rolesTable;
+
+    /**
+     * RoleBuilder constructor.
      *
-     * @see Role::NAME_CUSTOMER
-     *
+     * @param QueryBuilder $query
+     */
+    public function __construct(QueryBuilder $query)
+    {
+        parent::__construct($query);
+
+        $this->rolesTable = (new Role)->getTable();
+    }
+
+    /**
      * @return $this
      */
     public function whereNameCustomer()
     {
-        return $this->where('name', Role::NAME_CUSTOMER);
+        return $this->where("{$this->rolesTable}.name", Role::NAME_CUSTOMER);
     }
 
     /**
-     * Scope where model name is Role::NAME_ADMINISTRATOR.
-     *
-     * @see Role::NAME_ADMINISTRATOR
-     *
      * @return $this
      */
     public function whereNameAdministrator()
     {
-        return $this->where('name', Role::NAME_ADMINISTRATOR);
+        return $this->where("{$this->rolesTable}.name", Role::NAME_ADMINISTRATOR);
     }
 }

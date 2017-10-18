@@ -69,12 +69,12 @@ class DeleteUnusedObjectsFromPhotoStorage extends Command
     public function handle(): void
     {
         foreach ($this->getDirectoriesToDelete() as $directory) {
-            $this->comment("Deleting [directory:'{$directory}'] ...");
+            $this->comment("Deleting {$directory}.");
             $this->storage->deleteDirectory($directory);
         }
 
         foreach ($this->getFilesToDelete() as $file) {
-            $this->comment("Deleting [file:'{$file}'] ...");
+            $this->comment("Deleting {$file}.");
             $this->storage->delete($file);
         }
     }
@@ -110,7 +110,7 @@ class DeleteUnusedObjectsFromPhotoStorage extends Command
      */
     protected function getAllDirectoriesFromStorage(): array
     {
-        return $this->storage->allDirectories($this->config->get('main.storage.path.photos'));
+        return $this->storage->allDirectories('photos');
     }
 
     /**
@@ -120,7 +120,7 @@ class DeleteUnusedObjectsFromPhotoStorage extends Command
      */
     protected function getAllFilesFromStorage(): array
     {
-        return $this->storage->allFiles($this->config->get('main.storage.path.photos'));
+        return $this->storage->allFiles('photos');
     }
 
     /**

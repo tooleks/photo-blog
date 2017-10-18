@@ -2,11 +2,12 @@
 
 namespace Console\Commands;
 
+use function App\Util\url_frontend;
+use function App\Util\url_frontend_unsubscription;
 use App\Mail\WeeklySubscription;
 use App\Managers\Photo\Contracts\PhotoManager;
 use App\Managers\Subscription\Contracts\SubscriptionManager;
 use App\Models\Subscription;
-use Illuminate\Config\Repository as Config;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
 
@@ -32,11 +33,6 @@ class SendWeeklySubscriptionMails extends Command
     protected $description = 'Send weekly subscription mails';
 
     /**
-     * @var Config
-     */
-    private $config;
-
-    /**
      * @var SubscriptionManager
      */
     private $subscriptionManager;
@@ -49,15 +45,13 @@ class SendWeeklySubscriptionMails extends Command
     /**
      * SendWeeklySubscriptionMails constructor.
      *
-     * @param Config $config
      * @param SubscriptionManager $subscriptionManager
      * @param PhotoManager $photoManager
      */
-    public function __construct(Config $config, SubscriptionManager $subscriptionManager, PhotoManager $photoManager)
+    public function __construct(SubscriptionManager $subscriptionManager, PhotoManager $photoManager)
     {
         parent::__construct();
 
-        $this->config = $config;
         $this->subscriptionManager = $subscriptionManager;
         $this->photoManager = $photoManager;
     }
@@ -69,9 +63,9 @@ class SendWeeklySubscriptionMails extends Command
      */
     public function handle(): void
     {
-        if ($this->photoManager->existsPublishedOlderThanWeek()) {
+        if ($this->photoManager->existsPublishedLessThanWeekAgo()) {
             $this->subscriptionManager->eachFilteredByEmails(function (Subscription $subscription) {
-                $this->comment("Sending subscription mail [recipient:{$subscription->email}] ...");
+                $this->comment("Sending subscription mail {$subscription->email}.");
                 $this->sendMail($subscription);
             }, $this->argument('email_filter'));
         }
@@ -84,11 +78,11 @@ class SendWeeklySubscriptionMails extends Command
      */
     protected function sendMail(Subscription $subscription)
     {
-        $data['website_url'] = $this->config->get('main.frontend.url');
+        $data['website_url'] = url_frontend();
 
         $data['subscriber_email'] = $subscription->email;
 
-        $data['unsubscribe_url'] = sprintf($this->config->get('format.frontend.url.unsubscription_page'), $subscription->token);
+        $data['unsubscribe_url'] = url_frontend_unsubscription($subscription->token);
 
         Mail::queue(new WeeklySubscription($data));
     }

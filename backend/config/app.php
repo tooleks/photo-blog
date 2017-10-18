@@ -174,8 +174,8 @@ return [
         /*
          * Package Service Providers...
          */
-        Tooleks\Laravel\Presenter\Providers\PresenterProvider::class,
         Laravel\Passport\PassportServiceProvider::class,
+        HuangYi\Http\LaravelServiceProvider::class,
 
     ],
 

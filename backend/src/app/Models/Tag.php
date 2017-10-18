@@ -31,9 +31,37 @@ class Tag extends Model
     /**
      * @inheritdoc
      */
-    public function newEloquentBuilder($query)
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function (Tag $tag) {
+            $tag->photos()->detach();
+        });
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function newEloquentBuilder($query): TagBuilder
     {
         return new TagBuilder($query);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function newQuery(): TagBuilder
+    {
+        return parent::newQuery();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function photos()
+    {
+        return $this->belongsToMany(Photo::class, 'photos_tags');
     }
 
     /**
@@ -47,23 +75,5 @@ class Tag extends Model
         $this->attributes['value'] = trim(str_replace(' ', '_', strtolower($value)));
 
         return $this;
-    }
-
-    /**
-     * Getter for the 'value' attribute.
-     *
-     * @return string
-     */
-    public function getValueAttribute()
-    {
-        return $this->attributes['value'];
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function photos()
-    {
-        return $this->belongsToMany(Photo::class, 'photo_tags');
     }
 }

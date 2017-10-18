@@ -5,6 +5,7 @@ namespace Api\V1\Http\Controllers;
 use Api\V1\Http\Requests\ContactMessageRequest as ContactMessageRequest;
 use App\Mail\ContactMessage;
 use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Mail;
@@ -38,25 +39,29 @@ class ContactMessagesController extends Controller
      * @apiGroup Contact Message
      * @apiHeader {String} Accept application/json
      * @apiHeader {String} Content-Type application/json
-     * @apiParam {String{1..255}} email Author email address to reply.
-     * @apiParam {String{1..255}} name Author name.
-     * @apiParam {String{1..255}} subject Message subject.
-     * @apiParam {String{1..65535}} text Message text.
+     * @apiParamExample {json} Request-Body-Example:
+     * {
+     *     "email": "username@domain.name",
+     *     "name": "John Doe",
+     *     "subject": "The message subject",
+     *     "text": "The message text."
+     * }
      * @apiSuccessExample {json} Success-Response:
-     * HTTP/1.1 201 Created
-     * {}
+     * HTTP/1.1 204 No Content
      */
 
     /**
      * Create a resource.
      *
      * @param ContactMessageRequest $request
-     * @return Response
+     * @return JsonResponse
      */
-    public function create(ContactMessageRequest $request)
+    public function create(ContactMessageRequest $request): JsonResponse
     {
+        $request->merge(['client_ip_address' => $request->getClientIp()]);
+
         Mail::queue(new ContactMessage($request->all()));
 
-        return $this->responseFactory->json((object) [], Response::HTTP_CREATED);
+        return $this->responseFactory->json(null, Response::HTTP_NO_CONTENT);
     }
 }

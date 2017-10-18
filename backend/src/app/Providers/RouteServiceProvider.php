@@ -101,7 +101,7 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         Route::bind('user', function ($id) {
-            $id = $id === 'me' ? Auth::user()->id ?? 0 : $id;
+            $id = ($id === 'me') ? optional(Auth::user())->id : $id;
             return $this->app
                 ->make(\App\Managers\User\Contracts\UserManager::class)
                 ->getById((int) $id);

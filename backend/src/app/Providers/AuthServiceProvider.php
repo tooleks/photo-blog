@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
@@ -30,20 +31,21 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
+        $this->registerResourcePolicy();
+
         $this->registerGates();
 
         $this->registerOAuth();
     }
 
     /**
-     * Register the application's gates.
+     * Register the application's resource policy.
      *
      * @return void
      */
-    public function registerGates()
+    public function registerResourcePolicy(): void
     {
         $resourcePolicy = $this->app->make(\Api\V1\Policies\ResourcePolicy::class);
-
         Gate::define('create-resource', [$resourcePolicy, 'create']);
         Gate::define('get-resource', [$resourcePolicy, 'get']);
         Gate::define('update-resource', [$resourcePolicy, 'update']);
@@ -51,14 +53,26 @@ class AuthServiceProvider extends ServiceProvider
     }
 
     /**
+     * Register the application's gates.
+     *
+     * @return void
+     */
+    public function registerGates(): void
+    {
+        Gate::define('get-user-contacts', function (User $authUser, User $user) {
+            return $authUser->isAdministrator() || $authUser->id === $user->id;
+        });
+    }
+
+    /**
      * Register the application's OAuth server.
      *
      * @return void
      */
-    public function registerOAuth()
+    public function registerOAuth(): void
     {
         Passport::routes();
-        Passport::tokensExpireIn(Carbon::now()->addHour());
+        Passport::tokensExpireIn(Carbon::now()->addHours(12));
         Passport::refreshTokensExpireIn(Carbon::now()->addDays(30));
     }
 }

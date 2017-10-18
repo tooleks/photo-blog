@@ -3,10 +3,10 @@
 namespace App\Managers\Tag;
 
 use Closure;
-use App\DataProviders\Tag\Contracts\TagDataProvider;
-use App\DataProviders\Tag\Criterias\SortByPhotosCount;
+use App\Models\Tag;
 use App\Managers\Tag\Contracts\TagManager as TagManagerContract;
-use Illuminate\Pagination\AbstractPaginator;
+use Illuminate\Database\ConnectionInterface as DbConnection;
+use Illuminate\Support\Collection;
 
 /**
  * Class TagManager.
@@ -16,28 +16,33 @@ use Illuminate\Pagination\AbstractPaginator;
 class TagManager implements TagManagerContract
 {
     /**
-     * @var TagDataProvider
+     * @var DbConnection
      */
-    private $tagDataProvider;
+    private $dbConnection;
 
     /**
      * TagManager constructor.
      *
-     * @param TagDataProvider $tagDataProvider
+     * @param DbConnection $dbConnection
      */
-    public function __construct(TagDataProvider $tagDataProvider)
+    public function __construct(DbConnection $dbConnection)
     {
-        $this->tagDataProvider = $tagDataProvider;
+        $this->dbConnection = $dbConnection;
     }
 
     /**
      * @inheritdoc
      */
-    public function paginateOverMostPopular(int $page, int $perPage, array $query = []): AbstractPaginator
+    public function paginateOverMostPopular(int $page, int $perPage, array $filters = [])
     {
-        return $this->tagDataProvider
-            ->applyCriteria((new SortByPhotosCount)->desc())
-            ->paginate($page, $perPage);
+        $query = (new Tag)
+            ->newQuery()
+            ->defaultSelect()
+            ->orderByMostPopular();
+
+        $paginator = $query->paginate($perPage, ['*'], 'page', $page)->appends($filters);
+
+        return $paginator;
     }
 
     /**
@@ -45,6 +50,10 @@ class TagManager implements TagManagerContract
      */
     public function each(Closure $callback): void
     {
-        $this->tagDataProvider->each($callback);
+        (new Tag)
+            ->newQuery()
+            ->chunk(10, function (Collection $tags) use ($callback) {
+                $tags->each($callback);
+            });
     }
 }

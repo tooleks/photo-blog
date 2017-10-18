@@ -2,10 +2,13 @@
 
 namespace Api\V1\Http\Controllers;
 
-use Api\V1\Http\Requests\FindTagsRequest;
+use Api\V1\Http\Requests\PaginatedRequest;
+use Api\V1\Http\Resources\PaginatedResource;
+use Api\V1\Http\Resources\TagPlainResource;
 use App\Managers\Tag\Contracts\TagManager;
-use Illuminate\Contracts\Cache\Factory as CacheManager;
-use Illuminate\Pagination\AbstractPaginator;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 
 /**
@@ -16,9 +19,9 @@ use Illuminate\Routing\Controller;
 class TagsController extends Controller
 {
     /**
-     * @var CacheManager
+     * @var ResponseFactory
      */
-    private $cacheManager;
+    private $responseFactory;
 
     /**
      * @var TagManager
@@ -28,18 +31,18 @@ class TagsController extends Controller
     /**
      * TagsController constructor.
      *
-     * @param CacheManager $cacheManager
+     * @param ResponseFactory $responseFactory
      * @param TagManager $tagManager
      */
-    public function __construct(CacheManager $cacheManager, TagManager $tagManager)
+    public function __construct(ResponseFactory $responseFactory, TagManager $tagManager)
     {
-        $this->cacheManager = $cacheManager;
+        $this->responseFactory = $responseFactory;
         $this->tagManager = $tagManager;
     }
 
     /**
      * @apiVersion 1.0.0
-     * @api {get} /v1/tags Find
+     * @api {get} /v1/tags?page=:page&per_page=:per_page Find
      * @apiName Find
      * @apiGroup Tags
      * @apiHeader {String} Accept application/json
@@ -58,34 +61,26 @@ class TagsController extends Controller
      *     "to": 20,
      *     "data": [
      *         {
-     *             "value": "nature"
+     *             "value": "sky"
      *         }
      *     ]
      * }
      */
 
     /**
-     * Find photos.
+     * Find tags.
      *
-     * @param FindTagsRequest $request
-     * @return AbstractPaginator
+     * @param PaginatedRequest $request
+     * @return JsonResponse
      */
-    public function find(FindTagsRequest $request): AbstractPaginator
+    public function find(PaginatedRequest $request): JsonResponse
     {
-        $cacheKey = sprintf(
-            'tags:%s:%s',
-            $request->get('page'),
-            $request->get('per_page')
+        $paginator = $this->tagManager->paginateOverMostPopular(
+            $request->get('page', 1),
+            $request->get('per_page', 20),
+            $request->query()
         );
 
-        $paginator = $this->cacheManager
-            ->tags(['tags'])
-            ->remember($cacheKey, config('cache.lifetime'), function () use ($request) {
-                return $this->tagManager->paginateOverMostPopular($request->get('page', 1), $request->get('per_page', 20));
-            });
-
-        $paginator->appends($request->query());
-
-        return $paginator;
+        return $this->responseFactory->json(new PaginatedResource($paginator, TagPlainResource::class), Response::HTTP_OK);
     }
 }

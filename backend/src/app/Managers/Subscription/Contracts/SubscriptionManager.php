@@ -30,12 +30,12 @@ interface SubscriptionManager
     public function eachFilteredByEmails(Closure $callback, array $emails): void;
 
     /**
-     * Generate the subscription by email.
+     * Create the subscription by email.
      *
-     * @param string $email
+     * @param array $attributes
      * @return Subscription
      */
-    public function generateByEmail(string $email): Subscription;
+    public function create(array $attributes): Subscription;
 
     /**
      * Delete the subscription.
