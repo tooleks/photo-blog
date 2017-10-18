@@ -1,4 +1,4 @@
-## Photo Blog Application based on Laravel 5 and Angular 4
+## Photo Blog Application based on [Laravel 5 + Swoole] and [Angular 4 + Server Side Rendering]
 
 ### Tech Stack
 
