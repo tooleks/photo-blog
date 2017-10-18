@@ -10,6 +10,7 @@ services:
       - 8081:8081
       - 8082:8082
       - 8083:8083
+      - 8084:8084
     depends_on:
       - photo-blog-frontend.docker
     volumes:
@@ -26,6 +27,8 @@ services:
     image: photo-blog-php:7.1-fpm
     container_name: photo-blog-backend
     restart: always
+    ports:
+      - 1215:1215
     depends_on:
       - photo-blog-mysql.docker
       - photo-blog-redis.docker
