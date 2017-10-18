@@ -3,17 +3,17 @@
 namespace App\Util;
 
 /**
- * Trait Normalizer.
+ * Trait CastsValues.
  *
  * @package App\Util
  */
-trait Normalizer
+trait CastsValues
 {
     /**
      * @param $value
      * @return null|bool
      */
-    protected function normalizeBool($value): ?bool
+    protected function toBoolOrNull($value): ?bool
     {
         return (bool) $value;
     }
@@ -22,14 +22,14 @@ trait Normalizer
      * @param $value
      * @return null|int
      */
-    protected function normalizeInt($value): ?int
+    protected function toIntOrNull($value): ?int
     {
         if (is_numeric($value) && $value == 0) {
             return (int) $value;
         }
 
         if (is_string($value) && $value == 0) {
-            return (float) $value;
+            return (int) $value;
         }
 
         if ($value) {
@@ -43,7 +43,7 @@ trait Normalizer
      * @param $value
      * @return null|float
      */
-    protected function normalizeFloat($value): ?float
+    protected function toFloatOrNull($value): ?float
     {
         if (is_numeric($value) && $value == 0) {
             return (float) $value;
@@ -64,7 +64,7 @@ trait Normalizer
      * @param $value
      * @return null|string
      */
-    protected function normalizeString($value): ?string
+    protected function toStringOrNull($value): ?string
     {
         return $value ? (string) $value : null;
     }
@@ -73,7 +73,7 @@ trait Normalizer
      * @param $value
      * @return null|array
      */
-    protected function normalizeArray($value): ?array
+    protected function toArrayOrNull($value): ?array
     {
         return $value ? (array) $value : null;
     }
@@ -83,7 +83,7 @@ trait Normalizer
      * @param string $className
      * @return null|object
      */
-    protected function normalizeClassObject($value, string $className)
+    protected function toClassObjectOrNull($value, string $className)
     {
         return $value ? new $className($value) : null;
     }

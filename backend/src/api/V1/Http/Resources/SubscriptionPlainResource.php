@@ -4,7 +4,7 @@ namespace Api\V1\Http\Resources;
 
 use function App\Util\html_purify;
 use App\Models\Subscription;
-use App\Util\Normalizer;
+use App\Util\CastsValues;
 use Illuminate\Http\Resources\Json\Resource;
 
 /**
@@ -14,7 +14,7 @@ use Illuminate\Http\Resources\Json\Resource;
  */
 class SubscriptionPlainResource extends Resource
 {
-    use Normalizer;
+    use CastsValues;
 
     /**
      * @var Subscription
@@ -27,8 +27,8 @@ class SubscriptionPlainResource extends Resource
     public function toArray($request)
     {
         return [
-            'email' => $this->normalizeString(html_purify($this->resource->email)),
-            'token' => $this->normalizeString(html_purify($this->resource->token)),
+            'email' => $this->toStringOrNull(html_purify($this->resource->email)),
+            'token' => $this->toStringOrNull(html_purify($this->resource->token)),
         ];
     }
 }
