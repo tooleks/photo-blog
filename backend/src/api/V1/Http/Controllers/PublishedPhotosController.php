@@ -113,7 +113,7 @@ class PublishedPhotosController extends Controller
      */
     public function create(CreatePublishedPhotoRequest $request): JsonResponse
     {
-        $photo = $this->photoManager->getUnpublishedById($request->get('photo_id'));
+        $photo = $this->photoManager->getUnpublishedById($request->input('photo_id'));
 
         $request->merge(['is_published' => true]);
 

@@ -65,8 +65,8 @@ class AuthController extends Controller
     {
         return $this->oAuthProxy->requestTokenByCredentials(
             env('OAUTH_CLIENT_ID'),
-            $request->get('email'),
-            $request->get('password')
+            $request->input('email'),
+            $request->input('password')
         );
     }
 
