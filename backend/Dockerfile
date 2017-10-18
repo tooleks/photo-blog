@@ -45,7 +45,12 @@ RUN docker-php-ext-install -j$(nproc) mcrypt \
  && docker-php-ext-install zip
 
 # Install swoole.
-RUN yes | pecl install swoole \
+RUN git clone https://github.com/swoole/swoole-src.git \
+ && cd swoole-src \
+ && phpize \
+ && ./configure \
+ && make \
+ && make install \
  && echo "extension=$(find /usr/local/lib/php/extensions/ -name swoole.so)" > /usr/local/etc/php/conf.d/swoole.ini
 
 # Install composer.
