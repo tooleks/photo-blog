@@ -23,7 +23,7 @@ return [
 
             'log_file' => env('HTTP_SERVER_OPTIONS_LOG_FILE', base_path('storage/logs/http.log')),
 
-            'daemonize' => env('HTTP_SERVER_OPTIONS_DAEMONIZE', 1),
+            'daemonize' => env('HTTP_SERVER_OPTIONS_DAEMONIZE', 0),
 
         ],
 
