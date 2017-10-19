@@ -55,7 +55,7 @@ class CreateAdministratorUser extends Command
             'role_id' => (new Role)->newQuery()->whereNameAdministrator()->firstOrFail()->id,
             'name' => $this->ask('Enter user\'s name:'),
             'email' => $this->ask('Enter user\'s email:'),
-            'password' => $this->ask('Enter user\'s password:'),
+            'password' => $this->secret('Enter user\'s password:'),
         ]);
     }
 }
