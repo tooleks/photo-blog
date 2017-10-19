@@ -46,6 +46,10 @@ function html_purify($html)
 }
 
 /**
+ * Remove keys from an array that are not exists in a structure array.
+ *
+ * @example array_filter_structure(['key_0' => 'value', 'key_1' => 'value'], ['key_0']); // ['key_0' => 'value']
+ *
  * @param array $array
  * @param array $structure
  * @return array
@@ -68,6 +72,10 @@ function array_filter_structure(array $array, array $structure): array
 }
 
 /**
+ * Convert a single-dimensional array with keys in "dot" notation into a multi-dimensional array.
+ *
+ * @example array_remove_dot_notation(['key_0.key_1' => 'value']); // ['key_0' => ['key_1' => 'value']]
+ *
  * @param array $array
  * @return array
  */
@@ -83,6 +91,8 @@ function array_remove_dot_notation(array $array): array
 }
 
 /**
+ * Remove attributes that have no validation rules.
+ *
  * @param array $attributes
  * @param array $rules
  * @return array
@@ -93,51 +103,10 @@ function validator_filter_attributes(array $attributes, array $rules): array
 }
 
 /**
- * @param string $path
- * @return string
- */
-function url_storage(string $path): string
-{
-    return config('main.storage.url') . $path;
-}
-
-/**
- * @param string $path
- * @return string
- */
-function url_frontend(string $path = ''): string
-{
-    return config('main.frontend.url') . $path;
-}
-
-/**
- * @param int $id
- * @return string
- */
-function url_frontend_photo(int $id): string
-{
-    return url_frontend("/photos?show={$id}");
-}
-
-/**
- * @param string $tag
- * @return string
- */
-function url_frontend_tag(string $tag): string
-{
-    return url_frontend("/photos/tag/{$tag}");
-}
-
-/**
- * @param string $token
- * @return string
- */
-function url_frontend_unsubscription(string $token): string
-{
-    return url_frontend("/unsubscription/{$token}");
-}
-
-/**
+ * Normalize math fraction value.
+ *
+ * @example fraction_normalize("2/4"); // 1/2
+ *
  * @param string $value
  * @return null|string
  */
@@ -152,4 +121,59 @@ function fraction_normalize(string $value): ?string
     }
 
     return $result;
+}
+
+/**
+ * Get file storage url.
+ *
+ * @param string $path
+ * @return string
+ */
+function url_storage(string $path): string
+{
+    return config('main.storage.url') . $path;
+}
+
+/**
+ * Get main frontend page url.
+ *
+ * @param string $path
+ * @return string
+ */
+function url_frontend(string $path = ''): string
+{
+    return config('main.frontend.url') . $path;
+}
+
+/**
+ * Get photo frontend page url.
+ *
+ * @param int $id
+ * @return string
+ */
+function url_frontend_photo(int $id): string
+{
+    return url_frontend("/photos?show={$id}");
+}
+
+/**
+ * Get search by tag frontend page url.
+ *
+ * @param string $tag
+ * @return string
+ */
+function url_frontend_tag(string $tag): string
+{
+    return url_frontend("/photos/tag/{$tag}");
+}
+
+/**
+ * Get unsubscription frontend page url.
+ *
+ * @param string $token
+ * @return string
+ */
+function url_frontend_unsubscription(string $token): string
+{
+    return url_frontend("/unsubscription/{$token}");
 }
