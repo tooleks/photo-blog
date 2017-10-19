@@ -54,7 +54,7 @@ class ChangeUserPassword extends Command
 
         $user = $this->userManager->getByName($name);
 
-        $password = $this->ask('Enter new user\'s password:');
+        $password = $this->secret('Enter a new user\'s password:');
 
         $this->userManager->save($user, compact('password'));
     }
