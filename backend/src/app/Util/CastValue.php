@@ -3,17 +3,17 @@
 namespace App\Util;
 
 /**
- * Trait CastsValues.
+ * Class CastValue.
  *
  * @package App\Util
  */
-trait CastsValues
+class CastValue
 {
     /**
      * @param $value
      * @return null|bool
      */
-    protected function toBoolOrNull($value): ?bool
+    public static function toBool($value): bool
     {
         return (bool) $value;
     }
@@ -22,7 +22,7 @@ trait CastsValues
      * @param $value
      * @return null|int
      */
-    protected function toIntOrNull($value): ?int
+    public static function toIntOrNull($value): ?int
     {
         if (is_numeric($value) && $value == 0) {
             return (int) $value;
@@ -43,7 +43,7 @@ trait CastsValues
      * @param $value
      * @return null|float
      */
-    protected function toFloatOrNull($value): ?float
+    public static function toFloatOrNull($value): ?float
     {
         if (is_numeric($value) && $value == 0) {
             return (float) $value;
@@ -64,7 +64,7 @@ trait CastsValues
      * @param $value
      * @return null|string
      */
-    protected function toStringOrNull($value): ?string
+    public static function toStringOrNull($value): ?string
     {
         return $value ? (string) $value : null;
     }
@@ -73,7 +73,7 @@ trait CastsValues
      * @param $value
      * @return null|array
      */
-    protected function toArrayOrNull($value): ?array
+    public static function toArrayOrNull($value): ?array
     {
         return $value ? (array) $value : null;
     }
@@ -83,7 +83,7 @@ trait CastsValues
      * @param string $className
      * @return null|object
      */
-    protected function toClassObjectOrNull($value, string $className)
+    public static function toClassObjectOrNull($value, string $className)
     {
         return $value ? new $className($value) : null;
     }
