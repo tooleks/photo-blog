@@ -4,7 +4,7 @@ namespace Api\V1\Http\Resources;
 
 use function App\Util\html_purify;
 use App\Models\User;
-use App\Util\CastsValues;
+use App\Util\CastValue;
 use Illuminate\Http\Resources\Json\Resource;
 
 /**
@@ -14,8 +14,6 @@ use Illuminate\Http\Resources\Json\Resource;
  */
 class UserPlainResource extends Resource
 {
-    use CastsValues;
-
     /**
      * @var User
      */
@@ -29,14 +27,14 @@ class UserPlainResource extends Resource
         $isVisibleUserContacts = optional($request->user())->can('get-user-contacts', $this->resource);
 
         return [
-            'id' => $this->toIntOrNull(html_purify($this->resource->id)),
-            'name' => $this->toStringOrNull(html_purify($this->resource->name)),
+            'id' => CastValue::toIntOrNull(html_purify($this->resource->id)),
+            'name' => CastValue::toStringOrNull(html_purify($this->resource->name)),
             'email' => $this->when($isVisibleUserContacts, function () {
-                return $this->toStringOrNull(html_purify($this->resource->email));
+                return CastValue::toStringOrNull(html_purify($this->resource->email));
             }),
-            'role' => $this->toStringOrNull(html_purify($this->resource->role->name)),
-            'created_at' => $this->toStringOrNull(html_purify($this->resource->created_at)),
-            'updated_at' => $this->toStringOrNull(html_purify($this->resource->updated_at)),
+            'role' => CastValue::toStringOrNull(html_purify($this->resource->role->name)),
+            'created_at' => CastValue::toStringOrNull(html_purify($this->resource->created_at)),
+            'updated_at' => CastValue::toStringOrNull(html_purify($this->resource->updated_at)),
         ];
     }
 }

@@ -4,7 +4,7 @@ namespace Api\V1\Http\Resources;
 
 use function App\Util\html_purify;
 use App\Models\Photo;
-use App\Util\CastsValues;
+use App\Util\CastValue;
 use Illuminate\Http\Resources\Json\Resource;
 
 /**
@@ -14,8 +14,6 @@ use Illuminate\Http\Resources\Json\Resource;
  */
 class PhotoPlainResource extends Resource
 {
-    use CastsValues;
-
     /**
      * @var Photo
      */
@@ -27,14 +25,14 @@ class PhotoPlainResource extends Resource
     public function toArray($request)
     {
         return [
-            'id' => $this->toIntOrNull(html_purify($this->resource->id)),
-            'created_by_user_id' => $this->toIntOrNull(html_purify($this->resource->created_by_user_id)),
-            'avg_color' => $this->toStringOrNull(html_purify($this->resource->avg_color)),
+            'id' => CastValue::toIntOrNull(html_purify($this->resource->id)),
+            'created_by_user_id' => CastValue::toIntOrNull(html_purify($this->resource->created_by_user_id)),
+            'avg_color' => CastValue::toStringOrNull(html_purify($this->resource->avg_color)),
             'description' => $this->when($this->resource->isPublished(), function () {
-                return $this->toStringOrNull(html_purify($this->resource->description));
+                return CastValue::toStringOrNull(html_purify($this->resource->description));
             }),
-            'created_at' => $this->toStringOrNull(html_purify($this->resource->created_at)),
-            'updated_at' => $this->toStringOrNull(html_purify($this->resource->updated_at)),
+            'created_at' => CastValue::toStringOrNull(html_purify($this->resource->created_at)),
+            'updated_at' => CastValue::toStringOrNull(html_purify($this->resource->updated_at)),
         ];
     }
 }
