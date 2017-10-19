@@ -917,16 +917,16 @@
         },
         {
             "name": "huang-yi/laravel-swoole-http",
-            "version": "2.0.0",
+            "version": "2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/huang-yi/laravel-swoole-http.git",
-                "reference": "84e17e8e5ef573c588562c96b4c7b60efadabea0"
+                "reference": "0c3a8a6fdfa920c750458a1b75ba31d8ee9cb7ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/huang-yi/laravel-swoole-http/zipball/84e17e8e5ef573c588562c96b4c7b60efadabea0",
-                "reference": "84e17e8e5ef573c588562c96b4c7b60efadabea0",
+                "url": "https://api.github.com/repos/huang-yi/laravel-swoole-http/zipball/0c3a8a6fdfa920c750458a1b75ba31d8ee9cb7ee",
+                "reference": "0c3a8a6fdfa920c750458a1b75ba31d8ee9cb7ee",
                 "shasum": ""
             },
             "require": {
@@ -966,7 +966,7 @@
                 "server",
                 "swoole"
             ],
-            "time": "2017-10-02T19:11:50+00:00"
+            "time": "2017-10-19T01:52:43+00:00"
         },
         {
             "name": "imagine/imagine",
