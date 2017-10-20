@@ -2,6 +2,7 @@
 
 use App\Models\Photo;
 use App\Models\User;
+use Illuminate\Contracts\Config\Repository as Config;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,9 +15,9 @@ use App\Models\User;
 |
 */
 
-Route::get('/', function () {
+Route::get('/', function (Config $config) {
     return [
-        'name' => config('app.name'),
+        'name' => $config->get('app.name'),
         'version' => '1',
     ];
 });
@@ -49,21 +50,25 @@ Route::group(['prefix' => 'users'], function () {
     Route::post('/')
         ->uses('UsersController@create')
         ->middleware('auth:api')
+        ->middleware('can:access-administrator-part')
         ->middleware(sprintf('can:create-resource,%s', User::class));
 
     Route::get('/{user}')
         ->uses('UsersController@get')
         ->middleware('auth:api')
+        ->middleware('can:access-administrator-part')
         ->middleware('can:get-resource,user');
 
     Route::put('/{user}')
         ->uses('UsersController@update')
         ->middleware('auth:api')
+        ->middleware('can:access-administrator-part')
         ->middleware('can:update-resource,user');
 
     Route::delete('/{user}')
-        ->middleware('auth:api')
         ->uses('UsersController@delete')
+        ->middleware('auth:api')
+        ->middleware('can:access-administrator-part')
         ->middleware('can:delete-resource,user');
 
 });
@@ -78,21 +83,25 @@ Route::group(['prefix' => 'photos'], function () {
     Route::post('/')
         ->uses('PhotosController@create')
         ->middleware('auth:api')
+        ->middleware('can:access-administrator-part')
         ->middleware(sprintf('can:create-resource,%s', Photo::class));
 
     Route::get('/{photo}')
         ->uses('PhotosController@get')
         ->middleware('auth:api')
+        ->middleware('can:access-administrator-part')
         ->middleware('can:get-resource,photo');
 
     Route::post('/{photo}')
         ->uses('PhotosController@update')
         ->middleware('auth:api')
+        ->middleware('can:access-administrator-part')
         ->middleware('can:update-resource,photo');
 
     Route::delete('/{photo}')
         ->uses('PhotosController@delete')
         ->middleware('auth:api')
+        ->middleware('can:access-administrator-part')
         ->middleware('can:delete-resource,photo');
 
 });
@@ -107,6 +116,7 @@ Route::group(['prefix' => 'published_photos'], function () {
     Route::post('/')
         ->uses('PublishedPhotosController@create')
         ->middleware('auth:api')
+        ->middleware('can:access-administrator-part')
         ->middleware(sprintf('can:create-resource,%s', Photo::class));
 
     Route::get('/')
@@ -118,11 +128,13 @@ Route::group(['prefix' => 'published_photos'], function () {
     Route::put('/{published_photo}')
         ->uses('PublishedPhotosController@update')
         ->middleware('auth:api')
+        ->middleware('can:access-administrator-part')
         ->middleware('can:update-resource,published_photo');
 
     Route::delete('/{published_photo}')
         ->uses('PublishedPhotosController@delete')
         ->middleware('auth:api')
+        ->middleware('can:access-administrator-part')
         ->middleware('can:delete-resource,published_photo');
 
 });
@@ -162,6 +174,11 @@ Route::group(['prefix' => 'subscriptions'], function () {
     Route::post('/')
         ->uses('SubscriptionsController@create')
         ->middleware('throttle:10,1');
+
+    Route::get('/')
+        ->uses('SubscriptionsController@find')
+        ->middleware('auth:api')
+        ->middleware('can:access-administrator-part');
 
     Route::delete('/{subscription}')
         ->uses('SubscriptionsController@delete')

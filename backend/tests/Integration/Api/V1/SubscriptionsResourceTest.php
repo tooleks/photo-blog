@@ -86,6 +86,34 @@ class SubscriptionsResourceTest extends TestCase
             ->assertStatus(422);
     }
 
+    public function testGetSuccess(): void
+    {
+        $this
+            ->actingAs($this->createAdministratorUser())
+            ->json('GET', $this->getResourceFullName())
+            ->assertStatus(200)
+            ->assertJsonStructure([
+                'data' => [
+                    '*' => $this->getResourceStructure(),
+                ],
+            ]);
+    }
+
+    public function testGetUnauthorizedFail(): void
+    {
+        $this
+            ->json('GET', $this->getResourceFullName())
+            ->assertStatus(401);
+    }
+
+    public function testGetPermissionFail(): void
+    {
+        $this
+            ->actingAs($this->createCustomerUser())
+            ->json('GET', $this->getResourceFullName())
+            ->assertStatus(403);
+    }
+
     public function testDeleteSuccess(): void
     {
         $subscription = $this->createSubscription();

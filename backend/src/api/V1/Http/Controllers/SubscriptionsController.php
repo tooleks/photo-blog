@@ -2,6 +2,8 @@
 
 namespace Api\V1\Http\Controllers;
 
+use Api\V1\Http\Requests\PaginatedRequest;
+use Api\V1\Http\Resources\PaginatedResource;
 use Api\V1\Http\Resources\SubscriptionPlainResource;
 use App\Managers\Subscription\Contracts\SubscriptionManager;
 use App\Models\Subscription;
@@ -70,6 +72,21 @@ class SubscriptionsController extends Controller
         $subscription = $this->subscriptionManager->create($request->all());
 
         return $this->responseFactory->json(new SubscriptionPlainResource($subscription), Response::HTTP_CREATED);
+    }
+
+    /**
+     * @param PaginatedRequest $request
+     * @return JsonResponse
+     */
+    public function find(PaginatedRequest $request): JsonResponse
+    {
+        $paginator = $this->subscriptionManager->paginate(
+            $request->get('page', 1),
+            $request->get('per_page', 20),
+            $request->query()
+        );
+
+        return $this->responseFactory->json(new PaginatedResource($paginator, SubscriptionPlainResource::class), Response::HTTP_OK);
     }
 
     /**

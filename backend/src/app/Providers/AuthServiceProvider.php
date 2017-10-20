@@ -62,6 +62,10 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('get-user-contacts', function (User $authUser, User $user) {
             return $authUser->isAdministrator() || $authUser->id === $user->id;
         });
+
+        Gate::define('access-administrator-part', function (User $authUser) {
+            return $authUser->isAdministrator();
+        });
     }
 
     /**

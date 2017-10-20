@@ -38,6 +38,16 @@ interface SubscriptionManager
     public function create(array $attributes): Subscription;
 
     /**
+     * Paginate over subscriptions.
+     *
+     * @param int $page
+     * @param int $perPage
+     * @param array $filters
+     * @return mixed
+     */
+    public function paginate(int $page, int $perPage, array $filters = []);
+
+    /**
      * Delete the subscription.
      *
      * @param Subscription $subscription

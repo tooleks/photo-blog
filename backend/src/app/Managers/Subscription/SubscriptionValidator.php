@@ -49,4 +49,21 @@ class SubscriptionValidator
 
         return validator_filter_attributes($attributes, $rules);
     }
+
+    /**
+     * @param array $filters
+     * @return array
+     */
+    public function validateForPaginate(array $filters): array
+    {
+        $allowedFilters = [
+            'id',
+            'email',
+            'token',
+        ];
+
+        $this->validatorFactory->validate($filters, ['sort_attribute' => Rule::in($allowedFilters)]);
+
+        return $filters;
+    }
 }

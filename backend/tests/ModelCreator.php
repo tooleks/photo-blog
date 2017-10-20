@@ -31,6 +31,22 @@ trait ModelCreator
 
         return $user;
     }
+    protected function createCustomerUser(array $attributes = []): User
+    {
+        $defaultAttributes = ['role_id' => (new Role)->newQuery()->whereNameCustomer()->firstOrFail()->id];
+
+        if (isset($attributes['password'])) {
+            $attributes['password'] = bcrypt($attributes['password']);
+        }
+
+        /** @var User $user */
+
+        $user = factory(User::class)->make()->forceFill(array_merge($defaultAttributes, $attributes));
+
+        $user->save();
+
+        return $user;
+    }
 
     protected function createPhoto(array $attributes = []): Photo
     {

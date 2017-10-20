@@ -2,6 +2,7 @@
 
 namespace App\Managers\Subscription;
 
+use App\Models\Builders\SubscriptionBuilder;
 use function App\Util\str_unique;
 use Closure;
 use App\Managers\Subscription\Contracts\SubscriptionManager as SubscriptionManagerContract;
@@ -78,6 +79,34 @@ class SubscriptionManager implements SubscriptionManagerContract
         $subscription->save();
 
         return $subscription;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function paginate(int $page, int $perPage, array $filters = [])
+    {
+        $this->validator->validateForPaginate($filters);
+
+        $sortAttribute = $filters['sort_attribute'] ?? 'id';
+        $sortOrder = $filters['sort_order'] ?? 'desc';
+
+        $query = (new Subscription)
+            ->newQuery()
+            ->when(isset($filters['id']), function (SubscriptionBuilder $query) use ($filters) {
+                return $query->whereIds($filters['id']);
+            })
+            ->when(isset($filters['email']), function (SubscriptionBuilder $query) use ($filters) {
+                return $query->whereEmailLike($filters['email'] . '%');
+            })
+            ->when(isset($filters['token']), function (SubscriptionBuilder $query) use ($filters) {
+                return $query->whereTokenEquals($filters['token']);
+            })
+            ->orderBy($sortAttribute, $sortOrder);
+
+        $paginator = $query->paginate($perPage, ['*'], 'page', $page)->appends($filters);
+
+        return $paginator;
     }
 
     /**
