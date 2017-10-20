@@ -2,6 +2,7 @@
 
 namespace App\Models\Builders;
 
+use App\Models\Photo;
 use App\Models\Tag;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
@@ -22,7 +23,12 @@ class TagBuilder extends Builder
     /**
      * @var string
      */
-    private $photoTagsTable;
+    private $photosTable;
+
+    /**
+     * @var string
+     */
+    private $photosTagsTable;
 
     /**
      * TagBuilder constructor.
@@ -34,7 +40,8 @@ class TagBuilder extends Builder
         parent::__construct($query);
 
         $this->tagsTable = (new Tag)->getTable();
-        $this->photoTagsTable = 'photos_tags';
+        $this->photosTable = (new Photo)->getTable();
+        $this->photosTagsTable = $this->photosTable . '_' . $this->tagsTable;
     }
 
     /**
@@ -60,8 +67,8 @@ class TagBuilder extends Builder
     public function orderByMostPopular(string $order = 'desc')
     {
         return $this
-            ->addSelect(new Expression("COUNT({$this->photoTagsTable}.tag_id) AS count"))
-            ->leftJoin($this->photoTagsTable, "{$this->photoTagsTable}.tag_id", '=', "{$this->tagsTable}.id")
+            ->addSelect(new Expression("COUNT({$this->photosTagsTable}.tag_id) AS count"))
+            ->leftJoin($this->photosTagsTable, "{$this->photosTagsTable}.tag_id", '=', "{$this->tagsTable}.id")
             ->groupBy("{$this->tagsTable}.id")
             ->orderBy('count', $order);
     }
