@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\SiteMap\Contracts\SiteMapBuilderService;
 use Illuminate\Contracts\Cache\Factory as CacheManager;
+use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 
@@ -15,25 +16,32 @@ use Illuminate\Routing\Controller;
 class SiteMapController extends Controller
 {
     /**
-     * @var CacheManager
-     */
-    private $cacheManager;
-
-    /**
      * @var SiteMapBuilderService
      */
     private $siteMapBuilder;
 
     /**
+     * @var CacheManager
+     */
+    private $cacheManager;
+
+    /**
+     * @var Config
+     */
+    private $config;
+
+    /**
      * SiteMapController constructor.
      *
-     * @param CacheManager $cacheManager
      * @param SiteMapBuilderService $siteMapBuilder
+     * @param CacheManager $cacheManager
+     * @param Config $config
      */
-    public function __construct(CacheManager $cacheManager, SiteMapBuilderService $siteMapBuilder)
+    public function __construct(SiteMapBuilderService $siteMapBuilder, CacheManager $cacheManager, Config $config)
     {
-        $this->cacheManager = $cacheManager;
         $this->siteMapBuilder = $siteMapBuilder;
+        $this->cacheManager = $cacheManager;
+        $this->config = $config;
     }
 
     /**
@@ -43,12 +51,12 @@ class SiteMapController extends Controller
     {
         $siteMap = $this->cacheManager
             ->tags(['siteMap', 'photos', 'tags'])
-            ->remember('siteMap', config('cache.lifetime'), function () {
+            ->remember('siteMap', $this->config->get('cache.lifetime'), function () {
                 return $this->siteMapBuilder->build();
             });
 
         return response()
-            ->view('app.site-map.index', compact('siteMap'))
+            ->view('app.site-map.index', ['siteMap' => $siteMap])
             ->header('Content-Type', 'text/xml');
     }
 }

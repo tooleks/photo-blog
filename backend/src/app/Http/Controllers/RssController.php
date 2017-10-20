@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\Rss\Contracts\RssBuilderService;
 use Illuminate\Contracts\Cache\Factory as CacheManager;
+use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 
@@ -15,25 +16,32 @@ use Illuminate\Routing\Controller;
 class RssController extends Controller
 {
     /**
-     * @var CacheManager
-     */
-    private $cacheManager;
-
-    /**
      * @var RssBuilderService
      */
     private $rssBuilder;
 
     /**
+     * @var CacheManager
+     */
+    private $cacheManager;
+
+    /**
+     * @var Config
+     */
+    private $config;
+
+    /**
      * RssController constructor.
      *
-     * @param CacheManager $cacheManager
      * @param RssBuilderService $rssBuilder
+     * @param CacheManager $cacheManager
+     * @param Config $config
      */
-    public function __construct(CacheManager $cacheManager, RssBuilderService $rssBuilder)
+    public function __construct(RssBuilderService $rssBuilder, CacheManager $cacheManager, Config $config)
     {
-        $this->cacheManager = $cacheManager;
         $this->rssBuilder = $rssBuilder;
+        $this->cacheManager = $cacheManager;
+        $this->config = $config;
     }
 
     /**
@@ -43,12 +51,12 @@ class RssController extends Controller
     {
         $rss = $this->cacheManager
             ->tags(['rss', 'photos', 'tags'])
-            ->remember('rss', config('cache.lifetime'), function () {
+            ->remember('rss', $this->config->get('cache.lifetime'), function () {
                 return $this->rssBuilder->build();
             });
 
         return response()
-            ->view('app.rss.index', compact('rss'))
+            ->view('app.rss.index', ['rss' => $rss])
             ->header('Content-Type', 'text/xml');
     }
 }
