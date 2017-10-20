@@ -7,6 +7,7 @@ use Illuminate\Contracts\Cache\Factory as CacheManager;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Illuminate\Routing\ResponseFactory;
 
 /**
  * Class SiteMapController.
@@ -15,6 +16,11 @@ use Illuminate\Routing\Controller;
  */
 class SiteMapController extends Controller
 {
+    /**
+     * @var ResponseFactory
+     */
+    private $responseFactory;
+
     /**
      * @var SiteMapBuilderService
      */
@@ -33,12 +39,14 @@ class SiteMapController extends Controller
     /**
      * SiteMapController constructor.
      *
+     * @param ResponseFactory $responseFactory
      * @param SiteMapBuilderService $siteMapBuilder
      * @param CacheManager $cacheManager
      * @param Config $config
      */
-    public function __construct(SiteMapBuilderService $siteMapBuilder, CacheManager $cacheManager, Config $config)
+    public function __construct(ResponseFactory $responseFactory, SiteMapBuilderService $siteMapBuilder, CacheManager $cacheManager, Config $config)
     {
+        $this->responseFactory = $responseFactory;
         $this->siteMapBuilder = $siteMapBuilder;
         $this->cacheManager = $cacheManager;
         $this->config = $config;
@@ -55,7 +63,7 @@ class SiteMapController extends Controller
                 return $this->siteMapBuilder->build();
             });
 
-        return response()
+        return $this->responseFactory
             ->view('app.site-map.index', ['siteMap' => $siteMap])
             ->header('Content-Type', 'text/xml');
     }
