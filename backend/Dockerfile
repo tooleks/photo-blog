@@ -59,15 +59,16 @@ RUN curl -sS https://getcomposer.org/installer | php \
 
 # Install nvm, node, npm and node dependencies.
 ENV NVM_DIR /usr/local/nvm
-ENV NVM_VERSION 0.33.2
-ENV NODE_VERSION 8.1.3
+ENV NVM_VERSION 0.33.6
+ENV NODE_VERSION 8.9.1
 
 RUN curl -sS https://raw.githubusercontent.com/creationix/nvm/v$NVM_VERSION/install.sh | bash
 RUN ["/bin/bash", "-c", "source $NVM_DIR/nvm.sh \
                       && nvm install $NODE_VERSION \
                       && nvm alias default $NODE_VERSION \
                       && nvm use default \
-                      && npm install -g yarn apidoc"]
+                      && npm install -g \
+                         apidoc"]
 
 ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
 ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH

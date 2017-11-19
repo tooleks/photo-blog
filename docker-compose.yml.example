@@ -19,8 +19,6 @@ services:
       - ./config/nginx/conf.d/:/etc/nginx/conf.d
 
   photo-blog-backend.docker:
-    environment:
-      REBUILD_ON_STARTUP: '1'
     build:
       context: ./backend/
       dockerfile: Dockerfile
