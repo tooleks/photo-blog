@@ -68,14 +68,14 @@ class TagsController extends Controller
      */
 
     /**
-     * Find tags.
+     * Paginate over tags.
      *
      * @param PaginatedRequest $request
      * @return JsonResponse
      */
-    public function find(PaginatedRequest $request): JsonResponse
+    public function paginate(PaginatedRequest $request): JsonResponse
     {
-        $paginator = $this->tagManager->paginateOverMostPopular(
+        $paginator = $this->tagManager->paginate(
             $request->get('page', 1),
             $request->get('per_page', 20),
             $request->query()

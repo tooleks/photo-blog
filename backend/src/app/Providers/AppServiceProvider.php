@@ -54,6 +54,11 @@ class AppServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
+            \App\Managers\Post\Contracts\PostManager::class,
+            \App\Managers\Post\PostManager::class
+        );
+
+        $this->app->bind(
             \App\Managers\Subscription\Contracts\SubscriptionManager::class,
             \App\Managers\Subscription\SubscriptionManager::class
         );
@@ -102,10 +107,10 @@ class AppServiceProvider extends ServiceProvider
         );
 
         $this->app->singleton('HTMLPurifier', function (Application $app) {
-            $fileSystem = $app->make('filesystem')->disk('local');
+            $filesystem = $app->make('filesystem')->disk('local');
             $cacheDirectory = 'cache/HTMLPurifier_DefinitionCache';
-            if (!$fileSystem->exists($cacheDirectory)) {
-                $fileSystem->makeDirectory($cacheDirectory);
+            if (!$filesystem->exists($cacheDirectory)) {
+                $filesystem->makeDirectory($cacheDirectory);
             }
             $config = \HTMLPurifier_Config::createDefault();
             $config->set('Cache.SerializerPath', storage_path("app/{$cacheDirectory}"));

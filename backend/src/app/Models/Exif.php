@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use function App\Util\fraction_normalize;
+use App\Models\Tables\Constant;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,7 +20,7 @@ class Exif extends Model
     /**
      * @inheritdoc
      */
-    protected $table = 'exif';
+    protected $table = Constant::TABLE_EXIF;
 
     /**
      * @inheritdoc

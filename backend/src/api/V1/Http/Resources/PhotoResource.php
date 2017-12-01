@@ -22,11 +22,6 @@ class PhotoResource extends PhotoPlainResource
                 'medium' => CastValue::toClassObjectOrNull($this->resource->thumbnails->get(0), ThumbnailPlainResource::class),
                 'large' => CastValue::toClassObjectOrNull($this->resource->thumbnails->get(1), ThumbnailPlainResource::class),
             ],
-            'tags' => $this->when($this->resource->isPublished(), function () {
-                return collect($this->resource->tags)->map(function ($tag) {
-                    return CastValue::toClassObjectOrNull($tag, TagPlainResource::class);
-                });
-            }),
         ]);
     }
 }

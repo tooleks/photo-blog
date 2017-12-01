@@ -2,13 +2,11 @@
 
 namespace App\Managers\Subscription;
 
-use App\Models\Builders\SubscriptionBuilder;
 use function App\Util\str_unique;
-use Closure;
+use App\Models\Builders\SubscriptionBuilder;
 use App\Managers\Subscription\Contracts\SubscriptionManager as SubscriptionManagerContract;
 use App\Models\Subscription;
-use Illuminate\Database\ConnectionInterface as DbConnection;
-use Illuminate\Support\Collection;
+use Illuminate\Database\ConnectionInterface as Database;
 
 /**
  * Class SubscriptionManager.
@@ -18,9 +16,9 @@ use Illuminate\Support\Collection;
 class SubscriptionManager implements SubscriptionManagerContract
 {
     /**
-     * @var DbConnection
+     * @var Database
      */
-    private $dbConnection;
+    private $database;
 
     /**
      * @var SubscriptionValidator
@@ -30,39 +28,13 @@ class SubscriptionManager implements SubscriptionManagerContract
     /**
      * SubscriptionManager constructor.
      *
-     * @param DbConnection $dbConnection
+     * @param Database $database
      * @param SubscriptionValidator $validator
      */
-    public function __construct(DbConnection $dbConnection, SubscriptionValidator $validator)
+    public function __construct(Database $database, SubscriptionValidator $validator)
     {
-        $this->dbConnection = $dbConnection;
+        $this->database = $database;
         $this->validator = $validator;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getByToken(string $token): Subscription
-    {
-        $subscription = (new Subscription)
-            ->newQuery()
-            ->whereTokenEquals($token)
-            ->firstOrFail();
-
-        return $subscription;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function eachFilteredByEmails(Closure $callback, array $emails): void
-    {
-        (new Subscription)
-            ->newQuery()
-            ->whereEmailIn($emails)
-            ->chunk(10, function (Collection $collection) use ($callback) {
-                $collection->each($callback);
-            });
     }
 
     /**
@@ -77,6 +49,19 @@ class SubscriptionManager implements SubscriptionManagerContract
         $subscription->token = str_unique(64);
 
         $subscription->save();
+
+        return $subscription;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getByToken(string $token): Subscription
+    {
+        $subscription = (new Subscription)
+            ->newQuery()
+            ->whereTokenEquals($token)
+            ->firstOrFail();
 
         return $subscription;
     }

@@ -1,17 +1,15 @@
 <?php
 
 use App\Models\Photo;
+use App\Models\Post;
 use App\Models\User;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Contracts\Config\Repository as Config;
 
 /*
 |--------------------------------------------------------------------------
 | API Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the Api\V1\Providers\RouteServiceProvider within a group which
-| is assigned the "api.v1" middleware group. Enjoy building your API!
 |
 */
 
@@ -86,18 +84,6 @@ Route::group(['prefix' => 'photos'], function () {
         ->middleware('can:access-administrator-part')
         ->middleware(sprintf('can:create-resource,%s', Photo::class));
 
-    Route::get('/{photo}')
-        ->uses('PhotosController@get')
-        ->middleware('auth:api')
-        ->middleware('can:access-administrator-part')
-        ->middleware('can:get-resource,photo');
-
-    Route::post('/{photo}')
-        ->uses('PhotosController@update')
-        ->middleware('auth:api')
-        ->middleware('can:access-administrator-part')
-        ->middleware('can:update-resource,photo');
-
     Route::delete('/{photo}')
         ->uses('PhotosController@delete')
         ->middleware('auth:api')
@@ -108,34 +94,34 @@ Route::group(['prefix' => 'photos'], function () {
 
 /*
 |--------------------------------------------------------------------------
-| Published Photos Resource Routes
+| Posts Resource Routes
 |--------------------------------------------------------------------------
 */
-Route::group(['prefix' => 'published_photos'], function () {
+Route::group(['prefix' => 'posts'], function () {
 
     Route::post('/')
-        ->uses('PublishedPhotosController@create')
+        ->uses('PostsController@create')
         ->middleware('auth:api')
         ->middleware('can:access-administrator-part')
-        ->middleware(sprintf('can:create-resource,%s', Photo::class));
+        ->middleware(sprintf('can:create-resource,%s', Post::class));
 
     Route::get('/')
-        ->uses('PublishedPhotosController@find');
+        ->uses('PostsController@paginate');
 
-    Route::get('/{published_photo}')
-        ->uses('PublishedPhotosController@get');
+    Route::get('/{post}')
+        ->uses('PostsController@get');
 
-    Route::put('/{published_photo}')
-        ->uses('PublishedPhotosController@update')
+    Route::put('/{post}')
+        ->uses('PostsController@update')
         ->middleware('auth:api')
         ->middleware('can:access-administrator-part')
-        ->middleware('can:update-resource,published_photo');
+        ->middleware('can:update-resource,photo');
 
-    Route::delete('/{published_photo}')
+    Route::delete('/{post}')
         ->uses('PublishedPhotosController@delete')
         ->middleware('auth:api')
         ->middleware('can:access-administrator-part')
-        ->middleware('can:delete-resource,published_photo');
+        ->middleware('can:delete-resource,photo');
 
 });
 
@@ -147,7 +133,7 @@ Route::group(['prefix' => 'published_photos'], function () {
 Route::group(['prefix' => 'tags'], function () {
 
     Route::get('/')
-        ->uses('TagsController@find');
+        ->uses('TagsController@paginate');
 
 });
 
@@ -176,7 +162,7 @@ Route::group(['prefix' => 'subscriptions'], function () {
         ->middleware('throttle:10,1');
 
     Route::get('/')
-        ->uses('SubscriptionsController@find')
+        ->uses('SubscriptionsController@paginate')
         ->middleware('auth:api')
         ->middleware('can:access-administrator-part');
 

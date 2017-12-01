@@ -24,17 +24,17 @@ class UserPlainResource extends Resource
      */
     public function toArray($request)
     {
-        $isVisibleUserContacts = optional($request->user())->can('get-user-contacts', $this->resource);
+        $visibleUserContacts = optional($request->user())->can('view-user-contacts', $this->resource);
 
         return [
             'id' => CastValue::toIntOrNull(html_purify($this->resource->id)),
             'name' => CastValue::toStringOrNull(html_purify($this->resource->name)),
-            'email' => $this->when($isVisibleUserContacts, function () {
+            'email' => $this->when($visibleUserContacts, function () {
                 return CastValue::toStringOrNull(html_purify($this->resource->email));
             }),
             'role' => CastValue::toStringOrNull(html_purify($this->resource->role->name)),
-            'created_at' => CastValue::toStringOrNull(html_purify($this->resource->created_at)),
-            'updated_at' => CastValue::toStringOrNull(html_purify($this->resource->updated_at)),
+            'created_at' => CastValue::toStringOrNull(html_purify(optional($this->resource->created_at)->toAtomString())),
+            'updated_at' => CastValue::toStringOrNull(html_purify(optional($this->resource->updated_at)->toAtomString())),
         ];
     }
 }

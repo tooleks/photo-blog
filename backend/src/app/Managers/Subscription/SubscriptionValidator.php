@@ -3,7 +3,7 @@
 namespace App\Managers\Subscription;
 
 use function App\Util\validator_filter_attributes;
-use App\Models\Subscription;
+use App\Models\Tables\Constant;
 use Illuminate\Validation\Factory as ValidatorFactory;
 use Illuminate\Validation\Rule;
 
@@ -35,7 +35,7 @@ class SubscriptionValidator
      */
     public function validateForCreate(array $attributes): array
     {
-        $uniqueSubscriptionEmail = Rule::unique((new Subscription)->getTable(), 'email');
+        $uniqueSubscriptionEmail = Rule::unique(Constant::TABLE_SUBSCRIPTIONS, 'email');
 
         $rules = [
             'email' => ['required', 'email', 'min:1', 'max:255', $uniqueSubscriptionEmail],

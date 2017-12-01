@@ -2,10 +2,8 @@
 
 namespace App\Models\Builders;
 
-use App\Models\Photo;
-use App\Models\Tag;
+use App\Models\Tables\Constant;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Database\Query\Expression;
 
 /**
@@ -18,31 +16,12 @@ class TagBuilder extends Builder
     /**
      * @var string
      */
-    private $tagsTable;
+    private $tagsTable = Constant::TABLE_TAGS;
 
     /**
      * @var string
      */
-    private $photosTable;
-
-    /**
-     * @var string
-     */
-    private $photosTagsTable;
-
-    /**
-     * TagBuilder constructor.
-     *
-     * @param QueryBuilder $query
-     */
-    public function __construct(QueryBuilder $query)
-    {
-        parent::__construct($query);
-
-        $this->tagsTable = (new Tag)->getTable();
-        $this->photosTable = (new Photo)->getTable();
-        $this->photosTagsTable = $this->photosTable . '_' . $this->tagsTable;
-    }
+    private $postsTagsTable = Constant::TABLE_POSTS_TAGS;
 
     /**
      * @return $this
@@ -55,21 +34,28 @@ class TagBuilder extends Builder
     /**
      * @return $this
      */
-    public function whereHasNoPhotos()
+    public function whereHasPosts()
     {
-        return $this->has('photos', '<', 1);
+        return $this->has('posts');
     }
 
     /**
-     * @param string $order
      * @return $this
      */
-    public function orderByMostPopular(string $order = 'desc')
+    public function whereHasNoPosts()
+    {
+        return $this->doesntHave('posts');
+    }
+
+    /**
+     * @return $this
+     */
+    public function orderByPopularity()
     {
         return $this
-            ->addSelect(new Expression("COUNT({$this->photosTagsTable}.tag_id) AS count"))
-            ->leftJoin($this->photosTagsTable, "{$this->photosTagsTable}.tag_id", '=', "{$this->tagsTable}.id")
+            ->addSelect(new Expression("COUNT({$this->postsTagsTable}.tag_id) AS popularity"))
+            ->leftJoin($this->postsTagsTable, "{$this->postsTagsTable}.tag_id", '=', "{$this->tagsTable}.id")
             ->groupBy("{$this->tagsTable}.id")
-            ->orderBy('count', $order);
+            ->orderBy('popularity', 'desc');
     }
 }

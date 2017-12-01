@@ -10,7 +10,6 @@ use App\Models\Subscription;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 
 /**
@@ -71,14 +70,14 @@ class SubscriptionsController extends Controller
     {
         $subscription = $this->subscriptionManager->create($request->all());
 
-        return $this->responseFactory->json(new SubscriptionPlainResource($subscription), Response::HTTP_CREATED);
+        return $this->responseFactory->json(new SubscriptionPlainResource($subscription), JsonResponse::HTTP_CREATED);
     }
 
     /**
      * @param PaginatedRequest $request
      * @return JsonResponse
      */
-    public function find(PaginatedRequest $request): JsonResponse
+    public function paginate(PaginatedRequest $request): JsonResponse
     {
         $paginator = $this->subscriptionManager->paginate(
             $request->get('page', 1),
@@ -86,7 +85,7 @@ class SubscriptionsController extends Controller
             $request->query()
         );
 
-        return $this->responseFactory->json(new PaginatedResource($paginator, SubscriptionPlainResource::class), Response::HTTP_OK);
+        return $this->responseFactory->json(new PaginatedResource($paginator, SubscriptionPlainResource::class), JsonResponse::HTTP_OK);
     }
 
     /**
@@ -110,6 +109,6 @@ class SubscriptionsController extends Controller
     {
         $this->subscriptionManager->delete($subscription);
 
-        return $this->responseFactory->json(null, Response::HTTP_NO_CONTENT);
+        return $this->responseFactory->json(null, JsonResponse::HTTP_NO_CONTENT);
     }
 }

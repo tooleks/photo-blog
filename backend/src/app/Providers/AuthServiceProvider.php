@@ -59,11 +59,15 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function registerGates(): void
     {
-        Gate::define('get-user-contacts', function (User $authUser, User $user) {
+        Gate::define('access-administrator-part', function (User $authUser) {
+            return $authUser->isAdministrator();
+        });
+
+        Gate::define('view-user-contacts', function (User $authUser, User $user) {
             return $authUser->isAdministrator() || $authUser->id === $user->id;
         });
 
-        Gate::define('access-administrator-part', function (User $authUser) {
+        Gate::define('view-unpublished-posts', function (User $authUser) {
             return $authUser->isAdministrator();
         });
     }

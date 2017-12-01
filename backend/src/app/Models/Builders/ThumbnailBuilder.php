@@ -16,6 +16,6 @@ class ThumbnailBuilder extends Builder
      */
     public function whereHasNoPhotos()
     {
-        return $this->has('photos', '<', 1);
+        return $this->doesntHave('photos');
     }
 }

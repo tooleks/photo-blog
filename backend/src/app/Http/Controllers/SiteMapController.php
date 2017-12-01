@@ -58,7 +58,7 @@ class SiteMapController extends Controller
     public function index()
     {
         $siteMap = $this->cacheManager
-            ->tags(['siteMap', 'photos', 'tags'])
+            ->tags(['siteMap', 'posts', 'photos', 'tags'])
             ->remember('siteMap', $this->config->get('cache.lifetime'), function () {
                 return $this->siteMapBuilder->build();
             });

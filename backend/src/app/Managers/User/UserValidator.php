@@ -3,8 +3,8 @@
 namespace App\Managers\User;
 
 use function App\Util\validator_filter_attributes;
-use App\Models\Role;
 use App\Models\User;
+use App\Models\Tables\Constant;
 use Illuminate\Validation\Factory as ValidatorFactory;
 use Illuminate\Validation\Rule;
 
@@ -36,8 +36,8 @@ class UserValidator
      */
     public function validateForCreate(array $attributes): array
     {
-        $validRoleIdRule = Rule::exists((new Role)->getTable(), 'id');
-        $uniqueUserEmailRule = Rule::unique((new User)->getTable(), 'email');
+        $validRoleIdRule = Rule::exists(Constant::TABLE_ROLES, 'id');
+        $uniqueUserEmailRule = Rule::unique(Constant::TABLE_USERS, 'email');
 
         $rules = [
             'role_id' => ['required', $validRoleIdRule],
@@ -58,7 +58,7 @@ class UserValidator
      */
     public function validateForSave(User $user, array $attributes): array
     {
-        $uniqueUserEmailRule = Rule::unique((new User)->getTable(), 'email')->ignore($user->id);
+        $uniqueUserEmailRule = Rule::unique(Constant::TABLE_USERS, 'email')->ignore($user->id, 'id');
 
         $rules = [
             'email' => ['filled', 'min:1', 'max:255', $uniqueUserEmailRule],

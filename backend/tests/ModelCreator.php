@@ -61,18 +61,7 @@ trait ModelCreator
         $photo->thumbnails()->save(factory(Thumbnail::class)->make());
         $photo->thumbnails()->save(factory(Thumbnail::class)->make());
 
-        return $photo;
-    }
-
-    protected function createPublishedPhoto(array $attributes = []): Photo
-    {
-        /** @var Photo $photo */
-
-        $photo = $this->createPhoto($attributes);
-
-        $photo->tags()->save(factory(Tag::class)->make());
-
-        return $photo;
+        return $photo->load('exif', 'thumbnails');
     }
 
     protected function createTag(array $attributes = []): Tag

@@ -6,7 +6,7 @@ use App\Managers\User\Contracts\UserManager as UserManagerContract;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Contracts\Hashing\Hasher;
-use Illuminate\Database\ConnectionInterface as DbConnection;
+use Illuminate\Database\ConnectionInterface as Database;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 /**
@@ -17,9 +17,9 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 class UserManager implements UserManagerContract
 {
     /**
-     * @var DbConnection
+     * @var Database
      */
-    private $dbConnection;
+    private $database;
 
     /**
      * @var Hasher
@@ -34,15 +34,56 @@ class UserManager implements UserManagerContract
     /**
      * UserManager constructor.
      *
-     * @param DbConnection $dbConnection
+     * @param Database $database
      * @param Hasher $hasher
      * @param UserValidator $validator
      */
-    public function __construct(DbConnection $dbConnection, Hasher $hasher, UserValidator $validator)
+    public function __construct(Database $database, Hasher $hasher, UserValidator $validator)
     {
-        $this->dbConnection = $dbConnection;
+        $this->database = $database;
         $this->hasher = $hasher;
         $this->validator = $validator;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function create(array $attributes): User
+    {
+        // Create a customer user by default.
+        if (!isset($attributes['role_id'])) {
+            $attributes['role_id'] = (new Role)->newQuery()->whereNameCustomer()->firstOrFail()->id;
+        }
+
+        $attributes = $this->validator->validateForCreate($attributes);
+
+        $user = (new User)->fill($attributes);
+
+        $user->password = $this->hasher->make($attributes['password']);
+
+        $this->database->transaction(function () use ($user) {
+            $user->save();
+        });
+
+        return $user;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function update(User $user, array $attributes): void
+    {
+        $attributes = $this->validator->validateForSave($user, $attributes);
+
+        $user->fill($attributes);
+
+        if (isset($attributes['password'])) {
+            $user->password = $this->hasher->make($attributes['password']);
+        }
+
+        $this->database->transaction(function () use ($user) {
+            $user->save();
+        });
     }
 
     /**
@@ -100,50 +141,9 @@ class UserManager implements UserManagerContract
     /**
      * @inheritdoc
      */
-    public function create(array $attributes): User
-    {
-        // Create a customer user by default.
-        if (!isset($attributes['role_id'])) {
-            $attributes['role_id'] = (new Role)->newQuery()->whereNameCustomer()->firstOrFail()->id;
-        }
-
-        $attributes = $this->validator->validateForCreate($attributes);
-
-        $user = (new User)->fill($attributes);
-
-        $user->password = $this->hasher->make($attributes['password']);
-
-        $this->dbConnection->transaction(function () use ($user) {
-            $user->save();
-        });
-
-        return $user;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function save(User $user, array $attributes): void
-    {
-        $attributes = $this->validator->validateForSave($user, $attributes);
-
-        $user->fill($attributes);
-
-        if (isset($attributes['password'])) {
-            $user->password = $this->hasher->make($attributes['password']);
-        }
-
-        $this->dbConnection->transaction(function () use ($user) {
-            $user->save();
-        });
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function delete(User $user): void
     {
-        $this->dbConnection->transaction(function () use ($user) {
+        $this->database->transaction(function () use ($user) {
             $user->delete();
         });
     }

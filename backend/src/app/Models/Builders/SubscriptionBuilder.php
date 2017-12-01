@@ -2,9 +2,8 @@
 
 namespace App\Models\Builders;
 
-use App\Models\Subscription;
+use App\Models\Tables\Constant;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 
 /**
  * Class SubscriptionBuilder.
@@ -16,19 +15,7 @@ class SubscriptionBuilder extends Builder
     /**
      * @var string
      */
-    private $subscriptionsTable;
-
-    /**
-     * SubscriptionBuilder constructor.
-     *
-     * @param QueryBuilder $query
-     */
-    public function __construct(QueryBuilder $query)
-    {
-        parent::__construct($query);
-
-        $this->subscriptionsTable = (new Subscription)->getTable();
-    }
+    private $subscriptionsTable = Constant::TABLE_SUBSCRIPTIONS;
 
     /**
      * @param string $ids

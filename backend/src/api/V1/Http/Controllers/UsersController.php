@@ -60,8 +60,8 @@ class UsersController extends Controller
      *     "name": "username",
      *     "email": "username@mail.address",
      *     "role": "Customer",
-     *     "created_at": "2016-10-24 12:24:33",
-     *     "updated_at": "2016-10-24 14:38:05"
+     *     "created_at": "2099-12-31T23:59:59+00:00",
+     *     "updated_at": "2099-12-31T23:59:59+00:00"
      * }
      */
 
@@ -92,8 +92,8 @@ class UsersController extends Controller
      *     "name": "username",
      *     "email": "username@mail.address",
      *     "role": "Customer",
-     *     "created_at": "2016-10-24 12:24:33",
-     *     "updated_at": "2016-10-24 14:38:05"
+     *     "created_at": "2099-12-31T23:59:59+00:00",
+     *     "updated_at": "2099-12-31T23:59:59+00:00"
      * }
      */
 
@@ -129,8 +129,8 @@ class UsersController extends Controller
      *     "name": "username",
      *     "email": "username@mail.address",
      *     "role": "Customer",
-     *     "created_at": "2016-10-24 12:24:33",
-     *     "updated_at": "2016-10-24 14:38:05"
+     *     "created_at": "2099-12-31T23:59:59+00:00",
+     *     "updated_at": "2099-12-31T23:59:59+00:00"
      * }
      */
 
@@ -143,7 +143,7 @@ class UsersController extends Controller
      */
     public function update(Request $request, User $user): JsonResponse
     {
-        $this->userManager->save($user, $request->all());
+        $this->userManager->update($user, $request->all());
 
         return $this->responseFactory->json(new UserPlainResource($user), Response::HTTP_OK);
     }

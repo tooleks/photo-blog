@@ -30,7 +30,7 @@ class PaginatedRequest extends FormRequest
     {
         return [
             'page' => ['filled', 'integer', 'min:1'],
-            'per_page' => ['filled', 'integer', 'min:1', 'max:100'],
+            'per_page' => ['filled', 'integer', 'min:1', 'max:50'],
         ];
     }
 }

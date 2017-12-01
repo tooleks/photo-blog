@@ -82,29 +82,33 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function registerModelBindings()
     {
-        Route::bind('published_photo', function ($id) {
-            return $this->app
-                ->make(\App\Managers\Photo\Contracts\PhotoManager::class)
-                ->getPublishedById((int) $id);
+        Route::bind('photo', function ($id) {
+            /** @var \App\Managers\Photo\Contracts\PhotoManager $manager */
+            $manager = $this->app->make(\App\Managers\Photo\Contracts\PhotoManager::class);
+            $model = $manager->getById((int) $id);
+            return $model;
         });
 
-        Route::bind('photo', function ($id) {
-            return $this->app
-                ->make(\App\Managers\Photo\Contracts\PhotoManager::class)
-                ->getById((int) $id);
+        Route::bind('post', function ($id) {
+            /** @var \App\Managers\Post\Contracts\PostManager $manager */
+            $manager = $this->app->make(\App\Managers\Post\Contracts\PostManager::class);
+            $model = $manager->getById((int) $id);
+            return $model;
         });
 
         Route::bind('subscription', function ($token) {
-            return $this->app
-                ->make(\App\Managers\Subscription\Contracts\SubscriptionManager::class)
-                ->getByToken((string) $token);
+            /** @var \App\Managers\Subscription\Contracts\SubscriptionManager $manager */
+            $manager = $this->app->make(\App\Managers\Subscription\Contracts\SubscriptionManager::class);
+            $model = $manager->getByToken((string) $token);
+            return $model;
         });
 
         Route::bind('user', function ($id) {
             $id = ($id === 'me') ? optional(Auth::user())->id : $id;
-            return $this->app
-                ->make(\App\Managers\User\Contracts\UserManager::class)
-                ->getById((int) $id);
+            /** @var \App\Managers\User\Contracts\UserManager $manager */
+            $manager = $this->app->make(\App\Managers\User\Contracts\UserManager::class);
+            $model = $manager->getById((int) $id);
+            return $model;
         });
     }
 }

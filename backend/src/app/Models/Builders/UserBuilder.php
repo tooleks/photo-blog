@@ -2,9 +2,8 @@
 
 namespace App\Models\Builders;
 
-use App\Models\User;
+use App\Models\Tables\Constant;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 
 /**
  * Class UserBuilder.
@@ -16,19 +15,7 @@ class UserBuilder extends Builder
     /**
      * @var string
      */
-    private $usersTable;
-
-    /**
-     * UserBuilder constructor.
-     *
-     * @param QueryBuilder $query
-     */
-    public function __construct(QueryBuilder $query)
-    {
-        parent::__construct($query);
-
-        $this->usersTable = (new User)->getTable();
-    }
+    private $usersTable = Constant::TABLE_USERS;
 
     /**
      * @return $this

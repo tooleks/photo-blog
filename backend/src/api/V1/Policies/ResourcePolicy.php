@@ -80,7 +80,7 @@ class ResourcePolicy
             return true;
         }
 
-        if ($authUser->id === optional($resource)->user_id) {
+        if ($authUser->id === optional($resource)->created_by_user_id) {
             return true;
         }
 

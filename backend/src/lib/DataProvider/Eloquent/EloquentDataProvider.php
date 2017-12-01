@@ -4,7 +4,7 @@ namespace Lib\DataProvider\Eloquent;
 
 use Closure;
 use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Database\ConnectionInterface as DbConnection;
+use Illuminate\Database\ConnectionInterface as Database;
 use Illuminate\Database\Eloquent\Model;
 use Lib\DataProvider\Contracts\Criteria;
 use Lib\DataProvider\Contracts\DataProvider as DataProviderContract;
@@ -40,7 +40,7 @@ abstract class EloquentDataProvider implements DataProviderContract
      *
      * @var mixed
      */
-    protected $dbConnection;
+    protected $database;
 
     /**
      * Events dispatcher class instance.
@@ -52,12 +52,12 @@ abstract class EloquentDataProvider implements DataProviderContract
     /**
      * DataProvider constructor.
      *
-     * @param DbConnection $dbConnection
+     * @param Database $database
      * @param Dispatcher $dispatcher
      */
-    public function __construct(DbConnection $dbConnection, Dispatcher $dispatcher)
+    public function __construct(Database $database, Dispatcher $dispatcher)
     {
-        $this->dbConnection = $dbConnection;
+        $this->database = $database;
         $this->dispatcher = $dispatcher;
 
         $this->reset();
@@ -266,14 +266,14 @@ abstract class EloquentDataProvider implements DataProviderContract
         $this->assertModel($model);
 
         try {
-            $this->dbConnection->beginTransaction();
+            $this->database->beginTransaction();
             $this->dispatchEvent('beforeSave', $model, $attributes, $options);
             $model->fill($attributes);
             $model->save();
             $this->dispatchEvent('afterSave', $model, $attributes, $options);
-            $this->dbConnection->commit();
+            $this->database->commit();
         } catch (Throwable $e) {
-            $this->dbConnection->rollBack();
+            $this->database->rollBack();
             throw new DataProviderSaveException($e->getMessage(), $e->getCode(), $e);
         } finally {
             $this->reset();
@@ -288,13 +288,13 @@ abstract class EloquentDataProvider implements DataProviderContract
         $this->assertModel($model);
 
         try {
-            $this->dbConnection->beginTransaction();
+            $this->database->beginTransaction();
             $this->dispatchEvent('beforeDelete', $model, $options);
             $deleted = $model->delete();
             $this->dispatchEvent('afterDelete', $model, $deleted, $options);
-            $this->dbConnection->commit();
+            $this->database->commit();
         } catch (Throwable $e) {
-            $this->dbConnection->rollBack();
+            $this->database->rollBack();
             throw new DataProviderDeleteException($e->getMessage(), $e->getCode(), $e);
         } finally {
             $this->reset();

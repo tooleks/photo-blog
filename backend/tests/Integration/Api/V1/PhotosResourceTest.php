@@ -2,6 +2,8 @@
 
 namespace Tests\Integration\Api\V1;
 
+use App\Models\Photo;
+use App\Models\Thumbnail;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
@@ -24,7 +26,6 @@ class PhotosResourceTest extends TestCase
             'created_by_user_id',
             'avg_color',
             'created_at',
-            'updated_at',
             'exif' => [
                 'manufacturer',
                 'model',
@@ -46,11 +47,6 @@ class PhotosResourceTest extends TestCase
                 ],
             ],
         ];
-    }
-
-    protected function getPathFromUrl(string $url): string
-    {
-        return str_after($url, '/storage/');
     }
 
     public function validCreateAttributesProvider(): array
@@ -109,15 +105,17 @@ class PhotosResourceTest extends TestCase
             ->assertJsonStructure($this->getResourceStructure())
             ->decodeResponseJson();
 
-        Storage::disk('public')->assertExists(
-            $this->getPathFromUrl($responseBody['thumbnails']['medium']['url']),
-            'The photo thumbnail file was not generated.'
-        );
+        /** @var Photo $photo */
+        $photo = (new Photo)
+            ->newQuery()
+            ->withThumbnails()
+            ->whereIdEquals($responseBody['id'])
+            ->firstOrFail();
 
-        Storage::disk('public')->assertExists(
-            $this->getPathFromUrl($responseBody['thumbnails']['large']['url']),
-            'The photo thumbnail file was not generated.'
-        );
+        Storage::assertExists($photo->path);
+        $photo->thumbnails->each(function (Thumbnail $thumbnail) {
+            Storage::assertExists($thumbnail->path);
+        });
     }
 
     /**
@@ -151,42 +149,7 @@ class PhotosResourceTest extends TestCase
             ->assertStatus(401);
     }
 
-    /**
-     * @dataProvider validUpdateAttributesProvider
-     * @param array $requestBody
-     * @return void
-     */
-    public function testUpdateSuccess(array $requestBody): void
-    {
-        Storage::fake('public');
-
-        $authUser = $this->createAdministratorUser();
-        $photo = $this->createPhoto(['created_by_user_id' => $authUser->id]);
-
-        $responseBody = $this
-            ->actingAs($authUser)
-            ->json('POST', "{$this->getResourceFullName()}/{$photo->id}", $requestBody)
-            ->assertStatus(200)
-            ->assertJsonStructure($this->getResourceStructure())
-            ->decodeResponseJson();
-
-        Storage::disk('public')->assertExists(
-            $this->getPathFromUrl($responseBody['thumbnails']['medium']['url']),
-            'The photo thumbnail file was not generated.'
-        );
-
-        Storage::disk('public')->assertExists(
-            $this->getPathFromUrl($responseBody['thumbnails']['large']['url']),
-            'The photo thumbnail file was not generated.'
-        );
-    }
-
-    /**
-     * @dataProvider invalidUpdateAttributesProvider
-     * @param array $requestBody
-     * @return void
-     */
-    public function testUpdateValidationFail(array $requestBody): void
+    public function testDeleteSuccess(): void
     {
         Storage::fake('public');
 
@@ -195,16 +158,11 @@ class PhotosResourceTest extends TestCase
 
         $this
             ->actingAs($authUser)
-            ->json('POST', "{$this->getResourceFullName()}/{$photo->id}", $requestBody)
-            ->assertStatus(422);
+            ->json('DELETE', "{$this->getResourceFullName()}/{$photo->id}")
+            ->assertStatus(204);
     }
 
-    /**
-     * @dataProvider validUpdateAttributesProvider
-     * @param array $requestBody
-     * @return void
-     */
-    public function testUpdateUnauthorized(array $requestBody): void
+    public function testDeleteUnauthorized(): void
     {
         Storage::fake('public');
 
@@ -212,7 +170,12 @@ class PhotosResourceTest extends TestCase
         $photo = $this->createPhoto(['created_by_user_id' => $user->id]);
 
         $this
-            ->json('POST', "{$this->getResourceFullName()}/{$photo->id}", $requestBody)
+            ->json('DELETE', "{$this->getResourceFullName()}/{$photo->id}")
             ->assertStatus(401);
+
+        Storage::assertMissing($photo->path);
+        $photo->thumbnails->each(function (Thumbnail $thumbnail) {
+            Storage::assertMissing($thumbnail->path);
+        });
     }
 }

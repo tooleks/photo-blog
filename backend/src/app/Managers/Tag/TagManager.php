@@ -2,11 +2,9 @@
 
 namespace App\Managers\Tag;
 
-use Closure;
 use App\Models\Tag;
 use App\Managers\Tag\Contracts\TagManager as TagManagerContract;
-use Illuminate\Database\ConnectionInterface as DbConnection;
-use Illuminate\Support\Collection;
+use Illuminate\Database\ConnectionInterface as Database;
 
 /**
  * Class TagManager.
@@ -16,44 +14,32 @@ use Illuminate\Support\Collection;
 class TagManager implements TagManagerContract
 {
     /**
-     * @var DbConnection
+     * @var Database
      */
-    private $dbConnection;
+    private $database;
 
     /**
      * TagManager constructor.
      *
-     * @param DbConnection $dbConnection
+     * @param Database $database
      */
-    public function __construct(DbConnection $dbConnection)
+    public function __construct(Database $database)
     {
-        $this->dbConnection = $dbConnection;
+        $this->database = $database;
     }
 
     /**
      * @inheritdoc
      */
-    public function paginateOverMostPopular(int $page, int $perPage, array $filters = [])
+    public function paginate(int $page, int $perPage, array $filters = [])
     {
         $query = (new Tag)
             ->newQuery()
             ->defaultSelect()
-            ->orderByMostPopular();
+            ->orderByPopularity();
 
         $paginator = $query->paginate($perPage, ['*'], 'page', $page)->appends($filters);
 
         return $paginator;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function each(Closure $callback): void
-    {
-        (new Tag)
-            ->newQuery()
-            ->chunk(10, function (Collection $tags) use ($callback) {
-                $tags->each($callback);
-            });
     }
 }

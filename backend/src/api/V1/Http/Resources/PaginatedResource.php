@@ -14,19 +14,19 @@ class PaginatedResource extends ResourceCollection
     /**
      * @var string|callable
      */
-    private $resourceModifier;
+    private $wrapper;
 
     /**
      * PaginatedResource constructor.
      *
      * @param mixed $resource
-     * @param string|callable $resourceModifier
+     * @param string|callable $wrapper
      */
-    public function __construct($resource, $resourceModifier)
+    public function __construct($resource, $wrapper)
     {
         parent::__construct($resource);
 
-        $this->resourceModifier = $resourceModifier;
+        $this->wrapper = $wrapper;
     }
 
     /**
@@ -34,13 +34,12 @@ class PaginatedResource extends ResourceCollection
      */
     public function toArray($request)
     {
-        $resourceModifier = $this->resourceModifier;
-
-        if (is_callable($resourceModifier)) {
-            $data = $resourceModifier($this->collection);
-        } elseif (class_exists($resourceModifier)) {
-            $data = $this->collection->map(function ($item) use ($resourceModifier) {
-                return new $resourceModifier($item);
+        $wrapper = $this->wrapper;
+        if (is_callable($wrapper)) {
+            $data = $wrapper($this->collection);
+        } elseif (class_exists($wrapper)) {
+            $data = $this->collection->map(function ($item) use ($wrapper) {
+                return new $wrapper($item);
             });
         }
 

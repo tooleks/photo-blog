@@ -58,7 +58,7 @@ class RssController extends Controller
     public function index()
     {
         $rss = $this->cacheManager
-            ->tags(['rss', 'photos', 'tags'])
+            ->tags(['rss', 'posts', 'photos', 'tags'])
             ->remember('rss', $this->config->get('cache.lifetime'), function () {
                 return $this->rssBuilder->build();
             });

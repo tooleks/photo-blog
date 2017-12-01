@@ -5,13 +5,14 @@ namespace App\Services\SiteMap;
 use function App\Util\url_frontend;
 use function App\Util\url_frontend_photo;
 use function App\Util\url_frontend_tag;
+use App\Models\Post;
 use App\Managers\Photo\Contracts\PhotoManager;
 use App\Managers\Tag\Contracts\TagManager;
-use App\Models\Photo;
 use App\Models\Tag;
 use App\Services\SiteMap\Contracts\SiteMapBuilderService as SiteMapBuilderServiceContract;
 use Lib\SiteMap\Contracts\Builder;
 use Lib\SiteMap\Item;
+use Illuminate\Support\Collection;
 
 /**
  * Class SiteMapBuilderService.
@@ -84,24 +85,34 @@ class SiteMapBuilderService implements SiteMapBuilderServiceContract
                 ->setPriority('0.5')
         );
 
-        $this->photoManager->eachPublished(function (Photo $photo) use ($items) {
-            $items->push(
-                (new Item)
-                    ->setLocation(url_frontend_photo($photo->id))
-                    ->setLastModified($photo->updated_at->toAtomString())
-                    ->setChangeFrequency('weekly')
-                    ->setPriority('0.8')
-            );
-        });
+        (new Post)
+            ->newQuery()
+            ->whereIsPublished()
+            ->chunk(50, function (Collection $posts) use ($items) {
+                $posts->each(function (Post $post) use ($items) {
+                    $items->push(
+                        (new Item)
+                            ->setLocation(url_frontend_photo($post->id))
+                            ->setLastModified($post->updated_at->toAtomString())
+                            ->setChangeFrequency('weekly')
+                            ->setPriority('0.8')
+                    );
+                });
+            });
 
-        $this->tagManager->each(function (Tag $tag) use ($items) {
-            $items->push(
-                (new Item)
-                    ->setLocation(url_frontend_tag($tag->value))
-                    ->setChangeFrequency('daily')
-                    ->setPriority('0.7')
-            );
-        });
+        (new Tag)
+            ->newQuery()
+            ->whereHasPosts()
+            ->chunk(50, function (Collection $tags) use ($items) {
+                $tags->each(function (Tag $tag) use ($items) {
+                    $items->push(
+                        (new Item)
+                            ->setLocation(url_frontend_tag($tag->value))
+                            ->setChangeFrequency('daily')
+                            ->setPriority('0.7')
+                    );
+                });
+            });
 
         $this->siteMapBuilder->setItems($items->toArray());
 

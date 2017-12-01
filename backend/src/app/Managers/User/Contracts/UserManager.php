@@ -12,7 +12,24 @@ use App\Models\User;
 interface UserManager
 {
     /**
-     * Get the user by ID.
+     * Create a user.
+     *
+     * @param array $attributes
+     * @return User
+     */
+    public function create(array $attributes): User;
+
+    /**
+     * Update a user.
+     *
+     * @param User $user
+     * @param array $attributes
+     * @return void
+     */
+    public function update(User $user, array $attributes): void;
+
+    /**
+     * Get a user by ID.
      *
      * @param int $id
      * @return User
@@ -20,7 +37,7 @@ interface UserManager
     public function getById(int $id): User;
 
     /**
-     * Get the user by name.
+     * Get a user by name.
      *
      * @param string $name
      * @return User
@@ -28,7 +45,7 @@ interface UserManager
     public function getByName(string $name): User;
 
     /**
-     * Get the user by email.
+     * Get a user by email.
      *
      * @param string $email
      * @return User
@@ -36,7 +53,7 @@ interface UserManager
     public function getByEmail(string $email): User;
 
     /**
-     * Get the user by credentials.
+     * Get a user by credentials.
      *
      * @param string $email
      * @param string $password
@@ -45,24 +62,7 @@ interface UserManager
     public function getByCredentials(string $email, string $password): User;
 
     /**
-     * Create the user.
-     *
-     * @param array $attributes
-     * @return User
-     */
-    public function create(array $attributes): User;
-
-    /**
-     * Save the user.
-     *
-     * @param User $user
-     * @param array $attributes
-     * @return void
-     */
-    public function save(User $user, array $attributes): void;
-
-    /**
-     * Delete the user.
+     * Delete a user.
      *
      * @param User $user
      * @return void

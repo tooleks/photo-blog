@@ -3,8 +3,8 @@
 namespace App\Models\Builders;
 
 use App\Models\Role;
+use App\Models\Tables\Constant;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 
 /**
  * Class RoleBuilder.
@@ -16,19 +16,7 @@ class RoleBuilder extends Builder
     /**
      * @var string
      */
-    private $rolesTable;
-
-    /**
-     * RoleBuilder constructor.
-     *
-     * @param QueryBuilder $query
-     */
-    public function __construct(QueryBuilder $query)
-    {
-        parent::__construct($query);
-
-        $this->rolesTable = (new Role)->getTable();
-    }
+    private $rolesTable = Constant::TABLE_ROLES;
 
     /**
      * @return $this

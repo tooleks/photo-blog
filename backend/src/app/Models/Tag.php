@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Builders\TagBuilder;
+use App\Models\Tables\Constant;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property int id
  * @property string value
- * @property Collection photos
+ * @property Collection posts
  * @package App\Models
  */
 class Tag extends Model
@@ -35,8 +36,8 @@ class Tag extends Model
     {
         parent::boot();
 
-        static::deleting(function (Tag $tag) {
-            $tag->photos()->detach();
+        static::deleting(function (self $tag) {
+            $tag->posts()->detach();
         });
     }
 
@@ -59,9 +60,9 @@ class Tag extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function photos()
+    public function posts()
     {
-        return $this->belongsToMany(Photo::class, 'photos_tags');
+        return $this->belongsToMany(Post::class, Constant::TABLE_POSTS_TAGS);
     }
 
     /**

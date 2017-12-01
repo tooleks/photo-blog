@@ -4,8 +4,8 @@ namespace App\Services\Rss;
 
 use function App\Util\url_frontend_photo;
 use function App\Util\url_storage;
+use App\Models\Post;
 use App\Managers\Photo\Contracts\PhotoManager;
-use App\Models\Photo;
 use App\Services\Rss\Contracts\RssBuilderService as RssBuilderServiceContract;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
 use Lib\Rss\Contracts\Builder;
@@ -70,26 +70,29 @@ class RssBuilderService implements RssBuilderServiceContract
      */
     private function provideItems(): array
     {
-        return $this->photoManager
-            ->getNewlyPublished(50)
-            ->map(function (Photo $photo) {
-                $url = url_frontend_photo($photo->id);
-                $enclosureUrl = url_storage($this->storage->url($photo->thumbnails->first()->path));
-                $enclosureSize = $this->storage->size($photo->thumbnails->first()->path);
+        return (new Post)
+            ->newQuery()
+            ->withPhoto()
+            ->withTags()
+            ->whereIsPublished()
+            ->orderByCreatedAtDesc()
+            ->take(100)
+            ->get()
+            ->map(function (Post $post) {
                 return (new Item)
-                    ->setTitle($photo->description)
-                    ->setDescription($photo->exif->toString())
-                    ->setLink($url)
-                    ->setGuid($url)
-                    ->setPubDate($photo->created_at)
+                    ->setTitle($post->description)
+                    ->setDescription($post->photo->exif->toString())
+                    ->setLink(url_frontend_photo($post->id))
+                    ->setGuid(url_frontend_photo($post->id))
+                    ->setPubDate($post->photo->created_at->toAtomString())
                     ->setEnclosure(
                         (new Enclosure)
-                            ->setUrl($enclosureUrl)
+                            ->setUrl(url_storage($this->storage->url($post->photo->thumbnails->first()->path)))
                             ->setType('image/jpeg')
-                            ->setLength($enclosureSize)
+                            ->setLength($this->storage->size($post->photo->thumbnails->first()->path))
                     )
                     ->setCategories(
-                        $photo->tags
+                        $post->tags
                             ->pluck('value')
                             ->map(function (string $value) {
                                 return (new Category)->setValue($value);

@@ -30,10 +30,8 @@ $factory->define(Exif::class, function (Generator $faker) {
 $factory->define(Photo::class, function (Generator $faker) {
     return [
         'created_by_user_id' => User::inRandomOrder()->first()->id,
-        'description' => $faker->realText(),
         'path' => sprintf('/%s/%s.%s', str_random(12), str_random(5), str_random(3)),
         'avg_color' => $faker->hexColor,
-        'published_at' => $faker->boolean(75) ? \Carbon\Carbon::now() : null,
     ];
 });
 

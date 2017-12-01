@@ -35,13 +35,15 @@ class Handler extends ExceptionHandler
      */
     protected function prepareException(Exception $e)
     {
+        $e = parent::prepareException($e);
+
         if ($e instanceof ModelNotFoundException) {
             $e = $this->modifyModelNotFoundException($e);
-        } elseif ($e instanceof HttpException) {
-            $e = $this->modifyHttpException($e);
         }
 
-        $e = parent::prepareException($e);
+        if ($e instanceof HttpException) {
+            $e = $this->modifyHttpException($e);
+        }
 
         return $e;
     }

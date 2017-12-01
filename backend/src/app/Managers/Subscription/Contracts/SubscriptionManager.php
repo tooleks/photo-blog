@@ -13,29 +13,20 @@ use App\Models\Subscription;
 interface SubscriptionManager
 {
     /**
-     * Get the subscription by token.
-     *
-     * @param string $token
-     * @return Subscription
-     */
-    public function getByToken(string $token): Subscription;
-
-    /**
-     * Apply the callback function on each subscription filtered by emails list.
-     *
-     * @param Closure $callback
-     * @param array $emails
-     * @return void
-     */
-    public function eachFilteredByEmails(Closure $callback, array $emails): void;
-
-    /**
-     * Create the subscription by email.
+     * Create a subscription by email.
      *
      * @param array $attributes
      * @return Subscription
      */
     public function create(array $attributes): Subscription;
+
+    /**
+     * Get a subscription by token.
+     *
+     * @param string $token
+     * @return Subscription
+     */
+    public function getByToken(string $token): Subscription;
 
     /**
      * Paginate over subscriptions.
@@ -48,7 +39,7 @@ interface SubscriptionManager
     public function paginate(int $page, int $perPage, array $filters = []);
 
     /**
-     * Delete the subscription.
+     * Delete a subscription.
      *
      * @param Subscription $subscription
      * @return void

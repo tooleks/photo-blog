@@ -36,7 +36,7 @@ class ExifPlainResource extends Resource
             'iso' => CastValue::toStringOrNull(html_purify(data_get($this->resource->data, 'ISOSpeedRatings'))),
             'taken_at' => CastValue::toStringOrNull(html_purify(function () {
                 $takenAt = data_get($this->resource->data, 'DateTimeOriginal');
-                return $takenAt ? new Carbon($takenAt) : null;
+                return $takenAt ? (new Carbon($takenAt))->toAtomString() : null;
             })),
         ];
     }

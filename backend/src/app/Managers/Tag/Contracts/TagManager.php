@@ -2,8 +2,6 @@
 
 namespace App\Managers\Tag\Contracts;
 
-use Closure;
-
 /**
  * Interface TagManager.
  *
@@ -12,20 +10,12 @@ use Closure;
 interface TagManager
 {
     /**
-     * Paginate over the most popular tags.
+     * Paginate over tags.
      *
      * @param int $page
      * @param int $perPage
      * @param array $filters
      * @return mixed
      */
-    public function paginateOverMostPopular(int $page, int $perPage, array $filters = []);
-
-    /**
-     * Apply the callback function on each tag.
-     *
-     * @param Closure $callback
-     * @return void
-     */
-    public function each(Closure $callback): void;
+    public function paginate(int $page, int $perPage, array $filters = []);
 }

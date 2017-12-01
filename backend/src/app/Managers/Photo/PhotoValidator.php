@@ -3,12 +3,10 @@
 namespace App\Managers\Photo;
 
 use function App\Util\validator_filter_attributes;
-use App\Models\Photo;
-use App\Models\User;
+use App\Models\Tables\Constant;
 use Illuminate\Validation\Factory as ValidatorFactory;
 use Illuminate\Validation\Rule;
 use Illuminate\Contracts\Config\Repository as Config;
-
 
 /**
  * Class PhotoValidator.
@@ -40,11 +38,15 @@ class PhotoValidator
     }
 
     /**
+     * @param array $attributes
      * @return array
      */
-    private function getFileRules(): array
+    public function validateForCreate(array $attributes): array
     {
-        return [
+        $validUserIdRule = Rule::exists(Constant::TABLE_USERS, 'id');
+
+        $rules = [
+            'created_by_user_id' => ['required', $validUserIdRule],
             'file' => [
                 'required',
                 'file',
@@ -57,57 +59,6 @@ class PhotoValidator
                 sprintf('max:%s', $this->config->get('main.upload.max-size')),
             ],
         ];
-    }
-
-    /**
-     * @param array $attributes
-     * @return array
-     */
-    public function validateForCreateByFile(array $attributes): array
-    {
-        $validUserIdRule = Rule::exists((new User)->getTable(), 'id');
-
-        $rules = array_merge($this->getFileRules(), [
-            'created_by_user_id' => ['required', $validUserIdRule],
-        ]);
-
-        $this->validatorFactory->validate($attributes, $rules);
-
-        return validator_filter_attributes($attributes, $rules);
-    }
-
-    /**
-     * @param array $attributes
-     * @return array
-     */
-    public function validateForSaveByFile(array $attributes): array
-    {
-        $rules = $this->getFileRules();
-
-        $this->validatorFactory->validate($attributes, $rules);
-
-        return validator_filter_attributes($attributes, $rules);
-    }
-
-    /**
-     * @param Photo $photo
-     * @param array $attributes
-     * @return array
-     */
-    public function validateForSaveByAttributes(Photo $photo, array $attributes): array
-    {
-        $rules = [
-            'description' => ['filled', 'string', 'min:1', 'max:65535'],
-            'is_published' => ['filled', 'boolean'],
-            'tags' => ['filled', 'array'],
-            'tags.*.value' => ['filled', 'string', 'min:1', 'max:255'],
-        ];
-
-        if ($photo->isUnpublished()) {
-            $rules['description'][] = 'required';
-            $rules['tags'][] = 'required';
-            $rules['tags.*.value'][] = 'required';
-        }
 
         $this->validatorFactory->validate($attributes, $rules);
 

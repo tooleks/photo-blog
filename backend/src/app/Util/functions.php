@@ -14,7 +14,7 @@ use InvalidArgumentException;
 function str_unique(int $length = 40, $alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'): string
 {
     if ($length < 1) {
-        throw new InvalidArgumentException('Length parameter value should at least equals 1.');
+        throw new InvalidArgumentException('Length parameter value should be greater than or equals to 1.');
     }
 
     $str = '';
