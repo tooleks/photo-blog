@@ -60,29 +60,29 @@ class SiteMapBuilderService implements SiteMapBuilderServiceContract
         $items->push(
             (new Item)
                 ->setLocation(url_frontend())
-                ->setChangeFrequency('daily')
+                ->setChangeFrequency('weekly')
                 ->setPriority('1')
         );
 
         $items->push(
             (new Item)
                 ->setLocation(url_frontend('/about-me'))
-                ->setChangeFrequency('weekly')
-                ->setPriority('0.6')
+                ->setChangeFrequency('monthly')
+                ->setPriority('0.4')
         );
 
         $items->push(
             (new Item)
                 ->setLocation(url_frontend('/contact-me'))
-                ->setChangeFrequency('weekly')
-                ->setPriority('0.6')
+                ->setChangeFrequency('monthly')
+                ->setPriority('0.2')
         );
 
         $items->push(
             (new Item)
                 ->setLocation(url_frontend('/subscription'))
-                ->setChangeFrequency('weekly')
-                ->setPriority('0.5')
+                ->setChangeFrequency('monthly')
+                ->setPriority('0.2')
         );
 
         (new Post)
@@ -95,7 +95,7 @@ class SiteMapBuilderService implements SiteMapBuilderServiceContract
                             ->setLocation(url_frontend_photo($post->id))
                             ->setLastModified($post->updated_at->toAtomString())
                             ->setChangeFrequency('weekly')
-                            ->setPriority('0.8')
+                            ->setPriority('0.7')
                     );
                 });
             });
@@ -108,8 +108,8 @@ class SiteMapBuilderService implements SiteMapBuilderServiceContract
                     $items->push(
                         (new Item)
                             ->setLocation(url_frontend_tag($tag->value))
-                            ->setChangeFrequency('daily')
-                            ->setPriority('0.7')
+                            ->setChangeFrequency('weekly')
+                            ->setPriority('0.4')
                     );
                 });
             });
