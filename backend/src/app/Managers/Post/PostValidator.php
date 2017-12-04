@@ -65,10 +65,10 @@ class PostValidator
         $uniquePhotoIdRule = Rule::unique(Constant::TABLE_POSTS_PHOTOS, 'photo_id')->ignore(optional($post->photo)->id, 'photo_id');
 
         $rules = [
-            'is_published' => ['required', 'boolean'],
-            'description' => ['required', 'string', 'max:1000'],
-            'photo_id' => ['required', $validPhotoIdRule, $uniquePhotoIdRule],
-            'tags' => ['required', 'array'],
+            'is_published' => ['filled', 'boolean'],
+            'description' => ['filled', 'string', 'max:1000'],
+            'photo_id' => ['filled', $validPhotoIdRule, $uniquePhotoIdRule],
+            'tags' => ['filled', 'array'],
             'tags.*.value' => ['required', 'string', 'max:255'],
         ];
 
