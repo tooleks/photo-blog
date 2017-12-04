@@ -68,7 +68,7 @@ class PostBuilder extends Builder
      */
     public function wherePublishedAtGreaterThanOrEqualTo(Carbon $date)
     {
-        return $this->where('published_at', '>=', $date);
+        return $this->where("{$this->postsTable}.published_at", '>=', $date);
     }
 
     /**
