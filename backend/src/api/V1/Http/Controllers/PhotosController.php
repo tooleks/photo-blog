@@ -54,7 +54,6 @@ class PhotosController extends Controller
      *     "created_by_user_id" 1,
      *     "avg_color": "#000000",
      *     "created_at": "2099-12-31T23:59:59+00:00",
-     *     "updated_at": "2099-12-31T23:59:59+00:00",
      *     "exif": {
      *         "manufacturer": "Manufacturer Name",
      *         "model": "Model Number",

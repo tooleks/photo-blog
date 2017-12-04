@@ -42,8 +42,8 @@ class TagsController extends Controller
 
     /**
      * @apiVersion 1.0.0
-     * @api {get} /v1/tags?page=:page&per_page=:per_page Find
-     * @apiName Find
+     * @api {get} /v1/tags?page=:page&per_page=:per_page Paginate
+     * @apiName Paginate
      * @apiGroup Tags
      * @apiHeader {String} Accept application/json
      * @apiParam {Integer{1..N}} [page=1]
@@ -61,7 +61,7 @@ class TagsController extends Controller
      *     "to": 20,
      *     "data": [
      *         {
-     *             "value": "sky"
+     *             "value": "tag"
      *         }
      *     ]
      * }
