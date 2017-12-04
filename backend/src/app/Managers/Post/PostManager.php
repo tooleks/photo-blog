@@ -131,7 +131,7 @@ class PostManager implements PostManagerContract
             ->newQuery()
             ->withPhoto()
             ->withTags()
-            ->when(!optional($this->auth->user())->can('view-unpublished-posts'), function (PostBuilder $query) {
+            ->when(!$this->auth->user() || !$this->auth->user()->can('view-unpublished-posts'), function (PostBuilder $query) {
                 return $query->whereIsPublished();
             })
             ->findOrFail($id);
