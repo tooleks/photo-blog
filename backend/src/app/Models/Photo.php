@@ -20,6 +20,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property User createdByUser
  * @property Exif exif
  * @property Collection thumbnails
+ * @property Post post
+ * @property Collection posts
  * @package App\Models
  */
 class Photo extends Model
@@ -92,5 +94,25 @@ class Photo extends Model
     public function thumbnails()
     {
         return $this->belongsToMany(Thumbnail::class, Constant::TABLE_PHOTOS_THUMBNAILS)->orderBy('width')->orderBy('height');
+    }
+
+    /**
+     * @return Post|null
+     */
+    public function getPostAttribute(): ?Post
+    {
+        $this->setRelation('post', collect($this->posts)->first());
+
+        $photo = $this->getRelation('post');
+
+        return $photo;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function posts()
+    {
+        return $this->belongsToMany(Post::class, Constant::TABLE_POSTS_PHOTOS);
     }
 }

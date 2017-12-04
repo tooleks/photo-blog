@@ -4,7 +4,7 @@ namespace Console;
 
 use Console\Commands\ChangeUserPassword;
 use Console\Commands\CreateAdministratorUser;
-use Console\Commands\DeleteUnpublishedPhotosOlderThanWeek;
+use Console\Commands\DeleteDetachedPhotosOlderThanWeek;
 use Console\Commands\DeleteUnusedObjectsFromPhotoStorage;
 use Console\Commands\CreateRoles;
 use Console\Commands\GenerateRestApiDocumentation;
@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
         ChangeUserPassword::class,
         CreateAdministratorUser::class,
         CreateRoles::class,
-        DeleteUnpublishedPhotosOlderThanWeek::class,
+        DeleteDetachedPhotosOlderThanWeek::class,
         DeleteUnusedObjectsFromPhotoStorage::class,
         GenerateRestApiDocumentation::class,
         SendWeeklySubscriptionMails::class,
@@ -47,16 +47,13 @@ class Kernel extends ConsoleKernel
         $schedule->command(TestScheduler::class)
             ->hourly();
 
-        $schedule->command(DeleteUnpublishedPhotosOlderThanWeek::class)
+        $schedule->command(DeleteDetachedPhotosOlderThanWeek::class)
             ->dailyAt('00:00');
 
         $schedule->command(DeleteUnusedObjectsFromPhotoStorage::class)
             ->dailyAt('00:10');
 
-        $schedule->command(ClearTrash::class)
-            ->dailyAt('00:20');
-
-        $schedule->command('send:weekly_subscription_mails')
+        $schedule->command(SendWeeklySubscriptionMails::class)
             ->weekly()
             ->saturdays()
             ->at('09:00');

@@ -64,9 +64,17 @@ class PhotoBuilder extends Builder
      * @param Carbon $date
      * @return $this
      */
-    public function whereCreatedAtGreaterThan(Carbon $date)
+    public function whereCreatedAtLessThan(Carbon $date)
     {
-        return $this->where("{$this->photosTable}.created_at", '>', $date);
+        return $this->where("{$this->photosTable}.created_at", '<', $date);
+    }
+
+    /**
+     * @return $this
+     */
+    public function whereHasNoPosts()
+    {
+        return $this->doesntHave('posts');
     }
 
     /**
