@@ -57,12 +57,12 @@ class SendWeeklySubscriptionMails extends Command
                 })
                 ->chunk($this->option('chunk_size'), function (Collection $subscriptions) {
                     $subscriptions->each(function (Subscription $subscription) {
+                        $this->comment("Sending subscription mail to {$subscription->email}.");
                         Mail::queue(new WeeklySubscription([
                             'website_url' => url_frontend(),
                             'subscriber_email' => $subscription->email,
                             'unsubscribe_url' => url_frontend_unsubscription($subscription->token),
                         ]));
-                        $this->comment("Subscription mail to {$subscription->email} has been successfully sent.");
                     });
                 });
         }
