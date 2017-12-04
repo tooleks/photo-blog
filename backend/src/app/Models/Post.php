@@ -122,7 +122,9 @@ class Post extends Model
      */
     public function setIsPublishedAttribute(bool $isPublished)
     {
-        $this->attributes['published_at'] = $isPublished ? Carbon::now() : null;
+        if ($this->is_published !== $isPublished) {
+            $this->attributes['published_at'] = $isPublished ? Carbon::now() : null;
+        }
 
         return $this;
     }

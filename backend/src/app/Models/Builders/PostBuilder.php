@@ -4,6 +4,7 @@ namespace App\Models\Builders;
 
 use App\Models\Tables\Constant;
 use Illuminate\Database\Eloquent\Builder;
+use Carbon\Carbon;
 
 /**
  * Class PostBuilder.
@@ -59,6 +60,15 @@ class PostBuilder extends Builder
     public function whereIsNotPublished()
     {
         return $this->whereNull("{$this->postsTable}.published_at");
+    }
+
+    /**
+     * @param Carbon $date
+     * @return $this
+     */
+    public function wherePublishedAtGreaterThanOrEqualTo(Carbon $date)
+    {
+        return $this->where('published_at', '>=', $date);
     }
 
     /**

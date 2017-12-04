@@ -4,11 +4,13 @@ namespace Console\Commands;
 
 use function App\Util\url_frontend;
 use function App\Util\url_frontend_unsubscription;
+use App\Models\Builders\SubscriptionBuilder;
+use App\Models\Post;
 use App\Mail\WeeklySubscription;
-use App\Managers\Photo\Contracts\PhotoManager;
-use App\Managers\Subscription\Contracts\SubscriptionManager;
 use App\Models\Subscription;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Mail;
 
 /**
@@ -23,7 +25,9 @@ class SendWeeklySubscriptionMails extends Command
      *
      * @var string
      */
-    protected $signature = 'send:weekly_subscription_mails {email_filter?*}';
+    protected $signature = 'send:weekly_subscription_mails
+                                {--batch_size=50}
+                                {--email=*}';
 
     /**
      * The console command description.
@@ -33,57 +37,34 @@ class SendWeeklySubscriptionMails extends Command
     protected $description = 'Send weekly subscription mails';
 
     /**
-     * @var SubscriptionManager
-     */
-    private $subscriptionManager;
-
-    /**
-     * @var PhotoManager
-     */
-    private $photoManager;
-
-    /**
-     * SendWeeklySubscriptionMails constructor.
-     *
-     * @param SubscriptionManager $subscriptionManager
-     * @param PhotoManager $photoManager
-     */
-    public function __construct(SubscriptionManager $subscriptionManager, PhotoManager $photoManager)
-    {
-        parent::__construct();
-
-        $this->subscriptionManager = $subscriptionManager;
-        $this->photoManager = $photoManager;
-    }
-
-    /**
      * Execute the console command.
      *
      * @return void
      */
     public function handle(): void
     {
-        if ($this->photoManager->existsPublishedLessThanWeekAgo()) {
-            $this->subscriptionManager->eachFilteredByEmails(function (Subscription $subscription) {
-                $this->comment("Sending subscription mail {$subscription->email}.");
-                $this->sendMail($subscription);
-            }, $this->argument('email_filter'));
+        $postsExists = (new Post)
+            ->newQuery()
+            ->whereIsPublished()
+            ->wherePublishedAtGreaterThanOrEqualTo(Carbon::now()->addWeek(-1))
+            ->exists();
+
+        if ($postsExists) {
+            (new Subscription)
+                ->newQuery()
+                ->when($this->option('email'), function (SubscriptionBuilder $query) {
+                    return $query->whereEmailIn($this->option('email'));
+                })
+                ->chunk($this->option('batch_size'), function (Collection $subscriptions) {
+                    $subscriptions->each(function (Subscription $subscription) {
+                        Mail::queue(new WeeklySubscription([
+                            'website_url' => url_frontend(),
+                            'subscriber_email' => $subscription->email,
+                            'unsubscribe_url' => url_frontend_unsubscription($subscription->token),
+                        ]));
+                        $this->comment("Subscription mail to {$subscription->email} has been successfully sent.");
+                    });
+                });
         }
-    }
-
-    /**
-     * Send mail.
-     *
-     * @param Subscription $subscription
-     */
-    protected function sendMail(Subscription $subscription)
-    {
-        $data['website_url'] = url_frontend();
-
-        $data['subscriber_email'] = $subscription->email;
-
-        $data['unsubscribe_url'] = url_frontend_unsubscription($subscription->token);
-
-        Mail::queue(new WeeklySubscription($data));
     }
 }
