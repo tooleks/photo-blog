@@ -2,6 +2,7 @@
 
 use App\Models\Exif;
 use App\Models\Photo;
+use App\Models\Post;
 use App\Models\Role;
 use App\Models\Subscription;
 use App\Models\Tag;
@@ -22,16 +23,23 @@ use Faker\Generator;
 
 $factory->define(Exif::class, function (Generator $faker) {
     return [
-        'photo_id' => Photo::inRandomOrder()->first()->id,
+        'photo_id' => (new Photo)->newQuery()->inRandomOrder()->firstOrFail()->id,
         'data' => [],
     ];
 });
 
 $factory->define(Photo::class, function (Generator $faker) {
     return [
-        'created_by_user_id' => User::inRandomOrder()->first()->id,
+        'created_by_user_id' => (new User)->newQuery()->inRandomOrder()->firstOrFail()->id,
         'path' => sprintf('/%s/%s.%s', str_random(12), str_random(5), str_random(3)),
         'avg_color' => $faker->hexColor,
+    ];
+});
+
+$factory->define(Post::class, function (Generator $faker) {
+    return [
+        'created_by_user_id' => (new User)->newQuery()->inRandomOrder()->firstOrFail()->id,
+        'description' => $faker->sentence,
     ];
 });
 
@@ -59,7 +67,7 @@ $factory->define(Thumbnail::class, function (Generator $faker) {
 $factory->define(User::class, function (Generator $faker) {
     static $password;
     return [
-        'role_id' => Role::inRandomOrder()->first()->id,
+        'role_id' => (new Role)->newQuery()->inRandomOrder()->firstOrFail()->id,
         'name' => $faker->userName,
         'email' => $faker->safeEmail,
         'password' => $password ?: $password = bcrypt('secret'),

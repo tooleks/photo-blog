@@ -21,7 +21,7 @@ class TagsResourceTest extends TestCase
         ];
     }
 
-    public function testGetSuccess(): void
+    public function testPaginateSuccess(): void
     {
         $this->createTag();
 

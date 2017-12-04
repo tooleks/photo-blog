@@ -49,7 +49,7 @@ class PhotosResourceTest extends TestCase
         ];
     }
 
-    public function validCreateAttributesProvider(): array
+    public function validAttributesProvider(): array
     {
         $this->refreshApplication();
 
@@ -58,26 +58,7 @@ class PhotosResourceTest extends TestCase
         ];
     }
 
-    public function invalidCreateAttributesProvider(): array
-    {
-        $this->refreshApplication();
-
-        return [
-            [[]],
-            [['file' => UploadedFile::fake()->create('photo.txt', 0)]],
-        ];
-    }
-
-    public function validUpdateAttributesProvider(): array
-    {
-        $this->refreshApplication();
-
-        return [
-            [['file' => UploadedFile::fake()->image('photo.jpg', 1000, 1000)->size(500)]],
-        ];
-    }
-
-    public function invalidUpdateAttributesProvider(): array
+    public function invalidAttributesProvider(): array
     {
         $this->refreshApplication();
 
@@ -88,7 +69,7 @@ class PhotosResourceTest extends TestCase
     }
 
     /**
-     * @dataProvider validCreateAttributesProvider
+     * @dataProvider validAttributesProvider
      * @param array $requestBody
      * @return void
      */
@@ -119,7 +100,7 @@ class PhotosResourceTest extends TestCase
     }
 
     /**
-     * @dataProvider invalidCreateAttributesProvider
+     * @dataProvider invalidAttributesProvider
      * @param array $requestBody
      * @return void
      */
@@ -136,7 +117,7 @@ class PhotosResourceTest extends TestCase
     }
 
     /**
-     * @dataProvider validCreateAttributesProvider
+     * @dataProvider validAttributesProvider
      * @param array $requestBody
      * @return void
      */

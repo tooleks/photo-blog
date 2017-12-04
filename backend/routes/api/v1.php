@@ -118,7 +118,7 @@ Route::group(['prefix' => 'posts'], function () {
         ->middleware('can:update-resource,photo');
 
     Route::delete('/{post}')
-        ->uses('PublishedPhotosController@delete')
+        ->uses('PostsController@delete')
         ->middleware('auth:api')
         ->middleware('can:access-administrator-part')
         ->middleware('can:delete-resource,photo');

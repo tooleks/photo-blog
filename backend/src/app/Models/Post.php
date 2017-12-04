@@ -109,11 +109,11 @@ class Post extends Model
      */
     public function getPhotoAttribute(): ?Photo
     {
-        if (!isset($this->relations['photo'])) {
-            $this->setRelation('photo', $this->photos->first());
-        }
+        $this->setRelation('photo', collect($this->photos)->first());
 
-        return $this->getRelation('photo');
+        $photo = $this->getRelation('photo');
+
+        return $photo;
     }
 
     /**
