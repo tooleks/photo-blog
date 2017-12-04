@@ -2,12 +2,13 @@
 
 namespace Console\Commands;
 
-use App\Managers\Photo\Contracts\PhotoManager;
 use App\Models\Photo;
 use App\Models\Thumbnail;
 use Illuminate\Config\Repository as Config;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 /**
  * Class DeleteUnusedObjectsFromPhotoStorage.
@@ -21,7 +22,8 @@ class DeleteUnusedObjectsFromPhotoStorage extends Command
      *
      * @var string
      */
-    protected $signature = 'delete:unused_objects_from_photo_storage';
+    protected $signature = 'delete:unused_objects_from_photo_storage
+                                {--chunk_size=50}';
 
     /**
      * The console command description.
@@ -41,24 +43,17 @@ class DeleteUnusedObjectsFromPhotoStorage extends Command
     private $storage;
 
     /**
-     * @var PhotoManager
-     */
-    private $photoManager;
-
-    /**
      * DeleteUnusedObjectsFromPhotoStorage constructor.
      *
      * @param Config $config
      * @param Storage $storage
-     * @param PhotoManager $photoManager
      */
-    public function __construct(Config $config, Storage $storage, PhotoManager $photoManager)
+    public function __construct(Config $config, Storage $storage)
     {
         parent::__construct();
 
         $this->config = $config;
         $this->storage = $storage;
-        $this->photoManager = $photoManager;
     }
 
     /**
@@ -88,7 +83,9 @@ class DeleteUnusedObjectsFromPhotoStorage extends Command
     {
         $directories = array_diff($this->getAllDirectoriesFromStorage(), $this->getAllDirectoriesFromDataProvider());
 
-        return array_filter(array_unique($directories), 'boolval');
+        return array_filter(array_unique($directories), function ($directory) {
+            return Str::length($directory) > 0;
+        });
     }
 
     /**
@@ -100,7 +97,9 @@ class DeleteUnusedObjectsFromPhotoStorage extends Command
     {
         $files = array_diff($this->getAllFilesFromStorage(), $this->getAllFilesFromDataProvider());
 
-        return array_filter(array_unique($files), 'boolval');
+        return array_filter(array_unique($files), function ($directory) {
+            return Str::length($directory) > 0;
+        });
     }
 
     /**
@@ -110,7 +109,7 @@ class DeleteUnusedObjectsFromPhotoStorage extends Command
      */
     protected function getAllDirectoriesFromStorage(): array
     {
-        return $this->storage->allDirectories('photos');
+        return array_values($this->storage->allDirectories('photos'));
     }
 
     /**
@@ -120,7 +119,7 @@ class DeleteUnusedObjectsFromPhotoStorage extends Command
      */
     protected function getAllFilesFromStorage(): array
     {
-        return $this->storage->allFiles('photos');
+        return array_values($this->storage->allFiles('photos'));
     }
 
     /**
@@ -130,11 +129,17 @@ class DeleteUnusedObjectsFromPhotoStorage extends Command
      */
     protected function getAllDirectoriesFromDataProvider(): array
     {
-        $this->photoManager->each(function (Photo $photo) use (&$directories) {
-            $directories[] = dirname($photo->path);
-        });
+        $directories = [];
 
-        return $directories ?? [];
+        (new Photo)
+            ->newQuery()
+            ->chunk($this->option('chunk_size'), function (Collection $photos) use (&$directories) {
+                $photos->each(function (Photo $photo) use (&$directories) {
+                    $directories[] = dirname($photo->path);
+                });
+            });
+
+        return array_values($directories);
     }
 
     /**
@@ -144,13 +149,19 @@ class DeleteUnusedObjectsFromPhotoStorage extends Command
      */
     protected function getAllFilesFromDataProvider(): array
     {
-        $this->photoManager->each(function (Photo $photo) use (&$files) {
-            $files[] = $photo->path;
-            $photo->thumbnails->each(function (Thumbnail $thumbnail) use (&$files) {
-                $files[] = $thumbnail->path;
-            });
-        });
+        $files = [];
 
-        return $files ?? [];
+        (new Photo)
+            ->newQuery()
+            ->chunk($this->option('chunk_size'), function (Collection $photos) use (&$files) {
+                $photos->each(function (Photo $photo) use (&$files) {
+                    $files[] = $photo->path;
+                    $photo->thumbnails->each(function (Thumbnail $thumbnail) use (&$files) {
+                        $files[] = $thumbnail->path;
+                    });
+                });
+            });
+
+        return array_values($files);
     }
 }

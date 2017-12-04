@@ -26,7 +26,7 @@ class SendWeeklySubscriptionMails extends Command
      * @var string
      */
     protected $signature = 'send:weekly_subscription_mails
-                                {--batch_size=50}
+                                {--chunk_size=50}
                                 {--email=*}';
 
     /**
@@ -55,7 +55,7 @@ class SendWeeklySubscriptionMails extends Command
                 ->when($this->option('email'), function (SubscriptionBuilder $query) {
                     return $query->whereEmailIn($this->option('email'));
                 })
-                ->chunk($this->option('batch_size'), function (Collection $subscriptions) {
+                ->chunk($this->option('chunk_size'), function (Collection $subscriptions) {
                     $subscriptions->each(function (Subscription $subscription) {
                         Mail::queue(new WeeklySubscription([
                             'website_url' => url_frontend(),

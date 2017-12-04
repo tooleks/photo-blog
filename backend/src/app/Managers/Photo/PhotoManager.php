@@ -154,8 +154,8 @@ class PhotoManager implements PhotoManagerContract
     {
         $this->database->transaction(function () use ($photo) {
             $photo->delete();
-            if ($this->storage->exists($photo->directory_path)) {
-                $this->storage->deleteDirectory($photo->directory_path);
+            if ($this->storage->exists(dirname($photo->path))) {
+                $this->storage->deleteDirectory(dirname($photo->path));
             }
         });
     }

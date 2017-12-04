@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property int id
  * @property int created_by_user_id
  * @property string path
- * @property string directory_path
  * @property string avg_color
  * @property Carbon created_at
  * @property Carbon updated_at
@@ -93,19 +92,5 @@ class Photo extends Model
     public function thumbnails()
     {
         return $this->belongsToMany(Thumbnail::class, Constant::TABLE_PHOTOS_THUMBNAILS)->orderBy('width')->orderBy('height');
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getDirectoryPath(): ?string
-    {
-        $directoryPath = null;
-
-        if (isset($this->attributes['path'])) {
-            $directoryPath = dirname($this->attributes['path']);
-        }
-
-        return $directoryPath;
     }
 }
