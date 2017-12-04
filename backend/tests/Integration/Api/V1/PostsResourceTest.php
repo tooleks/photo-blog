@@ -230,10 +230,10 @@ class PostsResourceTest extends TestCase
             ]);
     }
 
-    public function testPaginateBySearchSuccess(): void
+    public function testPaginateBySearchPhraseSuccess(): void
     {
         $this->createPost();
-        $searchPhrase = $this->createPost()->description;
+        $searchPhrase = $this->createPost(['description' => 'description'])->description;
         $this->createPost();
 
         $this
