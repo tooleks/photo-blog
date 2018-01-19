@@ -1,8 +1,0 @@
-<div class="notices-wrapper">
-    <div *ngFor="let notice of getNotices(); let i = index;"
-         (click)="deleteAllNotices(i)"
-         [ngClass]="'notice notice-' + notice.type">
-        <div class="notice-title">{{ notice.title }}</div>
-        <div class="notice-text">{{ notice.text }}</div>
-    </div>
-</div>

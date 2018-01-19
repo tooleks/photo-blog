@@ -1,7 +1,0 @@
-/node_modules/
-/dist/
-/lib/
-*.log
-/src/**/*.js
-/src/**/*.js.map
-/.env
