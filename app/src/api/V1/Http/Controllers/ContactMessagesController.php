@@ -60,7 +60,7 @@ class ContactMessagesController extends Controller
     {
         $request->merge(['client_ip_address' => $request->getClientIp()]);
 
-        Mail::queue(new ContactMessage($request->all()));
+        Mail::send(new ContactMessage($request->all()));
 
         return $this->responseFactory->json(null, Response::HTTP_NO_CONTENT);
     }
