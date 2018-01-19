@@ -8,6 +8,8 @@ services:
     image: photo-blog-app-php:7.2-fpm
     container_name: photo-blog-app
     restart: always
+    ports:
+      - 9000:9000
     depends_on:
       - photo-blog-redis.docker
     volumes:
