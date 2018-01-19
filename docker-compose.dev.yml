@@ -1,0 +1,64 @@
+version: '3.3'
+
+services:
+  photo-blog-nginx.docker:
+    image: nginx:1.12
+    container_name: photo-blog-nginx
+    restart: always
+    ports:
+      - 8080:8080
+      - 8081:8081
+      - 8082:8082
+    volumes:
+      - ./app/:/app/
+      - ./docker/config/nginx/sites/:/etc/nginx/conf.d/
+
+  photo-blog-app.docker:
+    build:
+      context: ./
+      dockerfile: Dockerfile_app
+    image: photo-blog-app-php:7.2-fpm
+    container_name: photo-blog-app
+    restart: always
+    depends_on:
+      - photo-blog-mysql.docker
+      - photo-blog-redis.docker
+    volumes:
+      - ./app/:/app/
+      - ./docker/config/app/php.dev.ini:/usr/local/etc/php/php.ini
+
+  photo-blog-prerender.docker:
+    build:
+      context: ./
+      dockerfile: Dockerfile_prerender
+    image: photo-blog-prerender-node:8.9
+    container_name: photo-blog-prerender
+    restart: always
+
+  photo-blog-mysql.docker:
+    image: mysql:5.7
+    container_name: photo-blog-mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'photo_blog'
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_USER: 'dev'
+      MYSQL_PASSWORD: 'dev'
+    ports:
+      - 3306:3306
+    volumes:
+      - ./docker/storage/mysql/var/lib/mysql:/var/lib/mysql
+      - ./docker/config/mysql/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
+      - ./docker/config/mysql/my.cnf:/etc/mysql/my.cnf
+
+  photo-blog-redis.docker:
+    image: redis:3.2
+    container_name: photo-blog-redis
+    restart: always
+
+  photo-blog-maildev.docker:
+    image: djfarrelly/maildev
+    container_name: photo-blog-maildev
+    restart: always
+    ports:
+      - 8083:80
