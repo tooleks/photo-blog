@@ -1,0 +1,28 @@
+version: '3.3'
+
+services:
+  photo-blog-app.docker:
+    build:
+      context: ./
+      dockerfile: Dockerfile_app
+    image: photo-blog-app-php:7.2-fpm
+    container_name: photo-blog-app
+    restart: always
+    depends_on:
+      - photo-blog-redis.docker
+    volumes:
+      - ./app/:/app/
+      - ./docker/config/app/php.prod.ini:/usr/local/etc/php/php.ini
+
+  photo-blog-renderer.docker:
+    build:
+      context: ./
+      dockerfile: Dockerfile_renderer
+    image: photo-blog-renderer-node:8.9
+    container_name: photo-blog-renderer
+    restart: always
+
+  photo-blog-redis.docker:
+    image: redis:3.2
+    container_name: photo-blog-redis
+    restart: always
