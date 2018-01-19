@@ -13,7 +13,7 @@ cd ./app/public/ && \
 ln -s ../storage/app/public storage
 ```
 
-Run the following command (within the `./` directory) to start the docker containers and build the application for **development**.
+Run the following command (within the `./` directory) to start the docker containers and build the application for **development** environment.
 
 ```
 docker-compose --file ./docker-compose.dev.yml up --build
@@ -57,4 +57,12 @@ docker exec -it photo-blog-mysql bash -c "tail -n 1000 -f /var/log/mysql/general
 Run the following command to execute the backend application tests.
 ```
 docker exec -it photo-blog-app bash -c "./vendor/bin/phpunit"
+```
+
+### Production
+
+Run the following command (within the `./` directory) to start the docker containers and build the application for **production** environment.
+
+```
+docker-compose --file ./docker-compose.prod.yml up --build -d
 ```
