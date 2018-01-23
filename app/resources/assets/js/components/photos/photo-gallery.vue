@@ -97,10 +97,10 @@
                     // with an older version of the application.
                     this.goToPhotoPage(this.$route.query.show);
                 } else {
-                    this.loadPosts();
+                    this.loadPhotos();
                 }
             },
-            loadPosts: function () {
+            loadPhotos: function () {
                 this.$store.dispatch("photoGallery/loadPhotos", {
                     per_page: 40,
                     page: this.$route.params.page,
