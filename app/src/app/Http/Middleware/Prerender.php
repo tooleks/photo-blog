@@ -146,7 +146,7 @@ class Prerender
         }
 
         if ($this->blacklist) {
-            $uris[] = $request->getRequestUri();
+            $uris[] = $request->getPathInfo();
             if ($referer) {
                 $uris[] = $referer;
             }
