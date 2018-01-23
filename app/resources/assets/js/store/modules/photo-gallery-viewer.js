@@ -1,5 +1,4 @@
 import {api, mapper} from "../../services";
-import {preloadImage} from "../../utils";
 
 const getDefaultPhotos = () => [];
 const getDefaultActivePhoto = () => undefined;
