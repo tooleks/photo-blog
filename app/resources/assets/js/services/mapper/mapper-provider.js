@@ -12,14 +12,15 @@ export default function () {
             title: value(() => meta.title),
             titleTemplate: value(() => meta.title) ? `%s | ${value(() => meta.name)}` : value(() => meta.name),
             meta: [
-                {vmid: "description", name: "description", property: "description", content: value(() => meta.description)},
-                {vmid: "keywords", name: "keywords", property: "keywords", content: value(() => meta.keywords)},
+                {vmid: "description", name: "description", content: value(() => meta.description)},
+                {vmid: "keywords", name: "keywords", content: value(() => meta.keywords)},
                 // Open Graph protocol properties.
-                {vmid: "og:type", name: "og:type", property: "og:type", content: "article"},
-                {vmid: "og:url", name: "og:url", property: "og:url", content: config.url.app + router.currentRoute.fullPath},
-                {vmid: "og:site_name", name: "og:site_name", property: "og:site_name", content: value(() => meta.name)},
-                {vmid: "og:description", name: "og:description", property: "og:description", content: value(() => meta.description)},
-                {vmid: "og:image", name: "og:image", property: "og:image", content: value(() => meta.image)},
+                {vmid: "og:type", property: "og:type", content: "article"},
+                {vmid: "og:url", property: "og:url", content: config.url.app + router.currentRoute.fullPath},
+                {vmid: "og:site_name", property: "og:site_name", content: value(() => meta.name)},
+                {vmid: "og:description", property: "og:description", content: value(() => meta.description)},
+                {vmid: "og:image", property: "og:image", content: value(() => meta.image)},
+                {vmid: "og:title", property: "og:title", content: value(() => meta.title)},
                 // Twitter Cards properties.
                 {vmid: "twitter:card", name: "twitter:card", property: "twitter:card", content: "summary_large_image"},
                 {vmid: "twitter:title", name: "twitter:title", property: "twitter:title", content: value(() => meta.title)},
