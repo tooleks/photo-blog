@@ -3,130 +3,104 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use GuzzleHttp\ClientInterface as HttpClient;
 use GuzzleHttp\Exception\RequestException;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Support\Facades\Redirect;
-use GuzzleHttp\Client as Guzzle;
-use Psr\Http\Message\ResponseInterface;
+use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Contracts\Config\Repository as Config;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\Request as IlluminateRequest;
+use Illuminate\Support\Str;
+use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
 use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class Prerender.
- *
- * The file content is copied from the https://github.com/jeroennoten/Laravel-Prerender library.
  *
  * @package App\Http\Middleware
  */
 class Prerender
 {
-    /**
-     * The application instance
-     *
-     * @var Application
-     */
-    private $app;
+    private const PARAMETER_NAME = '_escaped_fragment_';
 
     /**
-     * The Guzzle Client that sends GET requests to the prerender server
-     *
-     * @var Guzzle
+     * @var HttpClient
      */
-    private $client;
+    private $httpClient;
 
     /**
-     * This token will be provided via the X-Prerender-Token header.
-     *
+     * @var Config
+     */
+    private $config;
+
+    /**
+     * @var ResponseFactory
+     */
+    private $responseFactory;
+
+    /**
+     * @var bool
+     */
+    private $enabled;
+
+    /**
      * @var string
      */
-    private $prerenderToken;
+    private $url;
 
     /**
-     * List of crawler user agents that will be
-     *
+     * @var string
+     */
+    private $token;
+
+    /**
      * @var array
      */
-    private $crawlerUserAgents;
+    private $allowedUserAgents;
 
     /**
-     * URI whitelist for prerendering pages only on this list
-     *
      * @var array
      */
     private $whitelist;
 
     /**
-     * URI blacklist for prerendering pages that are not on the list
-     *
      * @var array
      */
     private $blacklist;
 
     /**
-     * Base URI to make the prerender requests
+     * Prerender constructor.
      *
-     * @var string
+     * @param HttpClient $httpClient
+     * @param Config $config
      */
-    private $prerenderUri;
-
-    /**
-     * Return soft 3xx and 404 HTTP codes
-     *
-     * @var string
-     */
-    private $returnSoftHttpCodes;
-
-    /**
-     * Creates a new Prerender instance
-     *
-     * @param Application $app
-     * @param Guzzle $client
-     */
-    public function __construct(Application $app, Guzzle $client)
+    public function __construct(HttpClient $httpClient, Config $config, ResponseFactory $responseFactory)
     {
-        $this->app = $app;
-        $this->returnSoftHttpCodes = $app['config']->get('prerender')['prerender_soft_http_codes'];
+        $this->httpClient = $httpClient;
+        $this->config = $config;
+        $this->responseFactory = $responseFactory;
 
-        if ($this->returnSoftHttpCodes) {
-            $this->client = $client;
-        } else {
-            // Workaround to avoid following redirects
-            $config = $client->getConfig();
-            $config['allow_redirects'] = false;
-            $this->client = new Guzzle($config);
-        }
-
-        $config = $app['config']->get('prerender');
-
-        $this->prerenderUri = $config['prerender_url'];
-        $this->crawlerUserAgents = $config['crawler_user_agents'];
-        $this->prerenderToken = $config['prerender_token'];
-        $this->whitelist = $config['whitelist'];
-        $this->blacklist = $config['blacklist'];
+        $this->enabled = $this->config->get('prerender.enabled');
+        $this->url = $this->config->get('prerender.url');
+        $this->token = $this->config->get('prerender.token');
+        $this->allowedUserAgents = $this->config->get('prerender.allowed_user_agents');
+        $this->whitelist = $this->config->get('prerender.whitelist');
+        $this->blacklist = $this->config->get('prerender.blacklist');
     }
 
     /**
-     * Handles a request and prerender if it should, otherwise call the next middleware.
-     *
-     * @param $request
+     * @param IlluminateRequest $request
      * @param Closure $next
-     * @return Response
-     * @internal param int $type
-     * @internal param bool $catch
+     * @return mixed|SymfonyResponse
+     * @throws GuzzleException
      */
-    public function handle($request, Closure $next)
+    public function handle(IlluminateRequest $request, Closure $next)
     {
-        if ($this->shouldShowPrerenderedPage($request)) {
-            $prerenderedResponse = $this->getPrerenderedPageResponse($request);
-
-            if ($prerenderedResponse) {
-                $statusCode = $prerenderedResponse->getStatusCode();
-
-                if (!$this->returnSoftHttpCodes && $statusCode >= 300 && $statusCode < 400) {
-                    return Redirect::to($prerenderedResponse->getHeaders()["Location"][0], $statusCode);
-                }
-
-                return $this->buildSymfonyResponseFromGuzzleResponse($prerenderedResponse);
+        if ($this->enabled && $this->shouldBePrerendered($request)) {
+            $response = $this->prerender($request);
+            if (!is_null($response)) {
+                return $response;
             }
         }
 
@@ -134,123 +108,162 @@ class Prerender
     }
 
     /**
-     * Returns whether the request must be prerendered.
+     * Determine if a request should be prerendered.
      *
-     * @param $request
+     * @param IlluminateRequest $request
      * @return bool
      */
-    private function shouldShowPrerenderedPage($request)
+    private function shouldBePrerendered(IlluminateRequest $request): bool
     {
-        $userAgent = strtolower($request->server->get('HTTP_USER_AGENT'));
-        $bufferAgent = $request->server->get('X-BUFFERBOT');
-        $requestUri = $request->getRequestUri();
-        $referer = $request->headers->get('Referer');
+        $userAgent = $request->header('user-agent');
+        $bufferAgent = $request->header('x-bufferbot');
+        $referer = $request->header('referer');
 
-        $isRequestingPrerenderedPage = false;
+        $isCrawler = false;
 
-        if (!$userAgent) return false;
-        if (!$request->isMethod('GET')) return false;
-
-        // prerender if _escaped_fragment_ is in the query string
-        if ($request->query->has('_escaped_fragment_')) $isRequestingPrerenderedPage = true;
-
-        // prerender if a crawler is detected
-        foreach ($this->crawlerUserAgents as $crawlerUserAgent) {
-            if (str_contains($userAgent, strtolower($crawlerUserAgent))) {
-                $isRequestingPrerenderedPage = true;
+        if ($userAgent && $request->isMethod('GET')) {
+            if ($request->has(static::PARAMETER_NAME)) {
+                $isCrawler = true;
+            }
+            foreach ($this->allowedUserAgents as $crawlerUserAgent) {
+                if (Str::contains(Str::lower($userAgent), Str::lower($crawlerUserAgent))) {
+                    $isCrawler = true;
+                }
+            }
+            if ($bufferAgent) {
+                $isCrawler = true;
             }
         }
 
-        if ($bufferAgent) $isRequestingPrerenderedPage = true;
+        if (!$isCrawler) {
+            return false;
+        }
 
-        if (!$isRequestingPrerenderedPage) return false;
-
-        // only check whitelist if it is not empty
         if ($this->whitelist) {
-            if (!$this->isListed($requestUri, $this->whitelist)) {
+            if (!$this->inList($this->whitelist, $request->getRequestUri())) {
                 return false;
             }
         }
 
-        // only check blacklist if it is not empty
         if ($this->blacklist) {
-            $uris[] = $requestUri;
-            // we also check for a blacklisted referer
-            if ($referer) $uris[] = $referer;
-            if ($this->isListed($uris, $this->blacklist)) {
+            $uris[] = $request->getRequestUri();
+            if ($referer) {
+                $uris[] = $referer;
+            }
+            if ($this->inList($this->blacklist, $uris)) {
                 return false;
             }
         }
 
-        // Okay! Prerender please.
         return true;
     }
 
     /**
-     * Prerender the page and return the Guzzle Response
+     * Prerender a requested resource.
      *
-     * @param $request
-     * @return null|void
+     * @param IlluminateRequest $request
+     * @return null|SymfonyResponse
+     * @throws GuzzleException
      */
-    private function getPrerenderedPageResponse($request)
+    private function prerender(IlluminateRequest $request)
     {
         $headers = [
-            'User-Agent' => $request->server->get('HTTP_USER_AGENT'),
+            'User-Agent' => $request->header('User-Agent'),
         ];
-        if ($this->prerenderToken) {
-            $headers['X-Prerender-Token'] = $this->prerenderToken;
+
+        if ($this->token) {
+            $headers['X-Prerender-Token'] = $this->token;
         }
 
-        $protocol = $request->isSecure() ? 'https' : 'http';
+        $requestedResourceUrl = $this->getRequestedResourceUrl($request);
+        $renderingUrl = $this->getRenderingUrl($requestedResourceUrl);
 
         try {
-            // Return the Guzzle Response
-            $host = $request->getHost();
-            $path = $request->Path();
-            return $this->client->get($this->prerenderUri . '/' . urlencode($protocol . '://' . $host . '/' . $path), compact('headers'));
-        } catch (RequestException $exception) {
-            if (!$this->returnSoftHttpCodes && !empty($exception->getResponse()) && $exception->getResponse()->getStatusCode() == 404) {
-                \App::abort(404);
+            $response = $this->httpClient->request('GET', $renderingUrl, ['headers' => $headers]);
+            return $this->buildApplicationResponse($response);
+        } catch (RequestException $e) {
+            if (!empty($e->getResponse()) && $e->getResponse()->getStatusCode() == 404) {
+                throw new NotFoundHttpException;
             }
-            // In case of an exception, we only throw the exception if we are in debug mode. Otherwise,
-            // we return null and the handle() method will just pass the request to the next middleware
-            // and we do not show a prerendered page.
-            if ($this->app['config']->get('app.debug')) {
-                throw $exception;
+            if ($this->config->get('app.debug')) {
+                throw $e;
             }
-            return null;
         }
+
+        return null;
     }
 
     /**
-     * Convert a Guzzle Response to a Symfony Response
+     * Get an URL of the requested resource.
      *
-     * @param ResponseInterface $prerenderedResponse
-     * @return Response
+     * @param IlluminateRequest $request
+     * @return string
      */
-    private function buildSymfonyResponseFromGuzzleResponse(ResponseInterface $prerenderedResponse)
+    private function getRequestedResourceUrl(IlluminateRequest $request): string
     {
-        return (new HttpFoundationFactory)->createResponse($prerenderedResponse);
+        $url = $request->getSchemeAndHttpHost() . $request->getBaseUrl() . $request->getPathInfo();
+
+        if ($request->except(static::PARAMETER_NAME)) {
+            $url .= '?' . http_build_query($request->except(static::PARAMETER_NAME));
+        }
+
+        return $url;
     }
 
     /**
-     * Check whether one or more needles are in the given list
+     * Get an URL to render the requested resource.
      *
-     * @param $needles
-     * @param $list
+     * @param string $requestedResourceUrl
+     * @return string
+     */
+    private function getRenderingUrl(string $requestedResourceUrl = null): string
+    {
+        $url = $this->url;
+
+        if (!is_null($requestedResourceUrl)) {
+            $url .= '/' . urlencode($requestedResourceUrl);
+        }
+
+        return $url;
+    }
+
+    /**
+     * Determine if values exist in the list.
+     *
+     * @param mixed $values
+     * @param array $list
      * @return bool
      */
-    private function isListed($needles, $list)
+    private function inList(array $list, $values): bool
     {
-        $needles = is_array($needles) ? $needles : [$needles];
+        $values = is_array($values) ? $values : [$values];
 
         foreach ($list as $pattern) {
-            foreach ($needles as $needle) {
-                if (str_is($pattern, $needle)) {
+            foreach ($values as $needle) {
+                if (Str::is($pattern, $needle)) {
                     return true;
                 }
             }
         }
+
         return false;
+    }
+
+    /**
+     * Build application response from prerendered page response.
+     *
+     * @param PsrResponseInterface $response
+     * @return SymfonyResponse
+     */
+    private function buildApplicationResponse(PsrResponseInterface $response): SymfonyResponse
+    {
+        if ($response->getStatusCode() >= 300 && $response->getStatusCode() < 400) {
+            return $this->responseFactory->redirectTo(
+                $response->getHeaders()["Location"][0],
+                $response->getStatusCode()
+            );
+        }
+
+        return (new HttpFoundationFactory)->createResponse($response);
     }
 }

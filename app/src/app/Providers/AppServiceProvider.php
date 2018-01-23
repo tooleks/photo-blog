@@ -27,18 +27,60 @@ class AppServiceProvider extends ServiceProvider
 
         $this->registerApiV1Services();
     }
-
     /**
-     * Register "api.v1" services.
+     * Register "package" services.
      *
      * @return void
      */
-    protected function registerApiV1Services(): void
+    protected function registerPackageServices(): void
     {
         $this->app->bind(
-            \Api\V1\Http\Proxy\Contracts\OAuthProxy::class,
-            \Api\V1\Http\Proxy\CookieOAuthProxy::class
+            \GuzzleHttp\ClientInterface::class,
+            \GuzzleHttp\Client::class
         );
+
+        $this->app->bind(
+            \Tooleks\Php\AvgColorPicker\Contracts\AvgColorPicker::class,
+            \Tooleks\Php\AvgColorPicker\Gd\AvgColorPicker::class
+        );
+
+        $this->app->singleton('HTMLPurifier', function (Application $app) {
+            $filesystem = $app->make('filesystem')->disk('local');
+            $cacheDirectory = 'cache/HTMLPurifier_DefinitionCache';
+            if (!$filesystem->exists($cacheDirectory)) {
+                $filesystem->makeDirectory($cacheDirectory);
+            }
+            $config = \HTMLPurifier_Config::createDefault();
+            $config->set('Cache.SerializerPath', storage_path("app/{$cacheDirectory}"));
+            return new \HTMLPurifier($config);
+        });
+    }
+
+    /**
+     * Register "lib" services.
+     *
+     * @return void
+     */
+    protected function registerLibServices(): void
+    {
+        $this->app->bind(
+            \Lib\ExifFetcher\Contracts\ExifFetcher::class,
+            \Lib\ExifFetcher\ExifFetcher::class
+        );
+
+        $this->app->bind(
+            \Lib\Rss\Contracts\Builder::class,
+            \Lib\Rss\Builder::class
+        );
+
+        $this->app->bind(
+            \Lib\SiteMap\Contracts\Builder::class,
+            \Lib\SiteMap\Builder::class
+        );
+
+        $this->app->bind(\Lib\ThumbnailsGenerator\Contracts\ThumbnailsGenerator::class, function () {
+            return new \Lib\ThumbnailsGenerator\ThumbnailsGenerator(config('main.photo.thumbnails'));
+        });
     }
 
     /**
@@ -95,53 +137,15 @@ class AppServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register "package" services.
+     * Register "api.v1" services.
      *
      * @return void
      */
-    protected function registerPackageServices(): void
+    protected function registerApiV1Services(): void
     {
         $this->app->bind(
-            \Tooleks\Php\AvgColorPicker\Contracts\AvgColorPicker::class,
-            \Tooleks\Php\AvgColorPicker\Gd\AvgColorPicker::class
+            \Api\V1\Http\Proxy\Contracts\OAuthProxy::class,
+            \Api\V1\Http\Proxy\CookieOAuthProxy::class
         );
-
-        $this->app->singleton('HTMLPurifier', function (Application $app) {
-            $filesystem = $app->make('filesystem')->disk('local');
-            $cacheDirectory = 'cache/HTMLPurifier_DefinitionCache';
-            if (!$filesystem->exists($cacheDirectory)) {
-                $filesystem->makeDirectory($cacheDirectory);
-            }
-            $config = \HTMLPurifier_Config::createDefault();
-            $config->set('Cache.SerializerPath', storage_path("app/{$cacheDirectory}"));
-            return new \HTMLPurifier($config);
-        });
-    }
-
-    /**
-     * Register "lib" services.
-     *
-     * @return void
-     */
-    protected function registerLibServices(): void
-    {
-        $this->app->bind(
-            \Lib\ExifFetcher\Contracts\ExifFetcher::class,
-            \Lib\ExifFetcher\ExifFetcher::class
-        );
-
-        $this->app->bind(
-            \Lib\Rss\Contracts\Builder::class,
-            \Lib\Rss\Builder::class
-        );
-
-        $this->app->bind(
-            \Lib\SiteMap\Contracts\Builder::class,
-            \Lib\SiteMap\Builder::class
-        );
-
-        $this->app->bind(\Lib\ThumbnailsGenerator\Contracts\ThumbnailsGenerator::class, function () {
-            return new \Lib\ThumbnailsGenerator\ThumbnailsGenerator(config('main.photo.thumbnails'));
-        });
     }
 }
