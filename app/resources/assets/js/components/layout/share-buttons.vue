@@ -43,13 +43,19 @@
     export default {
         computed: {
             url: function () {
-                return config.url.app + this.$route.fullPath;
+                let url = config.url.app;
+                if (this.$route.fullPath) {
+                    url += this.$route.fullPath;
+                }
+                return encodeURIComponent(url);
             },
             title: function () {
-                return this.$store.getters["meta/getTitle"];
+                const title = this.$store.getters["meta/getTitle"];
+                return title ? encodeURIComponent(title) : "";
             },
             description: function () {
-                return this.$store.getters["meta/getDescription"];
+                const description = this.$store.getters["meta/getDescription"];
+                return description ? encodeURIComponent(description) : "";
             },
         },
         methods: {
