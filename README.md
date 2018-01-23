@@ -34,6 +34,12 @@ Open the [http://localhost:8080/sign-in](http://localhost:8080/sign-in) link in 
 
 ### Useful Commands
 
+Automatically recompile assets when it detects a change.
+
+```bash
+docker exec -it photo-blog-app bash -c "npm run watch"
+```
+
 Generate the Laravel application's REST API documentation.
 
 ```bash
