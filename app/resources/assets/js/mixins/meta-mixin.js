@@ -39,7 +39,7 @@ export default {
         initMeta: function () {
             this.$store.commit("meta/setName", {name: this.pageName});
             this.$store.commit("meta/setDescription", {description: this.pageDescription});
-            this.$store.commit("meta/setKeywords", {name: this.pageKeywords});
+            this.$store.commit("meta/setKeywords", {keywords: this.pageKeywords});
             this.$store.commit("meta/setTitle", {title: this.pageTitle});
             this.$store.commit("meta/setImage", {image: this.pageImage});
         },
