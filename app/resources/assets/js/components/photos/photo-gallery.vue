@@ -67,8 +67,8 @@
                 return this.$store.getters["photoGallery/isNextPageExist"];
             },
             routeName: function () {
-                const nameSuffix = "-with-page";
-                return this.$route.name.endsWith(nameSuffix) ? this.$route.name : `${this.$route.name}${nameSuffix}`;
+                const withPageSuffix = "-with-page";
+                return this.$route.name.endsWith(withPageSuffix) ? this.$route.name : `${this.$route.name}${withPageSuffix}`;
             },
             pageTitle: function () {
                 if (this.$route.params.search_phrase) {
@@ -84,9 +84,9 @@
             "$route": function () {
                 this.init();
             },
-            photos: function () {
-                if (this.currentPage > 1) {
-                    this.$router.push({name: this.routeName, params: {page: this.currentPage}});
+            currentPage: function (currentPage) {
+                if (currentPage > 1) {
+                    this.$router.push({name: this.routeName, params: {page: currentPage}});
                 }
             },
         },
