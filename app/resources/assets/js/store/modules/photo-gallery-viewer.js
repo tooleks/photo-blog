@@ -30,12 +30,10 @@ export default {
                 .getPost(id, params, {suppressNotFoundErrors: true})
                 .then((response) => {
                     const photo = mapper.map(response.data, "Api.V1.Post", "App.Photo");
-                    return preloadImage(photo.toString()).then(() => {
-                        commit("setPhoto", {photo});
-                        commit("setActivePhoto", {photo});
-                        commit("setPending", {pending: false});
-                        return Promise.resolve(getters.getPhotos);
-                    });
+                    commit("setPhoto", {photo});
+                    commit("setActivePhoto", {photo});
+                    commit("setPending", {pending: false});
+                    return Promise.resolve(getters.getPhotos);
                 })
                 .catch((error) => {
                     commit("setPending", {pending: false});
@@ -48,11 +46,9 @@ export default {
                 .getPreviousPost(getters.getActivePhoto.id, params, {suppressNotFoundErrors: true})
                 .then((response) => {
                     const photo = mapper.map(response.data, "Api.V1.Post", "App.Photo");
-                    return preloadImage(photo.toString()).then(() => {
-                        commit("appendPhoto", {photo});
-                        commit("setPending", {pending: false});
-                        return Promise.resolve(getters.getPhotos);
-                    });
+                    commit("appendPhoto", {photo});
+                    commit("setPending", {pending: false});
+                    return Promise.resolve(getters.getPhotos);
                 })
                 .catch((error) => {
                     commit("setPending", {pending: false});
@@ -65,11 +61,9 @@ export default {
                 .getNextPost(getters.getActivePhoto.id, params, {suppressNotFoundErrors: true})
                 .then((response) => {
                     const photo = mapper.map(response.data, "Api.V1.Post", "App.Photo");
-                    return preloadImage(photo.toString()).then(() => {
-                        commit("prependPhoto", {photo});
-                        commit("setPending", {pending: false});
-                        return Promise.resolve(getters.getPhotos);
-                    });
+                    commit("prependPhoto", {photo});
+                    commit("setPending", {pending: false});
+                    return Promise.resolve(getters.getPhotos);
                 })
                 .catch((error) => {
                     commit("setPending", {pending: false});
