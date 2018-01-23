@@ -4,7 +4,7 @@ services:
   photo-blog-app.docker:
     build:
       context: ./
-      dockerfile: Dockerfile_app
+      dockerfile: DockerfileApp
     image: photo-blog-app-php:7.2-fpm
     container_name: photo-blog-app
     restart: always
@@ -19,7 +19,7 @@ services:
   photo-blog-renderer.docker:
     build:
       context: ./
-      dockerfile: Dockerfile_renderer
+      dockerfile: DockerfileRenderer
     image: photo-blog-renderer-node:8.9
     container_name: photo-blog-renderer
     restart: always
