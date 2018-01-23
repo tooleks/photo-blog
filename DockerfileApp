@@ -17,7 +17,8 @@ RUN apt-get update \
 RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/ --with-freetype-dir=/usr/include/ \
  && docker-php-ext-install -j$(nproc) gd \
  && docker-php-ext-install -j$(nproc) exif \
- && docker-php-ext-install -j$(nproc) pdo_mysql
+ && docker-php-ext-install -j$(nproc) pdo_mysql \
+ && docker-php-ext-install -j$(nproc) zip
 
 RUN curl -sS https://getcomposer.org/installer | php \
  && mv composer.phar /usr/local/bin/composer
