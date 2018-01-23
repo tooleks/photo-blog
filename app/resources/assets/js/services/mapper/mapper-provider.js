@@ -22,9 +22,9 @@ export default function () {
                 {vmid: "og:image", property: "og:image", content: value(() => meta.image)},
                 {vmid: "og:title", property: "og:title", content: value(() => meta.title)},
                 // Twitter Cards properties.
-                {vmid: "twitter:card", name: "twitter:card", property: "twitter:card", content: "summary_large_image"},
-                {vmid: "twitter:title", name: "twitter:title", property: "twitter:title", content: value(() => meta.title)},
-                {vmid: "twitter:image", name: "twitter:image", property: "twitter:image", content: value(() => meta.image)},
+                {vmid: "twitter:card", name: "twitter:card", content: "summary_large_image"},
+                {vmid: "twitter:title", name: "twitter:title", content: value(() => meta.title)},
+                {vmid: "twitter:image", name: "twitter:image", content: value(() => meta.image)},
             ],
         };
     });
