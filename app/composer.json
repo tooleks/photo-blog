@@ -9,12 +9,12 @@
         "ext-gd": "*",
         "ext-exif": "*",
         "ext-pdo_mysql": "*",
+        "ext-redis": "*",
         "laravel/framework": "5.5.*",
         "doctrine/dbal": "~2.3",
         "imagine/imagine": "^0.6.3",
         "tooleks/php-avg-color-picker": "^1.0.0",
         "guzzlehttp/guzzle": "~6.0",
-        "predis/predis": "^1.1",
         "laravel/passport": "^3.0",
         "ezyang/htmlpurifier": "^4.9"
     },
