@@ -18,7 +18,9 @@ RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/include/ --with-png-dir=/us
  && docker-php-ext-install -j$(nproc) gd \
  && docker-php-ext-install -j$(nproc) exif \
  && docker-php-ext-install -j$(nproc) pdo_mysql \
- && docker-php-ext-install -j$(nproc) zip
+ && docker-php-ext-install -j$(nproc) zip \
+ && pecl install redis \
+ && docker-php-ext-enable redis
 
 RUN curl -sS https://getcomposer.org/installer | php \
  && mv composer.phar /usr/local/bin/composer
