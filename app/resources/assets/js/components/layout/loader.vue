@@ -2,7 +2,7 @@
     <div class="loader" v-if="isVisible">
         <div class="loader-inner">
             <span class="loader-icon">
-                <i class="fa fa-spinner fa-spin fa-3x fa-fw" aria-hidden="true"></i>
+                Loading...
             </span>
         </div>
     </div>
@@ -11,10 +11,10 @@
 <style scoped>
     .loader {
         position: fixed;
-        top: 45%;
-        left: 45%;
-        right: 45%;
-        bottom: 45%;
+        top: 40%;
+        left: 40%;
+        right: 40%;
+        bottom: 40%;
         z-index: 1000;
     }
 
@@ -62,7 +62,6 @@
                 if (!this.isLoading) {
                     this.clearDelayTimeout();
                     this.hideLoader();
-                    this.isVisible = this.isLoading;
                 } else {
                     this.setDelayTimeout(() => this.showLoader());
                 }
