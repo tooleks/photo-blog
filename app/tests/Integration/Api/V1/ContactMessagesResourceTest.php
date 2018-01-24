@@ -75,7 +75,7 @@ class ContactMessagesResourceTest extends TestCase
             ->json('POST', $this->getResourceFullName(), $requestBody)
             ->assertStatus(204);
 
-        Mail::assertSent(ContactMessage::class, function (ContactMessage $mail) use ($requestBody) {
+        Mail::assertQueued(ContactMessage::class, function (ContactMessage $mail) use ($requestBody) {
             return
                 $mail->data['email'] === $requestBody['email'] &&
                 $mail->data['name'] === $requestBody['name'] &&
