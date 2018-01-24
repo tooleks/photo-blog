@@ -1,0 +1,65 @@
+// Basic.
+
+html {
+  height: 100%;
+}
+
+html,
+body {
+  min-width: 320px;
+}
+
+body {
+  min-height: 100%;
+  position: relative;
+  background-color: #f3f3f4;
+  color: #494949;
+}
+
+// Font Awesome.
+
+.fa {
+  min-width: 1rem;
+}
+
+// Bootstrap.
+
+.btn {
+  cursor: pointer;
+}
+
+.btn[disabled] {
+  cursor: not-allowed;
+  opacity: .65;
+}
+
+.btn-link:hover {
+  text-decoration: none;
+}
+
+.alert,
+.card,
+.card-img-top,
+.btn,
+.form-control,
+.dropdown-menu {
+  border-radius: 0 !important;
+}
+
+// Vue Notification.
+
+@media (min-width: 992px) {
+  .notifications {
+    top: 54px !important;
+  }
+}
+
+.vue-notification {
+  margin: 0.5rem 0.5rem 0 0 !important;
+  font-size: 1rem !important;
+  cursor: pointer !important;
+}
+
+.notification-title {
+  font-weight: normal !important;
+}

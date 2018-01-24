@@ -1,0 +1,55 @@
+FROM php:7.2-fpm
+
+RUN apt-get update \
+ && apt-get install -y \
+    supervisor \
+    cron \
+    git \
+ && apt-get install -y \
+    libjpeg-dev \
+    libpng-dev \
+    libfreetype6-dev \
+ && apt-get -y autoclean \
+ && apt-get -y autoremove \
+ && apt-get -y clean \
+ && rm -rf /var/lib/apt/lists/*
+
+RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/ --with-freetype-dir=/usr/include/ \
+ && docker-php-ext-install -j$(nproc) gd \
+ && docker-php-ext-install -j$(nproc) exif \
+ && docker-php-ext-install -j$(nproc) pdo_mysql \
+ && docker-php-ext-install -j$(nproc) zip
+
+RUN curl -sS https://getcomposer.org/installer | php \
+ && mv composer.phar /usr/local/bin/composer
+
+ENV NVM_DIR /usr/local/nvm
+ENV NVM_VERSION 0.33.6
+ENV NODE_VERSION 8.9.1
+
+RUN curl -sS https://raw.githubusercontent.com/creationix/nvm/v$NVM_VERSION/install.sh | bash
+RUN ["/bin/bash", "-c", "source $NVM_DIR/nvm.sh \
+                      && nvm install $NODE_VERSION \
+                      && nvm alias default $NODE_VERSION \
+                      && nvm use default \
+                      && npm install -g \
+                         apidoc"]
+
+ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
+ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
+
+RUN mkdir -p /app/
+WORKDIR /app/
+
+COPY ./docker/config/app/supervisor.conf /etc/supervisor/conf.d/docker-supervisor.conf
+RUN chmod 0444 /etc/supervisor/conf.d/docker-supervisor.conf
+
+COPY ./docker/config/app/scheduler /etc/cron.d/docker-scheduler
+RUN chmod 0444 /etc/cron.d/docker-scheduler
+
+COPY ./docker/config/app/entrypoint.sh /docker-entrypoint.sh
+RUN chmod 0544 /docker-entrypoint.sh
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
+
+CMD ["/usr/bin/supervisord", "-n"]
