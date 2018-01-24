@@ -61,14 +61,14 @@
         methods: {
             init: function () {
                 if (this.isAuthenticated) {
-                    this.goToPath(this.$route.query.redirect);
+                    this.goToPath(this.$route.query.redirect_uri);
                 }
             },
             signIn: function () {
                 this.$store.dispatch("auth/signIn", this.form)
                     .then((user) => {
                         notification.success(`Hello, ${user.name}!`);
-                        this.goToPath(this.$route.query.redirect);
+                        this.goToPath(this.$route.query.redirect_uri);
                     });
             },
         },

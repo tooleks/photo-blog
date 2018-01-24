@@ -21,7 +21,7 @@ router.beforeEach((to, from, next) => {
     if (to.matched.some((route) => route.meta.requiresAuth) && !auth.exists()) {
         next({
             name: "sign-in",
-            query: {redirect: to.fullPath},
+            query: {redirect_uri: to.fullPath},
         });
     } else {
         next();
