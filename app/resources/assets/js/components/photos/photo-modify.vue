@@ -21,15 +21,19 @@
                                           v-model.trim="formDescription"
                                           rows="7"></textarea>
                             </div>
-                            <button :disabled="isPending" type="submit" class="btn btn-secondary">Save</button>
+                            <button :disabled="isPending" type="submit" class="btn btn-secondary">
+                                <i class="fa fa-floppy-o" aria-hidden="true"></i> Save
+                            </button>
                             <file-input @change="uploadFile"
-                                        :text="'Upload file'"
-                                        :attributes="{id: 'file', name: 'file', class: 'btn btn-secondary', disabled: isPending}"></file-input>
+                                        :attributes="{id: 'file', name: 'file', class: 'btn btn-secondary', disabled: isPending}">
+                                <i class="fa fa-cloud-upload" aria-hidden="true"></i> Upload file
+                            </file-input>
                             <button v-if="photo.id"
                                     @click="deletePhoto"
                                     :disabled="isPending"
                                     type="button"
-                                    class="btn btn-secondary">Delete
+                                    class="btn btn-danger float-right">
+                                <i class="fa fa-trash" aria-hidden="true"></i> Delete
                             </button>
                         </form>
                     </div>
