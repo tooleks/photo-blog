@@ -4,7 +4,7 @@ export default {
             if (path) {
                 this.$router.push({path});
             } else {
-                this.$router.push({name: "home"});
+                this.goToHomePage();
             }
         },
         goToHomePage: function () {
