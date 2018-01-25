@@ -26,7 +26,7 @@ class ReCaptchaRule implements Rule
      *
      * @return bool
      */
-    public static function enabled(): bool
+    public static function isEnabled(): bool
     {
         return (bool) static::getSecretKey();
     }
@@ -36,6 +36,10 @@ class ReCaptchaRule implements Rule
      */
     public function passes($attribute, $value)
     {
+        if (!static::isEnabled()) {
+            return true;
+        }
+
         $context = stream_context_create([
             'http' => [
                 'method' => 'POST',

@@ -34,7 +34,7 @@ class CreateAuthRequest extends FormRequest
             'password' => ['required', 'string'],
         ];
 
-        if (ReCaptchaRule::enabled()) {
+        if (ReCaptchaRule::isEnabled()) {
             $rules['g_recaptcha_response'] = ['required', new ReCaptchaRule];
         }
 
