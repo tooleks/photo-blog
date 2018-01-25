@@ -31,7 +31,7 @@
 </template>
 
 <script>
-    import Loader from "../layout/loader";
+    import Loader from "../utils/loader";
     import Masonry from "../gallery/masonry";
     import {GotoMixin, MetaMixin} from "../../mixins";
 

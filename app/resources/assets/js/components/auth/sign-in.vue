@@ -4,7 +4,7 @@
             <div class="col-sm-12 col-lg-6">
                 <div class="card">
                     <div class="card-body">
-                        <form @submit.prevent="signIn">
+                        <form @submit.prevent="verifyReCaptcha">
                             <div class="form-group">
                                 <label for="email">Email
                                     <small>Required</small>
@@ -23,6 +23,7 @@
                                        class="form-control"
                                        v-model="form.password">
                             </div>
+                            <re-captcha ref="recaptcha" @verified="signIn"></re-captcha>
                             <button :disabled="isPending" type="submit" class="btn btn-secondary">Sign In</button>
                         </form>
                     </div>
@@ -33,10 +34,14 @@
 </template>
 
 <script>
+    import ReCaptcha from "../utils/re-captcha";
     import {AuthMixin, GotoMixin, MetaMixin} from "../../mixins";
     import {notification} from "../../services";
 
     export default {
+        components: {
+            ReCaptcha,
+        },
         mixins: [
             AuthMixin,
             GotoMixin,
@@ -64,8 +69,11 @@
                     this.goToPath(this.$route.query.redirect_uri);
                 }
             },
-            signIn: function () {
-                this.$store.dispatch("auth/signIn", this.form)
+            verifyReCaptcha: function () {
+                this.$refs.recaptcha.execute();
+            },
+            signIn: function (reCaptchaResponse) {
+                this.$store.dispatch("auth/signIn", Object.assign({}, this.form, {"g_recaptcha_response": reCaptchaResponse}))
                     .then((user) => {
                         notification.success(`Hello, ${user.name}!`);
                         this.goToPath(this.$route.query.redirect_uri);

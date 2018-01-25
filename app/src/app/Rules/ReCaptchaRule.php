@@ -12,14 +12,31 @@ use Illuminate\Contracts\Validation\Rule;
 class ReCaptchaRule implements Rule
 {
     /**
+     * Get reCAPTCHA secret key.
+     *
+     * @return null|string
+     */
+    private static function getSecretKey(): ?string
+    {
+        return env('GOOGLE_RECAPTCHA_SECRET_KEY');
+    }
+
+    /**
+     * Determine if reCAPTCHA is enabled.
+     *
+     * @return bool
+     */
+    public static function isEnabled(): bool
+    {
+        return (bool) static::getSecretKey();
+    }
+
+    /**
      * @inheritdoc
      */
     public function passes($attribute, $value)
     {
-        $reCaptchaSecretKey = env('RECAPTCHA_SECRET_KEY');
-
-        // Note: If reCAPTCHA secret key is not configured consider all value as valid.
-        if (is_null($reCaptchaSecretKey)) {
+        if (!static::isEnabled()) {
             return true;
         }
 
@@ -28,7 +45,7 @@ class ReCaptchaRule implements Rule
                 'method' => 'POST',
                 'header' => 'Content-type: application/x-www-form-urlencoded',
                 'content' => http_build_query([
-                    'secret' => $reCaptchaSecretKey,
+                    'secret' => static::getSecretKey(),
                     'response' => $value,
                 ]),
             ],

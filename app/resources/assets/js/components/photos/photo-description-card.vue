@@ -45,7 +45,7 @@
 
 <script>
     import ExifDescription from "./exif-description";
-    import ShareButtons from "../layout/share-buttons";
+    import ShareButtons from "../utils/share-buttons";
     import {AuthMixin} from "../../mixins"
     import TagBadges from "./tag-badges";
 

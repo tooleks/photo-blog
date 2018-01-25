@@ -63,3 +63,9 @@ body {
 .notification-title {
   font-weight: normal !important;
 }
+
+// Google reCAPTCHA
+
+.grecaptcha-badge {
+  z-index: 1 !important;
+}
