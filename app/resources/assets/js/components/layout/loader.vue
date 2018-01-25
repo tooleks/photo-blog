@@ -82,5 +82,8 @@
                 this.delayTimeout = setTimeout(() => callback.call(callback), this.delay);
             },
         },
+        beforeDestroy: function () {
+            this.clearDelayTimeout();
+        },
     }
 </script>
