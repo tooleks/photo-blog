@@ -14,7 +14,8 @@ const mix = require("laravel-mix");
 mix.js("resources/assets/js/app.js", "public/js")
     .sass("resources/assets/sass/app.scss", "public/css")
     .copy("resources/assets/img/*.*", "public/img")
-    .copy("resources/assets/favicon/*.*", "public/favicon");
+    .copy("resources/assets/favicon/*.*", "public/favicon")
+    .copy("resources/assets/favicon/favicon.ico", "public/favicon.ico");
 
 if (mix.inProduction()) {
     mix.version();
