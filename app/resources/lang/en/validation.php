@@ -102,7 +102,7 @@ return [
         'photo.id' => [
             'required' => 'The file upload is required.',
         ],
-        'g-recaptcha-response' => [
+        'g_recaptcha_response' => [
             'required' => 'reCAPTCHA validation is required.',
         ],
     ],
