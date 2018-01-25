@@ -18,5 +18,8 @@ export default {
         googleAnalytics: {
             trackingId: process.env.MIX_CREDENTIALS_GOOGLE_ANALYTICS_TRACKING_ID,
         },
+        googleReCaptcha: {
+            siteKey: process.env.MIX_CREDENTIALS_GOOGLE_RECAPTCHA_SITE_KEY,
+        },
     },
 }

@@ -58,8 +58,8 @@
 </style>
 
 <script>
-    import FileInput from "../layout/file-input";
-    import TagInput from "../layout/tag-input";
+    import FileInput from "../utils/file-input";
+    import TagInput from "../utils/tag-input";
     import PhotoCard from "./photo-card";
     import {GotoMixin, MetaMixin} from "../../mixins";
     import {mapper, notification} from "../../services";

@@ -29,10 +29,15 @@ class CreateAuthRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
-            'g-recaptcha-response' => [new ReCaptchaRule],
         ];
+
+        if (ReCaptchaRule::enabled()) {
+            $rules['g_recaptcha_response'] = ['required', new ReCaptchaRule];
+        }
+
+        return $rules;
     }
 }
