@@ -23,7 +23,9 @@
                                        class="form-control"
                                        v-model="form.password">
                             </div>
-                            <re-captcha ref="recaptcha" @verified="signIn"></re-captcha>
+                            <div class="form-group">
+                                <re-captcha ref="recaptcha" @verified="signIn"></re-captcha>
+                            </div>
                             <button :disabled="isPending" type="submit" class="btn btn-secondary">Sign In</button>
                         </form>
                     </div>
