@@ -16,7 +16,7 @@
             <div class="row">
                 <div class="col-md">
                     <p class="card-text" v-if="photo.exif.takenAt !== 'N/A'">
-                        Taken at {{ photo.exif.takenAt }}
+                        Taken on {{ photo.exif.takenAt }}
                     </p>
                     <p class="card-text" title="Description">{{ photo.description }}</p>
                     <tag-badges :tags="photo.tags"></tag-badges>
