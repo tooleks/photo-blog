@@ -96,7 +96,7 @@ return [
     */
 
     'custom' => [
-        'tags.*.text' => [
+        'tags.*.value' => [
             'required' => 'The tags field is required.',
         ],
         'photo.id' => [
