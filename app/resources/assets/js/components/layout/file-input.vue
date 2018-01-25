@@ -1,7 +1,9 @@
 <template>
     <label :class="attributes.class"
            :disabled="attributes.disabled">
-        {{ text }}
+        <slot>
+            Upload file
+        </slot>
         <input hidden
                type="file"
                v-bind="attributes"
