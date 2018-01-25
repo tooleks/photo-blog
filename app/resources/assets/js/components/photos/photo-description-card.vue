@@ -1,14 +1,14 @@
 <template>
     <div class="card" v-if="photo">
         <div class="card-header bg-white">
-            <button @click="emitBackEvent" class="btn btn-light btn-sm btn-action">
+            <button @click="emitBackEvent" class="btn btn-light btn-sm">
                 <i class="fa fa-arrow-left" aria-hidden="true"></i> Back to gallery
             </button>
-            <a :href="photo" class="btn btn-light btn-sm btn-action" target="_blank">
+            <a :href="photo" class="btn btn-light btn-sm" target="_blank">
                 <i class="fa fa-expand" aria-hidden="true"></i> Open in full screen
             </a>
             <router-link v-if="isAuthenticated" :to="{name: 'photo/edit', params: {id: photo.id}}"
-                         class="btn btn-light btn-sm btn-action">
+                         class="btn btn-light btn-sm">
                 <i class="fa fa-pencil" aria-hidden="true"></i> Edit photo
             </router-link>
         </div>
@@ -33,9 +33,13 @@
 </template>
 
 <style scoped>
-    .btn-action {
+    .btn {
         margin-right: 2px;
-        margin-bottom: 2px;
+        margin-bottom: 6px;
+    }
+
+    .btn:last-child {
+        margin-right: 0;
     }
 </style>
 

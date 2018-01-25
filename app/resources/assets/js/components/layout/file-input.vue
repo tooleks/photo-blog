@@ -24,7 +24,6 @@
 <script>
     export default {
         props: {
-            text: {type: String, default: ""},
             attributes: {
                 type: Object,
                 default: () => {
