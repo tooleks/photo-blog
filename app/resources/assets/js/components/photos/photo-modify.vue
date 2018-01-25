@@ -1,7 +1,7 @@
 <template>
     <div class="container py-3">
         <div class="row">
-            <div class="col-md">
+            <div class="col-lg">
                 <div class="card">
                     <div class="card-body">
                         <form @submit.prevent="savePhoto">
@@ -32,19 +32,30 @@
                                     @click="deletePhoto"
                                     :disabled="isPending"
                                     type="button"
-                                    class="btn btn-danger float-right">
+                                    class="btn btn-danger">
                                 <i class="fa fa-trash" aria-hidden="true"></i> Delete
                             </button>
                         </form>
                     </div>
                 </div>
             </div>
-            <div class="col-md mt-3 mt-md-0">
+            <div class="col-lg mt-3 mt-lg-0">
                 <photo-card :photo="photo"></photo-card>
             </div>
         </div>
     </div>
 </template>
+
+<style scoped>
+    .btn {
+        margin-right: 2px;
+        margin-bottom: 6px;
+    }
+
+    .btn:last-child {
+        margin-right: 0;
+    }
+</style>
 
 <script>
     import FileInput from "../layout/file-input";
@@ -126,7 +137,7 @@
                 });
             },
             deletePhoto: function () {
-                if (confirm('Do you really want to delete the photo?')) {
+                if (confirm("Do you really want to delete the photo?")) {
                     this.$store
                         .dispatch("photoForm/deletePhoto")
                         .then(() => {
