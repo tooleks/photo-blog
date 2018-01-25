@@ -29,8 +29,8 @@
     .loader-icon {
         background: rgba(0, 0, 0, 0.4);
         color: #dde3e6;
-        padding: 1rem;
-        border-radius: 0.5rem;
+        padding: 0.76rem 1.5rem;
+        border-radius: 0.25rem;
     }
 </style>
 
