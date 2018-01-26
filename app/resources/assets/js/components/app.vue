@@ -10,9 +10,6 @@
 </template>
 
 <style scoped>
-    .app-header {
-    }
-
     .app-router {
         padding-top: 0;
         padding-bottom: 50px;
