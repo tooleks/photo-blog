@@ -1,21 +1,18 @@
 const mix = require("laravel-mix");
+const path = require("path");
 
-/*
- |--------------------------------------------------------------------------
- | Mix Asset Management
- |--------------------------------------------------------------------------
- |
- | Mix provides a clean, fluent API for defining some Webpack build steps
- | for your Laravel application. By default, we are compiling the Sass
- | file for the application as well as bundling up all the JS files.
- |
- */
+const ASSETS_DIR = "resources/assets";
+const PUBLIC_DIR = "public";
 
-mix.js("resources/assets/js/app.js", "public/js")
-    .sass("resources/assets/sass/app.scss", "public/css")
-    .copy("resources/assets/img/*.*", "public/img")
-    .copy("resources/assets/favicon/*.*", "public/favicon")
-    .copy("resources/assets/favicon/favicon.ico", "public/favicon.ico");
+mix
+    .js(path.join(ASSETS_DIR, "js/app.js"), path.join(PUBLIC_DIR, "js"))
+    .sass(path.join(ASSETS_DIR, "sass/app.scss"), path.join(PUBLIC_DIR, "css"))
+    .copy(path.join(ASSETS_DIR, "img/*.*"), path.join(PUBLIC_DIR, "img"))
+    .copy(path.join(ASSETS_DIR, "favicon/*.*"), path.join(PUBLIC_DIR, "favicon"))
+    .copy(path.join(ASSETS_DIR, "favicon/favicon.ico"), path.join(PUBLIC_DIR, "favicon.ico"))
+    .options({
+        extractVueStyles: true,
+    });
 
 if (mix.inProduction()) {
     mix.version();
