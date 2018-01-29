@@ -132,7 +132,7 @@ class UserManager implements UserManagerContract
         $user = $this->getByEmail($email);
 
         if (!$this->hasher->check($password, $user->password)) {
-            throw new ModelNotFoundException('Invalid user password.');
+            throw new ModelNotFoundException(__('auth.password', ['email' => $email]));
         }
 
         return $user;
