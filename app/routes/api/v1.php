@@ -112,10 +112,10 @@ Route::group(['prefix' => 'posts'], function () {
         ->uses('PostsController@get');
 
     Route::get('/{id}/previous')
-        ->uses('PostsController@previous');
+        ->uses('PostsController@getPrevious');
 
     Route::get('/{id}/next')
-        ->uses('PostsController@next');
+        ->uses('PostsController@getNext');
 
     Route::put('/{id}')
         ->uses('PostsController@update')

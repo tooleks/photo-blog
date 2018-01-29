@@ -181,7 +181,34 @@ class PostsResourceTest extends TestCase
         $this
             ->json('GET', "{$this->getResourceFullName()}/{$post->id}")
             ->assertStatus(200)
-            ->assertJsonStructure($this->getResourceStructure());
+            ->assertJsonStructure($this->getResourceStructure())
+            ->assertJsonFragment(['id' => $post->id]);
+    }
+
+    public function testGetPreviousPublishedSuccess(): void
+    {
+        $previousPost = $this->createPost();
+        $post = $this->createPost();
+        $nextPost = $this->createPost();
+
+        $this
+            ->json('GET', "{$this->getResourceFullName()}/{$post->id}/previous")
+            ->assertStatus(200)
+            ->assertJsonStructure($this->getResourceStructure())
+            ->assertJsonFragment(['id' => $previousPost->id]);
+    }
+
+    public function testGetNextPublishedSuccess(): void
+    {
+        $previousPost = $this->createPost();
+        $post = $this->createPost();
+        $nextPost = $this->createPost();
+
+        $this
+            ->json('GET', "{$this->getResourceFullName()}/{$post->id}/next")
+            ->assertStatus(200)
+            ->assertJsonStructure($this->getResourceStructure())
+            ->assertJsonFragment(['id' => $nextPost->id]);
     }
 
     public function testGetNotPublishedAsAdministratorSuccess(): void
