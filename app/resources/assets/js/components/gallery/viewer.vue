@@ -18,16 +18,18 @@
             </div>
         </div>
         <button v-if="!isFirstImage(this.activeImage)"
+                @click="slideToPreviousImage"
                 class="carousel-control carousel-control-prev"
                 role="button"
-                @click="slideToPreviousImage">
+                title="Previous Image">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="sr-only">Previous</span>
         </button>
         <button v-if="!isLastImage(this.activeImage)"
+                @click="slideToNextImage"
                 class="carousel-control carousel-control-next"
                 role="button"
-                @click="slideToNextImage">
+                title="Next Image">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="sr-only">Next</span>
         </button>
