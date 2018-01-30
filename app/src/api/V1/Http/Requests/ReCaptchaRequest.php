@@ -6,11 +6,11 @@ use App\Rules\ReCaptchaRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * Class CreateAuthRequest.
+ * Class ReCaptchaRequest.
  *
  * @package Api\V1\Http\Requests
  */
-class CreateAuthRequest extends FormRequest
+class ReCaptchaRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,12 +29,10 @@ class CreateAuthRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = [
-            'email' => ['required', 'string', 'email'],
-            'password' => ['required', 'string'],
-        ];
+        $rules = [];
 
         $reCaptchaRule = $this->container->make(ReCaptchaRule::class);
+
         if ($reCaptchaRule->isEnabled()) {
             $rules['g_recaptcha_response'] = ['required', $reCaptchaRule];
         }

@@ -2,6 +2,7 @@
 
 namespace Api\V1\Http\Requests;
 
+use App\Rules\ReCaptchaRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
@@ -28,11 +29,18 @@ class ContactMessageRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'email' => ['required', 'email', 'max:255'],
             'name' => ['required', 'string', 'max:255'],
             'subject' => ['required', 'string', 'max:255'],
             'message' => ['required', 'string', 'max:65535'],
         ];
+
+        $reCaptchaRule = $this->container->make(ReCaptchaRule::class);
+        if ($reCaptchaRule->isEnabled()) {
+            $rules['g_recaptcha_response'] = ['required', $reCaptchaRule];
+        }
+
+        return $rules;
     }
 }

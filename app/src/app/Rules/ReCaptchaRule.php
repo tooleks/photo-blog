@@ -12,13 +12,23 @@ use Illuminate\Contracts\Validation\Rule;
 class ReCaptchaRule implements Rule
 {
     /**
-     * Get reCAPTCHA secret key.
-     *
-     * @return null|string
+     * @var string
      */
-    private static function getSecretKey(): ?string
+    private $apiEndpoint = 'https://www.google.com/recaptcha/api/siteverify';
+
+    /**
+     * @var string
+     */
+    private $secretKey;
+
+    /**
+     * ReCaptchaRule constructor.
+     *
+     * @param null|string $secretKey
+     */
+    public function __construct(?string $secretKey)
     {
-        return env('GOOGLE_RECAPTCHA_SECRET_KEY');
+        $this->secretKey = $secretKey;
     }
 
     /**
@@ -26,9 +36,9 @@ class ReCaptchaRule implements Rule
      *
      * @return bool
      */
-    public static function isEnabled(): bool
+    public function isEnabled(): bool
     {
-        return (bool) static::getSecretKey();
+        return (bool) $this->secretKey;
     }
 
     /**
@@ -36,7 +46,7 @@ class ReCaptchaRule implements Rule
      */
     public function passes($attribute, $value)
     {
-        if (!static::isEnabled()) {
+        if (!$this->isEnabled()) {
             return true;
         }
 
@@ -45,16 +55,16 @@ class ReCaptchaRule implements Rule
                 'method' => 'POST',
                 'header' => 'Content-type: application/x-www-form-urlencoded',
                 'content' => http_build_query([
-                    'secret' => static::getSecretKey(),
+                    'secret' => $this->secretKey,
                     'response' => $value,
                 ]),
             ],
         ]);
 
-        $response = file_get_contents('https://www.google.com/recaptcha/api/siteverify', false, $context);
+        $response = file_get_contents($this->apiEndpoint, false, $context);
         $result = json_decode($response);
 
-        return $result->success;
+        return optional($result)->success;
     }
 
     /**

@@ -13,7 +13,7 @@
                     <div class="col-sm-12 col-lg-6">
                         <div class="card">
                             <div class="card-body">
-                                <form @submit.prevent="send">
+                                <form @submit.prevent="$refs.reCaptcha.verify">
                                     <div class="form-group">
                                         <label for="email">Email
                                             <small>Required</small>
@@ -50,6 +50,9 @@
                                                   v-model.trim="form.message"
                                                   rows="3"></textarea>
                                     </div>
+                                    <div class="form-group">
+                                        <re-captcha ref="reCaptcha" @verified="send"></re-captcha>
+                                    </div>
                                     <button :disabled="isPending" type="submit" class="btn btn-secondary">Send</button>
                                 </form>
                             </div>
@@ -62,10 +65,14 @@
 </template>
 
 <script>
+    import ReCaptcha from "../utils/re-captcha";
     import {GotoMixin, MetaMixin} from "../../mixins";
     import {notification} from "../../services";
 
     export default {
+        components: {
+            ReCaptcha,
+        },
         mixins: [
             GotoMixin,
             MetaMixin,
@@ -89,8 +96,8 @@
             },
         },
         methods: {
-            send: function () {
-                this.$store.dispatch("contactMessage/createContactMessage", this.form)
+            send: function (reCaptchaResponse) {
+                this.$store.dispatch("contactMessage/createContactMessage", Object.assign({}, this.form, {"g_recaptcha_response": reCaptchaResponse}))
                     .then(() => {
                         notification.success("Your message has been successfully sent.");
                         this.goToHomePage();
