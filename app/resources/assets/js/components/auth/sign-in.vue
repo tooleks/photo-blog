@@ -4,7 +4,7 @@
             <div class="col-sm-12 col-lg-6">
                 <div class="card">
                     <div class="card-body">
-                        <form @submit.prevent="verifyInvisibleReCaptcha">
+                        <form @submit.prevent="verifyReCaptcha">
                             <div class="form-group">
                                 <label for="email">Email
                                     <small>Required</small>
@@ -24,7 +24,7 @@
                                        v-model="form.password">
                             </div>
                             <div class="form-group">
-                                <re-captcha ref="invisibleReCaptcha" @verified="signIn"></re-captcha>
+                                <re-captcha ref="reCaptcha" @verified="signIn"></re-captcha>
                             </div>
                             <button :disabled="isPending" type="submit" class="btn btn-secondary">Sign In</button>
                         </form>
@@ -71,8 +71,8 @@
                     this.goToPath(this.$route.query.redirect_uri);
                 }
             },
-            verifyInvisibleReCaptcha: function () {
-                this.$refs.invisibleReCaptcha.verify();
+            verifyReCaptcha: function () {
+                this.$refs.reCaptcha.verify();
             },
             signIn: function (reCaptchaResponse) {
                 this.$store.dispatch("auth/signIn", Object.assign({}, this.form, {"g_recaptcha_response": reCaptchaResponse}))
