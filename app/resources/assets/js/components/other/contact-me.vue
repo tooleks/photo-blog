@@ -13,7 +13,7 @@
                     <div class="col-sm-12 col-lg-6">
                         <div class="card">
                             <div class="card-body">
-                                <form @submit.prevent="verifyReCaptcha">
+                                <form @submit.prevent="$refs.reCaptcha.verify">
                                     <div class="form-group">
                                         <label for="email">Email
                                             <small>Required</small>
@@ -96,9 +96,6 @@
             },
         },
         methods: {
-            verifyReCaptcha: function () {
-                this.$refs.reCaptcha.verify();
-            },
             send: function (reCaptchaResponse) {
                 this.$store.dispatch("contactMessage/createContactMessage", Object.assign({}, this.form, {"g_recaptcha_response": reCaptchaResponse}))
                     .then(() => {

@@ -4,7 +4,7 @@
             <div class="col-sm-12 col-lg-6">
                 <div class="card">
                     <div class="card-body">
-                        <form @submit.prevent="verifyReCaptcha">
+                        <form @submit.prevent="$refs.reCaptcha.verify">
                             <div class="form-group">
                                 <label for="email">Email
                                     <small>Required</small>
@@ -70,9 +70,6 @@
                 if (this.isAuthenticated) {
                     this.goToPath(this.$route.query.redirect_uri);
                 }
-            },
-            verifyReCaptcha: function () {
-                this.$refs.reCaptcha.verify();
             },
             signIn: function (reCaptchaResponse) {
                 this.$store.dispatch("auth/signIn", Object.assign({}, this.form, {"g_recaptcha_response": reCaptchaResponse}))
