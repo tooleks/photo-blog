@@ -334,7 +334,7 @@ class PostsController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function previous($id, Request $request): JsonResponse
+    public function getPrevious($id, Request $request): JsonResponse
     {
         $post = $this->postManager->getBeforeId((int) $id, $request->all());
 
@@ -399,7 +399,7 @@ class PostsController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function next($id, Request $request): JsonResponse
+    public function getNext($id, Request $request): JsonResponse
     {
         $post = $this->postManager->getAfterId((int) $id, $request->all());
 
