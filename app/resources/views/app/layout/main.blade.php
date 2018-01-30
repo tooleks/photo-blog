@@ -30,12 +30,12 @@
     <meta name="msapplication-TileImage" content="{{ mix('/favicon/ms-icon-144x144.png') }}">
     <meta name="theme-color" content="#ffffff">
     <link href="{{ mix('/css/app.css') }}" rel="stylesheet" type="text/css">
-    <?php if (env('GOOGLE_RECAPTCHA_SECRET_KEY')): ?>
-    <script src="https://www.google.com/recaptcha/api.js"></script>
-    <?php endif; ?>
 </head>
 <body>
 @yield('content')
 <script type="application/javascript" src="{{ mix('/js/app.js') }}"></script>
+<?php if (env('GOOGLE_RECAPTCHA_SECRET_KEY')): ?>
+<script src="https://www.google.com/recaptcha/api.js?onload=vueReCaptchaOnLoad&render=explicit" async defer></script>
+<?php endif; ?>
 </body>
 </html>

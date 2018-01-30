@@ -1,9 +1,10 @@
 <template>
-    <div id="g-recaptcha" class="g-recaptcha" :data-sitekey="siteKey"></div>
+    <div id="g-recaptcha"></div>
 </template>
 
 <script>
     import config from "../../config";
+    import {provideReCaptchaService} from "../../services";
 
     export default {
         props: {
@@ -14,43 +15,18 @@
         },
         data: function () {
             return {
-                widgetId: 0,
+                reCaptcha: provideReCaptchaService("g-recaptcha", this.siteKey, (response) => this.$emit("verified", response)),
             };
         },
         methods: {
-            isEnabled: function () {
-                return window.grecaptcha && this.siteKey;
-            },
-            execute: function () {
-                if (this.isEnabled) {
-                    window.grecaptcha.execute(this.widgetId);
-                } else {
-                    this.emitVerifiedEvent();
-                }
-            },
-            render: function () {
-                if (this.isEnabled) {
-                    this.widgetId = window.grecaptcha.render("g-recaptcha", {
-                        sitekey: this.siteKey,
-                        size: "invisible",
-                        callback: (response) => {
-                            this.emitVerifiedEvent(response);
-                            this.reset();
-                        },
-                    });
-                }
-            },
-            reset: function () {
-                if (this.isEnabled) {
-                    window.grecaptcha.reset(this.widgetId);
-                }
-            },
-            emitVerifiedEvent: function (response) {
-                this.$emit("verified", response);
+            verify: function () {
+                this.reCaptcha.execute();
             },
         },
         mounted: function () {
-            this.render();
-        }
+            if (this.reCaptcha.isReady()) {
+                this.reCaptcha.render();
+            }
+        },
     }
 </script>

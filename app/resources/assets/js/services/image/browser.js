@@ -1,4 +1,4 @@
-export function preloadImage(url) {
+export function browserPreloadImage(url) {
     return new Promise((resolve, reject) => {
         const image = new Image;
         image.onload = (event) => resolve(url);
