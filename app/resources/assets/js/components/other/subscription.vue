@@ -13,7 +13,7 @@
                     <div class="col-sm-12 col-lg-6">
                         <div class="card">
                             <div class="card-body">
-                                <form @submit.prevent="send">
+                                <form @submit.prevent="verifyReCaptcha">
                                     <div class="form-group">
                                         <label for="email">Email
                                             <small>Required</small>
@@ -22,6 +22,9 @@
                                                id="email"
                                                class="form-control"
                                                v-model.trim="form.email">
+                                    </div>
+                                    <div class="form-group">
+                                        <re-captcha ref="reCaptcha" @verified="send"></re-captcha>
                                     </div>
                                     <button :disabled="isPending" type="submit" class="btn btn-secondary">Send</button>
                                 </form>
@@ -35,10 +38,14 @@
 </template>
 
 <script>
+    import ReCaptcha from "../utils/re-captcha";
     import {GotoMixin, MetaMixin} from "../../mixins";
     import {notification} from "../../services";
 
     export default {
+        components: {
+            ReCaptcha,
+        },
         mixins: [
             GotoMixin,
             MetaMixin,
@@ -59,8 +66,11 @@
             },
         },
         methods: {
-            send: function () {
-                this.$store.dispatch("subscription/createSubscription", this.form)
+            verifyReCaptcha: function () {
+                this.$refs.reCaptcha.verify();
+            },
+            send: function (reCaptchaResponse) {
+                this.$store.dispatch("subscription/createSubscription", Object.assign({}, this.form, {"g_recaptcha_response": reCaptchaResponse}))
                     .then(() => {
                         notification.success("You have been successfully subscribed to the website updates.");
                         this.goToHomePage();

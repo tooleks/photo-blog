@@ -27,6 +27,7 @@ class AppServiceProvider extends ServiceProvider
 
         $this->registerApiV1Services();
     }
+
     /**
      * Register "package" services.
      *
@@ -133,6 +134,13 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             \App\Services\Rss\Contracts\RssBuilderService::class,
             \App\Services\Rss\RssBuilderService::class
+        );
+
+        $this->app->bind(
+            \App\Rules\ReCaptchaRule::class,
+            function () {
+                return new \App\Rules\ReCaptchaRule(env('GOOGLE_RECAPTCHA_SECRET_KEY'));
+            }
         );
     }
 

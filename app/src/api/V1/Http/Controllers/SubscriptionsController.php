@@ -3,13 +3,12 @@
 namespace Api\V1\Http\Controllers;
 
 use Api\V1\Http\Requests\PaginatedRequest;
+use Api\V1\Http\Requests\ReCaptchaRequest;
 use Api\V1\Http\Resources\PaginatedResource;
 use Api\V1\Http\Resources\SubscriptionPlainResource;
 use App\Managers\Subscription\Contracts\SubscriptionManager;
-use App\Models\Subscription;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 /**
@@ -63,10 +62,10 @@ class SubscriptionsController extends Controller
     /**
      * Create a subscription.
      *
-     * @param Request $request
+     * @param ReCaptchaRequest $request
      * @return JsonResponse
      */
-    public function create(Request $request): JsonResponse
+    public function create(ReCaptchaRequest $request): JsonResponse
     {
         $subscription = $this->subscriptionManager->create($request->all());
 
