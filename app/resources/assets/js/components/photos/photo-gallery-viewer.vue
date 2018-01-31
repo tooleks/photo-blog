@@ -77,19 +77,20 @@
             reset: function () {
                 this.$store.commit("photoGalleryViewer/reset");
             },
-            loadPhoto: function () {
-                this.$store
-                    .dispatch("photoGalleryViewer/loadPhoto", {
-                        id: this.$route.params.id,
-                        params: this.$route.query
-                    })
-                    .catch((error) => {
-                        if (value(() => error.response.status) === 404) {
-                            this.goTo404Page();
-                        } else {
-                            this.goToHomePage();
-                        }
-                    });
+            loadPhoto: async function () {
+                try {
+                    await this.$store
+                        .dispatch("photoGalleryViewer/loadPhoto", {
+                            id: this.$route.params.id,
+                            params: this.$route.query
+                        });
+                } catch (error) {
+                    if (value(() => error.response.status) === 404) {
+                        this.goTo404Page();
+                    } else {
+                        this.goToHomePage();
+                    }
+                }
             },
             loadOlderPhoto: function () {
                 this.$store.dispatch("photoGalleryViewer/loadOlderPhoto", {params: this.$route.query});

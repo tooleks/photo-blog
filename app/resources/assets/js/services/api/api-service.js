@@ -7,75 +7,89 @@ export default class ApiService {
     }
 
     _getFullUrl(relativeUrl) {
-        return `${this.apiEndpoint}${relativeUrl}`;
+        return this.apiEndpoint + relativeUrl;
     }
 
-    _handle(callback, options = {}) {
-        return callback
-            .call(this)
-            .then((response) => this.onSuccess(response))
-            .catch((error) => this.onError(error, options));
+    async _handleRequest(request, options = {}) {
+        return request.call(this)
+            .then((response) => this.onSuccess.call(this.onSuccess, response))
+            .catch((error) => this.onError.call(this.onError, error, options));
     }
 
     createToken(data) {
-        return this._handle(() => this.httpClient.post(this._getFullUrl("/auth/token"), data));
+        const request = () => this.httpClient.post(this._getFullUrl("/auth/token"), data);
+        return this._handleRequest(request);
     }
 
     deleteToken() {
-        return this._handle(() => this.httpClient.delete(this._getFullUrl("/auth/token")));
+        const request = () => this.httpClient.delete(this._getFullUrl("/auth/token"));
+        return this._handleRequest(request);
     }
 
-    get(id) {
-        return this._handle(() => this.httpClient.get(this._getFullUrl(`/users/${id}`)));
+    getUser(id) {
+        const request = () => this.httpClient.get(this._getFullUrl(`/users/${id}`));
+        return this._handleRequest(request);
     }
 
     createPhoto(file) {
         const data = new FormData;
         data.append("file", file);
-        return this._handle(() => this.httpClient.post(this._getFullUrl("/photos"), data));
+        const request = () => this.httpClient.post(this._getFullUrl("/photos"), data);
+        return this._handleRequest(request);
     }
 
     createPost(data) {
-        return this._handle(() => this.httpClient.post(this._getFullUrl("/posts"), Object.assign(data, {is_published: true})));
+        const request = () => this.httpClient.post(this._getFullUrl("/posts"), Object.assign({}, data, {is_published: true}));
+        return this._handleRequest(request);
     }
 
     updatePost(id, data) {
-        return this._handle(() => this.httpClient.put(this._getFullUrl(`/posts/${id}`), data));
+        const request = () => this.httpClient.put(this._getFullUrl(`/posts/${id}`), data);
+        return this._handleRequest(request);
     }
 
     getPosts(params = {}) {
-        return this._handle(() => this.httpClient.get(this._getFullUrl("/posts"), {params}));
+        const request = () => this.httpClient.get(this._getFullUrl("/posts"), {params});
+        return this._handleRequest(request);
     }
 
     getPost(id, params = {}, options = {}) {
-        return this._handle(() => this.httpClient.get(this._getFullUrl(`/posts/${id}`), {params}), options);
+        const request = () => this.httpClient.get(this._getFullUrl(`/posts/${id}`), {params});
+        return this._handleRequest(request, options);
     }
 
     getPreviousPost(id, params = {}, options = {}) {
-        return this._handle(() => this.httpClient.get(this._getFullUrl(`/posts/${id}/previous`), {params}), options);
+        const request = () => this.httpClient.get(this._getFullUrl(`/posts/${id}/previous`), {params});
+        return this._handleRequest(request, options);
     }
 
     getNextPost(id, params = {}, options = {}) {
-        return this._handle(() => this.httpClient.get(this._getFullUrl(`/posts/${id}/next`), {params}), options);
+        const request = () => this.httpClient.get(this._getFullUrl(`/posts/${id}/next`), {params});
+        return this._handleRequest(request, options);
     }
 
     deletePost(id) {
-        return this._handle(() => this.httpClient.delete(this._getFullUrl(`/posts/${id}`)));
+        const request = () => this.httpClient.delete(this._getFullUrl(`/posts/${id}`));
+        return this._handleRequest(request);
     }
 
     getTags(params = {}) {
-        return this._handle(() => this.httpClient.get(this._getFullUrl("/tags"), {params}));
+        const request = () => this.httpClient.get(this._getFullUrl("/tags"), {params});
+        return this._handleRequest(request);
     }
 
     createContactMessage(data) {
-        return this._handle(() => this.httpClient.post(this._getFullUrl("/contact_messages"), data));
+        const request = () => this.httpClient.post(this._getFullUrl("/contact_messages"), data);
+        return this._handleRequest(request);
     }
 
     createSubscription(data) {
-        return this._handle(() => this.httpClient.post(this._getFullUrl("/subscriptions"), data));
+        const request = () => this.httpClient.post(this._getFullUrl("/subscriptions"), data);
+        return this._handleRequest(request);
     }
 
     deleteSubscription(token) {
-        return this._handle(() => this.httpClient.delete(this._getFullUrl(`/subscriptions/${token}`)));
+        const request = () => this.httpClient.delete(this._getFullUrl(`/subscriptions/${token}`));
+        return this._handleRequest(request);
     }
 }

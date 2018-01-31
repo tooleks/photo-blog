@@ -18,7 +18,8 @@
                                         <label for="email">Email
                                             <small>Required</small>
                                         </label>
-                                        <input type="text"
+                                        <input type="email"
+                                               required
                                                id="email"
                                                class="form-control"
                                                v-model.trim="form.email">
@@ -28,6 +29,7 @@
                                             <small>Required</small>
                                         </label>
                                         <input type="text"
+                                               required
                                                id="name"
                                                class="form-control"
                                                v-model.trim="form.name">
@@ -37,6 +39,7 @@
                                             <small>Required</small>
                                         </label>
                                         <input type="text"
+                                               required
                                                id="subject"
                                                class="form-control"
                                                v-model.trim="form.subject">
@@ -46,6 +49,7 @@
                                             <small>Required</small>
                                         </label>
                                         <textarea id="message"
+                                                  required
                                                   class="form-control"
                                                   v-model.trim="form.message"
                                                   rows="3"></textarea>
@@ -96,12 +100,10 @@
             },
         },
         methods: {
-            send: function (reCaptchaResponse) {
-                this.$store.dispatch("contactMessage/createContactMessage", Object.assign({}, this.form, {"g_recaptcha_response": reCaptchaResponse}))
-                    .then(() => {
-                        notification.success("Your message has been successfully sent.");
-                        this.goToHomePage();
-                    });
+            send: async function (reCaptchaResponse) {
+                await this.$store.dispatch("contactMessage/createContactMessage", Object.assign({}, this.form, {"g_recaptcha_response": reCaptchaResponse}));
+                notification.success("Your message has been successfully sent.");
+                this.goToHomePage();
             },
         },
     }

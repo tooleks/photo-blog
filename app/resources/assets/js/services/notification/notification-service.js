@@ -6,11 +6,11 @@ export default class NotificationService {
             duration: 2000,
             position: "center",
         };
-        this.options = Object.assign(defaultOptions, options);
+        this.options = Object.assign({}, defaultOptions, options);
     }
 
     notify(title, message = "", type = "") {
-        const notification = Object.assign(this.options, {title: title, text: message, type});
+        const notification = Object.assign({}, this.options, {title: title, text: message, type});
         this.handler(notification);
     }
 

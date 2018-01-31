@@ -11,31 +11,21 @@ export default {
         },
     },
     actions: {
-        createSubscription: function ({commit}, data) {
-            commit("setPending", {pending: true});
-            return api
-                .createSubscription(data)
-                .then((response) => {
-                    commit("setPending", {pending: false});
-                    return Promise.resolve();
-                })
-                .catch((error) => {
-                    commit("setPending", {pending: false});
-                    return Promise.reject(error);
-                });
+        createSubscription: async function ({commit}, data) {
+            try {
+                commit("setPending", {pending: true});
+                await api.createSubscription(data);
+            } finally {
+                commit("setPending", {pending: false});
+            }
         },
-        deleteSubscription: function ({commit}, {token}) {
-            commit("setPending", {pending: true});
-            return api
-                .deleteSubscription(token)
-                .then((response) => {
-                    commit("setPending", {pending: false});
-                    return Promise.resolve();
-                })
-                .catch((error) => {
-                    commit("setPending", {pending: false});
-                    return Promise.reject(error);
-                });
+        deleteSubscription: async function ({commit}, {token}) {
+            try {
+                commit("setPending", {pending: true});
+                await api.deleteSubscription(token);
+            } finally {
+                commit("setPending", {pending: false});
+            }
         },
     },
     mutations: {

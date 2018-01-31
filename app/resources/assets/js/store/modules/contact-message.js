@@ -11,18 +11,13 @@ export default {
         },
     },
     actions: {
-        createContactMessage: function ({commit}, data) {
-            commit("setPending", {pending: true});
-            return api
-                .createContactMessage(data)
-                .then((response) => {
-                    commit("setPending", {pending: false});
-                    return Promise.resolve();
-                })
-                .catch((error) => {
-                    commit("setPending", {pending: false});
-                    return Promise.reject(error);
-                });
+        createContactMessage: async function ({commit}, data) {
+            try {
+                commit("setPending", {pending: true});
+                await api.createContactMessage(data);
+            } finally {
+                commit("setPending", {pending: false});
+            }
         },
     },
     mutations: {

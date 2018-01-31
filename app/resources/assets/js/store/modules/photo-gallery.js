@@ -56,26 +56,21 @@ export default {
         },
     },
     actions: {
-        loadPhotos: function ({commit, getters}, data) {
-            commit("setPending", {pending: true});
-            return api
-                .getPosts(data)
-                .then((response) => {
-                    const photos = response.data.data.map((post) => mapper.map(post, "Api.V1.Post", "App.Photo"));
-                    commit("setPhotos", {
-                        photos,
-                        currentPage: response.data.current_page,
-                        previousPageExists: Boolean(response.data.prev_page_url),
-                        nextPageExists: Boolean(response.data.next_page_url),
-                    });
-                    commit("setPending", {pending: false});
-                    return Promise.resolve(getters.getPhotos);
-                })
-                .catch((error) => {
-                    commit("reset");
-                    commit("setPending", {pending: false});
-                    return Promise.reject(error);
+        loadPhotos: async function ({commit, getters}, data) {
+            try {
+                commit("setPending", {pending: true});
+                const response = await api.getPosts(data);
+                const photos = response.data.data.map((post) => mapper.map(post, "Api.V1.Post", "App.Photo"));
+                commit("setPhotos", {
+                    photos,
+                    currentPage: response.data.current_page,
+                    previousPageExists: Boolean(response.data.prev_page_url),
+                    nextPageExists: Boolean(response.data.next_page_url),
                 });
+                return getters.getPhotos;
+            } finally {
+                commit("setPending", {pending: false});
+            }
         },
     },
     mutations: {

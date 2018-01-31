@@ -9,14 +9,12 @@
             GotoMixin,
         ],
         methods: {
-            signOut: function () {
-                this.$store.dispatch("auth/signOut")
-                    .then(() => {
-                        this.goToSignInPage();
-                    })
-                    .catch(() => {
-                        this.goToSignInPage();
-                    });
+            signOut: async function () {
+                try {
+                    await this.$store.dispatch("auth/signOut");
+                } finally {
+                    this.goToSignInPage();
+                }
             },
         },
         created: function () {

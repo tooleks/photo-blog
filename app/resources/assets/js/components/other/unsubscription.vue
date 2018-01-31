@@ -42,15 +42,13 @@
             },
         },
         methods: {
-            send: function () {
-                this.$store.dispatch("subscription/deleteSubscription", {token: this.$route.params.token})
-                    .then(() => {
-                        notification.success("You have been successfully unsubscribed from the website updates.");
-                        this.goToHomePage();
-                    })
-                    .catch(() => {
-                        this.goToHomePage();
-                    });
+            send: async function () {
+                try {
+                    await this.$store.dispatch("subscription/deleteSubscription", {token: this.$route.params.token});
+                    notification.success("You have been successfully unsubscribed from the website updates.");
+                } finally {
+                    this.goToHomePage();
+                }
             },
         },
     }
