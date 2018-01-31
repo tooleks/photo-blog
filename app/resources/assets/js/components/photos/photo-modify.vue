@@ -10,13 +10,14 @@
                                     <small>Required</small>
                                 </label>
                                 <tag-input :tags.sync="formTags"
-                                           :attributes="{id: 'tags', class: 'form-control', rows: '5'}"></tag-input>
+                                           :attributes="{id: 'tags', class: 'form-control', rows: '5', required: true}"></tag-input>
                             </div>
                             <div class="form-group">
                                 <label for="message">Description
                                     <small>Required</small>
                                 </label>
                                 <textarea id="message"
+                                          required
                                           class="form-control"
                                           v-model.trim="formDescription"
                                           rows="7"></textarea>
@@ -120,38 +121,31 @@
             reset: function () {
                 this.$store.commit("photoForm/reset");
             },
-            loadPhoto: function (id) {
-                this.$store
-                    .dispatch("photoForm/loadPhoto", {id})
-                    .catch((error) => {
-                        if (value(() => error.response.status) === 404) {
-                            this.goTo404Page();
-                        } else {
-                            this.goToHomePage();
-                        }
-                    });
-            },
-            savePhoto: function () {
-                this.$store.dispatch("photoForm/savePhoto").then(() => {
-                    notification.success("The photo has been successfully saved.");
-                });
-            },
-            deletePhoto: function () {
-                if (confirm("Do you really want to delete the photo?")) {
-                    this.$store
-                        .dispatch("photoForm/deletePhoto")
-                        .then(() => {
-                            notification.success("The photo has been successfully deleted.");
-                            this.goToHomePage();
-                        });
+            loadPhoto: async function (id) {
+                try {
+                    await this.$store.dispatch("photoForm/loadPhoto", {id});
+                } catch (error) {
+                    if (value(() => error.response.status) === 404) {
+                        this.goTo404Page();
+                    } else {
+                        this.goToHomePage();
+                    }
                 }
             },
-            uploadFile: function (file) {
-                this.$store
-                    .dispatch("photoForm/uploadFile", {file})
-                    .then(() => {
-                        notification.success("The photo has been successfully uploaded. Don't forget to save changes before exit.");
-                    });
+            savePhoto: async function () {
+                await this.$store.dispatch("photoForm/savePhoto");
+                notification.success("The photo has been successfully saved.");
+            },
+            deletePhoto: async function () {
+                if (confirm("Do you really want to delete the photo?")) {
+                    await this.$store.dispatch("photoForm/deletePhoto");
+                    notification.success("The photo has been successfully deleted.");
+                    this.goToHomePage();
+                }
+            },
+            uploadFile: async function (file) {
+                await this.$store.dispatch("photoForm/uploadFile", {file});
+                notification.success("The photo has been successfully uploaded. Don't forget to save changes before exit.");
             },
         },
         created: function () {

@@ -10,6 +10,7 @@
                                     <small>Required</small>
                                 </label>
                                 <input type="email"
+                                       required
                                        id="email"
                                        class="form-control"
                                        v-model.trim="form.email">
@@ -19,6 +20,7 @@
                                     <small>Required</small>
                                 </label>
                                 <input type="password"
+                                       required
                                        id="password"
                                        class="form-control"
                                        v-model="form.password">
@@ -71,12 +73,10 @@
                     this.goToPath(this.$route.query.redirect_uri);
                 }
             },
-            signIn: function (reCaptchaResponse) {
-                this.$store.dispatch("auth/signIn", Object.assign({}, this.form, {"g_recaptcha_response": reCaptchaResponse}))
-                    .then((user) => {
-                        notification.success(`Hello, ${user.name}!`);
-                        this.goToPath(this.$route.query.redirect_uri);
-                    });
+            signIn: async function (reCaptchaResponse) {
+                const user = await this.$store.dispatch("auth/signIn", Object.assign({}, this.form, {"g_recaptcha_response": reCaptchaResponse}));
+                notification.success(`Hello, ${user.name}!`);
+                this.goToPath(this.$route.query.redirect_uri);
             },
         },
         created: function () {

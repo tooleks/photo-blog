@@ -11,14 +11,10 @@ export default {
         },
     },
     actions: {
-        loadTags: function ({commit, getters}, data) {
-            return api
-                .getTags(data)
-                .then((response) => {
-                    const tags = response.data.data.map((tag) => mapper.map(tag, "Api.V1.Tag", "App.Tag"));
-                    commit("setTags", {tags});
-                    return Promise.resolve(getters.getTags);
-                });
+        loadTags: async function ({commit, getters}, data) {
+            const response = await api.getTags(data);
+            const tags = response.data.data.map((tag) => mapper.map(tag, "Api.V1.Tag", "App.Tag"));
+            commit("setTags", {tags});
         },
     },
     mutations: {

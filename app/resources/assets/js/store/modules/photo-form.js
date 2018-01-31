@@ -24,62 +24,46 @@ export default {
         },
     },
     actions: {
-        loadPhoto: function ({commit, getters}, {id}) {
-            commit("setPending", {pending: true});
-            return api
-                .getPost(id, {}, {suppressNotFoundErrors: true})
-                .then((response) => {
-                    commit("setPending", {pending: false});
-                    commit("setPost", {post: response.data});
-                    return Promise.resolve(getters.getPhoto);
-                })
-                .catch((error) => {
-                    commit("setPending", {pending: false});
-                    return Promise.reject(error);
-                });
+        loadPhoto: async function ({commit, getters}, {id}) {
+            try {
+                commit("setPending", {pending: true});
+                const response = await api.getPost(id, {}, {suppressNotFoundErrors: true});
+                commit("setPost", {post: response.data});
+                return getters.getPhoto;
+            } finally {
+                commit("setPending", {pending: false});
+            }
         },
-        uploadFile: function ({commit, getters}, {file}) {
-            commit("setPending", {pending: true});
-            return api
-                .createPhoto(file)
-                .then((response) => {
-                    commit("setPending", {pending: false});
-                    commit("setPhoto", {photo: response.data});
-                    return Promise.resolve(getters.getPhoto);
-                })
-                .catch((error) => {
-                    commit("setPending", {pending: false});
-                    return Promise.reject(error);
-                });
+        uploadFile: async function ({commit, getters}, {file}) {
+            try {
+                commit("setPending", {pending: true});
+                const response = await api.createPhoto(file);
+                commit("setPhoto", {photo: response.data});
+                return getters.getPhoto;
+            } finally {
+                commit("setPending", {pending: false});
+            }
         },
-        savePhoto: function ({commit, state, getters}) {
+        savePhoto: async function ({commit, state, getters}) {
             const createPost = () => api.createPost(state.post);
             const updatePost = () => api.updatePost(state.post.id, state.post);
             const savePost = typeof state.post.id === "undefined" ? createPost : updatePost;
-            commit("setPending", {pending: true});
-            return savePost()
-                .then((response) => {
-                    commit("setPending", {pending: false});
-                    commit("setPost", {post: response.data});
-                    return Promise.resolve(getters.getPhoto);
-                })
-                .catch((error) => {
-                    commit("setPending", {pending: false});
-                    return Promise.reject(error);
-                });
+            try {
+                commit("setPending", {pending: true});
+                const response = await savePost();
+                commit("setPost", {post: response.data});
+                return getters.getPhoto;
+            } finally {
+                commit("setPending", {pending: false});
+            }
         },
-        deletePhoto: function ({commit, state}) {
-            commit("setPending", {pending: true});
-            return api
-                .deletePost(state.post.id)
-                .then((response) => {
-                    commit("setPending", {pending: false});
-                    return Promise.resolve();
-                })
-                .catch((error) => {
-                    commit("setPending", {pending: false});
-                    return Promise.reject(error);
-                });
+        deletePhoto: async function ({commit, state}) {
+            try {
+                commit("setPending", {pending: true});
+                await api.deletePost(state.post.id);
+            } finally {
+                commit("setPending", {pending: false});
+            }
         },
     },
     mutations: {

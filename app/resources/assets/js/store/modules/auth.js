@@ -19,37 +19,33 @@ export default {
         },
     },
     actions: {
-        signIn: function ({commit, getters}, data) {
-            commit("setPending", {pending: true});
-            return api
-                .createToken(data)
-                .then(() => api.get("me"))
-                .then((response) => {
-                    const user = mapper.map(response.data, "Api.V1.User", "App.User");
-                    commit("setUser", {user});
-                    commit("setPending", {pending: false});
-                    return Promise.resolve(getters.getUser);
-                })
-                .catch((error) => {
-                    commit("setUser", {user: null});
-                    commit("setPending", {pending: false});
-                    return Promise.reject(error);
-                });
+        signIn: async function ({commit, getters}, data) {
+            try {
+                commit("setPending", {pending: true});
+                await api.createToken(data);
+                const response = await api.getUser("me");
+                const user = mapper.map(response.data, "Api.V1.User", "App.User");
+                commit("setUser", {user});
+                return getters.getUser;
+            } catch (error) {
+                commit("setUser", {user: null});
+                throw error;
+            } finally {
+                commit("setPending", {pending: false});
+            }
         },
-        signOut: function ({commit, getters}) {
-            commit("setPending", {pending: true});
-            return api
-                .deleteToken()
-                .then((response) => {
-                    commit("setUser", {user: null});
-                    commit("setPending", {pending: false});
-                    return Promise.resolve(getters.getUser);
-                })
-                .catch((error) => {
-                    commit("setUser", {user: null});
-                    commit("setPending", {pending: false});
-                    return Promise.reject(error);
-                });
+        signOut: async function ({commit, getters}) {
+            try {
+                commit("setPending", {pending: true});
+                await api.deleteToken();
+                commit("setUser", {user: null});
+                return getters.getUser;
+            } catch (error) {
+                commit("setUser", {user: null});
+                throw error;
+            } finally {
+                commit("setPending", {pending: false});
+            }
         },
     },
     mutations: {

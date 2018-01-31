@@ -18,7 +18,8 @@
                                         <label for="email">Email
                                             <small>Required</small>
                                         </label>
-                                        <input type="text"
+                                        <input type="email"
+                                               required
                                                id="email"
                                                class="form-control"
                                                v-model.trim="form.email">
@@ -66,12 +67,10 @@
             },
         },
         methods: {
-            send: function (reCaptchaResponse) {
-                this.$store.dispatch("subscription/createSubscription", Object.assign({}, this.form, {"g_recaptcha_response": reCaptchaResponse}))
-                    .then(() => {
-                        notification.success("You have been successfully subscribed to the website updates.");
-                        this.goToHomePage();
-                    });
+            send: async function (reCaptchaResponse) {
+                await this.$store.dispatch("subscription/createSubscription", Object.assign({}, this.form, {"g_recaptcha_response": reCaptchaResponse}));
+                notification.success("You have been successfully subscribed to the website updates.");
+                this.goToHomePage();
             },
         },
     }

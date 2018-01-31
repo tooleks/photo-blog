@@ -1,4 +1,5 @@
 import {api, mapper} from "../../services";
+import {value} from "../../utils";
 
 const getDefaultPhotos = () => [];
 const getDefaultActivePhoto = () => undefined;
@@ -23,51 +24,47 @@ export default {
         },
     },
     actions: {
-        loadPhoto: function ({commit, getters}, {id, params}) {
-            commit("setPending", {pending: true});
-            return api
-                .getPost(id, params, {suppressNotFoundErrors: true})
-                .then((response) => {
-                    const photo = mapper.map(response.data, "Api.V1.Post", "App.Photo");
-                    commit("setPhoto", {photo});
-                    commit("setActivePhoto", {photo});
-                    commit("setPending", {pending: false});
-                    return Promise.resolve(getters.getPhotos);
-                })
-                .catch((error) => {
-                    commit("setPending", {pending: false});
-                    return Promise.reject(error);
-                });
+        loadPhoto: async function ({commit, getters}, {id, params}) {
+            try {
+                commit("setPending", {pending: true});
+                const response = await api.getPost(id, params, {suppressNotFoundErrors: true});
+                const photo = mapper.map(response.data, "Api.V1.Post", "App.Photo");
+                commit("setPhoto", {photo});
+                commit("setActivePhoto", {photo});
+                return getters.getPhotos
+            } finally {
+                commit("setPending", {pending: false});
+            }
         },
-        loadOlderPhoto: function ({commit, getters}, {params}) {
-            commit("setPending", {pending: true});
-            return api
-                .getPreviousPost(getters.getActivePhoto.id, params, {suppressNotFoundErrors: true})
-                .then((response) => {
-                    const photo = mapper.map(response.data, "Api.V1.Post", "App.Photo");
-                    commit("appendPhoto", {photo});
-                    commit("setPending", {pending: false});
-                    return Promise.resolve(getters.getPhotos);
-                })
-                .catch((error) => {
-                    commit("setPending", {pending: false});
-                    return Promise.reject(error);
-                });
+        loadOlderPhoto: async function ({commit, getters}, {params}) {
+            try {
+                commit("setPending", {pending: true});
+                const response = await api.getPreviousPost(getters.getActivePhoto.id, params, {suppressNotFoundErrors: true});
+                const photo = mapper.map(response.data, "Api.V1.Post", "App.Photo");
+                commit("appendPhoto", {photo});
+                return getters.getPhotos
+            } catch (error) {
+                if (value(() => error.response.status) !== 404) {
+                    throw error;
+                }
+            } finally {
+                commit("setPending", {pending: false});
+            }
         },
-        loadNewerPhoto: function ({commit, getters}, {params}) {
-            commit("setPending", {pending: true});
-            return api
-                .getNextPost(getters.getActivePhoto.id, params, {suppressNotFoundErrors: true})
-                .then((response) => {
-                    const photo = mapper.map(response.data, "Api.V1.Post", "App.Photo");
-                    commit("prependPhoto", {photo});
-                    commit("setPending", {pending: false});
-                    return Promise.resolve(getters.getPhotos);
-                })
-                .catch((error) => {
-                    commit("setPending", {pending: false});
-                    return Promise.reject(error);
-                });
+        loadNewerPhoto: async function ({commit, getters}, {params}) {
+            try {
+                commit("setPending", {pending: true});
+                const response = await api.getNextPost(getters.getActivePhoto.id, params, {suppressNotFoundErrors: true});
+                const photo = mapper.map(response.data, "Api.V1.Post", "App.Photo");
+                commit("prependPhoto", {photo});
+                return getters.getPhotos
+            } catch (error) {
+                if (value(() => error.response.status) !== 404) {
+                    throw error;
+                }
+            } finally {
+                commit("setPending", {pending: false});
+            }
         },
     },
     mutations: {
