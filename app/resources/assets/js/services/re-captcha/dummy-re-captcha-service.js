@@ -14,4 +14,8 @@ export default class DummyReCaptchaService {
     reset() {
         //
     }
+
+    load() {
+        //
+    }
 }
