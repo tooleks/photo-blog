@@ -12,7 +12,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <router-link :to="{name: 'photos'}"
+                        <router-link :to="{name: 'home'}"
                                      class="nav-link"
                                      data-toggle="collapse"
                                      data-target=".navbar-collapse.show">

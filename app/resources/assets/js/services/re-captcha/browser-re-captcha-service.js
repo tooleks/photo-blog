@@ -1,46 +1,63 @@
-export default class BrowserReCaptcha {
-    constructor(element, siteKey, onVerified) {
+import Defer from "../../utils/defer";
+
+const defer = new Defer;
+
+export default class BrowserReCaptchaService {
+    constructor(element, siteKey, onLoadFunctionName, onVerified) {
         this.element = element;
         this.siteKey = siteKey;
         this.onVerified = onVerified;
+        window[onLoadFunctionName] = () => defer.resolve();
     }
 
     _isEnabled() {
-        return this.siteKey;
+        return Boolean(this.siteKey);
     }
 
-    _callOnVerified(response = undefined) {
+    _emitOnVerified(response = undefined) {
         this.onVerified.call(this.onVerified, response);
     }
 
-    isReady() {
-        return typeof window.grecaptcha !== "undefined";
-    }
-
     execute() {
-        if (this._isEnabled()) {
-            window.grecaptcha.execute(this.widgetId);
+        // Do not do anything if reCAPTCHA service is not enabled.
+        if (!this._isEnabled()) {
+            return;
         }
+
+        defer.subscribe(() => window["grecaptcha"].execute(this.widgetId));
     }
 
     render() {
-        if (this._isEnabled()) {
-            this.widgetId = window.grecaptcha.render(this.element, {
+        // Emit `onVerified` event explicitly if reCAPTCHA service is not enabled.
+        if (!this._isEnabled()) {
+            this._emitOnVerified();
+        }
+
+        defer.subscribe(() => {
+            this.widgetId = window["grecaptcha"].render(this.element, {
                 sitekey: this.siteKey,
                 size: "invisible",
                 callback: (response) => {
-                    this._callOnVerified(response);
+                    this._emitOnVerified(response);
                     this.reset();
                 },
             });
-        } else {
-            this._callOnVerified();
-        }
+        });
     }
 
     reset() {
-        if (this._isEnabled()) {
-            window.grecaptcha.reset(this.widgetId);
+        // Do not do anything if reCAPTCHA service is not enabled.
+        if (!this._isEnabled()) {
+            return;
+        }
+
+        defer.subscribe(() => window["grecaptcha"].reset(this.widgetId));
+    }
+
+    load() {
+        // Resolve defer explicitly if reCAPTCHA service is loaded.
+        if (typeof window["grecaptcha"] !== "undefined") {
+            defer.resolve();
         }
     }
 }

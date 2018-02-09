@@ -11,5 +11,5 @@ export function preloadImage(url) {
         return dummyPreloadImage(url);
     }
 
-    throw new Error("Unknown environment.");
+    return Promise.reject(new Error("Unknown environment."));
 }
