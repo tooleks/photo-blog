@@ -10,12 +10,12 @@ export default class Defer {
             return;
         }
 
+        this.resolved = true;
+
         for (let index = 0, length = this.callStack.length; index < length; index++) {
             let callback = this.callStack[index];
             callback.call(callback);
         }
-
-        this.resolved = true;
     }
 
     subscribe(callback) {
