@@ -1,12 +1,6 @@
-export default class DummyReCaptcha {
-    constructor(element, siteKey, onVerified) {
-        this.element = element;
-        this.siteKey = siteKey;
+export default class DummyReCaptchaService {
+    constructor(onVerified) {
         this.onVerified = onVerified;
-    }
-
-    isReady() {
-        return true;
     }
 
     execute() {

@@ -24,9 +24,8 @@
             },
         },
         mounted: function () {
-            if (this.reCaptcha.isReady()) {
-                this.reCaptcha.render();
-            }
+            this.reCaptcha.load();
+            this.reCaptcha.render();
         },
     }
 </script>
