@@ -19,6 +19,7 @@ abstract class TestCase extends BaseTestCase
     public function createApplication()
     {
         putenv('DB_DEFAULT=testing');
+        putenv('GOOGLE_RECAPTCHA_SECRET_KEY=');
 
         $app = require __DIR__ . '/../bootstrap/app.php';
 
