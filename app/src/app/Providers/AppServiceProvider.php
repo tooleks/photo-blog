@@ -113,7 +113,13 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(
             \App\Managers\User\Contracts\UserManager::class,
-            \App\Managers\User\UserManager::class
+            function ($app) {
+                return new \App\Managers\User\UserManager(
+                    $app['db']->connection(),
+                    $app['hash'],
+                    $app[\App\Managers\User\UserValidator::class]
+                );
+            }
         );
 
         $this->app->bind(

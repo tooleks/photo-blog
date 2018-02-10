@@ -48,15 +48,18 @@ class Kernel extends ConsoleKernel
             ->hourly();
 
         $schedule->command(DeleteDetachedPhotosOlderThanWeek::class)
-            ->dailyAt('00:00');
+            ->dailyAt('00:00')
+            ->onOneServer();
 
         $schedule->command(DeleteUnusedObjectsFromPhotoStorage::class)
-            ->dailyAt('00:10');
+            ->dailyAt('00:10')
+            ->onOneServer();
 
         $schedule->command(SendWeeklySubscriptionMails::class)
             ->weekly()
             ->saturdays()
-            ->at('09:00');
+            ->at('09:00')
+            ->onOneServer();
     }
 
     /**
