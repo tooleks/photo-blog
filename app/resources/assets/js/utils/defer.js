@@ -1,7 +1,7 @@
 export default class Defer {
     constructor() {
         this.resolved = false;
-        this.callStack = [];
+        this.callbacks = [];
     }
 
     resolve() {
@@ -11,18 +11,15 @@ export default class Defer {
         }
 
         this.resolved = true;
-
-        for (let index = 0, length = this.callStack.length; index < length; index++) {
-            let callback = this.callStack[index];
-            callback.call(callback);
-        }
+        this.callbacks.forEach((callback) => callback.call(callback));
+        this.callbacks = [];
     }
 
-    subscribe(callback) {
+    then(callback) {
         if (this.resolved) {
             callback.call(callback);
         } else {
-            this.callStack.push(callback);
+            this.callbacks.push(callback);
         }
     }
 }

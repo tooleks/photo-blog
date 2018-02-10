@@ -24,7 +24,7 @@ export default class BrowserReCaptchaService {
             return;
         }
 
-        defer.subscribe(() => window["grecaptcha"].execute(this.widgetId));
+        defer.then(() => window["grecaptcha"].execute(this.widgetId));
     }
 
     render() {
@@ -33,7 +33,7 @@ export default class BrowserReCaptchaService {
             this._emitOnVerified();
         }
 
-        defer.subscribe(() => {
+        defer.then(() => {
             this.widgetId = window["grecaptcha"].render(this.element, {
                 sitekey: this.siteKey,
                 size: "invisible",
@@ -51,7 +51,7 @@ export default class BrowserReCaptchaService {
             return;
         }
 
-        defer.subscribe(() => window["grecaptcha"].reset(this.widgetId));
+        defer.then(() => window["grecaptcha"].reset(this.widgetId));
     }
 
     load() {
