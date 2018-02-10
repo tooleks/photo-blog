@@ -3,7 +3,7 @@
 namespace Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Contracts\Logging\Log as Logger;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class TestScheduler.
@@ -29,10 +29,10 @@ class TestScheduler extends Command
     /**
      * Execute the console command.
      *
-     * @param Logger $logger
+     * @param LoggerInterface $logger
      * @return void
      */
-    public function handle(Logger $logger): void
+    public function handle(LoggerInterface $logger): void
     {
         $logger->info('The scheduler is running.');
     }
