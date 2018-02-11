@@ -113,14 +113,12 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(
             \App\Managers\User\Contracts\UserManager::class,
-            function ($app) {
-                return new \App\Managers\User\UserManager(
-                    $app['db']->connection(),
-                    $app['hash'],
-                    $app[\App\Managers\User\UserValidator::class]
-                );
-            }
+            \App\Managers\User\UserManager::class
         );
+
+        $this->app->when(\App\Managers\User\UserManager::class)
+            ->needs(\Illuminate\Contracts\Hashing\Hasher::class)
+            ->give('hash');
 
         $this->app->bind(
             \App\Services\Photo\Contracts\ExifFetcherService::class,
