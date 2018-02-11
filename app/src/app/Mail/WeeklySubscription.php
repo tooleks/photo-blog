@@ -36,6 +36,6 @@ class WeeklySubscription extends Mailable
         return $this
             ->to($this->data['subscriber_email'])
             ->subject(sprintf('%s - %s', config('app.name'), trans('mails.weekly-subscription.subject')))
-            ->view('app.mails.weekly-subscription', ['data' => $this->data]);
+            ->view('app.mails.en.weekly-subscription', ['data' => $this->data]);
     }
 }
