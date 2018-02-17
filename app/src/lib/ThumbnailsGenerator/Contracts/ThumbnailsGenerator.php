@@ -10,10 +10,10 @@ namespace Lib\ThumbnailsGenerator\Contracts;
 interface ThumbnailsGenerator
 {
     /**
-     * Generate thumbnail files for original image file and return thumbnails metadata.
+     * Generate thumbnails for the image and return thumbnails meta data.
      *
-     * @param string $originalImageAbsPath
+     * @param string $imagePath
      * @return array
      */
-    public function generateThumbnails(string $originalImageAbsPath): array;
+    public function generateThumbnails(string $imagePath): array;
 }

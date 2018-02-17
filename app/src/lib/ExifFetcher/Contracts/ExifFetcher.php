@@ -10,10 +10,10 @@ namespace Lib\ExifFetcher\Contracts;
 interface ExifFetcher
 {
     /**
-     * Fetch EXIF data by a given file path.
+     * Fetch EXIF data for the image.
      *
-     * @param string $filePath
+     * @param string $imagePath
      * @return array
      */
-    public function fetch(string $filePath): array;
+    public function fetch(string $imagePath): array;
 }

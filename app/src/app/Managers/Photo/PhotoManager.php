@@ -79,14 +79,14 @@ class PhotoManager implements PhotoManagerContract
      * Save exif relation records.
      *
      * @param Photo $photo
-     * @param array $rawExif
+     * @param array $attributes
      * @return void
      */
-    private function saveExif(Photo $photo, array $rawExif): void
+    private function saveExif(Photo $photo, array $attributes): void
     {
         $photo->exif()->delete();
 
-        $photo->exif()->create($rawExif);
+        $photo->exif()->create($attributes);
 
         $photo->load('exif');
     }

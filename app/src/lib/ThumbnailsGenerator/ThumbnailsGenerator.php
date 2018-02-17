@@ -3,7 +3,7 @@
 namespace Lib\ThumbnailsGenerator;
 
 use Closure;
-use Illuminate\Support\Facades\Validator as ValidatorFactory;
+use Illuminate\Contracts\Validation\Factory as ValidatorFactory;
 use Illuminate\Validation\Rule;
 use Imagine\Image\Box;
 use Imagine\Gd\Imagine;
@@ -18,6 +18,11 @@ use Lib\ThumbnailsGenerator\Exceptions\ThumbnailsGeneratorException;
 class ThumbnailsGenerator implements ThumbnailsGeneratorContract
 {
     /**
+     * @var ValidatorFactory
+     */
+    private $validatorFactory;
+
+    /**
      * @var array
      */
     private $config;
@@ -25,7 +30,7 @@ class ThumbnailsGenerator implements ThumbnailsGeneratorContract
     /**
      * ThumbnailsGenerator constructor.
      *
-     * Example of initialization:
+     * Example of configuration:
      * $config = [
      *     [
      *         'mode' => 'inset',
@@ -35,12 +40,15 @@ class ThumbnailsGenerator implements ThumbnailsGeneratorContract
      *         'height' => 1500,    // pixels
      *     ],
      * ];
-     * $thumbnailsGenerator = new ThumbnailsGenerator($config);
      *
+     * @param ValidatorFactory $validatorFactory
      * @param array $config
+     * @throws ThumbnailsGeneratorException
      */
-    public function __construct(array $config)
+    public function __construct(ValidatorFactory $validatorFactory, array $config)
     {
+        $this->validatorFactory = $validatorFactory;
+
         $this->assertConfig($config);
 
         $this->config = $config;
@@ -55,7 +63,7 @@ class ThumbnailsGenerator implements ThumbnailsGeneratorContract
      */
     private function assertConfig(array $config): void
     {
-        $validator = ValidatorFactory::make($config, [
+        $validator = $this->validatorFactory->make($config, [
             '*.mode' => ['required', Rule::in(['inset', 'outbound'])],
             '*.quality' => ['required', 'integer', 'min:0', 'max:100'],
             '*.name' => ['required', 'string', 'min:1'],
@@ -64,35 +72,30 @@ class ThumbnailsGenerator implements ThumbnailsGeneratorContract
         ]);
 
         if ($validator->fails()) {
-            throw new ThumbnailsGeneratorException(sprintf('Invalid configuration value while initializing "%s" class.', static::class));
+            throw new ThumbnailsGeneratorException(sprintf('Invalid configuration of "%s".', static::class));
         }
     }
 
     /**
      * @inheritdoc
      */
-    public function generateThumbnails(string $originalImageAbsPath): array
+    public function generateThumbnails(string $imagePath): array
     {
-        $originalImage = (new Imagine)->open($originalImageAbsPath);
+        $image = (new Imagine)->open($imagePath);
 
-        $this->eachThumbnailConfig(function ($config) use ($originalImage, &$metaData) {
-            // Generate thumbnail image.
-            $thumbnailImage = $originalImage->thumbnail(new Box($config['width'], $config['height']), $config['mode']);
-            // Generate thumbnail file path.
-            $thumbnailImageAbsPath = $this->generateThumbnailImageAbsPath(
-                $originalImage->metadata()->get('filepath'), $config['name']
-            );
-            // Save thumbnail file.
-            $thumbnailImage->save($thumbnailImageAbsPath, ['quality' => $config['quality']]);
-            // Store thumbnail metadata.
-            $metaData[] = [
-                'path' => $thumbnailImageAbsPath,
-                'width' => $thumbnailImage->getSize()->getWidth(),
-                'height' => $thumbnailImage->getSize()->getHeight(),
+        $this->eachConfig(function ($config) use ($image, &$meta) {
+            $thumbnail = $image->thumbnail(new Box($config['width'], $config['height']), $config['mode']);
+            $thumbnailPath = $this->generateThumbnailPath($image->metadata()->get('filepath'), $config['name']);
+            $thumbnail->save($thumbnailPath, ['quality' => $config['quality']]);
+
+            $meta[] = [
+                'path' => $thumbnailPath,
+                'width' => $thumbnail->getSize()->getWidth(),
+                'height' => $thumbnail->getSize()->getHeight(),
             ];
         });
 
-        return $metaData ?? [];
+        return $meta ?? [];
     }
 
     /**
@@ -101,25 +104,24 @@ class ThumbnailsGenerator implements ThumbnailsGeneratorContract
      * @param Closure $callback
      * @return void
      */
-    private function eachThumbnailConfig(Closure $callback): void
+    private function eachConfig(Closure $callback): void
     {
         array_map($callback, $this->config);
     }
 
     /**
-     * Generate thumbnail image absolute path.
+     * Generate thumbnail path.
      *
-     * @param string $originalImageAbsPath
-     * @param string $suffix
+     * @param string $imagePath
+     * @param string $fileSuffix
      * @return string
      */
-    private function generateThumbnailImageAbsPath(string $originalImageAbsPath, string $suffix = 'thumbnail'): string
+    private function generateThumbnailPath(string $imagePath, string $fileSuffix = 'thumbnail'): string
     {
-        return sprintf(
-            '%s/%s_%s.%s',
-            pathinfo($originalImageAbsPath, PATHINFO_DIRNAME),     // Subdirectory.
-            pathinfo($originalImageAbsPath, PATHINFO_FILENAME),    // File name.
-            $suffix,                                                        // Suffix.
-            pathinfo($originalImageAbsPath, PATHINFO_EXTENSION));  // Extension.
+        $directoryName = pathinfo($imagePath, PATHINFO_DIRNAME);
+        $fileName = pathinfo($imagePath, PATHINFO_FILENAME);
+        $fileExtension = pathinfo($imagePath, PATHINFO_EXTENSION);
+
+        return sprintf('%s/%s_%s.%s', $directoryName, $fileName, $fileSuffix, $fileExtension);
     }
 }
