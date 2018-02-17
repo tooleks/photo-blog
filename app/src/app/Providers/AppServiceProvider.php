@@ -79,9 +79,16 @@ class AppServiceProvider extends ServiceProvider
             \Lib\SiteMap\Builder::class
         );
 
-        $this->app->bind(\Lib\ThumbnailsGenerator\Contracts\ThumbnailsGenerator::class, function () {
-            return new \Lib\ThumbnailsGenerator\ThumbnailsGenerator(config('main.photo.thumbnails'));
-        });
+        $this->app->bind(
+            \Lib\ThumbnailsGenerator\Contracts\ThumbnailsGenerator::class,
+            function (Application $app) {
+                return new \Lib\ThumbnailsGenerator\ThumbnailsGenerator(
+                    $app->make(\Illuminate\Contracts\Validation\Factory::class),
+                    $app->make('config')->get('main.photo.thumbnails')
+                );
+            }
+        );
+
     }
 
     /**
