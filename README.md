@@ -6,14 +6,18 @@ Docker 17.10, NGINX 1.12, MySQL 5.7, Redis 3.2, PHP 7.2, Laravel 5.6, Node.js 8.
 
 ### Installation
 
-Run the following command (within the `./` directory) to create a symbolic link to the public storage.
+Run the following command (within the project root directory) to create the environment file.
 
 ```
-cd ./app/public/ && \
-ln -s ../storage/app/public storage
+cp ./app/.env.example ./app/.env
+```
+Run the following command (within the project root directory) to create a symbolic link to the public storage.
+
+```
+cd ./app/public/ && ln -s ../storage/app/public storage
 ```
 
-Run the following command (within the `./` directory) to start Docker containers and build the application for **development** environment.
+Run the following command (within the project root directory) to start Docker containers and build the application for **development** environment.
 
 ```
 docker-compose --file ./docker-compose.dev.yml up --build
@@ -67,7 +71,7 @@ docker exec -it photo-blog-app bash -c "./vendor/bin/phpunit"
 
 ### Production
 
-Run the following command (within the `./` directory) to start Docker containers and build the application for **production** environment.
+Run the following command (within the project root directory) to start Docker containers and build the application for **production** environment.
 
 ```
 docker-compose --file ./docker-compose.prod.yml up --build -d
