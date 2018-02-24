@@ -1,4 +1,4 @@
-import Defer from "../../utils/defer";
+import {Defer} from "../../utils";
 
 const defer = new Defer;
 
@@ -7,7 +7,7 @@ export default class BrowserReCaptchaService {
         this.element = element;
         this.siteKey = siteKey;
         this.onVerified = onVerified;
-        window[onLoadFunctionName] = () => defer.resolve();
+        window[onLoadFunctionName] = () => defer.resolve(window["grecaptcha"]);
     }
 
     _isEnabled() {
@@ -24,7 +24,7 @@ export default class BrowserReCaptchaService {
             return;
         }
 
-        defer.then(() => window["grecaptcha"].execute(this.widgetId));
+        defer.then((gReCaptcha) => gReCaptcha.execute(this.widgetId));
     }
 
     render() {
@@ -32,9 +32,8 @@ export default class BrowserReCaptchaService {
         if (!this._isEnabled()) {
             this._emitOnVerified();
         }
-
-        defer.then(() => {
-            this.widgetId = window["grecaptcha"].render(this.element, {
+        defer.then((gReCaptcha) => {
+            this.widgetId = gReCaptcha.render(this.element, {
                 sitekey: this.siteKey,
                 size: "invisible",
                 callback: (response) => {
@@ -50,14 +49,13 @@ export default class BrowserReCaptchaService {
         if (!this._isEnabled()) {
             return;
         }
-
-        defer.then(() => window["grecaptcha"].reset(this.widgetId));
+        defer.then((gReCaptcha) => gReCaptcha.reset(this.widgetId));
     }
 
     load() {
         // Resolve defer explicitly if reCAPTCHA service is loaded.
         if (typeof window["grecaptcha"] !== "undefined") {
-            defer.resolve();
+            defer.resolve(window["grecaptcha"]);
         }
     }
 }
