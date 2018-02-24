@@ -64,7 +64,7 @@
     import PhotoCard from "./photo-card";
     import {GotoMixin, MetaMixin} from "../../mixins";
     import {mapper, notification} from "../../services";
-    import {value} from "../../utils";
+    import {optional} from "../../utils";
 
     export default {
         components: {
@@ -100,10 +100,10 @@
                 return this.$store.getters["photoForm/getPhoto"];
             },
             pageTitle: function () {
-                return value(() => this.photo.description) || "Add photo";
+                return optional(() => this.photo.description) || "Add photo";
             },
             pageImage: function () {
-                return value(() => this.photo.original.url);
+                return optional(() => this.photo.original.url);
             },
         },
         watch: {
@@ -114,7 +114,7 @@
         methods: {
             init: function () {
                 this.reset();
-                if (value(() => this.$route.params.id)) {
+                if (optional(() => this.$route.params.id)) {
                     this.loadPhoto(this.$route.params.id);
                 }
             },
@@ -125,7 +125,7 @@
                 try {
                     await this.$store.dispatch("photoForm/loadPhoto", {id});
                 } catch (error) {
-                    if (value(() => error.response.status) === 404) {
+                    if (optional(() => error.response.status) === 404) {
                         this.goTo404Page();
                     } else {
                         this.goToHomePage();

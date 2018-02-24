@@ -1,5 +1,5 @@
 import {api, mapper} from "../../services";
-import {value} from "../../utils";
+import {optional} from "../../utils";
 
 const getDefaultPhotos = () => [];
 const getDefaultActivePhoto = () => undefined;
@@ -44,7 +44,7 @@ export default {
                 commit("appendPhoto", {photo});
                 return getters.getPhotos
             } catch (error) {
-                if (value(() => error.response.status) !== 404) {
+                if (optional(() => error.response.status) !== 404) {
                     throw error;
                 }
             } finally {
@@ -59,7 +59,7 @@ export default {
                 commit("prependPhoto", {photo});
                 return getters.getPhotos
             } catch (error) {
-                if (value(() => error.response.status) !== 404) {
+                if (optional(() => error.response.status) !== 404) {
                     throw error;
                 }
             } finally {

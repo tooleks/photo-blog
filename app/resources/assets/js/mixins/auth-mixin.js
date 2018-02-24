@@ -1,4 +1,4 @@
-import {value} from "../utils";
+import {optional} from "../utils";
 
 export default {
     computed: {
@@ -6,7 +6,7 @@ export default {
             return this.$store.getters["auth/isAuthenticated"];
         },
         username: function () {
-            return value(() => this.$store.getters["auth/getUser"].name);
+            return optional(() => this.$store.getters["auth/getUser"].name);
         },
     },
 }

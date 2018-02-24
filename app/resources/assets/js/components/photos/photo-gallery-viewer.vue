@@ -22,7 +22,7 @@
     import Viewer from "../gallery/viewer";
     import PhotoDescriptionCard from "./photo-description-card";
     import {GotoMixin, MetaMixin} from "../../mixins";
-    import {value} from "../../utils";
+    import {optional} from "../../utils";
 
     export default {
         components: {
@@ -50,10 +50,10 @@
                 },
             },
             pageTitle: function () {
-                return value(() => this.activePhoto.description);
+                return optional(() => this.activePhoto.description);
             },
             pageImage: function () {
-                return value(() => this.activePhoto.original.url);
+                return optional(() => this.activePhoto.original.url);
             },
         },
         watch: {
@@ -85,7 +85,7 @@
                             params: this.$route.query
                         });
                 } catch (error) {
-                    if (value(() => error.response.status) === 404) {
+                    if (optional(() => error.response.status) === 404) {
                         this.goTo404Page();
                     } else {
                         this.goToHomePage();

@@ -1,4 +1,6 @@
-export function value(callback) {
+import Defer from "./defer";
+
+function optional(callback) {
     try {
         return callback.call(callback);
     } catch (error) {
@@ -6,10 +8,12 @@ export function value(callback) {
     }
 }
 
-export function isBrowserEnv() {
+function isBrowserEnv() {
     return typeof window !== "undefined";
 }
 
-export function isServerEnv() {
+function isServerEnv() {
     return !isBrowserEnv();
 }
+
+export {optional, isBrowserEnv, isServerEnv, Defer};
