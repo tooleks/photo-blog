@@ -1,29 +1,29 @@
 export default class Defer {
     constructor() {
-        this._resolved = false;
-        this._callbacks = [];
+        this.resolved = false;
+        this.callbacks = [];
     }
 
     _callCallback(callback) {
-        callback.call(callback, this._value);
+        callback.call(callback, this.value);
     }
 
     resolve(value) {
         // Do not do anything if defer is already resolved.
-        if (this._resolved) {
+        if (this.resolved) {
             return;
         }
-        this._value = value;
-        this._resolved = true;
-        this._callbacks.forEach((callback) => this._callCallback(callback));
-        this._callbacks = [];
+        this.value = value;
+        this.resolved = true;
+        this.callbacks.forEach((callback) => this._callCallback(callback));
+        this.callbacks = [];
     }
 
     then(callback) {
-        if (this._resolved) {
+        if (this.resolved) {
             this._callCallback(callback);
         } else {
-            this._callbacks.push(callback);
+            this.callbacks.push(callback);
         }
     }
 }
