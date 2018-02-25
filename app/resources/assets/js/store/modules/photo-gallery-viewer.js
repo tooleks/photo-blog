@@ -23,15 +23,19 @@ export default {
             return state.activePhoto;
         },
     },
-    actions: {
-        loadPhoto: async function ({commit, getters}, {id, params}) {
+    actions: {loadPhoto: async function ({commit, getters, rootGetters}, {id, params}) {
+            const photos = rootGetters["photoGallery/getPhotos"];
+            const index = photos.findIndex((image) => image.id === id);
+            let photo = photos[index];
             try {
                 commit("setPending", {pending: true});
-                const response = await api.getPost(id, params, {suppressNotFoundErrors: true});
-                const photo = mapper.map(response.data, "Api.V1.Post", "App.Photo");
+                if (typeof photo === "undefined") {
+                    const response = await api.getPost(id, params, {suppressNotFoundErrors: true});
+                    photo = mapper.map(response.data, "Api.V1.Post", "App.Photo");
+                }
                 commit("setPhoto", {photo});
                 commit("setActivePhoto", {photo});
-                return getters.getPhotos
+                return getters.getPhotos;
             } finally {
                 commit("setPending", {pending: false});
             }
