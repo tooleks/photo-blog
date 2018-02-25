@@ -23,12 +23,12 @@ export default {
             return state.activePhoto;
         },
     },
-    actions: {loadPhoto: async function ({commit, getters, rootGetters}, {id, params}) {
-            const photos = rootGetters["photoGallery/getPhotos"];
-            const index = photos.findIndex((image) => image.id === id);
-            let photo = photos[index];
+    actions: {
+        loadPhoto: async function ({commit, getters, rootGetters}, {id, params}) {
+            let photo = rootGetters["photoGallery/getPhotos"].find((photo) => photo.id === id);
             try {
                 commit("setPending", {pending: true});
+                // If a photo not found in a photo gallery retrieve it from an API explicitly.
                 if (typeof photo === "undefined") {
                     const response = await api.getPost(id, params, {suppressNotFoundErrors: true});
                     photo = mapper.map(response.data, "Api.V1.Post", "App.Photo");
@@ -40,11 +40,17 @@ export default {
                 commit("setPending", {pending: false});
             }
         },
-        loadOlderPhoto: async function ({commit, getters}, {params}) {
+        loadOlderPhoto: async function ({commit, getters, rootGetters}, {params}) {
+            const photos = rootGetters["photoGallery/getPhotos"];
+            const index = photos.findIndex((photo) => photo.id === getters.getActivePhoto.id);
+            let photo = photos[index + 1];
             try {
                 commit("setPending", {pending: true});
-                const response = await api.getPreviousPost(getters.getActivePhoto.id, params, {suppressNotFoundErrors: true});
-                const photo = mapper.map(response.data, "Api.V1.Post", "App.Photo");
+                // If a photo not found in a photo gallery retrieve it from an API explicitly.
+                if (typeof photo === "undefined") {
+                    const response = await api.getPreviousPost(getters.getActivePhoto.id, params, {suppressNotFoundErrors: true});
+                    photo = mapper.map(response.data, "Api.V1.Post", "App.Photo");
+                }
                 commit("appendPhoto", {photo});
                 return getters.getPhotos
             } catch (error) {
@@ -55,11 +61,17 @@ export default {
                 commit("setPending", {pending: false});
             }
         },
-        loadNewerPhoto: async function ({commit, getters}, {params}) {
+        loadNewerPhoto: async function ({commit, getters, rootGetters}, {params}) {
+            const photos = rootGetters["photoGallery/getPhotos"];
+            const index = photos.findIndex((photo) => photo.id === getters.getActivePhoto.id);
+            let photo = photos[index - 1];
             try {
                 commit("setPending", {pending: true});
-                const response = await api.getNextPost(getters.getActivePhoto.id, params, {suppressNotFoundErrors: true});
-                const photo = mapper.map(response.data, "Api.V1.Post", "App.Photo");
+                // If a photo not found in a photo gallery retrieve it from an API explicitly.
+                if (typeof photo === "undefined") {
+                    const response = await api.getNextPost(getters.getActivePhoto.id, params, {suppressNotFoundErrors: true});
+                    photo = mapper.map(response.data, "Api.V1.Post", "App.Photo");
+                }
                 commit("prependPhoto", {photo});
                 return getters.getPhotos
             } catch (error) {
