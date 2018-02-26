@@ -33,6 +33,7 @@ const routes = [
         path: "/photo/:id",
         name: "photo",
         component: require("../components/photos/photo-gallery-viewer.vue"),
+        meta: {transition: false},
     },
     {
         path: "/photos",

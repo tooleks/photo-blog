@@ -1,11 +1,13 @@
 <template>
-    <div class="loader" v-if="isVisible">
-        <div class="loader-inner">
+    <transition name="fade">
+        <div class="loader" v-if="isVisible">
+            <div class="loader-inner">
             <span class="loader-icon">
                 Loading...
             </span>
+            </div>
         </div>
-    </div>
+    </transition>
 </template>
 
 <style scoped>

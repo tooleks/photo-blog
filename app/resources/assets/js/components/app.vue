@@ -3,7 +3,7 @@
         <app-header class="app-header"></app-header>
         <div class="app-router">
             <transition name="fade">
-                <router-view></router-view>
+                <router-view :key="routeKey"></router-view>
             </transition>
         </div>
         <notifications group="main"></notifications>
@@ -12,19 +12,6 @@
 </template>
 
 <style scoped>
-    .fade-enter-active, .fade-leave-active {
-        transition-property: opacity;
-        transition-duration: .2s;
-    }
-
-    .fade-enter-active {
-        transition-delay: .2s;
-    }
-
-    .fade-enter, .fade-leave-active {
-        opacity: 0
-    }
-
     .app-router {
         padding-top: 0;
         padding-bottom: 50px;
@@ -51,5 +38,10 @@
         mixins: [
             MetaMixin,
         ],
+        computed: {
+            routeKey: function () {
+                return this.$route.meta.transition !== false ? this.$route.path : null;
+            },
+        },
     }
 </script>
