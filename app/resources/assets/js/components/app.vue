@@ -40,7 +40,7 @@
         ],
         computed: {
             routeKey: function () {
-                return this.$route.meta.transition !== false ? this.$route.path : null;
+                return this.$route.meta.transition !== false ? this.$route.fullPath : null;
             },
         },
     }
