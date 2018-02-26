@@ -2,7 +2,9 @@
     <div id="container">
         <app-header class="app-header"></app-header>
         <div class="app-router">
-            <router-view></router-view>
+            <transition name="fade">
+                <router-view :key="routeKey"></router-view>
+            </transition>
         </div>
         <notifications group="main"></notifications>
         <app-footer></app-footer>
@@ -36,5 +38,10 @@
         mixins: [
             MetaMixin,
         ],
+        computed: {
+            routeKey: function () {
+                return this.$route.meta.transition !== false ? this.$route.path : null;
+            },
+        },
     }
 </script>
