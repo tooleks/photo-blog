@@ -57,6 +57,7 @@ export default {
     },
     actions: {
         loadPhotos: async function ({commit, getters}, data) {
+            commit("reset");
             try {
                 commit("setPending", {pending: true});
                 const response = await api.getPosts(data);
