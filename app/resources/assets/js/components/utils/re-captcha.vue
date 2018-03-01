@@ -25,7 +25,6 @@
         },
         mounted: function () {
             this.reCaptcha.load();
-            this.reCaptcha.reset();
             this.reCaptcha.render();
         },
     }
