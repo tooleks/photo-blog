@@ -7,7 +7,7 @@ export default class BrowserReCaptchaService {
         this.element = element;
         this.siteKey = siteKey;
         this.onVerified = onVerified;
-        window[onLoadFunctionName] = () => defer.resolve(window["grecaptcha"]);
+        window[onLoadFunctionName] = () => defer.resolve(this._getReCaptcha());
     }
 
     _isEnabled() {
@@ -18,13 +18,16 @@ export default class BrowserReCaptchaService {
         this.onVerified.call(this.onVerified, response);
     }
 
+    _getReCaptcha() {
+        return window["grecaptcha"];
+    }
+
     execute() {
         // Do not do anything if reCAPTCHA service is not enabled.
         if (!this._isEnabled()) {
             return;
         }
-
-        defer.then((gReCaptcha) => gReCaptcha.execute(this.widgetId));
+        defer.then(() => this._getReCaptcha().execute(this.widgetId));
     }
 
     render() {
@@ -32,8 +35,8 @@ export default class BrowserReCaptchaService {
         if (!this._isEnabled()) {
             this._emitOnVerified();
         }
-        defer.then((gReCaptcha) => {
-            this.widgetId = gReCaptcha.render(this.element, {
+        defer.then(() => {
+            this.widgetId = this._getReCaptcha().render(this.element, {
                 sitekey: this.siteKey,
                 size: "invisible",
                 callback: (response) => {
@@ -49,13 +52,13 @@ export default class BrowserReCaptchaService {
         if (!this._isEnabled()) {
             return;
         }
-        defer.then((gReCaptcha) => gReCaptcha.reset(this.widgetId));
+        defer.then(() => this._getReCaptcha().reset(this.widgetId));
     }
 
     load() {
         // Resolve defer explicitly if reCAPTCHA service is loaded.
-        if (typeof window["grecaptcha"] !== "undefined") {
-            defer.resolve(window["grecaptcha"]);
+        if (typeof this._getReCaptcha() !== "undefined") {
+            defer.resolve(this._getReCaptcha());
         }
     }
 }
