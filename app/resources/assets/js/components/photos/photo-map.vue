@@ -1,7 +1,7 @@
 <template>
     <div class="photo-map">
         <loader :loading="loading"></loader>
-        <image-map :images="images"></image-map>
+        <image-map :images="images" :zoom="5"></image-map>
     </div>
 </template>
 
