@@ -84,6 +84,12 @@ Route::group(['prefix' => 'photos'], function () {
         ->middleware('can:access-administrator-part')
         ->middleware(sprintf('can:create-resource,%s', Photo::class));
 
+    Route::put('/{id}')
+        ->uses('PhotosController@update')
+        ->middleware('auth:api')
+        ->middleware('can:access-administrator-part')
+        ->middleware(sprintf('can:update-resource,%s', Photo::class));
+
     Route::delete('/{id}')
         ->uses('PhotosController@delete')
         ->middleware('auth:api')

@@ -3,10 +3,14 @@
 namespace App\Managers\Photo;
 
 use function App\Util\str_unique;
+use App\ValueObjects\Coordinates;
+use App\Models\Location;
 use App\Managers\Photo\Contracts\PhotoManager as PhotoManagerContract;
 use App\Models\Photo;
 use App\Services\Photo\Contracts\ExifFetcherService;
 use App\Services\Photo\Contracts\ThumbnailsGeneratorService;
+use App\ValueObjects\Latitude;
+use App\ValueObjects\Longitude;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
 use Illuminate\Database\ConnectionInterface as Database;
 use Tooleks\Php\AvgColorPicker\Contracts\AvgColorPicker;
@@ -76,7 +80,26 @@ class PhotoManager implements PhotoManagerContract
     }
 
     /**
-     * Save exif relation records.
+     * Create location record.
+     *
+     * @param array $attributes
+     * @return Location
+     */
+    private function createLocation(array $attributes): Location
+    {
+        ['latitude' => $latitude, 'longitude' => $longitude] = $attributes;
+
+        $coordinates = new Coordinates(new Latitude($latitude), new Longitude($longitude));
+
+        $location = (new Location)->fill(['coordinates' => $coordinates]);
+
+        $location->save();
+
+        return $location;
+    }
+
+    /**
+     * Save exif relation record.
      *
      * @param Photo $photo
      * @param array $attributes
@@ -87,8 +110,6 @@ class PhotoManager implements PhotoManagerContract
         $photo->exif()->delete();
 
         $photo->exif()->create($attributes);
-
-        $photo->load('exif');
     }
 
     /**
@@ -105,8 +126,6 @@ class PhotoManager implements PhotoManagerContract
         collect($rawThumbnails)->each(function (array $attributes) use ($photo) {
             $photo->thumbnails()->create($attributes);
         });
-
-        $photo->load('thumbnails');
     }
 
     /**
@@ -115,24 +134,39 @@ class PhotoManager implements PhotoManagerContract
     public function create(array $attributes = []): Photo
     {
         $attributes = $this->validator->validateForCreate($attributes);
-        // Generate average color of the image.
+
         $attributes['avg_color'] = $this->avgColorPicker->getImageAvgHex($attributes['file']->getPathname());
-        // Move image from the temporary location to the permanent location.
-        $attributes['path'] = $this->storage->put(sprintf('photos/%s', str_unique(20)), $attributes['file']);
-        // Fetch the EXIF information from the image.
         $attributes['exif'] = $this->exifFetcher->fetch($attributes['file']);
-        // Generate thumbnails from the image.
+        $attributes['path'] = $this->storage->put(sprintf('photos/%s', str_unique(20)), $attributes['file']);
         $attributes['thumbnails'] = $this->thumbnailsGenerator->generate($attributes['path']);
 
         $photo = (new Photo)->fill($attributes);
 
         $this->database->transaction(function () use ($photo, $attributes) {
+            if (isset($attributes['location'])) {
+                $location = $this->createLocation($attributes['location']);
+                $photo->fill(['location_id' => $location->id]);
+            }
             $photo->save();
             $this->saveExif($photo, $attributes['exif']);
             $this->saveThumbnails($photo, $attributes['thumbnails']);
         });
 
         return $photo;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function update(Photo $photo, array $attributes): void
+    {
+        $attributes = $this->validator->validateForUpdate($attributes);
+
+        $this->database->transaction(function () use ($photo, $attributes) {
+            $location = $this->createLocation($attributes['location']);
+            $photo->fill(array_merge($attributes, ['location_id' => $location->id]));
+            $photo->save();
+        });
     }
 
     /**

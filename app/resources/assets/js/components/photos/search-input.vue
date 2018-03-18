@@ -1,13 +1,20 @@
 <template>
-    <form class="form-inline my-2 my-lg-0" @submit.prevent="debounceSearch">
+    <form @submit.prevent="debounceSearch" class="form-inline my-2 my-lg-0">
         <div class="input-group">
-            <input class="form-control mr-sm-2"
+            <input @input="debounceSearch"
+                   v-model.trim="input"
+                   class="form-control border-0"
                    type="search"
                    aria-label="Search"
                    placeholder="Search photos"
-                   required
-                   @input="debounceSearch"
-                   v-model.trim="input">
+                   required>
+            <div class="input-group-append">
+                <button @click="debounceSearch"
+                        type="button"
+                        class="btn btn-secondary border-0"
+                        aria-label="Search"
+                        title="Search"><i class="fa fa-search" aria-hidden="true"></i></button>
+            </div>
         </div>
     </form>
 </template>
@@ -15,7 +22,10 @@
 <script>
     export default {
         props: {
-            delay: {type: Number, default: 500},
+            delay: {
+                type: Number,
+                default: 500,
+            },
         },
         data: function () {
             return {

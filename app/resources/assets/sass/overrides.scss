@@ -37,15 +37,6 @@ body {
   text-decoration: none;
 }
 
-.alert,
-.card,
-.card-img-top,
-.btn,
-.form-control,
-.dropdown-menu {
-  border-radius: 0 !important;
-}
-
 // Vue Notification.
 
 @media (min-width: 992px) {
@@ -58,6 +49,7 @@ body {
   margin: 0.5rem 0.5rem 0 0 !important;
   font-size: 1rem !important;
   cursor: pointer !important;
+  border-radius: 4px !important;
 }
 
 .notification-title {
@@ -68,4 +60,10 @@ body {
 
 .grecaptcha-badge {
   z-index: 1 !important;
+}
+
+// Leaflet
+
+.leaflet-popup-content-wrapper {
+  border-radius: 2px !important;
 }

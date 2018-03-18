@@ -1,4 +1,4 @@
-export default class Mapper {
+export default class MapperService {
     constructor() {
         this.resolvers = {};
     }

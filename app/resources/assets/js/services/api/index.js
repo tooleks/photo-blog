@@ -1,5 +1,5 @@
 import provideApiService from "./api-v1-service-provider";
 
-const api = provideApiService();
+const apiService = provideApiService();
 
-export default api;
+export default apiService;

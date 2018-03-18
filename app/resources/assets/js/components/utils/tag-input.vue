@@ -1,6 +1,5 @@
 <template>
-    <textarea v-model.trim="input"
-              v-bind="attributes"></textarea>
+    <textarea v-model.trim="input" v-bind="attributes"></textarea>
 </template>
 
 <script>

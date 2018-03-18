@@ -22,12 +22,12 @@
                                                required
                                                id="email"
                                                class="form-control"
-                                               v-model.trim="form.email">
+                                               v-model.trim="email">
                                     </div>
                                     <div class="form-group">
-                                        <re-captcha ref="reCaptcha" @verified="send"></re-captcha>
+                                        <re-captcha ref="reCaptcha" @verified="subscribe"></re-captcha>
                                     </div>
-                                    <button :disabled="isPending" type="submit" class="btn btn-secondary">Send</button>
+                                    <button :disabled="loading" type="submit" class="btn btn-secondary">Send</button>
                                 </form>
                             </div>
                         </div>
@@ -41,7 +41,7 @@
 <script>
     import ReCaptcha from "../utils/re-captcha";
     import {GotoMixin, MetaMixin} from "../../mixins";
-    import {notification} from "../../services";
+    import {apiService, notificationService} from "../../services";
 
     export default {
         components: {
@@ -53,24 +53,28 @@
         ],
         data: function () {
             return {
-                form: {
-                    email: "",
-                },
+                loading: false,
+                email: "",
             };
         },
         computed: {
-            isPending: function () {
-                return this.$store.getters["subscription/isPending"];
-            },
             pageTitle: function () {
                 return "Subscription";
             },
         },
         methods: {
-            send: async function (reCaptchaResponse) {
-                await this.$store.dispatch("subscription/createSubscription", Object.assign({}, this.form, {"g_recaptcha_response": reCaptchaResponse}));
-                notification.success("You have been successfully subscribed to the website updates.");
-                this.goToHomePage();
+            subscribe: async function (reCaptchaResponse) {
+                this.loading = true;
+                try {
+                    await apiService.createSubscription({
+                        email: this.email,
+                        g_recaptcha_response: reCaptchaResponse,
+                    });
+                    notificationService.success("You have been successfully subscribed to the website updates.");
+                    this.goToHomePage();
+                } finally {
+                    this.loading = false;
+                }
             },
         },
     }

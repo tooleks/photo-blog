@@ -16,6 +16,10 @@
         margin-bottom: initial;
     }
 
+    [disabled] {
+        cursor: not-allowed !important;
+    }
+
     [hidden] {
         display: none !important;
     }

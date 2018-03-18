@@ -10,86 +10,107 @@ export default class ApiService {
         return this.apiEndpoint + relativeUrl;
     }
 
-    async _handleRequest(request, options = {}) {
+    _handleRequest(request, options = {}) {
         return request.call(this)
             .then((response) => this.onSuccess.call(this.onSuccess, response))
             .catch((error) => this.onError.call(this.onError, error, options));
     }
 
-    createToken(data) {
-        const request = () => this.httpClient.post(this._getFullUrl("/auth/token"), data);
+    createToken(payload) {
+        const url = this._getFullUrl("/auth/token");
+        const request = () => this.httpClient.post(url, payload);
         return this._handleRequest(request);
     }
 
     deleteToken() {
-        const request = () => this.httpClient.delete(this._getFullUrl("/auth/token"));
+        const url = this._getFullUrl("/auth/token");
+        const request = () => this.httpClient.delete(url);
         return this._handleRequest(request);
     }
 
     getUser(id) {
-        const request = () => this.httpClient.get(this._getFullUrl(`/users/${id}`));
+        const url = this._getFullUrl(`/users/${id}`);
+        const request = () => this.httpClient.get(url);
         return this._handleRequest(request);
     }
 
-    createPhoto(file) {
-        const data = new FormData;
-        data.append("file", file);
-        const request = () => this.httpClient.post(this._getFullUrl("/photos"), data);
+    uploadPhotoFile(file) {
+        const payload = new FormData;
+        payload.append("file", file);
+        const url = this._getFullUrl("/photos");
+        const request = () => this.httpClient.post(url, payload);
         return this._handleRequest(request);
     }
 
-    createPost(data) {
-        const request = () => this.httpClient.post(this._getFullUrl("/posts"), Object.assign({}, data, {is_published: true}));
+    updatePhotoLocation(id, payload) {
+        const url = this._getFullUrl(`/photos/${id}`);
+        const request = () => this.httpClient.put(url, payload);
         return this._handleRequest(request);
     }
 
-    updatePost(id, data) {
-        const request = () => this.httpClient.put(this._getFullUrl(`/posts/${id}`), data);
+    createPost(payload) {
+        const url = this._getFullUrl("/posts");
+        const request = () => this.httpClient.post(url, Object.assign({}, payload, {is_published: true}));
+        return this._handleRequest(request);
+    }
+
+    updatePost(id, payload) {
+        const url = this._getFullUrl(`/posts/${id}`);
+        const request = () => this.httpClient.put(url, payload);
         return this._handleRequest(request);
     }
 
     getPosts(params = {}) {
-        const request = () => this.httpClient.get(this._getFullUrl("/posts"), {params});
+        const url = this._getFullUrl("/posts");
+        const request = () => this.httpClient.get(url, {params});
         return this._handleRequest(request);
     }
 
     getPost(id, params = {}, options = {}) {
-        const request = () => this.httpClient.get(this._getFullUrl(`/posts/${id}`), {params});
+        const url = this._getFullUrl(`/posts/${id}`);
+        const request = () => this.httpClient.get(url, {params});
         return this._handleRequest(request, options);
     }
 
     getPreviousPost(id, params = {}, options = {}) {
-        const request = () => this.httpClient.get(this._getFullUrl(`/posts/${id}/previous`), {params});
+        const url = this._getFullUrl(`/posts/${id}/previous`);
+        const request = () => this.httpClient.get(url, {params});
         return this._handleRequest(request, options);
     }
 
     getNextPost(id, params = {}, options = {}) {
-        const request = () => this.httpClient.get(this._getFullUrl(`/posts/${id}/next`), {params});
+        const url = this._getFullUrl(`/posts/${id}/next`);
+        const request = () => this.httpClient.get(url, {params});
         return this._handleRequest(request, options);
     }
 
     deletePost(id) {
-        const request = () => this.httpClient.delete(this._getFullUrl(`/posts/${id}`));
+        const url = this._getFullUrl(`/posts/${id}`);
+        const request = () => this.httpClient.delete(url);
         return this._handleRequest(request);
     }
 
     getTags(params = {}) {
-        const request = () => this.httpClient.get(this._getFullUrl("/tags"), {params});
+        const url = this._getFullUrl("/tags");
+        const request = () => this.httpClient.get(url, {params});
         return this._handleRequest(request);
     }
 
-    createContactMessage(data) {
-        const request = () => this.httpClient.post(this._getFullUrl("/contact_messages"), data);
+    createContactMessage(payload) {
+        const url = this._getFullUrl("/contact_messages");
+        const request = () => this.httpClient.post(url, payload);
         return this._handleRequest(request);
     }
 
-    createSubscription(data) {
-        const request = () => this.httpClient.post(this._getFullUrl("/subscriptions"), data);
+    createSubscription(payload) {
+        const url = this._getFullUrl("/subscriptions");
+        const request = () => this.httpClient.post(url, payload);
         return this._handleRequest(request);
     }
 
     deleteSubscription(token) {
-        const request = () => this.httpClient.delete(this._getFullUrl(`/subscriptions/${token}`));
+        const url = this._getFullUrl(`/subscriptions/${token}`);
+        const request = () => this.httpClient.delete(url);
         return this._handleRequest(request);
     }
 }

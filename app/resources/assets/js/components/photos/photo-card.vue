@@ -1,5 +1,5 @@
 <template>
-    <div class="card" v-if="photo.original.url">
+    <div v-if="photo" class="card">
         <a :href="photo.original.url"
            target="_blank"><img class="card-img-top"
                                 :src="photo.thumbnail.url"
@@ -26,9 +26,6 @@
         props: {
             photo: {
                 type: Object,
-                default: function () {
-                    return {};
-                },
             },
         },
     }

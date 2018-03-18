@@ -4,6 +4,7 @@ namespace App\Managers\Post;
 
 use App\Managers\Post\Contracts\PostManager as PostManagerContract;
 use App\Models\Builders\PostBuilder;
+use App\Models\Photo;
 use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Contracts\Auth\Guard as Auth;
@@ -62,22 +63,25 @@ class PostManager implements PostManagerContract
                 ->pluck('id')
                 ->toArray()
         );
-
-        $post->load('tags');
     }
 
     /**
      * Synchronize photos relation records.
      *
      * @param Post $post
-     * @param int $photoId
+     * @param array $rawPhotos
      * @return void
      */
-    private function syncPhoto(Post $post, int $photoId): void
+    private function syncPhotos(Post $post, array $rawPhotos): void
     {
-        $post->photos()->sync(array_wrap($photoId));
-
-        $post->load('photos');
+        $post->photos()->sync(
+            collect($rawPhotos)
+                ->filter(function (array $attributes) {
+                    return (new Photo)->newQuery()->find($attributes['id']);
+                })
+                ->pluck('id')
+                ->toArray()
+        );
     }
 
     /**
@@ -98,10 +102,12 @@ class PostManager implements PostManagerContract
             if (isset($attributes['tags'])) {
                 $this->syncTags($post, $attributes['tags']);
             }
-            if (isset($attributes['photo']['id'])) {
-                $this->syncPhoto($post, $attributes['photo']['id']);
+            if (isset($attributes['photo'])) {
+                $this->syncPhotos($post, [$attributes['photo']]);
             }
         });
+
+        $post->load('tags', 'photos');
 
         return $post;
     }
@@ -120,10 +126,12 @@ class PostManager implements PostManagerContract
             if (isset($attributes['tags'])) {
                 $this->syncTags($post, $attributes['tags']);
             }
-            if (isset($attributes['photo']['id'])) {
-                $this->syncPhoto($post, $attributes['photo']['id']);
+            if (isset($attributes['photo'])) {
+                $this->syncPhotos($post, [$attributes['photo']]);
             }
         });
+
+        $post->load('tags', 'photos');
     }
 
     /**

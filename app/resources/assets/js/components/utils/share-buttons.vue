@@ -50,12 +50,7 @@
                 return encodeURIComponent(url);
             },
             title: function () {
-                const title = this.$store.getters["meta/getTitle"];
-                return title ? encodeURIComponent(title) : "";
-            },
-            description: function () {
-                const description = this.$store.getters["meta/getDescription"];
-                return description ? encodeURIComponent(description) : "";
+                return document.title;
             },
         },
         methods: {
@@ -69,7 +64,7 @@
                 return `https://plus.google.com/share?url=${this.url}`;
             },
             getLinkedInShareUrl: function () {
-                return `https://www.linkedin.com/shareArticle?mini=true&url=${this.url}&title=${this.title}&summary=${this.description}&source=`;
+                return `https://www.linkedin.com/shareArticle?mini=true&url=${this.url}&title=${this.title}&summary=&source=`;
             },
         },
     }

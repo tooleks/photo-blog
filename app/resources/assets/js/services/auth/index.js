@@ -1,5 +1,5 @@
 import provideAuthService from "./auth-service-provider";
 
-const auth = provideAuthService();
+const authService = provideAuthService();
 
-export default auth;
+export default authService;

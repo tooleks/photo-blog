@@ -3,6 +3,8 @@
 namespace App\Managers\Photo;
 
 use function App\Util\validator_filter_attributes;
+use App\Rules\LatitudeRule;
+use App\Rules\LongitudeRule;
 use App\Models\Tables\Constant;
 use Illuminate\Validation\Factory as ValidatorFactory;
 use Illuminate\Validation\Rule;
@@ -58,6 +60,26 @@ class PhotoValidator
                 sprintf('min:%s', $this->config->get('main.upload.min-size')),
                 sprintf('max:%s', $this->config->get('main.upload.max-size')),
             ],
+            'location' => [],
+            'location.latitude' => ['required_with:location', 'numeric', new LatitudeRule],
+            'location.longitude' => ['required_with:location', 'numeric', new LongitudeRule],
+        ];
+
+        $this->validatorFactory->validate($attributes, $rules);
+
+        return validator_filter_attributes($attributes, $rules);
+    }
+
+    /**
+     * @param array $attributes
+     * @return array
+     */
+    public function validateForUpdate(array $attributes): array
+    {
+        $rules = [
+            'location' => [],
+            'location.latitude' => ['required', new LatitudeRule],
+            'location.longitude' => ['required', new LongitudeRule],
         ];
 
         $this->validatorFactory->validate($attributes, $rules);

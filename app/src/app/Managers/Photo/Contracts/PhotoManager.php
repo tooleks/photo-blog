@@ -20,6 +20,14 @@ interface PhotoManager
     public function create(array $attributes = []): Photo;
 
     /**
+     * Update a photo.
+     *
+     * @param Photo $photo
+     * @param array $attributes
+     */
+    public function update(Photo $photo, array $attributes): void;
+
+    /**
      * Get a photo by ID.
      *
      * @param int $id

@@ -30,9 +30,6 @@
         props: {
             exif: {
                 type: Object,
-                default: () => {
-                    return {};
-                },
             },
         },
     }

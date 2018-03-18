@@ -1,10 +1,11 @@
 import Defer from "./defer";
+import EventEmitter from "./event-emitter";
 
-function optional(callback) {
+function optional(callback, defaultValue = undefined) {
     try {
         return callback.call(callback);
     } catch (error) {
-        return undefined;
+        return defaultValue;
     }
 }
 
@@ -16,4 +17,4 @@ function isServerEnv() {
     return !isBrowserEnv();
 }
 
-export {optional, isBrowserEnv, isServerEnv, Defer};
+export {optional, isBrowserEnv, isServerEnv, Defer, EventEmitter};

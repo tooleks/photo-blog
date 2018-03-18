@@ -32,12 +32,7 @@
 </style>
 
 <script>
-    import {MetaMixin} from "../mixins";
-
     export default {
-        mixins: [
-            MetaMixin,
-        ],
         computed: {
             routeKey: function () {
                 return this.$route.meta.transition !== false ? this.$route.fullPath : null;

@@ -4,14 +4,7 @@
             <div class="col-lg">
                 <div class="card">
                     <div class="card-body">
-                        <form @submit.prevent="savePhoto">
-                            <div class="form-group">
-                                <label for="tags">Tags
-                                    <small>Required</small>
-                                </label>
-                                <tag-input :tags.sync="formTags"
-                                           :attributes="{id: 'tags', class: 'form-control', rows: '5', required: true}"></tag-input>
-                            </div>
+                        <form @submit.prevent="savePost">
                             <div class="form-group">
                                 <label for="message">Description
                                     <small>Required</small>
@@ -19,19 +12,27 @@
                                 <textarea id="message"
                                           required
                                           class="form-control"
-                                          v-model.trim="formDescription"
+                                          v-model.trim="description"
+                                          :disabled="loading"
                                           rows="7"></textarea>
                             </div>
-                            <button :disabled="isPending" type="submit" class="btn btn-secondary">
+                            <div class="form-group">
+                                <label for="tags">Tags
+                                    <small>Required</small>
+                                </label>
+                                <tag-input :tags.sync="tags"
+                                           :attributes="{id: 'tags', class: 'form-control', rows: '5', required: true, disabled: loading}"></tag-input>
+                            </div>
+                            <button :disabled="loading" type="submit" class="btn btn-secondary">
                                 <i class="fa fa-floppy-o" aria-hidden="true"></i> Save
                             </button>
-                            <file-input @change="uploadFile"
-                                        :attributes="{id: 'file', name: 'file', class: 'btn btn-secondary', disabled: isPending}">
+                            <file-input @change="uploadPhotoFile"
+                                        :attributes="{id: 'file', name: 'file', class: 'btn btn-secondary', disabled: loading}">
                                 <i class="fa fa-cloud-upload" aria-hidden="true"></i> Upload file
                             </file-input>
-                            <button v-if="photo.id"
-                                    @click="deletePhoto"
-                                    :disabled="isPending"
+                            <button v-if="post"
+                                    @click="deletePost"
+                                    :disabled="loading"
                                     type="button"
                                     class="btn btn-danger">
                                 <i class="fa fa-trash" aria-hidden="true"></i> Delete
@@ -42,6 +43,9 @@
             </div>
             <div class="col-lg mt-3 mt-lg-0">
                 <photo-card :photo="photo"></photo-card>
+                <div v-if="photo" class="card mt-3">
+                    <location-input :lat.sync="latitude" :lng.sync="longitude"></location-input>
+                </div>
             </div>
         </div>
     </div>
@@ -61,13 +65,16 @@
 <script>
     import FileInput from "../utils/file-input";
     import TagInput from "../utils/tag-input";
+    import LocationInput from "../map/location-input";
     import PhotoCard from "./photo-card";
     import {GotoMixin, MetaMixin} from "../../mixins";
-    import {mapper, notification} from "../../services";
+    import {apiService, mapperService, notificationService} from "../../services";
     import {optional} from "../../utils";
 
+    // TODO: Refactor the following component.
     export default {
         components: {
+            LocationInput,
             FileInput,
             TagInput,
             PhotoCard,
@@ -76,76 +83,113 @@
             GotoMixin,
             MetaMixin,
         ],
+        data: function () {
+            return {
+                loading: false,
+                description: "",
+                tags: [],
+                latitude: undefined,
+                longitude: undefined,
+                post: undefined,
+            };
+        },
         computed: {
-            isPending: function () {
-                return this.$store.getters["photoForm/isPending"];
+            postId: function () {
+                return optional(() => this.post.id);
             },
-            formTags: {
-                set: function (tags) {
-                    this.$store.commit("photoForm/setTags", {tags});
-                },
-                get: function () {
-                    return this.$store.getters["photoForm/getTags"];
-                },
-            },
-            formDescription: {
-                set: function (description) {
-                    this.$store.commit("photoForm/setDescription", {description});
-                },
-                get: function () {
-                    return this.$store.getters["photoForm/getDescription"];
-                },
+            photoId: function () {
+                return optional(() => this.post.photo.id);
             },
             photo: function () {
-                return this.$store.getters["photoForm/getPhoto"];
+                return mapperService.map(this.post, "Api.V1.Post", "App.Photo");
             },
             pageTitle: function () {
-                return optional(() => this.photo.description) || "Add photo";
-            },
-            pageImage: function () {
-                return optional(() => this.photo.original.url);
+                return optional(() => `Edit photo "${this.photo.description}"`) || "Add photo";
             },
         },
         watch: {
             "$route": function () {
                 this.init();
             },
+            latitude: function (latitude) {
+                if (latitude && this.longitude) {
+                    this.savePhotoLocation();
+                }
+            },
+            longitude: function (longitude) {
+                if (this.latitude && longitude) {
+                    this.savePhotoLocation();
+                }
+            },
         },
         methods: {
             init: function () {
-                this.reset();
-                if (optional(() => this.$route.params.id)) {
-                    this.loadPhoto(this.$route.params.id);
+                if (this.$route.params.id) {
+                    this.loadPost();
                 }
             },
-            reset: function () {
-                this.$store.commit("photoForm/reset");
-            },
-            loadPhoto: async function (id) {
+            loadPost: async function (id = this.$route.params.id) {
+                this.loading = true;
                 try {
-                    await this.$store.dispatch("photoForm/loadPhoto", {id});
+                    const {data} = await apiService.getPost(id);
+                    this.post = data;
                 } catch (error) {
                     if (optional(() => error.response.status) === 404) {
-                        this.goTo404Page();
+                        this.goToNotFoundPage();
                     } else {
+                        throw error;
+                    }
+                } finally {
+                    this.loading = false;
+                }
+            },
+            deletePost: async function () {
+                if (confirm("Do you really want to delete the photo?")) {
+                    this.loading = true;
+                    try {
+                        await apiService.deletePost(this.postId);
+                        notificationService.success("The photo has been successfully deleted.");
+                    } finally {
+                        this.loading = false;
                         this.goToHomePage();
                     }
                 }
             },
-            savePhoto: async function () {
-                await this.$store.dispatch("photoForm/savePhoto");
-                notification.success("The photo has been successfully saved.");
-            },
-            deletePhoto: async function () {
-                if (confirm("Do you really want to delete the photo?")) {
-                    await this.$store.dispatch("photoForm/deletePhoto");
-                    notification.success("The photo has been successfully deleted.");
-                    this.goToHomePage();
+            savePost: async function () {
+                const create = async (post) => await apiService.createPost(post);
+                const update = async (post) => await apiService.updatePost(post.id, post);
+                const save = async (post) => optional(() => post.id) ? await update(post) : await create(post);
+                this.loading = true;
+                try {
+                    const {data} = await save({
+                        id: this.postId,
+                        photo: {id: this.photoId},
+                        description: this.description,
+                        tags: this.tags.map((tag) => mapperService.map(tag, "App.Tag", "Api.V1.Tag")),
+                    });
+                    this.post = data;
+                    notificationService.success("The photo has been successfully saved.");
+                } finally {
+                    this.loading = false;
                 }
             },
-            uploadFile: async function (file) {
-                await this.$store.dispatch("photoForm/uploadFile", {file});
-                notification.success("The photo has been successfully uploaded. Don't forget to save changes before exit.");
+            savePhotoLocation: async function () {
+                const {data} = await apiService.updatePhotoLocation(this.photoId, {
+                    location: {latitude: this.latitude, longitude: this.longitude},
+                });
+                this.post = this.post || {};
+                this.post.photo = data;
+            },
+            uploadPhotoFile: async function (file) {
+                this.loading = true;
+                try {
+                    const {data} = await apiService.uploadPhotoFile(file);
+                    this.post = this.post || {};
+                    this.post.photo = data;
+                    notificationService.success("The photo has been successfully uploaded. Don't forget to save changes before exit.");
+                } finally {
+                    this.loading = false;
+                }
             },
         },
         created: function () {

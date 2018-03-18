@@ -9,7 +9,6 @@ export default class Defer {
     }
 
     resolve(value) {
-        // Do not do anything if defer is already resolved.
         if (this.resolved) {
             return;
         }
@@ -19,11 +18,17 @@ export default class Defer {
         this.callbacks = [];
     }
 
-    then(callback) {
+    afterResolve(callback) {
         if (this.resolved) {
             this._callCallback(callback);
         } else {
             this.callbacks.push(callback);
         }
+    }
+
+    promisify() {
+        return new Promise((resolve) => {
+            this.afterResolve(resolve);
+        });
     }
 }

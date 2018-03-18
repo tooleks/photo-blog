@@ -8,7 +8,6 @@ window.Vue = Vue;
 
 import config from "./config";
 import router from "./router";
-import store from "./store";
 
 if (config.credentials.googleAnalytics.trackingId) {
     Vue.use(VueAnalytics, {
@@ -25,6 +24,5 @@ Vue.component("app-footer", require("./components/layout/footer"));
 
 new Vue({
     el: "#app",
-    store,
     router,
 });

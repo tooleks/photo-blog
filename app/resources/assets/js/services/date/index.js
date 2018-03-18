@@ -1,5 +1,5 @@
 import provideDateService from "./date-service-provider";
 
-const date = provideDateService();
+const dateService = provideDateService();
 
-export default date;
+export default dateService;

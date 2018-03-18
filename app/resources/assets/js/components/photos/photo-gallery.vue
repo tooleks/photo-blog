@@ -1,28 +1,28 @@
 <template>
     <div class="container">
-        <loader :isLoading="isPending"></loader>
-        <div class="row" v-if="photos.length">
+        <loader :loading="loading"></loader>
+        <div v-if="photos.length" class="row">
             <div class="col py-1">
                 <masonry :images="photos"></masonry>
             </div>
         </div>
-        <div class="row" v-if="!isPending && !photos.length">
+        <div v-if="!loading && !photos.length" class="row">
             <div class="col mt-3">
                 <div class="alert alert-secondary">No photos found</div>
             </div>
         </div>
-        <div class="row">
+        <div v-if="previousPageExists || nextPageExists" class="row">
             <div class="col mt-2">
                 <router-link
-                        class="btn btn-secondary float-left"
-                        v-if="isPreviousPageExists"
+                        v-if="previousPageExists"
                         :to="{name: this.routeName, params: {page: this.previousPage}}"
+                        class="btn btn-secondary float-left"
                         title="Previous Page">Previous
                 </router-link>
                 <router-link
-                        class="btn btn-secondary float-right"
-                        v-if="isNextPageExists"
+                        v-if="nextPageExists"
                         :to="{name: this.routeName, params: {page: this.nextPage}}"
+                        class="btn btn-secondary float-right"
                         title="Next Page">Next
                 </router-link>
             </div>
@@ -34,6 +34,7 @@
     import Loader from "../utils/loader";
     import Masonry from "../gallery/masonry";
     import {GotoMixin, MetaMixin} from "../../mixins";
+    import {photoService} from "../../services";
 
     export default {
         components: {
@@ -44,28 +45,18 @@
             GotoMixin,
             MetaMixin,
         ],
+        data: function () {
+            return {
+                loading: false,
+                photos: [],
+                previousPage: null,
+                currentPage: 1,
+                nextPage: null,
+                previousPageExists: false,
+                nextPageExists: false,
+            };
+        },
         computed: {
-            isPending: function () {
-                return this.$store.getters["photoGallery/isPending"];
-            },
-            photos: function () {
-                return this.$store.getters["photoGallery/getPhotos"];
-            },
-            currentPage: function () {
-                return this.$store.getters["photoGallery/getCurrentPage"];
-            },
-            previousPage: function () {
-                return this.$store.getters["photoGallery/getPreviousPage"];
-            },
-            nextPage: function () {
-                return this.$store.getters["photoGallery/getNextPage"];
-            },
-            isPreviousPageExists: function () {
-                return this.$store.getters["photoGallery/isPreviousPageExist"];
-            },
-            isNextPageExists: function () {
-                return this.$store.getters["photoGallery/isNextPageExist"];
-            },
             routeName: function () {
                 const withPageSuffix = "-with-page";
                 return this.$route.name.endsWith(withPageSuffix) ? this.$route.name : `${this.$route.name}${withPageSuffix}`;
@@ -93,20 +84,30 @@
         methods: {
             init: function () {
                 if (this.$route.query.show) {
-                    // @BC: Go to new photo page in order to preserve backward compatibility
+                    // #bc: Go to a new photo page in order to preserve backward compatibility
                     // with an older version of the application.
                     this.goToPhotoPage(this.$route.query.show);
                 } else {
                     this.loadPhotos();
                 }
             },
-            loadPhotos: function () {
-                this.$store.dispatch("photoGallery/loadPhotos", {
-                    per_page: 40,
-                    page: this.$route.params.page,
-                    tag: this.$route.params.tag,
-                    search_phrase: this.$route.params.search_phrase,
-                });
+            loadPhotos: async function () {
+                this.loading = true;
+                try {
+                    const {items, previousPage, currentPage, nextPage, previousPageExists, nextPageExists} = await photoService.getPhotos({
+                        page: this.$route.params.page,
+                        tag: this.$route.params.tag,
+                        searchPhrase: this.$route.params.search_phrase,
+                    });
+                    this.photos = items;
+                    this.previousPage = previousPage;
+                    this.currentPage = currentPage;
+                    this.nextPage = nextPage;
+                    this.previousPageExists = previousPageExists;
+                    this.nextPageExists = nextPageExists;
+                } finally {
+                    this.loading = false;
+                }
             },
         },
         created: function () {

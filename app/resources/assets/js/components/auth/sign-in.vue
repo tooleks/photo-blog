@@ -13,7 +13,7 @@
                                        required
                                        id="email"
                                        class="form-control"
-                                       v-model.trim="form.email">
+                                       v-model.trim="email">
                             </div>
                             <div class="form-group">
                                 <label for="password">Password
@@ -23,12 +23,12 @@
                                        required
                                        id="password"
                                        class="form-control"
-                                       v-model="form.password">
+                                       v-model="password">
                             </div>
                             <div class="form-group">
                                 <re-captcha ref="reCaptcha" @verified="signIn"></re-captcha>
                             </div>
-                            <button :disabled="isPending" type="submit" class="btn btn-secondary">Sign In</button>
+                            <button :disabled="loading" type="submit" class="btn btn-secondary">Sign In</button>
                         </form>
                     </div>
                 </div>
@@ -40,7 +40,7 @@
 <script>
     import ReCaptcha from "../utils/re-captcha";
     import {AuthMixin, GotoMixin, MetaMixin} from "../../mixins";
-    import {notification} from "../../services";
+    import {loginService, notificationService} from "../../services";
 
     export default {
         components: {
@@ -53,30 +53,35 @@
         ],
         data: function () {
             return {
-                form: {
-                    email: "",
-                    password: "",
-                },
+                loading: false,
+                email: "",
+                password: "",
             };
         },
         computed: {
-            isPending: function () {
-                return this.$store.getters["auth/isPending"];
-            },
             pageTitle: function () {
                 return "Sign In";
             },
         },
         methods: {
             init: function () {
-                if (this.isAuthenticated) {
+                if (this.authenticated) {
                     this.goToPath(this.$route.query.redirect_uri);
                 }
             },
             signIn: async function (reCaptchaResponse) {
-                const user = await this.$store.dispatch("auth/signIn", Object.assign({}, this.form, {"g_recaptcha_response": reCaptchaResponse}));
-                notification.success(`Hello, ${user.name}!`);
-                this.goToPath(this.$route.query.redirect_uri);
+                this.loading = true;
+                try {
+                    const user = await loginService.signIn({
+                        email: this.email,
+                        password: this.password,
+                        g_recaptcha_response: reCaptchaResponse
+                    });
+                    notificationService.success(`Hello ${user.name}!`);
+                    this.goToPath(this.$route.query.redirect_uri);
+                } finally {
+                    this.loading = false;
+                }
             },
         },
         created: function () {

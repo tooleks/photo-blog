@@ -1,53 +1,43 @@
 import config from "../config";
+import {optional} from "../utils";
 
 export default {
     computed: {
         pageName: function () {
-            return config.app.name;
+            return optional(() => config.app.name, "");
         },
         pageDescription: function () {
-            return config.app.description;
+            return optional(() => config.app.description, "");
         },
         pageKeywords: function () {
-            return config.app.keywords;
+            return optional(() => config.app.keywords, "");
         },
         pageTitle: function () {
-            return undefined;
+            return "";
         },
         pageImage: function () {
-            return config.url.image;
+            return optional(() => config.url.image, "");
         },
-    },
-    watch: {
-        pageName: function () {
-            this.initMeta();
-        },
-        pageDescription: function () {
-            this.initMeta();
-        },
-        pageKeywords: function () {
-            this.initMeta();
-        },
-        pageTitle: function () {
-            this.initMeta();
-        },
-        pageImage: function () {
-            this.initMeta();
-        },
-    },
-    methods: {
-        initMeta: function () {
-            this.$store.commit("meta/setName", {name: this.pageName});
-            this.$store.commit("meta/setDescription", {description: this.pageDescription});
-            this.$store.commit("meta/setKeywords", {keywords: this.pageKeywords});
-            this.$store.commit("meta/setTitle", {title: this.pageTitle});
-            this.$store.commit("meta/setImage", {image: this.pageImage});
-        },
-    },
-    created: function () {
-        this.initMeta();
     },
     metaInfo: function () {
-        return this.$store.getters["meta/getVueMetaInfo"];
+        return {
+            title: this.pageTitle,
+            titleTemplate: this.pageTitle ? `%s | ${this.pageName}` : this.pageName,
+            meta: [
+                {vmid: "description", name: "description", content: this.pageDescription},
+                {vmid: "keywords", name: "keywords", content: this.pageKeywords},
+                // Open Graph protocol properties.
+                {vmid: "og:type", property: "og:type", content: "article"},
+                {vmid: "og:url", property: "og:url", content: config.url.app + this.$route.fullPath},
+                {vmid: "og:site_name", property: "og:site_name", content: this.pageName},
+                {vmid: "og:description", property: "og:description", content: this.pageDescription},
+                {vmid: "og:image", property: "og:image", content: this.pageImage},
+                {vmid: "og:title", property: "og:title", content: this.pageTitle},
+                // Twitter Cards properties.
+                {vmid: "twitter:card", name: "twitter:card", content: "summary_large_image"},
+                {vmid: "twitter:title", name: "twitter:title", content: this.pageTitle},
+                {vmid: "twitter:image", name: "twitter:image", content: this.pageImage},
+            ],
+        };
     },
 }

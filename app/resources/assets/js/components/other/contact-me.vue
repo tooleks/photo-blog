@@ -22,7 +22,7 @@
                                                required
                                                id="email"
                                                class="form-control"
-                                               v-model.trim="form.email">
+                                               v-model.trim="email">
                                     </div>
                                     <div class="form-group">
                                         <label for="name">Name
@@ -32,7 +32,7 @@
                                                required
                                                id="name"
                                                class="form-control"
-                                               v-model.trim="form.name">
+                                               v-model.trim="name">
                                     </div>
                                     <div class="form-group">
                                         <label for="subject">Subject
@@ -42,7 +42,7 @@
                                                required
                                                id="subject"
                                                class="form-control"
-                                               v-model.trim="form.subject">
+                                               v-model.trim="subject">
                                     </div>
                                     <div class="form-group">
                                         <label for="message">Message
@@ -51,13 +51,13 @@
                                         <textarea id="message"
                                                   required
                                                   class="form-control"
-                                                  v-model.trim="form.message"
+                                                  v-model.trim="message"
                                                   rows="3"></textarea>
                                     </div>
                                     <div class="form-group">
-                                        <re-captcha ref="reCaptcha" @verified="send"></re-captcha>
+                                        <re-captcha ref="reCaptcha" @verified="contactMe"></re-captcha>
                                     </div>
-                                    <button :disabled="isPending" type="submit" class="btn btn-secondary">Send</button>
+                                    <button :disabled="loading" type="submit" class="btn btn-secondary">Send</button>
                                 </form>
                             </div>
                         </div>
@@ -71,7 +71,7 @@
 <script>
     import ReCaptcha from "../utils/re-captcha";
     import {GotoMixin, MetaMixin} from "../../mixins";
-    import {notification} from "../../services";
+    import {apiService, notificationService} from "../../services";
 
     export default {
         components: {
@@ -83,27 +83,34 @@
         ],
         data: function () {
             return {
-                form: {
-                    email: "",
-                    name: "",
-                    subject: "",
-                    message: "",
-                },
+                loading: false,
+                email: "",
+                name: "",
+                subject: "",
+                message: "",
             };
         },
         computed: {
-            isPending: function () {
-                return this.$store.getters["contactMessage/isPending"];
-            },
             pageTitle: function () {
                 return "Contact Me";
             },
         },
         methods: {
-            send: async function (reCaptchaResponse) {
-                await this.$store.dispatch("contactMessage/createContactMessage", Object.assign({}, this.form, {"g_recaptcha_response": reCaptchaResponse}));
-                notification.success("Your message has been successfully sent.");
-                this.goToHomePage();
+            contactMe: async function (reCaptchaResponse) {
+                this.loading = true;
+                try {
+                    await apiService.createContactMessage({
+                        email: this.email,
+                        name: this.name,
+                        subject: this.subject,
+                        message: this.message,
+                        g_recaptcha_response: reCaptchaResponse,
+                    });
+                    notificationService.success("Your message has been successfully sent.");
+                    this.goToHomePage();
+                } finally {
+                    this.loading = false;
+                }
             },
         },
     }

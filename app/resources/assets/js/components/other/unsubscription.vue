@@ -11,10 +11,10 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12">
-                        <button type="button" class="btn btn-danger" @click="send" :disabled="isPending">
+                        <button type="button" class="btn btn-danger" @click="unsubscribe" :disabled="loading">
                             Yes
                         </button>
-                        <button type="button" class="btn btn-secondary" @click="goToHomePage" :disabled="isPending">
+                        <button type="button" class="btn btn-secondary" @click="goToHomePage" :disabled="loading">
                             No
                         </button>
                     </div>
@@ -26,27 +26,31 @@
 
 <script>
     import {GotoMixin, MetaMixin} from "../../mixins";
-    import {notification} from "../../services";
+    import {apiService, notificationService} from "../../services";
 
     export default {
         mixins: [
             GotoMixin,
             MetaMixin,
         ],
+        data: function () {
+            return {
+                loading: false,
+            };
+        },
         computed: {
-            isPending: function () {
-                return this.$store.getters["subscription/isPending"];
-            },
             pageTitle: function () {
                 return "Unsubscription";
             },
         },
         methods: {
-            send: async function () {
+            unsubscribe: async function () {
+                this.loading = true;
                 try {
-                    await this.$store.dispatch("subscription/deleteSubscription", {token: this.$route.params.token});
-                    notification.success("You have been successfully unsubscribed from the website updates.");
+                    await apiService.deleteSubscription(this.$route.params.token);
+                    notificationService.success("You have been successfully unsubscribed from the website updates.");
                 } finally {
+                    this.loading = false;
                     this.goToHomePage();
                 }
             },

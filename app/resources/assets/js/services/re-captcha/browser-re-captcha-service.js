@@ -27,7 +27,7 @@ export default class BrowserReCaptchaService {
         if (!this._isEnabled()) {
             return;
         }
-        defer.then(() => this._getReCaptcha().execute(this.widgetId));
+        defer.promisify().then(() => this._getReCaptcha().execute(this.widgetId));
     }
 
     render() {
@@ -35,7 +35,7 @@ export default class BrowserReCaptchaService {
         if (!this._isEnabled()) {
             this._emitOnVerified();
         }
-        defer.then(() => {
+        defer.promisify().then(() => {
             this.widgetId = this._getReCaptcha().render(this.element, {
                 sitekey: this.siteKey,
                 size: "invisible",
@@ -52,7 +52,7 @@ export default class BrowserReCaptchaService {
         if (!this._isEnabled()) {
             return;
         }
-        defer.then(() => this._getReCaptcha().reset(this.widgetId));
+        defer.promisify().then(() => this._getReCaptcha().reset(this.widgetId));
     }
 
     load() {

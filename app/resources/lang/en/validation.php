@@ -83,6 +83,8 @@ return [
     'url'                  => 'The :attribute format is invalid.',
 
     'recaptcha' => 'reCAPTCHA validation failed.',
+    'latitude' => 'The :attribute must be a valid latitude.',
+    'longitude' => 'The :attribute must be a valid longitude.',
 
     /*
     |--------------------------------------------------------------------------
@@ -118,7 +120,10 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'location.latitude' => 'location latitude',
+        'location.longitude' => 'location longitude',
+    ],
 
     /*
     |--------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 import provideStorageService from "./storage-service-provider";
 
-const storage = provideStorageService();
+const storageService = provideStorageService();
 
-export default storage;
+export default storageService;

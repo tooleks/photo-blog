@@ -45,7 +45,7 @@ export default {
             }
             this.$router.push({name, params: this.$route.query});
         },
-        goTo404Page: function () {
+        goToNotFoundPage: function () {
             this.$router.push({name: "404"});
         },
     },

@@ -5,6 +5,7 @@
                 <div class="gallery-image" :style="getImageStyle(image, index, row)">
                     <router-link :to="image.getModel().route"
                                  :title="image.getModel().description"
+                                 :aria-label="image.getModel().description"
                                  class="gallery-link"></router-link>
                 </div>
             </div>

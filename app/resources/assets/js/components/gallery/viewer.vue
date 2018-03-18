@@ -21,7 +21,8 @@
                 @click="slideToPreviousImage"
                 class="carousel-control carousel-control-prev"
                 role="button"
-                title="Previous Image">
+                title="Previous Image"
+                aria-label="Previous Image">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="sr-only">Previous</span>
         </button>
@@ -29,7 +30,8 @@
                 @click="slideToNextImage"
                 class="carousel-control carousel-control-next"
                 role="button"
-                title="Next Image">
+                title="Next Image"
+                aria-label="Next Image">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="sr-only">Next</span>
         </button>
@@ -45,7 +47,7 @@
 
     @media screen and (orientation: landscape) {
         .carousel-item {
-            height: 80vh;
+            height: 70vh;
         }
     }
 

@@ -1,15 +1,15 @@
 <template>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container px-3 bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-shark box-shadow-1dp">
+        <div class="container px-3 bg-shark">
             <button class="navbar-toggler" type="button"
                     data-toggle="collapse"
-                    data-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent"
+                    data-target="#navbar"
+                    aria-controls="navbar"
                     aria-expanded="false"
                     aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="collapse navbar-collapse" id="navbar">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
                         <router-link :to="{name: 'home'}"
@@ -19,10 +19,18 @@
                             Home
                         </router-link>
                     </li>
+                    <li class="nav-item">
+                        <router-link :to="{name: 'photos-map'}"
+                                     class="nav-link"
+                                     data-toggle="collapse"
+                                     data-target=".navbar-collapse.show">
+                            Map
+                        </router-link>
+                    </li>
                     <li v-if="tags.length" class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarTagsDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tags</a>
-                        <div class="dropdown-menu" aria-labelledby="navbarTagsDropdown">
+                        <div class="dropdown-menu box-shadow-2dp" aria-labelledby="navbarTagsDropdown">
                             <router-link v-for="tag in tags"
                                          :key="tag"
                                          :to="{name: 'photos-tag', params: {tag: tag}}"
@@ -61,7 +69,8 @@
                         <a class="nav-link"
                            :href="social.facebook"
                            target="_blank"
-                           title="My Facebook Account">
+                           title="My Facebook Account"
+                           aria-label="My Facebook Account">
                             <i class="fa fa-facebook-official" aria-hidden="true"></i> <span class="d-lg-none">My Facebook</span>
                         </a>
                     </li>
@@ -69,26 +78,28 @@
                         <a class="nav-link"
                            :href="social.github"
                            target="_blank"
-                           title="My GitHub Account">
+                           title="My GitHub Account"
+                           aria-label="My GitHub Account">
                             <i class="fa fa-github" aria-hidden="true"></i> <span
                                 class="d-lg-none">My GitHub</span>
                         </a>
                     </li>
-                    <li class="nav-item" v-if="!isAuthenticated">
+                    <li class="nav-item" v-if="!authenticated">
                         <router-link :to="{name: 'sign-in'}"
                                      class="nav-link"
                                      title="Sign In"
                                      data-toggle="collapse"
-                                     data-target=".navbar-collapse.show">
+                                     data-target=".navbar-collapse.show"
+                                     aria-label="Sign In">
                             <i class="fa fa-sign-in" aria-hidden="true"></i> <span class="d-lg-none">Sign In</span>
                         </router-link>
                     </li>
-                    <li class="nav-item dropdown" v-if="isAuthenticated">
+                    <li class="nav-item dropdown" v-if="authenticated">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarUserDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fa fa-user" aria-hidden="true"></i> {{ username }}
+                            <i class="fa fa-user" aria-hidden="true"></i> {{ userName }}
                         </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarUserDropdown">
+                        <div class="dropdown-menu  box-shadow-2dp" aria-labelledby="navbarUserDropdown">
                             <router-link class="dropdown-item"
                                          :to="{name: 'photo/add'}"
                                          data-toggle="collapse"
@@ -118,8 +129,16 @@
         z-index: 1010;
     }
 
-    .color-rss {
+    .navbar-expand-lg .navbar-nav .nav-item:first-child .nav-link {
+        padding-left: 0;
+    }
+
+    .nav-link > .color-rss {
         color: #e19126;
+    }
+
+    .nav-link:hover > .color-rss {
+        color: #e7a853;
     }
 </style>
 
@@ -127,7 +146,7 @@
     import SearchInput from "../photos/search-input";
     import {AuthMixin} from "../../mixins";
     import config from "../../config";
-    import {api} from "../../services";
+    import {tagService} from "../../services";
 
     export default {
         components: {
@@ -136,17 +155,23 @@
         mixins: [
             AuthMixin,
         ],
+        data: function () {
+            return {
+                tags: [],
+            };
+        },
         computed: {
             social: function () {
                 return config.url.social;
             },
-            tags: function () {
-                return this.$store.getters["tags/getTags"];
-            },
         },
         methods: {
             init: function () {
-                this.$store.dispatch("tags/loadTags", {per_page: 15});
+                this.loadTags();
+            },
+            loadTags: async function () {
+                const {items} = await tagService.getTags();
+                this.tags = items;
             },
         },
         created: function () {

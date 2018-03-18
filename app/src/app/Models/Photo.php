@@ -13,11 +13,13 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property int id
  * @property int created_by_user_id
+ * @property int location_id
  * @property string path
  * @property string avg_color
  * @property Carbon created_at
  * @property Carbon updated_at
  * @property User createdByUser
+ * @property User location
  * @property Exif exif
  * @property Collection thumbnails
  * @property Post post
@@ -39,6 +41,7 @@ class Photo extends Model
      */
     protected $fillable = [
         'created_by_user_id',
+        'location_id',
         'path',
         'avg_color',
     ];
@@ -78,6 +81,14 @@ class Photo extends Model
     public function createdByUser()
     {
         return $this->belongsTo(User::class, 'created_by_user_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function location()
+    {
+        return $this->belongsTo(Location::class, 'location_id');
     }
 
     /**

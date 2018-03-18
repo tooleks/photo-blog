@@ -28,25 +28,25 @@ export default class ErrorHandlerService {
         }
     }
 
-    handleUnknownError(error, options = {}) {
+    handleUnknownError(error, {}) {
         notification.error("Remote server connection error. Try again later.");
         return Promise.reject(error);
     }
 
-    handleUnauthenticatedError(error, options = {}) {
+    handleUnauthenticatedError(error, {}) {
         router.push({name: "sign-out"});
         this.handleHttpError(error);
         return Promise.reject(error);
     }
 
-    handleNotFoundError(error, options = {}) {
-        if (!options.suppressNotFoundErrors) {
+    handleNotFoundError(error, {suppressNotFoundErrors = false}) {
+        if (!suppressNotFoundErrors) {
             notification.error(error.response.data.message);
         }
         return Promise.reject(error);
     }
 
-    handleValidationError(error, options = {}) {
+    handleValidationError(error, {}) {
         const errors = optional(() => error.response.data.errors) || {};
         for (let attribute in errors) {
             if (errors.hasOwnProperty(attribute)) {

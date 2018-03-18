@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import VueMeta from "vue-meta"
-import {auth} from "../services";
+import {authService} from "../services";
 
 Vue.use(VueRouter);
 Vue.use(VueMeta);
@@ -18,7 +18,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    if (to.matched.some((route) => route.meta.requiresAuth) && !auth.exists()) {
+    if (to.matched.some((route) => route.meta.requiresAuth) && !authService.authenticated()) {
         next({
             name: "sign-in",
             query: {redirect_uri: to.fullPath},

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <loader :isLoading="isPending"></loader>
+        <loader :loading="loading"></loader>
         <viewer v-if="activePhoto"
                 :activeImage.sync="activePhoto"
                 :images="photos"
@@ -22,6 +22,7 @@
     import Viewer from "../gallery/viewer";
     import PhotoDescriptionCard from "./photo-description-card";
     import {GotoMixin, MetaMixin} from "../../mixins";
+    import {photoService} from "../../services";
     import {optional} from "../../utils";
 
     export default {
@@ -34,26 +35,19 @@
             GotoMixin,
             MetaMixin,
         ],
+        data: function () {
+            return {
+                loading: false,
+                photos: [],
+                activePhoto: undefined,
+            };
+        },
         computed: {
-            isPending: function () {
-                return this.$store.getters["photoGalleryViewer/isPending"];
-            },
-            photos: function () {
-                return this.$store.getters["photoGalleryViewer/getPhotos"];
-            },
-            activePhoto: {
-                get: function () {
-                    return this.$store.getters["photoGalleryViewer/getActivePhoto"];
-                },
-                set: function (photo) {
-                    this.$store.commit("photoGalleryViewer/setActivePhoto", {photo});
-                },
-            },
             pageTitle: function () {
-                return optional(() => this.activePhoto.description);
+                return optional(() => this.activePhoto.description, "");
             },
             pageImage: function () {
-                return optional(() => this.activePhoto.original.url);
+                return optional(() => this.activePhoto.original.url, "");
             },
         },
         watch: {
@@ -62,7 +56,7 @@
                 if (typeof photo !== "undefined") {
                     this.activePhoto = photo;
                 } else {
-                    this.goTo404Page();
+                    this.goToNotFoundPage();
                 }
             },
             activePhoto: function (activePhoto) {
@@ -71,39 +65,54 @@
         },
         methods: {
             init: function () {
-                this.reset();
-                this.loadPhoto(this.$route.params.id, this.$route.query);
-            },
-            reset: function () {
-                this.$store.commit("photoGalleryViewer/reset");
+                this.loadPhoto();
             },
             loadPhoto: async function () {
+                this.loading = true;
                 try {
-                    await this.$store
-                        .dispatch("photoGalleryViewer/loadPhoto", {
-                            id: this.$route.params.id,
-                            params: this.$route.query
-                        });
+                    const photo = await photoService.getPhoto(this.$route.params.id, {
+                        tag: this.$route.query.tag,
+                        searchPhrase: this.$route.query.search_phrase,
+                    });
+                    this.photos = [photo];
+                    this.activePhoto = photo;
                 } catch (error) {
                     if (optional(() => error.response.status) === 404) {
-                        this.goTo404Page();
+                        this.goToNotFoundPage();
                     } else {
-                        this.goToHomePage();
+                        throw error;
                     }
+                } finally {
+                    this.loading = false;
                 }
             },
-            loadOlderPhoto: function () {
-                this.$store.dispatch("photoGalleryViewer/loadOlderPhoto", {params: this.$route.query});
+            loadOlderPhoto: async function () {
+                this.loading = true;
+                try {
+                    const photo = await photoService.getOlderPhoto(this.activePhoto.id, {
+                        tag: this.$route.query.tag,
+                        searchPhrase: this.$route.query.search_phrase,
+                    });
+                    this.photos = [...this.photos, photo];
+                } finally {
+                    this.loading = false;
+                }
             },
-            loadNewerPhoto: function () {
-                this.$store.dispatch("photoGalleryViewer/loadNewerPhoto", {params: this.$route.query});
+            loadNewerPhoto: async function () {
+                this.loading = true;
+                try {
+                    const photo = await photoService.getNewerPhoto(this.activePhoto.id, {
+                        tag: this.$route.query.tag,
+                        searchPhrase: this.$route.query.search_phrase,
+                    });
+                    this.photos = [photo, ...this.photos];
+                } finally {
+                    this.loading = false;
+                }
             },
         },
         created: function () {
             this.init();
-        },
-        beforeDestroy: function () {
-            this.reset();
         },
     }
 </script>

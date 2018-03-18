@@ -1,6 +1,6 @@
 <template>
     <transition name="fade">
-        <div class="loader" v-if="isVisible">
+        <div class="loader" v-if="visible">
             <div class="loader-inner">
             <span class="loader-icon">
                 Loading...
@@ -39,7 +39,7 @@
 <script>
     export default {
         props: {
-            isLoading: {
+            loading: {
                 type: Boolean,
                 default: true,
             },
@@ -50,18 +50,18 @@
         },
         data: function () {
             return {
-                isVisible: this.isLoading,
+                visible: this.loading,
                 delayTimeout: null,
             };
         },
         watch: {
-            isLoading: function () {
+            loading: function () {
                 this.init();
             },
         },
         methods: {
             init: function () {
-                if (!this.isLoading) {
+                if (!this.loading) {
                     this.clearDelayTimeout();
                     this.hideLoader();
                 } else {
@@ -69,10 +69,10 @@
                 }
             },
             showLoader: function () {
-                this.isVisible = true;
+                this.visible = true;
             },
             hideLoader: function () {
-                this.isVisible = false;
+                this.visible = false;
             },
             clearDelayTimeout: function () {
                 if (this.delayTimeout) {
