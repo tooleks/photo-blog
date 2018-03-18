@@ -123,9 +123,13 @@
             },
         },
         methods: {
-            init: function () {
+            init: async function () {
                 if (this.$route.params.id) {
-                    this.loadPost();
+                    await this.loadPost();
+                    this.description = this.post.description;
+                    this.tags = this.post.tags.map((tag) => mapperService.map(tag, "Api.V1.Tag", "App.Tag"));
+                    this.latitude = optional(() => this.post.photo.location.latitude);
+                    this.longitude = optional(() => this.post.photo.location.longitude);
                 }
             },
             loadPost: async function (id = this.$route.params.id) {
@@ -133,6 +137,7 @@
                 try {
                     const {data} = await apiService.getPost(id);
                     this.post = data;
+                    return data;
                 } catch (error) {
                     if (optional(() => error.response.status) === 404) {
                         this.goToNotFoundPage();
