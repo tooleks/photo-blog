@@ -59,6 +59,23 @@ export default function () {
         };
     });
 
+    mapperService.registerResolver("Api.V1.Post", "App.Component.PhotoModify", function ({response, component}) {
+        const post = optional(() => response.data);
+        component.post = optional(() => post);
+        component.description = optional(() => post.description);
+        component.tags = optional(() => post.tags, []).map((tag) => mapperService.map(tag, "Api.V1.Tag", "App.Tag"));
+        component.latitude = optional(() => post.photo.location.latitude);
+        component.longitude = optional(() => post.photo.location.longitude);
+        return component;
+    });
+
+    mapperService.registerResolver("Api.V1.Photo", "App.Component.PhotoModify", function ({response, component}) {
+        const photo = optional(() => response.data);
+        component.post = component.post || {};
+        component.post.photo = optional(() => photo);
+        return component;
+    });
+
     mapperService.registerResolver("Api.V1.Thumbnail", "App.Thumbnail", function (thumbnail) {
         if (typeof thumbnail === "undefined") {
             return undefined;
@@ -94,16 +111,6 @@ export default function () {
         return optional(() => tag.value);
     });
 
-    mapperService.registerResolver("App.Tag", "Api.V1.Tag", function (tag) {
-        if (typeof tag === "undefined") {
-            return undefined;
-        }
-
-        return {
-            value: tag,
-        };
-    });
-
     mapperService.registerResolver("Api.V1.Location", "App.Location", function (location) {
         if (typeof location === "undefined") {
             return undefined;
@@ -117,6 +124,16 @@ export default function () {
         });
     });
 
+    mapperService.registerResolver("App.Tag", "Api.V1.Tag", function (tag) {
+        if (typeof tag === "undefined") {
+            return undefined;
+        }
+
+        return {
+            value: tag,
+        };
+    });
+
     mapperService.registerResolver("App.Location", "Api.V1.Location", function (location) {
         if (typeof location === "undefined") {
             return undefined;
@@ -128,6 +145,34 @@ export default function () {
                 longitude: location.lng,
             };
         });
+    });
+
+    mapperService.registerResolver("App.Component.PhotoModify", "Api.V1.Post", function (component) {
+        return {
+            id: optional(() => component.postId),
+            photo: {id: optional(() => component.photoId)},
+            description: optional(() => component.description),
+            tags: optional(() => component.tags, []).map((tag) => mapperService.map(tag, "App.Tag", "Api.V1.Tag")),
+        };
+    });
+
+    mapperService.registerResolver("App.Component.PhotoModify", "Api.V1.Photo", function (component) {
+        return {
+            location: {
+                latitude: optional(() => component.latitude),
+                longitude: optional(() => component.longitude),
+            },
+        };
+    });
+
+    mapperService.registerResolver("App.PhotoService.Photos", "App.Component.PhotoGallery", function ({photos, component}) {
+        component.photos = optional(() => photos.items);
+        component.previousPage = optional(() => photos.previousPage);
+        component.currentPage = optional(() => photos.currentPage);
+        component.nextPage = optional(() => photos.nextPage);
+        component.previousPageExists = optional(() => photos.previousPageExists);
+        component.nextPageExists = optional(() => photos.nextPageExists);
+        return component;
     });
 
     return mapperService;

@@ -71,7 +71,6 @@
     import {apiService, mapperService, notificationService} from "../../services";
     import {optional} from "../../utils";
 
-    // TODO: Refactor the following component.
     export default {
         components: {
             LocationInput,
@@ -104,40 +103,25 @@
                 return mapperService.map(this.post, "Api.V1.Post", "App.Photo");
             },
             pageTitle: function () {
-                return optional(() => `Edit photo "${this.photo.description}"`) || "Add photo";
+                return optional(() => `Edit photo ${this.photo.description}`) || "Add photo";
             },
         },
         watch: {
             "$route": function () {
                 this.init();
             },
-            latitude: function (latitude) {
-                if (latitude && this.longitude) {
-                    this.savePhotoLocation();
-                }
-            },
-            longitude: function (longitude) {
-                if (this.latitude && longitude) {
-                    this.savePhotoLocation();
-                }
-            },
         },
         methods: {
-            init: async function () {
+            init: function () {
                 if (this.$route.params.id) {
-                    await this.loadPost();
-                    this.description = this.post.description;
-                    this.tags = this.post.tags.map((tag) => mapperService.map(tag, "Api.V1.Tag", "App.Tag"));
-                    this.latitude = optional(() => this.post.photo.location.latitude);
-                    this.longitude = optional(() => this.post.photo.location.longitude);
+                    this.loadPost();
                 }
             },
             loadPost: async function (id = this.$route.params.id) {
                 this.loading = true;
                 try {
-                    const {data} = await apiService.getPost(id);
-                    this.post = data;
-                    return data;
+                    const response = await apiService.getPost(id);
+                    mapperService.map({response, component: this}, "Api.V1.Post", "App.Component.PhotoModify");
                 } catch (error) {
                     if (optional(() => error.response.status) === 404) {
                         this.goToNotFoundPage();
@@ -161,36 +145,29 @@
                 }
             },
             savePost: async function () {
-                const create = async (post) => await apiService.createPost(post);
-                const update = async (post) => await apiService.updatePost(post.id, post);
-                const save = async (post) => optional(() => post.id) ? await update(post) : await create(post);
+                const createPost = async (post) => await apiService.createPost(post);
+                const updatePost = async (post) => await apiService.updatePost(post.id, post);
+                const savePost = async (post) => optional(() => post.id) ? await updatePost(post) : await createPost(post);
                 this.loading = true;
                 try {
-                    const {data} = await save({
-                        id: this.postId,
-                        photo: {id: this.photoId},
-                        description: this.description,
-                        tags: this.tags.map((tag) => mapperService.map(tag, "App.Tag", "Api.V1.Tag")),
-                    });
-                    this.post = data;
+                    if (this.latitude && this.longitude) {
+                        const photo = mapperService.map(this, "App.Component.PhotoModify", "Api.V1.Photo");
+                        const photoResponse = await apiService.updatePhotoLocation(this.photoId, photo);
+                        mapperService.map({response: photoResponse, component: this}, "Api.V1.Photo", "App.Component.PhotoModify");
+                    }
+                    const post = mapperService.map(this, "App.Component.PhotoModify", "Api.V1.Post");
+                    const postResponse = await savePost(post);
+                    mapperService.map({response: postResponse, component: this}, "Api.V1.Post", "App.Component.PhotoModify");
                     notificationService.success("The photo has been successfully saved.");
                 } finally {
                     this.loading = false;
                 }
             },
-            savePhotoLocation: async function () {
-                const {data} = await apiService.updatePhotoLocation(this.photoId, {
-                    location: {latitude: this.latitude, longitude: this.longitude},
-                });
-                this.post = this.post || {};
-                this.post.photo = data;
-            },
             uploadPhotoFile: async function (file) {
                 this.loading = true;
                 try {
-                    const {data} = await apiService.uploadPhotoFile(file);
-                    this.post = this.post || {};
-                    this.post.photo = data;
+                    const response = await apiService.uploadPhotoFile(file);
+                    mapperService.map({response, component: this}, "Api.V1.Photo", "App.Component.PhotoModify");
                     notificationService.success("The photo has been successfully uploaded. Don't forget to save changes before exit.");
                 } finally {
                     this.loading = false;

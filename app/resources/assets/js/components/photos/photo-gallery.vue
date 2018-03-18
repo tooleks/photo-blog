@@ -34,7 +34,7 @@
     import Loader from "../utils/loader";
     import Masonry from "../gallery/masonry";
     import {GotoMixin, MetaMixin} from "../../mixins";
-    import {photoService} from "../../services";
+    import {photoService, mapperService} from "../../services";
 
     export default {
         components: {
@@ -94,17 +94,12 @@
             loadPhotos: async function () {
                 this.loading = true;
                 try {
-                    const {items, previousPage, currentPage, nextPage, previousPageExists, nextPageExists} = await photoService.getPhotos({
+                    const photos = await photoService.getPhotos({
                         page: this.$route.params.page,
                         tag: this.$route.params.tag,
                         searchPhrase: this.$route.params.search_phrase,
                     });
-                    this.photos = items;
-                    this.previousPage = previousPage;
-                    this.currentPage = currentPage;
-                    this.nextPage = nextPage;
-                    this.previousPageExists = previousPageExists;
-                    this.nextPageExists = nextPageExists;
+                    mapperService.map({photos, component: this}, "App.PhotoService.Photos", "App.Component.PhotoGallery");
                 } finally {
                     this.loading = false;
                 }
