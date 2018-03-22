@@ -27,6 +27,6 @@ export default class AuthService {
     }
 
     onChange(callback) {
-        this.eventEmitter.subscribe(this.key, callback);
+        this.eventEmitter.on(this.key, callback);
     }
 }

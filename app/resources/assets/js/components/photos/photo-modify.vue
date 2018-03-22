@@ -63,13 +63,13 @@
 </style>
 
 <script>
+    import {optional} from "tooleks";
     import FileInput from "../utils/file-input";
     import TagInput from "../utils/tag-input";
     import LocationInput from "../map/location-input";
     import PhotoCard from "./photo-card";
     import {GotoMixin, MetaMixin} from "../../mixins";
     import {apiService, mapperService, notificationService} from "../../services";
-    import {optional} from "../../utils";
 
     export default {
         components: {

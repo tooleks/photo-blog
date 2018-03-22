@@ -1,4 +1,4 @@
-import {EventEmitter} from "../../utils";
+import {EventEmitter} from "tooleks";
 import AuthService from "./auth-service";
 import storage from "../storage";
 

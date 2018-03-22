@@ -1,6 +1,6 @@
+import {optional} from "tooleks";
 import notification from "../notification";
 import router from "../../router";
-import {optional} from "../../utils";
 
 export const HTTP_STATUS_UNAUTHORIZED = 401;
 export const HTTP_STATUS_NOT_FOUND = 404;

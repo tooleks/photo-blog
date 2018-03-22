@@ -1,4 +1,4 @@
-import {Defer} from "../../utils";
+import {Defer} from "tooleks";
 
 const defer = new Defer;
 

@@ -1,5 +1,5 @@
+import {optional} from "tooleks";
 import config from "../config";
-import {optional} from "../utils";
 
 export default {
     computed: {

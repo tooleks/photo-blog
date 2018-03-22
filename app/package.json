@@ -42,5 +42,8 @@
             "filename": "./docs/rest_api/header.md"
         },
         "url": "/api"
+    },
+    "dependencies": {
+        "tooleks": "0.0.1"
     }
 }
