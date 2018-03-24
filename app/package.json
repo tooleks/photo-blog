@@ -26,7 +26,7 @@
         "moment": "^2.20.1",
         "npm": "^5.7.1",
         "popper.js": "^1.14.1",
-        "tooleks": "0.0.2",
+        "tooleks": "^0.1.1",
         "vue": "^2.5.16",
         "vue-analytics": "^5.9.0",
         "vue-meta": "^1.5.0",

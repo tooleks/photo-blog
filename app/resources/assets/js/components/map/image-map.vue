@@ -57,7 +57,9 @@
                 this.initMarkerClusterGroup();
             },
             initMarkerClusterGroup: function () {
-                this.markerClusterGroup = L.markerClusterGroup();
+                this.markerClusterGroup = L.markerClusterGroup({
+                    spiderLegPolylineOptions: {opacity: 0},
+                });
                 this.map.addLayer(this.markerClusterGroup);
             },
             destroyMarkerClusterGroup: function () {
