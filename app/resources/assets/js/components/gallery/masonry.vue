@@ -2,7 +2,10 @@
     <div class="gallery-masonry">
         <div v-for="row in rows" class="gallery-row" :style="getRowStyle()">
             <div v-for="(image, index) of row" class="gallery-cell" :style="getCellStyle()">
-                <div class="gallery-image" :style="getImageStyle(image, index, row)">
+                <div class="gallery-image"
+                     :style="getImageStyle(image, index, row)"
+                     role="img"
+                     :aria-label="image.getModel().description">
                     <router-link :to="image.getModel().route"
                                  :title="image.getModel().description"
                                  :aria-label="image.getModel().description"
