@@ -2,8 +2,8 @@
     <transition name="fade">
         <div class="loader" v-if="visible">
             <div class="loader-inner">
-            <span class="loader-icon">
-                <i class="fa fa-compass fa-spin fa-2x" aria-hidden="true"></i>
+            <span class="loader-icon" aria-label="Loading...">
+                <div class="loader-animation" aria-hidden="true"></div>
             </span>
             </div>
         </div>
@@ -33,6 +33,47 @@
         color: #dde3e6;
         padding: 0.76rem 1.5rem;
         border-radius: 0.25rem;
+    }
+
+    .loader-animation,
+    .loader-animation:after {
+        border-radius: 50%;
+        width: 10em;
+        height: 10em;
+    }
+    .loader-animation {
+        font-size: 4px;
+        position: relative;
+        text-indent: -9999em;
+        border-top: 1.1em solid rgba(255, 255, 255, 0.2);
+        border-right: 1.1em solid rgba(255, 255, 255, 0.2);
+        border-bottom: 1.1em solid rgba(255, 255, 255, 0.2);
+        border-left: 1.1em solid #ffffff;
+        -webkit-transform: translateZ(0);
+        -ms-transform: translateZ(0);
+        transform: translateZ(0);
+        -webkit-animation: load8 1.1s infinite linear;
+        animation: load8 1.1s infinite linear;
+    }
+    @-webkit-keyframes load8 {
+        0% {
+            -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+        }
+        100% {
+            -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+        }
+    }
+    @keyframes load8 {
+        0% {
+            -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+        }
+        100% {
+            -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+        }
     }
 </style>
 
