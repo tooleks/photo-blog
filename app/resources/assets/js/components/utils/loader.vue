@@ -3,7 +3,7 @@
         <div class="loader" v-if="visible">
             <div class="loader-inner">
             <span class="loader-icon">
-                Loading...
+                <i class="fa fa-compass fa-spin fa-2x" aria-hidden="true"></i>
             </span>
             </div>
         </div>
