@@ -13,11 +13,9 @@
         props: {
             lat: {
                 type: Number,
-                default: 49.85,
             },
             lng: {
                 type: Number,
-                default: 24.0166666667,
             },
             zoom: {
                 type: Number,

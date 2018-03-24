@@ -38,9 +38,9 @@ export default class Image {
         return image;
     }
 
-    scale(rate) {
-        const width = this.getWidth() * 100 / rate;
-        const height = this.getHeight() * 100 / rate;
+    scale(ratio) {
+        const width = this.getWidth() * 100 / ratio;
+        const height = this.getHeight() * 100 / ratio;
         const image = this.clone();
         image.setWidth(width);
         image.setHeight(height);
@@ -48,12 +48,12 @@ export default class Image {
     }
 
     scaleToHeight(height) {
-        const rate = this.getHeight() * 100 / height;
-        return this.scale(rate);
+        const ratio = this.getHeight() * 100 / height;
+        return this.scale(ratio);
     }
 
     scaleToWidth(width) {
-        const rate = this.getWidth() * 100 / width;
-        return this.scale(rate);
+        const ratio = this.getWidth() * 100 / width;
+        return this.scale(ratio);
     }
 }

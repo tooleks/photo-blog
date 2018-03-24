@@ -70,8 +70,8 @@ export class Masonry {
         let row = [];
 
         if (this.getCurrentRowTotalWidth() > this.getOptions().rowMaxWidth) {
-            const rate = this.getCurrentRowTotalWidth() * 100 / this.getOptions().rowMaxWidth;
-            row = this.getCurrentRow().map((image) => image.scale(rate));
+            const ratio = this.getCurrentRowTotalWidth() * 100 / this.getOptions().rowMaxWidth;
+            row = this.getCurrentRow().map((image) => image.scale(ratio));
         }
 
         if (force && !row.length) {
