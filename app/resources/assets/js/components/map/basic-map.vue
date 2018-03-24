@@ -37,7 +37,7 @@
             },
             tileLayerUrl: {
                 type: String,
-                default: "https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png",
+                default: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
             },
             tileLayerOptions: {
                 type: Object,
