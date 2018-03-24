@@ -24,7 +24,7 @@
         "leaflet.markercluster": "^1.3.0",
         "lodash": "^4.17.5",
         "moment": "^2.20.1",
-        "npm": "^5.7.1",
+        "npm": "^5.8.0",
         "popper.js": "^1.14.1",
         "tooleks": "^0.1.1",
         "vue": "^2.5.16",

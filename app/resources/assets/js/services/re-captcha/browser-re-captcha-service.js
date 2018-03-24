@@ -7,7 +7,7 @@ export default class BrowserReCaptchaService {
         this.element = element;
         this.siteKey = siteKey;
         this.onVerified = onVerified;
-        window[onLoadFunctionName] = () => defer.resolve(this._getReCaptcha());
+        window[onLoadFunctionName] = () => defer.resolve();
     }
 
     _isEnabled() {
@@ -23,18 +23,18 @@ export default class BrowserReCaptchaService {
     }
 
     execute() {
-        // Do not do anything if reCAPTCHA service is not enabled.
         if (!this._isEnabled()) {
             return;
         }
+
         defer.promisify().then(() => this._getReCaptcha().execute(this.widgetId));
     }
 
     render() {
-        // Emit `onVerified` event explicitly if reCAPTCHA service is not enabled.
         if (!this._isEnabled()) {
             this._emitOnVerified();
         }
+
         defer.promisify().then(() => {
             this.widgetId = this._getReCaptcha().render(this.element, {
                 sitekey: this.siteKey,
@@ -48,17 +48,16 @@ export default class BrowserReCaptchaService {
     }
 
     reset() {
-        // Do not do anything if reCAPTCHA service is not enabled.
         if (!this._isEnabled()) {
             return;
         }
+
         defer.promisify().then(() => this._getReCaptcha().reset(this.widgetId));
     }
 
     load() {
-        // Resolve defer explicitly if reCAPTCHA service is loaded.
         if (typeof this._getReCaptcha() !== "undefined") {
-            defer.resolve(this._getReCaptcha());
+            defer.resolve();
         }
     }
 }
