@@ -41,6 +41,7 @@
         width: 10em;
         height: 10em;
     }
+
     .loader-animation {
         font-size: 4px;
         position: relative;
@@ -55,6 +56,7 @@
         -webkit-animation: load8 1.1s infinite linear;
         animation: load8 1.1s infinite linear;
     }
+
     @-webkit-keyframes load8 {
         0% {
             -webkit-transform: rotate(0deg);
@@ -65,6 +67,7 @@
             transform: rotate(360deg);
         }
     }
+
     @keyframes load8 {
         0% {
             -webkit-transform: rotate(0deg);
