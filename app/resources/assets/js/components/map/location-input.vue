@@ -54,6 +54,11 @@
                     this.map.on("click", (event) => this.setMarker(event.latlng.lat, event.latlng.lng));
                 }
 
+                // Enable scroll wheel zooming only when map is in focus.
+                this.map.scrollWheelZoom.disable();
+                this.map.on("blur", (event) => event.target.scrollWheelZoom.disable());
+                this.map.on("focus", (event) => event.target.scrollWheelZoom.enable());
+
                 // Set marker if latitude and longitude are initialized.
                 if (typeof this.lat !== "undefined" && typeof this.lng !== "undefined") {
                     this.setMarker(this.lat, this.lng);
