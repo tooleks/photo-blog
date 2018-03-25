@@ -32,6 +32,11 @@
     <link href="{{ mix('/css/app.css') }}" rel="stylesheet" type="text/css">
 </head>
 <body>
+<noscript>
+    <div style="padding: 5em; text-align: center;">
+        To use {{ config('app.name') }}, please enable JavaScript.
+    </div>
+</noscript>
 @yield('content')
 <script type="application/javascript" src="{{ mix('/js/app.js') }}"></script>
 <?php if (env('GOOGLE_RECAPTCHA_SECRET_KEY')): ?>
