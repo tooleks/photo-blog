@@ -77,9 +77,6 @@
             zoom: function () {
                 this.map.setView([this.lat, this.lng], this.zoom);
             },
-            scrollWheelZoom: function () {
-                this.scrollWheelZoom ? this.enableScrollWheelZoom() : this.disableScrollWheelZoom();
-            },
         },
         methods: {
             init: function () {
