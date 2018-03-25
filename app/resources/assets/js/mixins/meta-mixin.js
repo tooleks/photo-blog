@@ -18,6 +18,13 @@ export default {
         pageImage: function () {
             return optional(() => config.url.image, "");
         },
+        pageCanonicalUrl: function () {
+            let url = config.url.app;
+            if (this.$route.fullPath) {
+                url += this.$route.path;
+            }
+            return url;
+        },
     },
     metaInfo: function () {
         return {
@@ -37,6 +44,9 @@ export default {
                 {vmid: "twitter:card", name: "twitter:card", content: "summary_large_image"},
                 {vmid: "twitter:title", name: "twitter:title", content: this.pageTitle},
                 {vmid: "twitter:image", name: "twitter:image", content: this.pageImage},
+            ],
+            link: [
+                {vmid: "canonical", rel: "canonical", href: this.pageCanonicalUrl},
             ],
         };
     },

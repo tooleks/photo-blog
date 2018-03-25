@@ -14,26 +14,34 @@ const routes = [
         path: "/sign-out",
         name: "sign-out",
         component: require("../components/auth/sign-out"),
-        meta: {requiresAuth: true},
+        meta: {
+            requiresAuth: true,
+        },
     },
     // Photos
     {
         path: "/photo/add",
         name: "photo/add",
         component: require("../components/photos/photo-modify"),
-        meta: {requiresAuth: true},
+        meta: {
+            requiresAuth: true,
+        },
     },
     {
         path: "/photo/:id/edit",
         name: "photo/edit",
         component: require("../components/photos/photo-modify"),
-        meta: {requiresAuth: true},
+        meta: {
+            requiresAuth: true,
+        },
     },
     {
         path: "/photo/:id",
         name: "photo",
         component: require("../components/photos/photo-gallery-viewer"),
-        meta: {transition: false},
+        meta: {
+            transition: false,
+        },
     },
     {
         path: "/photos/map",
