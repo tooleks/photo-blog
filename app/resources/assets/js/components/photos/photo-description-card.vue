@@ -4,9 +4,6 @@
             <button @click="emitBackEvent" class="btn btn-light btn-sm">
                 <i class="fa fa-arrow-left" aria-hidden="true"></i> Back to gallery
             </button>
-            <a :href="photo" class="btn btn-light btn-sm" target="_blank">
-                <i class="fa fa-expand" aria-hidden="true"></i> Open in full screen
-            </a>
             <router-link v-if="authenticated && photo.id" :to="{name: 'photo/edit', params: {id: photo.id}}"
                          class="btn btn-light btn-sm">
                 <i class="fa fa-pencil" aria-hidden="true"></i> Edit photo

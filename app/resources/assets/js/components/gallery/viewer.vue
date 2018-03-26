@@ -5,6 +5,7 @@
          data-keyboard="true"
          data-ride="false"
          data-wrap="false"
+         :class="{'full-screen': inFullScreenMode}"
          v-swipe-left="slideToNextImage"
          v-swipe-right="slideToPreviousImage">
         <div class="carousel-inner text-center">
@@ -35,39 +36,86 @@
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="sr-only">Next</span>
         </button>
+        <div class="carousel-actions">
+            <button @click="toggleFullScreenMode"
+                    class="carousel-action"
+                    type="button"
+                    aria-label="Toggle full screen mode"
+                    title="Toggle full screen mode"><i class="fa fa-expand" aria-hidden="true"></i></button>
+        </div>
     </div>
 </template>
 
-<style scoped>
-    @media screen and (orientation: portrait) {
-        .carousel-item {
-            height: 40vh;
+<style lang="scss" scoped>
+    .carousel {
+        &.full-screen {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 100000;
         }
-    }
 
-    @media screen and (orientation: landscape) {
-        .carousel-item {
-            height: 70vh;
+        &:not(.full-screen) {
+            @media screen and (orientation: portrait) {
+                .carousel-item {
+                    height: 40vh;
+                }
+            }
+
+            @media screen and (orientation: landscape) {
+                .carousel-item {
+                    height: 70vh;
+                }
+            }
         }
-    }
 
-    .carousel-image {
-        width: auto;
-        height: auto;
-        max-width: 100%;
-        max-height: 100%;
-        position: absolute;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        margin: auto;
-    }
+        &.full-screen {
+            .carousel-item {
+                height: 100vh;
+            }
+        }
 
-    .carousel-control {
-        background: transparent;
-        border: 0;
-        cursor: pointer;
+        .carousel-image {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            margin: auto;
+        }
+
+        .carousel-control {
+            background: transparent;
+            border: 0;
+            cursor: pointer;
+        }
+
+        .carousel-actions {
+            position: absolute;
+            top: 0;
+            right: 0;
+
+            .carousel-action {
+                background: transparent;
+                border: 0;
+                padding: 0.6em 1em;
+                font-size: 1.5em;
+                cursor: pointer;
+                color: #999c9f;
+
+                &:hover, &:focus {
+                    color: #eaebeb;
+                }
+            }
+        }
     }
 </style>
 
@@ -97,6 +145,11 @@
                     return [];
                 },
             },
+        },
+        data: function () {
+            return {
+                inFullScreenMode: false,
+            };
         },
         computed: {
             carouselSelector: function () {
@@ -133,7 +186,11 @@
             handleKeyUpEvent: function (event) {
                 switch (event.keyCode) {
                     case KEY_CODE_ESC: {
-                        this.emitExitEvent();
+                        if (this.inFullScreenMode) {
+                            this.toggleFullScreenMode();
+                        } else {
+                            this.emitExitEvent();
+                        }
                         break;
                     }
                     case KEY_CODE_LEFT: {
@@ -177,6 +234,9 @@
             isLastImage: function (activeImage) {
                 const index = this.images.findIndex((image) => image.is(activeImage));
                 return index === this.images.length - 1;
+            },
+            toggleFullScreenMode: function () {
+                this.inFullScreenMode = !this.inFullScreenMode;
             },
         },
         mounted: function () {
