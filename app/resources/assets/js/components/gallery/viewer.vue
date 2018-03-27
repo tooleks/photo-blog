@@ -22,8 +22,8 @@
                 @click="slideToPreviousImage"
                 class="carousel-control carousel-control-prev"
                 role="button"
-                title="Previous Image"
-                aria-label="Previous Image">
+                title="Previous"
+                aria-label="Previous">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="sr-only">Previous</span>
         </button>
@@ -31,8 +31,8 @@
                 @click="slideToNextImage"
                 class="carousel-control carousel-control-next"
                 role="button"
-                title="Next Image"
-                aria-label="Next Image">
+                title="Next"
+                aria-label="Next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="sr-only">Next</span>
         </button>
@@ -41,7 +41,9 @@
                     class="carousel-action"
                     type="button"
                     aria-label="Toggle full screen mode"
-                    title="Toggle full screen mode"><i class="fa fa-expand" aria-hidden="true"></i></button>
+                    title="Toggle full screen mode"><i class="fa"
+                                                       :class="{'fa-expand': !inFullScreenMode, 'fa-close': inFullScreenMode}"
+                                                       aria-hidden="true"></i></button>
         </div>
     </div>
 </template>
@@ -93,9 +95,20 @@
         }
 
         .carousel-control {
-            background: transparent;
+            width: auto;
             border: 0;
+            background: transparent;
             cursor: pointer;
+        }
+
+        .carousel-control-prev {
+            padding-right: 2.8em;
+            padding-left: 1.4em;
+        }
+
+        .carousel-control-next {
+            padding-right: 1.4em;
+            padding-left: 2.8em;
         }
 
         .carousel-actions {
