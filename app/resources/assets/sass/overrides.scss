@@ -1,4 +1,10 @@
+$default-font-family: 'Hind Vadodara', sans-serif !default;
+
 // Basic.
+
+body {
+  font-family: $default-font-family !important;
+}
 
 html {
   height: 100%;
@@ -64,6 +70,10 @@ body {
 }
 
 // Leaflet
+
+.leaflet-container {
+  font-family: $default-font-family !important;
+}
 
 .leaflet-popup-content-wrapper {
   border-radius: 2px !important;
