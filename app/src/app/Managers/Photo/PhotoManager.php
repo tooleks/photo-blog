@@ -152,6 +152,8 @@ class PhotoManager implements PhotoManagerContract
             $this->saveThumbnails($photo, $attributes['thumbnails']);
         });
 
+        $photo->load('location', 'exif', 'thumbnails');
+
         return $photo;
     }
 
@@ -167,6 +169,8 @@ class PhotoManager implements PhotoManagerContract
             $photo->fill(array_merge($attributes, ['location_id' => $location->id]));
             $photo->save();
         });
+
+        $photo->load('location', 'exif', 'thumbnails');
     }
 
     /**
