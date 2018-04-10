@@ -96,9 +96,9 @@ return [
     */
 
     'allowed_user_agents' => [
-        // 'googlebot',
-        // 'yahoo',
-        // 'bingbot',
+        'googlebot',
+        'yahoo',
+        'bingbot',
         'baiduspider',
         'facebookexternalhit',
         'twitterbot',
