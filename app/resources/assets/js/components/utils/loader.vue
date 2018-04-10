@@ -31,8 +31,8 @@
     .loader-icon {
         background: rgba(0, 0, 0, 0.4);
         color: #dde3e6;
-        padding: 0.76rem 1.5rem;
-        border-radius: 0.25rem;
+        padding: 1em;
+        border-radius: 50%;
     }
 
     .loader-animation,
