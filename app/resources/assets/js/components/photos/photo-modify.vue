@@ -1,5 +1,6 @@
 <template>
     <div class="container py-3">
+        <loader :loading="loading"></loader>
         <div class="row">
             <div class="col-lg">
                 <div class="card">
@@ -65,6 +66,7 @@
 <script>
     import {optional} from "tooleks";
     import FileInput from "../utils/file-input";
+    import Loader from "../utils/loader";
     import TagInput from "../utils/tag-input";
     import LocationInput from "../map/location-input";
     import PhotoCard from "./photo-card";
@@ -73,9 +75,10 @@
 
     export default {
         components: {
-            LocationInput,
             FileInput,
+            Loader,
             TagInput,
+            LocationInput,
             PhotoCard,
         },
         mixins: [
@@ -103,7 +106,8 @@
                 return mapperService.map(this.post, "Api.V1.Post", "App.Photo");
             },
             pageTitle: function () {
-                return optional(() => `Edit photo ${this.photo.description}`) || "Add photo";
+                const description = optional(() => this.photo.description);
+                return description ? `Edit photo ${description}` : "Add photo";
             },
         },
         watch: {
