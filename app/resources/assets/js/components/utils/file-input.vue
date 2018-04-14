@@ -4,7 +4,8 @@
         <slot>
             Upload file
         </slot>
-        <input hidden
+        <input v-if="fileInputReady"
+               hidden
                type="file"
                v-bind="attributes"
                @change="onFileChange($event.target.files.item(0))">
@@ -37,9 +38,21 @@
                 },
             },
         },
+        data: function () {
+            return {
+                fileInputReady: true,
+            };
+        },
         methods: {
             onFileChange: function (file) {
                 this.$emit("change", file);
+                this.clearFileInput();
+            },
+            clearFileInput: function () {
+                this.fileInputReady = false;
+                this.$nextTick(() => {
+                    this.fileInputReady = true;
+                });
             },
         },
     }
