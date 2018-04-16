@@ -3,10 +3,22 @@ export default class AuthService {
         this.eventEmitter = eventEmitter;
         this.storageService = storageService;
         this.key = key;
+        this._initialize();
+    }
+
+    _initialize() {
+        const user = this.getUser();
+        if (this._isExpiredAuth(user)) {
+            this.setUser(null);
+        }
     }
 
     _isValidUser(user) {
-        return user !== null && typeof user !== "undefined";
+        return typeof user === "object" && user !== null;
+    }
+
+    _isExpiredAuth(user) {
+        return !this._isValidUser(user) || (new Date).valueOf() > user.expires_at;
     }
 
     setUser(user) {

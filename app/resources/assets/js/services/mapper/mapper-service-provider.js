@@ -13,6 +13,7 @@ export default function () {
         return {
             id: optional(() => user.id),
             name: optional(() => user.name),
+            expires_at: (new Date).setSeconds(optional(() => user.expires_in, 0)).valueOf()
         };
     });
 

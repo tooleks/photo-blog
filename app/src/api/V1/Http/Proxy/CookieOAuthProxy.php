@@ -78,9 +78,7 @@ class CookieOAuthProxy implements OAuthProxyContract
 
         $response = $this->app->handle($proxy);
 
-        return $response->isSuccessful()
-            ? $this->proxyOnSuccessResponse($response)
-            : $this->proxyOnErrorResponse($response);
+        return $this->handleResponse($response);
     }
 
     /**
@@ -98,6 +96,16 @@ class CookieOAuthProxy implements OAuthProxyContract
 
         $response = $this->app->handle($proxy);
 
+        return $this->handleResponse($response);
+    }
+
+    /**
+     * Handle proxy response.
+     *
+     * @param Response $response
+     * @return Response
+     */
+    private function handleResponse($response) {
         return $response->isSuccessful()
             ? $this->proxyOnSuccessResponse($response)
             : $this->proxyOnErrorResponse($response);
@@ -124,7 +132,7 @@ class CookieOAuthProxy implements OAuthProxyContract
                     null,
                     null,
                     $this->request->isSecure(),
-                    true
+                    $name !== 'expires_in'
                 )
             );
         }
