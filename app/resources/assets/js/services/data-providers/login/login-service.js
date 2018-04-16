@@ -15,7 +15,7 @@ export default class LoginService {
     async signIn(credentials) {
         await this.apiService.createToken(credentials);
         const {data} = await this.apiService.getUser("me");
-        const expiresIn = this.cookiesService.get('expires_in');
+        const expiresIn = this.cookiesService.get("expires_in");
         const user = this.mapperService.map({...data, expires_in: expiresIn}, "Api.V1.User", "App.User");
         this.authService.setUser(user);
         return this.authService.getUser();
