@@ -6,13 +6,14 @@
          data-ride="false"
          data-wrap="false"
          :class="{'full-screen': inFullScreenMode}"
-         v-swipe-left="slideToNextImage"
-         v-swipe-right="slideToPreviousImage">
+         v-on-swipe-left="slideToNextImage"
+         v-on-swipe-right="slideToPreviousImage">
         <div class="carousel-inner text-center">
             <div v-for="image in images" :key="image.id" class="carousel-item">
                 <img class="carousel-image"
-                     v-swipe-left="slideToNextImage"
-                     v-swipe-right="slideToPreviousImage"
+                     v-on-swipe-left="slideToNextImage"
+                     v-on-swipe-right="slideToPreviousImage"
+                     v-on-key-up="onKeyUp"
                      :src="image"
                      :alt="image.description"
                      :title="image.description">
@@ -179,7 +180,6 @@
         },
         methods: {
             init: function () {
-                this.registerEventListeners();
                 this.emitActiveImageEvents(this.activeImage);
                 $(this.carouselItemSelector).first().addClass("active");
                 $(this.carouselSelector).on("slide.bs.carousel", (event) => {
@@ -187,16 +187,7 @@
                     this.emitActiveImageEvents(activeImage);
                 });
             },
-            reset: function () {
-                this.resetEventListeners();
-            },
-            registerEventListeners: function () {
-                window.addEventListener("keyup", this.handleKeyUpEvent);
-            },
-            resetEventListeners: function () {
-                window.removeEventListener("keyup", this.handleKeyUpEvent);
-            },
-            handleKeyUpEvent: function (event) {
+            onKeyUp: function (event) {
                 switch (event.keyCode) {
                     case KEY_CODE_ESC: {
                         if (this.inFullScreenMode) {
@@ -254,9 +245,6 @@
         },
         mounted: function () {
             this.init();
-        },
-        beforeDestroy: function () {
-            this.reset();
         },
     }
 </script>

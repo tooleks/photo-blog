@@ -1,18 +1,22 @@
 import Vue from "vue";
 import Hammer from "hammerjs";
 
-Vue.directive("swipe-left", {
+Vue.directive("on-swipe-left", {
     inserted: function (el, bindings) {
         const handler = bindings.value;
-        const hammer = new Hammer(el);
-        hammer.on("swipeleft", () => handler.call(handler));
+        Hammer(el).on("swipeleft", () => handler.call(handler));
+    },
+    unbind: function (el) {
+        Hammer(el).off("swipeleft");
     },
 });
 
-Vue.directive("swipe-right", {
+Vue.directive("on-swipe-right", {
     inserted: function (el, bindings) {
         const handler = bindings.value;
-        const hammer = new Hammer(el);
-        hammer.on("swiperight", () => handler.call(handler));
+        Hammer(el).on("swiperight", () => handler.call(handler));
+    },
+    unbind: function (el) {
+        Hammer(el).off("swiperight");
     },
 });

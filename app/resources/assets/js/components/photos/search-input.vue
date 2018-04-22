@@ -3,6 +3,7 @@
         <div class="input-group">
             <input @input="debounceSearch"
                    v-model.trim="input"
+                   v-focus
                    class="form-control border-0"
                    type="search"
                    aria-label="Search"
