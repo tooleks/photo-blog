@@ -93,11 +93,10 @@
             loadPhotos: async function () {
                 this.loading = true;
                 try {
-                    const photos = await this.$dc.get("photo").getPhotos({
-                        page: this.$route.params.page,
-                        tag: this.$route.params.tag,
-                        searchPhrase: this.$route.params.search_phrase,
-                    });
+                    const page = this.$route.params.page;
+                    const tag = this.$route.params.tag;
+                    const searchPhrase = this.$route.params.search_phrase;
+                    const photos = await this.$dc.get("photo").getPhotos({page, tag, searchPhrase});
                     this.$dc.get("mapper").map({photos, component: this}, "App.PhotoService.Photos", "App.Component.PhotoGallery");
                 } finally {
                     this.loading = false;

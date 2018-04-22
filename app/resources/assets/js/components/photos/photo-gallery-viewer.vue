@@ -69,10 +69,9 @@
             loadPhoto: async function () {
                 this.loading = true;
                 try {
-                    const photo = await this.$dc.get("photo").getPhoto(this.$route.params.id, {
-                        tag: this.$route.query.tag,
-                        searchPhrase: this.$route.query.search_phrase,
-                    });
+                    const tag = this.$route.query.tag;
+                    const searchPhrase = this.$route.query.search_phrase;
+                    const photo = await this.$dc.get("photo").getPhoto(this.$route.params.id, {tag, searchPhrase});
                     this.photos = [photo];
                     this.activePhoto = photo;
                 } catch (error) {
@@ -88,10 +87,9 @@
             loadOlderPhoto: async function () {
                 this.loading = true;
                 try {
-                    const photo = await this.$dc.get("photo").getOlderPhoto(this.activePhoto.id, {
-                        tag: this.$route.query.tag,
-                        searchPhrase: this.$route.query.search_phrase,
-                    });
+                    const tag = this.$route.query.tag;
+                    const searchPhrase = this.$route.query.search_phrase;
+                    const photo = await this.$dc.get("photo").getOlderPhoto(this.activePhoto.id, {tag, searchPhrase});
                     this.photos = [...this.photos, photo];
                 } finally {
                     this.loading = false;
@@ -100,10 +98,9 @@
             loadNewerPhoto: async function () {
                 this.loading = true;
                 try {
-                    const photo = await this.$dc.get("photo").getNewerPhoto(this.activePhoto.id, {
-                        tag: this.$route.query.tag,
-                        searchPhrase: this.$route.query.search_phrase,
-                    });
+                    const tag = this.$route.query.tag;
+                    const searchPhrase = this.$route.query.search_phrase;
+                    const photo = await this.$dc.get("photo").getNewerPhoto(this.activePhoto.id, {tag, searchPhrase});
                     this.photos = [photo, ...this.photos];
                 } finally {
                     this.loading = false;
