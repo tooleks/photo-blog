@@ -86,7 +86,7 @@
             },
             showMarkerPopup: function () {
                 if (typeof this.marker !== "undefined") {
-                    this.marker.bindPopup(`${this.marker.getLatLng().lat.toFixed(2)}, ${this.marker.getLatLng().lng.toFixed(2)}`).openPopup();
+                    this.marker.bindPopup(`${this.marker.getLatLng().lat}, ${this.marker.getLatLng().lng}`).openPopup();
                 }
             },
         },
