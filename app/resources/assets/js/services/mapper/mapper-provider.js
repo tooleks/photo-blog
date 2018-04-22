@@ -1,11 +1,10 @@
 import {Mapper, optional} from "tooleks";
-import dateService from "../date";
 import router from "../../router";
 
-export default function () {
-    const mapper = new Mapper;
+export default function (dateService) {
+    const mapperService = new Mapper;
 
-    mapper.registerResolver("Api.V1.User", "App.User", function (user) {
+    mapperService.registerResolver("Api.V1.User", "App.User", function (user) {
         if (typeof user === "undefined") {
             return undefined;
         }
@@ -17,7 +16,7 @@ export default function () {
         };
     });
 
-    mapper.registerResolver("Api.V1.Post", "App.Photo", function (post) {
+    mapperService.registerResolver("Api.V1.Post", "App.Photo", function (post) {
         if (typeof post === "undefined") {
             return undefined;
         }
@@ -35,18 +34,18 @@ export default function () {
                 },
             },
             description: optional(() => post.description),
-            exif: mapper.map(optional(() => post.photo.exif), "Api.V1.Exif", "App.Exif"),
+            exif: mapperService.map(optional(() => post.photo.exif), "Api.V1.Exif", "App.Exif"),
             averageColor: optional(() => post.photo.avg_color),
-            thumbnail: mapper.map(optional(() => post.photo.thumbnails.medium), "Api.V1.Thumbnail", "App.Thumbnail"),
-            original: mapper.map(optional(() => post.photo.thumbnails.large), "Api.V1.Thumbnail", "App.Thumbnail"),
+            thumbnail: mapperService.map(optional(() => post.photo.thumbnails.medium), "Api.V1.Thumbnail", "App.Thumbnail"),
+            original: mapperService.map(optional(() => post.photo.thumbnails.large), "Api.V1.Thumbnail", "App.Thumbnail"),
             tags: optional(() => post.tags.map((tag) => optional(() => tag.value)), []),
-            location: mapper.map(optional(() => post.photo.location), "Api.V1.Location", "App.Location"),
+            location: mapperService.map(optional(() => post.photo.location), "Api.V1.Location", "App.Location"),
             toString: () => optional(() => post.photo.thumbnails.large.url),
             is: (image) => optional(() => image.id) === optional(() => post.id),
         };
     });
 
-    mapper.registerResolver("Api.V1.Post", "App.Map.Image", function (post) {
+    mapperService.registerResolver("Api.V1.Post", "App.Map.Image", function (post) {
         if (typeof post === "undefined") {
             return undefined;
         }
@@ -55,28 +54,28 @@ export default function () {
             imageUrl: optional(() => post.photo.thumbnails.large.url),
             linkUrl: optional(() => `/photo/${post.id}`),
             title: optional(() => post.description),
-            location: mapper.map(optional(() => post.photo.location), "Api.V1.Location", "App.Location"),
+            location: mapperService.map(optional(() => post.photo.location), "Api.V1.Location", "App.Location"),
         };
     });
 
-    mapper.registerResolver("Api.V1.Post", "App.Component.PhotoModify", function ({response, component}) {
+    mapperService.registerResolver("Api.V1.Post", "App.Component.PhotoModify", function ({response, component}) {
         const post = optional(() => response.data);
         component.post = optional(() => post);
         component.description = optional(() => post.description);
-        component.tags = optional(() => post.tags, []).map((tag) => mapper.map(tag, "Api.V1.Tag", "App.Tag"));
+        component.tags = optional(() => post.tags, []).map((tag) => mapperService.map(tag, "Api.V1.Tag", "App.Tag"));
         component.latitude = optional(() => post.photo.location.latitude);
         component.longitude = optional(() => post.photo.location.longitude);
         return component;
     });
 
-    mapper.registerResolver("Api.V1.Photo", "App.Component.PhotoModify", function ({response, component}) {
+    mapperService.registerResolver("Api.V1.Photo", "App.Component.PhotoModify", function ({response, component}) {
         const photo = optional(() => response.data);
         component.post = component.post || {};
         component.post.photo = optional(() => photo);
         return component;
     });
 
-    mapper.registerResolver("Api.V1.Thumbnail", "App.Thumbnail", function (thumbnail) {
+    mapperService.registerResolver("Api.V1.Thumbnail", "App.Thumbnail", function (thumbnail) {
         if (typeof thumbnail === "undefined") {
             return undefined;
         }
@@ -88,7 +87,7 @@ export default function () {
         };
     });
 
-    mapper.registerResolver("Api.V1.Exif", "App.Exif", function (exif) {
+    mapperService.registerResolver("Api.V1.Exif", "App.Exif", function (exif) {
         if (typeof exif === "undefined") {
             return undefined;
         }
@@ -103,7 +102,7 @@ export default function () {
         };
     });
 
-    mapper.registerResolver("Api.V1.Tag", "App.Tag", function (tag) {
+    mapperService.registerResolver("Api.V1.Tag", "App.Tag", function (tag) {
         if (typeof tag === "undefined") {
             return undefined;
         }
@@ -111,7 +110,7 @@ export default function () {
         return optional(() => tag.value);
     });
 
-    mapper.registerResolver("Api.V1.Location", "App.Location", function (location) {
+    mapperService.registerResolver("Api.V1.Location", "App.Location", function (location) {
         if (typeof location === "undefined") {
             return undefined;
         }
@@ -124,7 +123,7 @@ export default function () {
         });
     });
 
-    mapper.registerResolver("App.Tag", "Api.V1.Tag", function (tag) {
+    mapperService.registerResolver("App.Tag", "Api.V1.Tag", function (tag) {
         if (typeof tag === "undefined") {
             return undefined;
         }
@@ -134,7 +133,7 @@ export default function () {
         };
     });
 
-    mapper.registerResolver("App.Location", "Api.V1.Location", function (location) {
+    mapperService.registerResolver("App.Location", "Api.V1.Location", function (location) {
         if (typeof location === "undefined") {
             return undefined;
         }
@@ -147,16 +146,16 @@ export default function () {
         });
     });
 
-    mapper.registerResolver("App.Component.PhotoModify", "Api.V1.Post", function (component) {
+    mapperService.registerResolver("App.Component.PhotoModify", "Api.V1.Post", function (component) {
         return {
             id: optional(() => component.postId),
             photo: {id: optional(() => component.photoId)},
             description: optional(() => component.description),
-            tags: optional(() => component.tags, []).map((tag) => mapper.map(tag, "App.Tag", "Api.V1.Tag")),
+            tags: optional(() => component.tags, []).map((tag) => mapperService.map(tag, "App.Tag", "Api.V1.Tag")),
         };
     });
 
-    mapper.registerResolver("App.Component.PhotoModify", "Api.V1.Photo", function (component) {
+    mapperService.registerResolver("App.Component.PhotoModify", "Api.V1.Photo", function (component) {
         return {
             location: {
                 latitude: optional(() => component.latitude),
@@ -165,7 +164,7 @@ export default function () {
         };
     });
 
-    mapper.registerResolver("App.PhotoService.Photos", "App.Component.PhotoGallery", function ({photos, component}) {
+    mapperService.registerResolver("App.PhotoService.Photos", "App.Component.PhotoGallery", function ({photos, component}) {
         component.photos = optional(() => photos.items);
         component.previousPage = optional(() => photos.previousPage);
         component.currentPage = optional(() => photos.currentPage);
@@ -175,5 +174,5 @@ export default function () {
         return component;
     });
 
-    return mapper;
-}
+    return mapperService;
+};

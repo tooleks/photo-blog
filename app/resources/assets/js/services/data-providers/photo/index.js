@@ -1,5 +1,3 @@
-import providePhotoService from "./photo-service-provider";
+import PhotoService from "./photo-service";
 
-const photoService = providePhotoService();
-
-export default photoService;
+export {PhotoService};

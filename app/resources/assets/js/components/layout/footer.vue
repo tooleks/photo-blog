@@ -23,15 +23,13 @@
 </style>
 
 <script>
-    import config from "../../config";
-
     export default {
         computed: {
             currentYear: function () {
                 return (new Date).getFullYear();
             },
             appName: function () {
-                return config.app.name;
+                return this.$dc.get("config").app.name;
             },
         },
     }

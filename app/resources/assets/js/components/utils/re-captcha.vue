@@ -3,9 +3,6 @@
 </template>
 
 <script>
-    import config from "../../config";
-    import {provideReCaptchaService} from "../../services";
-
     export default {
         props: {
             id: {
@@ -17,12 +14,12 @@
             },
             siteKey: {
                 type: String,
-                default: config.credentials.googleReCaptcha.siteKey,
+                default: '',
             },
         },
         data: function () {
             return {
-                reCaptcha: provideReCaptchaService(this.id, this.siteKey, (response) => this.$emit("verified", response)),
+                reCaptcha: this.$dc.get("reCaptchaProvider")(this.id, this.siteKey, (response) => this.$emit("verified", response)),
             };
         },
         methods: {
@@ -31,6 +28,7 @@
             },
         },
         mounted: function () {
+            this.siteKey = this.siteKey || this.$dc.get("config").credentials.googleReCaptcha.siteKey;
             this.reCaptcha.load();
             this.reCaptcha.render();
         },

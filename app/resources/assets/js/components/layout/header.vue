@@ -145,8 +145,6 @@
 <script>
     import SearchInput from "../photos/search-input";
     import {AuthMixin} from "../../mixins";
-    import config from "../../config";
-    import {tagService} from "../../services";
 
     export default {
         components: {
@@ -162,7 +160,7 @@
         },
         computed: {
             social: function () {
-                return config.url.social;
+                return this.$dc.get("config").url.social;
             },
         },
         methods: {
@@ -170,7 +168,7 @@
                 this.loadTags();
             },
             loadTags: async function () {
-                const {items} = await tagService.getTags();
+                const {items} = await this.$dc.get("tag").getTags();
                 this.tags = items;
             },
         },

@@ -1,5 +1,4 @@
 import {optional} from "tooleks";
-import notification from "../notification";
 import router from "../../router";
 
 export const HTTP_STATUS_UNAUTHORIZED = 401;
@@ -8,6 +7,10 @@ export const HTTP_STATUS_UNPROCESSABLE_ENTITY = 422;
 export const HTTP_STATUS_NO_CONTENT = 204;
 
 export default class ErrorHandlerService {
+    constructor(notificationService) {
+        this.notificationService = notificationService;
+    }
+
     handle(error, options) {
         switch (optional(() => error.response.status)) {
             case 0: {
@@ -29,7 +32,7 @@ export default class ErrorHandlerService {
     }
 
     handleUnknownError(error, {}) {
-        notification.error("Remote server connection error. Try again later.");
+        this.notificationService.error("Remote server connection error. Try again later.");
         return Promise.reject(error);
     }
 
@@ -41,7 +44,7 @@ export default class ErrorHandlerService {
 
     handleNotFoundError(error, {suppressNotFoundErrors = false}) {
         if (!suppressNotFoundErrors) {
-            notification.error(error.response.data.message);
+            this.notificationService.error(error.response.data.message);
         }
         return Promise.reject(error);
     }
@@ -50,7 +53,7 @@ export default class ErrorHandlerService {
         const errors = optional(() => error.response.data.errors) || {};
         for (let attribute in errors) {
             if (errors.hasOwnProperty(attribute)) {
-                errors[attribute].forEach((message) => notification.warning(message));
+                errors[attribute].forEach((message) => this.notificationService.warning(message));
             }
         }
         return Promise.reject(error);
@@ -59,14 +62,14 @@ export default class ErrorHandlerService {
     handleHttpError(error, options = {}) {
         if (error instanceof SyntaxError) {
             const title = "Invalid response type.";
-            notification.error(title);
+            this.notificationService.error(title);
         } else if (optional(() => error.response)) {
             const title = optional(() => error.response.data.message) || "Internal Server Error.";
             const status = optional(() => error.response.status) || "500";
-            notification.error(title, `HTTP ${status} Error.`);
+            this.notificationService.error(title, `HTTP ${status} Error.`);
         } else {
             const title = optional(() => error.message) || "Unknown Error.";
-            notification.error(title);
+            this.notificationService.error(title);
         }
         return Promise.reject(error);
     }

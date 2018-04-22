@@ -41,7 +41,6 @@
 <script>
     import ReCaptcha from "../utils/re-captcha";
     import {GotoMixin, MetaMixin} from "../../mixins";
-    import {apiService, notificationService} from "../../services";
 
     export default {
         components: {
@@ -66,11 +65,11 @@
             subscribe: async function (reCaptchaResponse) {
                 this.loading = true;
                 try {
-                    await apiService.createSubscription({
+                    await this.$dc.get("api").createSubscription({
                         email: this.email,
                         g_recaptcha_response: reCaptchaResponse,
                     });
-                    notificationService.success("You have been successfully subscribed to the website updates.");
+                    this.$dc.get("notification").success("You have been successfully subscribed to the website updates.");
                     this.goToHomePage();
                 } finally {
                     this.loading = false;

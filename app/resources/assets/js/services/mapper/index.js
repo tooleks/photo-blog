@@ -1,5 +1,3 @@
-import provideMapperService from "./mapper-service-provider";
+import mapperProvider from "./mapper-provider";
 
-const mapperService = provideMapperService();
-
-export default mapperService;
+export {mapperProvider};

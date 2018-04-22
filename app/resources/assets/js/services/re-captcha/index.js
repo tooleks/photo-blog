@@ -1,3 +1,4 @@
-import provideReCaptchaService from "./re-captcha-service-provider";
+import BrowserReCaptchaService from "./browser-re-captcha-service";
+import DummyReCaptchaService from "./dummy-re-captcha-service";
 
-export {provideReCaptchaService};
+export {BrowserReCaptchaService, DummyReCaptchaService};

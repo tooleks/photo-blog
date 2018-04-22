@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import VueMeta from "vue-meta"
-import {authService} from "../services";
+import dc from "../dependency-container";
 
 Vue.use(VueRouter);
 Vue.use(VueMeta);
@@ -18,7 +18,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    if (to.matched.some((route) => route.meta.requiresAuth) && !authService.authenticated()) {
+    if (to.matched.some((route) => route.meta.requiresAuth) && !dc.get("auth").authenticated()) {
         next({
             name: "sign-in",
             query: {redirect_uri: to.fullPath},

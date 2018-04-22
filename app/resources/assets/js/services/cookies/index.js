@@ -1,5 +1,3 @@
-import provideCookiesService from "./cookies-service-provider";
+import CookiesService from "./cookies-service";
 
-const cookiesService = provideCookiesService();
-
-export default cookiesService;
+export {CookiesService};

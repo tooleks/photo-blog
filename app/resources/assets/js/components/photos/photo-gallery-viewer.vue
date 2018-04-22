@@ -23,7 +23,6 @@
     import Viewer from "../gallery/viewer";
     import PhotoDescriptionCard from "./photo-description-card";
     import {GotoMixin, MetaMixin} from "../../mixins";
-    import {photoService} from "../../services";
 
     export default {
         components: {
@@ -70,7 +69,7 @@
             loadPhoto: async function () {
                 this.loading = true;
                 try {
-                    const photo = await photoService.getPhoto(this.$route.params.id, {
+                    const photo = await this.$dc.get("photo").getPhoto(this.$route.params.id, {
                         tag: this.$route.query.tag,
                         searchPhrase: this.$route.query.search_phrase,
                     });
@@ -89,7 +88,7 @@
             loadOlderPhoto: async function () {
                 this.loading = true;
                 try {
-                    const photo = await photoService.getOlderPhoto(this.activePhoto.id, {
+                    const photo = await this.$dc.get("photo").getOlderPhoto(this.activePhoto.id, {
                         tag: this.$route.query.tag,
                         searchPhrase: this.$route.query.search_phrase,
                     });
@@ -101,7 +100,7 @@
             loadNewerPhoto: async function () {
                 this.loading = true;
                 try {
-                    const photo = await photoService.getNewerPhoto(this.activePhoto.id, {
+                    const photo = await this.$dc.get("photo").getNewerPhoto(this.activePhoto.id, {
                         tag: this.$route.query.tag,
                         searchPhrase: this.$route.query.search_phrase,
                     });

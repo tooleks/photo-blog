@@ -1,25 +1,24 @@
 import {optional} from "tooleks";
-import config from "../config";
 
 export default {
     computed: {
         pageName: function () {
-            return optional(() => config.app.name, "");
+            return optional(() => this.$dc.get("config").app.name, "");
         },
         pageDescription: function () {
-            return optional(() => config.app.description, "");
+            return optional(() => this.$dc.get("config").app.description, "");
         },
         pageKeywords: function () {
-            return optional(() => config.app.keywords, "");
+            return optional(() => this.$dc.get("config").app.keywords, "");
         },
         pageTitle: function () {
             return "";
         },
         pageImage: function () {
-            return optional(() => config.url.image, "");
+            return optional(() => this.$dc.get("config").url.image, "");
         },
         pageCanonicalUrl: function () {
-            let url = config.url.app;
+            let url = this.$dc.get("config").url.app;
             if (this.$route.fullPath) {
                 url += this.$route.path;
             }
@@ -35,7 +34,7 @@ export default {
                 {vmid: "keywords", name: "keywords", content: this.pageKeywords},
                 // Open Graph protocol properties.
                 {vmid: "og:type", property: "og:type", content: "article"},
-                {vmid: "og:url", property: "og:url", content: config.url.app + this.$route.fullPath},
+                {vmid: "og:url", property: "og:url", content: this.$dc.get("config").url.app + this.$route.fullPath},
                 {vmid: "og:site_name", property: "og:site_name", content: this.pageName},
                 {vmid: "og:description", property: "og:description", content: this.pageDescription},
                 {vmid: "og:image", property: "og:image", content: this.pageImage},

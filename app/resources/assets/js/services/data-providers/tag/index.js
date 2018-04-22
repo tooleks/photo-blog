@@ -1,5 +1,3 @@
-import provideTagService from "./tag-service-provider";
+import TagService from "./tag-service";
 
-const tagService = provideTagService();
-
-export default tagService;
+export {TagService};

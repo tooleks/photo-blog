@@ -38,12 +38,10 @@
 </style>
 
 <script>
-    import config from "../../config";
-
     export default {
         computed: {
             url: function () {
-                let url = config.url.app;
+                let url = this.$dc.get("config").url.app;
                 if (this.$route.fullPath) {
                     url += this.$route.fullPath;
                 }

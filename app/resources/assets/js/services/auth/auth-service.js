@@ -1,7 +1,7 @@
 export default class AuthService {
-    constructor(eventEmitter, storageService, key) {
+    constructor(eventEmitter, localStorageService, key) {
         this.eventEmitter = eventEmitter;
-        this.storageService = storageService;
+        this.localStorageService = localStorageService;
         this.key = key;
         this._initialize();
     }
@@ -23,19 +23,19 @@ export default class AuthService {
 
     setUser(user) {
         if (this._isValidUser(user)) {
-            this.storageService.set(this.key, user);
+            this.localStorageService.set(this.key, user);
         } else {
-            this.storageService.remove(this.key);
+            this.localStorageService.remove(this.key);
         }
         this.eventEmitter.emit(this.key, user);
     }
 
     getUser() {
-        return this.storageService.get(this.key);
+        return this.localStorageService.get(this.key);
     }
 
     authenticated() {
-        return this.storageService.exists(this.key);
+        return this.localStorageService.exists(this.key);
     }
 
     onChange(callback) {

@@ -1,5 +1,3 @@
-import providePhotoMapService from "./photo-map-service-provider";
+import PhotoMapService from "./photo-map-service";
 
-const photoMapService = providePhotoMapService();
-
-export default photoMapService;
+export {PhotoMapService};

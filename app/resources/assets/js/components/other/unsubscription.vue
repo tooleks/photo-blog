@@ -26,7 +26,6 @@
 
 <script>
     import {GotoMixin, MetaMixin} from "../../mixins";
-    import {apiService, notificationService} from "../../services";
 
     export default {
         mixins: [
@@ -47,8 +46,8 @@
             unsubscribe: async function () {
                 this.loading = true;
                 try {
-                    await apiService.deleteSubscription(this.$route.params.token);
-                    notificationService.success("You have been successfully unsubscribed from the website updates.");
+                    await this.$dc.get("api").deleteSubscription(this.$route.params.token);
+                    this.$dc.get("notification").success("You have been successfully unsubscribed from the website updates.");
                 } finally {
                     this.loading = false;
                     this.goToHomePage();

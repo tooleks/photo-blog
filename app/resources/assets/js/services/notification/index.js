@@ -1,5 +1,3 @@
-import provideNotificationService from "./notification-service-provider";
+import NotificationService from "./notification-service";
 
-const notificationService = provideNotificationService();
-
-export default notificationService;
+export {NotificationService};

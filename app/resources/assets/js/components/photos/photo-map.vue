@@ -18,7 +18,6 @@
     import Loader from "../utils/loader";
     import ImageMap from "../map/image-map";
     import {MetaMixin} from "../../mixins";
-    import {photoMapService} from "../../services";
 
     export default {
         components: {
@@ -46,7 +45,7 @@
             loadImages: async function () {
                 this.loading = true;
                 try {
-                    this.images = await photoMapService.getImages();
+                    this.images = await this.$dc.get("photoMap").getImages();
                 } finally {
                     this.loading = false;
                 }

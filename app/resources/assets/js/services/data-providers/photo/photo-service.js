@@ -5,17 +5,26 @@ export default class PhotoService {
     }
 
     async getPhoto(id, {tag, searchPhrase} = {}) {
-        const {data} = await this.apiService.getPost(id, {tag, search_phrase: searchPhrase}, {suppressNotFoundErrors: true});
+        const {data} = await this.apiService.getPost(id, {
+            tag,
+            search_phrase: searchPhrase
+        }, {suppressNotFoundErrors: true});
         return this.mapperService.map(data, "Api.V1.Post", "App.Photo");
     }
 
     async getOlderPhoto(id, {tag, searchPhrase} = {}) {
-        const {data} = await this.apiService.getPreviousPost(id, {tag, search_phrase: searchPhrase}, {suppressNotFoundErrors: true});
+        const {data} = await this.apiService.getPreviousPost(id, {
+            tag,
+            search_phrase: searchPhrase
+        }, {suppressNotFoundErrors: true});
         return this.mapperService.map(data, "Api.V1.Post", "App.Photo");
     }
 
     async getNewerPhoto(id, {tag, searchPhrase} = {}) {
-        const {data} = await this.apiService.getNextPost(id, {tag, search_phrase: searchPhrase}, {suppressNotFoundErrors: true});
+        const {data} = await this.apiService.getNextPost(id, {
+            tag,
+            search_phrase: searchPhrase
+        }, {suppressNotFoundErrors: true});
         return this.mapperService.map(data, "Api.V1.Post", "App.Photo");
     }
 

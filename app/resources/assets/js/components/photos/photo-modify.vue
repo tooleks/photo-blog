@@ -71,7 +71,6 @@
     import LocationInput from "../map/location-input";
     import PhotoCard from "./photo-card";
     import {GotoMixin, MetaMixin} from "../../mixins";
-    import {apiService, mapperService, notificationService} from "../../services";
 
     export default {
         components: {
@@ -103,7 +102,7 @@
                 return optional(() => this.post.photo.id);
             },
             photo: function () {
-                return mapperService.map(this.post, "Api.V1.Post", "App.Photo");
+                return this.$dc.get("mapper").map(this.post, "Api.V1.Post", "App.Photo");
             },
             pageTitle: function () {
                 const description = optional(() => this.photo.description);
@@ -124,8 +123,8 @@
             loadPost: async function (id = this.$route.params.id) {
                 this.loading = true;
                 try {
-                    const response = await apiService.getPost(id);
-                    mapperService.map({response, component: this}, "Api.V1.Post", "App.Component.PhotoModify");
+                    const response = await this.$dc.get("api").getPost(id);
+                    this.$dc.get("mapper").map({response, component: this}, "Api.V1.Post", "App.Component.PhotoModify");
                 } catch (error) {
                     if (optional(() => error.response.status) === 404) {
                         this.goToNotFoundPage();
@@ -140,8 +139,8 @@
                 if (confirm("Do you really want to delete the photo?")) {
                     this.loading = true;
                     try {
-                        await apiService.deletePost(this.postId);
-                        notificationService.success("The photo has been successfully deleted.");
+                        await this.$dc.get("api").deletePost(this.postId);
+                        this.$dc.get("notification").success("The photo has been successfully deleted.");
                     } finally {
                         this.loading = false;
                         this.goToHomePage();
@@ -149,20 +148,20 @@
                 }
             },
             savePost: async function () {
-                const createPost = async (post) => await apiService.createPost(post);
-                const updatePost = async (post) => await apiService.updatePost(post.id, post);
+                const createPost = async (post) => await this.$dc.get("api").createPost(post);
+                const updatePost = async (post) => await this.$dc.get("api").updatePost(post.id, post);
                 const savePost = async (post) => optional(() => post.id) ? await updatePost(post) : await createPost(post);
                 this.loading = true;
                 try {
                     if (this.latitude && this.longitude) {
-                        const photo = mapperService.map(this, "App.Component.PhotoModify", "Api.V1.Photo");
-                        const photoResponse = await apiService.updatePhotoLocation(this.photoId, photo);
-                        mapperService.map({response: photoResponse, component: this}, "Api.V1.Photo", "App.Component.PhotoModify");
+                        const photo = this.$dc.get("mapper").map(this, "App.Component.PhotoModify", "Api.V1.Photo");
+                        const photoResponse = await this.$dc.get("api").updatePhotoLocation(this.photoId, photo);
+                        this.$dc.get("mapper").map({response: photoResponse, component: this}, "Api.V1.Photo", "App.Component.PhotoModify");
                     }
-                    const post = mapperService.map(this, "App.Component.PhotoModify", "Api.V1.Post");
+                    const post = this.$dc.get("mapper").map(this, "App.Component.PhotoModify", "Api.V1.Post");
                     const postResponse = await savePost(post);
-                    mapperService.map({response: postResponse, component: this}, "Api.V1.Post", "App.Component.PhotoModify");
-                    notificationService.success("The photo has been successfully saved.");
+                    this.$dc.get("mapper").map({response: postResponse, component: this}, "Api.V1.Post", "App.Component.PhotoModify");
+                    this.$dc.get("notification").success("The photo has been successfully saved.");
                 } finally {
                     this.loading = false;
                 }
@@ -170,9 +169,9 @@
             uploadPhotoFile: async function (file) {
                 this.loading = true;
                 try {
-                    const response = await apiService.uploadPhotoFile(file);
-                    mapperService.map({response, component: this}, "Api.V1.Photo", "App.Component.PhotoModify");
-                    notificationService.success("The photo has been successfully uploaded. Don't forget to save changes before exit.");
+                    const response = await this.$dc.get("api").uploadPhotoFile(file);
+                    this.$dc.get("mapper").map({response, component: this}, "Api.V1.Photo", "App.Component.PhotoModify");
+                    this.$dc.get("notification").success("The photo has been successfully uploaded. Don't forget to save changes before exit.");
                 } finally {
                     this.loading = false;
                 }

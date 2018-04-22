@@ -1,5 +1,3 @@
-import provideLoginService from "./login-service-provider";
+import LoginService from "./login-service";
 
-const loginService = provideLoginService();
-
-export default loginService;
+export {LoginService};

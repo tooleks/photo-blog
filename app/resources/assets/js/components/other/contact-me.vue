@@ -71,7 +71,6 @@
 <script>
     import ReCaptcha from "../utils/re-captcha";
     import {GotoMixin, MetaMixin} from "../../mixins";
-    import {apiService, notificationService} from "../../services";
 
     export default {
         components: {
@@ -99,14 +98,14 @@
             contactMe: async function (reCaptchaResponse) {
                 this.loading = true;
                 try {
-                    await apiService.createContactMessage({
+                    await this.$dc.get("api").createContactMessage({
                         email: this.email,
                         name: this.name,
                         subject: this.subject,
                         message: this.message,
                         g_recaptcha_response: reCaptchaResponse,
                     });
-                    notificationService.success("Your message has been successfully sent.");
+                    this.$dc.get("notification").success("Your message has been successfully sent.");
                     this.goToHomePage();
                 } finally {
                     this.loading = false;

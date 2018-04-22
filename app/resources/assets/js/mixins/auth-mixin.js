@@ -1,18 +1,17 @@
 import {optional} from "tooleks";
-import {authService} from "../services";
 
 export default {
     data: function () {
         return {
-            authenticated: authService.authenticated(),
-            userName: optional(() => authService.getUser().name),
+            authenticated: this.$dc.get("auth").authenticated(),
+            userName: optional(() => this.$dc.get("auth").getUser().name),
             unsubscribeFromAuthChanges: undefined,
         };
     },
     mounted: function () {
-        this.unsubscribeFromAuthChanges = authService.onChange(() => {
-            this.authenticated = authService.authenticated();
-            this.userName = optional(() => authService.getUser().name);
+        this.unsubscribeFromAuthChanges = this.$dc.get("auth").onChange(() => {
+            this.authenticated = this.$dc.get("auth").authenticated();
+            this.userName = optional(() => this.$dc.get("auth").getUser().name);
         });
     },
     beforeDestroy: function () {

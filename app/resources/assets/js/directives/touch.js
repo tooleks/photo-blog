@@ -5,9 +5,7 @@ Vue.directive("swipe-left", {
     inserted: function (el, bindings) {
         const handler = bindings.value;
         const hammer = new Hammer(el);
-        hammer.on("swipeleft", function () {
-            handler.call(handler);
-        });
+        hammer.on("swipeleft", () => handler.call(handler));
     },
 });
 
@@ -15,8 +13,6 @@ Vue.directive("swipe-right", {
     inserted: function (el, bindings) {
         const handler = bindings.value;
         const hammer = new Hammer(el);
-        hammer.on("swiperight", function () {
-            handler.call(handler);
-        });
+        hammer.on("swiperight", () => handler.call(handler));
     },
 });

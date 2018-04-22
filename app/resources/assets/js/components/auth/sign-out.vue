@@ -3,7 +3,6 @@
 
 <script>
     import {GotoMixin} from "../../mixins";
-    import {loginService} from "../../services";
 
     export default {
         mixins: [
@@ -12,7 +11,7 @@
         methods: {
             signOut: async function () {
                 try {
-                    await loginService.signOut();
+                    await this.$dc.get("login").signOut();
                 } finally {
                     this.goToSignInPage();
                 }

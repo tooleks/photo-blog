@@ -40,7 +40,6 @@
 <script>
     import ReCaptcha from "../utils/re-captcha";
     import {AuthMixin, GotoMixin, MetaMixin} from "../../mixins";
-    import {loginService, notificationService} from "../../services";
 
     export default {
         components: {
@@ -72,12 +71,12 @@
             signIn: async function (reCaptchaResponse) {
                 this.loading = true;
                 try {
-                    const user = await loginService.signIn({
+                    const user = await this.$dc.get("login").signIn({
                         email: this.email,
                         password: this.password,
                         g_recaptcha_response: reCaptchaResponse
                     });
-                    notificationService.success(`Hello ${user.name}!`);
+                    this.$dc.get("notification").success(`Hello ${user.name}!`);
                     this.goToPath(this.$route.query.redirect_uri);
                 } finally {
                     this.loading = false;

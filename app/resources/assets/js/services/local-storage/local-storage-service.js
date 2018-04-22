@@ -1,10 +1,14 @@
-export default class LocalStorage {
+export default class LocalStorageService {
+    constructor(driver) {
+        this.driver = driver;
+    }
+
     set(key, value) {
-        localStorage.setItem(key, JSON.stringify(value));
+        this.driver.setItem(key, JSON.stringify(value));
     }
 
     remove(key) {
-        localStorage.removeItem(key);
+        this.driver.removeItem(key);
     }
 
     get(key, defaultValue = null) {
@@ -17,6 +21,6 @@ export default class LocalStorage {
     }
 
     exists(key) {
-        return localStorage.getItem(key) !== null;
+        return this.driver.getItem(key) !== null;
     }
 }
