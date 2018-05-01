@@ -8,6 +8,7 @@
                          class="btn btn-light btn-sm">
                 <i class="fa fa-pencil" aria-hidden="true"></i> Edit photo
             </router-link>
+            <share-buttons class="float-sm-right"></share-buttons>
         </div>
         <div class="card-body">
             <div class="row">
@@ -29,9 +30,6 @@
                                     :disabled="true"></location-input>
                 </div>
             </div>
-        </div>
-        <div class="card-footer">
-            <share-buttons></share-buttons>
         </div>
     </div>
 </template>
