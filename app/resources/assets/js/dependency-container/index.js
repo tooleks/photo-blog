@@ -50,7 +50,7 @@ dc.registerBinding(
     },
     {
         factory: true,
-    }
+    },
 );
 
 Vue.use(VueNotifications);
@@ -95,8 +95,8 @@ dc.registerBinding(
     {
         dependencies: ["config", "notification"],
         singleton: true,
-        factory: true
-    }
+        factory: true,
+    },
 );
 
 dc.registerBinding("login", LoginService, {
