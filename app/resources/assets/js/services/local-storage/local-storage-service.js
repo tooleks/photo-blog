@@ -14,7 +14,7 @@ export default class LocalStorageService {
     get(key, defaultValue = null) {
         let value = defaultValue;
         if (this.exists(key)) {
-            const rawValue = localStorage.getItem(key);
+            const rawValue = this.driver.getItem(key);
             value = typeof rawValue !== "undefined" ? JSON.parse(rawValue) : undefined;
         }
         return value;

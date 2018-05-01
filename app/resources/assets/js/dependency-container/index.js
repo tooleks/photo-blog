@@ -95,6 +95,7 @@ dc.registerBinding(
     {
         dependencies: ["config", "notification"],
         singleton: true,
+        factory: true
     }
 );
 
