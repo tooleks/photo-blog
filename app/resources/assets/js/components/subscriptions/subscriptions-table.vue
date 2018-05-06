@@ -2,19 +2,17 @@
     <div class="container py-3">
         <div class="row">
             <div class="col">
-                <table class="table table-sm">
+                <table class="table table-bordered bg-white">
                     <thead>
                     <tr>
                         <th>Email</th>
-                        <th>Token</th>
-                        <th></th>
+                        <th class="width-3em"></th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr v-for="subscription in subscriptions">
                         <td>{{ subscription.email }}</td>
-                        <td><code>{{ subscription.token }}</code></td>
-                        <td>
+                        <td class="width-3em text-center">
                             <button @click="deleteSubscription(subscription)"
                                     class="btn btn-secondary btn-sm"
                                     type="button"
