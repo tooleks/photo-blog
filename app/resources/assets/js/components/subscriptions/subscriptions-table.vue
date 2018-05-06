@@ -106,7 +106,7 @@
                 }
             },
         },
-        mounted: function () {
+        created: function () {
             this.init();
         },
     };
