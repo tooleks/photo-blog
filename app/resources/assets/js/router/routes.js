@@ -85,6 +85,22 @@ const routes = [
         component: require("../components/other/contact-me"),
     },
     {
+        path: "/subscriptions",
+        name: "subscriptions",
+        component: require("../components/subscriptions/subscriptions-table"),
+        meta: {
+            requiresAuth: true,
+        },
+    },
+    {
+        path: "/subscriptions/:page",
+        name: "subscriptions-with-page",
+        component: require("../components/subscriptions/subscriptions-table"),
+        meta: {
+            requiresAuth: true,
+        },
+    },
+    {
         path: "/subscription",
         name: "subscription",
         component: require("../components/other/subscription"),

@@ -1,5 +1,4 @@
 import Vue from "vue";
-import VueNotifications from "vue-notification";
 import axios from "axios";
 import moment from "moment";
 import {DependencyContainer, EventEmitter} from "tooleks";
@@ -14,10 +13,8 @@ import {NotificationService} from "../services/notification";
 import {DateService} from "../services/date";
 import {AuthService} from "../services/auth";
 import {ApiService, ErrorHandlerService, HTTP_STATUS_NO_CONTENT} from "../services/api";
-import {LoginService} from "../services/data-providers/login";
-import {PhotoService} from "../services/data-providers/photo";
-import {PhotoMapService} from "../services/data-providers/photo-map";
-import {TagService} from "../services/data-providers/tag";
+import {LoginService} from "../services/login";
+import {PhotoMapService} from "../services/photo-map";
 
 const dc = new DependencyContainer;
 
@@ -53,7 +50,6 @@ dc.registerBinding(
     },
 );
 
-Vue.use(VueNotifications);
 dc.registerBinding("notification", () => new NotificationService(Vue.prototype.$notify), {
     factory: true,
     singleton: true,
@@ -103,15 +99,7 @@ dc.registerBinding("login", LoginService, {
     dependencies: ["api", "cookies", "auth", "mapper"],
 });
 
-dc.registerBinding("photo", PhotoService, {
-    dependencies: ["api", "mapper"],
-});
-
 dc.registerBinding("photoMap", PhotoMapService, {
-    dependencies: ["api", "mapper"],
-});
-
-dc.registerBinding("tag", TagService, {
     dependencies: ["api", "mapper"],
 });
 

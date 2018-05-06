@@ -2,32 +2,32 @@ import "./polyfills";
 import "./bootstrap";
 
 import Vue from "vue";
-
-// Register dependency container in the Vue prototype,
-// so it can be accessed from all components through `this.$dc` call.
+import VueAnalytics from "vue-analytics";
+import VueNotifications from "vue-notification";
 import dc from "./dependency-container";
-Vue.prototype.$dc = dc;
-
-// Add Vue to the global window object.
-window.Vue = Vue;
-
 import router from "./router";
 
-// Register Google Analytics plugin if tracking ID is configured.
-import VueAnalytics from "vue-analytics";
-if (dc.get('config').credentials.googleAnalytics.trackingId) {
+// Register VueAnalytics plugin if tracking ID is configured.
+if (dc.get("config").credentials.googleAnalytics.trackingId) {
     Vue.use(VueAnalytics, {
-        id: dc.get('config').credentials.googleAnalytics.trackingId,
+        id: dc.get("config").credentials.googleAnalytics.trackingId,
         checkDuplicatedScript: true,
         router,
     });
 }
+
+// Register VueNotifications plugins.
+Vue.use(VueNotifications);
 
 // Register application-wide directives and components.
 require("./directives");
 Vue.component("app", require("./components/app"));
 Vue.component("app-header", require("./components/layout/header"));
 Vue.component("app-footer", require("./components/layout/footer"));
+
+// Register dependency container in the Vue prototype,
+// so it can be accessed from all components through `this.$dc` call.
+Vue.prototype.$dc = dc;
 
 new Vue({
     el: "#app",

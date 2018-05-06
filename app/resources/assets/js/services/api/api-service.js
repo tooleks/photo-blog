@@ -60,27 +60,27 @@ export default class ApiService {
         return this._handleRequest(request);
     }
 
-    getPosts(params = {}) {
+    getPosts({page = 1, per_page = 15, tag, search_phrase} = {}) {
         const url = this._getFullUrl("/posts");
-        const request = () => this.httpClient.get(url, {params});
+        const request = () => this.httpClient.get(url, {params: {page, per_page, tag, search_phrase}});
         return this._handleRequest(request);
     }
 
-    getPost(id, params = {}, options = {}) {
+    getPost(id, {tag, search_phrase} = {}, options = {}) {
         const url = this._getFullUrl(`/posts/${id}`);
-        const request = () => this.httpClient.get(url, {params});
+        const request = () => this.httpClient.get(url, {params: {tag, search_phrase}});
         return this._handleRequest(request, options);
     }
 
-    getPreviousPost(id, params = {}, options = {}) {
+    getPreviousPost(id, {tag, search_phrase} = {}, options = {}) {
         const url = this._getFullUrl(`/posts/${id}/previous`);
-        const request = () => this.httpClient.get(url, {params});
+        const request = () => this.httpClient.get(url, {params: {tag, search_phrase}});
         return this._handleRequest(request, options);
     }
 
-    getNextPost(id, params = {}, options = {}) {
+    getNextPost(id, {tag, search_phrase} = {}, options = {}) {
         const url = this._getFullUrl(`/posts/${id}/next`);
-        const request = () => this.httpClient.get(url, {params});
+        const request = () => this.httpClient.get(url, {params: {tag, search_phrase}});
         return this._handleRequest(request, options);
     }
 
@@ -111,6 +111,12 @@ export default class ApiService {
     deleteSubscription(token) {
         const url = this._getFullUrl(`/subscriptions/${token}`);
         const request = () => this.httpClient.delete(url);
+        return this._handleRequest(request);
+    }
+
+    getSubscriptions({page = 1, per_page = 15} = {}) {
+        const url = this._getFullUrl("/subscriptions");
+        const request = () => this.httpClient.get(url, {params: {page, per_page}});
         return this._handleRequest(request);
     }
 }

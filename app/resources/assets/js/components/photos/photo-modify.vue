@@ -31,7 +31,7 @@
                                         :attributes="{id: 'file', name: 'file', class: 'btn btn-secondary', disabled: loading}">
                                 <i class="fa fa-cloud-upload" aria-hidden="true"></i> Upload file
                             </file-input>
-                            <button v-if="post"
+                            <button v-if="postId"
                                     @click="deletePost"
                                     :disabled="loading"
                                     type="button"
@@ -102,7 +102,7 @@
                 return optional(() => this.post.photo.id);
             },
             photo: function () {
-                return this.$dc.get("mapper").map(this.post, "Api.V1.Post", "App.Photo");
+                return this.$dc.get("mapper").map(this.post, "Api.Post", "Photo");
             },
             pageTitle: function () {
                 const description = optional(() => this.photo.description);
@@ -124,7 +124,7 @@
                 this.loading = true;
                 try {
                     const response = await this.$dc.get("api").getPost(id);
-                    this.$dc.get("mapper").map({response, component: this}, "Api.V1.Post", "App.Component.PhotoModify");
+                    this.$dc.get("mapper").map({response, component: this}, "Api.Raw.Post", "Component.PhotoModify");
                 } catch (error) {
                     if (optional(() => error.response.status) === 404) {
                         this.goToNotFoundPage();
@@ -154,13 +154,13 @@
                 this.loading = true;
                 try {
                     if (this.latitude && this.longitude) {
-                        const photo = this.$dc.get("mapper").map(this, "App.Component.PhotoModify", "Api.V1.Photo");
-                        const photoResponse = await this.$dc.get("api").updatePhotoLocation(this.photoId, photo);
-                        this.$dc.get("mapper").map({response: photoResponse, component: this}, "Api.V1.Photo", "App.Component.PhotoModify");
+                        const photo = this.$dc.get("mapper").map(this, "Component.PhotoModify", "Api.Photo");
+                        const response = await this.$dc.get("api").updatePhotoLocation(this.photoId, photo);
+                        this.$dc.get("mapper").map({response, component: this}, "Api.Raw.Photo", "Component.PhotoModify");
                     }
-                    const post = this.$dc.get("mapper").map(this, "App.Component.PhotoModify", "Api.V1.Post");
-                    const postResponse = await savePost(post);
-                    this.$dc.get("mapper").map({response: postResponse, component: this}, "Api.V1.Post", "App.Component.PhotoModify");
+                    const post = this.$dc.get("mapper").map(this, "Component.PhotoModify", "Api.Post");
+                    const response = await savePost(post);
+                    this.$dc.get("mapper").map({response, component: this}, "Api.Raw.Post", "Component.PhotoModify");
                     this.$dc.get("notification").success("The photo has been successfully saved.");
                 } finally {
                     this.loading = false;
@@ -170,7 +170,7 @@
                 this.loading = true;
                 try {
                     const response = await this.$dc.get("api").uploadPhotoFile(file);
-                    this.$dc.get("mapper").map({response, component: this}, "Api.V1.Photo", "App.Component.PhotoModify");
+                    this.$dc.get("mapper").map({response, component: this}, "Api.Raw.Photo", "Component.PhotoModify");
                     this.$dc.get("notification").success("The photo has been successfully uploaded. Don't forget to save changes before exit.");
                 } finally {
                     this.loading = false;

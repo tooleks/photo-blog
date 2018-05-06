@@ -93,11 +93,8 @@
             loadPhotos: async function () {
                 this.loading = true;
                 try {
-                    const page = this.$route.params.page;
-                    const tag = this.$route.params.tag;
-                    const searchPhrase = this.$route.params.search_phrase;
-                    const photos = await this.$dc.get("photo").getPhotos({page, tag, searchPhrase});
-                    this.$dc.get("mapper").map({photos, component: this}, "App.PhotoService.Photos", "App.Component.PhotoGallery");
+                    const response = await this.$dc.get("api").getPosts({...this.$route.params, per_page: 40});
+                    this.$dc.get("mapper").map({response, component: this}, "Api.Raw.Posts", "Component");
                 } finally {
                     this.loading = false;
                 }

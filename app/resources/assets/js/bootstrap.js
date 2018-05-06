@@ -1,17 +1,12 @@
+window.Vue = require("vue");
 window._ = require("lodash");
-
-try {
-    window.$ = window.jQuery = require("jquery");
-    window.Popper = require("popper.js").default;
-    require("bootstrap");
-} catch (e) {
-}
-
+window.$ = window.jQuery = require("jquery");
+window.Popper = require("popper.js").default;
+require("bootstrap");
 window.moment = require("moment");
 window.axios = require("axios");
 window.axios.defaults.headers.common["Accept"] = "application/json";
 window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
-
 const token = document.head.querySelector("meta[name=\"csrf-token\"]");
 if (token) {
     window.axios.defaults.headers.common["X-CSRF-TOKEN"] = token.content;

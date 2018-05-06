@@ -104,7 +104,13 @@
                                          :to="{name: 'photo/add'}"
                                          data-toggle="collapse"
                                          data-target=".navbar-collapse.show">
-                                <i class="fa fa-plus" aria-hidden="true"></i> Add Photo
+                                Add Photo
+                            </router-link>
+                            <router-link class="dropdown-item"
+                                         :to="{name: 'subscriptions'}"
+                                         data-toggle="collapse"
+                                         data-target=".navbar-collapse.show">
+                                Subscriptions
                             </router-link>
                             <div class="dropdown-divider"></div>
                             <router-link :to="{name: 'sign-out'}"
@@ -168,8 +174,8 @@
                 this.loadTags();
             },
             loadTags: async function () {
-                const {items} = await this.$dc.get("tag").getTags();
-                this.tags = items;
+                const response = await this.$dc.get("api").getTags();
+                this.$dc.get("mapper").map({response, component: this}, "Api.Raw.Tags", "Component");
             },
         },
         created: function () {
