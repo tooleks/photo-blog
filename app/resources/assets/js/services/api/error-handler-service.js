@@ -1,4 +1,4 @@
-import {optional} from "tooleks";
+import {optional as opt} from "tooleks";
 import router from "../../router";
 
 export const HTTP_STATUS_UNAUTHORIZED = 401;
@@ -12,7 +12,7 @@ export default class ErrorHandlerService {
     }
 
     handle(error, options) {
-        switch (optional(() => error.response.status)) {
+        switch (opt(() => error.response.status)) {
             case 0: {
                 return this.handleUnknownError(error, options);
             }
@@ -50,7 +50,7 @@ export default class ErrorHandlerService {
     }
 
     handleValidationError(error, {}) {
-        const errors = optional(() => error.response.data.errors) || {};
+        const errors = opt(() => error.response.data.errors) || {};
         for (let attribute in errors) {
             if (errors.hasOwnProperty(attribute)) {
                 errors[attribute].forEach((message) => this.notificationService.warning(message));
@@ -63,12 +63,12 @@ export default class ErrorHandlerService {
         if (error instanceof SyntaxError) {
             const title = "Invalid response type.";
             this.notificationService.error(title);
-        } else if (optional(() => error.response)) {
-            const title = optional(() => error.response.data.message) || "Internal Server Error.";
-            const status = optional(() => error.response.status) || "500";
+        } else if (opt(() => error.response)) {
+            const title = opt(() => error.response.data.message) || "Internal Server Error.";
+            const status = opt(() => error.response.status) || "500";
             this.notificationService.error(title, `HTTP ${status} Error.`);
         } else {
-            const title = optional(() => error.message) || "Unknown Error.";
+            const title = opt(() => error.message) || "Unknown Error.";
             this.notificationService.error(title);
         }
         return Promise.reject(error);

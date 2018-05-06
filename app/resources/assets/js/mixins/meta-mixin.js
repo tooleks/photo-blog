@@ -1,21 +1,21 @@
-import {optional} from "tooleks";
+import {optional as opt} from "tooleks";
 
 export default {
     computed: {
         pageName: function () {
-            return optional(() => this.$dc.get("config").app.name, "");
+            return opt(() => this.$dc.get("config").app.name, "");
         },
         pageDescription: function () {
-            return optional(() => this.$dc.get("config").app.description, "");
+            return opt(() => this.$dc.get("config").app.description, "");
         },
         pageKeywords: function () {
-            return optional(() => this.$dc.get("config").app.keywords, "");
+            return opt(() => this.$dc.get("config").app.keywords, "");
         },
         pageTitle: function () {
             return "";
         },
         pageImage: function () {
-            return optional(() => this.$dc.get("config").url.image, "");
+            return opt(() => this.$dc.get("config").url.image, "");
         },
         pageCanonicalUrl: function () {
             let url = this.$dc.get("config").url.app;

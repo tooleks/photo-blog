@@ -64,7 +64,7 @@
 </style>
 
 <script>
-    import {optional} from "tooleks";
+    import {optional as opt} from "tooleks";
     import FileInput from "../utils/file-input";
     import Loader from "../utils/loader";
     import TagInput from "../utils/tag-input";
@@ -96,16 +96,16 @@
         },
         computed: {
             postId: function () {
-                return optional(() => this.post.id);
+                return opt(() => this.post.id);
             },
             photoId: function () {
-                return optional(() => this.post.photo.id);
+                return opt(() => this.post.photo.id);
             },
             photo: function () {
                 return this.$dc.get("mapper").map(this.post, "Api.Post", "Photo");
             },
             pageTitle: function () {
-                const description = optional(() => this.photo.description);
+                const description = opt(() => this.photo.description);
                 return description ? `Edit photo ${description}` : "Add photo";
             },
         },
@@ -126,7 +126,7 @@
                     const response = await this.$dc.get("api").getPost(id);
                     this.$dc.get("mapper").map({response, component: this}, "Api.Raw.Post", "Component.PhotoModify");
                 } catch (error) {
-                    if (optional(() => error.response.status) === 404) {
+                    if (opt(() => error.response.status) === 404) {
                         this.goToNotFoundPage();
                     } else {
                         throw error;
@@ -150,7 +150,7 @@
             savePost: async function () {
                 const createPost = async (post) => await this.$dc.get("api").createPost(post);
                 const updatePost = async (post) => await this.$dc.get("api").updatePost(post.id, post);
-                const savePost = async (post) => optional(() => post.id) ? await updatePost(post) : await createPost(post);
+                const savePost = async (post) => opt(() => post.id) ? await updatePost(post) : await createPost(post);
                 this.loading = true;
                 try {
                     if (this.latitude && this.longitude) {

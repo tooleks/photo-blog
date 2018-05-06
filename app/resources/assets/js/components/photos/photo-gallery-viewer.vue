@@ -18,7 +18,7 @@
 </template>
 
 <script>
-    import {optional} from "tooleks";
+    import {optional as opt} from "tooleks";
     import Loader from "../utils/loader";
     import Viewer from "../gallery/viewer";
     import PhotoDescriptionCard from "./photo-description-card";
@@ -43,10 +43,10 @@
         },
         computed: {
             pageTitle: function () {
-                return optional(() => this.activePhoto.description, "");
+                return opt(() => this.activePhoto.description, "");
             },
             pageImage: function () {
-                return optional(() => this.activePhoto.original.url, "");
+                return opt(() => this.activePhoto.original.url, "");
             },
         },
         watch: {
@@ -74,7 +74,7 @@
                     this.photos = [photo];
                     this.activePhoto = photo;
                 } catch (error) {
-                    if (optional(() => error.response.status) === 404) {
+                    if (opt(() => error.response.status) === 404) {
                         this.goToNotFoundPage();
                     } else {
                         throw error;
