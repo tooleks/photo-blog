@@ -93,7 +93,7 @@
             loadPhotos: async function () {
                 this.loading = true;
                 try {
-                    const response = await this.$dc.get("api").getPosts({...this.$route.params, per_page: 10});
+                    const response = await this.$dc.get("api").getPosts({...this.$route.params, per_page: 40});
                     this.$dc.get("mapper").map({response, component: this}, "Api.Raw.Posts", "Component");
                 } finally {
                     this.loading = false;
