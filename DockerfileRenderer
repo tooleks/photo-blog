@@ -1,9 +1,0 @@
-FROM node:8.9
-
-RUN mkdir -p /app/
-WORKDIR /app/
-
-COPY ./renderer /app
-RUN npm install
-
-CMD ["npm", "run", "start"]

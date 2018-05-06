@@ -18,8 +18,8 @@ services:
 
   photo-blog-renderer.docker:
     build:
-      context: ./
-      dockerfile: DockerfileRenderer
+      context: ./renderer
+      dockerfile: Dockerfile
     image: photo-blog-renderer-node:8.9
     container_name: photo-blog-renderer
     restart: always
