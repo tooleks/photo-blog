@@ -90,9 +90,9 @@ export default class ApiService {
         return this._handleRequest(request);
     }
 
-    getTags(params = {}) {
+    getTags({page = 1, per_page = 15} = {}) {
         const url = this._getFullUrl("/tags");
-        const request = () => this.httpClient.get(url, {params});
+        const request = () => this.httpClient.get(url, {params: {page, per_page}});
         return this._handleRequest(request);
     }
 
