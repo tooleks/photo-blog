@@ -36,6 +36,12 @@ docker exec -it pb-app bash -c "php artisan create:administrator_user"
 
 Open the [http://localhost:8080/sign-in](http://localhost:8080/sign-in) link in a browser to signin with a newly created administrator user account.
 
+### Exposed Resources
+
+* [http://localhost:8080](http://localhost:8080) - The application;
+* [http://localhost:8081](http://localhost:8081) - REST API documentation;
+* [http://localhost:8083](http://localhost:8083) - MailDev mailbox.
+
 ### Useful Commands
 
 Automatically recompile assets when Webpack detects a change.
@@ -73,8 +79,8 @@ docker exec -it pb-app bash -c "./vendor/bin/phpunit"
 
 Run the following command (within the project root directory) to start Docker containers and build the application for **production** environment.
 
-**Note:** The following production configuration includes only `pb-app`, `pb-renderer` and `pb-redis` containers.
-
 ```
 docker-compose --file ./docker-compose.prod.yml up --build -d
 ```
+
+**Note:** Production configuration includes only `pb-app`, `pb-renderer` and `pb-redis` containers.
