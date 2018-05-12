@@ -57,7 +57,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->command(SendWeeklySubscriptionMails::class)
             ->weekly()
-            ->saturdays()
+            ->sundays()
             ->at('09:00')
             ->onOneServer();
     }
