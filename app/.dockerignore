@@ -2,17 +2,8 @@
 /vendor/
 /dist/
 
-Homestead.json
-Homestead.yaml
-.env
-npm-debug.log
-www.pid
+/storage/
 
-oauth-private.key
-oauth-public.key
-
-/public/storage
-/public/storage/
 /public/css/
 /public/favicon/
 /public/fonts/

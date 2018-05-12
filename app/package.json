@@ -12,6 +12,7 @@
     "dependencies": {},
     "devDependencies": {
         "axios": "^0.18",
+        "apidoc": "^0.17",
         "bootstrap": "^4.1.0",
         "core-js": "^2.5.5",
         "cross-env": "^5.1.4",

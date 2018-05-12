@@ -1,0 +1,57 @@
+FROM php:7.2-fpm
+
+# Install system dependencies.
+RUN apt-get update \
+ && apt-get install -y \
+    supervisor \
+    cron \
+    git \
+ && apt-get install -y \
+    libjpeg-dev \
+    libpng-dev \
+    libfreetype6-dev \
+ && apt-get install -y \
+    gnupg \
+    apt-utils \
+    build-essential \
+ && apt-get -y autoclean \
+ && apt-get -y autoremove \
+ && apt-get -y clean \
+ && rm -rf /var/lib/apt/lists/*
+
+# Install PHP dependencies.
+RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/ --with-freetype-dir=/usr/include/ \
+ && docker-php-ext-install -j$(nproc) gd \
+ && docker-php-ext-install -j$(nproc) exif \
+ && docker-php-ext-install -j$(nproc) pdo_mysql \
+ && docker-php-ext-install -j$(nproc) zip \
+ && docker-php-ext-install -j$(nproc) opcache \
+ && pecl install redis \
+ && docker-php-ext-enable redis
+
+# Install composer.
+RUN curl -sS https://getcomposer.org/installer | php \
+ && mv composer.phar /usr/local/bin/composer
+
+# Install Node.js, npm.
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - \
+ && apt-get install -y nodejs
+
+# Bundle supervisor configuration.
+COPY ./docker/supervisor.conf /etc/supervisor/conf.d/supervisor.conf
+RUN chmod 0444 /etc/supervisor/conf.d/supervisor.conf
+
+# Bundle cron configuration.
+COPY ./docker/scheduler /etc/cron.d/scheduler
+RUN chmod 0444 /etc/cron.d/scheduler
+
+# Bundle entrypoint configuration.
+COPY ./docker/entrypoint.dev.sh /entrypoint.sh
+RUN chmod 0544 /entrypoint.sh
+
+# Set working directory.
+WORKDIR /app/
+
+ENTRYPOINT ["/entrypoint.sh"]
+
+CMD ["/usr/bin/supervisord", "-n"]

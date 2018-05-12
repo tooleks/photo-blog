@@ -1,10 +1,12 @@
 version: '3.3'
 
 services:
-  photo-blog-nginx.docker:
-    image: nginx:1.12
-    container_name: photo-blog-nginx
+  pb-nginx.docker:
+    image: nginx:1.13
+    container_name: pb-nginx
     restart: always
+    depends_on:
+      - pb-app.docker
     ports:
       - 8080:8080
       - 8081:8081
@@ -13,33 +15,35 @@ services:
       - ./app/:/app/
       - ./docker/config/nginx/sites/:/etc/nginx/conf.d/
 
-  photo-blog-app.docker:
+  pb-app.docker:
     build:
-      context: ./
-      dockerfile: DockerfileApp
-    image: photo-blog-app-php:7.2-fpm
-    container_name: photo-blog-app
+      context: ./app
+      dockerfile: Dockerfile.dev
+    image: pb-app-php:7.2-fpm
+    container_name: pb-app
     restart: always
     depends_on:
-      - photo-blog-mysql.docker
-      - photo-blog-redis.docker
+      - pb-renderer.docker
+      - pb-mysql.docker
+      - pb-redis.docker
+      - pb-maildev.docker
     volumes:
       - ./app/:/app/
-      - ./docker/config/app/php.dev.ini:/usr/local/etc/php/php.ini
+      - ./app/docker/php.dev.ini:/usr/local/etc/php/php.ini
 
-  photo-blog-renderer.docker:
+  pb-renderer.docker:
     build:
       context: ./renderer
-      dockerfile: Dockerfile
-    image: photo-blog-renderer-node:8.9
-    container_name: photo-blog-renderer
+      dockerfile: Dockerfile.prod
+    image: pb-renderer-node:10
+    container_name: pb-renderer
     restart: always
     ports:
       - 3000:3000
 
-  photo-blog-mysql.docker:
+  pb-mysql.docker:
     image: mysql:5.7
-    container_name: photo-blog-mysql
+    container_name: pb-mysql
     restart: always
     environment:
       MYSQL_DATABASE: 'photo_blog'
@@ -53,14 +57,14 @@ services:
       - ./docker/config/mysql/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
       - ./docker/config/mysql/my.cnf:/etc/mysql/my.cnf
 
-  photo-blog-redis.docker:
+  pb-redis.docker:
     image: redis:3.2
-    container_name: photo-blog-redis
+    container_name: pb-redis
     restart: always
 
-  photo-blog-maildev.docker:
+  pb-maildev.docker:
     image: djfarrelly/maildev
-    container_name: photo-blog-maildev
+    container_name: pb-maildev
     restart: always
     ports:
       - 8083:80
