@@ -13,12 +13,12 @@ services:
       - 8082:8082
     volumes:
       - ./app/:/app/
-      - ./docker/config/nginx/sites/:/etc/nginx/conf.d/
+      - ./app/docker/config/nginx/sites/:/etc/nginx/conf.d/
 
   pb-app.docker:
     build:
       context: ./app
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile.php.dev
     image: pb-app-php:7.2-fpm
     container_name: pb-app
     restart: always
@@ -29,7 +29,7 @@ services:
       - pb-maildev.docker
     volumes:
       - ./app/:/app/
-      - ./app/docker/php.dev.ini:/usr/local/etc/php/php.ini
+      - ./app/docker/config/php/php.dev.ini:/usr/local/etc/php/php.ini
 
   pb-renderer.docker:
     build:

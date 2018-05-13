@@ -1,11 +1,26 @@
 version: '3.3'
 
 services:
+  pb-nginx.docker:
+    build:
+      context: ./app
+      dockerfile: Dockerfile.nginx.prod
+    image: pb-nginx:1.13
+    container_name: pb-nginx
+    restart: always
+    depends_on:
+      - pb-app.docker
+    ports:
+      - 8080:8080
+      - 8081:8081
+      - 8082:8082
+    volumes:
+      - ./app/storage/:/app/storage/
 
   pb-app.docker:
     build:
       context: ./app
-      dockerfile: Dockerfile.prod
+      dockerfile: Dockerfile.php.prod
     image: pb-app-php:7.2-fpm
     container_name: pb-app
     restart: always
@@ -16,7 +31,7 @@ services:
       - pb-redis.docker
     volumes:
       - ./app/storage/:/app/storage/
-      - ./app/docker/php.prod.ini:/usr/local/etc/php/php.ini
+      - ./app/docker/config/php/php.prod.ini:/usr/local/etc/php/php.ini
 
   pb-renderer.docker:
     build:
