@@ -4,16 +4,16 @@ import LocationPopup from "./location-popup";
 
 const LocationPopupComponent = Vue.extend(LocationPopup);
 
-export function provideLocationPopupHtml({lat, lng} = {}) {
+export function provideLocationPopupHtml({location = {}} = {}) {
     return new Promise((resolve) => {
         reverseGeocode()
-            .latlng([lat, lng])
+            .latlng(location)
             .run((error, result) => {
                 let address;
                 if (!error) {
                     address = result.address.LongLabel;
                 }
-                const propsData = {lat, lng, address};
+                const propsData = {lat: location.lat, lng: location.lng, address};
                 const popup = new LocationPopupComponent({propsData});
                 const html = popup.$mount().$el.outerHTML;
                 resolve(html);

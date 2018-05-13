@@ -1,5 +1,5 @@
 <template>
-    <div :id="this.id" class="map"></div>
+    <div :id="id" class="map"></div>
 </template>
 
 <style scoped>
@@ -48,13 +48,22 @@
                     };
                 },
             },
-            lat: {
-                type: Number,
-                default: 49.85,
-            },
-            lng: {
-                type: Number,
-                default: 24.0166666667,
+            location: {
+                type: Object,
+                default: () => {
+                    return {
+                        lat: 49.85,
+                        lng: 24.0166666667,
+                    }
+                },
+                validator: function (location) {
+                    if (location.lat < -90 && location.lat > 90) {
+                        return false;
+                    } else if (location.lng < -180 && location.lng > 180) {
+                        return false;
+                    }
+                    return true;
+                },
             },
             zoom: {
                 type: Number,
@@ -68,19 +77,16 @@
             };
         },
         watch: {
-            lat: function () {
-                this.map.panTo([this.lat, this.lng]);
-            },
-            lng: function () {
-                this.map.panTo([this.lat, this.lng]);
+            location: function () {
+                this.map.panTo(this.location);
             },
             zoom: function () {
-                this.map.setView([this.lat, this.lng], this.zoom);
+                this.map.setView(this.location, this.zoom);
             },
         },
         methods: {
             init: function () {
-                this.map = L.map(this.id).setView([this.lat, this.lng], this.zoom);
+                this.map = L.map(this.id).setView(this.location, this.zoom);
                 this.tileLayer = L.tileLayer(this.tileLayerUrl, this.tileLayerOptions).addTo(this.map);
             },
             destroy: function () {

@@ -3,7 +3,7 @@ import ImageMarker from "./image-marker";
 
 const ImageMarkerComponent = Vue.extend(ImageMarker);
 
-export function provideImageMarkerHtml(propsData) {
+export function provideImageMarkerHtml(propsData = {}) {
     const marker = new ImageMarkerComponent({propsData});
     return marker.$mount().$el.outerHTML;
 }

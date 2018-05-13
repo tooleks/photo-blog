@@ -1,5 +1,5 @@
 <template>
-    <basic-map ref="map" :lat="this.lat" :lng="this.lng" :zoom="this.zoom"></basic-map>
+    <basic-map ref="map" :location="location" :zoom="zoom"></basic-map>
 </template>
 
 <script>
@@ -11,11 +11,8 @@
             BasicMap,
         },
         props: {
-            lat: {
-                type: Number,
-            },
-            lng: {
-                type: Number,
+            location: {
+                type: Object,
             },
             zoom: {
                 type: Number,
@@ -67,7 +64,7 @@
             },
             renderImage: function (image) {
                 const icon = L.divIcon({html: provideImageMarkerHtml(image)});
-                const marker = L.marker([image.location.lat, image.location.lng], {icon, riseOnHover: true});
+                const marker = L.marker(image.location, {icon, riseOnHover: true});
                 this.markerClusterGroup.addLayer(marker);
             },
         },

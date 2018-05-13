@@ -118,8 +118,12 @@ export default function (dateService) {
         component.post = post;
         component.description = opt(() => post.description);
         component.tags = opt(() => post.tags || [], []).map((tag) => mapperService.map(tag, "Api.Tag", "Tag"));
-        component.latitude = opt(() => post.photo.location.latitude);
-        component.longitude = opt(() => post.photo.location.longitude);
+        component.location = opt(() => {
+            return {
+                lat: post.photo.location.latitude,
+                lng: post.photo.location.longitude,
+            };
+        }, null);
         return component;
     });
 
@@ -142,8 +146,8 @@ export default function (dateService) {
     mapperService.registerResolver("Component.PhotoModify", "Api.Photo", function (component) {
         return {
             location: {
-                latitude: opt(() => component.latitude),
-                longitude: opt(() => component.longitude),
+                latitude: opt(() => component.location.lat),
+                longitude: opt(() => component.location.lng),
             },
         };
     });

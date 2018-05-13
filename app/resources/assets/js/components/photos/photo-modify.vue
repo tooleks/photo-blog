@@ -45,7 +45,7 @@
             <div class="col-lg mt-3 mt-lg-0">
                 <photo-card :photo="photo"></photo-card>
                 <div v-if="photo" class="card mt-3">
-                    <location-input :lat.sync="latitude" :lng.sync="longitude"></location-input>
+                    <location-input :location.sync="location"></location-input>
                 </div>
             </div>
         </div>
@@ -89,9 +89,8 @@
                 loading: false,
                 description: "",
                 tags: [],
-                latitude: undefined,
-                longitude: undefined,
-                post: undefined,
+                location: null,
+                post: null,
             };
         },
         computed: {
@@ -153,7 +152,7 @@
                 const savePost = async (post) => opt(() => post.id) ? await updatePost(post) : await createPost(post);
                 this.loading = true;
                 try {
-                    if (this.latitude && this.longitude) {
+                    if (this.location) {
                         const photo = this.$dc.get("mapper").map(this, "Component.PhotoModify", "Api.Photo");
                         const response = await this.$dc.get("api").updatePhotoLocation(this.photoId, photo);
                         this.$dc.get("mapper").map({response, component: this}, "Api.Raw.Photo", "Component.PhotoModify");

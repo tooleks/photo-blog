@@ -25,8 +25,7 @@
             </div>
             <div v-if="photo.location" class="row">
                 <div class="col mt-3">
-                    <location-input :lat="photo.location.lat"
-                                    :lng="photo.location.lng"
+                    <location-input :location="photo.location"
                                     :zoom="12"
                                     :disabled="true"></location-input>
                 </div>
