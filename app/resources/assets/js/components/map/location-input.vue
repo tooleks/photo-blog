@@ -38,12 +38,12 @@
         },
         watch: {
             lat: function (lat) {
-                if (this.lat !== lat && typeof lat !== "undefined" && typeof this.lng !== "undefined") {
+                if (typeof lat !== "undefined" && typeof this.lng !== "undefined") {
                     this.setMarker(lat, this.lng);
                 }
             },
             lng: function (lng) {
-                if (this.lng !== lng && typeof this.lat !== "undefined" && typeof lng !== "undefined") {
+                if (typeof this.lat !== "undefined" && typeof lng !== "undefined") {
                     this.setMarker(this.lat, lng);
                 }
             },

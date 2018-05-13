@@ -27,6 +27,7 @@
                 <div class="col mt-3">
                     <location-input :lat="photo.location.lat"
                                     :lng="photo.location.lng"
+                                    :zoom="12"
                                     :disabled="true"></location-input>
                 </div>
             </div>
