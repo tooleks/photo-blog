@@ -1,5 +1,5 @@
 <template>
-    <basic-map ref="map" :location="location" :zoom="this.zoom"></basic-map>
+    <basic-map ref="map" :location="location" :zoom="zoom"></basic-map>
 </template>
 
 <script>
