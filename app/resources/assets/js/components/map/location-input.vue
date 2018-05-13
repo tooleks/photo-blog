@@ -5,6 +5,7 @@
 <script>
     import L from "leaflet";
     import BasicMap from "./basic-map";
+    import {provideLocationPopupHtml} from "./location-popup-provider";
 
     export default {
         components: {
@@ -27,7 +28,7 @@
         },
         data: function () {
             return {
-                marker: undefined,
+                marker: null,
             };
         },
         computed: {
@@ -37,12 +38,12 @@
         },
         watch: {
             lat: function (lat) {
-                if (typeof lat !== "undefined" && typeof this.lng !== "undefined") {
+                if (this.lat !== lat && typeof lat !== "undefined" && typeof this.lng !== "undefined") {
                     this.setMarker(lat, this.lng);
                 }
             },
             lng: function (lng) {
-                if (typeof this.lat !== "undefined" && typeof lng !== "undefined") {
+                if (this.lng !== lng && typeof this.lat !== "undefined" && typeof lng !== "undefined") {
                     this.setMarker(this.lat, lng);
                 }
             },
@@ -66,7 +67,7 @@
             },
             setMarker: function (lat, lng) {
                 // If marker is already initialized remove it from the map.
-                if (typeof this.marker !== "undefined") {
+                if (this.marker !== null) {
                     this.map.removeLayer(this.marker);
                 }
 
@@ -85,10 +86,10 @@
                 }
             },
             showMarkerPopup: function () {
-                if (typeof this.marker !== "undefined") {
-                    const lat = this.marker.getLatLng().lat.toFixed(4);
-                    const lng = this.marker.getLatLng().lng.toFixed(4);
-                    this.marker.bindPopup(`${lat}, ${lng}`).openPopup();
+                if (this.marker !== null) {
+                    const lat = this.marker.getLatLng().lat;
+                    const lng = this.marker.getLatLng().lng;
+                    provideLocationPopupHtml({lat, lng}).then((html) => this.marker.bindPopup(html).openPopup());
                 }
             },
         },

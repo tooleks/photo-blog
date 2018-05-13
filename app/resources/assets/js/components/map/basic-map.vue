@@ -63,8 +63,8 @@
         },
         data: function () {
             return {
-                map: undefined,
-                tileLayer: undefined,
+                map: null,
+                tileLayer: null,
             };
         },
         watch: {

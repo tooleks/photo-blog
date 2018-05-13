@@ -29,7 +29,7 @@
         },
         data: function () {
             return {
-                markerClusterGroup: undefined,
+                markerClusterGroup: null,
             };
         },
         computed: {
@@ -61,7 +61,7 @@
                 this.map.addLayer(this.markerClusterGroup);
             },
             destroyMarkerClusterGroup: function () {
-                if (typeof this.markerClusterGroup !== "undefined") {
+                if (this.markerClusterGroup !== null) {
                     this.map.removeLayer(this.markerClusterGroup);
                 }
             },

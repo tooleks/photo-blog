@@ -1,6 +1,7 @@
 <template>
     <div class="image-marker-container">
-        <a :href="linkUrl" :title="title" :aria-label="title" target="_blank" class="image-marker box-shadow-2dp" :style="style"></a>
+        <a :href="linkUrl" :title="title" :aria-label="title" target="_blank" class="image-marker box-shadow-2dp"
+           :style="style"></a>
     </div>
 </template>
 
