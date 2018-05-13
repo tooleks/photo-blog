@@ -73,6 +73,34 @@ class SubscriptionsController extends Controller
     }
 
     /**
+     * @apiVersion 1.0.0
+     * @api {get} /v1/subscriptions?page=:page&per_page=:per_page Paginate
+     * @apiName Paginate
+     * @apiGroup Subscriptions
+     * @apiHeader {String} Accept application/json
+     * @apiParam {Integer{1..N}} [page=1]
+     * @apiParam {Integer{1..100}} [per_page=20]
+     * @apiSuccessExample {json} Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *     "total": 100,
+     *     "per_page": 10,
+     *     "current_page": 2,
+     *     "last_page": 10,
+     *     "next_page_url": "http://path/to/api/resource?page=3",
+     *     "prev_page_url": "http://path/to/api/resource?page=1",
+     *     "from": 10,
+     *     "to": 20,
+     *     "data": [
+     *         {
+     *             "email": "username@mail.address",
+     *             "token": "subscription_token_string"
+     *         }
+     *     ]
+     * }
+     */
+
+    /**
      * @param PaginatedRequest $request
      * @return JsonResponse
      */
