@@ -37,6 +37,9 @@ RUN curl -sS https://getcomposer.org/installer | php \
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - \
  && apt-get install -y nodejs
 
+# Bundle php configuration.
+COPY ./docker/config/php/php.prod.ini /usr/local/etc/php/php.ini
+
 # Bundle supervisor configuration.
 COPY ./docker/config/php/supervisor.conf /etc/supervisor/conf.d/supervisor.conf
 RUN chmod 0444 /etc/supervisor/conf.d/supervisor.conf
@@ -48,17 +51,19 @@ RUN chmod 0444 /etc/cron.d/scheduler
 # Set working directory.
 WORKDIR /app/
 
+# Install frontend application dependencies.
+COPY ./package*.json ./
+RUN npm install
+
 # Bundle application source code.
 COPY ./ ./
 
-# Install application dependencies.
+# Install backend application dependencies.
 COPY ./composer* ./
-COPY ./package*.json ./
 RUN composer install --no-interaction
-RUN npm install
 
-# Build REST API documentation.
-RUN php artisan generate:rest_api_documentation
+# Build frontend application.
+RUN npm run prod
 
 # Clean up.
 RUN composer install --no-interaction --no-dev

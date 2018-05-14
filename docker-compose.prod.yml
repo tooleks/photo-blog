@@ -1,12 +1,12 @@
 version: '3.3'
 
 services:
-  pb-nginx.docker:
+  pb-app-nginx.docker:
     build:
       context: ./app
       dockerfile: Dockerfile.nginx.prod
-    image: pb-nginx:1.13
-    container_name: pb-nginx
+    image: pb-app-nginx:1.13
+    container_name: pb-app-nginx
     restart: always
     depends_on:
       - pb-app.docker
@@ -24,21 +24,18 @@ services:
     image: pb-app-php:7.2-fpm
     container_name: pb-app
     restart: always
-    ports:
-      - 9000:9000
     depends_on:
-      - pb-renderer.docker
+      - pb-prerender.docker
       - pb-redis.docker
     volumes:
       - ./app/storage/:/app/storage/
-      - ./app/docker/config/php/php.prod.ini:/usr/local/etc/php/php.ini
 
-  pb-renderer.docker:
+  pb-prerender.docker:
     build:
-      context: ./renderer
+      context: ./prerender
       dockerfile: Dockerfile.prod
-    image: pb-renderer-node:10
-    container_name: pb-renderer
+    image: pb-prerender-node:10
+    container_name: pb-prerender
     restart: always
 
   pb-redis.docker:
