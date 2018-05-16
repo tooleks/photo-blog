@@ -1,3 +1,21 @@
+FROM node:10 as node
+
+# Set working directory.
+WORKDIR /home/node/app/
+
+# Install frontend application dependencies.
+COPY package*.json ./
+RUN npm install
+
+# Bundle application source code.
+COPY ./ ./
+
+# Build frontend application.
+RUN npm run prod
+
+# Build REST API documentation.
+RUN ./node_modules/.bin/apidoc -i ./src/api/ -o ./docs/rest_api/dist
+
 FROM php:7.2-fpm
 
 # Install system dependencies.
@@ -10,10 +28,6 @@ RUN apt-get update \
     libjpeg-dev \
     libpng-dev \
     libfreetype6-dev \
- && apt-get install -y \
-    gnupg \
-    apt-utils \
-    build-essential \
  && apt-get -y autoclean \
  && apt-get -y autoremove \
  && apt-get -y clean \
@@ -33,38 +47,32 @@ RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/include/ --with-png-dir=/us
 RUN curl -sS https://getcomposer.org/installer | php \
  && mv composer.phar /usr/local/bin/composer
 
-# Install Node.js, npm.
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - \
- && apt-get install -y nodejs
+# Bundle php configuration.
+COPY ./docker/config/php/php.prod.ini /usr/local/etc/php/php.ini
 
 # Bundle supervisor configuration.
-COPY ./docker/supervisor.conf /etc/supervisor/conf.d/supervisor.conf
+COPY ./docker/config/php/supervisor.conf /etc/supervisor/conf.d/supervisor.conf
 RUN chmod 0444 /etc/supervisor/conf.d/supervisor.conf
 
 # Bundle cron configuration.
-COPY ./docker/scheduler /etc/cron.d/scheduler
+COPY ./docker/config/php/scheduler /etc/cron.d/scheduler
 RUN chmod 0444 /etc/cron.d/scheduler
 
 # Set working directory.
-WORKDIR /app/
+WORKDIR /var/www/app/
 
 # Bundle application source code.
 COPY ./ ./
 
-# Install application dependencies.
+# Install backend application dependencies.
 COPY ./composer* ./
-COPY ./package*.json ./
 RUN composer install --no-interaction
-RUN npm install
-
-# Build REST API documentation.
-RUN php artisan generate:rest_api_documentation
-
-# Build frontend application.
-RUN npm run prod
 
 # Clean up.
-RUN composer install --no-dev --no-interaction
-RUN npm prune --production
+RUN composer install --no-interaction --no-dev
+
+# Bundle application build.
+COPY --from=node /home/node/app/public/ ./public/
+COPY --from=node /home/node/app/docs/ ./docs/
 
 CMD ["/usr/bin/supervisord", "-n"]

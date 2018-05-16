@@ -38,19 +38,19 @@ RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - \
  && apt-get install -y nodejs
 
 # Bundle supervisor configuration.
-COPY ./docker/supervisor.conf /etc/supervisor/conf.d/supervisor.conf
+COPY ./docker/config/php/supervisor.conf /etc/supervisor/conf.d/supervisor.conf
 RUN chmod 0444 /etc/supervisor/conf.d/supervisor.conf
 
 # Bundle cron configuration.
-COPY ./docker/scheduler /etc/cron.d/scheduler
+COPY ./docker/config/php/scheduler /etc/cron.d/scheduler
 RUN chmod 0444 /etc/cron.d/scheduler
 
 # Bundle entrypoint configuration.
-COPY ./docker/entrypoint.dev.sh /entrypoint.sh
+COPY ./docker/config/php/entrypoint.dev.sh /entrypoint.sh
 RUN chmod 0544 /entrypoint.sh
 
 # Set working directory.
-WORKDIR /app/
+WORKDIR /var/www/app/
 
 ENTRYPOINT ["/entrypoint.sh"]
 

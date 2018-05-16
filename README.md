@@ -83,4 +83,4 @@ Run the following command (within the project root directory) to start Docker co
 docker-compose --file ./docker-compose.prod.yml up --build -d
 ```
 
-**Note:** Production configuration includes only `pb-app`, `pb-renderer` and `pb-redis` containers.
+**Note:** Production configuration doesn't include `pb-mysql` container.
