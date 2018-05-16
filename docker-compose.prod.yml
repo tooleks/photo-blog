@@ -15,7 +15,7 @@ services:
       - 8081:8081
       - 8082:8082
     volumes:
-      - ./app/storage/:/app/storage/
+      - ./app/storage/:/var/www/app/storage/
 
   pb-app.docker:
     build:
@@ -28,7 +28,7 @@ services:
       - pb-prerender.docker
       - pb-redis.docker
     volumes:
-      - ./app/storage/:/app/storage/
+      - ./app/storage/:/var/www/app/storage/
 
   pb-prerender.docker:
     build:

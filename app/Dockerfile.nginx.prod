@@ -1,7 +1,7 @@
 FROM node:10 as node
 
 # Set working directory.
-WORKDIR /app/
+WORKDIR /home/node/app/
 
 # Install frontend application dependencies.
 COPY package*.json ./
@@ -21,8 +21,10 @@ RUN npm prune --production
 
 FROM nginx:1.13
 
-# Bundle application source code.
-COPY --from=node /app/ /app/
+WORKDIR /var/www/app/
+
+# Bundle application build.
+COPY --from=node /home/node/app/ ./
 
 # Bundle nginx configuration.
 COPY ./docker/config/nginx/sites/ /etc/nginx/conf.d/

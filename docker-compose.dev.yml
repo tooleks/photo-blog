@@ -12,7 +12,7 @@ services:
       - 8081:8081
       - 8082:8082
     volumes:
-      - ./app/:/app/
+      - ./app/:/var/www/app/
       - ./app/docker/config/nginx/sites/:/etc/nginx/conf.d/
 
   pb-app.docker:
@@ -28,7 +28,7 @@ services:
       - pb-redis.docker
       - pb-maildev.docker
     volumes:
-      - ./app/:/app/
+      - ./app/:/var/www/app/
       - ./app/docker/config/php/php.dev.ini:/usr/local/etc/php/php.ini
 
   pb-prerender.docker:

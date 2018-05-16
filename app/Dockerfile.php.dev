@@ -50,7 +50,7 @@ COPY ./docker/config/php/entrypoint.dev.sh /entrypoint.sh
 RUN chmod 0544 /entrypoint.sh
 
 # Set working directory.
-WORKDIR /app/
+WORKDIR /var/www/app/
 
 ENTRYPOINT ["/entrypoint.sh"]
 
