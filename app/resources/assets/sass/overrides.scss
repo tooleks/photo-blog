@@ -72,7 +72,8 @@ body {
 // Leaflet
 
 .leaflet-container {
-  font-family: $default-font-family !important;
+  font-size: 13px !important;
+  font-family: inherit !important;
 }
 
 .leaflet-popup-content-wrapper {
