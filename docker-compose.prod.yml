@@ -3,7 +3,7 @@ version: '3.3'
 services:
   pb-app-nginx.docker:
     build:
-      context: ./app
+      context: ./app/
       dockerfile: Dockerfile.nginx.prod
     image: pb-app-nginx:1.13
     container_name: pb-app-nginx
@@ -19,7 +19,7 @@ services:
 
   pb-app.docker:
     build:
-      context: ./app
+      context: ./app/
       dockerfile: Dockerfile.php.prod
     image: pb-app-php:7.2-fpm
     container_name: pb-app
@@ -32,7 +32,7 @@ services:
 
   pb-prerender.docker:
     build:
-      context: ./prerender
+      context: ./prerender/
       dockerfile: Dockerfile.prod
     image: pb-prerender-node:10
     container_name: pb-prerender
