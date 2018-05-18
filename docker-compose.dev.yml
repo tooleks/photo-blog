@@ -17,7 +17,7 @@ services:
 
   pb-app.docker:
     build:
-      context: ./app
+      context: ./app/
       dockerfile: Dockerfile.php.dev
     image: pb-app-php:7.2-fpm
     container_name: pb-app
@@ -33,7 +33,7 @@ services:
 
   pb-prerender.docker:
     build:
-      context: ./prerender
+      context: ./prerender/
       dockerfile: Dockerfile.prod
     image: pb-prerender-node:10
     container_name: pb-prerender
@@ -53,7 +53,7 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - ./docker/mysql/storage/mysql/var/lib/mysql:/var/lib/mysql
+      - ./docker/mysql/storage/mysql/var/lib/mysql/:/var/lib/mysql/
       - ./docker/mysql/config/mysql/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
       - ./docker/mysql/config/mysql/my.cnf:/etc/mysql/my.cnf
 
