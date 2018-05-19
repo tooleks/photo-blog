@@ -1,10 +1,29 @@
 <template>
     <div class="container py-3">
-        <loader :loading="loading"></loader>
-        <div class="row">
-            <div class="col-lg">
-                <div class="card">
-                    <div class="card-body">
+        <loader :loading="loading" :delay="0"></loader>
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <file-input :attributes="{id: 'file', name: 'file', disabled: loading}"
+                                    @change="uploadPhotoFile">
+                        </file-input>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col">
+                        <div v-if="photo" class="row">
+                            <div class="col">
+                                <photo-card :photo="photo"></photo-card>
+                            </div>
+                            <div class="col mt-sm-3 mt-md-0">
+                                <location-input :location.sync="location"></location-input>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div v-show="photo" class="row mt-3">
+                    <div class="col">
                         <form @submit.prevent="savePost">
                             <div class="form-group">
                                 <label for="message">Description
@@ -27,10 +46,6 @@
                             <button :disabled="loading" type="submit" class="btn btn-secondary">
                                 <i class="fa fa-floppy-o" aria-hidden="true"></i> Save
                             </button>
-                            <file-input @change="uploadPhotoFile"
-                                        :attributes="{id: 'file', name: 'file', class: 'btn btn-secondary', disabled: loading}">
-                                <i class="fa fa-cloud-upload" aria-hidden="true"></i> Upload file
-                            </file-input>
                             <button v-if="postId"
                                     @click="deletePost"
                                     :disabled="loading"
@@ -40,12 +55,6 @@
                             </button>
                         </form>
                     </div>
-                </div>
-            </div>
-            <div class="col-lg mt-3 mt-lg-0">
-                <photo-card :photo="photo"></photo-card>
-                <div v-if="photo" class="card mt-3">
-                    <location-input :location.sync="location"></location-input>
                 </div>
             </div>
         </div>
