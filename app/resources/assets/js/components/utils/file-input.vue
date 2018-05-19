@@ -1,9 +1,13 @@
 <template>
-    <label :class="attributes.class"
+    <label class="file-input card bg-light"
+           :class="attributes.class"
            :disabled="attributes.disabled"
-           v-on-drop-file="onFileChange">
+           v-on-drop-file="onFileChange"
+           title="Choose a file or drag it here.">
         <slot>
-            Upload file
+            <span>
+                <i class="fa fa-cloud-upload" aria-hidden="true"></i> Choose a file or drag it here.
+            </span>
         </slot>
         <input v-if="fileInputReady"
                hidden
@@ -13,17 +17,24 @@
     </label>
 </template>
 
-<style scoped>
-    label {
-        margin-bottom: initial;
-    }
+<style lang="scss" scoped>
+    .file-input {
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        height: 5em;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        cursor: pointer;
 
-    [disabled] {
-        cursor: not-allowed !important;
-    }
+        [disabled] {
+            cursor: not-allowed !important;
+        }
 
-    [hidden] {
-        display: none !important;
+        [hidden] {
+            display: none !important;
+        }
     }
 </style>
 

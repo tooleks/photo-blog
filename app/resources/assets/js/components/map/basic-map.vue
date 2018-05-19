@@ -50,11 +50,11 @@
             },
             location: {
                 type: Object,
-                validator: function (location) {
-                    if (location) {
-                        if (location.lat < -90 && location.lat > 90) {
+                validator: function (value) {
+                    if (value) {
+                        if (value.lat < -90 && value.lat > 90) {
                             return false;
-                        } else if (location.lng < -180 && location.lng > 180) {
+                        } else if (value.lng < -180 && value.lng > 180) {
                             return false;
                         }
                     }
