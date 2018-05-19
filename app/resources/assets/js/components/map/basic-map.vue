@@ -50,17 +50,13 @@
             },
             location: {
                 type: Object,
-                default: () => {
-                    return {
-                        lat: 49.85,
-                        lng: 24.0166666667,
-                    }
-                },
                 validator: function (location) {
-                    if (location.lat < -90 && location.lat > 90) {
-                        return false;
-                    } else if (location.lng < -180 && location.lng > 180) {
-                        return false;
+                    if (location !== null) {
+                        if (location.lat < -90 && location.lat > 90) {
+                            return false;
+                        } else if (location.lng < -180 && location.lng > 180) {
+                            return false;
+                        }
                     }
                     return true;
                 },
@@ -86,7 +82,11 @@
         },
         methods: {
             init: function () {
-                this.map = L.map(this.id).setView(this.location, this.zoom);
+                // Set default location to Lviv, Ukraine.
+                this.map = L.map(this.id).setView({lat: 49.85, lng: 24.0166666667}, this.zoom);
+                if (this.location !== null) {
+                    this.map.setView(this.location, this.zoom);
+                }
                 this.tileLayer = L.tileLayer(this.tileLayerUrl, this.tileLayerOptions).addTo(this.map);
             },
             destroy: function () {
