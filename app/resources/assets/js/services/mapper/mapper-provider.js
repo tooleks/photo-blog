@@ -163,15 +163,15 @@ export default function (dateService) {
         return component;
     });
 
-    mapperService.registerResolver("Api.Raw.Subscriptions", "Component", function ({response, component}) {
+    mapperService.registerResolver("Api.Raw.Subscriptions", "Meta.Subscriptions", function (response) {
         const {data: body} = response;
-        component.subscriptions = body.data.map((subscription) => mapperService.map(subscription, "Api.Subscription", "Subscription"));
-        component.previousPageExists = Boolean(body.prev_page_url);
-        component.nextPageExists = Boolean(body.next_page_url);
-        component.currentPage = Number(body.current_page);
-        component.nextPage = component.nextPageExists ? component.currentPage + 1 : null;
-        component.previousPage = component.previousPageExists ? component.currentPage - 1 : null;
-        return component;
+        const items = body.data.map((subscription) => mapperService.map(subscription, "Api.Subscription", "Subscription"));
+        const previousPageExists = Boolean(body.prev_page_url);
+        const nextPageExists = Boolean(body.next_page_url);
+        const currentPage = Number(body.current_page);
+        const nextPage = nextPageExists ? currentPage + 1 : null;
+        const previousPage = previousPageExists ? currentPage - 1 : null;
+        return {items, previousPageExists, nextPageExists, currentPage, nextPage, previousPage};
     });
 
     mapperService.registerResolver("Api.Raw.Tags", "Component", function ({response, component}) {
