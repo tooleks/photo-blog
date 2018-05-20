@@ -90,11 +90,20 @@
                     this.loadPhotos();
                 }
             },
+            setPhotos: function ({items, previousPageExists, nextPageExists, currentPage, nextPage, previousPage}) {
+                this.photos = items;
+                this.previousPageExists = previousPageExists;
+                this.nextPageExists = nextPageExists;
+                this.currentPage = currentPage;
+                this.nextPage = nextPage;
+                this.previousPage = previousPage;
+            },
             loadPhotos: async function () {
                 this.loading = true;
                 try {
                     const response = await this.$dc.get("api").getPosts({...this.$route.params, per_page: 40});
-                    this.$dc.get("mapper").map({response, component: this}, "Api.Raw.Posts", "Component");
+                    const photos = this.$dc.get("mapper").map(response, "Api.Raw.Posts", "Meta.Photos");
+                    this.setPhotos(photos);
                 } finally {
                     this.loading = false;
                 }

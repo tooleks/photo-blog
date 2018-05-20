@@ -173,7 +173,7 @@
             init: function () {
                 this.loadTags();
             },
-            setTags: function ({items} = {}) {
+            setTags: function ({items}) {
                 this.tags = items;
             },
             loadTags: async function () {

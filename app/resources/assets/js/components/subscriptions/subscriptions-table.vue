@@ -89,7 +89,7 @@
             init: async function () {
                 this.loadSubscriptions();
             },
-            setSubscriptions: function ({items, previousPageExists, nextPageExists, currentPage, nextPage, previousPage} = {}) {
+            setSubscriptions: function ({items, previousPageExists, nextPageExists, currentPage, nextPage, previousPage}) {
                 this.subscriptions = items;
                 this.previousPageExists = previousPageExists;
                 this.nextPageExists = nextPageExists;

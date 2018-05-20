@@ -74,7 +74,7 @@
                     const user = await this.$dc.get("login").signIn({
                         email: this.email,
                         password: this.password,
-                        g_recaptcha_response: reCaptchaResponse
+                        g_recaptcha_response: reCaptchaResponse,
                     });
                     this.$dc.get("notification").success(`Hello ${user.name}!`);
                     this.goToPath(this.$route.query.redirect_uri);
