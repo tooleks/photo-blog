@@ -1,16 +1,12 @@
 <template>
     <div class="container py-3">
         <loader :loading="loading" :delay="0"></loader>
-        <div class="card">
+        <file-input :attributes="{id: 'file', name: 'file', disabled: loading}"
+                    @change="uploadPhotoFile">
+        </file-input>
+        <div v-show="photo" class="card mt-3">
             <div class="card-body">
                 <div class="row">
-                    <div class="col">
-                        <file-input :attributes="{id: 'file', name: 'file', disabled: loading}"
-                                    @change="uploadPhotoFile">
-                        </file-input>
-                    </div>
-                </div>
-                <div class="row mt-3">
                     <div class="col">
                         <div v-if="photo" class="row">
                             <div class="col">
