@@ -56,7 +56,7 @@ const routes = [
     {
         path: "/photos/search/:search_phrase/:page",
         name: "photos-search-with-page",
-        component: require("../components/photos/photo-gallery")
+        component: require("../components/photos/photo-gallery"),
     },
     {
         path: "/photos/tag/:tag",
@@ -66,7 +66,7 @@ const routes = [
     {
         path: "/photos/tag/:tag/:page",
         name: "photos-tag-with-page",
-        component: require("../components/photos/photo-gallery")
+        component: require("../components/photos/photo-gallery"),
     },
     {
         path: "/photos",
