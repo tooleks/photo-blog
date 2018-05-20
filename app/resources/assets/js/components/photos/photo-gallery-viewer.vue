@@ -69,8 +69,8 @@
             loadPhoto: async function () {
                 this.loading = true;
                 try {
-                    const response = await this.$dc.get("api").getPost(this.$route.params.id, this.$route.query, {suppressNotFoundErrors: true});
-                    const photo = this.$dc.get("mapper").map(response, "Api.Raw.Post", "Photo");
+                    const {data: post} = await this.$dc.get("api").getPost(this.$route.params.id, this.$route.query, {suppressNotFoundErrors: true});
+                    const photo = this.$dc.get("mapper").map(post, "Api.Post", "Photo");
                     this.photos = [photo];
                     this.activePhoto = photo;
                 } catch (error) {
@@ -86,8 +86,8 @@
             loadOlderPhoto: async function () {
                 this.loading = true;
                 try {
-                    const response = await this.$dc.get("api").getPreviousPost(this.activePhoto.id, this.$route.query, {suppressNotFoundErrors: true});
-                    const photo = this.$dc.get("mapper").map(response, "Api.Raw.Post", "Photo");
+                    const {data: post} = await this.$dc.get("api").getPreviousPost(this.activePhoto.id, this.$route.query, {suppressNotFoundErrors: true});
+                    const photo = this.$dc.get("mapper").map(post, "Api.Post", "Photo");
                     this.photos = [...this.photos, photo];
                 } finally {
                     this.loading = false;
@@ -96,8 +96,8 @@
             loadNewerPhoto: async function () {
                 this.loading = true;
                 try {
-                    const response = await this.$dc.get("api").getNextPost(this.activePhoto.id, this.$route.query, {suppressNotFoundErrors: true});
-                    const photo = this.$dc.get("mapper").map(response, "Api.Raw.Post", "Photo");
+                    const {data: post} = await this.$dc.get("api").getNextPost(this.activePhoto.id, this.$route.query, {suppressNotFoundErrors: true});
+                    const photo = this.$dc.get("mapper").map(post, "Api.Post", "Photo");
                     this.photos = [photo, ...this.photos];
                 } finally {
                     this.loading = false;

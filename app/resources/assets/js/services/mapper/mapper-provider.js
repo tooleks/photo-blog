@@ -108,11 +108,6 @@ export default function (dateService) {
         };
     });
 
-    mapperService.registerResolver("Api.Raw.Post", "Photo", function (response) {
-        const {data: post} = response;
-        return mapperService.map(post, "Api.Post", "Photo");
-    });
-
     mapperService.registerResolver("Api.Raw.Post", "Component.PhotoModify", function ({response, component}) {
         const {data: post} = response;
         component.post = post;
