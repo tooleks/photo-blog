@@ -34,7 +34,7 @@ export default function (dateService) {
             averageColor: opt(() => post.photo.avg_color),
             thumbnail: mapperService.map(opt(() => post.photo.thumbnails.medium), "Api.Thumbnail", "Thumbnail"),
             original: mapperService.map(opt(() => post.photo.thumbnails.large), "Api.Thumbnail", "Thumbnail"),
-            tags: opt(() => post.tags || [], []).map((tag) => mapperService.map(tag, "Api.Tag", "Tag")),
+            tags: opt(() => post.tags, []).map((tag) => mapperService.map(tag, "Api.Tag", "Tag")),
             location: mapperService.map(opt(() => post.photo.location), "Api.Location", "Location"),
             toString: () => opt(() => post.photo.thumbnails.large.url),
             is: (image) => opt(() => image.id) === opt(() => post.id),
@@ -108,45 +108,6 @@ export default function (dateService) {
         };
     });
 
-    mapperService.registerResolver("Api.Raw.Post", "Component.PhotoModify", function ({response, component}) {
-        const {data: post} = response;
-        component.post = post;
-        component.description = opt(() => post.description);
-        component.tags = opt(() => post.tags || [], []).map((tag) => mapperService.map(tag, "Api.Tag", "Tag"));
-        component.location = opt(() => {
-            return {
-                lat: post.photo.location.latitude,
-                lng: post.photo.location.longitude,
-            };
-        }, null);
-        return component;
-    });
-
-    mapperService.registerResolver("Api.Raw.Photo", "Component.PhotoModify", function ({response, component}) {
-        const {data: photo} = response;
-        component.post = component.post || {};
-        component.post.photo = photo;
-        return component;
-    });
-
-    mapperService.registerResolver("Component.PhotoModify", "Api.Post", function (component) {
-        return {
-            id: opt(() => component.postId),
-            photo: {id: opt(() => component.photoId)},
-            description: opt(() => component.description),
-            tags: component.tags.map((tag) => mapperService.map(tag, "Tag", "Api.Tag")),
-        };
-    });
-
-    mapperService.registerResolver("Component.PhotoModify", "Api.Photo", function (component) {
-        return {
-            location: {
-                latitude: opt(() => component.location.lat),
-                longitude: opt(() => component.location.lng),
-            },
-        };
-    });
-
     mapperService.registerResolver("Api.Raw.Posts", "Meta.Photos", function (response) {
         const {data: body} = response;
         const items = body.data.map((post) => mapperService.map(post, "Api.Post", "Photo"));
@@ -178,6 +139,26 @@ export default function (dateService) {
         const nextPage = nextPageExists ? currentPage + 1 : null;
         const previousPage = previousPageExists ? currentPage - 1 : null;
         return {items, previousPageExists, nextPageExists, currentPage, nextPage, previousPage};
+    });
+
+    //
+
+    mapperService.registerResolver("Component.PhotoForm", "Api.Post.FormData", function (component) {
+        return {
+            id: opt(() => component.postId),
+            photo: {id: opt(() => component.photoId)},
+            description: opt(() => component.description),
+            tags: component.tags.map((tag) => mapperService.map(tag, "Tag", "Api.Tag")),
+        };
+    });
+
+    mapperService.registerResolver("Component.PhotoForm", "Api.Photo.FormData", function (component) {
+        return {
+            location: {
+                latitude: opt(() => component.location.lat),
+                longitude: opt(() => component.location.lng),
+            },
+        };
     });
 
     return mapperService;

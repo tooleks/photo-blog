@@ -16,9 +16,9 @@ export default class ApiService {
             .catch((error) => this.onError.call(this.onError, error, options));
     }
 
-    createToken(payload) {
+    createToken(data) {
         const url = this._getFullUrl("/auth/token");
-        const request = () => this.httpClient.post(url, payload);
+        const request = () => this.httpClient.post(url, data);
         return this._handleRequest(request);
     }
 
@@ -35,28 +35,28 @@ export default class ApiService {
     }
 
     uploadPhotoFile(file) {
-        const payload = new FormData;
-        payload.append("file", file);
+        const data = new FormData;
+        data.append("file", file);
         const url = this._getFullUrl("/photos");
-        const request = () => this.httpClient.post(url, payload);
+        const request = () => this.httpClient.post(url, data);
         return this._handleRequest(request);
     }
 
-    updatePhotoLocation(id, payload) {
+    updatePhotoLocation(id, data) {
         const url = this._getFullUrl(`/photos/${id}`);
-        const request = () => this.httpClient.put(url, payload);
+        const request = () => this.httpClient.put(url, data);
         return this._handleRequest(request);
     }
 
-    createPost(payload) {
+    createPost(data) {
         const url = this._getFullUrl("/posts");
-        const request = () => this.httpClient.post(url, Object.assign({}, payload, {is_published: true}));
+        const request = () => this.httpClient.post(url, {...data, is_published: true});
         return this._handleRequest(request);
     }
 
-    updatePost(id, payload) {
+    updatePost(id, data) {
         const url = this._getFullUrl(`/posts/${id}`);
-        const request = () => this.httpClient.put(url, payload);
+        const request = () => this.httpClient.put(url, data);
         return this._handleRequest(request);
     }
 
@@ -96,15 +96,15 @@ export default class ApiService {
         return this._handleRequest(request);
     }
 
-    createContactMessage(payload) {
+    createContactMessage(data) {
         const url = this._getFullUrl("/contact_messages");
-        const request = () => this.httpClient.post(url, payload);
+        const request = () => this.httpClient.post(url, data);
         return this._handleRequest(request);
     }
 
-    createSubscription(payload) {
+    createSubscription(data) {
         const url = this._getFullUrl("/subscriptions");
-        const request = () => this.httpClient.post(url, payload);
+        const request = () => this.httpClient.post(url, data);
         return this._handleRequest(request);
     }
 
