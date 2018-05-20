@@ -49,7 +49,12 @@
 </template>
 
 <script>
+    import {MetaMixin} from "../../mixins";
+
     export default {
+        mixins: [
+            MetaMixin,
+        ],
         data: function () {
             return {
                 loading: false,
@@ -65,6 +70,9 @@
             routeName: function () {
                 const withPageSuffix = "-with-page";
                 return this.$route.name.endsWith(withPageSuffix) ? this.$route.name : `${this.$route.name}${withPageSuffix}`;
+            },
+            pageTitle: function () {
+                return "Subscriptions";
             },
         },
         watch: {
