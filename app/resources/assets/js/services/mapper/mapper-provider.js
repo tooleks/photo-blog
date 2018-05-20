@@ -152,15 +152,15 @@ export default function (dateService) {
         };
     });
 
-    mapperService.registerResolver("Api.Raw.Posts", "Component", function ({response, component}) {
+    mapperService.registerResolver("Api.Raw.Posts", "Meta.Photos", function (response) {
         const {data: body} = response;
-        component.photos = body.data.map((post) => mapperService.map(post, "Api.Post", "Photo"));
-        component.previousPageExists = Boolean(body.prev_page_url);
-        component.nextPageExists = Boolean(body.next_page_url);
-        component.currentPage = Number(body.current_page);
-        component.nextPage = component.nextPageExists ? component.currentPage + 1 : null;
-        component.previousPage = component.previousPageExists ? component.currentPage - 1 : null;
-        return component;
+        const items = body.data.map((post) => mapperService.map(post, "Api.Post", "Photo"));
+        const previousPageExists = Boolean(body.prev_page_url);
+        const nextPageExists = Boolean(body.next_page_url);
+        const currentPage = Number(body.current_page);
+        const nextPage = nextPageExists ? currentPage + 1 : null;
+        const previousPage = previousPageExists ? currentPage - 1 : null;
+        return {items, previousPageExists, nextPageExists, currentPage, nextPage, previousPage};
     });
 
     mapperService.registerResolver("Api.Raw.Subscriptions", "Meta.Subscriptions", function (response) {
