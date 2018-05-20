@@ -14,7 +14,7 @@
             },
             siteKey: {
                 type: String,
-                default: '',
+                default: "",
             },
         },
         data: function () {

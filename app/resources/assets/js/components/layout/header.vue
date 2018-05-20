@@ -173,9 +173,13 @@
             init: function () {
                 this.loadTags();
             },
+            setTags: function ({items}) {
+                this.tags = items;
+            },
             loadTags: async function () {
                 const response = await this.$dc.get("api").getTags();
-                this.$dc.get("mapper").map({response, component: this}, "Api.Raw.Tags", "Component");
+                const tags = this.$dc.get("mapper").map(response, "Api.Raw.Tags", "Meta.Tags");
+                this.setTags(tags);
             },
         },
         created: function () {

@@ -34,7 +34,7 @@ export default function (dateService) {
             averageColor: opt(() => post.photo.avg_color),
             thumbnail: mapperService.map(opt(() => post.photo.thumbnails.medium), "Api.Thumbnail", "Thumbnail"),
             original: mapperService.map(opt(() => post.photo.thumbnails.large), "Api.Thumbnail", "Thumbnail"),
-            tags: opt(() => post.tags || [], []).map((tag) => mapperService.map(tag, "Api.Tag", "Tag")),
+            tags: opt(() => post.tags, []).map((tag) => mapperService.map(tag, "Api.Tag", "Tag")),
             location: mapperService.map(opt(() => post.photo.location), "Api.Location", "Location"),
             toString: () => opt(() => post.photo.thumbnails.large.url),
             is: (image) => opt(() => image.id) === opt(() => post.id),
@@ -108,33 +108,42 @@ export default function (dateService) {
         };
     });
 
-    mapperService.registerResolver("Api.Raw.Post", "Photo", function (response) {
-        const {data: post} = response;
-        return mapperService.map(post, "Api.Post", "Photo");
+    mapperService.registerResolver("Api.Raw.Posts", "Meta.Photos", function (response) {
+        const {data: body} = response;
+        const items = body.data.map((post) => mapperService.map(post, "Api.Post", "Photo"));
+        const previousPageExists = Boolean(body.prev_page_url);
+        const nextPageExists = Boolean(body.next_page_url);
+        const currentPage = Number(body.current_page);
+        const nextPage = nextPageExists ? currentPage + 1 : null;
+        const previousPage = previousPageExists ? currentPage - 1 : null;
+        return {items, previousPageExists, nextPageExists, currentPage, nextPage, previousPage};
     });
 
-    mapperService.registerResolver("Api.Raw.Post", "Component.PhotoModify", function ({response, component}) {
-        const {data: post} = response;
-        component.post = post;
-        component.description = opt(() => post.description);
-        component.tags = opt(() => post.tags || [], []).map((tag) => mapperService.map(tag, "Api.Tag", "Tag"));
-        component.location = opt(() => {
-            return {
-                lat: post.photo.location.latitude,
-                lng: post.photo.location.longitude,
-            };
-        }, null);
-        return component;
+    mapperService.registerResolver("Api.Raw.Subscriptions", "Meta.Subscriptions", function (response) {
+        const {data: body} = response;
+        const items = body.data.map((subscription) => mapperService.map(subscription, "Api.Subscription", "Subscription"));
+        const previousPageExists = Boolean(body.prev_page_url);
+        const nextPageExists = Boolean(body.next_page_url);
+        const currentPage = Number(body.current_page);
+        const nextPage = nextPageExists ? currentPage + 1 : null;
+        const previousPage = previousPageExists ? currentPage - 1 : null;
+        return {items, previousPageExists, nextPageExists, currentPage, nextPage, previousPage};
     });
 
-    mapperService.registerResolver("Api.Raw.Photo", "Component.PhotoModify", function ({response, component}) {
-        const {data: photo} = response;
-        component.post = component.post || {};
-        component.post.photo = photo;
-        return component;
+    mapperService.registerResolver("Api.Raw.Tags", "Meta.Tags", function (response) {
+        const {data: body} = response;
+        const items = body.data.map((tag) => mapperService.map(tag, "Api.Tag", "Tag"));
+        const previousPageExists = Boolean(body.prev_page_url);
+        const nextPageExists = Boolean(body.next_page_url);
+        const currentPage = Number(body.current_page);
+        const nextPage = nextPageExists ? currentPage + 1 : null;
+        const previousPage = previousPageExists ? currentPage - 1 : null;
+        return {items, previousPageExists, nextPageExists, currentPage, nextPage, previousPage};
     });
 
-    mapperService.registerResolver("Component.PhotoModify", "Api.Post", function (component) {
+    //
+
+    mapperService.registerResolver("Component.PhotoForm", "Api.Post.FormData", function (component) {
         return {
             id: opt(() => component.postId),
             photo: {id: opt(() => component.photoId)},
@@ -143,46 +152,13 @@ export default function (dateService) {
         };
     });
 
-    mapperService.registerResolver("Component.PhotoModify", "Api.Photo", function (component) {
+    mapperService.registerResolver("Component.PhotoForm", "Api.Photo.FormData", function (component) {
         return {
             location: {
                 latitude: opt(() => component.location.lat),
                 longitude: opt(() => component.location.lng),
             },
         };
-    });
-
-    mapperService.registerResolver("Api.Raw.Posts", "Component", function ({response, component}) {
-        const {data: body} = response;
-        component.photos = body.data.map((post) => mapperService.map(post, "Api.Post", "Photo"));
-        component.previousPageExists = Boolean(body.prev_page_url);
-        component.nextPageExists = Boolean(body.next_page_url);
-        component.currentPage = Number(body.current_page);
-        component.nextPage = component.nextPageExists ? component.currentPage + 1 : null;
-        component.previousPage = component.previousPageExists ? component.currentPage - 1 : null;
-        return component;
-    });
-
-    mapperService.registerResolver("Api.Raw.Subscriptions", "Component", function ({response, component}) {
-        const {data: body} = response;
-        component.subscriptions = body.data.map((subscription) => mapperService.map(subscription, "Api.Subscription", "Subscription"));
-        component.previousPageExists = Boolean(body.prev_page_url);
-        component.nextPageExists = Boolean(body.next_page_url);
-        component.currentPage = Number(body.current_page);
-        component.nextPage = component.nextPageExists ? component.currentPage + 1 : null;
-        component.previousPage = component.previousPageExists ? component.currentPage - 1 : null;
-        return component;
-    });
-
-    mapperService.registerResolver("Api.Raw.Tags", "Component", function ({response, component}) {
-        const {data: body} = response;
-        component.tags = body.data.map((tag) => mapperService.map(tag, "Api.Tag", "Tag"));
-        component.previousPageExists = Boolean(body.prev_page_url);
-        component.nextPageExists = Boolean(body.next_page_url);
-        component.currentPage = Number(body.current_page);
-        component.nextPage = component.nextPageExists ? component.currentPage + 1 : null;
-        component.previousPage = component.previousPageExists ? component.currentPage - 1 : null;
-        return component;
     });
 
     return mapperService;

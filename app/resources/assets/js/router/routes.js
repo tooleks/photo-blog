@@ -22,7 +22,7 @@ const routes = [
     {
         path: "/photo/add",
         name: "photo/add",
-        component: require("../components/photos/photo-modify"),
+        component: require("../components/photos/photo-form"),
         meta: {
             requiresAuth: true,
         },
@@ -30,7 +30,7 @@ const routes = [
     {
         path: "/photo/:id/edit",
         name: "photo/edit",
-        component: require("../components/photos/photo-modify"),
+        component: require("../components/photos/photo-form"),
         meta: {
             requiresAuth: true,
         },

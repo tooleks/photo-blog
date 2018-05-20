@@ -49,7 +49,12 @@
 </template>
 
 <script>
+    import {MetaMixin} from "../../mixins";
+
     export default {
+        mixins: [
+            MetaMixin,
+        ],
         data: function () {
             return {
                 loading: false,
@@ -59,12 +64,15 @@
                 nextPage: null,
                 previousPageExists: false,
                 nextPageExists: false,
-            }
+            };
         },
         computed: {
             routeName: function () {
                 const withPageSuffix = "-with-page";
                 return this.$route.name.endsWith(withPageSuffix) ? this.$route.name : `${this.$route.name}${withPageSuffix}`;
+            },
+            pageTitle: function () {
+                return "Subscriptions";
             },
         },
         watch: {
@@ -81,12 +89,20 @@
             init: async function () {
                 this.loadSubscriptions();
             },
-            loadSubscriptions: async function () {
+            setSubscriptions: function ({items, previousPageExists, nextPageExists, currentPage, nextPage, previousPage}) {
+                this.subscriptions = items;
+                this.previousPageExists = previousPageExists;
+                this.nextPageExists = nextPageExists;
+                this.currentPage = currentPage;
+                this.nextPage = nextPage;
+                this.previousPage = previousPage;
+            },
+            loadSubscriptions: async function (page = this.$route.params.page) {
                 this.loading = true;
                 try {
-                    const page = this.$route.params.page;
                     const response = await this.$dc.get("api").getSubscriptions({page});
-                    this.$dc.get("mapper").map({response, component: this}, "Api.Raw.Subscriptions", "Component");
+                    const subscriptions = this.$dc.get("mapper").map(response, "Api.Raw.Subscriptions", "Meta.Subscriptions");
+                    this.setSubscriptions(subscriptions);
                 } finally {
                     this.loading = false;
                 }
