@@ -2,6 +2,9 @@ import {optional as opt} from "tooleks";
 
 export default {
     computed: {
+        pageStatusCode: function () {
+            return 200;
+        },
         pageName: function () {
             return opt(() => this.$dc.get("config").app.name, "");
         },
@@ -30,6 +33,8 @@ export default {
             title: this.pageTitle,
             titleTemplate: this.pageTitle ? `%s | ${this.pageName}` : this.pageName,
             meta: [
+                {vmid: "prerender-status-code", name: "prerender-status-code", content: this.pageStatusCode},
+                //
                 {vmid: "description", name: "description", content: this.pageDescription},
                 {vmid: "keywords", name: "keywords", content: this.pageKeywords},
                 // Open Graph protocol properties.

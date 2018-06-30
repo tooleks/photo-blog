@@ -26,6 +26,9 @@
             MetaMixin,
         ],
         computed: {
+            pageStatusCode: function () {
+                return 404;
+            },
             pageTitle: function () {
                 return "Page not found";
             },
