@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export default class AuthService {
     constructor(eventEmitter, localStorageService, key) {
         this.eventEmitter = eventEmitter;
@@ -8,7 +10,7 @@ export default class AuthService {
 
     _initialize() {
         const user = this.getUser();
-        if (this._isExpiredAuth(user)) {
+        if (!this._isValidUser(user) || this._isExpiredAuth(user)) {
             this.setUser(null);
         }
     }
@@ -18,7 +20,7 @@ export default class AuthService {
     }
 
     _isExpiredAuth(user) {
-        return !this._isValidUser(user) || (new Date).valueOf() > user.expires_at;
+        return moment.utc().isAfter(moment.utc(user.expires_at));
     }
 
     setUser(user) {
