@@ -18,10 +18,14 @@
     </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
     .app-router {
         padding-top: 0;
-        padding-bottom: 50px;
+        padding-bottom: 100px;
+
+        @media screen and (min-width: 768px) {
+            padding-bottom: 80px;
+        }
     }
 
     @media screen and (min-width: 992px) {

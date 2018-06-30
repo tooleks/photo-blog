@@ -55,7 +55,7 @@ class RssController extends Controller
     /**
      * @return Response
      */
-    public function index()
+    public function xml()
     {
         $rss = $this->cacheManager
             ->tags(['rss', 'posts', 'photos', 'tags'])

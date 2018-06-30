@@ -138,6 +138,11 @@ class AppServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
+            \App\Services\Manifest\Contracts\ManifestService::class,
+            \App\Services\Manifest\ManifestService::class
+        );
+
+        $this->app->bind(
             \App\Services\SiteMap\Contracts\SiteMapBuilderService::class,
             \App\Services\SiteMap\SiteMapBuilderService::class
         );

@@ -55,7 +55,7 @@ class SiteMapController extends Controller
     /**
      * @return Response
      */
-    public function index()
+    public function xml()
     {
         $siteMap = $this->cacheManager
             ->tags(['siteMap', 'posts', 'photos', 'tags'])

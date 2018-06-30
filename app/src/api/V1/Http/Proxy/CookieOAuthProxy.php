@@ -105,10 +105,13 @@ class CookieOAuthProxy implements OAuthProxyContract
      * @param Response $response
      * @return Response
      */
-    private function handleResponse($response) {
-        return $response->isSuccessful()
-            ? $this->proxyOnSuccessResponse($response)
-            : $this->proxyOnErrorResponse($response);
+    private function handleResponse($response)
+    {
+        if ($response->isSuccessful()) {
+            return $this->proxyOnSuccessResponse($response);
+        } else {
+            return $this->proxyOnErrorResponse($response);
+        }
     }
 
     /**

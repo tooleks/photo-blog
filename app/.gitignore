@@ -11,12 +11,3 @@ www.pid
 oauth-private.key
 oauth-public.key
 
-/public/storage
-/public/storage/
-/public/css/
-/public/favicon/
-/public/fonts/
-/public/img/
-/public/js/
-/public/mix-manifest.json
-/public/favicon.ico
