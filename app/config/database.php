@@ -61,9 +61,9 @@ return [
         ],
 
         'testing' => [
-            'driver'   => 'sqlite',
+            'driver' => 'sqlite',
             'database' => ':memory:',
-            'prefix'   => '',
+            'prefix' => '',
         ],
 
     ],
