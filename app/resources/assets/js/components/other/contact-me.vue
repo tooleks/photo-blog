@@ -70,14 +70,14 @@
 
 <script>
     import ReCaptcha from "../utils/re-captcha";
-    import {GotoMixin, MetaMixin} from "../../mixins";
+    import {GoToMixin, MetaMixin} from "../../mixins";
 
     export default {
         components: {
             ReCaptcha,
         },
         mixins: [
-            GotoMixin,
+            GoToMixin,
             MetaMixin,
         ],
         data: function () {

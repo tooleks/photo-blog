@@ -32,7 +32,6 @@ class ReCaptchaRequest extends FormRequest
         $rules = [];
 
         $reCaptchaRule = $this->container->make(ReCaptchaRule::class);
-
         if ($reCaptchaRule->isEnabled()) {
             $rules['g_recaptcha_response'] = ['required', $reCaptchaRule];
         }

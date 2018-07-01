@@ -28,9 +28,9 @@
                 this.reCaptcha.execute();
             },
         },
-        mounted: function () {
-            this.reCaptcha.load();
-            this.reCaptcha.render();
+        mounted: async function () {
+            await this.reCaptcha.load();
+            await this.reCaptcha.render();
         },
     }
 </script>

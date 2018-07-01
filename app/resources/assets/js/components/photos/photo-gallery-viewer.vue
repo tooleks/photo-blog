@@ -22,7 +22,7 @@
     import Loader from "../utils/loader";
     import Viewer from "../gallery/viewer";
     import PhotoDescriptionCard from "./photo-description-card";
-    import {GotoMixin, MetaMixin} from "../../mixins";
+    import {GoToMixin, MetaMixin} from "../../mixins";
 
     export default {
         components: {
@@ -31,7 +31,7 @@
             Viewer,
         },
         mixins: [
-            GotoMixin,
+            GoToMixin,
             MetaMixin,
         ],
         data: function () {
