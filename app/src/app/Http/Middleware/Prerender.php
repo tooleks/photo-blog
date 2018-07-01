@@ -182,15 +182,12 @@ class Prerender
             $response = $this->httpClient->request('GET', $renderingUrl, ['headers' => $headers]);
             return $this->buildApplicationResponse($response);
         } catch (RequestException $e) {
-            if (!empty($e->getResponse()) && $e->getResponse()->getStatusCode() == 404) {
-                throw new NotFoundHttpException;
-            }
             if ($this->config->get('app.debug')) {
                 throw $e;
+            } else {
+                return $this->buildApplicationResponse($e->getResponse());
             }
         }
-
-        return null;
     }
 
     /**
