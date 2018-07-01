@@ -25,11 +25,11 @@
 </template>
 
 <script>
-    import {GotoMixin, MetaMixin} from "../../mixins";
+    import {GoToMixin, MetaMixin} from "../../mixins";
 
     export default {
         mixins: [
-            GotoMixin,
+            GoToMixin,
             MetaMixin,
         ],
         data: function () {

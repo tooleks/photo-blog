@@ -4,7 +4,7 @@ import "./bootstrap";
 import Vue from "vue";
 import VueAnalytics from "vue-analytics";
 import VueNotifications from "vue-notification";
-import dc from "./dependency-container";
+import dc from "./dc";
 import router from "./router";
 
 // Register VueAnalytics plugin if tracking ID is configured.

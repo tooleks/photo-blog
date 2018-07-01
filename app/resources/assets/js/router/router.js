@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import VueMeta from "vue-meta"
-import dc from "../dependency-container";
+import dc from "../dc";
 
 Vue.use(VueRouter);
 Vue.use(VueMeta);

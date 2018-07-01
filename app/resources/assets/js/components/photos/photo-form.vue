@@ -74,7 +74,7 @@
     import TagInput from "../utils/tag-input";
     import LocationInput from "../map/location-input";
     import PhotoCard from "./photo-card";
-    import {GotoMixin, MetaMixin} from "../../mixins";
+    import {GoToMixin, MetaMixin} from "../../mixins";
 
     export default {
         components: {
@@ -85,7 +85,7 @@
             PhotoCard,
         },
         mixins: [
-            GotoMixin,
+            GoToMixin,
             MetaMixin,
         ],
         data: function () {

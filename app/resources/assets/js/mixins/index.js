@@ -1,5 +1,5 @@
-import AuthMixin from "./auth-mixin";
-import GotoMixin from "./goto-mixin";
-import MetaMixin from "./meta-mixin";
+import AuthMixin from "./AuthMixin";
+import GoToMixin from "./GoToMixin";
+import MetaMixin from "./MetaMixin";
 
-export {AuthMixin, GotoMixin, MetaMixin};
+export {AuthMixin, GoToMixin, MetaMixin};

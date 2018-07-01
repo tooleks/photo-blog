@@ -2,11 +2,11 @@
 </template>
 
 <script>
-    import {GotoMixin} from "../../mixins";
+    import {GoToMixin} from "../../mixins";
 
     export default {
         mixins: [
-            GotoMixin,
+            GoToMixin,
         ],
         methods: {
             signOut: async function () {

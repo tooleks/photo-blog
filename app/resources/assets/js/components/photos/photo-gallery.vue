@@ -33,7 +33,7 @@
 <script>
     import Loader from "../utils/loader";
     import Masonry from "../gallery/masonry";
-    import {GotoMixin, MetaMixin} from "../../mixins";
+    import {GoToMixin, MetaMixin} from "../../mixins";
 
     export default {
         components: {
@@ -41,7 +41,7 @@
             Masonry,
         },
         mixins: [
-            GotoMixin,
+            GoToMixin,
             MetaMixin,
         ],
         data: function () {

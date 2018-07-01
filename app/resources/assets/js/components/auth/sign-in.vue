@@ -39,7 +39,7 @@
 
 <script>
     import ReCaptcha from "../utils/re-captcha";
-    import {AuthMixin, GotoMixin, MetaMixin} from "../../mixins";
+    import {AuthMixin, GoToMixin, MetaMixin} from "../../mixins";
 
     export default {
         components: {
@@ -47,7 +47,7 @@
         },
         mixins: [
             AuthMixin,
-            GotoMixin,
+            GoToMixin,
             MetaMixin,
         ],
         data: function () {

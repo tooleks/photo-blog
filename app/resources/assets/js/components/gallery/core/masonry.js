@@ -15,7 +15,7 @@ export class Masonry {
             rowMaxWidth: DEFAULT_ROW_MAX_WIDTH,
             rowMaxHeight: DEFAULT_ROW_MAX_HEIGHT,
         };
-        this.options = Object.assign({}, defaultOptions, options);
+        this.options = {...defaultOptions, ...options};
     }
 
     getOptions() {
