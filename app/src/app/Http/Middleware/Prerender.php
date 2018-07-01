@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
  */
 class Prerender
 {
-    private const PARAMETER_NAME = '_escaped_fragment_';
+    private const AJAX_CRAWLING_PARAM_NAME = '_escaped_fragment_';
 
     /**
      * @var HttpClient
@@ -29,14 +29,14 @@ class Prerender
     private $httpClient;
 
     /**
-     * @var Config
-     */
-    private $config;
-
-    /**
      * @var ResponseFactory
      */
     private $responseFactory;
+
+    /**
+     * @var Config
+     */
+    private $config;
 
     /**
      * @var bool
@@ -72,84 +72,93 @@ class Prerender
      * Prerender constructor.
      *
      * @param HttpClient $httpClient
+     * @param ResponseFactory $responseFactory
      * @param Config $config
      */
-    public function __construct(HttpClient $httpClient, Config $config, ResponseFactory $responseFactory)
+    public function __construct(HttpClient $httpClient, ResponseFactory $responseFactory, Config $config)
     {
         $this->httpClient = $httpClient;
-        $this->config = $config;
         $this->responseFactory = $responseFactory;
+        $this->config = $config;
 
         $this->enabled = $this->config->get('prerender.enabled');
         $this->url = $this->config->get('prerender.url');
-        $this->token = $this->config->get('prerender.token');
-        $this->allowedUserAgents = $this->config->get('prerender.allowed_user_agents');
-        $this->whitelist = $this->config->get('prerender.whitelist');
-        $this->blacklist = $this->config->get('prerender.blacklist');
+        $this->token = $this->config->get('prerender.token', null);
+        $this->allowedUserAgents = $this->config->get('prerender.allowed_user_agents', []);
+        $this->whitelist = $this->config->get('prerender.whitelist', []);
+        $this->blacklist = $this->config->get('prerender.blacklist', []);
     }
 
     /**
      * @param IlluminateRequest $request
      * @param Closure $next
-     * @return mixed|SymfonyResponse
+     * @return SymfonyResponse
      * @throws GuzzleException
      */
     public function handle(IlluminateRequest $request, Closure $next)
     {
-        if ($this->enabled && $this->shouldBePrerendered($request)) {
-            $response = $this->prerender($request);
-            if (!is_null($response)) {
-                return $response;
-            }
+        $isSentByCrawler = $this->isSentByCrawler($request);
+        $isWhitelisted = $this->isWhitelisted($request);
+        $isBlacklisted = $this->isBlacklisted($request);
+
+        if ($this->enabled && $isSentByCrawler && $isWhitelisted && !$isBlacklisted) {
+            return $this->prerender($request);
         }
 
         return $next($request);
     }
 
     /**
-     * Determine if a request should be prerendered.
+     * Determine if a request is sent by crawler bot.
      *
      * @param IlluminateRequest $request
      * @return bool
      */
-    private function shouldBePrerendered(IlluminateRequest $request): bool
+    private function isSentByCrawler(IlluminateRequest $request): bool
+    {
+        if ($request->isMethod('GET')) {
+            $hasAjaxCrawlingParameter = $request->has(static::AJAX_CRAWLING_PARAM_NAME);
+            $isAllowedUserAgent = $this->isAllowedUserAgent($request);
+            $isBufferBot = $request->header('x-bufferbot');
+            return $hasAjaxCrawlingParameter || $isAllowedUserAgent || $isBufferBot;
+        }
+
+        return false;
+    }
+
+    /**
+     * Determine if a request user agent is listed in allowed user agents list.
+     *
+     * @param IlluminateRequest $request
+     * @return bool
+     */
+    private function isAllowedUserAgent(IlluminateRequest $request): bool
     {
         $userAgent = $request->header('user-agent');
-        $bufferAgent = $request->header('x-bufferbot');
-        $referer = $request->header('referer');
 
-        $isCrawler = false;
-
-        if ($userAgent && $request->isMethod('GET')) {
-            if ($request->has(static::PARAMETER_NAME)) {
-                $isCrawler = true;
-            }
-            foreach ($this->allowedUserAgents as $crawlerUserAgent) {
-                if (Str::contains(Str::lower($userAgent), Str::lower($crawlerUserAgent))) {
-                    $isCrawler = true;
+        if ($userAgent) {
+            foreach ($this->allowedUserAgents as $allowedUserAgent) {
+                if (Str::contains(Str::lower($userAgent), Str::lower($allowedUserAgent))) {
+                    return true;
                 }
             }
-            if ($bufferAgent) {
-                $isCrawler = true;
-            }
         }
 
-        if (!$isCrawler) {
-            return false;
-        }
+        return false;
+    }
+
+    /**
+     * Determine if request URI is in the white list.
+     *
+     * @param IlluminateRequest $request
+     * @return bool
+     */
+    private function isWhitelisted(IlluminateRequest $request): bool
+    {
+        $path = $request->getPathInfo();
 
         if ($this->whitelist) {
-            if (!$this->inList($this->whitelist, $request->getRequestUri())) {
-                return false;
-            }
-        }
-
-        if ($this->blacklist) {
-            $uris[] = $request->getPathInfo();
-            if ($referer) {
-                $uris[] = $referer;
-            }
-            if ($this->inList($this->blacklist, $uris)) {
+            if (!$this->isListed($this->whitelist, $path)) {
                 return false;
             }
         }
@@ -158,49 +167,93 @@ class Prerender
     }
 
     /**
+     * Determine if request URI is in the black list.
+     *
+     * @param IlluminateRequest $request
+     * @return bool
+     */
+    private function isBlacklisted(IlluminateRequest $request): bool
+    {
+        $path = $request->getPathInfo();
+        $referer = $request->header('referer');
+
+        if ($this->blacklist) {
+            $uris[] = $path;
+            if ($referer) {
+                $uris[] = $referer;
+            }
+            if ($this->isListed($this->blacklist, $uris)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Determine if values exist in the list.
+     *
+     * @param array $list
+     * @param mixed $values
+     * @return bool
+     */
+    private function isListed(array $list, $values): bool
+    {
+        $values = is_array($values) ? $values : [$values];
+
+        foreach ($list as $pattern) {
+            foreach ($values as $value) {
+                if (Str::is($pattern, $value)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Prerender a requested resource.
      *
      * @param IlluminateRequest $request
-     * @return null|SymfonyResponse
+     * @return SymfonyResponse
      * @throws GuzzleException
      */
     private function prerender(IlluminateRequest $request)
     {
         $headers = [
-            'User-Agent' => $request->header('User-Agent'),
+            'user-agent' => $request->header('user-agent'),
         ];
 
         if ($this->token) {
-            $headers['X-Prerender-Token'] = $this->token;
+            $headers['x-prerender-token'] = $this->token;
         }
 
-        $requestedResourceUrl = $this->getRequestedResourceUrl($request);
-        $renderingUrl = $this->getRenderingUrl($requestedResourceUrl);
+        $requestUrl = $this->getRequestUrl($request);
 
         try {
-            $response = $this->httpClient->request('GET', $renderingUrl, ['headers' => $headers]);
+            $response = $this->httpClient->request('GET', $this->getRenderingUrl($requestUrl), ['headers' => $headers]);
             return $this->buildApplicationResponse($response);
         } catch (RequestException $e) {
-            if ($this->config->get('app.debug')) {
-                throw $e;
-            } else {
-                return $this->buildApplicationResponse($e->getResponse());
-            }
+            return $this->buildApplicationResponse($e->getResponse());
         }
     }
 
     /**
-     * Get an URL of the requested resource.
+     * Get an URL of the resource from request.
      *
      * @param IlluminateRequest $request
      * @return string
      */
-    private function getRequestedResourceUrl(IlluminateRequest $request): string
+    private function getRequestUrl(IlluminateRequest $request): string
     {
         $url = $request->getSchemeAndHttpHost() . $request->getBaseUrl() . $request->getPathInfo();
 
-        if ($request->except(static::PARAMETER_NAME)) {
-            $url .= '?' . http_build_query($request->except(static::PARAMETER_NAME));
+        // Get parameters excluding AJAX crawling parameter.
+        $params = $request->except(static::AJAX_CRAWLING_PARAM_NAME);
+
+        if ($params) {
+            $url .= '?' . http_build_query($params);
         }
 
         return $url;
@@ -209,40 +262,18 @@ class Prerender
     /**
      * Get an URL to render the requested resource.
      *
-     * @param string $requestedResourceUrl
+     * @param string $resourceUrl
      * @return string
      */
-    private function getRenderingUrl(string $requestedResourceUrl = null): string
+    private function getRenderingUrl(string $resourceUrl = null): string
     {
         $url = $this->url;
 
-        if (!is_null($requestedResourceUrl)) {
-            $url .= '/' . urlencode($requestedResourceUrl);
+        if (!is_null($resourceUrl)) {
+            $url .= '/' . urlencode($resourceUrl);
         }
 
         return $url;
-    }
-
-    /**
-     * Determine if values exist in the list.
-     *
-     * @param mixed $values
-     * @param array $list
-     * @return bool
-     */
-    private function inList(array $list, $values): bool
-    {
-        $values = is_array($values) ? $values : [$values];
-
-        foreach ($list as $pattern) {
-            foreach ($values as $needle) {
-                if (Str::is($pattern, $needle)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -253,13 +284,6 @@ class Prerender
      */
     private function buildApplicationResponse(PsrResponseInterface $response): SymfonyResponse
     {
-        if ($response->getStatusCode() >= 300 && $response->getStatusCode() < 400) {
-            return $this->responseFactory->redirectTo(
-                $response->getHeaders()["Location"][0],
-                $response->getStatusCode()
-            );
-        }
-
         return (new HttpFoundationFactory)->createResponse($response);
     }
 }
