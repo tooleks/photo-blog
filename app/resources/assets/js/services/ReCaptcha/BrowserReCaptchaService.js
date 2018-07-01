@@ -35,16 +35,16 @@ export default class BrowserReCaptchaService {
      * @return {Promise}
      */
     async execute() {
-        await this.deffered.promisify();
-        this._getReCaptcha().execute(this.widgetId);
+        const reCaptcha = await this.deffered.promisify();
+        reCaptcha.execute(this.widgetId);
     }
 
     /**
      * @return {Promise}
      */
     async render() {
-        await this.deffered.promisify();
-        this.widgetId = this._getReCaptcha().render(this.element, {
+        const reCaptcha = await this.deffered.promisify();
+        this.widgetId = reCaptcha.render(this.element, {
             sitekey: this.siteKey,
             size: "invisible",
             callback: (response) => {
@@ -58,8 +58,8 @@ export default class BrowserReCaptchaService {
      * @return {Promise}
      */
     async reset() {
-        await this.deffered.promisify();
-        this._getReCaptcha().reset(this.widgetId);
+        const reCaptcha = await this.deffered.promisify();
+        reCaptcha.reset(this.widgetId);
     }
 
     /**
@@ -68,8 +68,9 @@ export default class BrowserReCaptchaService {
     load() {
         // Resolve deferred when reCaptcha will be loaded.
         const timerId = setInterval(() => {
-            if (typeof this._getReCaptcha() !== "undefined") {
-                this.deffered.resolve();
+            const reCaptcha = this._getReCaptcha();
+            if (typeof reCaptcha !== "undefined") {
+                this.deffered.resolve(reCaptcha);
                 clearInterval(timerId);
             }
         });
