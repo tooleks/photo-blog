@@ -183,11 +183,11 @@ class Prerender
                 $uris[] = $referer;
             }
             if ($this->isListed($this->blacklist, $uris)) {
-                return false;
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 
     /**

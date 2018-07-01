@@ -48,6 +48,7 @@ return [
     'blacklist' => [
         '/api/*',
         '*.js',
+        '*.json',
         '*.css',
         '*.xml',
         '*.less',
