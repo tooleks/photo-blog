@@ -9,6 +9,10 @@ export default class LocalStorageService {
      */
     constructor(driver) {
         this.driver = driver;
+        this.set = this.set.bind(this);
+        this.remove = this.remove.bind(this);
+        this.get = this.get.bind(this);
+        this.exists = this.exists.bind(this);
     }
 
     /**

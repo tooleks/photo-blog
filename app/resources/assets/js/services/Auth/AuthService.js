@@ -15,6 +15,13 @@ export default class AuthService {
         this.eventEmitter = eventEmitter;
         this.localStorageService = localStorageService;
         this.key = key;
+        this._initialize = this._initialize.bind(this);
+        this._isValidUser = this._isValidUser.bind(this);
+        this._isExpiredUserAuth = this._isExpiredUserAuth.bind(this);
+        this.setUser = this.setUser.bind(this);
+        this.getUser = this.getUser.bind(this);
+        this.authenticated = this.authenticated.bind(this);
+        this.onChange = this.onChange.bind(this);
         this._initialize();
     }
 
@@ -26,7 +33,7 @@ export default class AuthService {
      */
     _initialize() {
         const user = this.getUser();
-        if (!this._isValidUser(user) || this._isExpiredAuth(user)) {
+        if (!this._isValidUser(user) || this._isExpiredUserAuth(user)) {
             this.setUser(null);
         }
     }
@@ -49,7 +56,7 @@ export default class AuthService {
      * @return {boolean}
      * @private
      */
-    _isExpiredAuth(user) {
+    _isExpiredUserAuth(user) {
         return moment.utc().isAfter(moment.utc(user.expires_at));
     }
 

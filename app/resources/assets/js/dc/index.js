@@ -75,18 +75,17 @@ dc.registerBinding(
             axios,
             // apiEndpoint
             config.url.api,
-            // onSuccess
-            (response) => {
+            // onData
+            async (response) => {
                 if (response.status === HTTP_STATUS_NO_CONTENT || typeof response.data === "object") {
-                    return Promise.resolve(response);
+                    return response;
                 } else {
-                    return Promise.reject(new SyntaxError);
+                    throw new SyntaxError;
                 }
             },
             // onError
-            (error, options) => {
-                return errorHandler.handle(error, options);
-            });
+            errorHandler.handle,
+        )
     },
     {
         dependencies: ["config", "notification"],

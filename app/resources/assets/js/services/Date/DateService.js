@@ -9,6 +9,7 @@ export default class DateService {
      */
     constructor(handler) {
         this.handler = handler;
+        this.format = this.format.bind(this);
     }
 
     /**

@@ -9,6 +9,8 @@ export default class CookiesService {
      */
     constructor(cookies) {
         this.cookies = cookies;
+        this.getAll = this.getAll.bind(this);
+        this.get = this.get.bind(this);
     }
 
     /**

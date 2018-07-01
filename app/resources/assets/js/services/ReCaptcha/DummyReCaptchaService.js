@@ -9,6 +9,10 @@ export default class DummyReCaptchaService {
      */
     constructor(onVerified) {
         this.onVerified = onVerified;
+        this.execute = this.execute.bind(this);
+        this.render = this.render.bind(this);
+        this.reset = this.reset.bind(this);
+        this.load = this.load.bind(this);
     }
 
     /**

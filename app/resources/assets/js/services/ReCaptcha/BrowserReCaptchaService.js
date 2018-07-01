@@ -16,6 +16,11 @@ export default class BrowserReCaptchaService {
         this.element = element;
         this.siteKey = siteKey;
         this.onVerified = onVerified;
+        this._getReCaptcha = this._getReCaptcha.bind(this);
+        this.execute = this.execute.bind(this);
+        this.render = this.render.bind(this);
+        this.reset = this.reset.bind(this);
+        this.load = this.load.bind(this);
     }
 
     /**

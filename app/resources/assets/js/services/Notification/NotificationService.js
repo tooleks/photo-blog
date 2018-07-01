@@ -16,6 +16,10 @@ export default class NotificationService {
             position: "center",
             ...options,
         };
+        this.notify = this.notify.bind(this);
+        this.success = this.success.bind(this);
+        this.warning = this.warning.bind(this);
+        this.error = this.error.bind(this);
     }
 
     /**

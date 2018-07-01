@@ -15,6 +15,8 @@ export default class LoginService {
         this.cookiesService = cookiesService;
         this.authService = authService;
         this.mapperService = mapperService;
+        this.signIn = this.signIn.bind(this);
+        this.signOut = this.signOut.bind(this);
     }
 
     /**

@@ -7,14 +7,32 @@ export default class ApiService {
      *
      * @param {*} httpClient
      * @param {string} apiEndpoint
-     * @param {Function} onSuccess
+     * @param {Function} onData
      * @param {Function} onError
      */
-    constructor(httpClient, apiEndpoint, onSuccess, onError) {
+    constructor(httpClient, apiEndpoint, onData, onError) {
         this.httpClient = httpClient;
         this.apiEndpoint = apiEndpoint;
-        this.onSuccess = onSuccess;
+        this.onData = onData;
         this.onError = onError;
+        this._getFullUrl = this._getFullUrl.bind(this);
+        this._handleRequest = this._handleRequest.bind(this);
+        this.createToken = this.createToken.bind(this);
+        this.deleteToken = this.deleteToken.bind(this);
+        this.getUser = this.getUser.bind(this);
+        this.uploadPhotoFile = this.uploadPhotoFile.bind(this);
+        this.updatePhotoLocation = this.updatePhotoLocation.bind(this);
+        this.createPost = this.createPost.bind(this);
+        this.updatePost = this.updatePost.bind(this);
+        this.getPosts = this.getPosts.bind(this);
+        this.getPost = this.getPost.bind(this);
+        this.getPreviousPost = this.getPreviousPost.bind(this);
+        this.getNextPost = this.getNextPost.bind(this);
+        this.deletePost = this.deletePost.bind(this);
+        this.getTags = this.getTags.bind(this);
+        this.createSubscription = this.createSubscription.bind(this);
+        this.deleteSubscription = this.deleteSubscription.bind(this);
+        this.getSubscriptions = this.getSubscriptions.bind(this);
     }
 
     /**
@@ -38,7 +56,7 @@ export default class ApiService {
      */
     _handleRequest(request, options = {}) {
         return request()
-            .then((response) => this.onSuccess.call(this.onSuccess, response))
+            .then((response) => this.onData.call(this.onData, response))
             .catch((error) => this.onError.call(this.onError, error, options));
     }
 

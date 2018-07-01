@@ -17,6 +17,12 @@ export default class ErrorHandlerService {
      */
     constructor(notificationService) {
         this.notificationService = notificationService;
+        this.handle = this.handle.bind(this);
+        this.handleUnknownError = this.handleUnknownError.bind(this);
+        this.handleUnauthenticatedError = this.handleUnauthenticatedError.bind(this);
+        this.handleNotFoundError = this.handleNotFoundError.bind(this);
+        this.handleValidationError = this.handleValidationError.bind(this);
+        this.handleHttpError = this.handleHttpError.bind(this);
     }
 
     /**

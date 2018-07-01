@@ -2,9 +2,16 @@
  * Class PhotoMapService.
  */
 export default class PhotoMapService {
+    /**
+     * PhotoMapService constructor.
+     *
+     * @param {ApiService} apiService
+     * @param {Mapper} mapperService
+     */
     constructor(apiService, mapperService) {
         this.apiService = apiService;
         this.mapperService = mapperService;
+        this.getImages = this.getImages.bind(this);
     }
 
     /**
