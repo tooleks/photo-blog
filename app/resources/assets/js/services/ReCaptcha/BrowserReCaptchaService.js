@@ -67,11 +67,11 @@ export default class BrowserReCaptchaService {
      */
     load() {
         // Resolve deferred when reCaptcha will be loaded.
-        const timerId = setInterval(() => {
+        const timer = setInterval(() => {
             const reCaptcha = this._getReCaptcha();
             if (typeof reCaptcha !== "undefined") {
                 this.deffered.resolve(reCaptcha);
-                clearInterval(timerId);
+                clearInterval(timer);
             }
         });
         return this.deffered.promisify();

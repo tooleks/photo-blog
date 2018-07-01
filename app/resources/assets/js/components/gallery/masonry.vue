@@ -81,7 +81,7 @@
         },
         data: function () {
             return {
-                intervals: [],
+                timers: [],
                 element: {
                     width: 0,
                     height: 0,
@@ -126,7 +126,7 @@
             },
         },
         created: function () {
-            this.intervals.push(setInterval(() => {
+            this.timers.push(setInterval(() => {
                 const width = parseInt(this.$el.offsetWidth);
                 const height = parseInt(this.$el.offsetHeight);
                 if (width !== this.element.width) {
@@ -141,7 +141,7 @@
             }, this.refreshInterval));
         },
         beforeDestroy: function () {
-            this.intervals.forEach((interval) => clearInterval(interval));
+            this.timers.forEach((interval) => clearInterval(interval));
         },
     }
 </script>
