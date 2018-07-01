@@ -43,9 +43,11 @@ class RouteServiceProvider extends ServiceProvider
     {
         $this->mapApiV1Routes();
 
-        $this->mapPublicRoutes();
-
         $this->mapWebRoutes();
+
+        // Public routes include the universal route that handles all incoming requests,
+        // so this routes group should be the last one.
+        $this->mapPublicRoutes();
     }
 
     /**
