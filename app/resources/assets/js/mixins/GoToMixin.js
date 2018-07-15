@@ -24,7 +24,7 @@ export default {
                 },
             });
         },
-        goToPhotosPage: function () {
+        goToPhotosPage: function (id) {
             const withPageSuffix = "-with-page";
             let name = "photos";
             if (this.$route.query.tag) {
@@ -43,7 +43,12 @@ export default {
                     name = name + withPageSuffix;
                 }
             }
-            this.$router.push({name, params: this.$route.query});
+            const params = this.$route.query;
+            let hash = this.$route.hash;
+            if (id) {
+                hash = `#${id}`;
+            }
+            this.$router.push({name, params, hash});
         },
         goToNotFoundPage: function () {
             this.$router.push({name: "404"});
