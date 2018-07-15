@@ -2,7 +2,8 @@
     <div class="gallery-masonry">
         <div v-for="row in rows" class="gallery-row" :style="getRowStyle()">
             <div v-for="(image, index) of row" class="gallery-cell" :style="getCellStyle()">
-                <div class="gallery-image"
+                <div :id="getImageId(image)"
+                     class="gallery-image"
                      :style="getImageStyle(image, index, row)"
                      role="img"
                      :aria-label="image.getModel().description">
@@ -112,6 +113,9 @@
                 return {
                     "padding": `${this.cellPadding}px`,
                 };
+            },
+            getImageId: function (image) {
+                return `gallery-image-${image.getModel().id}`;
             },
             getImageStyle: function (image, index, row) {
                 const isFirstOrLastImage = row.length && (index === 0 || index === row.length - 1);

@@ -74,7 +74,7 @@
         },
         methods: {
             emitBackEvent: function () {
-                this.$emit("onBack");
+                this.$emit("onBack", this.photo.id);
             },
         },
     }

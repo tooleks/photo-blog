@@ -31,6 +31,7 @@
 </template>
 
 <script>
+    import {waitUntil} from "tooleks";
     import Loader from "../utils/loader";
     import Masonry from "../gallery/masonry";
     import {GoToMixin, MetaMixin} from "../../mixins";
@@ -104,9 +105,14 @@
                     const response = await this.$dc.get("api").getPosts({...this.$route.params, per_page: 40});
                     const photos = this.$dc.get("mapper").map(response, "Api.Raw.Posts", "Meta.Photos");
                     this.setPhotos(photos);
+                    this.scrollToPhoto(this.$route.hash.slice(1));
                 } finally {
                     this.loading = false;
                 }
+            },
+            scrollToPhoto: async function (id) {
+                const element = await waitUntil(() => document.querySelector(`#gallery-image-${id}`));
+                element.scrollIntoView();
             },
         },
         created: function () {

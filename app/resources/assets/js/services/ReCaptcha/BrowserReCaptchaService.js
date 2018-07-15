@@ -1,4 +1,4 @@
-import {Defer} from "tooleks";
+import {waitUntil} from "tooleks";
 
 /**
  * Class BrowserReCaptchaService.
@@ -16,19 +16,10 @@ export default class BrowserReCaptchaService {
         this.element = element;
         this.siteKey = siteKey;
         this.onVerified = onVerified;
-        this._getReCaptcha = this._getReCaptcha.bind(this);
         this.execute = this.execute.bind(this);
         this.render = this.render.bind(this);
         this.reset = this.reset.bind(this);
         this.load = this.load.bind(this);
-    }
-
-    /**
-     * @return {*}
-     * @private
-     */
-    _getReCaptcha() {
-        return window["grecaptcha"];
     }
 
     /**
@@ -66,14 +57,6 @@ export default class BrowserReCaptchaService {
      * @return {Promise}
      */
     load() {
-        // Resolve deferred when reCaptcha will be loaded.
-        const timer = setInterval(() => {
-            const reCaptcha = this._getReCaptcha();
-            if (typeof reCaptcha !== "undefined") {
-                this.deffered.resolve(reCaptcha);
-                clearInterval(timer);
-            }
-        });
-        return this.deffered.promisify();
+        return waitUntil(() => window["grecaptcha"]);
     }
 }
