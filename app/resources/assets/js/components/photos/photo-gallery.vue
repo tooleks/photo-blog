@@ -112,7 +112,7 @@
             },
             scrollToPhoto: async function (id) {
                 const element = await waitUntil(() => document.querySelector(`#gallery-image-${id}`));
-                element.scrollIntoView();
+                element.scrollIntoView({behavior: "smooth", block: "center"});
             },
         },
         created: function () {
