@@ -31,6 +31,7 @@
 </template>
 
 <script>
+    import {waitUntil} from "tooleks";
     import Loader from "../utils/loader";
     import Masonry from "../gallery/masonry";
     import {GoToMixin, MetaMixin} from "../../mixins";
@@ -76,8 +77,16 @@
             },
             currentPage: function (currentPage) {
                 if (currentPage > 1) {
-                    this.$router.push({name: this.routeName, params: {page: currentPage}});
+                    this.$router.push({
+                        name: this.routeName,
+                        params: {page: currentPage},
+                        hash: this.$route.hash,
+                    });
                 }
+            },
+            photos: function () {
+                // Wait until "masonry" reference will be available then scroll to an active image.
+                waitUntil(() => this.$refs.masonry).then((masonry) => masonry.scrollToImageById(this.$route.hash.slice(1)));
             },
         },
         methods: {
@@ -104,7 +113,6 @@
                     const response = await this.$dc.get("api").getPosts({...this.$route.params, per_page: 40});
                     const photos = this.$dc.get("mapper").map(response, "Api.Raw.Posts", "Meta.Photos");
                     this.setPhotos(photos);
-                    this.$nextTick(() => this.$refs.masonry.scrollToImageById(this.$route.hash.slice(1)));
                 } finally {
                     this.loading = false;
                 }

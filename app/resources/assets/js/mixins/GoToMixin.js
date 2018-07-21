@@ -46,7 +46,7 @@ export default {
             const params = this.$route.query;
             let hash = this.$route.hash;
             if (id) {
-                hash = `#${id}`;
+                hash = `#gallery-image-${id}`;
             }
             this.$router.push({name, params, hash});
         },
