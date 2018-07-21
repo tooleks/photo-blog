@@ -86,7 +86,12 @@
             },
             photos: function () {
                 // Wait until "masonry" reference will be available then scroll to an active image.
-                waitUntil(() => this.$refs.masonry).then((masonry) => masonry.scrollToImageById(this.$route.hash.slice(1)));
+                waitUntil(() => this.$refs.masonry).then((masonry) => {
+                    const id = this.$route.hash.slice(1);
+                    if (id) {
+                        masonry.scrollToImageById(id);
+                    }
+                });
             },
         },
         methods: {
