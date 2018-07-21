@@ -50,6 +50,7 @@
 </style>
 
 <script>
+    import {waitUntil} from "tooleks";
     import {Masonry} from "./core";
 
     export default {
@@ -127,6 +128,10 @@
                     "width": `${width}px`,
                     "height": `${height}px`,
                 };
+            },
+            scrollToImageById: async function (id) {
+                const element = await waitUntil(() => document.querySelector(`#gallery-image-${id}`));
+                element.scrollIntoView({behavior: "instant", block: "center"});
             },
         },
         created: function () {
