@@ -12,7 +12,6 @@ export default class BrowserReCaptchaService {
      * @param {Function} onVerified
      */
     constructor(element, siteKey, onVerified) {
-        this.deffered = new Defer;
         this.element = element;
         this.siteKey = siteKey;
         this.onVerified = onVerified;
@@ -26,7 +25,7 @@ export default class BrowserReCaptchaService {
      * @return {Promise}
      */
     async execute() {
-        const reCaptcha = await this.deffered.promisify();
+        const reCaptcha = await this.load();
         reCaptcha.execute(this.widgetId);
     }
 
@@ -34,7 +33,7 @@ export default class BrowserReCaptchaService {
      * @return {Promise}
      */
     async render() {
-        const reCaptcha = await this.deffered.promisify();
+        const reCaptcha = await this.load();
         this.widgetId = reCaptcha.render(this.element, {
             sitekey: this.siteKey,
             size: "invisible",
@@ -49,7 +48,7 @@ export default class BrowserReCaptchaService {
      * @return {Promise}
      */
     async reset() {
-        const reCaptcha = await this.deffered.promisify();
+        const reCaptcha = await this.load();
         reCaptcha.reset(this.widgetId);
     }
 

@@ -3,7 +3,7 @@
         <loader :loading="loading"></loader>
         <div v-if="photos.length" class="row">
             <div class="col py-1">
-                <masonry :images="photos"></masonry>
+                <masonry ref="masonry" :images="photos"></masonry>
             </div>
         </div>
         <div v-if="!loading && !photos.length" class="row">
@@ -77,8 +77,21 @@
             },
             currentPage: function (currentPage) {
                 if (currentPage > 1) {
-                    this.$router.push({name: this.routeName, params: {page: currentPage}});
+                    this.$router.push({
+                        name: this.routeName,
+                        params: {page: currentPage},
+                        hash: this.$route.hash,
+                    });
                 }
+            },
+            photos: function () {
+                // Wait until "masonry" reference will be available then scroll to an active image.
+                waitUntil(() => this.$refs.masonry).then((masonry) => {
+                    const id = this.$route.hash.slice(1);
+                    if (id) {
+                        masonry.scrollToImageById(id);
+                    }
+                });
             },
         },
         methods: {
@@ -105,14 +118,9 @@
                     const response = await this.$dc.get("api").getPosts({...this.$route.params, per_page: 40});
                     const photos = this.$dc.get("mapper").map(response, "Api.Raw.Posts", "Meta.Photos");
                     this.setPhotos(photos);
-                    this.scrollToPhoto(this.$route.hash.slice(1));
                 } finally {
                     this.loading = false;
                 }
-            },
-            scrollToPhoto: async function (id) {
-                const element = await waitUntil(() => document.querySelector(`#gallery-image-${id}`));
-                element.scrollIntoView({behavior: "smooth", block: "center"});
             },
         },
         created: function () {
