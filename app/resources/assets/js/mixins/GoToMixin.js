@@ -1,3 +1,5 @@
+import {isDefined} from "tooleks";
+
 export default {
     methods: {
         goToPath: function (path) {
@@ -14,14 +16,15 @@ export default {
             this.$router.push({name: "sign-in"});
         },
         goToPhotoPage: function (id) {
+            const query = {
+                tag: this.$route.params.tag || this.$route.query.tag,
+                search_phrase: this.$route.params.search_phrase || this.$route.query.search_phrase,
+                page: this.$route.params.page || this.$route.query.page,
+            };
             this.$router.push({
                 name: "photo",
                 params: {id},
-                query: {
-                    tag: this.$route.params.tag || this.$route.query.tag,
-                    search_phrase: this.$route.params.search_phrase || this.$route.query.search_phrase,
-                    page: this.$route.params.page || this.$route.query.page,
-                },
+                query: query.filter((param) => isDefined(param)),
             });
         },
         goToPhotosPage: function (id) {
