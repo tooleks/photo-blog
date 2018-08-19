@@ -35,6 +35,7 @@
     import Loader from "../utils/loader";
     import Masonry from "../gallery/masonry";
     import {GoToMixin, MetaMixin} from "../../mixins";
+    import {_PAGE_SUFFIX} from "../../router/names";
 
     export default {
         components: {
@@ -58,8 +59,7 @@
         },
         computed: {
             routeName: function () {
-                const withPageSuffix = "-with-page";
-                return this.$route.name.endsWith(withPageSuffix) ? this.$route.name : `${this.$route.name}${withPageSuffix}`;
+                return this.$route.name.endsWith(_PAGE_SUFFIX) ? this.$route.name : `${this.$route.name}${_PAGE_SUFFIX}`;
             },
             pageTitle: function () {
                 if (this.$route.params.search_phrase) {

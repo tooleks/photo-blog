@@ -50,6 +50,7 @@
 
 <script>
     import {MetaMixin} from "../../mixins";
+    import {_PAGE_SUFFIX} from "../../router/names";
 
     export default {
         mixins: [
@@ -68,8 +69,7 @@
         },
         computed: {
             routeName: function () {
-                const withPageSuffix = "-with-page";
-                return this.$route.name.endsWith(withPageSuffix) ? this.$route.name : `${this.$route.name}${withPageSuffix}`;
+                return this.$route.name.endsWith(_PAGE_SUFFIX) ? this.$route.name : `${this.$route.name}${_PAGE_SUFFIX}`;
             },
             pageTitle: function () {
                 return "Subscriptions";
