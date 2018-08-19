@@ -19,12 +19,12 @@
     import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 
     // Workaround for issue: https://github.com/Leaflet/Leaflet/issues/4968#issuecomment-269750768
+    import iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
+    import iconUrl from "leaflet/dist/images/marker-icon.png";
+    import shadowUrl from "leaflet/dist/images/marker-shadow.png";
+
     delete L.Icon.Default.prototype._getIconUrl;
-    L.Icon.Default.mergeOptions({
-        iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
-        iconUrl: require("leaflet/dist/images/marker-icon.png"),
-        shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
-    });
+    L.Icon.Default.mergeOptions({iconRetinaUrl, iconUrl, shadowUrl});
 
     export default {
         props: {
@@ -50,15 +50,17 @@
             },
             location: {
                 type: Object,
-                validator: function (value) {
-                    if (value) {
-                        if (value.lat < -90 && value.lat > 90) {
-                            return false;
-                        } else if (value.lng < -180 && value.lng > 180) {
-                            return false;
-                        }
-                    }
-                    return true;
+                validator: function ({lat, lng}) {
+                    const isValidLat = lat >= -90 && lat <= 90;
+                    const isValidLng = lng >= -180 && lng <= 180;
+                    return isValidLat && isValidLng;
+                },
+                default: function () {
+                    // Lviv, Ukraine.
+                    return {
+                        lat: 49.85,
+                        lng: 24.0166666667,
+                    };
                 },
             },
             zoom: {
@@ -82,11 +84,7 @@
         },
         methods: {
             init: function () {
-                // Set default location to Lviv, Ukraine.
-                this.map = L.map(this.id).setView({lat: 49.85, lng: 24.0166666667}, this.zoom);
-                if (this.location) {
-                    this.map.setView(this.location, this.zoom);
-                }
+                this.map = L.map(this.id).setView(this.location, this.zoom);
                 this.tileLayer = L.tileLayer(this.tileLayerUrl, this.tileLayerOptions).addTo(this.map);
             },
             destroy: function () {
