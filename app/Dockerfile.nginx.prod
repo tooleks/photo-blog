@@ -1,30 +1,24 @@
-FROM node:10 as node
+FROM node:10 as frontend
 
-# Set working directory.
 WORKDIR /home/node/app/
 
-# Install frontend application dependencies.
-COPY package*.json ./
+COPY ./package.json ./package.json
+COPY ./package-lock.json ./package-lock.json
 RUN npm install
 
-# Bundle application source code.
 COPY ./ ./
 
-# Build frontend application.
 RUN npm run prod
 
-# Build REST API documentation.
 RUN ./node_modules/.bin/apidoc -i ./src/api/ -o ./docs/rest_api/dist/
 
-# Clean up.
 RUN npm prune --production
+
 
 FROM nginx:1.13
 
 WORKDIR /var/www/app/
 
-# Bundle application build.
-COPY --from=node /home/node/app/ ./
+COPY --from=frontend /home/node/app/ ./
 
-# Bundle nginx configuration.
 COPY ./docker/config/nginx/sites/ /etc/nginx/conf.d/

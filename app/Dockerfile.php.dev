@@ -1,6 +1,5 @@
 FROM php:7.2-fpm
 
-# Install system dependencies.
 RUN apt-get update \
  && apt-get install -y \
     supervisor \
@@ -19,7 +18,6 @@ RUN apt-get update \
  && apt-get -y clean \
  && rm -rf /var/lib/apt/lists/*
 
-# Install PHP dependencies.
 RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/ --with-freetype-dir=/usr/include/ \
  && docker-php-ext-install -j$(nproc) gd \
  && docker-php-ext-install -j$(nproc) exif \
@@ -29,27 +27,21 @@ RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/include/ --with-png-dir=/us
  && pecl install redis \
  && docker-php-ext-enable redis
 
-# Install composer.
 RUN curl -sS https://getcomposer.org/installer | php \
  && mv composer.phar /usr/local/bin/composer
 
-# Install Node.js, npm.
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - \
  && apt-get install -y nodejs
 
-# Bundle supervisor configuration.
 COPY ./docker/config/php/supervisor.conf /etc/supervisor/conf.d/supervisor.conf
 RUN chmod 0444 /etc/supervisor/conf.d/supervisor.conf
 
-# Bundle cron configuration.
 COPY ./docker/config/php/scheduler /etc/cron.d/scheduler
 RUN chmod 0444 /etc/cron.d/scheduler
 
-# Bundle entrypoint configuration.
 COPY ./docker/config/php/entrypoint.dev.sh /entrypoint.sh
 RUN chmod 0544 /entrypoint.sh
 
-# Set working directory.
 WORKDIR /var/www/app/
 
 ENTRYPOINT ["/entrypoint.sh"]

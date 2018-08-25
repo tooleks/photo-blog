@@ -1,24 +1,33 @@
-FROM node:10 as node
+FROM node:10 as frontend
 
-# Set working directory.
 WORKDIR /home/node/app/
 
-# Install frontend application dependencies.
-COPY package*.json ./
+COPY ./package.json ./package.json
+COPY ./package-lock.json ./package-lock.json
 RUN npm install
 
-# Bundle application source code.
 COPY ./ ./
 
-# Build frontend application.
 RUN npm run prod
 
-# Build REST API documentation.
 RUN ./node_modules/.bin/apidoc -i ./src/api/ -o ./docs/rest_api/dist/
+
+FROM composer:1.7 as vendor
+
+COPY ./database/ ./database/
+
+COPY ./composer.json ./composer.json
+COPY ./composer.lock ./composer.lock
+RUN composer install \
+ --ignore-platform-reqs \
+ --no-interaction \
+ --no-plugins \
+ --no-scripts \
+ --prefer-dist
+
 
 FROM php:7.2-fpm
 
-# Install system dependencies.
 RUN apt-get update \
  && apt-get install -y \
     supervisor \
@@ -33,7 +42,6 @@ RUN apt-get update \
  && apt-get -y clean \
  && rm -rf /var/lib/apt/lists/*
 
-# Install PHP dependencies.
 RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/ --with-freetype-dir=/usr/include/ \
  && docker-php-ext-install -j$(nproc) gd \
  && docker-php-ext-install -j$(nproc) exif \
@@ -43,36 +51,20 @@ RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/include/ --with-png-dir=/us
  && pecl install redis \
  && docker-php-ext-enable redis
 
-# Install composer.
-RUN curl -sS https://getcomposer.org/installer | php \
- && mv composer.phar /usr/local/bin/composer
-
-# Bundle php configuration.
 COPY ./docker/config/php/php.prod.ini /usr/local/etc/php/php.ini
 
-# Bundle supervisor configuration.
 COPY ./docker/config/php/supervisor.conf /etc/supervisor/conf.d/supervisor.conf
 RUN chmod 0444 /etc/supervisor/conf.d/supervisor.conf
 
-# Bundle cron configuration.
 COPY ./docker/config/php/scheduler /etc/cron.d/scheduler
 RUN chmod 0444 /etc/cron.d/scheduler
 
-# Set working directory.
 WORKDIR /var/www/app/
 
-# Bundle application source code.
 COPY ./ ./
 
-# Install backend application dependencies.
-COPY ./composer* ./
-RUN composer install --no-interaction
-
-# Clean up.
-RUN composer install --no-interaction --no-dev
-
-# Bundle application build.
-COPY --from=node /home/node/app/public/ ./public/
-COPY --from=node /home/node/app/docs/ ./docs/
+COPY --from=frontend /home/node/app/public/ ./public/
+COPY --from=frontend /home/node/app/docs/ ./docs/
+COPY --from=vendor /app/vendor/ ./vendor/
 
 CMD ["/usr/bin/supervisord", "-n"]
