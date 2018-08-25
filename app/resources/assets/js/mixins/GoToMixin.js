@@ -1,3 +1,7 @@
+import {isDefined} from "tooleks";
+import {_PAGE_SUFFIX, HOME, PHOTO, PHOTOS, PHOTOS_SEARCH, PHOTOS_TAG, ROUTE_404, SIGN_IN} from "../router/names";
+import {removeUndefinedKeys} from "../utils";
+
 export default {
     methods: {
         goToPath: function (path) {
@@ -8,50 +12,56 @@ export default {
             }
         },
         goToHomePage: function () {
-            this.$router.push({name: "home"});
+            this.$router.push({name: HOME});
         },
         goToSignInPage: function () {
-            this.$router.push({name: "sign-in"});
+            this.$router.push({name: SIGN_IN});
         },
         goToPhotoPage: function (id) {
-            this.$router.push({
-                name: "photo",
-                params: {id},
-                query: {
-                    tag: this.$route.params.tag || this.$route.query.tag,
-                    search_phrase: this.$route.params.search_phrase || this.$route.query.search_phrase,
-                    page: this.$route.params.page || this.$route.query.page,
-                },
-            });
+            // Initialize the route params.
+            const params = {id};
+            removeUndefinedKeys(params);
+
+            // Initialize the route query.
+            const query = {
+                tag: this.$route.params.tag || this.$route.query.tag,
+                search_phrase: this.$route.params.search_phrase || this.$route.query.search_phrase,
+                page: this.$route.params.page || this.$route.query.page,
+            };
+            removeUndefinedKeys(query);
+
+            this.$router.push({name: PHOTO, params, query});
         },
         goToPhotosPage: function (id) {
-            const withPageSuffix = "-with-page";
-            let name = "photos";
-            if (this.$route.query.tag) {
-                name = "photos-tag";
-                if (this.$route.query.page) {
-                    name = name + withPageSuffix;
-                }
-            } else if (this.$route.query.search_phrase) {
-                name = "photos-search";
-                if (this.$route.query.page) {
-                    name = name + withPageSuffix;
-                }
-            } else {
-                name = "photos";
-                if (this.$route.query.page) {
-                    name = name + withPageSuffix;
-                }
+            // Initialize the route name.
+            let name = PHOTOS;
+            // If tag query parameter exists, go to the tag page.
+            if (isDefined(this.$route.query.tag)) {
+                name = PHOTOS_TAG;
             }
+            // If search phrase parameter exists go to the search page.
+            if (isDefined(this.$route.query.search_phrase)) {
+                name = PHOTOS_SEARCH;
+            }
+            // Modify the route name if the route supports paging.
+            if (isDefined(this.$route.query.page)) {
+                name = name + _PAGE_SUFFIX;
+            }
+
+            // Initialize route params.
             const params = this.$route.query;
+            removeUndefinedKeys(params);
+
+            // Initialize the route hash.
             let hash = this.$route.hash;
             if (id) {
                 hash = `#gallery-image-${id}`;
             }
+
             this.$router.push({name, params, hash});
         },
         goToNotFoundPage: function () {
-            this.$router.push({name: "404"});
+            this.$router.push({name: ROUTE_404});
         },
     },
 }

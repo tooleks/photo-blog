@@ -1,6 +1,5 @@
 import Vue from "vue";
 import axios from "axios";
-import moment from "moment";
 import {DependencyContainer, EventEmitter} from "tooleks";
 
 // Application-wide services.
@@ -27,13 +26,9 @@ dc.registerBinding("mapper", makeMapper, {
     factory: true,
 });
 
-dc.registerBinding("localStorage", () => new LocalStorageService(localStorage), {
-    factory: true,
-});
+dc.registerBinding("localStorage", LocalStorageService);
 
-dc.registerBinding("cookies", () => new CookiesService(document.cookie), {
-    factory: true,
-});
+dc.registerBinding("cookies", CookiesService);
 
 dc.registerBinding(
     "reCaptchaProvider",
@@ -55,12 +50,9 @@ dc.registerBinding("notification", () => new NotificationService(Vue.prototype.$
     singleton: true,
 });
 
-dc.registerBinding("date", () => new DateService(moment), {
-    factory: true,
-    singleton: true,
-});
+dc.registerBinding("date", DateService);
 
-dc.registerBinding("auth", (localStorageService) => new AuthService(new EventEmitter, localStorageService, "user"), {
+dc.registerBinding("auth", (localStorageService) => new AuthService(new EventEmitter, localStorageService), {
     dependencies: ["localStorage"],
     factory: true,
     singleton: true,

@@ -1,4 +1,12 @@
 import moment from "moment";
+import {isObject} from "tooleks";
+
+/**
+ * String key used to represent a user auth in the persistent storage.
+ *
+ * @type {string}
+ */
+export const DEFAULT_AUTH_KEY = "user";
 
 /**
  * Class AuthService.
@@ -9,44 +17,32 @@ export default class AuthService {
      *
      * @param {EventEmitter} eventEmitter
      * @param {LocalStorageService} localStorageService
-     * @param {string} key
+     * @param {string} [authKey="user"]
      */
-    constructor(eventEmitter, localStorageService, key) {
-        this.eventEmitter = eventEmitter;
-        this.localStorageService = localStorageService;
-        this.key = key;
-        this._initialize = this._initialize.bind(this);
-        this._isValidUser = this._isValidUser.bind(this);
+    constructor(eventEmitter, localStorageService, authKey = DEFAULT_AUTH_KEY) {
+        this._eventEmitter = eventEmitter;
+        this._localStorageService = localStorageService;
+        this._authKey = authKey;
+        this._init = this._init.bind(this);
         this._isExpiredUserAuth = this._isExpiredUserAuth.bind(this);
         this.setUser = this.setUser.bind(this);
         this.getUser = this.getUser.bind(this);
         this.authenticated = this.authenticated.bind(this);
-        this.onChange = this.onChange.bind(this);
-        this._initialize();
+        this.subscribe = this.subscribe.bind(this);
+        this._init();
     }
 
     /**
-     * Initialize service.
+     * Initialize service default state.
      *
      * @return {void}
      * @private
      */
-    _initialize() {
+    _init() {
         const user = this.getUser();
-        if (!this._isValidUser(user) || this._isExpiredUserAuth(user)) {
-            this.setUser(null);
+        if (!isObject(user) || this._isExpiredUserAuth(user)) {
+            this.removeUser();
         }
-    }
-
-    /**
-     * Determine if passed argument is valid user.
-     *
-     * @param {Object} user
-     * @return {boolean}
-     * @private
-     */
-    _isValidUser(user) {
-        return typeof user === "object" && user !== null;
     }
 
     /**
@@ -61,27 +57,38 @@ export default class AuthService {
     }
 
     /**
-     * Set user to persistent storage.
+     * Set user to the persistent storage.
      *
      * @param {Object} user
      * @return {void}
+     * @throws {TypeError}
      */
     setUser(user) {
-        if (this._isValidUser(user)) {
-            this.localStorageService.set(this.key, user);
+        if (!isObject(user)) {
+            throw new TypeError;
         } else {
-            this.localStorageService.remove(this.key);
+            this._localStorageService.set(this._authKey, user);
+            this._eventEmitter.emit(this._authKey, user);
         }
-        this.eventEmitter.emit(this.key, user);
     }
 
     /**
-     * Get user from persistent storage.
+     * Remove user from the persistent storage.
+     *
+     * @return {void}
+     */
+    removeUser() {
+        this._localStorageService.remove(this._authKey);
+        this._eventEmitter.emit(this._authKey, null);
+    }
+
+    /**
+     * Get user from the persistent storage.
      *
      * @return {Object}
      */
     getUser() {
-        return this.localStorageService.get(this.key);
+        return this._localStorageService.get(this._authKey);
     }
 
     /**
@@ -90,16 +97,16 @@ export default class AuthService {
      * @return {boolean}
      */
     authenticated() {
-        return this.localStorageService.exists(this.key);
+        return this._localStorageService.exists(this._authKey);
     }
 
     /**
-     * Register listener on user change.
+     * Subscribe a listener on user change.
      *
      * @param {Function} listener
      * @return {void}
      */
-    onChange(listener) {
-        this.eventEmitter.on(this.key, listener);
+    subscribe(listener) {
+        this._eventEmitter.on(this._authKey, listener);
     }
 }
