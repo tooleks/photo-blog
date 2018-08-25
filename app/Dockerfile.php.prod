@@ -12,6 +12,7 @@ RUN npm run prod
 
 RUN ./node_modules/.bin/apidoc -i ./src/api/ -o ./docs/rest_api/dist/
 
+
 FROM composer:1.7 as vendor
 
 COPY ./database/ ./database/
