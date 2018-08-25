@@ -11,10 +11,10 @@ export default class ApiService {
      * @param {Function} onError
      */
     constructor(httpClient, apiEndpoint, onData, onError) {
-        this.httpClient = httpClient;
-        this.apiEndpoint = apiEndpoint;
-        this.onData = onData;
-        this.onError = onError;
+        this._httpClient = httpClient;
+        this._apiEndpoint = apiEndpoint;
+        this._onData = onData;
+        this._onError = onError;
         this._getFullUrl = this._getFullUrl.bind(this);
         this._handleRequest = this._handleRequest.bind(this);
         this.createToken = this.createToken.bind(this);
@@ -43,7 +43,7 @@ export default class ApiService {
      * @private
      */
     _getFullUrl(relativeUrl) {
-        return this.apiEndpoint + relativeUrl;
+        return this._apiEndpoint + relativeUrl;
     }
 
     /**
@@ -56,8 +56,8 @@ export default class ApiService {
      */
     _handleRequest(request, options = {}) {
         return request()
-            .then((response) => this.onData.call(this.onData, response))
-            .catch((error) => this.onError.call(this.onError, error, options));
+            .then((response) => this._onData.call(this._onData, response))
+            .catch((error) => this._onError.call(this._onError, error, options));
     }
 
     /**
@@ -68,7 +68,7 @@ export default class ApiService {
      */
     createToken(data) {
         const url = this._getFullUrl("/auth/token");
-        const request = () => this.httpClient.post(url, data);
+        const request = () => this._httpClient.post(url, data);
         return this._handleRequest(request);
     }
 
@@ -79,7 +79,7 @@ export default class ApiService {
      */
     deleteToken() {
         const url = this._getFullUrl("/auth/token");
-        const request = () => this.httpClient.delete(url);
+        const request = () => this._httpClient.delete(url);
         return this._handleRequest(request);
     }
 
@@ -91,7 +91,7 @@ export default class ApiService {
      */
     getUser(id) {
         const url = this._getFullUrl(`/users/${id}`);
-        const request = () => this.httpClient.get(url);
+        const request = () => this._httpClient.get(url);
         return this._handleRequest(request);
     }
 
@@ -105,7 +105,7 @@ export default class ApiService {
         const data = new FormData;
         data.append("file", file);
         const url = this._getFullUrl("/photos");
-        const request = () => this.httpClient.post(url, data);
+        const request = () => this._httpClient.post(url, data);
         return this._handleRequest(request);
     }
 
@@ -118,7 +118,7 @@ export default class ApiService {
      */
     updatePhotoLocation(id, data) {
         const url = this._getFullUrl(`/photos/${id}`);
-        const request = () => this.httpClient.put(url, data);
+        const request = () => this._httpClient.put(url, data);
         return this._handleRequest(request);
     }
 
@@ -130,7 +130,7 @@ export default class ApiService {
      */
     createPost(data) {
         const url = this._getFullUrl("/posts");
-        const request = () => this.httpClient.post(url, {...data, is_published: true});
+        const request = () => this._httpClient.post(url, {...data, is_published: true});
         return this._handleRequest(request);
     }
 
@@ -143,7 +143,7 @@ export default class ApiService {
      */
     updatePost(id, data) {
         const url = this._getFullUrl(`/posts/${id}`);
-        const request = () => this.httpClient.put(url, data);
+        const request = () => this._httpClient.put(url, data);
         return this._handleRequest(request);
     }
 
@@ -159,7 +159,7 @@ export default class ApiService {
      */
     getPosts({page = 1, per_page = 15, tag, search_phrase} = {}) {
         const url = this._getFullUrl("/posts");
-        const request = () => this.httpClient.get(url, {params: {page, per_page, tag, search_phrase}});
+        const request = () => this._httpClient.get(url, {params: {page, per_page, tag, search_phrase}});
         return this._handleRequest(request);
     }
 
@@ -175,7 +175,7 @@ export default class ApiService {
      */
     getPost(id, {tag, search_phrase} = {}, options = {}) {
         const url = this._getFullUrl(`/posts/${id}`);
-        const request = () => this.httpClient.get(url, {params: {tag, search_phrase}});
+        const request = () => this._httpClient.get(url, {params: {tag, search_phrase}});
         return this._handleRequest(request, options);
     }
 
@@ -191,7 +191,7 @@ export default class ApiService {
      */
     getPreviousPost(id, {tag, search_phrase} = {}, options = {}) {
         const url = this._getFullUrl(`/posts/${id}/previous`);
-        const request = () => this.httpClient.get(url, {params: {tag, search_phrase}});
+        const request = () => this._httpClient.get(url, {params: {tag, search_phrase}});
         return this._handleRequest(request, options);
     }
 
@@ -207,7 +207,7 @@ export default class ApiService {
      */
     getNextPost(id, {tag, search_phrase} = {}, options = {}) {
         const url = this._getFullUrl(`/posts/${id}/next`);
-        const request = () => this.httpClient.get(url, {params: {tag, search_phrase}});
+        const request = () => this._httpClient.get(url, {params: {tag, search_phrase}});
         return this._handleRequest(request, options);
     }
 
@@ -219,7 +219,7 @@ export default class ApiService {
      */
     deletePost(id) {
         const url = this._getFullUrl(`/posts/${id}`);
-        const request = () => this.httpClient.delete(url);
+        const request = () => this._httpClient.delete(url);
         return this._handleRequest(request);
     }
 
@@ -233,7 +233,7 @@ export default class ApiService {
      */
     getTags({page = 1, per_page = 15} = {}) {
         const url = this._getFullUrl("/tags");
-        const request = () => this.httpClient.get(url, {params: {page, per_page}});
+        const request = () => this._httpClient.get(url, {params: {page, per_page}});
         return this._handleRequest(request);
     }
 
@@ -245,7 +245,7 @@ export default class ApiService {
      */
     createContactMessage(data) {
         const url = this._getFullUrl("/contact_messages");
-        const request = () => this.httpClient.post(url, data);
+        const request = () => this._httpClient.post(url, data);
         return this._handleRequest(request);
     }
 
@@ -257,7 +257,7 @@ export default class ApiService {
      */
     createSubscription(data) {
         const url = this._getFullUrl("/subscriptions");
-        const request = () => this.httpClient.post(url, data);
+        const request = () => this._httpClient.post(url, data);
         return this._handleRequest(request);
     }
 
@@ -269,7 +269,7 @@ export default class ApiService {
      */
     deleteSubscription(token) {
         const url = this._getFullUrl(`/subscriptions/${token}`);
-        const request = () => this.httpClient.delete(url);
+        const request = () => this._httpClient.delete(url);
         return this._handleRequest(request);
     }
 
@@ -283,7 +283,7 @@ export default class ApiService {
      */
     getSubscriptions({page = 1, per_page = 15} = {}) {
         const url = this._getFullUrl("/subscriptions");
-        const request = () => this.httpClient.get(url, {params: {page, per_page}});
+        const request = () => this._httpClient.get(url, {params: {page, per_page}});
         return this._handleRequest(request);
     }
 }

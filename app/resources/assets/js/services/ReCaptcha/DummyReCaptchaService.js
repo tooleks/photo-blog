@@ -8,7 +8,7 @@ export default class DummyReCaptchaService {
      * @param {Function} onVerified
      */
     constructor(onVerified) {
-        this.onVerified = onVerified;
+        this._onVerified = onVerified;
         this.execute = this.execute.bind(this);
         this.render = this.render.bind(this);
         this.reset = this.reset.bind(this);
@@ -19,7 +19,7 @@ export default class DummyReCaptchaService {
      * @return {Promise}
      */
     async execute() {
-        this.onVerified.call(this.onVerified);
+        this._onVerified.call(this._onVerified);
     }
 
     /**

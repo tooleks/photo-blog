@@ -4,11 +4,8 @@
 export default class LocalStorageService {
     /**
      * LocalStorageService constructor.
-     *
-     * @param {*} driver
      */
-    constructor(driver) {
-        this.driver = driver;
+    constructor() {
         this.set = this.set.bind(this);
         this.remove = this.remove.bind(this);
         this.get = this.get.bind(this);
@@ -23,7 +20,7 @@ export default class LocalStorageService {
      * @return {void}
      */
     set(key, value) {
-        this.driver.setItem(key, JSON.stringify(value));
+        localStorage.setItem(key, JSON.stringify(value));
     }
 
     /**
@@ -33,7 +30,7 @@ export default class LocalStorageService {
      * @return {void}
      */
     remove(key) {
-        this.driver.removeItem(key);
+        localStorage.removeItem(key);
     }
 
     /**
@@ -46,7 +43,7 @@ export default class LocalStorageService {
     get(key, defaultValue = null) {
         let value = defaultValue;
         if (this.exists(key)) {
-            const rawValue = this.driver.getItem(key);
+            const rawValue = localStorage.getItem(key);
             if (typeof rawValue !== "undefined") {
                 value = JSON.parse(rawValue);
             }
@@ -61,6 +58,6 @@ export default class LocalStorageService {
      * @return {boolean}
      */
     exists(key) {
-        return this.driver.getItem(key) !== null;
+        return localStorage.getItem(key) !== null;
     }
 }

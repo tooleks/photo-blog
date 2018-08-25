@@ -7,14 +7,14 @@ export default class BrowserReCaptchaService {
     /**
      * BrowserReCaptchaService constructor.
      *
-     * @param {*} element
+     * @param {HTMLElement} element
      * @param {string} siteKey
      * @param {Function} onVerified
      */
     constructor(element, siteKey, onVerified) {
-        this.element = element;
-        this.siteKey = siteKey;
-        this.onVerified = onVerified;
+        this._element = element;
+        this._siteKey = siteKey;
+        this._onVerified = onVerified;
         this.execute = this.execute.bind(this);
         this.render = this.render.bind(this);
         this.reset = this.reset.bind(this);
@@ -26,7 +26,7 @@ export default class BrowserReCaptchaService {
      */
     async execute() {
         const reCaptcha = await this.load();
-        reCaptcha.execute(this.widgetId);
+        reCaptcha.execute(this._widgetId);
     }
 
     /**
@@ -34,11 +34,11 @@ export default class BrowserReCaptchaService {
      */
     async render() {
         const reCaptcha = await this.load();
-        this.widgetId = reCaptcha.render(this.element, {
-            sitekey: this.siteKey,
+        this._widgetId = reCaptcha.render(this._element, {
+            sitekey: this._siteKey,
             size: "invisible",
             callback: (response) => {
-                this.onVerified.call(this.onVerified, response);
+                this._onVerified.call(this._onVerified, response);
                 this.reset();
             },
         });
@@ -49,7 +49,7 @@ export default class BrowserReCaptchaService {
      */
     async reset() {
         const reCaptcha = await this.load();
-        reCaptcha.reset(this.widgetId);
+        reCaptcha.reset(this._widgetId);
     }
 
     /**

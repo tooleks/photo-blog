@@ -11,10 +11,10 @@ export default class LoginService {
      * @param {Mapper} mapperService
      */
     constructor(apiService, cookiesService, authService, mapperService) {
-        this.apiService = apiService;
-        this.cookiesService = cookiesService;
-        this.authService = authService;
-        this.mapperService = mapperService;
+        this._apiService = apiService;
+        this._cookiesService = cookiesService;
+        this._authService = authService;
+        this._mapperService = mapperService;
         this.signIn = this.signIn.bind(this);
         this.signOut = this.signOut.bind(this);
     }
@@ -26,12 +26,12 @@ export default class LoginService {
      * @return {Promise<Object>}
      */
     async signIn(credentials) {
-        await this.apiService.createToken(credentials);
-        const {data} = await this.apiService.getUser("me");
-        const expiresIn = this.cookiesService.get("expires_in");
-        const user = this.mapperService.map({...data, expires_in: expiresIn}, "Api.User", "User");
-        this.authService.setUser(user);
-        return this.authService.getUser();
+        await this._apiService.createToken(credentials);
+        const {data} = await this._apiService.getUser("me");
+        const expiresIn = this._cookiesService.get("expires_in");
+        const user = this._mapperService.map({...data, expires_in: expiresIn}, "Api.User", "User");
+        this._authService.setUser(user);
+        return this._authService.getUser();
     }
 
     /**
@@ -41,9 +41,9 @@ export default class LoginService {
      */
     async signOut() {
         try {
-            await this.apiService.deleteToken();
+            await this._apiService.deleteToken();
         } finally {
-            this.authService.setUser(null);
+            this._authService.removeUser();
         }
     }
 }

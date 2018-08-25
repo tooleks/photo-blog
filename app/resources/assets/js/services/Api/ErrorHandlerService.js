@@ -16,7 +16,7 @@ export default class ErrorHandlerService {
      * @param {NotificationService} notificationService
      */
     constructor(notificationService) {
-        this.notificationService = notificationService;
+        this._notificationService = notificationService;
         this.handle = this.handle.bind(this);
         this.handleUnknownError = this.handleUnknownError.bind(this);
         this.handleUnauthenticatedError = this.handleUnauthenticatedError.bind(this);
@@ -60,7 +60,7 @@ export default class ErrorHandlerService {
      * @return {Promise}
      */
     async handleUnknownError(error, options) {
-        this.notificationService.error("Remote server connection error. Try again later.");
+        this._notificationService.error("Remote server connection error. Try again later.");
         throw error;
     }
 
@@ -87,7 +87,7 @@ export default class ErrorHandlerService {
      */
     async handleNotFoundError(error, {suppressNotFoundErrors = false} = {}) {
         if (!suppressNotFoundErrors) {
-            this.notificationService.error(error.response.data.message);
+            this._notificationService.error(error.response.data.message);
         }
         throw error;
     }
@@ -103,7 +103,7 @@ export default class ErrorHandlerService {
         const errors = opt(() => error.response.data.errors) || {};
         for (let attribute in errors) {
             if (errors.hasOwnProperty(attribute)) {
-                errors[attribute].forEach((message) => this.notificationService.warning(message));
+                errors[attribute].forEach((message) => this._notificationService.warning(message));
             }
         }
         throw error;
@@ -119,14 +119,14 @@ export default class ErrorHandlerService {
     async handleHttpError(error, options = {}) {
         if (error instanceof SyntaxError) {
             const title = "Invalid response type.";
-            this.notificationService.error(title);
+            this._notificationService.error(title);
         } else if (opt(() => error.response)) {
             const title = opt(() => error.response.data.message) || "Internal Server Error.";
             const status = opt(() => error.response.status) || "500";
-            this.notificationService.error(title, `HTTP ${status} Error.`);
+            this._notificationService.error(title, `HTTP ${status} Error.`);
         } else {
             const title = opt(() => error.message) || "Unknown Error.";
-            this.notificationService.error(title);
+            this._notificationService.error(title);
         }
         throw error;
     }

@@ -4,11 +4,8 @@
 export default class CookiesService {
     /**
      * CookiesService constructor.
-     *
-     * @param {*} cookies
      */
-    constructor(cookies) {
-        this.cookies = cookies;
+    constructor() {
         this.getAll = this.getAll.bind(this);
         this.get = this.get.bind(this);
     }
@@ -19,7 +16,7 @@ export default class CookiesService {
      * @return {Object}
      */
     getAll() {
-        return this.cookies
+        return document.cookie
             .split(";")
             .reduce((cookies, rawCookie) => {
                 const [name, value] = rawCookie.trim().split("=");

@@ -9,8 +9,8 @@ export default class NotificationService {
      * @param {Object} [options={}]
      */
     constructor(handler, options = {}) {
-        this.handler = handler;
-        this.options = {
+        this._handler = handler;
+        this._options = {
             group: "main",
             duration: 2000,
             position: "center",
@@ -31,8 +31,8 @@ export default class NotificationService {
      * @return {void}
      */
     notify(title, message = "", type = "") {
-        const notification = {...this.options, title, text: message, type};
-        this.handler(notification);
+        const notification = {...this._options, title, text: message, type};
+        this._handler(notification);
     }
 
     /**

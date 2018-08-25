@@ -1,14 +1,13 @@
+import moment from "moment";
+
 /**
  * Class DateService.
  */
 export default class DateService {
     /**
      * DateService constructor.
-     *
-     * @param {*} handler
      */
-    constructor(handler) {
-        this.handler = handler;
+    constructor() {
         this.format = this.format.bind(this);
     }
 
@@ -20,6 +19,6 @@ export default class DateService {
      * @return {*}
      */
     format(datetime, format = "LLLL") {
-        return this.handler(datetime).format(format);
+        return moment.utc(datetime).format(format);
     }
 }

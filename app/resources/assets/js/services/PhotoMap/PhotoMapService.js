@@ -9,8 +9,8 @@ export default class PhotoMapService {
      * @param {Mapper} mapperService
      */
     constructor(apiService, mapperService) {
-        this.apiService = apiService;
-        this.mapperService = mapperService;
+        this._apiService = apiService;
+        this._mapperService = mapperService;
         this.getImages = this.getImages.bind(this);
     }
 
@@ -23,8 +23,8 @@ export default class PhotoMapService {
      * @return {Promise}
      */
     async getImages({page = 1, perPage = 50} = {}) {
-        const {data} = await this.apiService.getPosts({page, per_page: perPage});
-        let images = data.data.map((post) => this.mapperService.map(post, "Api.Post", "Map.Image"));
+        const {data} = await this._apiService.getPosts({page, per_page: perPage});
+        let images = data.data.map((post) => this._mapperService.map(post, "Api.Post", "Map.Image"));
         const nextPageExists = Boolean(data.next_page_url);
         if (nextPageExists) {
             images = [...images, ...await this.getImages(page + 1)];
