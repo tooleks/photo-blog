@@ -57,9 +57,7 @@
         props: {
             images: {
                 type: Array,
-                default: () => {
-                    return [];
-                },
+                default: [],
             },
             refreshInterval: {
                 type: Number,

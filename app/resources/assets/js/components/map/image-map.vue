@@ -1,38 +1,19 @@
-<template>
-    <basic-map ref="map" :location="location" :zoom="zoom"></basic-map>
-</template>
-
 <script>
     import BasicMap from "./basic-map";
     import {provideImageMarkerHtml} from "./image-marker-provider";
 
     export default {
-        components: {
-            BasicMap,
-        },
+        extends: BasicMap,
         props: {
-            location: {
-                type: Object,
-            },
-            zoom: {
-                type: Number,
-            },
             images: {
                 type: Array,
-                default: () => {
-                    return [];
-                },
+                default: [],
             },
         },
         data: function () {
             return {
                 markerClusterGroup: null,
             };
-        },
-        computed: {
-            map: function () {
-                return this.$refs.map.getMap();
-            },
         },
         watch: {
             images: function () {
@@ -43,12 +24,7 @@
         },
         methods: {
             init: function () {
-                this.map.on("moveend", (event) => {
-                    const southWest = event.target.getBounds().getSouthWest();
-                    const northEast = event.target.getBounds().getNorthEast();
-                    this.$emit("positionChange", {southWest, northEast});
-                });
-                this.map.on("zoomend", (event) => this.$emit("update:zoom", event.target.getZoom()));
+                BasicMap.methods.init.call(this);
                 this.initMarkerClusterGroup();
             },
             initMarkerClusterGroup: function () {
@@ -67,9 +43,6 @@
                 const marker = L.marker(image.location, {icon, riseOnHover: true});
                 this.markerClusterGroup.addLayer(marker);
             },
-        },
-        mounted: function () {
-            this.init();
         },
     }
 </script>

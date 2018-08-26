@@ -26,9 +26,7 @@
         props: {
             tags: {
                 type: Array,
-                default: () => {
-                    return [];
-                },
+                default: [],
             },
         },
     }

@@ -13,9 +13,7 @@
             },
             tags: {
                 type: Array,
-                default: () => {
-                    return [];
-                },
+                default: [],
             },
         },
         data: function () {
