@@ -23,10 +23,6 @@
             },
         },
         methods: {
-            init: function () {
-                BasicMap.methods.init.call(this);
-                this.initMarkerClusterGroup();
-            },
             initMarkerClusterGroup: function () {
                 this.markerClusterGroup = L.markerClusterGroup({
                     spiderLegPolylineOptions: {opacity: 0},
@@ -36,6 +32,7 @@
             destroyMarkerClusterGroup: function () {
                 if (this.markerClusterGroup !== null) {
                     this.map.removeLayer(this.markerClusterGroup);
+                    this.markerClusterGroup = null;
                 }
             },
             renderImage: function (image) {
@@ -43,6 +40,9 @@
                 const marker = L.marker(image.location, {icon, riseOnHover: true});
                 this.markerClusterGroup.addLayer(marker);
             },
+        },
+        mounted: function () {
+            this.initMarkerClusterGroup();
         },
     }
 </script>

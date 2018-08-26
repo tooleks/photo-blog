@@ -83,18 +83,18 @@
             },
         },
         methods: {
-            init: function () {
+            initMap: function () {
                 this.map = L.map(this.id).setView(this.location, this.zoom);
                 this.tileLayer = L.tileLayer(this.tileLayerUrl, this.tileLayerOptions).addTo(this.map);
-                this.map.on("zoomend", this.onMapEvent);
-                this.map.on("moveend", this.onMapEvent);
+                this.map.on("zoomend", this.handleMapEvent);
+                this.map.on("moveend", this.handleMapEvent);
             },
-            destroy: function () {
+            destroyMap: function () {
                 this.map.remove();
                 this.map = null;
                 this.tileLayer = null;
             },
-            onMapEvent: function (event) {
+            handleMapEvent: function (event) {
                 this.$emit("update:location", event.target.getCenter());
                 this.$emit("update:zoom", event.target.getZoom());
                 this.$emit("bounds", {
@@ -104,10 +104,10 @@
             },
         },
         mounted: function () {
-            this.init();
+            this.initMap();
         },
         beforeDestroy: function () {
-            this.destroy();
+            this.destroyMap();
         },
     }
 </script>
