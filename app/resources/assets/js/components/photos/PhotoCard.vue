@@ -19,7 +19,7 @@
 </style>
 
 <script>
-    import ExifDescription from "./exif-description";
+    import ExifDescription from "./ExifDescription";
 
     export default {
         components: {ExifDescription},

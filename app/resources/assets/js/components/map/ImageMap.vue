@@ -1,6 +1,6 @@
 <script>
-    import BasicMap from "./basic-map";
-    import {provideImageMarkerHtml} from "./image-marker-provider";
+    import BasicMap from "./BasicMap";
+    import {provideImageMarkerHtml} from "./imageMarkerProvider";
 
     export default {
         extends: BasicMap,

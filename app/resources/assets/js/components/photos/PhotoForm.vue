@@ -69,11 +69,11 @@
 
 <script>
     import {optional as opt} from "tooleks";
-    import FileInput from "../utils/file-input";
-    import Loader from "../utils/loader";
-    import TagInput from "../utils/tag-input";
-    import LocationInput from "../map/location-input";
-    import PhotoCard from "./photo-card";
+    import FileInput from "../utils/FileInput";
+    import Loader from "../utils/Loader";
+    import TagInput from "../utils/TagInput";
+    import LocationInput from "../map/LocationInput";
+    import PhotoCard from "./PhotoCard";
     import {GoToMixin, MetaMixin} from "../../mixins";
 
     export default {

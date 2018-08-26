@@ -6,8 +6,8 @@
 
 <script>
     import L from "leaflet";
-    import BasicMap from "./basic-map";
-    import {provideLocationPopupHtml} from "./location-popup-provider";
+    import BasicMap from "./BasicMap";
+    import {provideLocationPopupHtml} from "./locationPopupProvider";
 
     export default {
         components: {

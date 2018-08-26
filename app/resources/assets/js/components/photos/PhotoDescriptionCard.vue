@@ -51,10 +51,10 @@
 </style>
 
 <script>
-    import LocationInput from "../map/location-input";
-    import ExifDescription from "./exif-description";
-    import ShareButtons from "../utils/share-buttons";
-    import TagBadges from "../utils/tag-badges";
+    import LocationInput from "../map/LocationInput";
+    import ExifDescription from "./ExifDescription";
+    import ShareButtons from "../utils/ShareButtons";
+    import TagBadges from "../utils/TagBadges";
     import {AuthMixin} from "../../mixins"
 
     export default {

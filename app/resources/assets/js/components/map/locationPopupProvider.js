@@ -1,6 +1,6 @@
 import Vue from "vue";
 import {reverseGeocode} from "esri-leaflet-geocoder";
-import LocationPopup from "./location-popup";
+import LocationPopup from "./LocationPopup";
 
 const LocationPopupComponent = Vue.extend(LocationPopup);
 

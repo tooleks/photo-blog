@@ -1,5 +1,5 @@
 import Vue from "vue";
-import ImageMarker from "./image-marker";
+import ImageMarker from "./ImageMarker";
 
 const ImageMarkerComponent = Vue.extend(ImageMarker);
 

@@ -149,7 +149,7 @@
 </style>
 
 <script>
-    import SearchInput from "../photos/search-input";
+    import SearchInput from "../photos/SearchInput";
     import {AuthMixin} from "../../mixins";
 
     export default {

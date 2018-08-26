@@ -32,8 +32,8 @@
 
 <script>
     import {waitUntil} from "tooleks";
-    import Loader from "../utils/loader";
-    import Masonry from "../gallery/masonry";
+    import Loader from "../utils/Loader";
+    import Masonry from "../gallery/Masonry";
     import {GoToMixin, MetaMixin} from "../../mixins";
     import {_PAGE_SUFFIX} from "../../router/names";
 
