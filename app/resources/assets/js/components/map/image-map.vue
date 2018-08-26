@@ -12,37 +12,37 @@
         },
         data: function () {
             return {
-                markerClusterGroup: null,
+                markerCluster: null,
             };
         },
         watch: {
             images: function () {
-                this.destroyMarkerClusterGroup();
-                this.initMarkerClusterGroup();
+                this.destroyMarkerCluster();
+                this.initMarkerCluster();
                 this.images.forEach((image) => this.renderImage(image));
             },
         },
         methods: {
-            initMarkerClusterGroup: function () {
-                this.markerClusterGroup = L.markerClusterGroup({
+            initMarkerCluster: function () {
+                this.markerCluster = L.markerClusterGroup({
                     spiderLegPolylineOptions: {opacity: 0},
                 });
-                this.map.addLayer(this.markerClusterGroup);
+                this.map.addLayer(this.markerCluster);
             },
-            destroyMarkerClusterGroup: function () {
-                if (this.markerClusterGroup !== null) {
-                    this.map.removeLayer(this.markerClusterGroup);
-                    this.markerClusterGroup = null;
+            destroyMarkerCluster: function () {
+                if (this.markerCluster !== null) {
+                    this.map.removeLayer(this.markerCluster);
+                    this.markerCluster = null;
                 }
             },
             renderImage: function (image) {
                 const icon = L.divIcon({html: provideImageMarkerHtml(image)});
                 const marker = L.marker(image.location, {icon, riseOnHover: true});
-                this.markerClusterGroup.addLayer(marker);
+                this.markerCluster.addLayer(marker);
             },
         },
         mounted: function () {
-            this.initMarkerClusterGroup();
+            this.initMarkerCluster();
         },
     }
 </script>
