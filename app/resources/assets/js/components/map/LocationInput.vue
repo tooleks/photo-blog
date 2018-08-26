@@ -1,11 +1,13 @@
 <template>
-    <basic-map ref="map" :location="location" :zoom="zoom"></basic-map>
+    <basic-map ref="map"
+               :location="location || undefined"
+               :zoom="zoom"></basic-map>
 </template>
 
 <script>
     import L from "leaflet";
-    import BasicMap from "./basic-map";
-    import {provideLocationPopupHtml} from "./location-popup-provider";
+    import BasicMap from "./BasicMap";
+    import {provideLocationPopupHtml} from "./locationPopupProvider";
 
     export default {
         components: {
@@ -30,7 +32,7 @@
         },
         computed: {
             map: function () {
-                return this.$refs.map.getMap();
+                return this.$refs.map.map;
             },
         },
         watch: {
@@ -67,7 +69,7 @@
                     this.map.removeLayer(this.marker);
                 }
 
-                this.marker = L.marker(location, {draggable: !this.disabled}).addTo(this.$refs.map.getMap());
+                this.marker = L.marker(location, {draggable: !this.disabled}).addTo(this.map);
                 // Show marker popup.
                 this.map.on("click", () => this.showMarkerPopup());
                 this.showMarkerPopup();

@@ -1,4 +1,4 @@
-import makeImage from "./image-factory";
+import makeImage from "./imageFactory";
 
 const DEFAULT_ROW_MAX_WIDTH = 300;
 const DEFAULT_ROW_MAX_HEIGHT = 300;

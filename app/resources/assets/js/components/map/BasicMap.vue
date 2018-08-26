@@ -75,30 +75,39 @@
             };
         },
         watch: {
-            location: function () {
-                this.map.panTo(this.location);
+            location: function (location) {
+                this.map.panTo(location);
             },
-            zoom: function () {
-                this.map.setView(this.location, this.zoom);
+            zoom: function (zoom) {
+                this.map.setView(this.map.getCenter(), zoom);
             },
         },
         methods: {
-            init: function () {
+            initMap: function () {
                 this.map = L.map(this.id).setView(this.location, this.zoom);
                 this.tileLayer = L.tileLayer(this.tileLayerUrl, this.tileLayerOptions).addTo(this.map);
+                this.map.on("zoomend", this.handleMapEvent);
+                this.map.on("moveend", this.handleMapEvent);
             },
-            destroy: function () {
+            destroyMap: function () {
                 this.map.remove();
+                this.map = null;
+                this.tileLayer = null;
             },
-            getMap: function () {
-                return this.map;
+            handleMapEvent: function (event) {
+                this.$emit("update:location", event.target.getCenter());
+                this.$emit("update:zoom", event.target.getZoom());
+                this.$emit("bounds", {
+                    southWest: event.target.getBounds().getSouthWest(),
+                    northEast: event.target.getBounds().getNorthEast(),
+                });
             },
         },
         mounted: function () {
-            this.init();
+            this.initMap();
         },
         beforeDestroy: function () {
-            this.destroy();
+            this.destroyMap();
         },
     }
 </script>

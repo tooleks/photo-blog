@@ -15,8 +15,8 @@
 </style>
 
 <script>
-    import Loader from "../utils/loader";
-    import ImageMap from "../map/image-map";
+    import Loader from "../utils/Loader";
+    import ImageMap from "../map/ImageMap";
     import {MetaMixin} from "../../mixins";
 
     export default {

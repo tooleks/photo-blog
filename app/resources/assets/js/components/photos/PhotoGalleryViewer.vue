@@ -19,9 +19,9 @@
 
 <script>
     import {optional as opt} from "tooleks";
-    import Loader from "../utils/loader";
-    import Viewer from "../gallery/viewer";
-    import PhotoDescriptionCard from "./photo-description-card";
+    import Loader from "../utils/Loader";
+    import Viewer from "../gallery/Viewer";
+    import PhotoDescriptionCard from "./PhotoDescriptionCard";
     import {GoToMixin, MetaMixin} from "../../mixins";
 
     export default {

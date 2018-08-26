@@ -155,9 +155,7 @@
             },
             images: {
                 type: Array,
-                default: () => {
-                    return [];
-                },
+                default: [],
             },
         },
         data: function () {

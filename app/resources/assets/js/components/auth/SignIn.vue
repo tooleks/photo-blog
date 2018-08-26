@@ -38,7 +38,7 @@
 </template>
 
 <script>
-    import ReCaptcha from "../utils/re-captcha";
+    import ReCaptcha from "../utils/ReCaptcha";
     import {AuthMixin, GoToMixin, MetaMixin} from "../../mixins";
 
     export default {
