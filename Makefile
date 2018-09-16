@@ -19,6 +19,6 @@ start-dev:
 	docker-compose --file ./docker-compose.dev.yml up
 up-prod:
 	make build
-	docker-compose ./docker-compose.prod.yml up -d
+	docker-compose --file ./docker-compose.prod.yml up -d
 down-prod:
-	docker-compose ./docker-compose.prod.yml down
+	docker-compose --file ./docker-compose.prod.yml down
