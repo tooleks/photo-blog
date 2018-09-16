@@ -4,7 +4,7 @@ init:
 	make dependencies
 dependencies:
 	docker run --rm --mount "type=bind,source=$(PWD)/app,target=/app" -w "/app" node:10 npm install
-    docker run --rm --mount "type=bind,source=$(PWD)/app,target=/app" -w "/app" composer:1.7 install --ignore-platform-reqs --no-interaction --no-plugins --no-scripts --prefer-dist
+	docker run --rm --mount "type=bind,source=$(PWD)/app,target=/app" -w "/app" composer:1.7 install --ignore-platform-reqs --no-interaction --no-plugins --no-scripts --prefer-dist
 build:
 	docker build -t "pb-app" ./app
 	docker build -t "pb-app-queue" ./app-queue
