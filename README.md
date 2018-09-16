@@ -6,19 +6,21 @@ Docker 17.10, NGINX 1.15, MySQL 5.7, Redis 4, PHP 7.2, Laravel 5.7, Node.js 10, 
 
 ### Installation
 
-Run the following command (within the project root directory) to initialize file system structure.
+Please make sure you have installed and running [Docker](https://docs.docker.com/) on the host machine as far as the following make commands will rely on your setup.
+
+Run the command (within the project root directory) to initialize file system structure.
 
 ```
 make init
 ```
 
-Run the following command (within the project root directory) to start Docker containers in the **development** mode.
+Run the command (within the project root directory) to start Docker containers in the **development** mode.
 
 ```
 make start-dev
 ```
 
-Run following command (within the project root directory) to configure the application and create the administrator user.
+Run the command (within the project root directory) to configure the application and create the administrator user.
 
 ```
 make configure
@@ -54,7 +56,7 @@ docker exec -it pb-mysql bash -c "tail -n 1000 -f /var/log/mysql/general.log"
 
 ### Tests
 
-Run the following command to execute the backend application tests.
+Run the command to execute the backend application tests.
 
 ```
 docker exec -it pb-app bash -c "./vendor/bin/phpunit"
