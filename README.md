@@ -2,11 +2,11 @@
 
 ### Tech Stack
 
-Docker 17.10, NGINX 1.15, MySQL 5.7, Redis 4, PHP 7.2, Laravel 5.7, Node.js 10, Vue.js 2.5.
+Docker 17.10, Docker Compose 1.14, NGINX 1.15, MySQL 5.7, Redis 4, PHP 7.2, Laravel 5.7, Node.js 10, Vue.js 2.5.
 
 ### Installation
 
-Please make sure you have installed and running [Docker](https://docs.docker.com/) on the host machine as far as the following make commands will rely on your setup.
+Please make sure you have installed and running [Docker](https://docs.docker.com/) and [Docker Compose](https://docs.docker.com/compose/install/) on the host machine as far as the following make commands will rely on your setup.
 
 Run the command (within the project root directory) to initialize file system structure.
 
