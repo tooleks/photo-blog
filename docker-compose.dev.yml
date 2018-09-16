@@ -1,45 +1,57 @@
 version: '3.3'
 
 services:
-  pb-app-nginx.docker:
-    image: nginx:1.13
-    container_name: pb-app-nginx
+  pb-nginx.docker:
+    image: pb-nginx
+    container_name: pb-nginx
     restart: always
     depends_on:
-      - pb-app.docker
+    - pb-app.docker
     ports:
-      - 8080:8080
-      - 8081:8081
-      - 8082:8082
+    - 8080:8080
+    - 8081:8081
+    - 8082:8082
     volumes:
-      - ./app/:/var/www/app/
-      - ./app/docker/config/nginx/sites/:/etc/nginx/conf.d/
+    - ./app:/var/www/app
+    - ./nginx/sites:/etc/nginx/conf.d
 
   pb-app.docker:
-    build:
-      context: ./app/
-      dockerfile: Dockerfile.php.dev
-    image: pb-app-php:7.2-fpm
+    image: pb-app
     container_name: pb-app
     restart: always
     depends_on:
-      - pb-prerender.docker
-      - pb-mysql.docker
-      - pb-redis.docker
-      - pb-maildev.docker
+    - pb-prerender.docker
+    - pb-redis.docker
     volumes:
-      - ./app/:/var/www/app/
-      - ./app/docker/config/php/php.dev.ini:/usr/local/etc/php/php.ini
+    - ./app:/var/www/app
+
+  pb-app-queue.docker:
+    image: pb-app-queue
+    container_name: pb-app-queue
+    restart: always
+    depends_on:
+    - pb-redis.docker
+    volumes:
+    - ./app:/var/www/app
+
+  pb-app-scheduler.docker:
+    image: pb-app-scheduler
+    container_name: pb-app-scheduler
+    restart: always
+    depends_on:
+    - pb-redis.docker
+    volumes:
+    - ./app:/var/www/app
 
   pb-prerender.docker:
-    build:
-      context: ./prerender/
-      dockerfile: Dockerfile.prod
-    image: pb-prerender-node:10
+    image: pb-prerender
     container_name: pb-prerender
     restart: always
-    ports:
-      - 3000:3000
+
+  pb-redis.docker:
+    image: redis:4
+    container_name: pb-redis
+    restart: always
 
   pb-mysql.docker:
     image: mysql:5.7
@@ -53,14 +65,9 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - ./docker/mysql/storage/mysql/var/lib/mysql/:/var/lib/mysql/
-      - ./docker/mysql/config/mysql/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
-      - ./docker/mysql/config/mysql/my.cnf:/etc/mysql/my.cnf
-
-  pb-redis.docker:
-    image: redis:3.2
-    container_name: pb-redis
-    restart: always
+      - ./mysql/storage/mysql/var/lib/mysql:/var/lib/mysql
+      - ./mysql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./mysql/my.cnf:/etc/mysql/my.cnf
 
   pb-maildev.docker:
     image: djfarrelly/maildev
