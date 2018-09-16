@@ -62,6 +62,7 @@ RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/include --with-png-dir=/usr
     && pecl install redis \
     && docker-php-ext-enable redis
 
+# Copy PHP configuration.
 COPY ./php.prod.ini /usr/local/etc/php/php.ini
 
 # Change the working directory.
