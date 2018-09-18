@@ -13,6 +13,6 @@ dependencies:
 
 configure:
 	docker exec -it pb-app bash -c "chown -R www-data:www-data ./storage"
-	docker exec -it pb-app bash -c "php artisan passport:install"
 	docker exec -it pb-app bash -c "php artisan migrate"
+	docker exec -it pb-app bash -c "php artisan passport:install"
 	docker exec -it pb-app bash -c "php artisan create:administrator_user"
