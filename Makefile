@@ -1,6 +1,6 @@
 init:
-	cp ./app/.env.example ./app/.env
-	cd ./app/public && ln -s ../storage/app/public storage
+	cp -n ./app/.env.example ./app/.env
+	ln -sfn ../storage/app/public app/public/storage
 
 dependencies:
 	docker run --rm --mount "type=bind,source=$(PWD)/app,target=/app" -w "/app" node:10 npm install
