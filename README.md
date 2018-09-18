@@ -6,7 +6,7 @@ Docker 17.10, Docker Compose 1.14, NGINX 1.15, MySQL 5.7, Redis 4, PHP 7.2, Lara
 
 ### Installation
 
-Please make sure you have installed and running [Docker](https://docs.docker.com/) and [Docker Compose](https://docs.docker.com/compose/install/) on the host machine as far as the following GNU make commands will rely on your setup.
+Please make sure you have installed and running [Docker](https://docs.docker.com/) and [Docker Compose](https://docs.docker.com/compose/install/) on the host machine as far as the following commands will rely on your setup.
 
 Run the command (within the project root directory) to initialize the project.
 
