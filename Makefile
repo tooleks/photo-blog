@@ -1,11 +1,6 @@
 init:
 	cp ./app/.env.example ./app/.env
 	cd ./app/public && ln -s ../storage/app/public storage
-	make dependencies
-
-dependencies:
-	make app/node_modules
-	make app/vendor
 
 app/node_modules: ./app/package.json ./app/package-lock.json
 	docker run --rm --mount "type=bind,source=$(PWD)/app,target=/app" -w "/app" node:10 npm install
@@ -30,11 +25,10 @@ configure:
 	docker exec -it pb-app bash -c "chown -R www-data:www-data storage"
 	docker exec -it pb-app bash -c "php artisan create:administrator_user"
 
-start-dev:
+start-dev: build app/node_modules app/vendor
 	docker-compose --file ./docker-compose.dev.yml up
 
-up-prod:
-	make build
+up-prod: build
 	docker-compose --file ./docker-compose.prod.yml up -d
 
 down-prod:
