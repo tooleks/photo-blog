@@ -8,16 +8,22 @@ Docker 17.10, Docker Compose 1.14, NGINX 1.15, MySQL 5.7, Redis 4, PHP 7.2, Lara
 
 Please make sure you have installed and running [Docker](https://docs.docker.com/) and [Docker Compose](https://docs.docker.com/compose/install/) on the host machine as far as the following GNU make commands will rely on your setup.
 
-Run the command (within the project root directory) to initialize file system structure.
+Run the command (within the project root directory) to initialize the project.
 
 ```
 make init
 ```
 
+Run the command (within the project root directory) to install the application dependencies.
+
+```
+make dependencies
+```
+
 Run the command (within the project root directory) to start Docker containers in the **development** mode.
 
 ```
-make start-dev
+docker-compose --file ./docker-compose.dev.yml up --build
 ```
 
 Run the command (within the project root directory) to configure the application and create the administrator user.
@@ -35,6 +41,12 @@ Open the [http://localhost:8080/sign-in](http://localhost:8080/sign-in) link in 
 * [http://localhost:8083](http://localhost:8083) - MailDev mailbox.
 
 ### Useful Commands
+
+Automatically recompile assets when Webpack detects a change.
+
+```bash
+docker exec -it pb-app bash -c "npm run watch"
+```
 
 Fetch the backend application's log.
 

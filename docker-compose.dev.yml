@@ -2,6 +2,8 @@ version: '3.3'
 
 services:
   pb-nginx.docker:
+    build:
+      context: ./nginx
     image: pb-nginx
     container_name: pb-nginx
     restart: always
@@ -16,34 +18,46 @@ services:
     - ./nginx/sites:/etc/nginx/conf.d
 
   pb-app.docker:
+    build:
+      context: ./app
+      args:
+      - INSTALL_NODE=true
     image: pb-app
     container_name: pb-app
     restart: always
     depends_on:
     - pb-prerender.docker
     - pb-redis.docker
+    - pb-mysql.docker
+    - pb-maildev.docker
     volumes:
     - ./app:/var/www/app
 
   pb-app-queue.docker:
+    build:
+      context: ./app-queue
     image: pb-app-queue
     container_name: pb-app-queue
     restart: always
     depends_on:
-    - pb-redis.docker
+    - pb-app.docker
     volumes:
     - ./app:/var/www/app
 
   pb-app-scheduler.docker:
+    build:
+      context: ./app-scheduler
     image: pb-app-scheduler
     container_name: pb-app-scheduler
     restart: always
     depends_on:
-    - pb-redis.docker
+    - pb-app.docker
     volumes:
     - ./app:/var/www/app
 
   pb-prerender.docker:
+    build:
+      context: ./prerender
     image: pb-prerender
     container_name: pb-prerender
     restart: always
@@ -63,15 +77,15 @@ services:
       MYSQL_USER: 'dev'
       MYSQL_PASSWORD: 'dev'
     ports:
-      - 3306:3306
+    - 3306:3306
     volumes:
-      - ./mysql/storage/mysql/var/lib/mysql:/var/lib/mysql
-      - ./mysql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
-      - ./mysql/my.cnf:/etc/mysql/my.cnf
+    - ./mysql/storage/mysql/var/lib/mysql:/var/lib/mysql
+    - ./mysql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    - ./mysql/my.cnf:/etc/mysql/my.cnf
 
   pb-maildev.docker:
     image: djfarrelly/maildev
     container_name: pb-maildev
     restart: always
     ports:
-      - 8083:80
+    - 8083:80

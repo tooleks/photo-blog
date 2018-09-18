@@ -22,7 +22,6 @@ RUN ./node_modules/.bin/apidoc -i ./src/api -o ./docs/rest_api/dist
 # Remove non-production dependencies.
 RUN npm prune --production
 
-
 FROM composer:1.7 as vendor
 
 # Copy the backend application package files.
@@ -41,19 +40,15 @@ RUN composer install \
 
 FROM php:7.2-fpm
 
-# Install system dependencies.
-RUN apt-get update \
-    && apt-get install -y \
+# Update dependencies list and install system dependencies.
+RUN apt-get update -yqq
+
+# Install PHP dependencies.
+RUN apt-get install -y \
         libjpeg-dev \
         libpng-dev \
         libfreetype6-dev \
-    && apt-get -y autoclean \
-    && apt-get -y autoremove \
-    && apt-get -y clean \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install PHP dependencies.
-RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/include --with-png-dir=/usr/include --with-freetype-dir=/usr/include \
+    && docker-php-ext-configure gd --with-jpeg-dir=/usr/include --with-png-dir=/usr/include --with-freetype-dir=/usr/include \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-install -j$(nproc) exif \
     && docker-php-ext-install -j$(nproc) pdo_mysql \
@@ -65,6 +60,14 @@ RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/include --with-png-dir=/usr
 # Copy PHP configuration.
 COPY ./php.prod.ini /usr/local/etc/php/php.ini
 
+# Install Node.js if the build argument provided.
+ARG INSTALL_NODE=false
+RUN if [ ${INSTALL_NODE} = true ]; then \
+    apt install -y apt-transport-https lsb-release gnupg \
+        && curl -sL https://deb.nodesource.com/setup_10.x | bash - \
+        && apt-get install -y nodejs \
+;fi
+
 # Change the working directory.
 WORKDIR /var/www/app
 
@@ -75,3 +78,10 @@ COPY . .
 COPY --from=frontend /home/node/app/public ./public
 COPY --from=frontend /home/node/app/docs ./docs
 COPY --from=vendor /app/vendor ./vendor
+
+# Clean up.
+RUN apt-get -y autoclean \
+    && apt-get -y autoremove \
+    && apt-get -y clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+    && rm /var/log/lastlog /var/log/faillog
