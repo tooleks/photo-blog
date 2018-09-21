@@ -1,0 +1,63 @@
+version: '3.3'
+
+services:
+  pb-nginx.docker:
+    build:
+      context: ./nginx
+    image: pb-nginx
+    container_name: pb-nginx
+    restart: always
+    depends_on:
+    - pb-app.docker
+    ports:
+    - 8080:8080
+    - 8081:8081
+    - 8082:8082
+    volumes:
+    - ./app/storage:/var/www/app/storage
+
+  pb-app.docker:
+    build:
+      context: ./app
+    image: pb-app
+    container_name: pb-app
+    restart: always
+    depends_on:
+    - pb-prerender.docker
+    - pb-redis.docker
+    volumes:
+    - ./app/storage:/var/www/app/storage
+
+  pb-app-queue.docker:
+    build:
+      context: ./app-queue
+    image: pb-app-queue
+    container_name: pb-app-queue
+    restart: always
+    depends_on:
+    - pb-app.docker
+    volumes:
+    - ./app/storage:/var/www/app/storage
+
+  pb-app-scheduler.docker:
+    build:
+      context: ./app-scheduler
+    image: pb-app-scheduler
+    container_name: pb-app-scheduler
+    restart: always
+    depends_on:
+    - pb-app.docker
+    volumes:
+    - ./app/storage:/var/www/app/storage
+
+  pb-prerender.docker:
+    build:
+      context: ./prerender
+    image: pb-prerender
+    container_name: pb-prerender
+    restart: always
+
+  pb-redis.docker:
+    image: redis:4
+    container_name: pb-redis
+    restart: always

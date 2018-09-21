@@ -1,0 +1,94 @@
+version: '3.3'
+
+services:
+  pb-nginx.docker:
+    build:
+      context: ./nginx
+    image: pb-nginx
+    container_name: pb-nginx
+    restart: always
+    depends_on:
+    - pb-app.docker
+    ports:
+    - 8080:8080
+    - 8081:8081
+    - 8082:8082
+    volumes:
+    - ./app:/var/www/app
+    - ./nginx/sites:/etc/nginx/conf.d
+
+  pb-app.docker:
+    build:
+      context: ./app
+      args:
+      - INSTALL_NODE=true
+    image: pb-app
+    container_name: pb-app
+    restart: always
+    depends_on:
+    - pb-prerender.docker
+    - pb-redis.docker
+    - pb-mysql.docker
+    - pb-maildev.docker
+    volumes:
+    - ./app:/var/www/app
+    - ./app/php.ini-development:/usr/local/etc/php/php.ini
+
+  pb-app-queue.docker:
+    build:
+      context: ./app-queue
+    image: pb-app-queue
+    container_name: pb-app-queue
+    restart: always
+    depends_on:
+    - pb-app.docker
+    volumes:
+    - ./app:/var/www/app
+    - ./app/php.ini-development:/usr/local/etc/php/php.ini
+
+  pb-app-scheduler.docker:
+    build:
+      context: ./app-scheduler
+    image: pb-app-scheduler
+    container_name: pb-app-scheduler
+    restart: always
+    depends_on:
+    - pb-app.docker
+    volumes:
+    - ./app:/var/www/app
+    - ./app/php.ini-development:/usr/local/etc/php/php.ini
+
+  pb-prerender.docker:
+    build:
+      context: ./prerender
+    image: pb-prerender
+    container_name: pb-prerender
+    restart: always
+
+  pb-redis.docker:
+    image: redis:4
+    container_name: pb-redis
+    restart: always
+
+  pb-mysql.docker:
+    image: mysql:5.7
+    container_name: pb-mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'photo_blog'
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_USER: 'dev'
+      MYSQL_PASSWORD: 'dev'
+    ports:
+    - 3306:3306
+    volumes:
+    - ./mysql/storage/mysql/var/lib/mysql:/var/lib/mysql
+    - ./mysql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    - ./mysql/my.cnf:/etc/mysql/my.cnf
+
+  pb-maildev.docker:
+    image: djfarrelly/maildev
+    container_name: pb-maildev
+    restart: always
+    ports:
+    - 8083:80

@@ -2,39 +2,31 @@
 
 ### Tech Stack
 
-Docker 17.10, NGINX 1.13, MySQL 5.7, Redis 3.2, PHP 7.2, Laravel 5.6, Node.js 10, Vue.js 2.5.
+Docker 17.10, Docker Compose 1.14, NGINX 1.15, MySQL 5.7, Redis 4, PHP 7.2, Laravel 5.7, Node.js 10, Vue.js 2.5.
 
 ### Installation
 
-Run the following command (within the project root directory) to create the environment file.
+Please make sure you have installed and running [Docker](https://docs.docker.com/) and [Docker Compose](https://docs.docker.com/compose/install/) on the host machine as far as the following commands will rely on your setup.
+
+Run the command (within the project root directory) to initialize the project.
 
 ```
-cp ./app/.env.example ./app/.env
-```
-Run the following command (within the project root directory) to create a symbolic link to the public storage.
-
-```
-cd ./app/public/ && ln -s ../storage/app/public storage
+make initialization
 ```
 
-Run the following command (within the project root directory) to start Docker containers and build the application for **development** environment.
+Run the command (within the project root directory) to start Docker containers in the **development** mode.
 
 ```
-docker-compose --file ./docker-compose.dev.yml up --build
+docker-compose --file ./docker-compose.development.yml up --build
 ```
 
-Run following commands to create encryption keys needed to generate secure access tokens.
+Run the command (in another terminal window, within the project root directory) to configure the application and create the administrator user.
+
 ```
-docker exec -it pb-app bash -c "php artisan passport:install" && \
-docker exec -it pb-app bash -c "chown -R www-data:www-data storage"
+make configuration
 ```
 
-Run the following command to create an administrator user.
-```
-docker exec -it pb-app bash -c "php artisan create:administrator_user"
-```
-
-Open the [http://localhost:8080/sign-in](http://localhost:8080/sign-in) link in a browser to signin with a newly created administrator user account.
+Open the [http://localhost:8080/sign-in](http://localhost:8080/sign-in) link in a browser and sign in with a newly created administrator user account.
 
 ### Exposed Resources
 
@@ -48,12 +40,6 @@ Automatically recompile assets when Webpack detects a change.
 
 ```bash
 docker exec -it pb-app bash -c "npm run watch"
-```
-
-Generate the backend application's REST API documentation.
-
-```bash
-docker exec -it pb-app bash -c "php artisan generate:rest_api_documentation"
 ```
 
 Fetch the backend application's log.
@@ -70,17 +56,8 @@ docker exec -it pb-mysql bash -c "tail -n 1000 -f /var/log/mysql/general.log"
 
 ### Tests
 
-Run the following command to execute the backend application tests.
+Run the command to execute the backend application tests.
+
 ```
 docker exec -it pb-app bash -c "./vendor/bin/phpunit"
 ```
-
-### Production
-
-Run the following command (within the project root directory) to start Docker containers and build the application for **production** environment.
-
-```
-docker-compose --file ./docker-compose.prod.yml up --build -d
-```
-
-**Note:** Production configuration doesn't include `pb-mysql` container.
