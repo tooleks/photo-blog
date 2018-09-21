@@ -11,7 +11,7 @@ Please make sure you have installed and running [Docker](https://docs.docker.com
 Run the command (within the project root directory) to initialize the project.
 
 ```
-make init
+make initialization
 ```
 
 Run the command (within the project root directory) to install the application dependencies.

@@ -1,4 +1,4 @@
-init:
+initialization:
 	cp -n ./app/.env.example ./app/.env
 	ln -sfn ../storage/app/public app/public/storage
 
