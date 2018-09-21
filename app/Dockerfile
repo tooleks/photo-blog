@@ -22,6 +22,7 @@ RUN ./node_modules/.bin/apidoc -i ./src/api -o ./docs/rest_api/dist
 # Remove non-production dependencies.
 RUN npm prune --production
 
+
 FROM composer:1.7 as vendor
 
 # Copy the backend application package files.
