@@ -19,6 +19,7 @@ configuration:
 	docker exec -it pb-app bash -c "php artisan passport:install"
 	docker exec -it pb-app bash -c "php artisan create:roles"
 	docker exec -it pb-app bash -c "npm run prod"
+	docker exec -it pb-app bash -c "php artisan generate:rest_api_documentation"
 	docker exec -it pb-app bash -c "php artisan create:administrator_user"
 
 start-dev:
