@@ -18,7 +18,7 @@ services:
 
   pb-app.docker:
     build:
-      context: ./pb-app
+      context: ./app
     image: pb-app
     container_name: pb-app
     restart: always
@@ -30,7 +30,7 @@ services:
 
   pb-app-queue.docker:
     build:
-      context: ./pb-app-queue
+      context: ./app-queue
     image: pb-app-queue
     container_name: pb-app-queue
     restart: always
@@ -41,7 +41,7 @@ services:
 
   pb-app-scheduler.docker:
     build:
-      context: ./pb-app-scheduler
+      context: ./app-scheduler
     image: pb-app-scheduler
     container_name: pb-app-scheduler
     restart: always
