@@ -20,3 +20,12 @@ configuration:
 	docker exec -it pb-app bash -c "php artisan create:roles"
 	docker exec -it pb-app bash -c "npm run prod"
 	docker exec -it pb-app bash -c "php artisan create:administrator_user"
+
+start-dev:
+	docker-compose --file ./docker-compose.dev.yml up
+
+up-prod:
+	docker-compose --file ./docker-compose.prod.yml up --build -d
+
+down-prod:
+	docker-compose --file ./docker-compose.prod.yml down
