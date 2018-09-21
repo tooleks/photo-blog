@@ -25,6 +25,9 @@ configuration:
 start-dev:
 	docker-compose --file ./docker-compose.development.yml up
 
+watch-dev:
+	docker exec -it pb-app bash -c "npm run watch"
+
 up-prod:
 	docker-compose --file ./docker-compose.production.yml up --build -d
 
