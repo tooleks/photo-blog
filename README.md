@@ -20,7 +20,7 @@ Run the command (within the project root directory) to start Docker containers i
 docker-compose --file ./docker-compose.development.yml up --build
 ```
 
-Run the command (within the project root directory) to configure the application and create the administrator user.
+Run the command (in another terminal window, within the project root directory) to configure the application and create the administrator user.
 
 ```
 make configuration
