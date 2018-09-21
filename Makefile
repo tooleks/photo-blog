@@ -11,8 +11,9 @@ dependencies:
 		--no-scripts \
 		--prefer-dist
 
-configure:
+configuration:
 	docker exec -it pb-app bash -c "chown -R www-data:www-data ./storage"
+	docker exec -it pb-app bash -c "php artisan key:generate"
 	docker exec -it pb-app bash -c "php artisan package:discover"
 	docker exec -it pb-app bash -c "php artisan migrate"
 	docker exec -it pb-app bash -c "php artisan passport:install"

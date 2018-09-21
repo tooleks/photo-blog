@@ -29,7 +29,7 @@ docker-compose --file ./docker-compose.dev.yml up --build
 Run the command (within the project root directory) to configure the application and create the administrator user.
 
 ```
-make configure
+make configuration
 ```
 
 Open the [http://localhost:8080/sign-in](http://localhost:8080/sign-in) link in a browser and sign in with a newly created administrator user account.
