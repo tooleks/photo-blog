@@ -14,12 +14,6 @@ Run the command (within the project root directory) to initialize the project.
 make initialization
 ```
 
-Run the command (within the project root directory) to install the application dependencies.
-
-```
-make dependencies
-```
-
 Run the command (within the project root directory) to start Docker containers in the **development** mode.
 
 ```
