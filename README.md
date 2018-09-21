@@ -17,7 +17,7 @@ make initialization
 Run the command (within the project root directory) to start Docker containers in the **development** mode.
 
 ```
-docker-compose --file ./docker-compose.dev.yml up --build
+docker-compose --file ./docker-compose.development.yml up --build
 ```
 
 Run the command (within the project root directory) to configure the application and create the administrator user.

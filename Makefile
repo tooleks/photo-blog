@@ -22,10 +22,10 @@ configuration:
 	docker exec -it pb-app bash -c "php artisan create:administrator_user"
 
 start-dev:
-	docker-compose --file ./docker-compose.dev.yml up
+	docker-compose --file ./docker-compose.development.yml up
 
 up-prod:
-	docker-compose --file ./docker-compose.prod.yml up --build -d
+	docker-compose --file ./docker-compose.production.yml up --build -d
 
 down-prod:
-	docker-compose --file ./docker-compose.prod.yml down
+	docker-compose --file ./docker-compose.production.yml down
