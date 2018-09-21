@@ -32,7 +32,7 @@ services:
     - pb-maildev.docker
     volumes:
     - ./app:/var/www/app
-    - ./app/php.dev.ini:/usr/local/etc/php/php.ini
+    - ./app/php.ini-development:/usr/local/etc/php/php.ini
 
   pb-app-queue.docker:
     build:
@@ -44,7 +44,7 @@ services:
     - pb-app.docker
     volumes:
     - ./app:/var/www/app
-    - ./app/php.dev.ini:/usr/local/etc/php/php.ini
+    - ./app/php.ini-development:/usr/local/etc/php/php.ini
 
   pb-app-scheduler.docker:
     build:
@@ -56,7 +56,7 @@ services:
     - pb-app.docker
     volumes:
     - ./app:/var/www/app
-    - ./app/php.dev.ini:/usr/local/etc/php/php.ini
+    - ./app/php.ini-development:/usr/local/etc/php/php.ini
 
   pb-prerender.docker:
     build:

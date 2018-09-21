@@ -58,7 +58,7 @@ RUN apt-get install -y \
     && docker-php-ext-enable redis
 
 # Copy PHP configuration.
-COPY ./php.prod.ini /usr/local/etc/php/php.ini
+COPY ./php.ini-production /usr/local/etc/php/php.ini
 
 # Install Node.js if the build argument provided.
 ARG INSTALL_NODE=false
