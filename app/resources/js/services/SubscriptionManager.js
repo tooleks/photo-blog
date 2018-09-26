@@ -1,4 +1,4 @@
-import * as apiDomainMapper from "../mapper/ApiDomain/transform";
+import * as apiEntityMapper from "../mapper/ApiEntity/transform";
 
 export default class SubscriptionManager {
     /**
@@ -32,6 +32,6 @@ export default class SubscriptionManager {
      */
     async paginate({page, perPage} = {}) {
         const response = await this._api.getSubscriptions({page, per_page: perPage});
-        return apiDomainMapper.toPaginator(response.data, apiDomainMapper.toSubscription);
+        return apiEntityMapper.toPaginator(response.data, apiEntityMapper.toSubscription);
     }
 }

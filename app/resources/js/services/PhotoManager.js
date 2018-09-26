@@ -1,5 +1,5 @@
-import * as apiDomainMapper from "../mapper/ApiDomain/transform";
-import * as domainApiMapper from "../mapper/DomainApi/transform";
+import * as apiEntityMapper from "../mapper/ApiEntity/transform";
+import * as entityApiMapper from "../mapper/EntityApi/transform";
 
 export default class PhotoManager {
     /**
@@ -24,7 +24,7 @@ export default class PhotoManager {
      */
     async upload(file) {
         const response = await this._api.uploadPhotoFile(file);
-        return apiDomainMapper.toPhoto({
+        return apiEntityMapper.toPhoto({
             photo: response.data,
         });
     }
@@ -38,19 +38,19 @@ export default class PhotoManager {
     async publish(photo) {
         // Update the photo location in case if the photo location is set.
         if (photo.location) {
-            await this._api.updatePhoto(photo.id, domainApiMapper.toPhoto(photo));
+            await this._api.updatePhoto(photo.id, entityApiMapper.toPhoto(photo));
         }
 
-        const post = domainApiMapper.toPost(photo);
+        const post = entityApiMapper.toPost(photo);
 
         // Create a new post in case if the photo is not published yet.
         if (!photo.published) {
             const response = await this._api.createPost(post);
-            return apiDomainMapper.toPhoto(response.data);
+            return apiEntityMapper.toPhoto(response.data);
         }
 
         const response = await this._api.updatePost(photo.postId, post);
-        return apiDomainMapper.toPhoto(response.data);
+        return apiEntityMapper.toPhoto(response.data);
     }
 
     /**
@@ -71,7 +71,7 @@ export default class PhotoManager {
      */
     async getByPostId(postId) {
         const response = await this._api.getPost(postId);
-        return apiDomainMapper.toPhoto(response.data);
+        return apiEntityMapper.toPhoto(response.data);
     }
 
     /**
@@ -91,7 +91,7 @@ export default class PhotoManager {
             tag,
             search_phrase: searchPhrase,
         });
-        return apiDomainMapper.toPaginator(response.data, apiDomainMapper.toPhoto);
+        return apiEntityMapper.toPaginator(response.data, apiEntityMapper.toPhoto);
     }
 
     /**
@@ -104,7 +104,7 @@ export default class PhotoManager {
      */
     async getAll({page = 1, perPage = 50} = {}) {
         const response = await this._api.getPosts({page, per_page: perPage});
-        let {nextPageExists, items} = apiDomainMapper.toPaginator(response.data, apiDomainMapper.toPhoto);
+        let {nextPageExists, items} = apiEntityMapper.toPaginator(response.data, apiEntityMapper.toPhoto);
         if (nextPageExists) {
             items = [...items, ...await this.getAll({page: ++page})];
         }

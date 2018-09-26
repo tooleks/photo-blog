@@ -36,6 +36,12 @@ export default class Exif {
             return undefined;
         }
 
-        return moment.utc(this._takenAt);
+        const takenAt = moment.utc(this._takenAt);
+
+        if (!takenAt.isValid()) {
+            return undefined;
+        }
+
+        return takenAt;
     }
 }

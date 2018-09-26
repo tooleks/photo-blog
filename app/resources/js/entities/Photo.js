@@ -25,6 +25,9 @@ export default class Photo {
         this.exif = exif;
         this.averageColor = averageColor;
         this.location = location;
+        this.valueOf = this.valueOf.bind(this);
+        this.toString = this.toString.bind(this);
+        this.is = this.is.bind(this);
     }
 
     /**
@@ -55,10 +58,24 @@ export default class Photo {
     }
 
     /**
+     * @return {Image}
+     */
+    get image() {
+        return this.original;
+    }
+
+    /**
+     * @return {string}
+     */
+    valueOf() {
+        return this.original.toString();
+    }
+
+    /**
      * @return {string}
      */
     toString() {
-        return this.original.toString();
+        return String(this.valueOf());
     }
 
     /**
@@ -67,5 +84,19 @@ export default class Photo {
      */
     is(photo) {
         return this.id === photo.id;
+    }
+
+    /**
+     * @param {Photo} photo
+     * @return {Photo}
+     */
+    replaceImage(photo) {
+        this.id = photo.id;
+        this.original = photo.original;
+        this.thumbnail = photo.thumbnail;
+        this.exif = photo.exif;
+        this.averageColor = photo.averageColor;
+        this.location = photo.location;
+        return this;
     }
 }

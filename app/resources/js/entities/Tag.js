@@ -7,6 +7,8 @@ export default class Tag {
      */
     constructor({value}) {
         this.value = value;
+        this.valueOf = this.valueOf.bind(this);
+        this.toString = this.toString.bind(this);
     }
 
     /**
@@ -20,7 +22,7 @@ export default class Tag {
      * @return {string}
      */
     toString() {
-        return this.valueOf();
+        return String(this.valueOf());
     }
 }
 

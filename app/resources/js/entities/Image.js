@@ -11,12 +11,21 @@ export default class Image {
         this.url = url;
         this.width = Number(width);
         this.height = Number(height);
+        this.valueOf = this.valueOf.bind(this);
+        this.toString = this.toString.bind(this);
+    }
+
+    /**
+     * @return {string}
+     */
+    valueOf() {
+        return this.url;
     }
 
     /**
      * @return {string}
      */
     toString() {
-        return String(this.url);
+        return String(this.valueOf());
     }
 }

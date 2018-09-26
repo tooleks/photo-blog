@@ -1,4 +1,4 @@
-import {toUser} from "../mapper/ApiDomain/transform";
+import {toUser} from "../mapper/ApiEntity/transform";
 
 export default class LoginManager {
     /**

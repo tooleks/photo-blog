@@ -36,7 +36,7 @@
     import Masonry from "../gallery/Masonry";
     import {GoToMixin, MetaMixin} from "../../mixins";
     import {_PAGINATION} from "../../router/names";
-    import {toPaginator, toPhoto} from "../../mapper/ApiDomain/transform";
+    import {toPaginator, toPhoto} from "../../mapper/ApiEntity/transform";
 
     export default {
         components: {

@@ -31,11 +31,11 @@ export default class AlertService {
      * Show alert message.
      *
      * @param {string} title
-     * @param {string} text
+     * @param {string} [text]
      * @param {string} [type]
      * @return {void}
      */
-    notify(title, text, type = TYPE_SUCCESS) {
+    notify(title, text = "", type = TYPE_SUCCESS) {
         notify({
             group: GROUP,
             duration: type === TYPE_ERROR
@@ -52,7 +52,7 @@ export default class AlertService {
      * Show success alert message.
      *
      * @param {string} title
-     * @param {string} text
+     * @param {string} [text]
      * @return {void}
      */
     success(title, text) {
@@ -63,7 +63,7 @@ export default class AlertService {
      * Show warning alert message.
      *
      * @param {string} title
-     * @param {string} text
+     * @param {string} [text]
      * @return {void}
      */
     warning(title, text) {
@@ -74,7 +74,7 @@ export default class AlertService {
      * Show error alert message.
      *
      * @param {string} title
-     * @param {string} text
+     * @param {string} [text]
      * @return {void}
      */
     error(title, text) {

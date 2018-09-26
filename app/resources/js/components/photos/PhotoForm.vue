@@ -3,7 +3,7 @@
         <loader :loading="loading" :delay="0"></loader>
         <file-input :attributes="{id: 'file', name: 'file', disabled: loading}"
                     @change="uploadPhoto"></file-input>
-        <div v-if="photo.original" class="card mt-3">
+        <div v-if="photo.image" class="card mt-3">
             <div class="card-body">
                 <div class="row">
                     <div class="col">
@@ -109,7 +109,13 @@
             uploadPhoto: async function (file) {
                 this.loading = true;
                 try {
-                    this.photo = await this.$services.getPhotoManager().upload(file);
+                    const photo = await this.$services.getPhotoManager().upload(file);
+                    // Replace the photo image or the whole photo if there is no uploaded image yet.
+                    if (this.photo.image) {
+                        this.photo.replaceImage(photo);
+                    } else {
+                        this.photo = photo;
+                    }
                     this.$services.getAlert().success("The photo has been successfully uploaded. Don't forget to save changes before exit.");
                 } catch (error) {
                     // The error is handled by the API service.

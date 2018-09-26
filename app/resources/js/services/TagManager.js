@@ -1,4 +1,4 @@
-import * as apiDomainMapper from "../mapper/ApiDomain/transform";
+import * as apiEntityMapper from "../mapper/ApiEntity/transform";
 
 export default class TagManager {
     /**
@@ -18,6 +18,6 @@ export default class TagManager {
      */
     async getPopular() {
         const response = await this._api.getTags();
-        return apiDomainMapper.toList(response.data, apiDomainMapper.toTag);
+        return apiEntityMapper.toList(response.data, apiEntityMapper.toTag);
     }
 }

@@ -9,6 +9,7 @@ export default class Location {
     constructor({lat, lng}) {
         this.lat = lat;
         this.lng = lng;
+        this.valueOf = this.valueOf.bind(this);
         this.toString = this.toString.bind(this);
     }
 
@@ -51,7 +52,14 @@ export default class Location {
     /**
      * @return {string}
      */
-    toString() {
+    valueOf() {
         return `${this.lat.toFixed(4)}, ${this.lng.toFixed(4)}`;
+    }
+
+    /**
+     * @return {string}
+     */
+    toString() {
+        return String(this.valueOf());
     }
 }

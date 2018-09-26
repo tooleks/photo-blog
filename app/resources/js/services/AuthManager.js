@@ -1,6 +1,6 @@
 import moment from "moment";
 import {isObject} from "tooleks";
-import {toUser} from "../mapper/ApiDomain/transform";
+import {toUser} from "../mapper/ApiEntity/transform";
 
 /** @type {string} */
 export const AUTH_KEY = "user";
