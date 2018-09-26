@@ -25,9 +25,9 @@ export default class SubscriptionManager {
     /**
      * Paginate over subscriptions.
      *
-     * @param {Object} [options]
-     * @param {number} [options.page]
-     * @param {number} [options.perPage]
+     * @param {Object} [params]
+     * @param {number} [params.page]
+     * @param {number} [params.perPage]
      * @return {Promise<Object>}
      */
     async paginate({page, perPage} = {}) {

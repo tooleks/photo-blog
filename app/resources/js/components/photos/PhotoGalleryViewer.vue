@@ -68,8 +68,10 @@
             loadPhoto: async function () {
                 this.loading = true;
                 try {
-                    const response = await this.$services.getApi().getPost(this.$route.params.id, this.$route.query, {suppressNotFoundErrors: true});
-                    const photo = toPhoto(response.data);
+                    const photo = await this.$services.getPhotoManager().getByPostId(
+                        this.$route.params.id,
+                        this.$route.query,
+                    );
                     this.photos = [photo];
                     this.activePhoto = photo;
                 } catch (error) {
@@ -85,8 +87,10 @@
             loadOlderPhoto: async function () {
                 this.loading = true;
                 try {
-                    const response = await this.$services.getApi().getPreviousPost(this.activePhoto.postId, this.$route.query, {suppressNotFoundErrors: true});
-                    const photo = toPhoto(response.data);
+                    const photo = await this.$services.getPhotoManager().getPreviousByPostId(
+                        this.activePhoto.postId,
+                        this.$route.query,
+                    );
                     this.photos = [...this.photos, photo];
                 } catch (error) {
                     // The error is handled by the API service.
@@ -98,8 +102,10 @@
             loadNewerPhoto: async function () {
                 this.loading = true;
                 try {
-                    const response = await this.$services.getApi().getNextPost(this.activePhoto.postId, this.$route.query, {suppressNotFoundErrors: true});
-                    const photo = toPhoto(response.data);
+                    const photo = await this.$services.getPhotoManager().getNextByPostId(
+                        this.activePhoto.postId,
+                        this.$route.query,
+                    );
                     this.photos = [photo, ...this.photos];
                 } catch (error) {
                     // The error is handled by the API service.

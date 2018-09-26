@@ -13,7 +13,10 @@ export default class PhotoManager {
         this.publish = this.publish.bind(this);
         this.deleteByPostId = this.deleteByPostId.bind(this);
         this.getByPostId = this.getByPostId.bind(this);
+        this.getPreviousByPostId = this.getPreviousByPostId.bind(this);
+        this.getNextByPostId = this.getNextByPostId.bind(this);
         this.getAll = this.getAll.bind(this);
+        this.paginate = this.paginate.bind(this);
     }
 
     /**
@@ -67,31 +70,55 @@ export default class PhotoManager {
      * Get the photo by related post ID.
      *
      * @param {number} postId
+     * @param {Object} [params]
+     * @param {string} [params.tag]
+     * @param {string} [params.searchPhrase]
      * @return {Promise<Photo>}
      */
-    async getByPostId(postId) {
-        const response = await this._api.getPost(postId);
+    async getByPostId(postId, {tag, searchPhrase} = {}) {
+        const response = await this._api.getPost(postId, {
+            tag,
+            search_phrase: searchPhrase,
+        });
         return apiEntityMapper.toPhoto(response.data);
     }
 
     /**
-     * Paginate over photos.
+     * Get the previous photo by related post ID.
      *
-     * @param {Object} [options]
-     * @param {number} [options.page]
-     * @param {number} [options.perPage]
-     * @param {string} [options.tag]
-     * @param {string} [options.searchPhrase]
-     * @return {Promise<Object>}
+     * @param {number} postId
+     * @param {Object} [params]
+     * @param {string} [params.tag]
+     * @param {string} [params.searchPhrase]
+     * @return {Promise<Photo>}
      */
-    async paginate({page = 1, perPage = 40, tag, searchPhrase}) {
-        const response = await this._api.getPosts({
-            page,
-            per_page: perPage,
+    async getPreviousByPostId(postId, {tag, searchPhrase} = {}) {
+        const response = await this._api.getPreviousPost(postId, {
             tag,
             search_phrase: searchPhrase,
+        }, {
+            suppressNotFoundErrors: true,
         });
-        return apiEntityMapper.toPaginator(response.data, apiEntityMapper.toPhoto);
+        return apiEntityMapper.toPhoto(response.data);
+    }
+
+    /**
+     * Get the next photo by related post ID.
+     *
+     * @param {number} postId
+     * @param {Object} [params]
+     * @param {string} [params.tag]
+     * @param {string} [params.searchPhrase]
+     * @return {Promise<Photo>}
+     */
+    async getNextByPostId(postId, {tag, searchPhrase} = {}) {
+        const response = await this._api.getNextPost(postId, {
+            tag,
+            search_phrase: searchPhrase,
+        }, {
+            suppressNotFoundErrors: true,
+        });
+        return apiEntityMapper.toPhoto(response.data);
     }
 
     /**
@@ -109,5 +136,25 @@ export default class PhotoManager {
             items = [...items, ...await this.getAll({page: ++page})];
         }
         return items;
+    }
+
+    /**
+     * Paginate over photos.
+     *
+     * @param {Object} [params]
+     * @param {number} [params.page]
+     * @param {number} [params.perPage]
+     * @param {string} [params.tag]
+     * @param {string} [params.searchPhrase]
+     * @return {Promise<Object>}
+     */
+    async paginate({page = 1, perPage = 40, tag, searchPhrase}) {
+        const response = await this._api.getPosts({
+            page,
+            per_page: perPage,
+            tag,
+            search_phrase: searchPhrase,
+        });
+        return apiEntityMapper.toPaginator(response.data, apiEntityMapper.toPhoto);
     }
 }
