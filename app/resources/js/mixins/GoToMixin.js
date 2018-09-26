@@ -1,4 +1,3 @@
-import {isDefined} from "tooleks";
 import {_PAGINATION, HOME, PHOTO, PHOTOS, PHOTOS_SEARCH, PHOTOS_TAG, ROUTE_404, SIGN_IN} from "../router/names";
 import {removeUndefinedKeys} from "../utils";
 
@@ -36,15 +35,15 @@ export default {
             // Initialize the route name.
             let name = PHOTOS;
             // If tag query parameter exists, go to the tag page.
-            if (isDefined(this.$route.query.tag)) {
+            if (typeof this.$route.query.tag !== "undefined") {
                 name = PHOTOS_TAG;
             }
             // If search phrase parameter exists go to the search page.
-            if (isDefined(this.$route.query.searchPhrase)) {
+            if (typeof this.$route.query.searchPhrase !== "undefined") {
                 name = PHOTOS_SEARCH;
             }
             // Modify the route name if the route supports paging.
-            if (isDefined(this.$route.query.page)) {
+            if (typeof this.$route.query.page !== "undefined") {
                 name = name + _PAGINATION;
             }
 
