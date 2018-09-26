@@ -4,7 +4,7 @@
             <button @click="emitBackEvent" class="btn btn-light btn-sm">
                 <i class="fa fa-arrow-left" aria-hidden="true"></i> Back to gallery
             </button>
-            <router-link v-if="authenticated && photo.id" :to="{name: 'photo/edit', params: {id: photo.id}}"
+            <router-link v-if="authenticated && photo.id" :to="{name: 'photo/edit', params: {id: photo.postId}}"
                          class="btn btn-light btn-sm">
                 <i class="fa fa-pencil" aria-hidden="true"></i> Edit photo
             </router-link>
@@ -14,7 +14,7 @@
             <div class="row">
                 <div class="col-md">
                     <p v-if="photo.exif && photo.exif.takenAt" class="card-text">
-                        Taken on {{ photo.exif.takenAt }}
+                        Taken on {{ photo.exif.takenAt.format("LLLL") }}
                     </p>
                     <p class="card-text" title="Description">{{ photo.description }}</p>
                     <tag-badges :tags="photo.tags"></tag-badges>

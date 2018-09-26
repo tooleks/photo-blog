@@ -11,7 +11,10 @@
         methods: {
             signOut: async function () {
                 try {
-                    await this.$dc.get("login").signOut();
+                    await this.$services.getLogin().signOut();
+                } catch (error) {
+                    // The error is handled by the API service.
+                    // No additional actions needed.
                 } finally {
                     this.goToSignInPage();
                 }

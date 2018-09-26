@@ -45,7 +45,7 @@
     export default {
         computed: {
             url: function () {
-                let url = this.$dc.get("config").url.app;
+                let url = this.$services.getConfig().url.app;
                 if (this.$route.fullPath) {
                     url += this.$route.fullPath;
                 }

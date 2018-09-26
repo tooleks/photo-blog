@@ -32,12 +32,12 @@
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tags</a>
                         <div class="dropdown-menu box-shadow-2dp" aria-labelledby="navbarTagsDropdown">
                             <router-link v-for="tag in tags"
-                                         :key="tag"
-                                         :to="{name: 'photos-tag', params: {tag: tag}}"
+                                         :key="`${tag}`"
+                                         :to="{name: 'photos-tag', params: {tag: `${tag}`}}"
                                          class="dropdown-item"
                                          data-toggle="collapse"
                                          data-target=".navbar-collapse.show">
-                                #{{ tag }}
+                                #{{ `${tag}` }}
                             </router-link>
                         </div>
                     </li>
@@ -151,6 +151,7 @@
 <script>
     import SearchInput from "../photos/SearchInput";
     import {AuthMixin} from "../../mixins";
+    import {toList, toTag} from "../../mapper/ApiDomain/transform";
 
     export default {
         components: {
@@ -166,24 +167,17 @@
         },
         computed: {
             social: function () {
-                return this.$dc.get("config").url.social;
+                return this.$services.getConfig().url.social;
             },
         },
         methods: {
-            init: function () {
-                this.loadTags();
-            },
-            setTags: function ({items}) {
-                this.tags = items;
-            },
             loadTags: async function () {
-                const response = await this.$dc.get("api").getTags();
-                const tags = this.$dc.get("mapper").map(response, "Api.Raw.Tags", "Meta.Tags");
-                this.setTags(tags);
+                const response = await this.$services.getApi().getTags();
+                this.tags = toList(response.data, toTag);
             },
         },
         created: function () {
-            this.init();
+            this.loadTags();
         },
     }
 </script>

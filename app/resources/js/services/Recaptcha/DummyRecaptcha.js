@@ -1,9 +1,6 @@
-/**
- * Class DummyReCaptchaService.
- */
-export default class DummyReCaptchaService {
+export default class DummyRecaptcha {
     /**
-     * DummyReCaptchaService constructor.
+     * DummyRecaptcha constructor.
      *
      * @param {Function} onVerified
      */
@@ -16,28 +13,28 @@ export default class DummyReCaptchaService {
     }
 
     /**
-     * @return {Promise}
+     * @return {Promise<void>}
      */
     async execute() {
         this._onVerified.call(this._onVerified);
     }
 
     /**
-     * @return {Promise}
+     * @return {Promise<void>}
      */
     async render() {
         //
     }
 
     /**
-     * @return {Promise}
+     * @return {Promise<void>}
      */
     async reset() {
         //
     }
 
     /**
-     * @return {Promise}
+     * @return {Promise<void>}
      */
     async load() {
         //

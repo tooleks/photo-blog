@@ -1,11 +1,8 @@
 import {waitUntil} from "tooleks";
 
-/**
- * Class BrowserReCaptchaService.
- */
-export default class BrowserReCaptchaService {
+export default class BrowserRecaptcha {
     /**
-     * BrowserReCaptchaService constructor.
+     * BrowserRecaptcha constructor.
      *
      * @param {HTMLElement} element
      * @param {string} siteKey
@@ -22,19 +19,19 @@ export default class BrowserReCaptchaService {
     }
 
     /**
-     * @return {Promise}
+     * @return {Promise<void>}
      */
     async execute() {
-        const reCaptcha = await this.load();
-        reCaptcha.execute(this._widgetId);
+        const recaptcha = await this.load();
+        recaptcha.execute(this._widgetId);
     }
 
     /**
-     * @return {Promise}
+     * @return {Promise<void>}
      */
     async render() {
-        const reCaptcha = await this.load();
-        this._widgetId = reCaptcha.render(this._element, {
+        const recaptcha = await this.load();
+        this._widgetId = recaptcha.render(this._element, {
             sitekey: this._siteKey,
             size: "invisible",
             callback: (response) => {
@@ -45,15 +42,15 @@ export default class BrowserReCaptchaService {
     }
 
     /**
-     * @return {Promise}
+     * @return {Promise<void>}
      */
     async reset() {
-        const reCaptcha = await this.load();
-        reCaptcha.reset(this._widgetId);
+        const recaptcha = await this.load();
+        recaptcha.reset(this._widgetId);
     }
 
     /**
-     * @return {Promise}
+     * @return {Promise<void>}
      */
     load() {
         return waitUntil(() => window["grecaptcha"]);

@@ -22,7 +22,8 @@
                                                required
                                                id="email"
                                                class="form-control"
-                                               v-model.trim="email">
+                                               v-model.trim="email"
+                                               v-focus>
                                     </div>
                                     <div class="form-group">
                                         <re-captcha ref="reCaptcha" @verified="subscribe"></re-captcha>
@@ -65,12 +66,15 @@
             subscribe: async function (reCaptchaResponse) {
                 this.loading = true;
                 try {
-                    await this.$dc.get("api").createSubscription({
+                    await this.$services.getApi().createSubscription({
                         email: this.email,
                         g_recaptcha_response: reCaptchaResponse,
                     });
-                    this.$dc.get("notification").success("You have been successfully subscribed to the website updates.");
+                    this.$services.getAlert().success("You have been successfully subscribed to the website updates.");
                     this.goToHomePage();
+                } catch (error) {
+                    // The error is handled by the API service.
+                    // No additional actions needed.
                 } finally {
                     this.loading = false;
                 }

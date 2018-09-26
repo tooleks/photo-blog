@@ -1,5 +1,5 @@
 import {optional as opt} from "tooleks";
-import dc from "../dc";
+import * as services from "../services/factory";
 
 /**
  * Determine whether current user is authenticated or not.
@@ -7,7 +7,7 @@ import dc from "../dc";
  * @return {boolean}
  */
 function isAuthenticated() {
-    return dc.get("auth").authenticated();
+    return services.getAuth().authenticated();
 }
 
 /**
@@ -16,7 +16,7 @@ function isAuthenticated() {
  * @return {string}
  */
 function getUserName() {
-    return opt(() => dc.get("auth").getUser().name);
+    return opt(() => services.getAuth().getUser().name);
 }
 
 export default {
@@ -28,7 +28,7 @@ export default {
         };
     },
     created: function () {
-        this.unsubscribeFromAuthChanges = this.$dc.get("auth").subscribe(() => {
+        this.unsubscribeFromAuthChanges = this.$services.getAuth().subscribe(() => {
             this.authenticated = isAuthenticated();
             this.userName = getUserName();
         });

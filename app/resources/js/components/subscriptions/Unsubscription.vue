@@ -46,8 +46,11 @@
             unsubscribe: async function () {
                 this.loading = true;
                 try {
-                    await this.$dc.get("api").deleteSubscription(this.$route.params.token);
-                    this.$dc.get("notification").success("You have been successfully unsubscribed from the website updates.");
+                    await this.$services.getApi().deleteSubscription(this.$route.params.token);
+                    this.$services.getAlert().success("You have been successfully unsubscribed from the website updates.");
+                } catch (error) {
+                    // The error is handled by the API service.
+                    // No additional actions needed.
                 } finally {
                     this.loading = false;
                     this.goToHomePage();

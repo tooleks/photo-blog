@@ -1,9 +1,6 @@
-/**
- * Class CookiesService.
- */
-export default class CookiesService {
+export default class CookiesManager {
     /**
-     * CookiesService constructor.
+     * CookiesManager constructor.
      */
     constructor() {
         this.getAll = this.getAll.bind(this);

@@ -39,20 +39,25 @@
             },
         },
         methods: {
-            init: function () {
-                this.loadImages();
-            },
             loadImages: async function () {
                 this.loading = true;
                 try {
-                    this.images = await this.$dc.get("photoMap").getImages();
+                    const photos = await this.$services.getPhotoManager().getAll();
+                    this.images = photos.filter((photo) => photo.location).map((photo) => {
+                        return {
+                            imageUrl: photo.original.url,
+                            linkUrl: `/photo/${encodeURIComponent(photo.id)}`,
+                            title: photo.description,
+                            location: photo.location,
+                        };
+                    });
                 } finally {
                     this.loading = false;
                 }
             },
         },
         created: function () {
-            this.init();
+            this.loadImages();
         },
     }
 </script>

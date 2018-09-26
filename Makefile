@@ -33,3 +33,12 @@ up-prod:
 
 down-prod:
 	docker-compose --file ./docker-compose.production.yml down
+
+test:
+	docker exec -it pb-app bash -c "./vendor/bin/phpunit"
+
+app-logs:
+	docker exec -it pb-app bash -c "tail -n 1000 -f ./storage/logs/laravel.log"
+
+mysql-logs:
+	docker exec -it pb-mysql bash -c "tail -n 1000 -f /var/log/mysql/general.log"

@@ -1,9 +1,6 @@
-/**
- * Class LocalStorageService.
- */
-export default class LocalStorageService {
+export default class LocalStorageManager {
     /**
-     * LocalStorageService constructor.
+     * LocalStorageManager constructor.
      */
     constructor() {
         this.set = this.set.bind(this);

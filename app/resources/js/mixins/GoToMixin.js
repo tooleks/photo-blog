@@ -1,5 +1,5 @@
 import {isDefined} from "tooleks";
-import {_PAGE_SUFFIX, HOME, PHOTO, PHOTOS, PHOTOS_SEARCH, PHOTOS_TAG, ROUTE_404, SIGN_IN} from "../router/names";
+import {_PAGINATION, HOME, PHOTO, PHOTOS, PHOTOS_SEARCH, PHOTOS_TAG, ROUTE_404, SIGN_IN} from "../router/names";
 import {removeUndefinedKeys} from "../utils";
 
 export default {
@@ -45,7 +45,7 @@ export default {
             }
             // Modify the route name if the route supports paging.
             if (isDefined(this.$route.query.page)) {
-                name = name + _PAGE_SUFFIX;
+                name = name + _PAGINATION;
             }
 
             // Initialize route params.

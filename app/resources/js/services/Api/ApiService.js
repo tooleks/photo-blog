@@ -1,6 +1,3 @@
-/**
- * Class ApiService.
- */
 export default class ApiService {
     /**
      * ApiService constructor.
@@ -21,7 +18,7 @@ export default class ApiService {
         this.deleteToken = this.deleteToken.bind(this);
         this.getUser = this.getUser.bind(this);
         this.uploadPhotoFile = this.uploadPhotoFile.bind(this);
-        this.updatePhotoLocation = this.updatePhotoLocation.bind(this);
+        this.updatePhoto = this.updatePhoto.bind(this);
         this.createPost = this.createPost.bind(this);
         this.updatePost = this.updatePost.bind(this);
         this.getPosts = this.getPosts.bind(this);
@@ -86,11 +83,11 @@ export default class ApiService {
     /**
      * Get user by ID.
      *
-     * @param {string} id
+     * @param {number} id
      * @return {Promise}
      */
     getUser(id) {
-        const url = this._getFullUrl(`/users/${id}`);
+        const url = this._getFullUrl(`/users/${encodeURIComponent(id)}`);
         const request = () => this._httpClient.get(url);
         return this._handleRequest(request);
     }
@@ -110,14 +107,14 @@ export default class ApiService {
     }
 
     /**
-     * Update photo location.
+     * Update photo.
      *
-     * @param {string} id
+     * @param {number} id
      * @param {Object} data
      * @return {Promise}
      */
-    updatePhotoLocation(id, data) {
-        const url = this._getFullUrl(`/photos/${id}`);
+    updatePhoto(id, data) {
+        const url = this._getFullUrl(`/photos/${encodeURIComponent(id)}`);
         const request = () => this._httpClient.put(url, data);
         return this._handleRequest(request);
     }
@@ -137,12 +134,12 @@ export default class ApiService {
     /**
      * Update post.
      *
-     * @param {string} id
+     * @param {number} id
      * @param {Object} data
      * @return {Promise}
      */
     updatePost(id, data) {
-        const url = this._getFullUrl(`/posts/${id}`);
+        const url = this._getFullUrl(`/posts/${encodeURIComponent(id)}`);
         const request = () => this._httpClient.put(url, data);
         return this._handleRequest(request);
     }
@@ -150,11 +147,11 @@ export default class ApiService {
     /**
      * Get posts.
      *
-     * @param {Object} [params={}]
+     * @param {Object} [params]
      * @param {number} [params.page=1]
      * @param {number} [params.per_page=15]
-     * @param {string} params.tag
-     * @param {string} params.search_phrase
+     * @param {string} [params.tag]
+     * @param {string} [params.search_phrase]
      * @return {Promise}
      */
     getPosts({page = 1, per_page = 15, tag, search_phrase} = {}) {
@@ -166,15 +163,15 @@ export default class ApiService {
     /**
      * Get post.
      *
-     * @param {string} id
-     * @param {Object} [params={}]
+     * @param {number} id
+     * @param {Object} [params]
      * @param {string} params.tag
      * @param {string} params.search_phrase
-     * @param {Object} [options={}]
+     * @param {Object} [options]
      * @return {Promise}
      */
     getPost(id, {tag, search_phrase} = {}, options = {}) {
-        const url = this._getFullUrl(`/posts/${id}`);
+        const url = this._getFullUrl(`/posts/${encodeURIComponent(id)}`);
         const request = () => this._httpClient.get(url, {params: {tag, search_phrase}});
         return this._handleRequest(request, options);
     }
@@ -182,15 +179,15 @@ export default class ApiService {
     /**
      * Get previous post.
      *
-     * @param {string} id
-     * @param {Object} [params={}]
+     * @param {number} id
+     * @param {Object} [params]
      * @param {string} params.tag
      * @param {string} params.search_phrase
-     * @param {Object} [options={}]
+     * @param {Object} [options]
      * @return {Promise}
      */
     getPreviousPost(id, {tag, search_phrase} = {}, options = {}) {
-        const url = this._getFullUrl(`/posts/${id}/previous`);
+        const url = this._getFullUrl(`/posts/${encodeURIComponent(id)}/previous`);
         const request = () => this._httpClient.get(url, {params: {tag, search_phrase}});
         return this._handleRequest(request, options);
     }
@@ -198,15 +195,15 @@ export default class ApiService {
     /**
      * Get next post.
      *
-     * @param {string} id
-     * @param {Object} [params={}]
+     * @param {number} id
+     * @param {Object} [params]
      * @param {string} params.tag
      * @param {string} params.search_phrase
-     * @param {Object} [options={}]
+     * @param {Object} [options]
      * @return {Promise}
      */
     getNextPost(id, {tag, search_phrase} = {}, options = {}) {
-        const url = this._getFullUrl(`/posts/${id}/next`);
+        const url = this._getFullUrl(`/posts/${encodeURIComponent(id)}/next`);
         const request = () => this._httpClient.get(url, {params: {tag, search_phrase}});
         return this._handleRequest(request, options);
     }
@@ -214,11 +211,11 @@ export default class ApiService {
     /**
      * Delete post.
      *
-     * @param {string} id
+     * @param {number} id
      * @return {Promise}
      */
     deletePost(id) {
-        const url = this._getFullUrl(`/posts/${id}`);
+        const url = this._getFullUrl(`/posts/${encodeURIComponent(id)}`);
         const request = () => this._httpClient.delete(url);
         return this._handleRequest(request);
     }
@@ -226,7 +223,7 @@ export default class ApiService {
     /**
      * Get tags.
      *
-     * @param {Object} [params={}]
+     * @param {Object} [params]
      * @param {number} [params.page=1]
      * @param {number} [params.per_page=15]
      * @return {Promise}
@@ -268,7 +265,7 @@ export default class ApiService {
      * @return {Promise}
      */
     deleteSubscription(token) {
-        const url = this._getFullUrl(`/subscriptions/${token}`);
+        const url = this._getFullUrl(`/subscriptions/${encodeURIComponent(token)}`);
         const request = () => this._httpClient.delete(url);
         return this._handleRequest(request);
     }
@@ -276,7 +273,7 @@ export default class ApiService {
     /**
      * Get subscriptions.
      *
-     * @param {Object} [params={}]
+     * @param {Object} [params]
      * @param {number} [params.page=1]
      * @param {number} [params.per_page=15]
      * @return {Promise}

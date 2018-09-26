@@ -1,28 +1,20 @@
 import moment from "moment";
 import {isObject} from "tooleks";
+import {toUser} from "../mapper/ApiDomain/transform";
 
-/**
- * String key used to represent a user auth in the persistent storage.
- *
- * @type {string}
- */
-export const DEFAULT_AUTH_KEY = "user";
+/** @type {string} */
+export const AUTH_KEY = "user";
 
-/**
- * Class AuthService.
- */
-export default class AuthService {
+export default class AuthManager {
     /**
-     * AuthService constructor.
+     * AuthManager constructor.
      *
      * @param {EventEmitter} eventEmitter
-     * @param {LocalStorageService} localStorageService
-     * @param {string} [authKey="user"]
+     * @param {LocalStorageManager} localStorage
      */
-    constructor(eventEmitter, localStorageService, authKey = DEFAULT_AUTH_KEY) {
+    constructor(eventEmitter, localStorage) {
         this._eventEmitter = eventEmitter;
-        this._localStorageService = localStorageService;
-        this._authKey = authKey;
+        this._localStorage = localStorage;
         this._init = this._init.bind(this);
         this._isExpiredUserAuth = this._isExpiredUserAuth.bind(this);
         this.setUser = this.setUser.bind(this);
@@ -67,8 +59,8 @@ export default class AuthService {
         if (!isObject(user)) {
             throw new TypeError;
         } else {
-            this._localStorageService.set(this._authKey, user);
-            this._eventEmitter.emit(this._authKey, user);
+            this._localStorage.set(AUTH_KEY, user);
+            this._eventEmitter.emit(AUTH_KEY, user);
         }
     }
 
@@ -78,17 +70,22 @@ export default class AuthService {
      * @return {void}
      */
     removeUser() {
-        this._localStorageService.remove(this._authKey);
-        this._eventEmitter.emit(this._authKey, null);
+        this._localStorage.remove(AUTH_KEY);
+        this._eventEmitter.emit(AUTH_KEY, null);
     }
 
     /**
      * Get user from the persistent storage.
      *
-     * @return {Object}
+     * @return {User}
      */
     getUser() {
-        return this._localStorageService.get(this._authKey);
+        if (this._localStorage.exists(AUTH_KEY)) {
+            const object = this._localStorage.get(AUTH_KEY);
+            return toUser(object);
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -97,7 +94,7 @@ export default class AuthService {
      * @return {boolean}
      */
     authenticated() {
-        return this._localStorageService.exists(this._authKey);
+        return this._localStorage.exists(AUTH_KEY);
     }
 
     /**
@@ -107,6 +104,6 @@ export default class AuthService {
      * @return {void}
      */
     subscribe(listener) {
-        this._eventEmitter.on(this._authKey, listener);
+        this._eventEmitter.on(AUTH_KEY, listener);
     }
 }

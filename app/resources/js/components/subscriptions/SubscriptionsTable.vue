@@ -6,12 +6,20 @@
                     <thead>
                     <tr>
                         <th>Email</th>
+                        <th>Unsubscribe</th>
                         <th class="width-3em"></th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr v-for="subscription in subscriptions">
                         <td>{{ subscription.email }}</td>
+                        <td>
+                            <router-link
+                                    :to="{name: 'unsubscription', params: {token: subscription.token}}"
+                                    target="_blank">
+                                {{ subscription.token }}
+                            </router-link>
+                        </td>
                         <td class="width-3em text-center">
                             <button @click="deleteSubscription(subscription)"
                                     class="btn btn-secondary btn-sm"
@@ -50,7 +58,8 @@
 
 <script>
     import {MetaMixin} from "../../mixins";
-    import {_PAGE_SUFFIX} from "../../router/names";
+    import {_PAGINATION} from "../../router/names";
+    import {toPaginator, toSubscription} from "../../mapper/ApiDomain/transform";
 
     export default {
         mixins: [
@@ -69,7 +78,7 @@
         },
         computed: {
             routeName: function () {
-                return this.$route.name.endsWith(_PAGE_SUFFIX) ? this.$route.name : `${this.$route.name}${_PAGE_SUFFIX}`;
+                return this.$route.name.endsWith(_PAGINATION) ? this.$route.name : `${this.$route.name}${_PAGINATION}`;
             },
             pageTitle: function () {
                 return "Subscriptions";
@@ -77,7 +86,7 @@
         },
         watch: {
             "$route": function () {
-                this.init();
+                this.loadSubscriptions();
             },
             currentPage: function (currentPage) {
                 if (currentPage > 1) {
@@ -86,9 +95,6 @@
             },
         },
         methods: {
-            init: async function () {
-                this.loadSubscriptions();
-            },
             setSubscriptions: function ({items, previousPageExists, nextPageExists, currentPage, nextPage, previousPage}) {
                 this.subscriptions = items;
                 this.previousPageExists = previousPageExists;
@@ -100,9 +106,8 @@
             loadSubscriptions: async function (page = this.$route.params.page) {
                 this.loading = true;
                 try {
-                    const response = await this.$dc.get("api").getSubscriptions({page});
-                    const subscriptions = this.$dc.get("mapper").map(response, "Api.Raw.Subscriptions", "Meta.Subscriptions");
-                    this.setSubscriptions(subscriptions);
+                    const response = await this.$services.getApi().getSubscriptions({page});
+                    this.setSubscriptions(toPaginator(response.data, toSubscription));
                 } finally {
                     this.loading = false;
                 }
@@ -111,9 +116,9 @@
                 if (confirm(`Do you really want to delete the ${subscription.email} subscription?`)) {
                     this.loading = true;
                     try {
-                        await this.$dc.get("api").deleteSubscription(subscription.token);
-                        this.$dc.get("notification").success("The subscription has been successfully deleted.");
-                        await this.init();
+                        await this.$services.getApi().deleteSubscription(subscription.token);
+                        this.$services.getAlert().success("The subscription has been successfully deleted.");
+                        await this.loadSubscriptions();
                     } finally {
                         this.loading = false;
                     }
@@ -121,7 +126,7 @@
             },
         },
         created: function () {
-            this.init();
+            this.loadSubscriptions();
         },
     };
 </script>

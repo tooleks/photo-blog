@@ -26,6 +26,8 @@
     delete L.Icon.Default.prototype._getIconUrl;
     L.Icon.Default.mergeOptions({iconRetinaUrl, iconUrl, shadowUrl});
 
+    import Location from "../../entities/Location";
+
     export default {
         props: {
             id: {
@@ -51,9 +53,13 @@
             location: {
                 type: Object,
                 validator: function ({lat, lng}) {
-                    const isValidLat = lat >= -90 && lat <= 90;
-                    const isValidLng = lng >= -180 && lng <= 180;
-                    return isValidLat && isValidLng;
+                    try {
+                        // Location constructor will throw an exception if invalid coordinates will be provided.
+                        new Location({lat, lng});
+                        return true;
+                    } catch (error) {
+                        return false;
+                    }
                 },
                 default: function () {
                     // Lviv, Ukraine.
