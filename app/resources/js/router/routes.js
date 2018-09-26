@@ -81,12 +81,12 @@ const routes = [
         component: PhotoMap,
     },
     {
-        path: "/photos/search/:search_phrase",
+        path: "/photos/search/:searchPhrase",
         name: PHOTOS_SEARCH,
         component: PhotoGallery,
     },
     {
-        path: "/photos/search/:search_phrase/:page",
+        path: "/photos/search/:searchPhrase/:page",
         name: PHOTOS_SEARCH + _PAGINATION,
         component: PhotoGallery,
     },

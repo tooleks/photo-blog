@@ -25,7 +25,7 @@ export default {
             // Initialize the route query.
             const query = {
                 tag: this.$route.params.tag || this.$route.query.tag,
-                search_phrase: this.$route.params.search_phrase || this.$route.query.search_phrase,
+                searchPhrase: this.$route.params.searchPhrase || this.$route.query.searchPhrase,
                 page: this.$route.params.page || this.$route.query.page,
             };
             removeUndefinedKeys(query);
@@ -40,7 +40,7 @@ export default {
                 name = PHOTOS_TAG;
             }
             // If search phrase parameter exists go to the search page.
-            if (isDefined(this.$route.query.search_phrase)) {
+            if (isDefined(this.$route.query.searchPhrase)) {
                 name = PHOTOS_SEARCH;
             }
             // Modify the route name if the route supports paging.

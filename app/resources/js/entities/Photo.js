@@ -44,7 +44,7 @@ export default class Photo {
             },
             query: {
                 tag: route.params.tag || route.query.tag,
-                search_phrase: route.params.search_phrase || route.query.search_phrase,
+                searchPhrase: route.params.searchPhrase || route.query.searchPhrase,
                 page: route.params.page || route.query.page,
             },
         };

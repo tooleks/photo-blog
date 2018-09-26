@@ -63,8 +63,8 @@
                 return this.$route.name.endsWith(_PAGINATION) ? this.$route.name : `${this.$route.name}${_PAGINATION}`;
             },
             pageTitle: function () {
-                if (this.$route.params.search_phrase) {
-                    return `Search "${this.$route.params.search_phrase}"`;
+                if (this.$route.params.searchPhrase) {
+                    return `Search "${this.$route.params.searchPhrase}"`;
                 }
                 if (this.$route.params.tag) {
                     return `Search by tag #${this.$route.params.tag}`;
