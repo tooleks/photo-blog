@@ -115,10 +115,9 @@ export function toLocation({latitude, longitude}) {
  * @param {string} [attributes.description]
  * @param {Array<Object>} [attributes.tags]
  * @param {Object} attributes.photo
- * @param {string} [attributes.avg_color]
  * @return {Photo}
  */
-export function toPhoto({id, description = "", tags = [], photo, avg_color}) {
+export function toPhoto({id, description = "", tags = [], photo}) {
     return new Photo({
         postId: id,
         id: photo.id,
@@ -127,7 +126,7 @@ export function toPhoto({id, description = "", tags = [], photo, avg_color}) {
         thumbnail: toImage(photo.thumbnails.medium),
         original: toImage(photo.thumbnails.large),
         exif: toExif(photo.exif),
-        averageColor: avg_color,
+        averageColor: photo.avg_color,
         location: opt(() => toLocation(photo.location)),
     });
 }
