@@ -116,8 +116,10 @@
             loadPhotos: async function () {
                 this.loading = true;
                 try {
-                    const response = await this.$services.getApi().getPosts({...this.$route.params, per_page: 40});
-                    this.setPhotos(toPaginator(response.data, toPhoto));
+                    this.setPhotos(await this.$services.getPhotoManager().paginate(this.$route.params));
+                } catch (error) {
+                    // The error is handled by the API service.
+                    // No additional actions needed.
                 } finally {
                     this.loading = false;
                 }

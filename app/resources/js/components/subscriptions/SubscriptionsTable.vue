@@ -59,7 +59,6 @@
 <script>
     import {MetaMixin} from "../../mixins";
     import {_PAGINATION} from "../../router/names";
-    import {toPaginator, toSubscription} from "../../mapper/ApiDomain/transform";
 
     export default {
         mixins: [
@@ -106,8 +105,10 @@
             loadSubscriptions: async function (page = this.$route.params.page) {
                 this.loading = true;
                 try {
-                    const response = await this.$services.getApi().getSubscriptions({page});
-                    this.setSubscriptions(toPaginator(response.data, toSubscription));
+                    this.setSubscriptions(await this.$services.getSubscriptionManager().paginate({page}));
+                } catch (error) {
+                    // The error is handled by the API service.
+                    // No additional actions needed.
                 } finally {
                     this.loading = false;
                 }
@@ -116,9 +117,12 @@
                 if (confirm(`Do you really want to delete the ${subscription.email} subscription?`)) {
                     this.loading = true;
                     try {
-                        await this.$services.getApi().deleteSubscription(subscription.token);
+                        await this.$services.getSubscriptionManager().deleteByToken(subscription.token);
                         this.$services.getAlert().success("The subscription has been successfully deleted.");
                         await this.loadSubscriptions();
+                    } catch (error) {
+                        // The error is handled by the API service.
+                        // No additional actions needed.
                     } finally {
                         this.loading = false;
                     }

@@ -12,6 +12,7 @@ import LoginManager from "./LoginManager";
 import BrowserRecaptcha from "./Recaptcha/BrowserRecaptcha";
 import DummyRecaptcha from "./Recaptcha/DummyRecaptcha";
 import PhotoManager from "./PhotoManager";
+import SubscriptionManager from "./SubscriptionManager";
 import TagManager from "./TagManager";
 
 /** @type {Object} */
@@ -74,6 +75,11 @@ export function getReCaptcha(element, siteKey, onVerified) {
 /** @return {PhotoManager} */
 export function getPhotoManager() {
     return new PhotoManager(getApi());
+}
+
+/** @return {SubscriptionManager} */
+export function getSubscriptionManager() {
+    return new SubscriptionManager(getApi());
 }
 
 /** @return {TagManager} */

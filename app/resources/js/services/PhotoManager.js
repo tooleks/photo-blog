@@ -75,6 +75,26 @@ export default class PhotoManager {
     }
 
     /**
+     * Paginate over photos.
+     *
+     * @param {Object} [options]
+     * @param {number} [options.page]
+     * @param {number} [options.perPage]
+     * @param {string} [options.tag]
+     * @param {string} [options.searchPhrase]
+     * @return {Promise<Object>}
+     */
+    async paginate({page = 1, perPage = 40, tag, searchPhrase}) {
+        const response = await this._api.getPosts({
+            page,
+            per_page: perPage,
+            tag,
+            search_phrase: searchPhrase,
+        });
+        return apiDomainMapper.toPaginator(response.data, apiDomainMapper.toPhoto);
+    }
+
+    /**
      * Recursively get all photos.
      *
      * @param {Object} [params]

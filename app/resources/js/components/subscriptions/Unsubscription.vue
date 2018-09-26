@@ -11,7 +11,7 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12">
-                        <button type="button" class="btn btn-danger" @click="unsubscribe" :disabled="loading">
+                        <button type="button" class="btn btn-danger" @click="deleteSubscription()" :disabled="loading">
                             Yes
                         </button>
                         <button type="button" class="btn btn-secondary" @click="goToHomePage" :disabled="loading">
@@ -43,10 +43,10 @@
             },
         },
         methods: {
-            unsubscribe: async function () {
+            deleteSubscription: async function (token = this.$route.params.token) {
                 this.loading = true;
                 try {
-                    await this.$services.getApi().deleteSubscription(this.$route.params.token);
+                    await this.$services.getSubscriptionManager().deleteByToken(token);
                     this.$services.getAlert().success("You have been successfully unsubscribed from the website updates.");
                 } catch (error) {
                     // The error is handled by the API service.

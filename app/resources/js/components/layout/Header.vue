@@ -151,7 +151,6 @@
 <script>
     import SearchInput from "../photos/SearchInput";
     import {AuthMixin} from "../../mixins";
-    import {toList, toTag} from "../../mapper/ApiDomain/transform";
 
     export default {
         components: {
