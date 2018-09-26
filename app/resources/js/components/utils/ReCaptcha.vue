@@ -24,8 +24,8 @@
             };
         },
         methods: {
-            verify: function () {
-                this.reCaptcha.execute();
+            verify: async function () {
+                await this.reCaptcha.execute();
             },
         },
         mounted: async function () {
