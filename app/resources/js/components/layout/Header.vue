@@ -172,8 +172,7 @@
         },
         methods: {
             loadTags: async function () {
-                const response = await this.$services.getApi().getTags();
-                this.tags = toList(response.data, toTag);
+                this.tags = await this.$services.getTagManager().getPopular();
             },
         },
         created: function () {
