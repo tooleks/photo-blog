@@ -5,16 +5,27 @@ export default {
     methods: {
         goToPath: function (path) {
             if (path) {
-                this.$router.push({path});
+                this.$router.push({
+                    path,
+                });
             } else {
                 this.goToHomePage();
             }
         },
+        goToRedirectUri: function () {
+            this.$router.push({
+                path: this.$route.query.redirectUri,
+            });
+        },
         goToHomePage: function () {
-            this.$router.push({name: HOME});
+            this.$router.push({
+                name: HOME,
+            });
         },
         goToSignInPage: function () {
-            this.$router.push({name: SIGN_IN});
+            this.$router.push({
+                name: SIGN_IN,
+            });
         },
         goToPhotoPage: function (id) {
             // Initialize the route params.
@@ -29,7 +40,11 @@ export default {
             };
             removeUndefinedKeys(query);
 
-            this.$router.push({name: PHOTO, params, query});
+            this.$router.push({
+                name: PHOTO,
+                params,
+                query,
+            });
         },
         goToPhotosPage: function (id) {
             // Initialize the route name.
@@ -57,10 +72,16 @@ export default {
                 hash = `#gallery-image-${id}`;
             }
 
-            this.$router.push({name, params, hash});
+            this.$router.push({
+                name,
+                params,
+                hash,
+            });
         },
         goToNotFoundPage: function () {
-            this.$router.push({name: ROUTE_404});
+            this.$router.push({
+                name: ROUTE_404,
+            });
         },
     },
 }
