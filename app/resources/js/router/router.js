@@ -21,7 +21,7 @@ router.beforeEach((to, from, next) => {
     if (to.matched.some((route) => route.meta.requiresAuth) && !services.getAuth().authenticated()) {
         next({
             name: "sign-in",
-            query: {redirect_uri: to.fullPath},
+            query: {redirectUri: to.fullPath},
         });
     } else {
         next();

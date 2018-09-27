@@ -66,7 +66,7 @@
         methods: {
             init: function () {
                 if (this.authenticated) {
-                    this.goToPath(this.$route.query.redirect_uri);
+                    this.goToPath(this.$route.query.redirectUri);
                 }
             },
             signIn: async function (reCaptchaResponse) {
@@ -78,7 +78,7 @@
                         g_recaptcha_response: reCaptchaResponse,
                     });
                     this.$services.getAlert().success(`Hello ${user.name}!`);
-                    this.goToPath(this.$route.query.redirect_uri);
+                    this.goToPath(this.$route.query.redirectUri);
                 } catch (error) {
                     // The error is handled by the API service.
                     // No additional actions needed.
