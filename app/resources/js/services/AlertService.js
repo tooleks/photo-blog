@@ -12,6 +12,7 @@ export const GROUP = "main";
 export const POSITION = "center";
 export const DURATION_INFINITE = -1;
 export const DURATION_THREE_SECONDS = 3 * 1000;
+export const DURATION_FIVE_SECONDS = 5 * 1000;
 export const TYPE_SUCCESS = "success";
 export const TYPE_WARN = "warn";
 export const TYPE_ERROR = "error";
@@ -39,7 +40,7 @@ export default class AlertService {
         notify({
             group: GROUP,
             duration: type === TYPE_ERROR
-                ? DURATION_INFINITE
+                ? DURATION_FIVE_SECONDS
                 : DURATION_THREE_SECONDS,
             position: POSITION,
             title,
