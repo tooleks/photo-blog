@@ -28,12 +28,8 @@
         text-align: center;
         cursor: pointer;
 
-        [disabled] {
+        &[disabled] {
             cursor: not-allowed !important;
-        }
-
-        [hidden] {
-            display: none !important;
         }
     }
 </style>
