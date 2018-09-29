@@ -1,12 +1,12 @@
 <template>
     <div>
-        <loader :loading="loading"></loader>
-        <viewer v-if="activePhoto"
-                :activeImage.sync="activePhoto"
-                :images="photos"
-                @onFirstImage="loadNewerPhoto"
-                @onLastImage="loadOlderPhoto"
-                @onExit="goToPhotosPage"></viewer>
+        <round-spinner :loading="loading"></round-spinner>
+        <gallery-viewer v-if="activePhoto"
+                        :activeImage.sync="activePhoto"
+                        :images="photos"
+                        @onFirstImage="loadNewerPhoto"
+                        @onLastImage="loadOlderPhoto"
+                        @onExit="goToPhotosPage"></gallery-viewer>
         <div class="container" v-if="activePhoto">
             <div class="row">
                 <div class="col">
@@ -19,16 +19,16 @@
 
 <script>
     import {optional as opt} from "tooleks";
-    import Loader from "../utils/Loader";
+    import RoundSpinner from "../utils/RoundSpinner";
     import Viewer from "../gallery/Viewer";
     import PhotoDescriptionCard from "./PhotoDescriptionCard";
     import {GoToMixin, MetaMixin} from "../../mixins";
 
     export default {
         components: {
-            Loader,
+            RoundSpinner,
             PhotoDescriptionCard,
-            Viewer,
+            GalleryViewer: Viewer,
         },
         mixins: [
             GoToMixin,
@@ -36,8 +36,11 @@
         ],
         data: function () {
             return {
+                /** @type {boolean} */
                 loading: false,
+                /** @type {Array<Photo>} */
                 photos: [],
+                /** @type {Photo} */
                 activePhoto: undefined,
             };
         },
@@ -46,7 +49,7 @@
                 return opt(() => this.activePhoto.description, "");
             },
             pageImage: function () {
-                return opt(() => this.activePhoto.original.url, "");
+                return opt(() => this.activePhoto.image.url, "");
             },
         },
         watch: {

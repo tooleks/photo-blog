@@ -66,12 +66,19 @@
         ],
         data: function () {
             return {
+                /** @type {boolean} */
                 loading: false,
+                /** @type {Array<Subscription>} */
                 subscriptions: [],
+                /** @type {number|null} */
                 previousPage: null,
+                /** @type {number} */
                 currentPage: 1,
+                /** @type {number|null} */
                 nextPage: null,
+                /** @type {boolean} */
                 previousPageExists: false,
+                /** @type {boolean} */
                 nextPageExists: false,
             };
         },

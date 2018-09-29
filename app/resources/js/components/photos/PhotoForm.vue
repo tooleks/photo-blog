@@ -1,6 +1,6 @@
 <template>
     <div class="container py-3">
-        <loader :loading="loading" :delay="0"></loader>
+        <round-spinner :loading="loading" :delay="0"></round-spinner>
         <file-input :attributes="{id: 'file', name: 'file', disabled: loading}"
                     @change="uploadPhoto"></file-input>
         <div v-if="photo.image" class="card mt-3">
@@ -70,7 +70,7 @@
 
 <script>
     import FileInput from "../utils/FileInput";
-    import Loader from "../utils/Loader";
+    import RoundSpinner from "../utils/RoundSpinner";
     import TagInput from "../utils/TagInput";
     import LocationInput from "../map/LocationInput";
     import PhotoCard from "./PhotoCard";
@@ -79,7 +79,7 @@
     export default {
         components: {
             FileInput,
-            Loader,
+            RoundSpinner,
             TagInput,
             LocationInput,
             PhotoCard,
@@ -90,7 +90,9 @@
         ],
         data: function () {
             return {
+                /** @type {boolean} */
                 loading: false,
+                /** @type {Photo|Object} */
                 photo: {},
             };
         },

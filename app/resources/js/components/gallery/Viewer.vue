@@ -155,11 +155,14 @@
             },
             images: {
                 type: Array,
-                default: [],
+                default: function () {
+                    return [];
+                },
             },
         },
         data: function () {
             return {
+                /** @type {boolean} */
                 inFullScreenMode: false,
             };
         },

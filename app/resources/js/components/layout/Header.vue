@@ -161,6 +161,7 @@
         ],
         data: function () {
             return {
+                /** @type {Array<Tag>} */
                 tags: [],
             };
         },

@@ -57,7 +57,9 @@
         props: {
             images: {
                 type: Array,
-                default: [],
+                default: function () {
+                    return [];
+                },
             },
             refreshInterval: {
                 type: Number,
@@ -81,11 +83,14 @@
         },
         data: function () {
             return {
+                /** @type {Array<Function>} */
                 intervals: [],
+                /** @type {Object} */
                 element: {
                     width: 0,
                     height: 0,
                 },
+                /** @type {Masonry} */
                 masonry: new Masonry({maxWidth: this.rowMaxWidth, maxHeight: this.rowMaxHeight}),
             };
         },

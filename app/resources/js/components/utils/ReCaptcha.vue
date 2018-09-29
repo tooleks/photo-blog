@@ -20,6 +20,7 @@
         data: function () {
             this.siteKey = this.siteKey || this.$services.getConfig().credentials.googleReCaptcha.siteKey;
             return {
+                /** @type {BrowserRecaptcha|DummyRecaptcha} */
                 reCaptcha: this.$services.getReCaptcha(this.id, this.siteKey, (response) => this.$emit("verified", response)),
             };
         },

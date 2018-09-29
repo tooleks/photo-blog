@@ -83,10 +83,15 @@
         ],
         data: function () {
             return {
+                /** @type {boolean} */
                 loading: false,
+                /** @type {string} */
                 email: "",
+                /** @type {string} */
                 name: "",
+                /** @type {string} */
                 subject: "",
+                /** @type {string} */
                 message: "",
             };
         },

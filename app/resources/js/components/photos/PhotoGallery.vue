@@ -1,9 +1,9 @@
 <template>
     <div class="container">
-        <loader :loading="loading"></loader>
+        <round-spinner :loading="loading"></round-spinner>
         <div v-if="photos.length" class="row">
             <div class="col py-1">
-                <masonry ref="masonry" :images="photos"></masonry>
+                <gallery-masonry ref="masonry" :images="photos"></gallery-masonry>
             </div>
         </div>
         <div v-if="!loading && !photos.length" class="row">
@@ -32,15 +32,15 @@
 
 <script>
     import {waitUntil} from "tooleks";
-    import Loader from "../utils/Loader";
+    import RoundSpinner from "../utils/RoundSpinner";
     import Masonry from "../gallery/Masonry";
     import {GoToMixin, MetaMixin} from "../../mixins";
     import {_PAGINATION} from "../../router/names";
 
     export default {
         components: {
-            Loader,
-            Masonry,
+            RoundSpinner,
+            GalleryMasonry: Masonry,
         },
         mixins: [
             GoToMixin,
@@ -48,12 +48,19 @@
         ],
         data: function () {
             return {
+                /** @type {boolean} */
                 loading: false,
+                /** @type {Array<Photo>} */
                 photos: [],
+                /** @type {number|null} */
                 previousPage: null,
+                /** @type {number} */
                 currentPage: 1,
+                /** @type {number|null} */
                 nextPage: null,
+                /** @type {boolean} */
                 previousPageExists: false,
+                /** @type {boolean} */
                 nextPageExists: false,
             };
         },

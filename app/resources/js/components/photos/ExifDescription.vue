@@ -26,11 +26,11 @@
 </template>
 
 <script>
+    import Exif from "../../entities/Exif";
+
     export default {
         props: {
-            exif: {
-                type: Object,
-            },
+            exif: Exif,
         },
     }
 </script>

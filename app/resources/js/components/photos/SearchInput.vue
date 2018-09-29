@@ -32,6 +32,7 @@
         },
         data: function () {
             return {
+                /** @type {string} */
                 input: "",
             };
         },

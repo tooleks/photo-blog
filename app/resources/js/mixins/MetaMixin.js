@@ -1,4 +1,7 @@
-import {optional as opt} from "tooleks";
+import Vue from "vue";
+import VueMeta from "vue-meta";
+
+Vue.use(VueMeta);
 
 export default {
     computed: {
@@ -6,19 +9,19 @@ export default {
             return 200;
         },
         pageName: function () {
-            return opt(() => this.$services.getConfig().app.name, "");
+            return this.$services.getConfig().app.name;
         },
         pageDescription: function () {
-            return opt(() => this.$services.getConfig().app.description, "");
+            return this.$services.getConfig().app.description;
         },
         pageKeywords: function () {
-            return opt(() => this.$services.getConfig().app.keywords, "");
+            return this.$services.getConfig().app.keywords;
         },
         pageTitle: function () {
             return "";
         },
         pageImage: function () {
-            return opt(() => this.$services.getConfig().url.image, "");
+            return this.$services.getConfig().url.image;
         },
         pageCanonicalUrl: function () {
             let url = this.$services.getConfig().url.app;
