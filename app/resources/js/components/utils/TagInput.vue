@@ -15,7 +15,9 @@
             },
             tags: {
                 type: Array,
-                default: [],
+                default: function () {
+                    return [];
+                },
                 validator: function (tags) {
                     return Array.isArray(tags) && tags.every((tag) => tag instanceof Tag);
                 },
