@@ -46,7 +46,7 @@
                     this.images = photos.filter((photo) => photo.location).map((photo) => {
                         return {
                             imageUrl: photo.original.url,
-                            linkUrl: `/photo/${encodeURIComponent(photo.id)}`,
+                            linkUrl: `/photo/${encodeURIComponent(photo.postId)}`,
                             title: photo.description,
                             location: photo.location,
                         };
