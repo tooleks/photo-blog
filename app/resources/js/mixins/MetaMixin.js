@@ -6,22 +6,22 @@ export default {
             return 200;
         },
         pageName: function () {
-            return opt(() => this.$dc.get("config").app.name, "");
+            return opt(() => this.$services.getConfig().app.name, "");
         },
         pageDescription: function () {
-            return opt(() => this.$dc.get("config").app.description, "");
+            return opt(() => this.$services.getConfig().app.description, "");
         },
         pageKeywords: function () {
-            return opt(() => this.$dc.get("config").app.keywords, "");
+            return opt(() => this.$services.getConfig().app.keywords, "");
         },
         pageTitle: function () {
             return "";
         },
         pageImage: function () {
-            return opt(() => this.$dc.get("config").url.image, "");
+            return opt(() => this.$services.getConfig().url.image, "");
         },
         pageCanonicalUrl: function () {
-            let url = this.$dc.get("config").url.app;
+            let url = this.$services.getConfig().url.app;
             if (this.$route.fullPath) {
                 url += this.$route.path;
             }
@@ -39,7 +39,11 @@ export default {
                 {vmid: "keywords", name: "keywords", content: this.pageKeywords},
                 // Open Graph protocol properties.
                 {vmid: "og:type", property: "og:type", content: "article"},
-                {vmid: "og:url", property: "og:url", content: this.$dc.get("config").url.app + this.$route.fullPath},
+                {
+                    vmid: "og:url",
+                    property: "og:url",
+                    content: this.$services.getConfig().url.app + this.$route.fullPath,
+                },
                 {vmid: "og:site_name", property: "og:site_name", content: this.pageName},
                 {vmid: "og:description", property: "og:description", content: this.pageDescription},
                 {vmid: "og:image", property: "og:image", content: this.pageImage},

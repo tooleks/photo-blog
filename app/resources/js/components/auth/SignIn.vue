@@ -13,7 +13,8 @@
                                        required
                                        id="email"
                                        class="form-control"
-                                       v-model.trim="email">
+                                       v-model.trim="email"
+                                       v-focus>
                             </div>
                             <div class="form-group">
                                 <label for="password">Password
@@ -64,20 +65,23 @@
         },
         methods: {
             init: function () {
-                if (this.authenticated) {
-                    this.goToPath(this.$route.query.redirect_uri);
+                if (this.currentUser) {
+                    this.goToRedirectUri();
                 }
             },
             signIn: async function (reCaptchaResponse) {
                 this.loading = true;
                 try {
-                    const user = await this.$dc.get("login").signIn({
+                    const user = await this.$services.getLogin().signIn({
                         email: this.email,
                         password: this.password,
                         g_recaptcha_response: reCaptchaResponse,
                     });
-                    this.$dc.get("notification").success(`Hello ${user.name}!`);
-                    this.goToPath(this.$route.query.redirect_uri);
+                    this.$services.getAlert().success(`Hello ${user.name}!`);
+                    this.goToRedirectUri();
+                } catch (error) {
+                    // The error is handled by the API service.
+                    // No additional actions needed.
                 } finally {
                     this.loading = false;
                 }

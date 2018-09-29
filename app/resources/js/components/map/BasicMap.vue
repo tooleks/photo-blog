@@ -26,6 +26,8 @@
     delete L.Icon.Default.prototype._getIconUrl;
     L.Icon.Default.mergeOptions({iconRetinaUrl, iconUrl, shadowUrl});
 
+    import Location from "../../entities/Location";
+
     export default {
         props: {
             id: {
@@ -48,12 +50,16 @@
                     };
                 },
             },
-            location: {
+            center: {
                 type: Object,
                 validator: function ({lat, lng}) {
-                    const isValidLat = lat >= -90 && lat <= 90;
-                    const isValidLng = lng >= -180 && lng <= 180;
-                    return isValidLat && isValidLng;
+                    try {
+                        // Location constructor will throw an exception if invalid coordinates will be provided.
+                        new Location({lat, lng});
+                        return true;
+                    } catch (error) {
+                        return false;
+                    }
                 },
                 default: function () {
                     // Lviv, Ukraine.
@@ -75,8 +81,8 @@
             };
         },
         watch: {
-            location: function (location) {
-                this.map.panTo(location);
+            center: function (center) {
+                this.map.panTo(center);
             },
             zoom: function (zoom) {
                 this.map.setView(this.map.getCenter(), zoom);
@@ -84,7 +90,7 @@
         },
         methods: {
             initMap: function () {
-                this.map = L.map(this.id).setView(this.location, this.zoom);
+                this.map = L.map(this.id).setView(this.center, this.zoom);
                 this.tileLayer = L.tileLayer(this.tileLayerUrl, this.tileLayerOptions).addTo(this.map);
                 this.map.on("zoomend", this.handleMapEvent);
                 this.map.on("moveend", this.handleMapEvent);

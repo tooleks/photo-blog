@@ -22,7 +22,8 @@
                                                required
                                                id="email"
                                                class="form-control"
-                                               v-model.trim="email">
+                                               v-model.trim="email"
+                                               v-focus>
                                     </div>
                                     <div class="form-group">
                                         <label for="name">Name
@@ -98,15 +99,18 @@
             contactMe: async function (reCaptchaResponse) {
                 this.loading = true;
                 try {
-                    await this.$dc.get("api").createContactMessage({
+                    await this.$services.getApi().createContactMessage({
                         email: this.email,
                         name: this.name,
                         subject: this.subject,
                         message: this.message,
                         g_recaptcha_response: reCaptchaResponse,
                     });
-                    this.$dc.get("notification").success("Your message has been successfully sent.");
+                    this.$services.getAlert().success("Your message has been successfully sent.");
                     this.goToHomePage();
+                } catch (error) {
+                    // The error is handled by the API service.
+                    // No additional actions needed.
                 } finally {
                     this.loading = false;
                 }

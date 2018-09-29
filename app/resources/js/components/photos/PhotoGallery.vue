@@ -35,7 +35,7 @@
     import Loader from "../utils/Loader";
     import Masonry from "../gallery/Masonry";
     import {GoToMixin, MetaMixin} from "../../mixins";
-    import {_PAGE_SUFFIX} from "../../router/names";
+    import {_PAGINATION} from "../../router/names";
 
     export default {
         components: {
@@ -59,11 +59,11 @@
         },
         computed: {
             routeName: function () {
-                return this.$route.name.endsWith(_PAGE_SUFFIX) ? this.$route.name : `${this.$route.name}${_PAGE_SUFFIX}`;
+                return this.$route.name.endsWith(_PAGINATION) ? this.$route.name : `${this.$route.name}${_PAGINATION}`;
             },
             pageTitle: function () {
-                if (this.$route.params.search_phrase) {
-                    return `Search "${this.$route.params.search_phrase}"`;
+                if (this.$route.params.searchPhrase) {
+                    return `Search "${this.$route.params.searchPhrase}"`;
                 }
                 if (this.$route.params.tag) {
                     return `Search by tag #${this.$route.params.tag}`;
@@ -115,9 +115,10 @@
             loadPhotos: async function () {
                 this.loading = true;
                 try {
-                    const response = await this.$dc.get("api").getPosts({...this.$route.params, per_page: 40});
-                    const photos = this.$dc.get("mapper").map(response, "Api.Raw.Posts", "Meta.Photos");
-                    this.setPhotos(photos);
+                    this.setPhotos(await this.$services.getPhotoManager().paginate(this.$route.params));
+                } catch (error) {
+                    // The error is handled by the API service.
+                    // No additional actions needed.
                 } finally {
                     this.loading = false;
                 }

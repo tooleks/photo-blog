@@ -3,6 +3,8 @@
 </template>
 
 <script>
+    import Tag from "../../entities/Tag";
+
     export default {
         props: {
             attributes: {
@@ -14,6 +16,9 @@
             tags: {
                 type: Array,
                 default: [],
+                validator: function (tags) {
+                    return Array.isArray(tags) && tags.every((tag) => tag instanceof Tag);
+                },
             },
         },
         data: function () {
@@ -22,16 +27,28 @@
             };
         },
         watch: {
-            tags: function (tags) {
-                const value = tags.join(",");
+            input: function () {
+                this.syncInput();
+            },
+            tags: function () {
+                this.syncTags();
+            },
+        },
+        methods: {
+            syncInput: function () {
+                this.input = this.input.split(" ").join("_").toLowerCase();
+                const tags = this.input.split(",").map((value) => Tag.fromValue(value));
+                this.$emit("update:tags", tags);
+            },
+            syncTags: function () {
+                const value = this.tags.map((tag) => String(tag)).join(",");
                 if (value !== this.input) {
                     this.input = value;
                 }
             },
-            input: function (input) {
-                this.input = input.split(" ").join("_").toLowerCase();
-                this.$emit("update:tags", this.input.split(","));
-            },
+        },
+        created: function () {
+            this.syncTags();
         },
     }
 </script>

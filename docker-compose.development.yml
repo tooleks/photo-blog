@@ -6,7 +6,6 @@ services:
       context: ./nginx
     image: pb-nginx
     container_name: pb-nginx
-    restart: always
     depends_on:
     - pb-app.docker
     ports:
@@ -24,7 +23,6 @@ services:
       - INSTALL_NODE=true
     image: pb-app
     container_name: pb-app
-    restart: always
     depends_on:
     - pb-prerender.docker
     - pb-redis.docker
@@ -39,7 +37,6 @@ services:
       context: ./app-queue
     image: pb-app-queue
     container_name: pb-app-queue
-    restart: always
     depends_on:
     - pb-app.docker
     volumes:
@@ -51,7 +48,6 @@ services:
       context: ./app-scheduler
     image: pb-app-scheduler
     container_name: pb-app-scheduler
-    restart: always
     depends_on:
     - pb-app.docker
     volumes:
@@ -63,17 +59,14 @@ services:
       context: ./prerender
     image: pb-prerender
     container_name: pb-prerender
-    restart: always
 
   pb-redis.docker:
     image: redis:4
     container_name: pb-redis
-    restart: always
 
   pb-mysql.docker:
     image: mysql:5.7
     container_name: pb-mysql
-    restart: always
     environment:
       MYSQL_DATABASE: 'photo_blog'
       MYSQL_ROOT_PASSWORD: 'root'
@@ -89,6 +82,5 @@ services:
   pb-maildev.docker:
     image: djfarrelly/maildev
     container_name: pb-maildev
-    restart: always
     ports:
     - 8083:80

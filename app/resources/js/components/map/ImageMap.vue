@@ -16,10 +16,10 @@
             };
         },
         watch: {
-            images: function () {
+            images: function (images) {
                 this.destroyMarkerCluster();
                 this.initMarkerCluster();
-                this.images.forEach((image) => this.renderImage(image));
+                images.forEach((image) => this.renderImage(image));
             },
         },
         methods: {

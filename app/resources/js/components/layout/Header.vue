@@ -32,12 +32,12 @@
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tags</a>
                         <div class="dropdown-menu box-shadow-2dp" aria-labelledby="navbarTagsDropdown">
                             <router-link v-for="tag in tags"
-                                         :key="tag"
-                                         :to="{name: 'photos-tag', params: {tag: tag}}"
+                                         :key="`${tag}`"
+                                         :to="{name: 'photos-tag', params: {tag: `${tag}`}}"
                                          class="dropdown-item"
                                          data-toggle="collapse"
                                          data-target=".navbar-collapse.show">
-                                #{{ tag }}
+                                #{{ `${tag}` }}
                             </router-link>
                         </div>
                     </li>
@@ -84,7 +84,7 @@
                                 class="d-lg-none">My GitHub</span>
                         </a>
                     </li>
-                    <li class="nav-item" v-if="!authenticated">
+                    <li class="nav-item" v-if="!currentUser">
                         <router-link :to="{name: 'sign-in'}"
                                      class="nav-link"
                                      title="Sign In"
@@ -94,10 +94,10 @@
                             <i class="fa fa-sign-in" aria-hidden="true"></i> <span class="d-lg-none">Sign In</span>
                         </router-link>
                     </li>
-                    <li class="nav-item dropdown" v-if="authenticated">
+                    <li class="nav-item dropdown" v-if="currentUser">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarUserDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fa fa-user" aria-hidden="true"></i> {{ userName }}
+                            <i class="fa fa-user" aria-hidden="true"></i> {{ currentUser.name }}
                         </a>
                         <div class="dropdown-menu  box-shadow-2dp" aria-labelledby="navbarUserDropdown">
                             <router-link class="dropdown-item"
@@ -166,24 +166,16 @@
         },
         computed: {
             social: function () {
-                return this.$dc.get("config").url.social;
+                return this.$services.getConfig().url.social;
             },
         },
         methods: {
-            init: function () {
-                this.loadTags();
-            },
-            setTags: function ({items}) {
-                this.tags = items;
-            },
             loadTags: async function () {
-                const response = await this.$dc.get("api").getTags();
-                const tags = this.$dc.get("mapper").map(response, "Api.Raw.Tags", "Meta.Tags");
-                this.setTags(tags);
+                this.tags = await this.$services.getTagManager().getPopular();
             },
         },
         created: function () {
-            this.init();
+            this.loadTags();
         },
     }
 </script>

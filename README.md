@@ -17,8 +17,10 @@ make initialization
 Run the command (within the project root directory) to start Docker containers in the **development** mode.
 
 ```
-docker-compose --file ./docker-compose.development.yml up --build
+make start-dev
 ```
+
+**Note:** `Ctrl`+`C` interrupts the process.
 
 Run the command (in another terminal window, within the project root directory) to configure the application and create the administrator user.
 
@@ -27,6 +29,8 @@ make configuration
 ```
 
 Open the [http://localhost:8080/sign-in](http://localhost:8080/sign-in) link in a browser and sign in with a newly created administrator user account.
+
+**Tip:** Take a look at `./Makefile` file content to understand "how it works?".
 
 ### Exposed Resources
 
@@ -39,19 +43,19 @@ Open the [http://localhost:8080/sign-in](http://localhost:8080/sign-in) link in 
 Automatically recompile assets when Webpack detects a change.
 
 ```bash
-docker exec -it pb-app bash -c "npm run watch"
+make watch-dev
 ```
 
-Fetch the backend application's log.
+Fetch the application logs.
 
 ```bash
-docker exec -it pb-app bash -c "tail -n 1000 -f ./storage/logs/laravel.log"
+make app-logs
 ```
 
-Fetch the database log.
+Fetch the database logs.
 
 ```bash
-docker exec -it pb-mysql bash -c "tail -n 1000 -f /var/log/mysql/general.log"
+make mysql-logs
 ```
 
 ### Tests
@@ -59,5 +63,5 @@ docker exec -it pb-mysql bash -c "tail -n 1000 -f /var/log/mysql/general.log"
 Run the command to execute the backend application tests.
 
 ```
-docker exec -it pb-app bash -c "./vendor/bin/phpunit"
+make test
 ```

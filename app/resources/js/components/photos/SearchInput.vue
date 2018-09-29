@@ -21,6 +21,8 @@
 </template>
 
 <script>
+    import _ from "lodash";
+
     export default {
         props: {
             delay: {
@@ -40,11 +42,11 @@
         },
         methods: {
             init: function () {
-                this.input = this.$route.params.search_phrase || this.$route.query.search_phrase;
+                this.input = this.$route.params.searchPhrase || this.$route.query.searchPhrase;
             },
             search: function () {
                 this.input
-                    ? this.$router.push({name: "photos-search", params: {search_phrase: this.input}})
+                    ? this.$router.push({name: "photos-search", params: {searchPhrase: this.input}})
                     : this.$router.push({name: "photos"});
             },
         },

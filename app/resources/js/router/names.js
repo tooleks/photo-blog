@@ -15,4 +15,4 @@ export const UNSUBSCRIPTION = "unsubscription";
 export const NOT_FOUND = "not-found";
 export const ROUTE_404 = "404";
 
-export const _PAGE_SUFFIX = "-with-page";
+export const _PAGINATION = "-pagination";

@@ -18,14 +18,14 @@
             },
         },
         data: function () {
-            this.siteKey = this.siteKey || this.$dc.get("config").credentials.googleReCaptcha.siteKey;
+            this.siteKey = this.siteKey || this.$services.getConfig().credentials.googleReCaptcha.siteKey;
             return {
-                reCaptcha: this.$dc.get("reCaptchaProvider")(this.id, this.siteKey, (response) => this.$emit("verified", response)),
+                reCaptcha: this.$services.getReCaptcha(this.id, this.siteKey, (response) => this.$emit("verified", response)),
             };
         },
         methods: {
-            verify: function () {
-                this.reCaptcha.execute();
+            verify: async function () {
+                await this.reCaptcha.execute();
             },
         },
         mounted: async function () {

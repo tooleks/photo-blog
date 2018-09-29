@@ -45,10 +45,14 @@
 <script>
     import GoTopButton from "vue-go-top-button";
     import "vue-go-top-button/dist/lib/vue-go-top-button.min.css";
+    import Header from "./layout/Header";
+    import Footer from "./layout/Footer";
 
     export default {
         components: {
             GoTopButton,
+            AppHeader: Header,
+            AppFooter: Footer,
         },
         computed: {
             routeKey: function () {

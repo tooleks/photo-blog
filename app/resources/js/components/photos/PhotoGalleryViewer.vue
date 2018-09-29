@@ -51,26 +51,26 @@
         },
         watch: {
             "$route.params.id": function (id) {
-                const photo = this.photos.find((photo) => photo.id === Number(id));
-                if (typeof photo !== "undefined") {
+                const photo = this.photos.find((photo) => photo.postId === Number(id));
+                if (photo) {
                     this.activePhoto = photo;
-                } else {
-                    this.goToNotFoundPage();
+                    return;
                 }
+
+                this.goToNotFoundPage();
             },
             activePhoto: function (activePhoto) {
-                this.goToPhotoPage(activePhoto.id);
+                this.goToPhotoPage(activePhoto.postId);
             },
         },
         methods: {
-            init: function () {
-                this.loadPhoto();
-            },
             loadPhoto: async function () {
                 this.loading = true;
                 try {
-                    const {data: post} = await this.$dc.get("api").getPost(this.$route.params.id, this.$route.query, {suppressNotFoundErrors: true});
-                    const photo = this.$dc.get("mapper").map(post, "Api.Post", "Photo");
+                    const photo = await this.$services.getPhotoManager().getByPostId(
+                        this.$route.params.id,
+                        this.$route.query,
+                    );
                     this.photos = [photo];
                     this.activePhoto = photo;
                 } catch (error) {
@@ -86,9 +86,14 @@
             loadOlderPhoto: async function () {
                 this.loading = true;
                 try {
-                    const {data: post} = await this.$dc.get("api").getPreviousPost(this.activePhoto.id, this.$route.query, {suppressNotFoundErrors: true});
-                    const photo = this.$dc.get("mapper").map(post, "Api.Post", "Photo");
+                    const photo = await this.$services.getPhotoManager().getPreviousByPostId(
+                        this.activePhoto.postId,
+                        this.$route.query,
+                    );
                     this.photos = [...this.photos, photo];
+                } catch (error) {
+                    // The error is handled by the API service.
+                    // No additional actions needed.
                 } finally {
                     this.loading = false;
                 }
@@ -96,16 +101,21 @@
             loadNewerPhoto: async function () {
                 this.loading = true;
                 try {
-                    const {data: post} = await this.$dc.get("api").getNextPost(this.activePhoto.id, this.$route.query, {suppressNotFoundErrors: true});
-                    const photo = this.$dc.get("mapper").map(post, "Api.Post", "Photo");
+                    const photo = await this.$services.getPhotoManager().getNextByPostId(
+                        this.activePhoto.postId,
+                        this.$route.query,
+                    );
                     this.photos = [photo, ...this.photos];
+                } catch (error) {
+                    // The error is handled by the API service.
+                    // No additional actions needed.
                 } finally {
                     this.loading = false;
                 }
             },
         },
         created: function () {
-            this.init();
+            this.loadPhoto();
         },
     }
 </script>
