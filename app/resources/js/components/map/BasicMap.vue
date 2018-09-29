@@ -50,7 +50,7 @@
                     };
                 },
             },
-            location: {
+            center: {
                 type: Object,
                 validator: function ({lat, lng}) {
                     try {
@@ -81,8 +81,8 @@
             };
         },
         watch: {
-            location: function (location) {
-                this.map.panTo(location);
+            center: function (center) {
+                this.map.panTo(center);
             },
             zoom: function (zoom) {
                 this.map.setView(this.map.getCenter(), zoom);
@@ -90,7 +90,7 @@
         },
         methods: {
             initMap: function () {
-                this.map = L.map(this.id).setView(this.location, this.zoom);
+                this.map = L.map(this.id).setView(this.center, this.zoom);
                 this.tileLayer = L.tileLayer(this.tileLayerUrl, this.tileLayerOptions).addTo(this.map);
                 this.map.on("zoomend", this.handleMapEvent);
                 this.map.on("moveend", this.handleMapEvent);

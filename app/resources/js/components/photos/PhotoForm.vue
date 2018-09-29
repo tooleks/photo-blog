@@ -37,7 +37,7 @@
                                 </label>
                                 <tag-input :tags.sync="photo.tags"
                                            :attributes="{id: 'tags', class: 'form-control', rows: '3', required: true, disabled: loading}"></tag-input>
-                                <small class="form-text text-muted">Comma-separated list of tags.</small>
+                                <small class="form-text text-muted">Comma-separated tag values.</small>
                             </div>
                             <button :disabled="loading" type="submit" class="btn btn-secondary">
                                 <i class="fa fa-floppy-o" aria-hidden="true"></i> Save
