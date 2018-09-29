@@ -1,9 +1,9 @@
 <template>
     <transition name="fade">
-        <div class="loader" v-if="visible">
-            <div class="loader-inner">
-            <span class="loader-icon" aria-label="Loading...">
-                <div class="loader-animation" aria-hidden="true"></div>
+        <div class="round-spinner" v-if="visible">
+            <div class="round-spinner-inner">
+            <span class="round-spinner-icon" aria-label="Loading...">
+                <div class="round-spinner-animation" aria-hidden="true"></div>
             </span>
             </div>
         </div>
@@ -11,7 +11,7 @@
 </template>
 
 <style scoped>
-    .loader {
+    .round-spinner {
         position: fixed;
         top: 40%;
         left: 40%;
@@ -20,7 +20,7 @@
         z-index: 1000;
     }
 
-    .loader-inner {
+    .round-spinner-inner {
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -28,21 +28,21 @@
         height: 100%;
     }
 
-    .loader-icon {
+    .round-spinner-icon {
         background: rgba(0, 0, 0, 0.4);
         color: #dde3e6;
         padding: 1em;
         border-radius: 50%;
     }
 
-    .loader-animation,
-    .loader-animation:after {
+    .round-spinner-animation,
+    .round-spinner-animation:after {
         border-radius: 50%;
         width: 10em;
         height: 10em;
     }
 
-    .loader-animation {
+    .round-spinner-animation {
         font-size: 4px;
         position: relative;
         text-indent: -9999em;
@@ -107,15 +107,15 @@
             init: function () {
                 if (!this.loading) {
                     this.clearDelayTimeout();
-                    this.hideLoader();
+                    this.hideSpinner();
                 } else {
-                    this.setDelayTimeout(() => this.showLoader());
+                    this.setDelayTimeout(() => this.showSpinner());
                 }
             },
-            showLoader: function () {
+            showSpinner: function () {
                 this.visible = true;
             },
-            hideLoader: function () {
+            hideSpinner: function () {
                 this.visible = false;
             },
             clearDelayTimeout: function () {

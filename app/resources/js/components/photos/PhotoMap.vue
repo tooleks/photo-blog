@@ -1,6 +1,6 @@
 <template>
     <div class="photo-map">
-        <loader :loading="loading"></loader>
+        <round-spinner :loading="loading"></round-spinner>
         <image-map :images="images" :zoom="5"></image-map>
     </div>
 </template>
@@ -15,13 +15,13 @@
 </style>
 
 <script>
-    import Loader from "../utils/Loader";
+    import RoundSpinner from "../utils/RoundSpinner";
     import ImageMap from "../map/ImageMap";
     import {MetaMixin} from "../../mixins";
 
     export default {
         components: {
-            Loader,
+            RoundSpinner,
             ImageMap,
         },
         mixins: [
