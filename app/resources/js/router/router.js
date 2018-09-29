@@ -1,10 +1,8 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import VueMeta from "vue-meta"
 import * as services from "../services/factory";
 
 Vue.use(VueRouter);
-Vue.use(VueMeta);
 
 import routes from "./routes";
 
