@@ -49,14 +49,12 @@ export function toTag({value}) {
  * @param {Object} attributes
  * @param {number} attributes.id
  * @param {string} attributes.name
- * @param {number} attributes.expires_in
  * @return {User}
  */
-export function toUser({id, name, expires_in}) {
+export function toUser({id, name}) {
     return new User({
         id,
         name,
-        expiresIn: expires_in,
     });
 }
 

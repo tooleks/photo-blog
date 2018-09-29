@@ -1,9 +1,8 @@
 import moment from "moment";
-import {isObject} from "tooleks";
-import {toUser} from "../mapper/ApiEntity/transform";
+import User from "../entities/User";
 
 /** @type {string} */
-export const AUTH_KEY = "user";
+export const AUTH_KEY = "currentUser";
 
 export default class AuthManager {
     /**
@@ -16,7 +15,6 @@ export default class AuthManager {
         this._eventEmitter = eventEmitter;
         this._localStorage = localStorage;
         this._init = this._init.bind(this);
-        this._isExpiredUserAuth = this._isExpiredUserAuth.bind(this);
         this.setUser = this.setUser.bind(this);
         this.getUser = this.getUser.bind(this);
         this.authenticated = this.authenticated.bind(this);
@@ -32,36 +30,27 @@ export default class AuthManager {
      */
     _init() {
         const user = this.getUser();
-        if (!isObject(user) || this._isExpiredUserAuth(user)) {
+        const validUser = user instanceof User && moment.utc().isBefore(user.expiresAt);
+
+        if (!validUser) {
             this.removeUser();
         }
     }
 
     /**
-     * Determine if a user session is already expired.
-     *
-     * @param {Object} user
-     * @return {boolean}
-     * @private
-     */
-    _isExpiredUserAuth(user) {
-        return moment.utc().isAfter(moment.utc(user.expires_at));
-    }
-
-    /**
      * Set user to the persistent storage.
      *
-     * @param {Object} user
+     * @param {User} user
      * @return {void}
      * @throws {TypeError}
      */
     setUser(user) {
-        if (!isObject(user)) {
-            throw new TypeError;
-        } else {
-            this._localStorage.set(AUTH_KEY, user);
-            this._eventEmitter.emit(AUTH_KEY, user);
+        if (!(user instanceof User)) {
+            throw new TypeError(`A user should be an instance of User class. ${user} is given.`);
         }
+
+        this._localStorage.set(AUTH_KEY, user);
+        this._eventEmitter.emit(AUTH_KEY, user);
     }
 
     /**
@@ -80,12 +69,12 @@ export default class AuthManager {
      * @return {User}
      */
     getUser() {
-        if (this._localStorage.exists(AUTH_KEY)) {
-            const object = this._localStorage.get(AUTH_KEY);
-            return toUser(object);
-        } else {
-            return null;
+        const object = this._localStorage.get(AUTH_KEY);
+        if (object !== null) {
+            return User.fromObject(object);
         }
+
+        return null;
     }
 
     /**
@@ -98,7 +87,7 @@ export default class AuthManager {
     }
 
     /**
-     * Subscribe a listener on user change.
+     * Register a listener on user change.
      *
      * @param {Function} listener
      * @return {void}

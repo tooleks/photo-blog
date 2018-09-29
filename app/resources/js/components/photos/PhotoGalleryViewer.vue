@@ -23,7 +23,6 @@
     import Viewer from "../gallery/Viewer";
     import PhotoDescriptionCard from "./PhotoDescriptionCard";
     import {GoToMixin, MetaMixin} from "../../mixins";
-    import {toPhoto} from "../../mapper/ApiEntity/transform";
 
     export default {
         components: {

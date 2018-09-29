@@ -1,4 +1,5 @@
-import {toUser} from "../mapper/ApiEntity/transform";
+import moment from "moment";
+import * as apiEntityMapper from "../mapper/ApiEntity/transform";
 
 export default class LoginManager {
     /**
@@ -25,8 +26,9 @@ export default class LoginManager {
     async signIn(credentials) {
         await this._api.createToken(credentials);
         const response = await this._api.getUser("me");
+        const user = apiEntityMapper.toUser(response.data);
         const expiresIn = this._cookies.get("expires_in");
-        const user = toUser({...response.data, expires_in: expiresIn});
+        user.expiresAt = moment.utc().add(expiresIn, "seconds");
         this._auth.setUser(user);
         return this._auth.getUser();
     }

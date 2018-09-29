@@ -1,87 +1,116 @@
-import {_PAGINATION, HOME, PHOTO, PHOTOS, PHOTOS_SEARCH, PHOTOS_TAG, ROUTE_404, SIGN_IN} from "../router/names";
-import {removeUndefinedKeys} from "../utils";
+import {HOME, PHOTO, PHOTOS, PHOTOS_SEARCH, PHOTOS_TAG, ROUTE_404, SIGN_IN, _PAGINATION} from "../router/names";
 
 export default {
     methods: {
         goToPath: function (path) {
-            if (path) {
-                this.$router.push({
-                    path,
-                });
-            } else {
-                this.goToHomePage();
+            if (typeof path !== "undefined") {
+                this.$router.push({path});
+                return;
             }
+            this.goToHomePage();
         },
-        goToRedirectUri: function () {
-            this.$router.push({
-                path: this.$route.query.redirectUri,
-            });
+        goToRedirectUri: function (redirectUri = this.$route.query.redirectUri) {
+            this.goToPath(redirectUri);
         },
         goToHomePage: function () {
-            this.$router.push({
-                name: HOME,
-            });
+            this.$router.push({name: HOME});
         },
         goToSignInPage: function () {
-            this.$router.push({
-                name: SIGN_IN,
-            });
+            this.$router.push({name: SIGN_IN});
         },
         goToPhotoPage: function (id) {
-            // Initialize the route params.
-            const params = {id};
-            removeUndefinedKeys(params);
+            /*
+             |--------------------------------------------------------------------------
+             | Route Parameters
+             |--------------------------------------------------------------------------
+             */
 
-            // Initialize the route query.
-            const query = {
-                tag: this.$route.params.tag || this.$route.query.tag,
-                searchPhrase: this.$route.params.searchPhrase || this.$route.query.searchPhrase,
-                page: this.$route.params.page || this.$route.query.page,
-            };
-            removeUndefinedKeys(query);
+            const params = {};
 
-            this.$router.push({
-                name: PHOTO,
-                params,
-                query,
-            });
+            params.id = id;
+
+            /*
+             |--------------------------------------------------------------------------
+             | Search Query Parameters
+             |--------------------------------------------------------------------------
+             */
+
+            const query = {};
+
+            const page = this.$route.params.page || this.$route.query.page;
+            if (typeof page !== "undefined") {
+                query.page = page;
+            }
+
+            const tag = this.$route.params.tag || this.$route.query.tag;
+            if (typeof tag !== "undefined") {
+                query.tag = tag;
+            }
+
+            const searchPhrase = this.$route.params.searchPhrase || this.$route.query.searchPhrase;
+            if (typeof searchPhrase !== "undefined") {
+                query.searchPhrase = searchPhrase;
+            }
+
+            /*
+             |--------------------------------------------------------------------------
+             | Route Redirection
+             |--------------------------------------------------------------------------
+             */
+
+            this.$router.push({name: PHOTO, params, query});
         },
         goToPhotosPage: function (id) {
-            // Initialize the route name.
+            /*
+             |--------------------------------------------------------------------------
+             | Route Name
+             |--------------------------------------------------------------------------
+             */
+
             let name = PHOTOS;
-            // If tag query parameter exists, go to the tag page.
+
             if (typeof this.$route.query.tag !== "undefined") {
                 name = PHOTOS_TAG;
             }
-            // If search phrase parameter exists go to the search page.
+
             if (typeof this.$route.query.searchPhrase !== "undefined") {
                 name = PHOTOS_SEARCH;
             }
-            // Modify the route name if the route supports paging.
+
             if (typeof this.$route.query.page !== "undefined") {
                 name = name + _PAGINATION;
             }
 
-            // Initialize route params.
-            const params = this.$route.query;
-            removeUndefinedKeys(params);
+            /*
+             |--------------------------------------------------------------------------
+             | Route Params
+             |--------------------------------------------------------------------------
+             */
 
-            // Initialize the route hash.
+            const params = this.$route.query;
+
+            /*
+             |--------------------------------------------------------------------------
+             | Route Hash
+             |--------------------------------------------------------------------------
+             */
+
             let hash = this.$route.hash;
-            if (id) {
+
+            if (typeof id !== "undefined") {
                 hash = `#gallery-image-${id}`;
             }
 
-            this.$router.push({
-                name,
-                params,
-                hash,
-            });
+            /*
+             |--------------------------------------------------------------------------
+             | Route Redirection
+             |--------------------------------------------------------------------------
+             */
+
+            this.$router.push({name, params, hash});
         },
         goToNotFoundPage: function () {
-            this.$router.push({
-                name: ROUTE_404,
-            });
+            this.$router.push({name: ROUTE_404});
         },
     },
 }

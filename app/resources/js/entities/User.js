@@ -7,18 +7,24 @@ export default class User {
      * @param {Object} attributes
      * @param {number} attributes.id
      * @param {string} attributes.name
-     * @param {number} attributes.expiresIn
+     * @param {number} attributes.expiresAt
      */
-    constructor({id, name, expiresIn}) {
+    constructor({id, name, expiresAt}) {
         this.id = id;
         this.name = name;
-        this.expiresIn = expiresIn;
-    }
-
-    /**
-     * @return {*}
-     */
-    get expiresAt() {
-        return moment.utc().add(this.expiresIn, "seconds");
+        this.expiresAt = expiresAt;
     }
 }
+
+/**
+ * @param {Object} object
+ * @return {User}
+ */
+User.fromObject = function fromObject(object) {
+    const expiresAt = moment.utc(object.expiresAt);
+    return new User({
+        id: object.id,
+        name: object.name,
+        expiresAt,
+    });
+};
