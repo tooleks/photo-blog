@@ -49,7 +49,7 @@
                 if (this.$route.fullPath) {
                     url += this.$route.fullPath;
                 }
-                return encodeURIComponent(url);
+                return url;
             },
             title: function () {
                 return document.title;
@@ -57,16 +57,17 @@
         },
         methods: {
             getFacebookShareUrl: function () {
-                return `https://www.facebook.com/sharer/sharer.php?u=${this.url}`;
+                return `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(this.url)}`;
             },
             getTwitterShareUrl: function () {
-                return `https://twitter.com/home?status=${this.url}`;
+                return `https://twitter.com/home?status=${encodeURIComponent(this.url)}`;
             },
             getGooglePlusShareUrl: function () {
-                return `https://plus.google.com/share?url=${this.url}`;
+                return `https://plus.google.com/share?url=${encodeURIComponent(this.url)}`;
             },
             getLinkedInShareUrl: function () {
-                return `https://www.linkedin.com/shareArticle?mini=true&url=${this.url}&title=${this.title}&summary=&source=`;
+                return `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(this.url)}`
+                    + `&title=${encodeURIComponent(this.title)}&summary=&source=`;
             },
         },
     }
