@@ -84,7 +84,7 @@
                                 class="d-lg-none">My GitHub</span>
                         </a>
                     </li>
-                    <li class="nav-item" v-if="!authenticated">
+                    <li class="nav-item" v-if="!currentUser">
                         <router-link :to="{name: 'sign-in'}"
                                      class="nav-link"
                                      title="Sign In"
@@ -94,10 +94,10 @@
                             <i class="fa fa-sign-in" aria-hidden="true"></i> <span class="d-lg-none">Sign In</span>
                         </router-link>
                     </li>
-                    <li class="nav-item dropdown" v-if="authenticated">
+                    <li class="nav-item dropdown" v-if="currentUser">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarUserDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fa fa-user" aria-hidden="true"></i> {{ userName }}
+                            <i class="fa fa-user" aria-hidden="true"></i> {{ currentUser.name }}
                         </a>
                         <div class="dropdown-menu  box-shadow-2dp" aria-labelledby="navbarUserDropdown">
                             <router-link class="dropdown-item"

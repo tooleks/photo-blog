@@ -4,7 +4,7 @@
             <button @click="emitBackEvent" class="btn btn-light btn-sm">
                 <i class="fa fa-arrow-left" aria-hidden="true"></i> Back to gallery
             </button>
-            <router-link v-if="authenticated && photo.id" :to="{name: 'photo/edit', params: {id: photo.postId}}"
+            <router-link v-if="currentUser && photo.id" :to="{name: 'photo/edit', params: {id: photo.postId}}"
                          class="btn btn-light btn-sm">
                 <i class="fa fa-pencil" aria-hidden="true"></i> Edit photo
             </router-link>

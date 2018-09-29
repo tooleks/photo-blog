@@ -1,5 +1,5 @@
 import moment from "moment";
-import * as apiEntityMapper from "../mapper/ApiEntity/transform";
+import * as apiEntityMapper from "../mapper/apiEntity";
 
 export default class LoginManager {
     /**

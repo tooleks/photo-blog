@@ -14,32 +14,13 @@ export default class AuthManager {
     constructor(eventEmitter, localStorage) {
         this._eventEmitter = eventEmitter;
         this._localStorage = localStorage;
-        this._init = this._init.bind(this);
         this.setUser = this.setUser.bind(this);
         this.getUser = this.getUser.bind(this);
         this.authenticated = this.authenticated.bind(this);
         this.subscribe = this.subscribe.bind(this);
-        this._init();
     }
 
     /**
-     * Initialize service default state.
-     *
-     * @return {void}
-     * @private
-     */
-    _init() {
-        const user = this.getUser();
-        const validUser = user instanceof User && moment.utc().isBefore(user.expiresAt);
-
-        if (!validUser) {
-            this.removeUser();
-        }
-    }
-
-    /**
-     * Set user to the persistent storage.
-     *
      * @param {User} user
      * @return {void}
      * @throws {TypeError}
@@ -54,8 +35,6 @@ export default class AuthManager {
     }
 
     /**
-     * Remove user from the persistent storage.
-     *
      * @return {void}
      */
     removeUser() {
@@ -64,12 +43,12 @@ export default class AuthManager {
     }
 
     /**
-     * Get user from the persistent storage.
-     *
      * @return {User}
      */
     getUser() {
         const object = this._localStorage.get(AUTH_KEY);
+
+        // Construct a new object of the user from the plain object.
         if (object !== null) {
             return User.fromObject(object);
         }
@@ -78,21 +57,27 @@ export default class AuthManager {
     }
 
     /**
-     * Determine if user is authenticated.
-     *
      * @return {boolean}
      */
     authenticated() {
-        return this._localStorage.exists(AUTH_KEY);
+        const user = this.getUser();
+
+        // The user is valid only if the user object is an instance of User class and
+        // session expiration datetime is in the future.
+        const validUser = user instanceof User && moment.utc().isBefore(user.expiresAt);
+
+        if (!validUser) {
+            this.removeUser();
+        }
+
+        return validUser;
     }
 
     /**
-     * Register a listener on user change.
-     *
      * @param {Function} listener
-     * @return {void}
+     * @return {Function}
      */
     subscribe(listener) {
-        this._eventEmitter.on(AUTH_KEY, listener);
+        return this._eventEmitter.on(AUTH_KEY, listener);
     }
 }

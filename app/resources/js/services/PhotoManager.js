@@ -1,5 +1,5 @@
-import * as apiEntityMapper from "../mapper/ApiEntity/transform";
-import * as entityApiMapper from "../mapper/EntityApi/transform";
+import * as apiEntityMapper from "../mapper/apiEntity";
+import * as entityApiMapper from "../mapper/entityApi";
 
 export default class PhotoManager {
     /**

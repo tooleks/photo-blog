@@ -1,6 +1,6 @@
 import {optional as opt} from "tooleks";
-import Photo from "../../entities/Photo";
-import Tag from "../../entities/Tag";
+import Photo from "../entities/Photo";
+import Tag from "../entities/Tag";
 
 /**
  * @param {Tag} tag
