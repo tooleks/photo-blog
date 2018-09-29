@@ -27,9 +27,7 @@
                     }
                 },
             },
-            zoom: {
-                type: Number,
-            },
+            zoom: Number,
             disabled: {
                 type: Boolean,
                 default: false,

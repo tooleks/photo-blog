@@ -90,7 +90,9 @@
         ],
         data: function () {
             return {
+                /** @type {boolean} */
                 loading: false,
+                /** @type {Photo|Object} */
                 photo: {},
             };
         },

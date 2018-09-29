@@ -160,6 +160,7 @@
         },
         data: function () {
             return {
+                /** @type {boolean} */
                 inFullScreenMode: false,
             };
         },

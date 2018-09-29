@@ -29,7 +29,9 @@
         ],
         data: function () {
             return {
+                /** @type {boolean} */
                 loading: false,
+                /** @type {Object} */
                 images: [],
             };
         },

@@ -94,7 +94,9 @@
         },
         data: function () {
             return {
+                /** @type {boolean} */
                 visible: this.loading,
+                /** @type {Function|null} */
                 delayTimeout: null,
             };
         },

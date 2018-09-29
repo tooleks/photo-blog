@@ -36,8 +36,11 @@
         ],
         data: function () {
             return {
+                /** @type {boolean} */
                 loading: false,
+                /** @type {Array<Photo>} */
                 photos: [],
+                /** @type {Photo} */
                 activePhoto: undefined,
             };
         },
@@ -46,7 +49,7 @@
                 return opt(() => this.activePhoto.description, "");
             },
             pageImage: function () {
-                return opt(() => this.activePhoto.original.url, "");
+                return opt(() => this.activePhoto.image.url, "");
             },
         },
         watch: {

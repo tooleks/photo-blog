@@ -48,6 +48,7 @@
         },
         data: function () {
             return {
+                /** @type {boolean} */
                 fileInputReady: true,
             };
         },
