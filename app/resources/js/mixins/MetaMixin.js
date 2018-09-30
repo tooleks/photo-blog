@@ -22,7 +22,6 @@ export default {
         },
         pageImage: function (pageImage) {
             document.head.querySelector("meta[property='og:image']").content = pageImage;
-            document.head.querySelector("meta[name='twitter:card']").content = "summary_large_image";
             document.head.querySelector("meta[name='twitter:image']").content = pageImage;
         },
         pageUrl: function (pageUrl) {
@@ -49,17 +48,24 @@ export default {
         pageUrl: (state) => state.meta.pageUrl,
         pageCanonicalUrl: (state) => state.meta.pageCanonicalUrl,
     }),
-    methods: mapActions("meta", [
-        "setPageStatusCode",
-        "setPageName",
-        "setPageDescription",
-        "setPageKeywords",
-        "setPageTitle",
-        "setPageImage",
-        "setPageUrl",
-        "setPageCanonicalUrl",
-    ]),
+    methods: {
+        init: function () {
+            document.head.querySelector("meta[property='og:type']").content = "article";
+            document.head.querySelector("meta[name='twitter:card']").content = "summary_large_image";
+        },
+        ...mapActions("meta", [
+            "setPageStatusCode",
+            "setPageName",
+            "setPageDescription",
+            "setPageKeywords",
+            "setPageTitle",
+            "setPageImage",
+            "setPageUrl",
+            "setPageCanonicalUrl",
+        ]),
+    },
     created: function () {
+        this.init();
         this.setPageStatusCode(200);
         this.setPageName(this.$services.getConfig().app.name);
         this.setPageDescription(this.$services.getConfig().app.description);
