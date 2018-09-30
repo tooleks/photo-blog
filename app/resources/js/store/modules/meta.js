@@ -5,7 +5,7 @@ const state = {
     pageKeywords: "",
     pageTitle: "",
     pageImage: "",
-    url: "",
+    pageUrl: "",
     pageCanonicalUrl: "",
 };
 

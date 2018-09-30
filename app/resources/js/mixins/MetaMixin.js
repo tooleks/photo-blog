@@ -1,41 +1,59 @@
 import {mapActions, mapState} from "vuex";
 
+/**
+ * @param {string} tag
+ * @param {Object} attributes
+ * @return {Node}
+ */
+export function getElement(tag, attributes) {
+    // Find the element in the head tag.
+    const elements = document.head.querySelectorAll(tag);
+    let element = Array.from(elements).find((element) => {
+        return Object.keys(attributes).every((key) => attributes[key] === element.getAttribute(key));
+    });
+
+    // If the element doesn't exist create a new one.
+    if (!element) {
+        element = document.createElement(tag);
+        Object.keys(attributes).forEach((key) => element.setAttribute(key, attributes[key]));
+        document.head.appendChild(element);
+    }
+
+    return element;
+}
+
 export default {
     watch: {
         pageStatusCode: function (pageStatusCode) {
-            document.head.querySelector("meta[name='prerender-status-code']").content = pageStatusCode;
+            getElement("meta", {name: "prerender-status-code"}).setAttribute("content", pageStatusCode);
         },
         pageName: function (pageName) {
-            document.head.querySelector("meta[property='og:site_name']").content = pageName;
+            getElement("meta", {property: "og:site_name"}).setAttribute("content", pageName);
         },
         pageDescription: function (pageDescription) {
-            document.head.querySelector("meta[name='description']").content = pageDescription;
-            document.head.querySelector("meta[property='og:description']").content = pageDescription;
+            getElement("meta", {name: "description"}).setAttribute("content", pageDescription);
+            getElement("meta", {property: "og:description"}).setAttribute("content", pageDescription);
         },
         pageKeywords: function (pageKeywords) {
-            document.head.querySelector("meta[name='keywords']").content = pageKeywords;
+            getElement("meta", {name: "keywords"}).setAttribute("content", pageKeywords);
         },
         pageTitle: function (pageTitle) {
             document.title = pageTitle ? `${pageTitle} | ${this.pageName}` : this.pageName;
-            document.head.querySelector("meta[property='og:title']").content = pageTitle;
-            document.head.querySelector("meta[name='twitter:title']").content = pageTitle;
+            getElement("meta", {property: "og:title"}).setAttribute("content", pageTitle);
+            getElement("meta", {name: "twitter:title"}).setAttribute("content", pageTitle);
         },
         pageImage: function (pageImage) {
-            document.head.querySelector("meta[property='og:image']").content = pageImage;
-            document.head.querySelector("meta[name='twitter:image']").content = pageImage;
+            getElement("meta", {property: "og:image"}).setAttribute("content", pageImage);
+            getElement("meta", {name: "twitter:image"}).setAttribute("content", pageImage);
         },
         pageUrl: function (pageUrl) {
-            document.head.querySelector("meta[property='og:url']").content = pageUrl;
+            getElement("meta", {property: "og:url"}).setAttribute("content", pageUrl);
         },
         pageCanonicalUrl: function (pageCanonicalUrl) {
-            document.head.querySelector("link[rel='canonical']").href = pageCanonicalUrl;
+            getElement("link", {rel: "canonical"}).setAttribute("href", pageCanonicalUrl);
         },
-        "$route": function ($route) {
-            let baseUrl = this.$services.getConfig().url.app;
-            if ($route.fullPath) {
-                this.setPageUrl(baseUrl + $route.fullPath);
-                this.setPageCanonicalUrl(baseUrl + $route.path);
-            }
+        "$route": function () {
+            this.syncPageUrl();
         },
     },
     computed: mapState({
@@ -49,9 +67,10 @@ export default {
         pageCanonicalUrl: (state) => state.meta.pageCanonicalUrl,
     }),
     methods: {
-        init: function () {
-            document.head.querySelector("meta[property='og:type']").content = "article";
-            document.head.querySelector("meta[name='twitter:card']").content = "summary_large_image";
+        syncPageUrl() {
+            let baseUrl = this.$services.getConfig().url.app;
+            this.setPageUrl(baseUrl + this.$route.fullPath);
+            this.setPageCanonicalUrl(baseUrl + this.$route.path);
         },
         ...mapActions("meta", [
             "setPageStatusCode",
@@ -65,12 +84,14 @@ export default {
         ]),
     },
     created: function () {
-        this.init();
+        getElement("meta", {property: "og:type"}).setAttribute("content", "article");
+        getElement("meta", {name: "twitter:card"}).setAttribute("content", "summary_large_image");
         this.setPageStatusCode(200);
         this.setPageName(this.$services.getConfig().app.name);
         this.setPageDescription(this.$services.getConfig().app.description);
         this.setPageKeywords(this.$services.getConfig().app.keywords);
         this.setPageKeywords(this.$services.getConfig().app.keywords);
         this.setPageImage(this.$services.getConfig().url.image);
+        this.syncPageUrl();
     },
 }
