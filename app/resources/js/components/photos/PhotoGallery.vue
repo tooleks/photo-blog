@@ -64,9 +64,6 @@
             };
         },
         watch: {
-            "$route": function () {
-                this.init();
-            },
             currentPage: function (currentPage) {
                 if (currentPage > 1) {
                     this.$router.push({
@@ -87,15 +84,6 @@
             },
         },
         methods: {
-            init: function () {
-                if (this.$route.query.show) {
-                    // #bc: Go to a new photo page in order to preserve backward compatibility
-                    // with an older version of the application.
-                    this.goToPhotoPage(this.$route.query.show);
-                } else {
-                    this.loadPhotos();
-                }
-            },
             setPhotos: function ({items, previousPageExists, nextPageExists, currentPage, nextPage, previousPage}) {
                 this.photos = items;
                 this.previousPageExists = previousPageExists;
@@ -117,7 +105,7 @@
             },
         },
         created: function () {
-            this.init();
+            this.loadPhotos();
             if (this.$route.params.searchPhrase) {
                 this.setPageTitle(`Search "${this.$route.params.searchPhrase}"`);
             } else if (this.$route.params.tag) {

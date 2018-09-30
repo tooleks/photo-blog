@@ -62,11 +62,6 @@
             };
         },
         methods: {
-            init: function () {
-                if (this.authenticated) {
-                    this.goToRedirectUri();
-                }
-            },
             signIn: async function (reCaptchaResponse) {
                 this.loading = true;
                 try {
@@ -87,7 +82,9 @@
         },
         created: function () {
             this.setPageTitle("Sign In");
-            this.init();
+            if (this.authenticated) {
+                this.goToRedirectUri();
+            }
         },
     }
 </script>
