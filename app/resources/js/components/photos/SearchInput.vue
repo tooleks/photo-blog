@@ -21,7 +21,7 @@
 </template>
 
 <script>
-    import _ from "lodash";
+    import {debounce} from "lodash";
 
     export default {
         props: {
@@ -53,7 +53,7 @@
         },
         computed: {
             debounceSearch: function () {
-                return _.debounce(() => this.search(), this.delay);
+                return debounce(() => this.search(), this.delay);
             },
         },
         created: function () {

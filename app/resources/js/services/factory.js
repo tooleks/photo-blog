@@ -2,6 +2,7 @@ import Vue from "vue";
 import axios from "axios";
 import {EventEmitter} from "tooleks";
 import config from "../config";
+import store from "../store";
 import CookiesManager from "./CookiesManager";
 import LocalStorageManager from "./LocalStorageManager";
 import AlertService from "./AlertService";
@@ -18,6 +19,10 @@ import TagManager from "./TagManager";
 /** @type {Object} */
 export function getConfig() {
     return config;
+}
+
+export function getStore() {
+    return store;
 }
 
 /** @type {EventEmitter} */
@@ -50,7 +55,7 @@ export function getApi() {
 }
 
 /** @type {AuthManager} */
-const auth = new AuthManager(getEventEmitter(), getLocalStorage());
+const auth = new AuthManager(getStore(), getLocalStorage());
 
 /** @return {AuthManager} */
 export function getAuth() {

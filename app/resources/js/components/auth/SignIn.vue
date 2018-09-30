@@ -63,7 +63,7 @@
         },
         methods: {
             init: function () {
-                if (this.currentUser) {
+                if (this.authenticated) {
                     this.goToRedirectUri();
                 }
             },
