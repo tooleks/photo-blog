@@ -1,15 +1,15 @@
 const state = {
-    currentUser: null,
+    user: null,
     authenticated: false,
 };
 
 const mutations = {
-    setUser(state, currentUser) {
-        state.currentUser = currentUser;
+    setUser(state, user) {
+        state.user = user;
         state.authenticated = true;
     },
     removeUser(state) {
-        state.currentUser = null;
+        state.user = null;
         state.authenticated = false;
     },
 };

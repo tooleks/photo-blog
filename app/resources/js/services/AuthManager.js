@@ -65,6 +65,6 @@ export default class AuthManager {
      * @return {User}
      */
     getUser() {
-        return this._store.state.auth.currentUser;
+        return this._store.state.auth.user;
     }
 }
