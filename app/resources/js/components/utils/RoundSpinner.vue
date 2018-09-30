@@ -102,11 +102,11 @@
         },
         watch: {
             loading: function () {
-                this.init();
+                this.initSpinner();
             },
         },
         methods: {
-            init: function () {
+            initSpinner: function () {
                 if (!this.loading) {
                     this.clearDelayTimeout();
                     this.hideSpinner();

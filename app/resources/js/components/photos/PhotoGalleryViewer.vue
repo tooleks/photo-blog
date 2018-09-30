@@ -51,7 +51,6 @@
                     this.activePhoto = photo;
                     return;
                 }
-
                 this.goToNotFoundPage();
             },
             activePhoto: function (activePhoto) {
