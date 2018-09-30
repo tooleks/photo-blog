@@ -2,33 +2,33 @@ import {mapActions, mapState} from "vuex";
 
 export default {
     watch: {
-        "pageStatusCode": function (pageStatusCode) {
+        pageStatusCode: function (pageStatusCode) {
             document.head.querySelector("meta[name='prerender-status-code']").content = pageStatusCode;
         },
-        "pageName": function (pageName) {
+        pageName: function (pageName) {
             document.head.querySelector("meta[property='og:site_name']").content = pageName;
         },
-        "pageDescription": function (pageDescription) {
+        pageDescription: function (pageDescription) {
             document.head.querySelector("meta[name='description']").content = pageDescription;
             document.head.querySelector("meta[property='og:description']").content = pageDescription;
         },
-        "pageKeywords": function (pageKeywords) {
+        pageKeywords: function (pageKeywords) {
             document.head.querySelector("meta[name='keywords']").content = pageKeywords;
         },
-        "pageTitle": function (pageTitle) {
+        pageTitle: function (pageTitle) {
             document.title = pageTitle ? `${pageTitle} | ${this.pageName}` : this.pageName;
             document.head.querySelector("meta[property='og:title']").content = pageTitle;
             document.head.querySelector("meta[name='twitter:title']").content = pageTitle;
         },
-        "pageImage": function (pageImage) {
+        pageImage: function (pageImage) {
             document.head.querySelector("meta[property='og:image']").content = pageImage;
             document.head.querySelector("meta[name='twitter:card']").content = "summary_large_image";
             document.head.querySelector("meta[name='twitter:image']").content = pageImage;
         },
-        "pageUrl": function (pageUrl) {
+        pageUrl: function (pageUrl) {
             document.head.querySelector("meta[property='og:url']").content = pageUrl;
         },
-        "pageCanonicalUrl": function (pageCanonicalUrl) {
+        pageCanonicalUrl: function (pageCanonicalUrl) {
             document.head.querySelector("link[rel='canonical']").href = pageCanonicalUrl;
         },
         "$route": function ($route) {
@@ -46,6 +46,7 @@ export default {
         pageKeywords: (state) => state.meta.pageKeywords,
         pageTitle: (state) => state.meta.pageTitle,
         pageImage: (state) => state.meta.pageImage,
+        pageUrl: (state) => state.meta.pageUrl,
         pageCanonicalUrl: (state) => state.meta.pageCanonicalUrl,
     }),
     methods: mapActions("meta", [
