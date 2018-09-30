@@ -20,7 +20,7 @@ Run the command (within the project root directory) to start Docker containers i
 make start-dev
 ```
 
-**Note:** `Ctrl`+`C` interrupts the process.
+**Tip:** `Ctrl`+`C` interrupts the process.
 
 Run the command (in another terminal window, within the project root directory) to configure the application and create the administrator user.
 
