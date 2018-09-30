@@ -25,13 +25,9 @@
         mixins: [
             MetaMixin,
         ],
-        computed: {
-            pageStatusCode: function () {
-                return 404;
-            },
-            pageTitle: function () {
-                return "Page not found";
-            },
+        created: function () {
+            this.setPageStatusCode(404);
+            this.setPageTitle("Page not found");
         },
     }
 </script>

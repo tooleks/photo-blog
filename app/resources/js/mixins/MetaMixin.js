@@ -1,64 +1,76 @@
-import Vue from "vue";
-import VueMeta from "vue-meta";
-
-Vue.use(VueMeta);
+import {mapActions, mapState} from "vuex";
 
 export default {
-    computed: {
-        pageStatusCode: function () {
-            return 200;
+    watch: {
+        pageStatusCode: function (pageStatusCode) {
+            document.head.querySelector("meta[name='prerender-status-code']").content = pageStatusCode;
         },
-        pageName: function () {
-            return this.$services.getConfig().app.name;
+        pageName: function (pageName) {
+            document.head.querySelector("meta[property='og:site_name']").content = pageName;
         },
-        pageDescription: function () {
-            return this.$services.getConfig().app.description;
+        pageDescription: function (pageDescription) {
+            document.head.querySelector("meta[name='description']").content = pageDescription;
+            document.head.querySelector("meta[property='og:description']").content = pageDescription;
         },
-        pageKeywords: function () {
-            return this.$services.getConfig().app.keywords;
+        pageKeywords: function (pageKeywords) {
+            document.head.querySelector("meta[name='keywords']").content = pageKeywords;
         },
-        pageTitle: function () {
-            return "";
+        pageTitle: function (pageTitle) {
+            document.title = pageTitle ? `${pageTitle} | ${this.pageName}` : this.pageName;
+            document.head.querySelector("meta[property='og:title']").content = pageTitle;
+            document.head.querySelector("meta[name='twitter:title']").content = pageTitle;
         },
-        pageImage: function () {
-            return this.$services.getConfig().url.image;
+        pageImage: function (pageImage) {
+            document.head.querySelector("meta[property='og:image']").content = pageImage;
+            document.head.querySelector("meta[name='twitter:image']").content = pageImage;
         },
-        pageCanonicalUrl: function () {
-            let url = this.$services.getConfig().url.app;
-            if (this.$route.fullPath) {
-                url += this.$route.path;
+        pageUrl: function (pageUrl) {
+            document.head.querySelector("meta[property='og:url']").content = pageUrl;
+        },
+        pageCanonicalUrl: function (pageCanonicalUrl) {
+            document.head.querySelector("link[rel='canonical']").href = pageCanonicalUrl;
+        },
+        "$route": function ($route) {
+            let baseUrl = this.$services.getConfig().url.app;
+            if ($route.fullPath) {
+                this.setPageUrl(baseUrl + $route.fullPath);
+                this.setPageCanonicalUrl(baseUrl + $route.path);
             }
-            return url;
         },
     },
-    metaInfo: function () {
-        return {
-            title: this.pageTitle,
-            titleTemplate: this.pageTitle ? `%s | ${this.pageName}` : this.pageName,
-            meta: [
-                {vmid: "prerender-status-code", name: "prerender-status-code", content: this.pageStatusCode},
-                //
-                {vmid: "description", name: "description", content: this.pageDescription},
-                {vmid: "keywords", name: "keywords", content: this.pageKeywords},
-                // Open Graph protocol properties.
-                {vmid: "og:type", property: "og:type", content: "article"},
-                {
-                    vmid: "og:url",
-                    property: "og:url",
-                    content: this.$services.getConfig().url.app + this.$route.fullPath,
-                },
-                {vmid: "og:site_name", property: "og:site_name", content: this.pageName},
-                {vmid: "og:description", property: "og:description", content: this.pageDescription},
-                {vmid: "og:image", property: "og:image", content: this.pageImage},
-                {vmid: "og:title", property: "og:title", content: this.pageTitle},
-                // Twitter Cards properties.
-                {vmid: "twitter:card", name: "twitter:card", content: "summary_large_image"},
-                {vmid: "twitter:title", name: "twitter:title", content: this.pageTitle},
-                {vmid: "twitter:image", name: "twitter:image", content: this.pageImage},
-            ],
-            link: [
-                {vmid: "canonical", rel: "canonical", href: this.pageCanonicalUrl},
-            ],
-        };
+    computed: mapState({
+        pageStatusCode: (state) => state.meta.pageStatusCode,
+        pageName: (state) => state.meta.pageName,
+        pageDescription: (state) => state.meta.pageDescription,
+        pageKeywords: (state) => state.meta.pageKeywords,
+        pageTitle: (state) => state.meta.pageTitle,
+        pageImage: (state) => state.meta.pageImage,
+        pageUrl: (state) => state.meta.pageUrl,
+        pageCanonicalUrl: (state) => state.meta.pageCanonicalUrl,
+    }),
+    methods: {
+        init: function () {
+            document.head.querySelector("meta[property='og:type']").content = "article";
+            document.head.querySelector("meta[name='twitter:card']").content = "summary_large_image";
+        },
+        ...mapActions("meta", [
+            "setPageStatusCode",
+            "setPageName",
+            "setPageDescription",
+            "setPageKeywords",
+            "setPageTitle",
+            "setPageImage",
+            "setPageUrl",
+            "setPageCanonicalUrl",
+        ]),
+    },
+    created: function () {
+        this.init();
+        this.setPageStatusCode(200);
+        this.setPageName(this.$services.getConfig().app.name);
+        this.setPageDescription(this.$services.getConfig().app.description);
+        this.setPageKeywords(this.$services.getConfig().app.keywords);
+        this.setPageKeywords(this.$services.getConfig().app.keywords);
+        this.setPageImage(this.$services.getConfig().url.image);
     },
 }

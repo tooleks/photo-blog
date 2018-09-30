@@ -1,6 +1,11 @@
-import {HOME, PHOTO, PHOTOS, PHOTOS_SEARCH, PHOTOS_TAG, ROUTE_404, SIGN_IN, _PAGINATION} from "../router/names";
+import {_PAGINATION, HOME, PHOTO, PHOTOS, PHOTOS_SEARCH, PHOTOS_TAG, ROUTE_404, SIGN_IN} from "../router/names";
 
 export default {
+    computed: {
+        routeName: function () {
+            return this.$route.name.endsWith(_PAGINATION) ? this.$route.name : `${this.$route.name}${_PAGINATION}`;
+        },
+    },
     methods: {
         goToPath: function (path) {
             if (typeof path !== "undefined") {

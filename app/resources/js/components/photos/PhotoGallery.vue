@@ -35,7 +35,6 @@
     import RoundSpinner from "../utils/RoundSpinner";
     import Masonry from "../gallery/Masonry";
     import {GoToMixin, MetaMixin} from "../../mixins";
-    import {_PAGINATION} from "../../router/names";
 
     export default {
         components: {
@@ -63,20 +62,6 @@
                 /** @type {boolean} */
                 nextPageExists: false,
             };
-        },
-        computed: {
-            routeName: function () {
-                return this.$route.name.endsWith(_PAGINATION) ? this.$route.name : `${this.$route.name}${_PAGINATION}`;
-            },
-            pageTitle: function () {
-                if (this.$route.params.searchPhrase) {
-                    return `Search "${this.$route.params.searchPhrase}"`;
-                }
-                if (this.$route.params.tag) {
-                    return `Search by tag #${this.$route.params.tag}`;
-                }
-                return "All photos";
-            },
         },
         watch: {
             "$route": function () {
@@ -133,6 +118,13 @@
         },
         created: function () {
             this.init();
+            if (this.$route.params.searchPhrase) {
+                this.setPageTitle(`Search "${this.$route.params.searchPhrase}"`);
+            } else if (this.$route.params.tag) {
+                this.setPageTitle(`Search by tag #${this.$route.params.tag}`);
+            } else {
+                this.setPageTitle("All photos");
+            }
         },
     }
 </script>

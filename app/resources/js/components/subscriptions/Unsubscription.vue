@@ -38,11 +38,6 @@
                 loading: false,
             };
         },
-        computed: {
-            pageTitle: function () {
-                return "Unsubscription";
-            },
-        },
         methods: {
             deleteSubscription: async function (token = this.$route.params.token) {
                 this.loading = true;
@@ -57,6 +52,9 @@
                     this.goToHomePage();
                 }
             },
+        },
+        created: function () {
+            this.setPageTitle("Unsubscribe");
         },
     }
 </script>

@@ -59,11 +59,6 @@
                 email: "",
             };
         },
-        computed: {
-            pageTitle: function () {
-                return "Subscription";
-            },
-        },
         methods: {
             subscribe: async function (reCaptchaResponse) {
                 this.loading = true;
@@ -81,6 +76,9 @@
                     this.loading = false;
                 }
             },
+        },
+        created: function () {
+            this.setPageTitle("Subscription");
         },
     }
 </script>

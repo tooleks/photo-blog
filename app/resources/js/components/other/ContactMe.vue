@@ -95,11 +95,6 @@
                 message: "",
             };
         },
-        computed: {
-            pageTitle: function () {
-                return "Contact Me";
-            },
-        },
         methods: {
             contactMe: async function (reCaptchaResponse) {
                 this.loading = true;
@@ -120,6 +115,9 @@
                     this.loading = false;
                 }
             },
+        },
+        created: function () {
+            this.setPageTitle("Contact Me");
         },
     }
 </script>

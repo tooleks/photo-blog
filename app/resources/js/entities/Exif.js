@@ -22,13 +22,6 @@ export default class Exif {
     }
 
     /**
-     * @param {string} value
-     */
-    set takenAt(value) {
-        this._takenAt = value;
-    }
-
-    /**
      * @return {*}
      */
     get takenAt() {
@@ -43,5 +36,12 @@ export default class Exif {
         }
 
         return takenAt;
+    }
+
+    /**
+     * @param {string} value
+     */
+    set takenAt(value) {
+        this._takenAt = value;
     }
 }

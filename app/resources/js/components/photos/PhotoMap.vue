@@ -35,11 +35,6 @@
                 images: [],
             };
         },
-        computed: {
-            pageTitle: function () {
-                return "Map";
-            },
-        },
         methods: {
             loadImages: async function () {
                 this.loading = true;
@@ -59,6 +54,7 @@
             },
         },
         created: function () {
+            this.setPageTitle("Photo Map");
             this.loadImages();
         },
     }

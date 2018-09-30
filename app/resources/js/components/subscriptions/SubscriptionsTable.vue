@@ -58,7 +58,6 @@
 
 <script>
     import {MetaMixin} from "../../mixins";
-    import {_PAGINATION} from "../../router/names";
 
     export default {
         mixins: [
@@ -81,14 +80,6 @@
                 /** @type {boolean} */
                 nextPageExists: false,
             };
-        },
-        computed: {
-            routeName: function () {
-                return this.$route.name.endsWith(_PAGINATION) ? this.$route.name : `${this.$route.name}${_PAGINATION}`;
-            },
-            pageTitle: function () {
-                return "Subscriptions";
-            },
         },
         watch: {
             "$route": function () {
@@ -137,6 +128,7 @@
             },
         },
         created: function () {
+            this.setPageTitle("Subscriptions");
             this.loadSubscriptions();
         },
     };

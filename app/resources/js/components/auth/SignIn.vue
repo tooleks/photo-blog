@@ -61,14 +61,9 @@
                 password: "",
             };
         },
-        computed: {
-            pageTitle: function () {
-                return "Sign In";
-            },
-        },
         methods: {
             init: function () {
-                if (this.currentUser) {
+                if (this.authenticated) {
                     this.goToRedirectUri();
                 }
             },
@@ -91,6 +86,7 @@
             },
         },
         created: function () {
+            this.setPageTitle("Sign In");
             this.init();
         },
     }
