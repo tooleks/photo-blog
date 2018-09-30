@@ -14,6 +14,13 @@ export default class Location {
     }
 
     /**
+     * @return {number}
+     */
+    get lat() {
+        return this._lat;
+    }
+
+    /**
      * @param {number} value
      */
     set lat(value) {
@@ -27,8 +34,8 @@ export default class Location {
     /**
      * @return {number}
      */
-    get lat() {
-        return this._lat;
+    get lng() {
+        return this._lng;
     }
 
     /**
@@ -40,13 +47,6 @@ export default class Location {
         }
 
         this._lng = Number(value);
-    }
-
-    /**
-     * @return {number}
-     */
-    get lng() {
-        return this._lng;
     }
 
     /**

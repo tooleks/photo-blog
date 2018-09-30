@@ -41,16 +41,8 @@
                 /** @type {Array<Photo>} */
                 photos: [],
                 /** @type {Photo} */
-                activePhoto: undefined,
+                activePhoto: null,
             };
-        },
-        computed: {
-            pageTitle: function () {
-                return opt(() => this.activePhoto.description, "");
-            },
-            pageImage: function () {
-                return opt(() => this.activePhoto.image.url, "");
-            },
         },
         watch: {
             "$route.params.id": function (id) {
@@ -64,6 +56,8 @@
             },
             activePhoto: function (activePhoto) {
                 this.goToPhotoPage(activePhoto.postId);
+                this.setPageTitle(activePhoto.description);
+                this.setPageImage(activePhoto.image.url);
             },
         },
         methods: {

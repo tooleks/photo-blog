@@ -61,11 +61,6 @@
                 password: "",
             };
         },
-        computed: {
-            pageTitle: function () {
-                return "Sign In";
-            },
-        },
         methods: {
             init: function () {
                 if (this.currentUser) {
@@ -91,6 +86,7 @@
             },
         },
         created: function () {
+            this.setPageTitle("Sign In");
             this.init();
         },
     }

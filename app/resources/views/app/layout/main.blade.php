@@ -6,7 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="fragment" content="!">
+    {{-- The following tags are under the control of the frontend application. --}}
     <title>{{ config('app.name') }}</title>
+    <meta name="prerender-status-code" content="200">
+    <meta name="description" content="{{ config('app.description') }}">
+    <meta name="keywords" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:site_name" content="">
+    <meta property="og:description" content="">
+    <meta property="og:image" content="">
+    <meta property="og:title" content="">
+    <meta name="twitter:card" content="">
+    <meta name="twitter:title" content="">
+    <meta name="twitter:image" content="">
+    <link rel="canonical" href="">
+    {{-- The preceding tags are under the control of the frontend application. --}}
     <link rel="apple-touch-icon" sizes="180x180" href="{{ mix('/apple-touch-icon.png') }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ mix('/favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ mix('/favicon-16x16.png') }}">
