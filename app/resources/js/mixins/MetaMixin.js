@@ -53,7 +53,9 @@ export default {
             getElement("link", {rel: "canonical"}).setAttribute("href", pageCanonicalUrl);
         },
         "$route": function () {
-            this.syncPageUrl();
+            const baseUrl = this.$services.getConfig().url.app;
+            this.setPageUrl(baseUrl + this.$route.fullPath);
+            this.setPageCanonicalUrl(baseUrl + this.$route.path);
         },
     },
     computed: mapState({
@@ -66,23 +68,16 @@ export default {
         pageUrl: (state) => state.meta.pageUrl,
         pageCanonicalUrl: (state) => state.meta.pageCanonicalUrl,
     }),
-    methods: {
-        syncPageUrl() {
-            let baseUrl = this.$services.getConfig().url.app;
-            this.setPageUrl(baseUrl + this.$route.fullPath);
-            this.setPageCanonicalUrl(baseUrl + this.$route.path);
-        },
-        ...mapActions("meta", [
-            "setPageStatusCode",
-            "setPageName",
-            "setPageDescription",
-            "setPageKeywords",
-            "setPageTitle",
-            "setPageImage",
-            "setPageUrl",
-            "setPageCanonicalUrl",
-        ]),
-    },
+    methods: mapActions("meta", [
+        "setPageStatusCode",
+        "setPageName",
+        "setPageDescription",
+        "setPageKeywords",
+        "setPageTitle",
+        "setPageImage",
+        "setPageUrl",
+        "setPageCanonicalUrl",
+    ]),
     created: function () {
         getElement("meta", {property: "og:type"}).setAttribute("content", "article");
         getElement("meta", {name: "twitter:card"}).setAttribute("content", "summary_large_image");
@@ -92,6 +87,8 @@ export default {
         this.setPageKeywords(this.$services.getConfig().app.keywords);
         this.setPageKeywords(this.$services.getConfig().app.keywords);
         this.setPageImage(this.$services.getConfig().url.image);
-        this.syncPageUrl();
+        const baseUrl = this.$services.getConfig().url.app;
+        this.setPageUrl(baseUrl + this.$route.fullPath);
+        this.setPageCanonicalUrl(baseUrl + this.$route.path);
     },
 }

@@ -15,13 +15,13 @@
             <div class="col mt-2">
                 <router-link
                         v-if="previousPageExists"
-                        :to="{name: this.routeName, params: {page: this.previousPage}}"
+                        :to="{name: routeName, params: {page: previousPage}}"
                         class="btn btn-secondary float-left"
                         title="Previous Page">Previous
                 </router-link>
                 <router-link
                         v-if="nextPageExists"
-                        :to="{name: this.routeName, params: {page: this.nextPage}}"
+                        :to="{name: routeName, params: {page: nextPage}}"
                         class="btn btn-secondary float-right"
                         title="Next Page">Next
                 </router-link>
