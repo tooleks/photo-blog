@@ -15,8 +15,8 @@ const mutations = {
 };
 
 const actions = {
-    setUser({commit}, pageStatusCode) {
-        commit("setUser", pageStatusCode);
+    setUser({commit}, user) {
+        commit("setUser", user);
     },
     removeUser({commit}) {
         commit("removeUser");
