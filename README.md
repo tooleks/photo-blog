@@ -47,4 +47,4 @@ Open the [localhost:8080/sign-in](http://localhost:8080/sign-in) link in a brows
 | `make app-logs`   | Fetch the application logs. |
 | `make mysql-logs` | Fetch MySQL logs. |
 
-**Tip:** Take a look at `./Makefile` file content to discover other available commands.
+**Tip:** Take a look at `./Makefile` file content to discover all available commands.
