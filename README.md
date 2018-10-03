@@ -28,40 +28,23 @@ Run the command (in another terminal window, within the project root directory) 
 make configuration
 ```
 
-Open the [http://localhost:8080/sign-in](http://localhost:8080/sign-in) link in a browser and sign in with a newly created administrator user account.
-
-**Tip:** Take a look at `./Makefile` file content to understand "how it works?".
+Open the [localhost:8080/sign-in](http://localhost:8080/sign-in) link in a browser and sign in with a newly created administrator user account.
 
 ### Exposed Resources
 
-* [http://localhost:8080](http://localhost:8080) - The application;
-* [http://localhost:8081](http://localhost:8081) - REST API documentation;
-* [http://localhost:8083](http://localhost:8083) - MailDev mailbox.
+| Resource Location                        | Description |
+|------------------------------------------|-------------|
+| [localhost:8080](http://localhost:8080)  | The application. |
+| [localhost:8081](http://localhost:8081)  | Documentation for RESTful API of the application. |
+| [localhost:8083](http://localhost:8083)  | SMTP Server + Web Interface for viewing and testing emails during development. |
 
-### Useful Commands
+### Commands
 
-Automatically recompile assets when Webpack detects a change.
+| Command Signature | Description |
+|-------------------|-------------|
+| `make watch-dev`  | Automatically recompile assets when Webpack detects a change. |
+| `make test`       | Execute the application tests. |
+| `make app-logs`   | Fetch the application logs. |
+| `make mysql-logs` | Fetch MySQL logs. |
 
-```bash
-make watch-dev
-```
-
-Fetch the application logs.
-
-```bash
-make app-logs
-```
-
-Fetch the database logs.
-
-```bash
-make mysql-logs
-```
-
-### Tests
-
-Run the command to execute the backend application tests.
-
-```
-make test
-```
+**Tip:** Take a look at `./Makefile` file content to discover other available commands.
