@@ -34,11 +34,11 @@ Open the [localhost:8080/sign-in](http://localhost:8080/sign-in) link in a brows
 
 | Resource Location                        | Description |
 |------------------------------------------|-------------|
-| [localhost:8080](http://localhost:8080)  | The application. |
+| [localhost:8080](http://localhost:8080)  | The photo blog application. |
 | [localhost:8081](http://localhost:8081)  | Documentation for RESTful API of the application. |
 | [localhost:8083](http://localhost:8083)  | SMTP Server + Web Interface for viewing and testing emails during development. |
 
-### Commands
+### Other Commands
 
 | Command Signature | Description |
 |-------------------|-------------|
