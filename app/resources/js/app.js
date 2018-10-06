@@ -4,9 +4,8 @@ import "./bootstrap";
 import Vue from "vue";
 import VueAnalytics from "vue-analytics";
 import router from "./router";
-import "./directives";
-import * as services from "./services/factory";
 import store from "./store";
+import * as services from "./services/factory";
 import App from "./components/App";
 import AppPlugin from "./AppPlugin";
 
