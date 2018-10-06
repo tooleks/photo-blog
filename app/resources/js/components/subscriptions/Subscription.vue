@@ -26,7 +26,7 @@
                                                v-focus>
                                     </div>
                                     <div class="form-group">
-                                        <re-captcha ref="reCaptcha" @verified="subscribe"></re-captcha>
+                                        <re-captcha ref="reCaptcha" @verified="subscribe"/>
                                     </div>
                                     <button :disabled="loading" type="submit" class="btn btn-secondary">Send</button>
                                 </form>
@@ -41,17 +41,17 @@
 
 <script>
     import ReCaptcha from "../utils/ReCaptcha";
-    import {GoToMixin, MetaMixin} from "../../mixins";
+    import {MetaMixin, RouteMixin} from "../../mixins";
 
     export default {
         components: {
             ReCaptcha,
         },
         mixins: [
-            GoToMixin,
+            RouteMixin,
             MetaMixin,
         ],
-        data: function () {
+        data() {
             return {
                 /** @type {boolean} */
                 loading: false,
@@ -60,7 +60,7 @@
             };
         },
         methods: {
-            subscribe: async function (reCaptchaResponse) {
+            async subscribe(reCaptchaResponse) {
                 this.loading = true;
                 try {
                     await this.$services.getApi().createSubscription({
@@ -77,7 +77,7 @@
                 }
             },
         },
-        created: function () {
+        created() {
             this.setPageTitle("Subscription");
         },
     }

@@ -43,7 +43,7 @@
             title: {type: String},
         },
         computed: {
-            style: function () {
+            style() {
                 return {
                     "background-image": `url(${this.imageUrl})`,
                 };

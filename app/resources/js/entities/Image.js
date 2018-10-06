@@ -13,6 +13,7 @@ export default class Image {
         this.height = Number(height);
         this.valueOf = this.valueOf.bind(this);
         this.toString = this.toString.bind(this);
+        this.clone = this.clone.bind(this);
     }
 
     /**
@@ -27,5 +28,16 @@ export default class Image {
      */
     toString() {
         return String(this.valueOf());
+    }
+
+    /**
+     * @return {Image}
+     */
+    clone() {
+        return new Image({
+            url: this.url,
+            width: this.width,
+            height: this.height,
+        });
     }
 }

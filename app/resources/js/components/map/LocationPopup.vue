@@ -21,10 +21,10 @@
             address: {type: String},
         },
         computed: {
-            formattedLat: function () {
+            formattedLat() {
                 return this.lat.toFixed(4);
             },
-            formattedLng: function () {
+            formattedLng() {
                 return this.lng.toFixed(4);
             },
         },

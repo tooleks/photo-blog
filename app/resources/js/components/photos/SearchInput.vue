@@ -30,33 +30,33 @@
                 default: 500,
             },
         },
-        data: function () {
+        data() {
             return {
                 /** @type {string} */
                 input: "",
             };
         },
         watch: {
-            "$route": function () {
+            ["$route"]() {
                 this.init();
             },
         },
         methods: {
-            init: function () {
+            init() {
                 this.input = this.$route.params.searchPhrase || this.$route.query.searchPhrase;
             },
-            search: function () {
+            search() {
                 this.input
                     ? this.$router.push({name: "photos-search", params: {searchPhrase: this.input}})
                     : this.$router.push({name: "photos"});
             },
         },
         computed: {
-            debounceSearch: function () {
+            debounceSearch() {
                 return debounce(() => this.search(), this.delay);
             },
         },
-        created: function () {
+        created() {
             this.init();
         },
     }

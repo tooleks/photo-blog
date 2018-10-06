@@ -24,35 +24,35 @@ export function getElement(tag, attributes) {
 
 export default {
     watch: {
-        pageStatusCode: function (pageStatusCode) {
+        pageStatusCode(pageStatusCode) {
             getElement("meta", {name: "prerender-status-code"}).setAttribute("content", pageStatusCode);
         },
-        pageName: function (pageName) {
+        pageName(pageName) {
             getElement("meta", {property: "og:site_name"}).setAttribute("content", pageName);
         },
-        pageDescription: function (pageDescription) {
+        pageDescription(pageDescription) {
             getElement("meta", {name: "description"}).setAttribute("content", pageDescription);
             getElement("meta", {property: "og:description"}).setAttribute("content", pageDescription);
         },
-        pageKeywords: function (pageKeywords) {
+        pageKeywords(pageKeywords) {
             getElement("meta", {name: "keywords"}).setAttribute("content", pageKeywords);
         },
-        pageTitle: function (pageTitle) {
+        pageTitle(pageTitle) {
             document.title = pageTitle ? `${pageTitle} | ${this.pageName}` : this.pageName;
             getElement("meta", {property: "og:title"}).setAttribute("content", pageTitle);
             getElement("meta", {name: "twitter:title"}).setAttribute("content", pageTitle);
         },
-        pageImage: function (pageImage) {
+        pageImage(pageImage) {
             getElement("meta", {property: "og:image"}).setAttribute("content", pageImage);
             getElement("meta", {name: "twitter:image"}).setAttribute("content", pageImage);
         },
-        pageUrl: function (pageUrl) {
+        pageUrl(pageUrl) {
             getElement("meta", {property: "og:url"}).setAttribute("content", pageUrl);
         },
-        pageCanonicalUrl: function (pageCanonicalUrl) {
+        pageCanonicalUrl(pageCanonicalUrl) {
             getElement("link", {rel: "canonical"}).setAttribute("href", pageCanonicalUrl);
         },
-        "$route": function () {
+        ["$route"]() {
             const baseUrl = this.$services.getConfig().url.app;
             this.setPageUrl(baseUrl + this.$route.fullPath);
             this.setPageCanonicalUrl(baseUrl + this.$route.path);
@@ -78,7 +78,7 @@ export default {
         "setPageUrl",
         "setPageCanonicalUrl",
     ]),
-    created: function () {
+    created() {
         getElement("meta", {property: "og:type"}).setAttribute("content", "article");
         getElement("meta", {name: "twitter:card"}).setAttribute("content", "summary_large_image");
         this.setPageStatusCode(200);

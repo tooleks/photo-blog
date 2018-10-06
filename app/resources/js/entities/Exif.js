@@ -19,6 +19,7 @@ export default class Exif {
         this.aperture = aperture;
         this.iso = iso;
         this.takenAt = takenAt;
+        this.clone = this.clone.bind(this);
     }
 
     /**
@@ -26,13 +27,13 @@ export default class Exif {
      */
     get takenAt() {
         if (typeof this._takenAt === "undefined") {
-            return undefined;
+            return;
         }
 
         const takenAt = moment.utc(this._takenAt);
 
         if (!takenAt.isValid()) {
-            return undefined;
+            return;
         }
 
         return takenAt;
@@ -43,5 +44,19 @@ export default class Exif {
      */
     set takenAt(value) {
         this._takenAt = value;
+    }
+
+    /**
+     * @return {Exif}
+     */
+    clone() {
+        return new Exif({
+            manufacturer: this.manufacturer,
+            model: this.model,
+            exposureTime: this.exposureTime,
+            aperture: this.aperture,
+            iso: this.iso,
+            takenAt: this.takenAt,
+        });
     }
 }

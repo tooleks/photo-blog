@@ -122,7 +122,7 @@
                         </div>
                     </li>
                 </ul>
-                <search-input></search-input>
+                <search-input/>
             </div>
         </div>
     </nav>
@@ -159,23 +159,23 @@
         mixins: [
             AuthMixin,
         ],
-        data: function () {
+        data() {
             return {
                 /** @type {Array<Tag>} */
                 tags: [],
             };
         },
         computed: {
-            social: function () {
+            social() {
                 return this.$services.getConfig().url.social;
             },
         },
         methods: {
-            loadTags: async function () {
+            async loadTags() {
                 this.tags = await this.$services.getTagManager().getPopular();
             },
         },
-        created: function () {
+        created() {
             this.loadTags();
         },
     }

@@ -1,16 +1,16 @@
 <template>
     <div>
-        <round-spinner :loading="loading"></round-spinner>
+        <round-spinner :loading="loading"/>
         <gallery-viewer v-if="activePhoto"
                         :activeImage.sync="activePhoto"
                         :images="photos"
                         @onFirstImage="loadNewerPhoto"
                         @onLastImage="loadOlderPhoto"
-                        @onExit="goToPhotosPage"></gallery-viewer>
+                        @onExit="goToPhotosPage"/>
         <div class="container" v-if="activePhoto">
             <div class="row">
                 <div class="col">
-                    <photo-description-card :photo="activePhoto" @onBack="goToPhotosPage"></photo-description-card>
+                    <photo-description-card :photo="activePhoto" @onBack="goToPhotosPage"/>
                 </div>
             </div>
         </div>
@@ -22,7 +22,7 @@
     import RoundSpinner from "../utils/RoundSpinner";
     import Viewer from "../gallery/Viewer";
     import PhotoDescriptionCard from "./PhotoDescriptionCard";
-    import {GoToMixin, MetaMixin} from "../../mixins";
+    import {MetaMixin, RouteMixin} from "../../mixins";
 
     export default {
         components: {
@@ -31,10 +31,10 @@
             GalleryViewer: Viewer,
         },
         mixins: [
-            GoToMixin,
+            RouteMixin,
             MetaMixin,
         ],
-        data: function () {
+        data() {
             return {
                 /** @type {boolean} */
                 loading: false,
@@ -45,7 +45,7 @@
             };
         },
         watch: {
-            "$route.params.id": function (id) {
+            ["$route.params.id"](id) {
                 const photo = this.photos.find((photo) => photo.postId === Number(id));
                 if (photo) {
                     this.activePhoto = photo;
@@ -53,14 +53,14 @@
                 }
                 this.goToNotFoundPage();
             },
-            activePhoto: function (activePhoto) {
+            activePhoto(activePhoto) {
                 this.goToPhotoPage(activePhoto.postId);
                 this.setPageTitle(activePhoto.description);
                 this.setPageImage(activePhoto.image.url);
             },
         },
         methods: {
-            loadPhoto: async function () {
+            async loadPhoto() {
                 this.loading = true;
                 try {
                     const photo = await this.$services.getPhotoManager().getByPostId(
@@ -79,7 +79,7 @@
                     this.loading = false;
                 }
             },
-            loadOlderPhoto: async function () {
+            async loadOlderPhoto() {
                 this.loading = true;
                 try {
                     const photo = await this.$services.getPhotoManager().getPreviousByPostId(
@@ -94,7 +94,7 @@
                     this.loading = false;
                 }
             },
-            loadNewerPhoto: async function () {
+            async loadNewerPhoto() {
                 this.loading = true;
                 try {
                     const photo = await this.$services.getPhotoManager().getNextByPostId(
@@ -110,7 +110,7 @@
                 }
             },
         },
-        created: function () {
+        created() {
             this.loadPhoto();
         },
     }

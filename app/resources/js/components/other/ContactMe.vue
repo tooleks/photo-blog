@@ -56,7 +56,7 @@
                                                   rows="3"></textarea>
                                     </div>
                                     <div class="form-group">
-                                        <re-captcha ref="reCaptcha" @verified="contactMe"></re-captcha>
+                                        <re-captcha ref="reCaptcha" @verified="contactMe"/>
                                     </div>
                                     <button :disabled="loading" type="submit" class="btn btn-secondary">Send</button>
                                 </form>
@@ -71,17 +71,17 @@
 
 <script>
     import ReCaptcha from "../utils/ReCaptcha";
-    import {GoToMixin, MetaMixin} from "../../mixins";
+    import {MetaMixin, RouteMixin} from "../../mixins";
 
     export default {
         components: {
             ReCaptcha,
         },
         mixins: [
-            GoToMixin,
+            RouteMixin,
             MetaMixin,
         ],
-        data: function () {
+        data() {
             return {
                 /** @type {boolean} */
                 loading: false,
@@ -96,7 +96,7 @@
             };
         },
         methods: {
-            contactMe: async function (reCaptchaResponse) {
+            async contactMe(reCaptchaResponse) {
                 this.loading = true;
                 try {
                     await this.$services.getApi().createContactMessage({
@@ -116,7 +116,7 @@
                 }
             },
         },
-        created: function () {
+        created() {
             this.setPageTitle("Contact Me");
         },
     }

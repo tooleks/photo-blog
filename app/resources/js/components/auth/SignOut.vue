@@ -2,14 +2,14 @@
 </template>
 
 <script>
-    import {GoToMixin} from "../../mixins";
+    import {RouteMixin} from "../../mixins";
 
     export default {
         mixins: [
-            GoToMixin,
+            RouteMixin,
         ],
         methods: {
-            signOut: async function () {
+            async signOut() {
                 try {
                     await this.$services.getLogin().signOut();
                 } catch (error) {
@@ -20,7 +20,7 @@
                 }
             },
         },
-        created: function () {
+        created() {
             this.signOut();
         },
     }

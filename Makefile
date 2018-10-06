@@ -1,8 +1,8 @@
-initialization: dependencies
+initialization: install-dependencies
 	cp -n ./app/.env.example ./app/.env
 	ln -sfn ../storage/app/public app/public/storage
 
-dependencies:
+install-dependencies:
 	docker run --rm --mount "type=bind,source=$(PWD)/app,target=/app" -w "/app" node:10 npm install
 	docker run --rm --mount "type=bind,source=$(PWD)/app,target=/app" -w "/app" composer:1.7 install \
 		--ignore-platform-reqs \
@@ -11,7 +11,7 @@ dependencies:
 		--no-scripts \
 		--prefer-dist
 
-new-dependencies:
+update-dependencies:
 	docker run --rm --mount "type=bind,source=$(PWD)/app,target=/app" -w "/app" node:10 npm update
 	docker run --rm --mount "type=bind,source=$(PWD)/app,target=/app" -w "/app" composer:1.7 update \
 		--ignore-platform-reqs \

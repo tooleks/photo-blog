@@ -17,7 +17,7 @@
                 default: "",
             },
         },
-        data: function () {
+        data() {
             this.siteKey = this.siteKey || this.$services.getConfig().credentials.googleReCaptcha.siteKey;
             return {
                 /** @type {BrowserRecaptcha|DummyRecaptcha} */
@@ -25,11 +25,11 @@
             };
         },
         methods: {
-            verify: async function () {
+            async verify() {
                 await this.reCaptcha.execute();
             },
         },
-        mounted: async function () {
+        async mounted() {
             await this.reCaptcha.load();
             await this.reCaptcha.render();
         },

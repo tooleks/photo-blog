@@ -25,7 +25,7 @@
         mixins: [
             MetaMixin,
         ],
-        created: function () {
+        created() {
             this.setPageStatusCode(404);
             this.setPageTitle("Page not found");
         },

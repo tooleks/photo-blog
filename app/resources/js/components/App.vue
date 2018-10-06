@@ -1,13 +1,13 @@
 <template>
     <div id="container">
-        <app-header class="app-header"></app-header>
+        <app-header class="app-header"/>
         <div class="app-router">
             <transition name="fade">
                 <router-view :key="routeKey"></router-view>
             </transition>
         </div>
-        <notifications group="main"></notifications>
-        <app-footer></app-footer>
+        <notifications group="main"/>
+        <app-footer/>
         <go-top-button :animate="true"
                        :speed="50"
                        :acceleration="2"
@@ -55,7 +55,7 @@
             AppFooter: Footer,
         },
         computed: {
-            routeKey: function () {
+            routeKey() {
                 return this.$route.meta.transition !== false ? this.$route.fullPath : null;
             },
         },

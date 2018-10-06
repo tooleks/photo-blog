@@ -44,28 +44,28 @@
 <script>
     export default {
         computed: {
-            url: function () {
+            url() {
                 let url = this.$services.getConfig().url.app;
                 if (this.$route.fullPath) {
                     url += this.$route.fullPath;
                 }
                 return url;
             },
-            title: function () {
+            title() {
                 return document.title;
             },
         },
         methods: {
-            getFacebookShareUrl: function () {
+            getFacebookShareUrl() {
                 return `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(this.url)}`;
             },
-            getTwitterShareUrl: function () {
+            getTwitterShareUrl() {
                 return `https://twitter.com/home?status=${encodeURIComponent(this.url)}`;
             },
-            getGooglePlusShareUrl: function () {
+            getGooglePlusShareUrl() {
                 return `https://plus.google.com/share?url=${encodeURIComponent(this.url)}`;
             },
-            getLinkedInShareUrl: function () {
+            getLinkedInShareUrl() {
                 return `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(this.url)}`
                     + `&title=${encodeURIComponent(this.title)}&summary=&source=`;
             },

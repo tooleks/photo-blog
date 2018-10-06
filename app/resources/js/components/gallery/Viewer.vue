@@ -155,32 +155,32 @@
             },
             images: {
                 type: Array,
-                default: function () {
+                default() {
                     return [];
                 },
             },
         },
-        data: function () {
+        data() {
             return {
                 /** @type {boolean} */
                 inFullScreenMode: false,
             };
         },
         computed: {
-            carouselSelector: function () {
+            carouselSelector() {
                 return `#${this.id}`;
             },
-            carouselItemSelector: function () {
+            carouselItemSelector() {
                 return `${this.carouselSelector} .carousel-item`;
             },
         },
         watch: {
-            activeImage: function (activeImage) {
+            activeImage(activeImage) {
                 // this.slideToImage(activeImage);
             },
         },
         methods: {
-            init: function () {
+            init() {
                 this.emitActiveImageEvents(this.activeImage);
                 $(this.carouselItemSelector).first().addClass("active");
                 $(this.carouselSelector).on("slide.bs.carousel", (event) => {
@@ -188,7 +188,7 @@
                     this.emitActiveImageEvents(activeImage);
                 });
             },
-            onKeyUp: function (event) {
+            onKeyUp(event) {
                 switch (event.keyCode) {
                     case KEY_CODE_ESC: {
                         if (this.inFullScreenMode) {
@@ -208,19 +208,19 @@
                     }
                 }
             },
-            slideToPreviousImage: function () {
+            slideToPreviousImage() {
                 $(this.carouselSelector).carousel("prev");
             },
-            slideToNextImage: function () {
+            slideToNextImage() {
                 $(this.carouselSelector).carousel("next");
             },
-            slideToImage: function (activeImage) {
+            slideToImage(activeImage) {
                 const index = this.images.findIndex((image) => activeImage.is(image));
                 if (index !== -1) {
                     $(this.carouselSelector).carousel(index);
                 }
             },
-            emitActiveImageEvents: function (activeImage) {
+            emitActiveImageEvents(activeImage) {
                 this.$emit("update:activeImage", activeImage);
                 if (this.isFirstImage(activeImage)) {
                     this.$emit("onFirstImage", activeImage);
@@ -229,22 +229,22 @@
                     this.$emit("onLastImage", activeImage);
                 }
             },
-            emitExitEvent: function () {
+            emitExitEvent() {
                 this.$emit("onExit");
             },
-            isFirstImage: function (activeImage) {
+            isFirstImage(activeImage) {
                 const index = this.images.findIndex((image) => image.is(activeImage));
                 return index === 0;
             },
-            isLastImage: function (activeImage) {
+            isLastImage(activeImage) {
                 const index = this.images.findIndex((image) => image.is(activeImage));
                 return index === this.images.length - 1;
             },
-            toggleFullScreenMode: function () {
+            toggleFullScreenMode() {
                 this.inFullScreenMode = !this.inFullScreenMode;
             },
         },
-        mounted: function () {
+        mounted() {
             this.init();
         },
     }

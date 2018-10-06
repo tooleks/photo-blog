@@ -11,6 +11,7 @@ export default class Location {
         this.lng = lng;
         this.valueOf = this.valueOf.bind(this);
         this.toString = this.toString.bind(this);
+        this.clone = this.clone.bind(this);
     }
 
     /**
@@ -61,5 +62,15 @@ export default class Location {
      */
     toString() {
         return String(this.valueOf());
+    }
+
+    /**
+     * @return {Location}
+     */
+    clone() {
+        return new Location({
+            lat: this.lat,
+            lng: this.lng,
+        });
     }
 }

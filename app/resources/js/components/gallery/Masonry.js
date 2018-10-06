@@ -1,9 +1,9 @@
-import makeImage from "./imageFactory";
+import Image from "./Image";
 
 const DEFAULT_ROW_MAX_WIDTH = 300;
 const DEFAULT_ROW_MAX_HEIGHT = 300;
 
-export class Masonry {
+export default class Masonry {
     constructor(options) {
         this.setOptions(options);
         this.setRows([]);
@@ -39,7 +39,7 @@ export class Masonry {
     }
 
     getCurrentRowTotalWidth() {
-        return this.getCurrentRow().reduce((totalWidth, image) => totalWidth + image.getWidth(), 0);
+        return this.getCurrentRow().reduce((totalWidth, image) => totalWidth + image.width, 0);
     }
 
     getRowsImages() {
@@ -52,7 +52,7 @@ export class Masonry {
     }
 
     process(images) {
-        const uniqueImages = images.map((image) => makeImage(image)).filter((image) => !this.exists(image));
+        const uniqueImages = images.map((image) => new Image(image)).filter((image) => !this.exists(image));
         const lastRowImages = this.getRows().pop() || [];
         const newImages = lastRowImages.concat(uniqueImages);
         newImages.forEach((newImage, index) => {
@@ -63,7 +63,7 @@ export class Masonry {
     }
 
     exists(newImage) {
-        return this.getRowsImages().some((image) => image.getModel().is(newImage.getModel()));
+        return this.getRowsImages().some((image) => image.model.is(newImage.model));
     }
 
     renderCurrentRowIfFilled(force) {

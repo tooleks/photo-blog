@@ -41,13 +41,13 @@
             <div class="col mt-2">
                 <router-link
                         v-if="previousPageExists"
-                        :to="{name: this.routeName, params: {page: this.previousPage}}"
+                        :to="{name: this.$route.name, params: {page: this.previousPage}}"
                         class="btn btn-secondary float-left"
                         title="Previous Page">Previous
                 </router-link>
                 <router-link
                         v-if="nextPageExists"
-                        :to="{name: this.routeName, params: {page: this.nextPage}}"
+                        :to="{name: this.$route.name, params: {page: this.nextPage}}"
                         class="btn btn-secondary float-right"
                         title="Next Page">Next
                 </router-link>
@@ -63,7 +63,7 @@
         mixins: [
             MetaMixin,
         ],
-        data: function () {
+        data() {
             return {
                 /** @type {boolean} */
                 loading: false,
@@ -82,17 +82,17 @@
             };
         },
         watch: {
-            "$route": function () {
+            ["$route"]() {
                 this.loadSubscriptions();
             },
-            currentPage: function (currentPage) {
+            currentPage(currentPage) {
                 if (currentPage > 1) {
-                    this.$router.push({name: this.routeName, params: {page: currentPage}});
+                    this.$router.push({name: this.$route.name, params: {page: currentPage}});
                 }
             },
         },
         methods: {
-            setSubscriptions: function ({items, previousPageExists, nextPageExists, currentPage, nextPage, previousPage}) {
+            setSubscriptions({items, previousPageExists, nextPageExists, currentPage, nextPage, previousPage}) {
                 this.subscriptions = items;
                 this.previousPageExists = previousPageExists;
                 this.nextPageExists = nextPageExists;
@@ -100,7 +100,7 @@
                 this.nextPage = nextPage;
                 this.previousPage = previousPage;
             },
-            loadSubscriptions: async function (page = this.$route.params.page) {
+            async loadSubscriptions(page = this.$route.params.page) {
                 this.loading = true;
                 try {
                     this.setSubscriptions(await this.$services.getSubscriptionManager().paginate({page}));
@@ -111,7 +111,7 @@
                     this.loading = false;
                 }
             },
-            deleteSubscription: async function (subscription) {
+            async deleteSubscription(subscription) {
                 if (confirm(`Do you really want to delete the ${subscription.email} subscription?`)) {
                     this.loading = true;
                     try {
@@ -127,7 +127,7 @@
                 }
             },
         },
-        created: function () {
+        created() {
             this.setPageTitle("Subscriptions");
             this.loadSubscriptions();
         },

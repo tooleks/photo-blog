@@ -1,18 +1,18 @@
 <template>
     <div class="container py-3">
-        <round-spinner :loading="loading" :delay="0"></round-spinner>
+        <round-spinner :loading="loading" :delay="0"/>
         <file-input :attributes="{id: 'file', name: 'file', disabled: loading}"
-                    @change="uploadPhoto"></file-input>
+                    @change="uploadPhoto"/>
         <div v-if="photo.image" class="card mt-3">
             <div class="card-body">
                 <div class="row">
                     <div class="col">
                         <div class="row">
                             <div class="col">
-                                <photo-card :photo="photo"></photo-card>
+                                <photo-card :photo="photo"/>
                             </div>
                             <div class="col mt-sm-3 mt-md-0">
-                                <location-input :location.sync="photo.location"></location-input>
+                                <location-input :location.sync="photo.location"/>
                             </div>
                         </div>
                     </div>
@@ -74,7 +74,7 @@
     import TagInput from "../utils/TagInput";
     import LocationInput from "../map/LocationInput";
     import PhotoCard from "./PhotoCard";
-    import {GoToMixin, MetaMixin} from "../../mixins";
+    import {MetaMixin, RouteMixin} from "../../mixins";
 
     export default {
         components: {
@@ -85,10 +85,10 @@
             PhotoCard,
         },
         mixins: [
-            GoToMixin,
+            RouteMixin,
             MetaMixin,
         ],
-        data: function () {
+        data() {
             return {
                 /** @type {boolean} */
                 loading: false,
@@ -97,7 +97,7 @@
             };
         },
         methods: {
-            loadPhoto: async function (id = this.$route.params.id) {
+            async loadPhoto(id = this.$route.params.id) {
                 this.loading = true;
                 try {
                     this.photo = await this.$services.getPhotoManager().getByPostId(id);
@@ -108,7 +108,7 @@
                     this.loading = false;
                 }
             },
-            uploadPhoto: async function (file) {
+            async uploadPhoto(file) {
                 this.loading = true;
                 try {
                     const photo = await this.$services.getPhotoManager().upload(file);
@@ -126,7 +126,7 @@
                     this.loading = false;
                 }
             },
-            savePhoto: async function () {
+            async savePhoto() {
                 this.loading = true;
                 try {
                     this.photo = await this.$services.getPhotoManager().publish(this.photo);
@@ -138,7 +138,7 @@
                     this.loading = false;
                 }
             },
-            deletePhoto: async function () {
+            async deletePhoto() {
                 if (confirm("Do you really want to delete the photo?")) {
                     this.loading = true;
                     try {
@@ -154,7 +154,7 @@
                 }
             },
         },
-        created: function () {
+        created() {
             if (this.$route.params.id) {
                 this.loadPhoto();
             }
