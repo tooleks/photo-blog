@@ -10,7 +10,7 @@ const AppPlugin = {
         Object.keys(directives).forEach((name) => Vue.directive(kebabCase(name), directives[name]));
         // Register error handler.
         Vue.config.errorHandler = function errorHandler(error, vm, info) {
-            services.getAlert().error("Whoops, something went wrong...Unexpected Error.");
+            services.getAlert().error("Whoops, something went wrong... Unexpected Error.");
             console.log({error, vm, info});
         };
     },
