@@ -46,7 +46,7 @@
 <script>
     import {cloneDeep} from "lodash";
     import {waitUntil} from "tooleks";
-    import Masonry from "./Masonry";
+    import Masonry from "./core/Masonry";
 
     export default {
         props: {
