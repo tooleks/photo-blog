@@ -1,5 +1,7 @@
 const state = {
+    /** @type {User|null} */
     user: null,
+    /** @type {boolean} */
     authenticated: false,
 };
 

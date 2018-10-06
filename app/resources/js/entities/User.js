@@ -13,6 +13,18 @@ export default class User {
         this.id = id;
         this.name = name;
         this.expiresAt = expiresAt;
+        this.clone = this.clone.bind(this);
+    }
+
+    /**
+     * @return {User}
+     */
+    clone() {
+        return new User({
+            id: this.id,
+            name: this.name,
+            expiresAt: this.expiresAt,
+        });
     }
 }
 

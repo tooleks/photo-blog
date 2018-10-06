@@ -25,21 +25,21 @@
 </template>
 
 <script>
-    import {GoToMixin, MetaMixin} from "../../mixins";
+    import {MetaMixin, RouteMixin} from "../../mixins";
 
     export default {
         mixins: [
-            GoToMixin,
+            RouteMixin,
             MetaMixin,
         ],
-        data: function () {
+        data() {
             return {
                 /** @type {boolean} */
                 loading: false,
             };
         },
         methods: {
-            deleteSubscription: async function (token = this.$route.params.token) {
+            async deleteSubscription(token = this.$route.params.token) {
                 this.loading = true;
                 try {
                     await this.$services.getSubscriptionManager().deleteByToken(token);
@@ -53,7 +53,7 @@
                 }
             },
         },
-        created: function () {
+        created() {
             this.setPageTitle("Unsubscribe");
         },
     }

@@ -4,12 +4,12 @@ import "./bootstrap";
 import Vue from "vue";
 import VueAnalytics from "vue-analytics";
 import router from "./router";
-import "./directives";
-import * as services from "./services/factory";
 import store from "./store";
+import * as services from "./services/factory";
 import App from "./components/App";
+import AppPlugin from "./AppPlugin";
 
-Vue.prototype.$services = services;
+Vue.use(AppPlugin);
 
 if (services.getConfig().credentials.googleAnalytics.trackingId) {
     Vue.use(VueAnalytics, {
@@ -19,10 +19,11 @@ if (services.getConfig().credentials.googleAnalytics.trackingId) {
     });
 }
 
-Vue.component("app", App);
-
-new Vue({
+export default new Vue({
     el: "#app",
+    render(createElement) {
+        return createElement(App);
+    },
     store,
     router,
 });

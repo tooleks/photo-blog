@@ -28,10 +28,10 @@
         props: {
             tags: {
                 type: Array,
-                default: function () {
+                default() {
                     return [];
                 },
-                validator: function (tags) {
+                validator(tags) {
                     return Array.isArray(tags) && tags.every((tag) => tag instanceof Tag);
                 },
             },

@@ -1,13 +1,11 @@
-import Vue from "vue";
-
-Vue.directive("focus", {
-    inserted: function (el) {
+export const focus = {
+    inserted(el) {
         el.focus();
     },
-});
+};
 
-Vue.directive("on-drop-file", {
-    inserted: function (el, bindings) {
+export const onDropFile = {
+    inserted(el, bindings) {
         const handler = bindings.value;
 
         const preventDefaultEvents = (event) => {
@@ -40,7 +38,7 @@ Vue.directive("on-drop-file", {
             el.removeEventListener("drop", handleOnDrop);
         };
     },
-    unbind: function (el) {
+    unbind(el) {
         el.$destroyOnDropFileDirective();
     },
-});
+};

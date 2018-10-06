@@ -1,4 +1,6 @@
+import {cloneDeep} from "lodash";
 import router from "../router";
+import * as routeName from "../router/names";
 
 export default class Photo {
     /**
@@ -27,7 +29,9 @@ export default class Photo {
         this.location = location;
         this.valueOf = this.valueOf.bind(this);
         this.toString = this.toString.bind(this);
+        this.clone = this.clone.bind(this);
         this.is = this.is.bind(this);
+        this.replaceImage = this.replaceImage.bind(this);
     }
 
     /**
@@ -37,17 +41,16 @@ export default class Photo {
      */
     get route() {
         const route = router.history.current;
-        return {
-            name: "photo",
+        return cloneDeep({
+            name: routeName.photo,
             params: {
                 id: this.postId,
             },
             query: {
                 tag: route.params.tag || route.query.tag,
                 searchPhrase: route.params.searchPhrase || route.query.searchPhrase,
-                page: route.params.page || route.query.page,
             },
-        };
+        });
     }
 
     /**
@@ -79,6 +82,23 @@ export default class Photo {
     }
 
     /**
+     * @return {Photo}
+     */
+    clone() {
+        return new Photo({
+            postId: this.postId,
+            id: this.id,
+            description: this.description,
+            tags: this.tags.map((tag) => tag.clone()),
+            original: this.original.clone(),
+            thumbnail: this.thumbnail.clone(),
+            exif: this.exif.clone(),
+            averageColor: this.averageColor,
+            location: this.location.clone(),
+        });
+    }
+
+    /**
      * @param {Photo} photo
      * @return {boolean}
      */
@@ -92,11 +112,11 @@ export default class Photo {
      */
     replaceImage(photo) {
         this.id = photo.id;
-        this.original = photo.original;
-        this.thumbnail = photo.thumbnail;
-        this.exif = photo.exif;
+        this.original = photo.original.clone();
+        this.thumbnail = photo.thumbnail.clone();
+        this.exif = photo.exif.clone();
         this.averageColor = photo.averageColor;
-        this.location = photo.location;
+        this.location = photo.location.clone();
         return this;
     }
 }

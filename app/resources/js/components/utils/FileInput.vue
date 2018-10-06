@@ -46,18 +46,18 @@
                 },
             },
         },
-        data: function () {
+        data() {
             return {
                 /** @type {boolean} */
                 fileInputReady: true,
             };
         },
         methods: {
-            onFileChange: function (file) {
+            onFileChange(file) {
                 this.$emit("change", file);
                 this.clearFileInput();
             },
-            clearFileInput: function () {
+            clearFileInput() {
                 this.fileInputReady = false;
                 this.$nextTick(() => {
                     this.fileInputReady = true;

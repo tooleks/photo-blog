@@ -1,7 +1,7 @@
 <template>
     <basic-map ref="map"
                :center="location"
-               :zoom="zoom"></basic-map>
+               :zoom="zoom"/>
 </template>
 
 <script>
@@ -17,7 +17,7 @@
         props: {
             location: {
                 type: Object,
-                validator: function ({lat, lng}) {
+                validator({lat, lng}) {
                     try {
                         // Location constructor will throw an exception if invalid coordinates will be provided.
                         new Location({lat, lng});
@@ -33,23 +33,23 @@
                 default: false,
             },
         },
-        data: function () {
+        data() {
             return {
                 marker: null,
             };
         },
         computed: {
-            map: function () {
+            map() {
                 return this.$refs.map.map;
             },
         },
         watch: {
-            location: function (location) {
+            location(location) {
                 this.resetMarker(location);
             },
         },
         methods: {
-            init: function () {
+            init() {
                 // Handle scroll events if the map is in a focus.
                 this.map.scrollWheelZoom.disable();
                 this.map.on("blur", (event) => event.target.scrollWheelZoom.disable());
@@ -64,7 +64,7 @@
                     this.setMarker(this.location);
                 }
             },
-            setMarker: function (location) {
+            setMarker(location) {
                 this.marker = L.marker(location, {draggable: !this.disabled}).addTo(this.map);
                 // Show marker popup.
                 this.map.on("click", () => this.showMarkerPopup());
@@ -77,19 +77,19 @@
 
                 this.$emit("update:location", location);
             },
-            removeMarker: function () {
+            removeMarker() {
                 if (this.marker !== null) {
                     this.map.removeLayer(this.marker);
                     this.marker = null;
                 }
             },
-            resetMarker: function (location) {
+            resetMarker(location) {
                 this.removeMarker();
                 if (location) {
                     this.setMarker(location);
                 }
             },
-            showMarkerPopup: async function () {
+            async showMarkerPopup() {
                 if (this.marker !== null) {
                     const location = this.marker.getLatLng();
                     const html = await provideLocationPopupHtml({location});
@@ -97,7 +97,7 @@
                 }
             },
         },
-        mounted: function () {
+        mounted() {
             this.init();
         },
     }

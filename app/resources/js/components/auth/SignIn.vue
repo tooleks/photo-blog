@@ -27,7 +27,7 @@
                                        v-model="password">
                             </div>
                             <div class="form-group">
-                                <re-captcha ref="reCaptcha" @verified="signIn"></re-captcha>
+                                <re-captcha ref="reCaptcha" @verified="signIn"/>
                             </div>
                             <button :disabled="loading" type="submit" class="btn btn-secondary">Sign In</button>
                         </form>
@@ -40,7 +40,7 @@
 
 <script>
     import ReCaptcha from "../utils/ReCaptcha";
-    import {AuthMixin, GoToMixin, MetaMixin} from "../../mixins";
+    import {AuthMixin, MetaMixin, RouteMixin} from "../../mixins";
 
     export default {
         components: {
@@ -48,10 +48,10 @@
         },
         mixins: [
             AuthMixin,
-            GoToMixin,
+            RouteMixin,
             MetaMixin,
         ],
-        data: function () {
+        data() {
             return {
                 /** @type {boolean} */
                 loading: false,
@@ -62,7 +62,7 @@
             };
         },
         methods: {
-            signIn: async function (reCaptchaResponse) {
+            async signIn(reCaptchaResponse) {
                 this.loading = true;
                 try {
                     const user = await this.$services.getLogin().signIn({
@@ -80,7 +80,7 @@
                 }
             },
         },
-        created: function () {
+        created() {
             this.setPageTitle("Sign In");
             if (this.authenticated) {
                 this.goToRedirectUri();

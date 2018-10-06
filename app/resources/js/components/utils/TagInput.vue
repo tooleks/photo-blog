@@ -15,42 +15,42 @@
             },
             tags: {
                 type: Array,
-                default: function () {
+                default() {
                     return [];
                 },
-                validator: function (tags) {
+                validator(tags) {
                     return Array.isArray(tags) && tags.every((tag) => tag instanceof Tag);
                 },
             },
         },
-        data: function () {
+        data() {
             return {
                 /** @type {string} */
                 input: "",
             };
         },
         watch: {
-            input: function () {
+            input() {
                 this.syncInput();
             },
-            tags: function () {
+            tags() {
                 this.syncTags();
             },
         },
         methods: {
-            syncInput: function () {
+            syncInput() {
                 this.input = this.input.split(" ").join("_").toLowerCase();
                 const tags = this.input.split(",").map((value) => Tag.fromValue(value));
                 this.$emit("update:tags", tags);
             },
-            syncTags: function () {
+            syncTags() {
                 const value = this.tags.map((tag) => String(tag)).join(",");
                 if (value !== this.input) {
                     this.input = value;
                 }
             },
         },
-        created: function () {
+        created() {
             this.syncTags();
         },
     }

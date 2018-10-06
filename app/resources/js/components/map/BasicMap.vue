@@ -50,7 +50,7 @@
             },
             center: {
                 type: Object,
-                validator: function ({lat, lng}) {
+                validator({lat, lng}) {
                     try {
                         // Location constructor will throw an exception if invalid coordinates will be provided.
                         new Location({lat, lng});
@@ -59,7 +59,7 @@
                         return false;
                     }
                 },
-                default: function () {
+                default() {
                     // Lviv, Ukraine.
                     return {
                         lat: 49.85,
@@ -72,33 +72,33 @@
                 default: 8,
             },
         },
-        data: function () {
+        data() {
             return {
                 map: null,
                 tileLayer: null,
             };
         },
         watch: {
-            center: function (center) {
+            center(center) {
                 this.map.panTo(center);
             },
-            zoom: function (zoom) {
+            zoom(zoom) {
                 this.map.setView(this.map.getCenter(), zoom);
             },
         },
         methods: {
-            initMap: function () {
+            initMap() {
                 this.map = L.map(this.id).setView(this.center, this.zoom);
                 this.tileLayer = L.tileLayer(this.tileLayerUrl, this.tileLayerOptions).addTo(this.map);
                 this.map.on("zoomend", this.handleMapEvent);
                 this.map.on("moveend", this.handleMapEvent);
             },
-            destroyMap: function () {
+            destroyMap() {
                 this.map.remove();
                 this.map = null;
                 this.tileLayer = null;
             },
-            handleMapEvent: function (event) {
+            handleMapEvent(event) {
                 this.$emit("update:location", event.target.getCenter());
                 this.$emit("update:zoom", event.target.getZoom());
                 this.$emit("bounds", {
@@ -107,10 +107,10 @@
                 });
             },
         },
-        mounted: function () {
+        mounted() {
             this.initMap();
         },
-        beforeDestroy: function () {
+        beforeDestroy() {
             this.destroyMap();
         },
     }

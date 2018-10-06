@@ -92,7 +92,7 @@
                 default: 1000,
             },
         },
-        data: function () {
+        data() {
             return {
                 /** @type {boolean} */
                 visible: this.loading,
@@ -101,12 +101,12 @@
             };
         },
         watch: {
-            loading: function () {
+            loading() {
                 this.initSpinner();
             },
         },
         methods: {
-            initSpinner: function () {
+            initSpinner() {
                 if (!this.loading) {
                     this.clearDelayTimeout();
                     this.hideSpinner();
@@ -114,23 +114,23 @@
                     this.setDelayTimeout(() => this.showSpinner());
                 }
             },
-            showSpinner: function () {
+            showSpinner() {
                 this.visible = true;
             },
-            hideSpinner: function () {
+            hideSpinner() {
                 this.visible = false;
             },
-            clearDelayTimeout: function () {
+            clearDelayTimeout() {
                 if (this.delayTimeout) {
                     clearTimeout(this.delayTimeout);
                     this.delayTimeout = null;
                 }
             },
-            setDelayTimeout: function (callback) {
+            setDelayTimeout(callback) {
                 this.delayTimeout = setTimeout(() => callback.call(callback), this.delay);
             },
         },
-        beforeDestroy: function () {
+        beforeDestroy() {
             this.clearDelayTimeout();
         },
     }

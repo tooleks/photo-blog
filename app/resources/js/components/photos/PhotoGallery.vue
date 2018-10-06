@@ -1,9 +1,9 @@
 <template>
     <div class="container">
-        <round-spinner :loading="loading"></round-spinner>
+        <round-spinner :loading="loading"/>
         <div v-if="photos.length" class="row">
             <div class="col py-1">
-                <gallery-masonry ref="masonry" :images="photos"></gallery-masonry>
+                <gallery-masonry ref="masonry" :images="photos"/>
             </div>
         </div>
         <div v-if="!loading && !photos.length" class="row">
@@ -15,13 +15,13 @@
             <div class="col mt-2">
                 <router-link
                         v-if="previousPageExists"
-                        :to="{name: routeName, params: {page: previousPage}}"
+                        :to="{name: $route.name, params: {page: previousPage}}"
                         class="btn btn-secondary float-left"
                         title="Previous Page">Previous
                 </router-link>
                 <router-link
                         v-if="nextPageExists"
-                        :to="{name: routeName, params: {page: nextPage}}"
+                        :to="{name: $route.name, params: {page: nextPage}}"
                         class="btn btn-secondary float-right"
                         title="Next Page">Next
                 </router-link>
@@ -34,7 +34,7 @@
     import {waitUntil} from "tooleks";
     import RoundSpinner from "../utils/RoundSpinner";
     import Masonry from "../gallery/Masonry";
-    import {GoToMixin, MetaMixin} from "../../mixins";
+    import {MetaMixin, RouteMixin} from "../../mixins";
 
     export default {
         components: {
@@ -42,10 +42,10 @@
             GalleryMasonry: Masonry,
         },
         mixins: [
-            GoToMixin,
+            RouteMixin,
             MetaMixin,
         ],
-        data: function () {
+        data() {
             return {
                 /** @type {boolean} */
                 loading: false,
@@ -64,27 +64,22 @@
             };
         },
         watch: {
-            currentPage: function (currentPage) {
+            currentPage(currentPage) {
                 if (currentPage > 1) {
                     this.$router.push({
-                        name: this.routeName,
+                        name: this.$route.name,
                         params: {page: currentPage},
                         hash: this.$route.hash,
                     });
                 }
             },
-            photos: function () {
-                // Wait until "masonry" reference will be available then scroll to an active image.
-                waitUntil(() => this.$refs.masonry).then((masonry) => {
-                    const id = this.$route.hash.slice(1);
-                    if (id) {
-                        masonry.scrollToImageById(id);
-                    }
-                });
+            async photos() {
+                const masonry = await waitUntil(() => this.$refs.masonry);
+                masonry.scrollToImage();
             },
         },
         methods: {
-            setPhotos: function ({items, previousPageExists, nextPageExists, currentPage, nextPage, previousPage}) {
+            setPhotos({items, previousPageExists, nextPageExists, currentPage, nextPage, previousPage}) {
                 this.photos = items;
                 this.previousPageExists = previousPageExists;
                 this.nextPageExists = nextPageExists;
@@ -92,7 +87,7 @@
                 this.nextPage = nextPage;
                 this.previousPage = previousPage;
             },
-            loadPhotos: async function () {
+            async loadPhotos() {
                 this.loading = true;
                 try {
                     this.setPhotos(await this.$services.getPhotoManager().paginate(this.$route.params));
@@ -104,12 +99,12 @@
                 }
             },
         },
-        created: function () {
+        created() {
             this.loadPhotos();
             if (this.$route.params.searchPhrase) {
                 this.setPageTitle(`Search "${this.$route.params.searchPhrase}"`);
             } else if (this.$route.params.tag) {
-                this.setPageTitle(`Search by tag #${this.$route.params.tag}`);
+                this.setPageTitle(`Tag #${this.$route.params.tag}`);
             } else {
                 this.setPageTitle("All photos");
             }

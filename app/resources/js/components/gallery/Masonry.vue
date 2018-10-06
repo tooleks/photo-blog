@@ -1,16 +1,16 @@
 <template>
     <div class="gallery-masonry">
-        <div v-for="row in rows" class="gallery-row" :style="getRowStyle()">
+        <div v-for="row in rows" class="gallery-row">
             <div v-for="(image, index) of row" class="gallery-cell" :style="getCellStyle()">
                 <div :id="getImageId(image)"
                      class="gallery-image"
                      :style="getImageStyle(image, index, row)"
                      role="img"
-                     :aria-label="image.getModel().description">
-                    <router-link :to="image.getModel().route"
-                                 :title="image.getModel().description"
-                                 :aria-label="image.getModel().description"
-                                 class="gallery-link"></router-link>
+                     :aria-label="image.model.description">
+                    <router-link :to="getImagePageRoute(image)"
+                                 :title="image.model.description"
+                                 :aria-label="image.model.description"
+                                 class="gallery-link"/>
                 </div>
             </div>
         </div>
@@ -18,12 +18,6 @@
 </template>
 
 <style scoped>
-    .gallery-masonry {
-    }
-
-    .gallery-row {
-    }
-
     .gallery-cell {
         float: left;
     }
@@ -50,14 +44,15 @@
 </style>
 
 <script>
+    import {cloneDeep} from "lodash";
     import {waitUntil} from "tooleks";
-    import {Masonry} from "./core";
+    import Masonry from "./Masonry";
 
     export default {
         props: {
             images: {
                 type: Array,
-                default: function () {
+                default() {
                     return [];
                 },
             },
@@ -76,12 +71,12 @@
             cellPadding: {
                 type: Number,
                 default: 3,
-                validator: function (value) {
+                validator(value) {
                     return value <= 3;
                 },
             },
         },
-        data: function () {
+        data() {
             return {
                 /** @type {Array<Function>} */
                 intervals: [],
@@ -95,12 +90,12 @@
             };
         },
         computed: {
-            rows: function () {
+            rows() {
                 return this.masonry.getRows();
             },
         },
         watch: {
-            images: function (images) {
+            images(images) {
                 this.masonry.reset();
                 this.masonry.setOptions({
                     rowMaxWidth: this.element.width || this.rowMaxWidth,
@@ -110,34 +105,40 @@
             },
         },
         methods: {
-            getRowStyle: function () {
-                return {};
-            },
-            getCellStyle: function () {
+            getCellStyle() {
                 return {
                     "padding": `${this.cellPadding}px`,
                 };
             },
-            getImageId: function (image) {
-                return `gallery-image-${image.getModel().id}`;
+            getImageId(image) {
+                return `image-${image.model.id}`;
             },
-            getImageStyle: function (image, index, row) {
+            getImageStyle(image, index, row) {
                 const isFirstOrLastImage = row.length && (index === 0 || index === row.length - 1);
-                const width = image.getWidth() - this.cellPadding * (isFirstOrLastImage ? 1 : 2);
-                const height = image.getHeight() - this.cellPadding * 2;
+                const width = image.width - this.cellPadding * (isFirstOrLastImage ? 1 : 2);
+                const height = image.height - this.cellPadding * 2;
                 return {
-                    "background-image": `url(${image.getModel().thumbnail.url})`,
-                    "background-color": image.getModel().averageColor,
+                    "background-image": `url(${image.model.thumbnail.url})`,
+                    "background-color": image.model.averageColor,
                     "width": `${width}px`,
                     "height": `${height}px`,
                 };
             },
-            scrollToImageById: async function (id) {
-                const element = await waitUntil(() => document.querySelector(`#${id}`));
-                element.scrollIntoView({behavior: "instant", block: "center"});
+            getImagePageRoute(image) {
+                const route = cloneDeep(image.model.route);
+                // Get the full path of the current route ignoring the hash segment.
+                const [fullPath] = this.$route.fullPath.split("#");
+                route.query.backUri = `${fullPath}#${this.getImageId(image)}`;
+                return route;
+            },
+            async scrollToImage() {
+                if (this.$route.hash) {
+                    const element = await waitUntil(() => document.querySelector(this.$route.hash));
+                    element.scrollIntoView({behavior: "instant", block: "center"});
+                }
             },
         },
-        created: function () {
+        created() {
             this.intervals.push(setInterval(() => {
                 const width = parseInt(this.$el.offsetWidth);
                 const height = parseInt(this.$el.offsetHeight);
@@ -152,7 +153,7 @@
                 }
             }, this.refreshInterval));
         },
-        beforeDestroy: function () {
+        beforeDestroy() {
             this.intervals.forEach((interval) => clearInterval(interval));
         },
     }

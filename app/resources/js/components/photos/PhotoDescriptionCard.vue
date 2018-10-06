@@ -27,7 +27,7 @@
                 <div class="col mt-3">
                     <location-input :location="photo.location"
                                     :zoom="12"
-                                    :disabled="true"></location-input>
+                                    :disabled="true"/>
                 </div>
             </div>
         </div>
@@ -73,8 +73,8 @@
             },
         },
         methods: {
-            emitBackEvent: function () {
-                this.$emit("onBack", this.photo.id);
+            emitBackEvent() {
+                this.$emit("onBack");
             },
         },
     }

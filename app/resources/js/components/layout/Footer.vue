@@ -29,10 +29,10 @@
 <script>
     export default {
         computed: {
-            currentYear: function () {
+            currentYear() {
                 return (new Date).getFullYear();
             },
-            appName: function () {
+            appName() {
                 return this.$services.getConfig().app.name;
             },
         },

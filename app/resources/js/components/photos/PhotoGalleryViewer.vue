@@ -1,16 +1,16 @@
 <template>
     <div>
-        <round-spinner :loading="loading"></round-spinner>
-        <gallery-viewer v-if="activePhoto"
-                        :activeImage.sync="activePhoto"
+        <round-spinner :loading="loading"/>
+        <gallery-viewer v-if="currentPhoto"
+                        :currentImage.sync="currentPhoto"
                         :images="photos"
                         @onFirstImage="loadNewerPhoto"
                         @onLastImage="loadOlderPhoto"
-                        @onExit="goToPhotosPage"></gallery-viewer>
-        <div class="container" v-if="activePhoto">
+                        @onExit="goToBackUri"/>
+        <div class="container" v-if="currentPhoto">
             <div class="row">
                 <div class="col">
-                    <photo-description-card :photo="activePhoto" @onBack="goToPhotosPage"></photo-description-card>
+                    <photo-description-card :photo="currentPhoto" @onBack="goToBackUri"/>
                 </div>
             </div>
         </div>
@@ -22,7 +22,7 @@
     import RoundSpinner from "../utils/RoundSpinner";
     import Viewer from "../gallery/Viewer";
     import PhotoDescriptionCard from "./PhotoDescriptionCard";
-    import {GoToMixin, MetaMixin} from "../../mixins";
+    import {MetaMixin, RouteMixin} from "../../mixins";
 
     export default {
         components: {
@@ -31,36 +31,36 @@
             GalleryViewer: Viewer,
         },
         mixins: [
-            GoToMixin,
+            RouteMixin,
             MetaMixin,
         ],
-        data: function () {
+        data() {
             return {
                 /** @type {boolean} */
                 loading: false,
                 /** @type {Array<Photo>} */
                 photos: [],
                 /** @type {Photo} */
-                activePhoto: null,
+                currentPhoto: null,
             };
         },
         watch: {
-            "$route.params.id": function (id) {
+            ["$route.params.id"](id) {
                 const photo = this.photos.find((photo) => photo.postId === Number(id));
                 if (photo) {
-                    this.activePhoto = photo;
+                    this.currentPhoto = photo;
                     return;
                 }
                 this.goToNotFoundPage();
             },
-            activePhoto: function (activePhoto) {
-                this.goToPhotoPage(activePhoto.postId);
-                this.setPageTitle(activePhoto.description);
-                this.setPageImage(activePhoto.image.url);
+            currentPhoto(currentPhoto, previousPhoto) {
+                if (previousPhoto) {
+                    this.goToPhotoPage(currentPhoto.postId);
+                }
             },
         },
         methods: {
-            loadPhoto: async function () {
+            async loadPhoto() {
                 this.loading = true;
                 try {
                     const photo = await this.$services.getPhotoManager().getByPostId(
@@ -68,7 +68,7 @@
                         this.$route.query,
                     );
                     this.photos = [photo];
-                    this.activePhoto = photo;
+                    this.currentPhoto = photo;
                 } catch (error) {
                     if (opt(() => error.response.status) === 404) {
                         this.goToNotFoundPage();
@@ -79,11 +79,11 @@
                     this.loading = false;
                 }
             },
-            loadOlderPhoto: async function () {
+            async loadOlderPhoto() {
                 this.loading = true;
                 try {
                     const photo = await this.$services.getPhotoManager().getPreviousByPostId(
-                        this.activePhoto.postId,
+                        this.currentPhoto.postId,
                         this.$route.query,
                     );
                     this.photos = [...this.photos, photo];
@@ -94,11 +94,11 @@
                     this.loading = false;
                 }
             },
-            loadNewerPhoto: async function () {
+            async loadNewerPhoto() {
                 this.loading = true;
                 try {
                     const photo = await this.$services.getPhotoManager().getNextByPostId(
-                        this.activePhoto.postId,
+                        this.currentPhoto.postId,
                         this.$route.query,
                     );
                     this.photos = [photo, ...this.photos];
@@ -110,8 +110,10 @@
                 }
             },
         },
-        created: function () {
-            this.loadPhoto();
+        async created() {
+            await this.loadPhoto();
+            this.setPageTitle(this.currentPhoto.description);
+            this.setPageImage(this.currentPhoto.image.url);
         },
     }
 </script>

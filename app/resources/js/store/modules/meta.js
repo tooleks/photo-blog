@@ -1,11 +1,19 @@
 const state = {
+    /** @type {string} */
     pageStatusCode: "",
+    /** @type {string} */
     pageName: "",
+    /** @type {string} */
     pageDescription: "",
+    /** @type {string} */
     pageKeywords: "",
+    /** @type {string} */
     pageTitle: "",
+    /** @type {string} */
     pageImage: "",
+    /** @type {string} */
     pageUrl: "",
+    /** @type {string} */
     pageCanonicalUrl: "",
 };
 

@@ -6,7 +6,7 @@
                                 :alt="photo.description"
                                 :title="photo.description"></a>
         <div class="card-img-avg-color" :style="{'background-color': photo.averageColor}"></div>
-        <exif-description :exif="photo.exif"></exif-description>
+        <exif-description :exif="photo.exif"/>
     </div>
 </template>
 

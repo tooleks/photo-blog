@@ -1,7 +1,7 @@
 <template>
     <div class="photo-map">
-        <round-spinner :loading="loading"></round-spinner>
-        <image-map :images="images" :zoom="5"></image-map>
+        <round-spinner :loading="loading"/>
+        <image-map :images="images" :zoom="5"/>
     </div>
 </template>
 
@@ -27,7 +27,7 @@
         mixins: [
             MetaMixin,
         ],
-        data: function () {
+        data() {
             return {
                 /** @type {boolean} */
                 loading: false,
@@ -36,7 +36,7 @@
             };
         },
         methods: {
-            loadImages: async function () {
+            async loadImages() {
                 this.loading = true;
                 try {
                     const photos = await this.$services.getPhotoManager().getAll();
@@ -53,7 +53,7 @@
                 }
             },
         },
-        created: function () {
+        created() {
             this.setPageTitle("Photo Map");
             this.loadImages();
         },
