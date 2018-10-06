@@ -1,16 +1,16 @@
 <template>
     <div>
         <round-spinner :loading="loading"/>
-        <gallery-viewer v-if="activePhoto"
-                        :activeImage.sync="activePhoto"
+        <gallery-viewer v-if="currentPhoto"
+                        :currentImage.sync="currentPhoto"
                         :images="photos"
                         @onFirstImage="loadNewerPhoto"
                         @onLastImage="loadOlderPhoto"
-                        @onExit="goToPhotosPage"/>
-        <div class="container" v-if="activePhoto">
+                        @onExit="goToBackUri"/>
+        <div class="container" v-if="currentPhoto">
             <div class="row">
                 <div class="col">
-                    <photo-description-card :photo="activePhoto" @onBack="goToPhotosPage"/>
+                    <photo-description-card :photo="currentPhoto" @onBack="goToBackUri"/>
                 </div>
             </div>
         </div>
@@ -41,22 +41,22 @@
                 /** @type {Array<Photo>} */
                 photos: [],
                 /** @type {Photo} */
-                activePhoto: null,
+                currentPhoto: null,
             };
         },
         watch: {
             ["$route.params.id"](id) {
                 const photo = this.photos.find((photo) => photo.postId === Number(id));
                 if (photo) {
-                    this.activePhoto = photo;
+                    this.currentPhoto = photo;
                     return;
                 }
                 this.goToNotFoundPage();
             },
-            activePhoto(activePhoto) {
-                this.goToPhotoPage(activePhoto.postId);
-                this.setPageTitle(activePhoto.description);
-                this.setPageImage(activePhoto.image.url);
+            currentPhoto(currentPhoto, previousPhoto) {
+                if (previousPhoto) {
+                    this.goToPhotoPage(currentPhoto.postId);
+                }
             },
         },
         methods: {
@@ -68,7 +68,7 @@
                         this.$route.query,
                     );
                     this.photos = [photo];
-                    this.activePhoto = photo;
+                    this.currentPhoto = photo;
                 } catch (error) {
                     if (opt(() => error.response.status) === 404) {
                         this.goToNotFoundPage();
@@ -83,7 +83,7 @@
                 this.loading = true;
                 try {
                     const photo = await this.$services.getPhotoManager().getPreviousByPostId(
-                        this.activePhoto.postId,
+                        this.currentPhoto.postId,
                         this.$route.query,
                     );
                     this.photos = [...this.photos, photo];
@@ -98,7 +98,7 @@
                 this.loading = true;
                 try {
                     const photo = await this.$services.getPhotoManager().getNextByPostId(
-                        this.activePhoto.postId,
+                        this.currentPhoto.postId,
                         this.$route.query,
                     );
                     this.photos = [photo, ...this.photos];
@@ -110,8 +110,10 @@
                 }
             },
         },
-        created() {
-            this.loadPhoto();
+        async created() {
+            await this.loadPhoto();
+            this.setPageTitle(this.currentPhoto.description);
+            this.setPageImage(this.currentPhoto.image.url);
         },
     }
 </script>

@@ -73,14 +73,9 @@
                     });
                 }
             },
-            photos() {
-                // Wait until "masonry" reference will be available then scroll to an active image.
-                waitUntil(() => this.$refs.masonry).then((masonry) => {
-                    const id = this.$route.hash.slice(1);
-                    if (id) {
-                        masonry.scrollToImageById(id);
-                    }
-                });
+            async photos() {
+                const masonry = await waitUntil(() => this.$refs.masonry);
+                masonry.scrollToImage();
             },
         },
         methods: {

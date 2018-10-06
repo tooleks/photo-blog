@@ -7,7 +7,7 @@
                      :style="getImageStyle(image, index, row)"
                      role="img"
                      :aria-label="image.model.description">
-                    <router-link :to="image.model.route"
+                    <router-link :to="getImagePageRoute(image)"
                                  :title="image.model.description"
                                  :aria-label="image.model.description"
                                  class="gallery-link"/>
@@ -44,6 +44,7 @@
 </style>
 
 <script>
+    import {cloneDeep} from "lodash";
     import {waitUntil} from "tooleks";
     import Masonry from "./Masonry";
 
@@ -110,7 +111,7 @@
                 };
             },
             getImageId(image) {
-                return `gallery-image-${image.model.id}`;
+                return `image-${image.model.id}`;
             },
             getImageStyle(image, index, row) {
                 const isFirstOrLastImage = row.length && (index === 0 || index === row.length - 1);
@@ -123,9 +124,18 @@
                     "height": `${height}px`,
                 };
             },
-            async scrollToImageById(id) {
-                const element = await waitUntil(() => document.querySelector(`#${id}`));
-                element.scrollIntoView({behavior: "instant", block: "center"});
+            getImagePageRoute(image) {
+                const route = cloneDeep(image.model.route);
+                // Get the full path of the current route ignoring the hash segment.
+                const [fullPath] = this.$route.fullPath.split("#");
+                route.query.backUri = `${fullPath}#${this.getImageId(image)}`;
+                return route;
+            },
+            async scrollToImage() {
+                if (this.$route.hash) {
+                    const element = await waitUntil(() => document.querySelector(this.$route.hash));
+                    element.scrollIntoView({behavior: "instant", block: "center"});
+                }
             },
         },
         created() {

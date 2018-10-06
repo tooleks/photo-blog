@@ -1,4 +1,4 @@
-import * as route from "./names";
+import * as routeName from "./names";
 
 import SignIn from "../components/auth/SignIn";
 import SignOut from "../components/auth/SignOut";
@@ -15,18 +15,18 @@ import SubscriptionsTable from "../components/subscriptions/SubscriptionsTable";
 const routes = [
     {
         path: "/",
-        name: route.home,
+        name: routeName.home,
         redirect: "/photos",
     },
     // Auth
     {
         path: "/sign-in",
-        name: route.signIn,
+        name: routeName.signIn,
         component: SignIn,
     },
     {
         path: "/sign-out",
-        name: route.signOut,
+        name: routeName.signOut,
         component: SignOut,
         meta: {
             requiresAuth: true,
@@ -35,7 +35,7 @@ const routes = [
     // Photos
     {
         path: "/photo/add",
-        name: route.photoAdd,
+        name: routeName.photoAdd,
         component: PhotoForm,
         meta: {
             requiresAuth: true,
@@ -43,7 +43,7 @@ const routes = [
     },
     {
         path: "/photo/:id/edit",
-        name: route.photoEdit,
+        name: routeName.photoEdit,
         component: PhotoForm,
         meta: {
             requiresAuth: true,
@@ -51,7 +51,7 @@ const routes = [
     },
     {
         path: "/photo/:id",
-        name: route.photo,
+        name: routeName.photo,
         component: PhotoGalleryViewer,
         meta: {
             transition: false,
@@ -59,33 +59,33 @@ const routes = [
     },
     {
         path: "/photos/map",
-        name: route.photosMap,
+        name: routeName.photosMap,
         component: PhotoMap,
     },
     {
         path: "/photos/search/:searchPhrase/:page?",
-        name: route.photosSearch,
+        name: routeName.photosSearch,
         component: PhotoGallery,
     },
     {
         path: "/photos/tag/:tag/:page?",
-        name: route.photosTag,
+        name: routeName.photosTag,
         component: PhotoGallery,
     },
     {
         path: "/photos/:page?",
-        name: route.photos,
+        name: routeName.photos,
         component: PhotoGallery,
     },
     // Other
     {
         path: "/contact-me",
-        name: route.contactMe,
+        name: routeName.contactMe,
         component: ContactMe,
     },
     {
         path: "/subscriptions/:page?",
-        name: route.subscriptions,
+        name: routeName.subscriptions,
         component: SubscriptionsTable,
         meta: {
             requiresAuth: true,
@@ -93,22 +93,22 @@ const routes = [
     },
     {
         path: "/subscription",
-        name: route.subscription,
+        name: routeName.subscription,
         component: Subscription,
     },
     {
         path: "/unsubscription/:token",
-        name: route.unsubscription,
+        name: routeName.unsubscription,
         component: Unsubscription,
     },
     {
         path: "*",
-        name: route.notFound,
+        name: routeName.notFound,
         component: NotFound,
     },
     {
         path: "/404",
-        name: route.route404,
+        name: routeName.route404,
         component: NotFound,
     },
 ];

@@ -19,7 +19,7 @@
                      :title="image.description">
             </div>
         </div>
-        <button v-if="!isFirstImage(this.activeImage)"
+        <button v-if="!isFirstImage(this.currentImage)"
                 @click="slideToPreviousImage"
                 class="carousel-control carousel-control-prev"
                 role="button"
@@ -28,7 +28,7 @@
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="sr-only">Previous</span>
         </button>
-        <button v-if="!isLastImage(this.activeImage)"
+        <button v-if="!isLastImage(this.currentImage)"
                 @click="slideToNextImage"
                 class="carousel-control carousel-control-next"
                 role="button"
@@ -147,7 +147,7 @@
                     return `image-viewer-${id}`;
                 },
             },
-            activeImage: {
+            currentImage: {
                 type: Object,
                 default: () => {
                     return {};
@@ -175,17 +175,17 @@
             },
         },
         watch: {
-            activeImage(activeImage) {
-                // this.slideToImage(activeImage);
+            currentImage(currentImage) {
+                // this.slideToImage(currentImage);
             },
         },
         methods: {
             init() {
-                this.emitActiveImageEvents(this.activeImage);
+                this.emitcurrentImageEvents(this.currentImage);
                 $(this.carouselItemSelector).first().addClass("active");
                 $(this.carouselSelector).on("slide.bs.carousel", (event) => {
-                    const activeImage = this.images[event.to];
-                    this.emitActiveImageEvents(activeImage);
+                    const currentImage = this.images[event.to];
+                    this.emitcurrentImageEvents(currentImage);
                 });
             },
             onKeyUp(event) {
@@ -214,30 +214,30 @@
             slideToNextImage() {
                 $(this.carouselSelector).carousel("next");
             },
-            slideToImage(activeImage) {
-                const index = this.images.findIndex((image) => activeImage.is(image));
+            slideToImage(currentImage) {
+                const index = this.images.findIndex((image) => currentImage.is(image));
                 if (index !== -1) {
                     $(this.carouselSelector).carousel(index);
                 }
             },
-            emitActiveImageEvents(activeImage) {
-                this.$emit("update:activeImage", activeImage);
-                if (this.isFirstImage(activeImage)) {
-                    this.$emit("onFirstImage", activeImage);
+            emitcurrentImageEvents(currentImage) {
+                this.$emit("update:currentImage", currentImage);
+                if (this.isFirstImage(currentImage)) {
+                    this.$emit("onFirstImage", currentImage);
                 }
-                if (this.isLastImage(activeImage)) {
-                    this.$emit("onLastImage", activeImage);
+                if (this.isLastImage(currentImage)) {
+                    this.$emit("onLastImage", currentImage);
                 }
             },
             emitExitEvent() {
                 this.$emit("onExit");
             },
-            isFirstImage(activeImage) {
-                const index = this.images.findIndex((image) => image.is(activeImage));
+            isFirstImage(currentImage) {
+                const index = this.images.findIndex((image) => image.is(currentImage));
                 return index === 0;
             },
-            isLastImage(activeImage) {
-                const index = this.images.findIndex((image) => image.is(activeImage));
+            isLastImage(currentImage) {
+                const index = this.images.findIndex((image) => image.is(currentImage));
                 return index === this.images.length - 1;
             },
             toggleFullScreenMode() {

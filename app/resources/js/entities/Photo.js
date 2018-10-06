@@ -1,4 +1,6 @@
+import {cloneDeep} from "lodash";
 import router from "../router";
+import * as routeName from "../router/names";
 
 export default class Photo {
     /**
@@ -39,17 +41,16 @@ export default class Photo {
      */
     get route() {
         const route = router.history.current;
-        return {
-            name: "photo",
+        return cloneDeep({
+            name: routeName.photo,
             params: {
                 id: this.postId,
             },
             query: {
                 tag: route.params.tag || route.query.tag,
                 searchPhrase: route.params.searchPhrase || route.query.searchPhrase,
-                page: route.params.page || route.query.page,
             },
-        };
+        });
     }
 
     /**
