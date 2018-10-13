@@ -32,19 +32,19 @@ Open the [localhost:8080/sign-in](http://localhost:8080/sign-in) link in a brows
 
 ### Exposed Resources
 
-| Resource Location                        | Description |
-|------------------------------------------|-------------|
-| [localhost:8080](http://localhost:8080)  | The photo blog application. |
-| [localhost:8081](http://localhost:8081)  | Documentation for RESTful API of the application. |
-| [localhost:8083](http://localhost:8083)  | SMTP Server + Web Interface for viewing and testing emails during development. |
+| Resource Location                         | Description |
+|:------------------------------------------|:-------------|
+| [localhost:8080](http://localhost:8080)   | The photo blog application. |
+| [localhost:8081](http://localhost:8081)   | Documentation for RESTful API of the application. |
+| [localhost:8083](http://localhost:8083)   | SMTP Server + Web Interface for viewing and testing emails during development. |
 
 ### Other Commands
 
-| Command Signature | Description |
-|-------------------|-------------|
-| `make watch-dev`  | Automatically recompile assets when Webpack detects a change. |
-| `make test`       | Execute the application tests. |
-| `make app-logs`   | Fetch the application logs. |
-| `make mysql-logs` | Fetch MySQL logs. |
+| Command Signature  | Description |
+|:-------------------|:-------------|
+| `make watch-dev`   | Automatically recompile assets when Webpack detects a change. |
+| `make test`        | Execute the application tests. |
+| `make app-logs`    | Fetch the application logs. |
+| `make mysql-logs`  | Fetch MySQL logs. |
 
 **Tip:** Take a look at `./Makefile` file content to discover all available commands.
