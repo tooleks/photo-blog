@@ -9,6 +9,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request as IlluminateRequest;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
 use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
@@ -199,10 +200,8 @@ class Prerender
      */
     private function isListed(array $list, $values): bool
     {
-        $values = is_array($values) ? $values : [$values];
-
         foreach ($list as $pattern) {
-            foreach ($values as $value) {
+            foreach (Arr::wrap($values) as $value) {
                 if (Str::is($pattern, $value)) {
                     return true;
                 }
