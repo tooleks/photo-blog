@@ -3,7 +3,7 @@ version: '3.3'
 services:
   pb-nginx.docker:
     build:
-      context: ./nginx
+      context: ./docker/nginx
     image: pb-nginx
     container_name: pb-nginx
     depends_on:
@@ -14,11 +14,12 @@ services:
     - 8082:8082
     volumes:
     - ./app:/var/www/app
-    - ./nginx/sites:/etc/nginx/conf.d
+    - ./docker/nginx/sites:/etc/nginx/conf.d
 
   pb-app.docker:
     build:
       context: ./app
+      dockerfile: ${PWD}/docker/app/Dockerfile
       args:
       - INSTALL_NODE=true
     image: pb-app
@@ -34,7 +35,7 @@ services:
 
   pb-app-queue.docker:
     build:
-      context: ./app-queue
+      context: ./docker/app-queue
     image: pb-app-queue
     container_name: pb-app-queue
     depends_on:
@@ -45,7 +46,7 @@ services:
 
   pb-app-scheduler.docker:
     build:
-      context: ./app-scheduler
+      context: ./docker/app-scheduler
     image: pb-app-scheduler
     container_name: pb-app-scheduler
     depends_on:
@@ -57,6 +58,7 @@ services:
   pb-prerender.docker:
     build:
       context: ./prerender
+      dockerfile: ${PWD}/docker/prerender/Dockerfile
     image: pb-prerender
     container_name: pb-prerender
 
@@ -75,9 +77,9 @@ services:
     ports:
     - 3306:3306
     volumes:
-    - ./mysql/storage/mysql/var/lib/mysql:/var/lib/mysql
-    - ./mysql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
-    - ./mysql/my.cnf:/etc/mysql/my.cnf
+    - ./docker/mysql/seed:/docker-entrypoint-initdb.d
+    - ./docker/mysql/storage:/var/lib/mysql
+    - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
 
   pb-maildev.docker:
     image: djfarrelly/maildev
