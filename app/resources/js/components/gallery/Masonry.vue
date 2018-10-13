@@ -45,7 +45,7 @@
 
 <script>
     import {cloneDeep} from "lodash";
-    import {waitUntil} from "tooleks";
+    import waitUntil from "../../utils/waitUntil";
     import Masonry from "./core/Masonry";
 
     export default {

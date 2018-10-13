@@ -31,7 +31,7 @@
 </template>
 
 <script>
-    import {waitUntil} from "tooleks";
+    import waitUntil from "../../utils/waitUntil";
     import RoundSpinner from "../utils/RoundSpinner";
     import Masonry from "../gallery/Masonry";
     import {MetaMixin, RouteMixin} from "../../mixins";

@@ -1,4 +1,4 @@
-import {waitUntil} from "tooleks";
+import waitUntil from "../../utils/waitUntil";
 
 export default class BrowserRecaptcha {
     /**
