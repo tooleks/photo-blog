@@ -5,6 +5,7 @@ namespace Console\Commands;
 use App\Managers\User\Contracts\UserManager;
 use App\Models\Role;
 use Illuminate\Console\Command;
+use function App\Util\url_frontend_sign_in;
 
 /**
  * Class CreateAdministratorUser.
@@ -53,9 +54,13 @@ class CreateAdministratorUser extends Command
     {
         $this->userManager->create([
             'role_id' => (new Role)->newQuery()->whereNameAdministrator()->firstOrFail()->id,
-            'name' => $this->ask('Enter user\'s name:'),
-            'email' => $this->ask('Enter user\'s email:'),
-            'password' => $this->secret('Enter user\'s password:'),
+            'name' => $this->ask('Enter user\'s name'),
+            'email' => $this->ask('Enter user\'s email'),
+            'password' => $this->secret('Enter user\'s password'),
         ]);
+
+        $signInUrl = url_frontend_sign_in();
+
+        $this->info("User has been successfully created. Now you can sign in into your account {$signInUrl}.");
     }
 }
