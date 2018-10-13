@@ -3,7 +3,7 @@ version: '3.3'
 services:
   pb-nginx.docker:
     build:
-      context: ./nginx
+      context: ./docker/nginx
     image: pb-nginx
     container_name: pb-nginx
     restart: always
@@ -19,6 +19,7 @@ services:
   pb-app.docker:
     build:
       context: ./app
+      dockerfile: ${PWD}/docker/app/Dockerfile
     image: pb-app
     container_name: pb-app
     restart: always
@@ -30,7 +31,7 @@ services:
 
   pb-app-queue.docker:
     build:
-      context: ./app-queue
+      context: ./docker/app-queue
     image: pb-app-queue
     container_name: pb-app-queue
     restart: always
@@ -41,7 +42,7 @@ services:
 
   pb-app-scheduler.docker:
     build:
-      context: ./app-scheduler
+      context: ./docker/app-scheduler
     image: pb-app-scheduler
     container_name: pb-app-scheduler
     restart: always
@@ -53,6 +54,7 @@ services:
   pb-prerender.docker:
     build:
       context: ./prerender
+      dockerfile: ${PWD}/docker/prerender/Dockerfile
     image: pb-prerender
     container_name: pb-prerender
     restart: always

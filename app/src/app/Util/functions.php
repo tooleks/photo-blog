@@ -146,6 +146,16 @@ function url_frontend(string $path = ''): string
 }
 
 /**
+ * Get sign in frontend page url.
+ *
+ * @return string
+ */
+function url_frontend_sign_in(): string
+{
+    return url_frontend("/sign-in");
+}
+
+/**
  * Get photo frontend page url.
  *
  * @param int $id
