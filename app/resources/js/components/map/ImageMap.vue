@@ -14,33 +14,36 @@
         },
         data() {
             return {
-                markerCluster: null,
+                markerGroup: null,
             };
         },
         watch: {
             images(images) {
                 this.destroyMarkerCluster();
                 this.initMarkerCluster();
-                images.forEach((image) => this.renderImage(image));
+                this.renderImages(images);
             },
         },
         methods: {
             initMarkerCluster() {
-                this.markerCluster = L.markerClusterGroup({
+                this.markerGroup = L.markerClusterGroup({
                     spiderLegPolylineOptions: {opacity: 0},
                 });
-                this.map.addLayer(this.markerCluster);
+                this.map.addLayer(this.markerGroup);
             },
             destroyMarkerCluster() {
-                if (this.markerCluster !== null) {
-                    this.map.removeLayer(this.markerCluster);
-                    this.markerCluster = null;
+                if (this.markerGroup !== null) {
+                    this.map.removeLayer(this.markerGroup);
+                    this.markerGroup = null;
                 }
             },
-            renderImage(image) {
-                const icon = L.divIcon({html: provideImageMarkerHtml(image)});
-                const marker = L.marker(image.location, {icon, riseOnHover: true});
-                this.markerCluster.addLayer(marker);
+            renderImages(images) {
+                images.forEach((image) => {
+                    const icon = L.divIcon({html: provideImageMarkerHtml(image)});
+                    const marker = L.marker(image.location, {icon, riseOnHover: true});
+                    this.markerGroup.addLayer(marker);
+                });
+                this.map.fitBounds(this.markerGroup.getBounds());
             },
         },
         mounted() {

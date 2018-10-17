@@ -17,14 +17,18 @@
     import "leaflet/dist/leaflet.css";
     import "leaflet.markercluster";
     import "leaflet.markercluster/dist/MarkerCluster.Default.css";
-    // Workaround for issue: https://github.com/Leaflet/Leaflet/issues/4968#issuecomment-269750768
-    import iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
-    import iconUrl from "leaflet/dist/images/marker-icon.png";
-    import shadowUrl from "leaflet/dist/images/marker-shadow.png";
+    import markerIconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
+    import markerIconUrl from "leaflet/dist/images/marker-icon.png";
+    import markerShadowUrl from "leaflet/dist/images/marker-shadow.png";
     import Location from "../../entities/Location";
 
+    // Workaround for issue: https://github.com/Leaflet/Leaflet/issues/4968#issuecomment-269750768
     delete L.Icon.Default.prototype._getIconUrl;
-    L.Icon.Default.mergeOptions({iconRetinaUrl, iconUrl, shadowUrl});
+    L.Icon.Default.mergeOptions({
+        iconRetinaUrl: markerIconRetinaUrl,
+        iconUrl: markerIconUrl,
+        shadowUrl: markerShadowUrl,
+    });
 
     export default {
         props: {
