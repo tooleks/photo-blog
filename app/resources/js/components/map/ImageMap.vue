@@ -21,8 +21,7 @@
             images(images) {
                 this.destroyMarkerCluster();
                 this.initMarkerCluster();
-                images.forEach((image) => this.renderImage(image));
-                this.map.fitBounds(this.markerCluster.getBounds());
+                this.renderImages(images);
             },
         },
         methods: {
@@ -38,10 +37,13 @@
                     this.markerCluster = null;
                 }
             },
-            renderImage(image) {
-                const icon = L.divIcon({html: provideImageMarkerHtml(image)});
-                const marker = L.marker(image.location, {icon, riseOnHover: true});
-                this.markerCluster.addLayer(marker);
+            renderImages(images) {
+                images.forEach((image) => {
+                    const icon = L.divIcon({html: provideImageMarkerHtml(image)});
+                    const marker = L.marker(image.location, {icon, riseOnHover: true});
+                    this.markerCluster.addLayer(marker);
+                });
+                this.map.fitBounds(this.markerCluster.getBounds());
             },
         },
         mounted() {
