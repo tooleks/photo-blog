@@ -14,7 +14,7 @@
         },
         data() {
             return {
-                markerCluster: null,
+                markerGroup: null,
             };
         },
         watch: {
@@ -26,24 +26,24 @@
         },
         methods: {
             initMarkerCluster() {
-                this.markerCluster = L.markerClusterGroup({
+                this.markerGroup = L.markerClusterGroup({
                     spiderLegPolylineOptions: {opacity: 0},
                 });
-                this.map.addLayer(this.markerCluster);
+                this.map.addLayer(this.markerGroup);
             },
             destroyMarkerCluster() {
-                if (this.markerCluster !== null) {
-                    this.map.removeLayer(this.markerCluster);
-                    this.markerCluster = null;
+                if (this.markerGroup !== null) {
+                    this.map.removeLayer(this.markerGroup);
+                    this.markerGroup = null;
                 }
             },
             renderImages(images) {
                 images.forEach((image) => {
                     const icon = L.divIcon({html: provideImageMarkerHtml(image)});
                     const marker = L.marker(image.location, {icon, riseOnHover: true});
-                    this.markerCluster.addLayer(marker);
+                    this.markerGroup.addLayer(marker);
                 });
-                this.map.fitBounds(this.markerCluster.getBounds());
+                this.map.fitBounds(this.markerGroup.getBounds());
             },
         },
         mounted() {
