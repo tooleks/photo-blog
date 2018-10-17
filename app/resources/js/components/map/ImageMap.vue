@@ -22,6 +22,7 @@
                 this.destroyMarkerCluster();
                 this.initMarkerCluster();
                 images.forEach((image) => this.renderImage(image));
+                this.map.fitBounds(this.markerCluster.getBounds());
             },
         },
         methods: {
