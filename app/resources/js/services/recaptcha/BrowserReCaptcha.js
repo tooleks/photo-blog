@@ -23,16 +23,16 @@ export default class BrowserReCaptcha {
      * @return {Promise<void>}
      */
     async execute() {
-        const reCaptcha = await this.load();
-        reCaptcha.execute(this._widgetId);
+        const grecaptcha = await this.load();
+        grecaptcha.execute(this._widgetId);
     }
 
     /**
      * @return {Promise<void>}
      */
     async render() {
-        const reCaptcha = await this.load();
-        this._widgetId = reCaptcha.render(this._element, {
+        const grecaptcha = await this.load();
+        this._widgetId = grecaptcha.render(this._element, {
             sitekey: this._siteKey,
             size: "invisible",
             callback: (response) => {
@@ -46,8 +46,8 @@ export default class BrowserReCaptcha {
      * @return {Promise<void>}
      */
     async reset() {
-        const reCaptcha = await this.load();
-        reCaptcha.reset(this._widgetId);
+        const grecaptcha = await this.load();
+        grecaptcha.reset(this._widgetId);
     }
 
     /**
@@ -55,10 +55,13 @@ export default class BrowserReCaptcha {
      */
     async load() {
         getOrCreateHeadElement("script", {src: "https://www.google.com/recaptcha/api.js"});
-        // Wait until reCaptcha library will be loaded.
-        const reCaptcha = await waitUntil(() => window.grecaptcha);
-        // Wait until reCaptcha library API will be loaded.
-        await waitUntil(() => reCaptcha.render && reCaptcha.execute && reCaptcha.reset);
-        return reCaptcha;
+        return waitUntil(() => {
+            // Verify that reCAPTCHA library API has been loaded.
+            if (window.grecaptcha && window.grecaptcha.render && window.grecaptcha.execute && window.grecaptcha.reset) {
+                return window.grecaptcha;
+            }
+
+            return false;
+        });
     }
 }
