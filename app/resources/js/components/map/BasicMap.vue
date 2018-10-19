@@ -34,7 +34,7 @@
         props: {
             id: {
                 type: String,
-                default: () => {
+                default() {
                     const id = Math.random().toString(36).substr(2, 5);
                     return `map-${id}`;
                 },
@@ -45,7 +45,7 @@
             },
             tileLayerOptions: {
                 type: Object,
-                default: () => {
+                default() {
                     return {
                         maxZoom: 18,
                         attribution: `&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>`,

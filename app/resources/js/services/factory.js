@@ -10,8 +10,8 @@ import ApiHandler from "./api/ApiHandler";
 import ApiService from "./api/ApiService";
 import AuthManager from "./AuthManager";
 import LoginManager from "./LoginManager";
-import BrowserRecaptcha from "./recaptcha/BrowserRecaptcha";
-import DummyRecaptcha from "./recaptcha/DummyRecaptcha";
+import BrowserReCaptcha from "./recaptcha/BrowserReCaptcha";
+import DummyReCaptcha from "./recaptcha/DummyReCaptcha";
 import PhotoManager from "./PhotoManager";
 import SubscriptionManager from "./SubscriptionManager";
 import TagManager from "./TagManager";
@@ -67,14 +67,14 @@ export function getLogin() {
     return new LoginManager(getApi(), getCookies(), getAuth());
 }
 
-/** @return {BrowserRecaptcha|DummyRecaptcha} */
+/** @return {BrowserReCaptcha|DummyReCaptcha} */
 export function getReCaptcha(element, siteKey, onVerified) {
     // Provide Recaptcha service only in a browser environment,
     // and if the site key value is provided.
     if (!Vue.$isServer && siteKey) {
-        return new BrowserRecaptcha(element, siteKey, onVerified);
+        return new BrowserReCaptcha(element, siteKey, onVerified);
     }
-    return new DummyRecaptcha(onVerified);
+    return new DummyReCaptcha(onVerified);
 }
 
 /** @return {PhotoManager} */

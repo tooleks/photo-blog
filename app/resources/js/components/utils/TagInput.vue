@@ -9,7 +9,7 @@
         props: {
             attributes: {
                 type: Object,
-                default: () => {
+                default() {
                     return {};
                 },
             },

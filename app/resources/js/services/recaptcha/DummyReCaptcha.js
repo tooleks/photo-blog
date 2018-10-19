@@ -1,4 +1,4 @@
-export default class DummyRecaptcha {
+export default class DummyReCaptcha {
     /**
      * DummyRecaptcha constructor.
      *

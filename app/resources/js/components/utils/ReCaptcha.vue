@@ -7,20 +7,21 @@
         props: {
             id: {
                 type: String,
-                default: () => {
+                default() {
                     const id = Math.random().toString(36).substr(2, 5);
                     return `g-recaptcha-${id}`;
                 },
             },
             siteKey: {
                 type: String,
-                default: "",
+                default() {
+                    return this.$services.getConfig().credentials.googleReCaptcha.siteKey;
+                },
             },
         },
         data() {
-            this.siteKey = this.siteKey || this.$services.getConfig().credentials.googleReCaptcha.siteKey;
             return {
-                /** @type {BrowserRecaptcha|DummyRecaptcha} */
+                /** @type {BrowserReCaptcha|DummyReCaptcha} */
                 reCaptcha: this.$services.getReCaptcha(this.id, this.siteKey, (response) => this.$emit("verified", response)),
             };
         },
@@ -30,7 +31,6 @@
             },
         },
         async mounted() {
-            await this.reCaptcha.load();
             await this.reCaptcha.render();
         },
     }

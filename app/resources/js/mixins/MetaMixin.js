@@ -1,56 +1,35 @@
 import {mapActions, mapState} from "vuex";
-
-/**
- * @param {string} tag
- * @param {Object} attributes
- * @return {Node}
- */
-export function getElement(tag, attributes) {
-    // Find the element in the head tag.
-    const elements = document.head.querySelectorAll(tag);
-    let element = Array.from(elements).find((element) => {
-        return Object.keys(attributes).every((key) => attributes[key] === element.getAttribute(key));
-    });
-
-    // If the element doesn't exist create a new one.
-    if (!element) {
-        element = document.createElement(tag);
-        Object.keys(attributes).forEach((key) => element.setAttribute(key, attributes[key]));
-        document.head.appendChild(element);
-    }
-
-    return element;
-}
+import getOrCreateHeadElement from "../utils/getOrCreateHeadElement";
 
 export default {
     watch: {
         pageStatusCode(pageStatusCode) {
-            getElement("meta", {name: "prerender-status-code"}).setAttribute("content", pageStatusCode);
+            getOrCreateHeadElement("meta", {name: "prerender-status-code"}).setAttribute("content", pageStatusCode);
         },
         pageName(pageName) {
-            getElement("meta", {property: "og:site_name"}).setAttribute("content", pageName);
+            getOrCreateHeadElement("meta", {property: "og:site_name"}).setAttribute("content", pageName);
         },
         pageDescription(pageDescription) {
-            getElement("meta", {name: "description"}).setAttribute("content", pageDescription);
-            getElement("meta", {property: "og:description"}).setAttribute("content", pageDescription);
+            getOrCreateHeadElement("meta", {name: "description"}).setAttribute("content", pageDescription);
+            getOrCreateHeadElement("meta", {property: "og:description"}).setAttribute("content", pageDescription);
         },
         pageKeywords(pageKeywords) {
-            getElement("meta", {name: "keywords"}).setAttribute("content", pageKeywords);
+            getOrCreateHeadElement("meta", {name: "keywords"}).setAttribute("content", pageKeywords);
         },
         pageTitle(pageTitle) {
             document.title = pageTitle ? `${pageTitle} | ${this.pageName}` : this.pageName;
-            getElement("meta", {property: "og:title"}).setAttribute("content", pageTitle);
-            getElement("meta", {name: "twitter:title"}).setAttribute("content", pageTitle);
+            getOrCreateHeadElement("meta", {property: "og:title"}).setAttribute("content", pageTitle);
+            getOrCreateHeadElement("meta", {name: "twitter:title"}).setAttribute("content", pageTitle);
         },
         pageImage(pageImage) {
-            getElement("meta", {property: "og:image"}).setAttribute("content", pageImage);
-            getElement("meta", {name: "twitter:image"}).setAttribute("content", pageImage);
+            getOrCreateHeadElement("meta", {property: "og:image"}).setAttribute("content", pageImage);
+            getOrCreateHeadElement("meta", {name: "twitter:image"}).setAttribute("content", pageImage);
         },
         pageUrl(pageUrl) {
-            getElement("meta", {property: "og:url"}).setAttribute("content", pageUrl);
+            getOrCreateHeadElement("meta", {property: "og:url"}).setAttribute("content", pageUrl);
         },
         pageCanonicalUrl(pageCanonicalUrl) {
-            getElement("link", {rel: "canonical"}).setAttribute("href", pageCanonicalUrl);
+            getOrCreateHeadElement("link", {rel: "canonical"}).setAttribute("href", pageCanonicalUrl);
         },
         ["$route"]() {
             const baseUrl = this.$services.getConfig().url.app;
@@ -79,8 +58,8 @@ export default {
         "setPageCanonicalUrl",
     ]),
     created() {
-        getElement("meta", {property: "og:type"}).setAttribute("content", "article");
-        getElement("meta", {name: "twitter:card"}).setAttribute("content", "summary_large_image");
+        getOrCreateHeadElement("meta", {property: "og:type"}).setAttribute("content", "article");
+        getOrCreateHeadElement("meta", {name: "twitter:card"}).setAttribute("content", "summary_large_image");
         this.setPageStatusCode(200);
         this.setPageName(this.$services.getConfig().app.name);
         this.setPageDescription(this.$services.getConfig().app.description);
