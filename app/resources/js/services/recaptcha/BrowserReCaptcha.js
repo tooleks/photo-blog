@@ -55,7 +55,9 @@ export default class BrowserReCaptcha {
      */
     async load() {
         getOrCreateHeadElement("script", {src: "https://www.google.com/recaptcha/api.js"});
-        const reCaptcha = await waitUntil(() => window["grecaptcha"]);
+        // Wait until reCaptcha library will be loaded.
+        const reCaptcha = await waitUntil(() => window.grecaptcha);
+        // Wait until reCaptcha library API will be loaded.
         await waitUntil(() => reCaptcha.render && reCaptcha.execute && reCaptcha.reset);
         return reCaptcha;
     }
