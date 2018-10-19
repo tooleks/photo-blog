@@ -1,4 +1,5 @@
 import waitUntil from "../../utils/waitUntil";
+import getOrCreateHeadElement from "../../utils/getOrCreateHeadElement";
 
 export default class BrowserRecaptcha {
     /**
@@ -53,6 +54,7 @@ export default class BrowserRecaptcha {
      * @return {Promise<void>}
      */
     load() {
+        getOrCreateHeadElement("script", {src: "https://www.google.com/recaptcha/api.js"});
         return waitUntil(() => window["grecaptcha"]);
     }
 }

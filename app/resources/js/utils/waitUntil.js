@@ -1,5 +1,5 @@
+const DEFAULT_TIMEOUT = 30 * 1000; // 30 seconds
 const DEFAULT_INTERVAL = 0; // 0 seconds
-const DEFAULT_TIMEOUT = 10 * 1000; // 10 seconds
 
 /**
  * Provide promise that will be resolved when callback will return truthy value.
@@ -9,7 +9,7 @@ const DEFAULT_TIMEOUT = 10 * 1000; // 10 seconds
  * @param {number} timeout
  * @return {Promise<*>}
  */
-export default function (callback, interval = DEFAULT_INTERVAL, timeout = DEFAULT_TIMEOUT) {
+export default function (callback, timeout = DEFAULT_TIMEOUT, interval = DEFAULT_INTERVAL) {
     return new Promise((resolve, reject) => {
         const intervalId = setInterval(async () => {
             try {
@@ -23,6 +23,9 @@ export default function (callback, interval = DEFAULT_INTERVAL, timeout = DEFAUL
             }
         }, interval);
 
-        setTimeout(() => clearInterval(intervalId), timeout);
+        setTimeout(() => {
+            clearInterval(intervalId);
+            reject(new Error(`The timeout period (${timeout}ms) elapsed prior to completion of the operation`));
+        }, timeout);
     });
 }

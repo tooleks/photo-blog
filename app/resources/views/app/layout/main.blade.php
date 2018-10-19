@@ -27,8 +27,5 @@
 </noscript>
 @yield('content')
 <script type="application/javascript" src="{{ mix('/js/app.js') }}" async defer></script>
-<?php if (env('GOOGLE_RECAPTCHA_SECRET_KEY')): ?>
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
-<?php endif; ?>
 </body>
 </html>
