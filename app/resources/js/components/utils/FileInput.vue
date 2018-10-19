@@ -39,7 +39,7 @@
         props: {
             attributes: {
                 type: Object,
-                default: () => {
+                default() {
                     return {
                         class: "btn btn-secondary",
                     };

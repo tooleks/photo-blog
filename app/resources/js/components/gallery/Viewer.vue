@@ -142,14 +142,14 @@
         props: {
             id: {
                 type: String,
-                default: () => {
+                default() {
                     const id = Math.random().toString(36).substr(2, 5);
                     return `image-viewer-${id}`;
                 },
             },
             currentImage: {
                 type: Object,
-                default: () => {
+                default() {
                     return {};
                 },
             },

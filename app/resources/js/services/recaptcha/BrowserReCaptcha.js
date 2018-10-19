@@ -1,7 +1,7 @@
 import waitUntil from "../../utils/waitUntil";
 import getOrCreateHeadElement from "../../utils/getOrCreateHeadElement";
 
-export default class BrowserRecaptcha {
+export default class BrowserReCaptcha {
     /**
      * BrowserRecaptcha constructor.
      *
@@ -23,16 +23,16 @@ export default class BrowserRecaptcha {
      * @return {Promise<void>}
      */
     async execute() {
-        const recaptcha = await this.load();
-        recaptcha.execute(this._widgetId);
+        const reCaptcha = await this.load();
+        reCaptcha.execute(this._widgetId);
     }
 
     /**
      * @return {Promise<void>}
      */
     async render() {
-        const recaptcha = await this.load();
-        this._widgetId = recaptcha.render(this._element, {
+        const reCaptcha = await this.load();
+        this._widgetId = reCaptcha.render(this._element, {
             sitekey: this._siteKey,
             size: "invisible",
             callback: (response) => {
@@ -46,15 +46,17 @@ export default class BrowserRecaptcha {
      * @return {Promise<void>}
      */
     async reset() {
-        const recaptcha = await this.load();
-        recaptcha.reset(this._widgetId);
+        const reCaptcha = await this.load();
+        reCaptcha.reset(this._widgetId);
     }
 
     /**
      * @return {Promise<void>}
      */
-    load() {
+    async load() {
         getOrCreateHeadElement("script", {src: "https://www.google.com/recaptcha/api.js"});
-        return waitUntil(() => window["grecaptcha"]);
+        const reCaptcha = await waitUntil(() => window["grecaptcha"]);
+        await waitUntil(() => reCaptcha.render && reCaptcha.execute && reCaptcha.reset);
+        return reCaptcha;
     }
 }

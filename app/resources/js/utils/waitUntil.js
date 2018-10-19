@@ -11,15 +11,15 @@ const DEFAULT_INTERVAL = 0; // 0 seconds
  */
 export default function (callback, timeout = DEFAULT_TIMEOUT, interval = DEFAULT_INTERVAL) {
     return new Promise((resolve, reject) => {
-        const intervalId = setInterval(async () => {
+        const intervalId = setInterval(() => {
             try {
-                const result = await callback();
+                const result = callback();
                 if (result) {
                     clearInterval(intervalId);
                     resolve(result);
                 }
             } catch (error) {
-                reject(error);
+                //
             }
         }, interval);
 
