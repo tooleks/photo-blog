@@ -25,7 +25,7 @@ export default function (callback, timeout = DEFAULT_TIMEOUT, interval = DEFAULT
 
         setTimeout(() => {
             clearInterval(intervalId);
-            reject(new Error(`The timeout period (${timeout}ms) elapsed prior to completion of the operation`));
+            reject(new Error(`The timeout period (${timeout}ms) elapsed prior to completion of the operation.`));
         }, timeout);
     });
 }
