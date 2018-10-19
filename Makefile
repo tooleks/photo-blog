@@ -31,11 +31,17 @@ configuration:
 	docker exec -it pb-app bash -c "php artisan generate:rest_api_documentation"
 	docker exec -it pb-app bash -c "php artisan create:administrator_user"
 
+build-dev:
+	docker-compose --file ./docker-compose.development.yml build
+
 start-dev:
 	docker-compose --file ./docker-compose.development.yml up
 
 watch-dev:
 	docker exec -it pb-app bash -c "npm run watch"
+
+build-prod:
+	docker-compose --file ./docker-compose.production.yml build
 
 up-prod:
 	docker-compose --file ./docker-compose.production.yml up --build -d
