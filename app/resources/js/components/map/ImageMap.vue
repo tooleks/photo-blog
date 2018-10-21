@@ -43,7 +43,11 @@
                     const marker = L.marker(image.location, {icon, riseOnHover: true});
                     this.markerGroup.addLayer(marker);
                 });
-                this.map.fitBounds(this.markerGroup.getBounds());
+
+                const bounds = this.markerGroup.getBounds();
+                if (bounds.isValid()) {
+                    this.map.fitBounds(this.markerGroup.getBounds());
+                }
             },
         },
         mounted() {
