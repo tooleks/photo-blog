@@ -26,7 +26,7 @@ class LocationBuilder extends Builder
      */
     public function defaultSelect()
     {
-        $coordinates = "ASTEXT({$this->locationsTable}.coordinates) AS coordinates";
+        $coordinates = "ST_AsText({$this->locationsTable}.coordinates) AS coordinates";
 
         return $this->addSelect("{$this->locationsTable}.*", $this->getConnection()->raw($coordinates));
     }
@@ -39,7 +39,7 @@ class LocationBuilder extends Builder
     public function whereInArea(Coordinates $southWest, Coordinates $northEast)
     {
         $boundaries = sprintf(
-            "ST_GEOMFROMTEXT('POLYGON((%s %s, %s %s, %s %s, %s %s, %s %s))')",
+            "ST_GeomFromText('POLYGON((%s %s, %s %s, %s %s, %s %s, %s %s))')",
             // South west point.
             $southWest->getLatitude(),
             $southWest->getLongitude(),
@@ -57,6 +57,6 @@ class LocationBuilder extends Builder
             $southWest->getLongitude()
         );
 
-        return $this->whereRaw($this->getConnection()->raw("ST_CONTAINS({$boundaries}, {$this->locationsTable}.coordinates)"));
+        return $this->whereRaw($this->getConnection()->raw("ST_Contains({$boundaries}, {$this->locationsTable}.coordinates)"));
     }
 }
