@@ -42,6 +42,9 @@
             map() {
                 return this.$refs.map.map;
             },
+            locationControl() {
+                return this.$refs.map.locationControl;
+            },
         },
         watch: {
             location(location) {
@@ -64,7 +67,7 @@
 
                 // If marker location is not provided use geolocation to position map.
                 if (!this.location) {
-                    this.map.locate({setView: true, maxZoom: 16});
+                    this.locationControl.start();
                 }
             },
             setMarker(location) {

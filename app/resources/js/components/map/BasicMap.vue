@@ -80,6 +80,7 @@
         data() {
             return {
                 map: null,
+                locationControl: null,
             };
         },
         watch: {
@@ -94,13 +95,14 @@
             initMap() {
                 this.map = L.map(this.id).setView(this.center, this.zoom);
                 L.tileLayer(this.tileLayerUrl, this.tileLayerOptions).addTo(this.map);
-                L.control.locate({drawMarker: false}).addTo(this.map);
+                this.locationControl = L.control.locate().addTo(this.map);
                 this.map.on("zoomend", this.handleMapEvent);
                 this.map.on("moveend", this.handleMapEvent);
             },
             destroyMap() {
                 this.map.remove();
                 this.map = null;
+                this.locationControl = null;
             },
             handleMapEvent(event) {
                 this.$emit("update:location", event.target.getCenter());
