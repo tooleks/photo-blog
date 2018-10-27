@@ -15,6 +15,7 @@
 <script>
     import L from "leaflet";
     import "leaflet/dist/leaflet.css";
+    import "leaflet.locatecontrol";
     import "leaflet.markercluster";
     import "leaflet.markercluster/dist/MarkerCluster.Default.css";
     import markerIconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
@@ -79,7 +80,6 @@
         data() {
             return {
                 map: null,
-                tileLayer: null,
             };
         },
         watch: {
@@ -93,14 +93,14 @@
         methods: {
             initMap() {
                 this.map = L.map(this.id).setView(this.center, this.zoom);
-                this.tileLayer = L.tileLayer(this.tileLayerUrl, this.tileLayerOptions).addTo(this.map);
+                L.tileLayer(this.tileLayerUrl, this.tileLayerOptions).addTo(this.map);
+                L.control.locate({drawMarker: false}).addTo(this.map);
                 this.map.on("zoomend", this.handleMapEvent);
                 this.map.on("moveend", this.handleMapEvent);
             },
             destroyMap() {
                 this.map.remove();
                 this.map = null;
-                this.tileLayer = null;
             },
             handleMapEvent(event) {
                 this.$emit("update:location", event.target.getCenter());

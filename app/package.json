@@ -10,6 +10,7 @@
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
     "dependencies": {
+        "leaflet.locatecontrol": "^0.63.0",
         "vuex": "^3.0.1"
     },
     "devDependencies": {
