@@ -55,13 +55,16 @@
                 this.map.on("blur", (event) => event.target.scrollWheelZoom.disable());
                 this.map.on("focus", (event) => event.target.scrollWheelZoom.enable());
 
+                this.resetMarker(this.location);
+
                 // Handle map click events if the component is not disabled.
                 if (!this.disabled) {
                     this.map.on("click", (event) => this.resetMarker(event.latlng));
                 }
 
-                if (this.location) {
-                    this.setMarker(this.location);
+                // If marker location is not provided use geolocation to position map.
+                if (!this.location) {
+                    this.map.locate({setView: true, maxZoom: 16});
                 }
             },
             setMarker(location) {
