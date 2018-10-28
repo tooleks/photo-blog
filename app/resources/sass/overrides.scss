@@ -61,21 +61,3 @@ body {
 .notification-title {
   font-weight: normal !important;
 }
-
-// Google reCAPTCHA
-
-.grecaptcha-badge {
-  z-index: 1 !important;
-  bottom: 0 !important;
-}
-
-// Leaflet
-
-.leaflet-container {
-  font-size: 13px !important;
-  font-family: inherit !important;
-}
-
-.leaflet-popup-content-wrapper {
-  border-radius: 2px !important;
-}

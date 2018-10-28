@@ -1,14 +1,24 @@
 <template>
-    <div :id="id" class="map"></div>
+    <div :id="id" class="leaflet-container"></div>
 </template>
 
-<style scoped>
-    .map {
+<style>
+    .leaflet-container {
         display: block;
         width: 100%;
         height: 100%;
         min-width: 200px;
         min-height: 350px;
+        font-size: 13px !important;
+        font-family: inherit !important;
+    }
+
+    .leaflet-popup-content-wrapper {
+        border-radius: 2px !important;
+    }
+
+    .leaflet-left .leaflet-control {
+        cursor: pointer;
     }
 </style>
 

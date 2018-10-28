@@ -2,6 +2,13 @@
     <div :id="id"></div>
 </template>
 
+<style>
+    .grecaptcha-badge {
+        z-index: 1 !important;
+        bottom: 0 !important;
+    }
+</style>
+
 <script>
     export default {
         props: {
