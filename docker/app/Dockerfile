@@ -27,7 +27,7 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php -r "unlink('composer-setup.php');"
 
 # Install Node.js, npm.
-RUN apt install -y apt-transport-https lsb-release gnupg \
+RUN apt-get install -y apt-transport-https lsb-release gnupg \
     && curl -sL https://deb.nodesource.com/setup_10.x | bash - \
     && apt-get install -y nodejs
 
