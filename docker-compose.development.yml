@@ -20,8 +20,6 @@ services:
     build:
       context: ./app
       dockerfile: ${PWD}/docker/app/Dockerfile
-      args:
-      - INSTALL_NODE=true
     image: pb-app
     container_name: pb-app
     depends_on:
