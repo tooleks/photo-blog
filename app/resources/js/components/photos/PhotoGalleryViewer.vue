@@ -18,7 +18,7 @@
 </template>
 
 <script>
-    import {optional as opt} from "tooleks";
+    import {optional} from "tooleks";
     import RoundSpinner from "../utils/RoundSpinner";
     import Viewer from "../gallery/Viewer";
     import PhotoDescriptionCard from "./PhotoDescriptionCard";
@@ -57,6 +57,10 @@
                 if (previousPhoto) {
                     this.goToPhotoPage(currentPhoto.postId);
                 }
+
+                // Sync page title/image as the current image has changed.
+                this.setPageTitle(currentPhoto.description);
+                this.setPageImage(currentPhoto.image.url);
             },
         },
         methods: {
@@ -70,7 +74,7 @@
                     this.photos = [photo];
                     this.currentPhoto = photo;
                 } catch (error) {
-                    if (opt(() => error.response.status) === 404) {
+                    if (optional(() => error.response.status) === 404) {
                         this.goToNotFoundPage();
                     } else {
                         throw error;
@@ -112,8 +116,6 @@
         },
         async created() {
             await this.loadPhoto();
-            this.setPageTitle(this.currentPhoto.description);
-            this.setPageImage(this.currentPhoto.image.url);
         },
     }
 </script>

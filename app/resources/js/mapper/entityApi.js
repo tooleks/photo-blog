@@ -1,4 +1,4 @@
-import {optional as opt} from "tooleks";
+import {optional} from "tooleks";
 import Photo from "../entities/Photo";
 import Tag from "../entities/Tag";
 
@@ -30,7 +30,7 @@ export function toLocation(location) {
 export function toPhoto(photo) {
     return {
         id: photo.id,
-        location: opt(() => toLocation(photo.location)),
+        location: optional(() => toLocation(photo.location)),
     };
 }
 
