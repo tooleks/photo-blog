@@ -1,4 +1,4 @@
-import {optional as opt} from "tooleks";
+import {optional} from "tooleks";
 import Exif from "../entities/Exif";
 import Image from "../entities/Image";
 import Location from "../entities/Location";
@@ -89,7 +89,7 @@ export function toPhoto({id, description = "", tags = [], photo}) {
         original: toImage(photo.thumbnails.large),
         exif: toExif(photo.exif),
         averageColor: photo.avg_color,
-        location: opt(() => toLocation(photo.location)),
+        location: optional(() => toLocation(photo.location)),
     });
 }
 

@@ -1,4 +1,4 @@
-import {optional as opt} from "tooleks";
+import {optional} from "tooleks";
 import router from "../../router";
 
 /** @type {Readonly} */
@@ -44,7 +44,7 @@ export default class ApiHandler {
      * @return {*}
      */
     onError(error, options) {
-        switch (opt(() => error.response.status)) {
+        switch (optional(() => error.response.status)) {
             case 0: {
                 return this.onConnectionError(error, options);
             }
@@ -102,7 +102,7 @@ export default class ApiHandler {
      * @return {Promise}
      */
     async onValidationError(error, {}) {
-        const errors = opt(() => error.response.data.errors) || {};
+        const errors = optional(() => error.response.data.errors) || {};
         Object.keys(errors).forEach((attribute) => {
             errors[attribute].forEach((message) => this._alert.warning(message));
         });
@@ -118,12 +118,12 @@ export default class ApiHandler {
         if (error instanceof SyntaxError) {
             const title = "Invalid response type.";
             this._alert.error(title);
-        } else if (opt(() => error.response)) {
-            const title = opt(() => error.response.data.message) || "Internal Server Error.";
-            const status = opt(() => error.response.status) || "500";
+        } else if (optional(() => error.response)) {
+            const title = optional(() => error.response.data.message) || "Internal Server Error.";
+            const status = optional(() => error.response.status) || "500";
             this._alert.error(title, `HTTP ${status} Error.`);
         } else {
-            const title = opt(() => error.message) || "Unknown Error.";
+            const title = optional(() => error.message) || "Unknown Error.";
             this._alert.error(title);
         }
         throw error;
