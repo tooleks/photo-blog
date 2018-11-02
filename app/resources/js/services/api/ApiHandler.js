@@ -20,10 +20,10 @@ export default class ApiHandler {
         this.onError = this.onError.bind(this);
         this._onResponseError = this._onResponseError.bind(this);
         this._onConnectionError = this._onConnectionError.bind(this);
-        this._onUnauthenticatedError = this._onUnauthenticatedError.bind(this);
-        this._onNotFoundError = this._onNotFoundError.bind(this);
-        this._onValidationError = this._onValidationError.bind(this);
-        this._onHttpError = this._onHttpError.bind(this);
+        this._onUnauthenticatedResponseError = this._onUnauthenticatedResponseError.bind(this);
+        this._onNotFoundResponseError = this._onNotFoundResponseError.bind(this);
+        this._onValidationReponseError = this._onValidationReponseError.bind(this);
+        this._onOtherResponseError = this._onOtherResponseError.bind(this);
     }
 
     /**
@@ -70,16 +70,16 @@ export default class ApiHandler {
                 return this._onConnectionError(error);
             }
             case HTTP_STATUS.UNAUTHORIZED: {
-                return this._onUnauthenticatedError(error);
+                return this._onUnauthenticatedResponseError(error);
             }
             case HTTP_STATUS.NOT_FOUND: {
-                return this._onNotFoundError(error);
+                return this._onNotFoundResponseError(error);
             }
             case HTTP_STATUS.UNPROCESSABLE_ENTITY: {
-                return this._onValidationError(error);
+                return this._onValidationReponseError(error);
             }
             default: {
-                return this._onHttpError(error);
+                return this._onOtherResponseError(error);
             }
         }
     }
@@ -110,9 +110,9 @@ export default class ApiHandler {
      * @return {*}
      * @private
      */
-    _onUnauthenticatedError(error) {
+    _onUnauthenticatedResponseError(error) {
         router.push({name: "sign-out"});
-        return this._onHttpError(error);
+        return this._onOtherResponseError(error);
     }
 
     /**
@@ -120,7 +120,7 @@ export default class ApiHandler {
      * @return {*}
      * @private
      */
-    _onNotFoundError(error) {
+    _onNotFoundResponseError(error) {
         this._alert.error(error.response.data.message);
         throw error;
     }
@@ -130,7 +130,7 @@ export default class ApiHandler {
      * @return {*}
      * @private
      */
-    _onValidationError(error) {
+    _onValidationReponseError(error) {
         const errors = error.response.data.errors || {};
         Object.keys(errors).forEach((attribute) => {
             errors[attribute].forEach((message) => this._alert.warning(message));
@@ -143,7 +143,7 @@ export default class ApiHandler {
      * @return {*}
      * @private
      */
-    _onHttpError(error) {
+    _onOtherResponseError(error) {
         const title = error.response.data.message || error.response.statusText;
         const status = error.response.status;
         this._alert.error(title, `HTTP ${status} Error.`);
