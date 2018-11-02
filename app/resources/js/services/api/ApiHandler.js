@@ -19,6 +19,7 @@ export default class ApiHandler {
         this.onData = this.onData.bind(this);
         this.onError = this.onError.bind(this);
         this._onResponseError = this._onResponseError.bind(this);
+        this._onSyntaxError = this._onSyntaxError.bind(this);
         this._onConnectionError = this._onConnectionError.bind(this);
         this._onUnauthenticatedResponseError = this._onUnauthenticatedResponseError.bind(this);
         this._onNotFoundResponseError = this._onNotFoundResponseError.bind(this);
