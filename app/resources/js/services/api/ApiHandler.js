@@ -1,4 +1,3 @@
-import {optional} from "tooleks";
 import router from "../../router";
 
 /** @type {Readonly} */
@@ -19,6 +18,7 @@ export default class ApiHandler {
         this._alert = alert;
         this.onData = this.onData.bind(this);
         this.onError = this.onError.bind(this);
+        this._onResponseError = this._onResponseError.bind(this);
         this._onConnectionError = this._onConnectionError.bind(this);
         this._onUnauthenticatedError = this._onUnauthenticatedError.bind(this);
         this._onNotFoundError = this._onNotFoundError.bind(this);
@@ -28,85 +28,110 @@ export default class ApiHandler {
 
     /**
      * @param {*} response
-     * @return {Promise<*>}
+     * @return {*}
      */
-    async onData(response) {
-        if (response.status === HTTP_STATUS.NO_CONTENT || typeof response.data === "object") {
+    onData(response) {
+        // Empty response data.
+        if (response.status === HTTP_STATUS.NO_CONTENT) {
             return response;
-        } else {
+        }
+        // `application/json` response data.
+        else if (typeof response.data === "object") {
+            return response;
+        }
+        // Invalid response data.
+        else {
             throw new SyntaxError;
         }
     }
 
     /**
      * @param {Error} error
-     * @param {Object} options
      * @return {*}
      */
-    onError(error, options = {}) {
-        switch (optional(() => error.response.status)) {
+    onError(error) {
+        if (error.response) {
+            return this._onResponseError(error);
+        } else if (error instanceof SyntaxError) {
+            return this._onSyntaxError(error);
+        }
+
+        return error;
+    }
+
+    /**
+     * @param {Error} error
+     * @return {*}
+     * @private
+     */
+    _onResponseError(error) {
+        switch (error.response.status) {
             case 0: {
-                return this._onConnectionError(error, options);
+                return this._onConnectionError(error);
             }
             case HTTP_STATUS.UNAUTHORIZED: {
-                return this._onUnauthenticatedError(error, options);
+                return this._onUnauthenticatedError(error);
             }
             case HTTP_STATUS.NOT_FOUND: {
-                return this._onNotFoundError(error, options);
+                return this._onNotFoundError(error);
             }
             case HTTP_STATUS.UNPROCESSABLE_ENTITY: {
-                return this._onValidationError(error, options);
+                return this._onValidationError(error);
             }
             default: {
-                return this._onHttpError(error, options);
+                return this._onHttpError(error);
             }
         }
     }
 
     /**
-     * @param {Error} error
-     * @param {Object} options
-     * @return {Promise}
+     * @private
+     * @return {*}
      * @private
      */
-    async _onConnectionError(error, options) {
+    _onSyntaxError(error) {
+        const title = "Invalid response type.";
+        this._alert.error(title);
+        throw error;
+    }
+
+    /**
+     * @param {Error} error
+     * @return {*}
+     * @private
+     */
+    _onConnectionError(error) {
         this._alert.error("Remote server connection error. Please, check your internet connection.");
         throw error;
     }
 
     /**
      * @param {Error} error
-     * @param {Object} options
-     * @return {Promise}
+     * @return {*}
      * @private
      */
-    async _onUnauthenticatedError(error, options) {
+    _onUnauthenticatedError(error) {
         router.push({name: "sign-out"});
         return this._onHttpError(error);
     }
 
     /**
      * @param {Error} error
-     * @param {Object} [options]
-     * @param {boolean} [options.suppressNotFoundErrors=false]
-     * @return {Promise}
+     * @return {*}
      * @private
      */
-    async _onNotFoundError(error, {suppressNotFoundErrors = false} = {}) {
-        if (!suppressNotFoundErrors) {
-            this._alert.error(error.response.data.message);
-        }
+    _onNotFoundError(error) {
+        this._alert.error(error.response.data.message);
         throw error;
     }
 
     /**
      * @param {Error} error
-     * @param {Object} options
-     * @return {Promise}
+     * @return {*}
      * @private
      */
-    async _onValidationError(error, {}) {
-        const errors = optional(() => error.response.data.errors) || {};
+    _onValidationError(error) {
+        const errors = error.response.data.errors || {};
         Object.keys(errors).forEach((attribute) => {
             errors[attribute].forEach((message) => this._alert.warning(message));
         });
@@ -115,22 +140,13 @@ export default class ApiHandler {
 
     /**
      * @param {Error} error
-     * @param {Object} options
-     * @return {Promise}
+     * @return {*}
      * @private
      */
-    async _onHttpError(error, options = {}) {
-        if (error instanceof SyntaxError) {
-            const title = "Invalid response type.";
-            this._alert.error(title);
-        } else if (optional(() => error.response)) {
-            const title = optional(() => error.response.data.message) || "Internal Server Error.";
-            const status = optional(() => error.response.status) || "500";
-            this._alert.error(title, `HTTP ${status} Error.`);
-        } else {
-            const title = optional(() => error.message) || "Unknown Error.";
-            this._alert.error(title);
-        }
+    _onHttpError(error) {
+        const title = error.response.data.message || error.response.statusText;
+        const status = error.response.status;
+        this._alert.error(title, `HTTP ${status} Error.`);
         throw error;
     }
 }
