@@ -1,6 +1,6 @@
 import Vue from "vue";
-import axios from "axios";
 import {EventEmitter} from "tooleks";
+
 import config from "../config";
 import store from "../store";
 import CookiesManager from "./CookiesManager";
@@ -33,38 +33,54 @@ export function getEventEmitter() {
     return eventEmitter;
 }
 
+/** @type {CookiesManager} */
+const cookiesManager = new CookiesManager;
+
 /** @return {CookiesManager} */
 export function getCookies() {
-    return new CookiesManager;
+    return cookiesManager;
 }
+
+/** @type {LocalStorageManager} */
+const localStorageManager = new LocalStorageManager;
 
 /** @return {LocalStorageManager} */
 export function getLocalStorage() {
-    return new LocalStorageManager;
+    return localStorageManager;
 }
+
+/** @type {AlertService} */
+const alertService = new AlertService;
 
 /** @return {AlertService} */
 export function getAlert() {
-    return new AlertService;
+    return alertService;
 }
+
+/** @type {ApiHandler} */
+const apiHandler = new ApiHandler(getAlert());
+/** @type {ApiService} */
+const apiService = new ApiService(config.url.api, apiHandler.onData, apiHandler.onError);
 
 /** @return {ApiService} */
 export function getApi() {
-    const apiHandler = new ApiHandler(getAlert());
-    return new ApiService(axios, config.url.api, apiHandler.onData, apiHandler.onError);
+    return apiService;
 }
 
 /** @type {AuthManager} */
-const auth = new AuthManager(getStore(), getLocalStorage());
+const authManager = new AuthManager(getStore(), getLocalStorage());
 
 /** @return {AuthManager} */
 export function getAuth() {
-    return auth;
+    return authManager;
 }
+
+/** @type {LoginManager} */
+const loginManager = new LoginManager(getApi(), getCookies(), getAuth());
 
 /** @return {LoginManager} */
 export function getLogin() {
-    return new LoginManager(getApi(), getCookies(), getAuth());
+    return loginManager;
 }
 
 /** @return {BrowserReCaptcha|DummyReCaptcha} */
@@ -77,17 +93,26 @@ export function getReCaptcha(element, siteKey, onVerified) {
     return new DummyReCaptcha(onVerified);
 }
 
+/** @type {PhotoManager} */
+const photoManager = new PhotoManager(getApi());
+
 /** @return {PhotoManager} */
 export function getPhotoManager() {
-    return new PhotoManager(getApi());
+    return photoManager;
 }
+
+/** @type {SubscriptionManager} */
+const subscriptionManager = new SubscriptionManager(getApi());
 
 /** @return {SubscriptionManager} */
 export function getSubscriptionManager() {
-    return new SubscriptionManager(getApi());
+    return subscriptionManager;
 }
+
+/** @type {TagManager} */
+const tagManager = new TagManager(getApi());
 
 /** @return {TagManager} */
 export function getTagManager() {
-    return new TagManager(getApi());
+    return tagManager;
 }

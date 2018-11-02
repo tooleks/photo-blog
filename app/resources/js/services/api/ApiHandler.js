@@ -19,11 +19,11 @@ export default class ApiHandler {
         this._alert = alert;
         this.onData = this.onData.bind(this);
         this.onError = this.onError.bind(this);
-        this.onConnectionError = this.onConnectionError.bind(this);
-        this.onUnauthenticatedError = this.onUnauthenticatedError.bind(this);
-        this.onNotFoundError = this.onNotFoundError.bind(this);
-        this.onValidationError = this.onValidationError.bind(this);
-        this.onHttpError = this.onHttpError.bind(this);
+        this._onConnectionError = this._onConnectionError.bind(this);
+        this._onUnauthenticatedError = this._onUnauthenticatedError.bind(this);
+        this._onNotFoundError = this._onNotFoundError.bind(this);
+        this._onValidationError = this._onValidationError.bind(this);
+        this._onHttpError = this._onHttpError.bind(this);
     }
 
     /**
@@ -43,22 +43,22 @@ export default class ApiHandler {
      * @param {Object} options
      * @return {*}
      */
-    onError(error, options) {
+    onError(error, options = {}) {
         switch (optional(() => error.response.status)) {
             case 0: {
-                return this.onConnectionError(error, options);
+                return this._onConnectionError(error, options);
             }
             case HTTP_STATUS.UNAUTHORIZED: {
-                return this.onUnauthenticatedError(error, options);
+                return this._onUnauthenticatedError(error, options);
             }
             case HTTP_STATUS.NOT_FOUND: {
-                return this.onNotFoundError(error, options);
+                return this._onNotFoundError(error, options);
             }
             case HTTP_STATUS.UNPROCESSABLE_ENTITY: {
-                return this.onValidationError(error, options);
+                return this._onValidationError(error, options);
             }
             default: {
-                return this.onHttpError(error, options);
+                return this._onHttpError(error, options);
             }
         }
     }
@@ -67,8 +67,9 @@ export default class ApiHandler {
      * @param {Error} error
      * @param {Object} options
      * @return {Promise}
+     * @private
      */
-    async onConnectionError(error, options) {
+    async _onConnectionError(error, options) {
         this._alert.error("Remote server connection error. Please, check your internet connection.");
         throw error;
     }
@@ -77,10 +78,11 @@ export default class ApiHandler {
      * @param {Error} error
      * @param {Object} options
      * @return {Promise}
+     * @private
      */
-    async onUnauthenticatedError(error, options) {
+    async _onUnauthenticatedError(error, options) {
         router.push({name: "sign-out"});
-        return this.onHttpError(error);
+        return this._onHttpError(error);
     }
 
     /**
@@ -88,8 +90,9 @@ export default class ApiHandler {
      * @param {Object} [options]
      * @param {boolean} [options.suppressNotFoundErrors=false]
      * @return {Promise}
+     * @private
      */
-    async onNotFoundError(error, {suppressNotFoundErrors = false} = {}) {
+    async _onNotFoundError(error, {suppressNotFoundErrors = false} = {}) {
         if (!suppressNotFoundErrors) {
             this._alert.error(error.response.data.message);
         }
@@ -100,8 +103,9 @@ export default class ApiHandler {
      * @param {Error} error
      * @param {Object} options
      * @return {Promise}
+     * @private
      */
-    async onValidationError(error, {}) {
+    async _onValidationError(error, {}) {
         const errors = optional(() => error.response.data.errors) || {};
         Object.keys(errors).forEach((attribute) => {
             errors[attribute].forEach((message) => this._alert.warning(message));
@@ -113,8 +117,9 @@ export default class ApiHandler {
      * @param {Error} error
      * @param {Object} options
      * @return {Promise}
+     * @private
      */
-    async onHttpError(error, options = {}) {
+    async _onHttpError(error, options = {}) {
         if (error instanceof SyntaxError) {
             const title = "Invalid response type.";
             this._alert.error(title);

@@ -1,67 +1,67 @@
-import {pickBy} from "lodash";
-import * as routeName from "../router/names";
-import getEmptyRoute from "../router/getEmptyRoute";
+import _, {includes, isUndefined, negate} from "lodash";
+import {routeName} from "../router/identifiers";
 
 export default {
     methods: {
-        goToPath(path) {
-            // If no path was provided go to the home page by default.
-            if (!path) {
-                this.goToHomePage();
+        goToPath(path = null) {
+            if (path !== null) {
+                this.$router.push({path});
                 return;
             }
 
-            const route = getEmptyRoute();
-            route.path = path;
-            this.$router.push(route);
+            // If no path was provided go to the home page by default.
+            this.goToHomePage();
         },
-        goToRedirectUri() {
-            this.goToPath(this.$route.query.redirectUri);
+        goToRedirectUrl() {
+            this.goToPath(this.$route.query.redirectUrl);
         },
-        goToBackUri() {
-            this.goToPath(this.$route.query.backUri);
+        goToBackUrl() {
+            this.goToPath(this.$route.query.backUrl);
         },
         goToHomePage() {
-            const route = getEmptyRoute();
-            route.name = routeName.home;
-            this.$router.push(route);
+            this.$router.push({name: routeName.home});
         },
         goToNotFoundPage() {
-            const route = getEmptyRoute();
-            route.name = routeName.route404;
-            this.$router.push(route);
+            this.$router.push({name: routeName.route404});
         },
         goToSignInPage() {
-            const route = getEmptyRoute();
-            route.name = routeName.signIn;
-            this.$router.push(route);
+            this.$router.push({name: routeName.signIn});
         },
         goToPhotoPage(id, args = {...this.$route.params, ...this.$route.query}) {
-            const route = getEmptyRoute();
-            route.name = routeName.photo;
-            route.params.id = id;
-            route.query = pickBy(args, (value, key) => {
-                const allowedKey = ["searchPhrase", "tag", "page", "backUri"].indexOf(key) !== -1;
-                const allowedValue = typeof value !== "undefined";
-                return allowedKey && allowedValue;
-            });
-            this.$router.replace(route);
+            let name, params = {}, query = {};
+
+            name = routeName.photo;
+            params.id = id;
+
+            // Omit junk query parameters.
+            query = _(args)
+                .pickBy(negate(isUndefined))
+                .pickBy((value, key) => includes(["searchPhrase", "tag", "page", "backUrl"], key))
+                .value();
+
+            console.log(query);
+
+            this.$router.replace({name, params, query});
         },
         goToPhotosPage(args = {...this.$route.params, ...this.$route.query}) {
-            const route = getEmptyRoute();
-            route.params = pickBy(args, (value, key) => {
-                const allowedKey = ["searchPhrase", "tag", "page"].indexOf(key) !== -1;
-                const allowedValue = typeof value !== "undefined";
-                return allowedKey && allowedValue;
-            });
-            if (typeof route.params.searchPhrase !== "undefined") {
-                route.name = routeName.photosSearch;
-            } else if (typeof route.params.tag !== "undefined") {
-                route.name = routeName.photosTag;
+            let name, params = {};
+
+            // Omit junk route parameters.
+            params = _(args)
+                .pickBy(negate(isUndefined))
+                .pickBy((value, key) => includes(["searchPhrase", "tag", "page"], key))
+                .value();
+
+            // Choose the right route name based on available route parameters.
+            if (typeof params.searchPhrase !== "undefined") {
+                name = routeName.photosSearch;
+            } else if (typeof params.tag !== "undefined") {
+                name = routeName.photosTag;
             } else {
-                route.name = routeName.photos;
+                name = routeName.photos;
             }
-            this.$router.push(route);
+
+            this.$router.push({name, params});
         },
     },
 }

@@ -71,7 +71,7 @@
                         g_recaptcha_response: reCaptchaResponse,
                     });
                     this.$services.getAlert().success(`Hello ${user.name}!`);
-                    this.goToRedirectUri();
+                    this.goToRedirectUrl();
                 } catch (error) {
                     // The error is handled by the API service.
                     // No additional actions needed.
@@ -83,7 +83,7 @@
         created() {
             this.setPageTitle("Sign In");
             if (this.authenticated) {
-                this.goToRedirectUri();
+                this.goToRedirectUrl();
             }
         },
     }
