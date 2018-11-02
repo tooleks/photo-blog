@@ -57,7 +57,7 @@ export default class ApiHandler {
             return this._onSyntaxError(error);
         }
 
-        return error;
+        throw error;
     }
 
     /**
