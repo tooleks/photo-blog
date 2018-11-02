@@ -39,8 +39,6 @@ export default {
                 .pickBy((value, key) => includes(["searchPhrase", "tag", "page", "backUrl"], key))
                 .value();
 
-            console.log(query);
-
             this.$router.replace({name, params, query});
         },
         goToPhotosPage(args = {...this.$route.params, ...this.$route.query}) {
