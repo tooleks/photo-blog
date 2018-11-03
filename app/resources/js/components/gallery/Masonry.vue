@@ -111,7 +111,7 @@
                 };
             },
             getImageId(image) {
-                return `image-${image.model.id}`;
+                return `img-${image.model.id}`;
             },
             getImageStyle(image, index, row) {
                 const isFirstOrLastImage = row.length && (index === 0 || index === row.length - 1);
