@@ -58,7 +58,7 @@ export function getAlert() {
 }
 
 /** @type {ApiHandler} */
-const apiHandler = new ApiHandler(config.url.api, getAlert());
+const apiHandler = new ApiHandler(getAlert());
 /** @type {ApiService} */
 const apiService = new ApiService(config.url.api, apiHandler.onData, apiHandler.onError);
 

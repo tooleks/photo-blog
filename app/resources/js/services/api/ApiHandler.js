@@ -1,4 +1,5 @@
 import router from "../../router";
+import {routeName} from "../../router/identifiers";
 
 /** @type {Readonly} */
 export const HTTP_STATUS = Object.freeze({
@@ -12,11 +13,9 @@ export default class ApiHandler {
     /**
      * ApiHandler constructor.
      *
-     * @param {string} baseUrl
      * @param {AlertService} alert
      */
-    constructor(baseUrl, alert) {
-        this._baseUrl = baseUrl;
+    constructor(alert) {
         this._alert = alert;
         this.onData = this.onData.bind(this);
         this.onError = this.onError.bind(this);
@@ -114,7 +113,7 @@ export default class ApiHandler {
      * @private
      */
     _onUnauthenticatedResponseError(error) {
-        router.push({name: "sign-out"});
+        router.push({name: routeName.signOut});
         return this._onOtherResponseError(error);
     }
 
@@ -125,8 +124,9 @@ export default class ApiHandler {
      */
     _onNotFoundResponseError(error) {
         const url = new URL(error.request.responseURL);
-        // Do not show alert messages for paths that start with `/posts`.
-        if (!url.pathname.startsWith(`${this._baseUrl}/posts`)) {
+        if (url.pathname.includes(`/posts`)) {
+            router.push({name: routeName.route404});
+        } else {
             this._alert.error(error.response.data.message);
         }
         throw error;

@@ -64,11 +64,8 @@
                     this.photos = [photo];
                     this.currentPhoto = photo;
                 } catch (error) {
-                    if (optional(() => error.response.status) === 404) {
-                        this.goToNotFoundPage();
-                    } else {
-                        throw error;
-                    }
+                    // The error is handled by the API service.
+                    // No additional actions needed.
                 } finally {
                     this.loading = false;
                 }
