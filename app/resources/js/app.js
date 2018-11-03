@@ -24,6 +24,6 @@ export default new Vue({
     render(createElement) {
         return createElement(App);
     },
-    store,
     router,
+    store,
 });

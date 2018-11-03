@@ -18,7 +18,7 @@ router.beforeEach((to, from, next) => {
     if (to.matched.some((route) => route.meta.requiresAuth) && !store.state.auth.authenticated) {
         next({
             name: "sign-in",
-            query: {redirectUri: to.fullPath},
+            query: {redirectUrl: to.fullPath},
         });
     } else {
         next();

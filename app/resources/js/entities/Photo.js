@@ -1,6 +1,6 @@
 import {cloneDeep} from "lodash";
 import router from "../router";
-import * as routeName from "../router/names";
+import {routeName} from "../router/identifiers";
 
 export default class Photo {
     /**

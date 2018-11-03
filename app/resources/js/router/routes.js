@@ -1,4 +1,4 @@
-import * as routeName from "./names";
+import {routeName} from "./identifiers";
 
 import SignIn from "../components/auth/SignIn";
 import SignOut from "../components/auth/SignOut";

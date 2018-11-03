@@ -128,7 +128,7 @@
                 const route = cloneDeep(image.model.route);
                 // Get the full path of the current route ignoring the hash segment.
                 const [fullPath] = this.$route.fullPath.split("#");
-                route.query.backUri = `${fullPath}#${this.getImageId(image)}`;
+                route.query.backUrl = `${fullPath}#${this.getImageId(image)}`;
                 return route;
             },
             async scrollToImage() {

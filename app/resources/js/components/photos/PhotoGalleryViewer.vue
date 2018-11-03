@@ -6,11 +6,11 @@
                         :images="photos"
                         @onFirstImage="loadNewerPhoto"
                         @onLastImage="loadOlderPhoto"
-                        @onExit="goToBackUri"/>
+                        @onExit="goToBackUrl"/>
         <div class="container" v-if="currentPhoto">
             <div class="row">
                 <div class="col">
-                    <photo-description-card :photo="currentPhoto" @onBack="goToBackUri"/>
+                    <photo-description-card :photo="currentPhoto" @onBack="goToBackUrl"/>
                 </div>
             </div>
         </div>
@@ -45,20 +45,11 @@
             };
         },
         watch: {
-            ["$route.params.id"](id) {
-                const photo = this.photos.find((photo) => photo.postId === Number(id));
-                if (photo) {
-                    this.currentPhoto = photo;
-                    return;
-                }
-                this.goToNotFoundPage();
-            },
             currentPhoto(currentPhoto, previousPhoto) {
-                if (previousPhoto) {
+                if (previousPhoto !== null) {
                     this.goToPhotoPage(currentPhoto.postId);
                 }
 
-                // Sync page title/image as the current image has changed.
                 this.setPageTitle(currentPhoto.description);
                 this.setPageImage(currentPhoto.image.url);
             },
@@ -67,10 +58,9 @@
             async loadPhoto() {
                 this.loading = true;
                 try {
-                    const photo = await this.$services.getPhotoManager().getByPostId(
-                        this.$route.params.id,
-                        this.$route.query,
-                    );
+                    const photo = await this.$services
+                        .getPhotoManager()
+                        .getByPostId(this.$route.params.id, this.$route.query);
                     this.photos = [photo];
                     this.currentPhoto = photo;
                 } catch (error) {
@@ -86,10 +76,9 @@
             async loadOlderPhoto() {
                 this.loading = true;
                 try {
-                    const photo = await this.$services.getPhotoManager().getPreviousByPostId(
-                        this.currentPhoto.postId,
-                        this.$route.query,
-                    );
+                    const photo = await this.$services
+                        .getPhotoManager()
+                        .getPreviousByPostId(this.currentPhoto.postId, this.$route.query);
                     this.photos = [...this.photos, photo];
                 } catch (error) {
                     // The error is handled by the API service.
@@ -101,10 +90,9 @@
             async loadNewerPhoto() {
                 this.loading = true;
                 try {
-                    const photo = await this.$services.getPhotoManager().getNextByPostId(
-                        this.currentPhoto.postId,
-                        this.$route.query,
-                    );
+                    const photo = await this.$services
+                        .getPhotoManager()
+                        .getNextByPostId(this.currentPhoto.postId, this.$route.query);
                     this.photos = [photo, ...this.photos];
                 } catch (error) {
                     // The error is handled by the API service.
