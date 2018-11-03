@@ -24,7 +24,7 @@ export default class ApiHandler {
         this._onConnectionError = this._onConnectionError.bind(this);
         this._onUnauthenticatedResponseError = this._onUnauthenticatedResponseError.bind(this);
         this._onNotFoundResponseError = this._onNotFoundResponseError.bind(this);
-        this._onValidationReponseError = this._onValidationReponseError.bind(this);
+        this._onValidationResponseError = this._onValidationResponseError.bind(this);
         this._onOtherResponseError = this._onOtherResponseError.bind(this);
     }
 
@@ -78,7 +78,7 @@ export default class ApiHandler {
                 return this._onNotFoundResponseError(error);
             }
             case HTTP_STATUS.UNPROCESSABLE_ENTITY: {
-                return this._onValidationReponseError(error);
+                return this._onValidationResponseError(error);
             }
             default: {
                 return this._onOtherResponseError(error);
@@ -135,7 +135,7 @@ export default class ApiHandler {
      * @return {*}
      * @private
      */
-    _onValidationReponseError(error) {
+    _onValidationResponseError(error) {
         const errors = error.response.data.errors || {};
         Object.keys(errors).forEach((attribute) => {
             errors[attribute].forEach((message) => this._alert.warning(message));
