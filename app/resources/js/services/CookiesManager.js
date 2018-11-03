@@ -17,7 +17,7 @@ export default class CookiesManager {
             .split(";")
             .filter((item) => item.length > 0)
             .reduce((cookies, item) => {
-                const [name = "", value = ""] = item.trim().split("=");
+                const [name, value = ""] = item.trim().split("=");
                 cookies[name] = value;
                 return cookies;
             }, {});
