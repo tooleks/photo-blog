@@ -12,9 +12,11 @@ export default class ApiHandler {
     /**
      * ApiHandler constructor.
      *
+     * @param {string} baseUrl
      * @param {AlertService} alert
      */
-    constructor(alert) {
+    constructor(baseUrl, alert) {
+        this._baseUrl = baseUrl;
         this._alert = alert;
         this.onData = this.onData.bind(this);
         this.onError = this.onError.bind(this);
@@ -122,7 +124,11 @@ export default class ApiHandler {
      * @private
      */
     _onNotFoundResponseError(error) {
-        this._alert.error(error.response.data.message);
+        const url = new URL(error.request.responseURL);
+        // Do not show alert messages for paths that start with `/posts`.
+        if (!url.pathname.startsWith(`${this._baseUrl}/posts`)) {
+            this._alert.error(error.response.data.message);
+        }
         throw error;
     }
 
