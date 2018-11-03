@@ -103,8 +103,11 @@
                 try {
                     this.photo = await this.$services.getPhotoManager().getByPostId(id);
                 } catch (error) {
-                    // The error is handled by the API service.
-                    // No additional actions needed.
+                    if (optional(() => error.response.status) === 404) {
+                        this.goToNotFoundPage();
+                    } else {
+                        throw error;
+                    }
                 } finally {
                     this.loading = false;
                 }
