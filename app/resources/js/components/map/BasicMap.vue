@@ -89,6 +89,8 @@
         },
         data() {
             return {
+                /** @type {Array<Function>} */
+                intervals: [],
                 map: null,
                 locationControl: null,
             };
@@ -102,18 +104,6 @@
             },
         },
         methods: {
-            initMap() {
-                this.map = L.map(this.id).setView(this.center, this.zoom);
-                L.tileLayer(this.tileLayerUrl, this.tileLayerOptions).addTo(this.map);
-                this.locationControl = L.control.locate().addTo(this.map);
-                this.map.on("zoomend", this.handleMapEvent);
-                this.map.on("moveend", this.handleMapEvent);
-            },
-            destroyMap() {
-                this.map.remove();
-                this.map = null;
-                this.locationControl = null;
-            },
             handleMapEvent(event) {
                 this.$emit("update:location", event.target.getCenter());
                 this.$emit("update:zoom", event.target.getZoom());
@@ -124,10 +114,18 @@
             },
         },
         mounted() {
-            this.initMap();
+            this.map = L.map(this.id).setView(this.center, this.zoom);
+            L.tileLayer(this.tileLayerUrl, this.tileLayerOptions).addTo(this.map);
+            this.locationControl = L.control.locate().addTo(this.map);
+            this.map.on("zoomend", this.handleMapEvent);
+            this.map.on("moveend", this.handleMapEvent);
+            this.intervals.push(setInterval(() => this.map.invalidateSize(), 100));
         },
         beforeDestroy() {
-            this.destroyMap();
+            this.map.remove();
+            this.map = null;
+            this.locationControl = null;
+            this.intervals.forEach((interval) => clearInterval(interval));
         },
     }
 </script>
