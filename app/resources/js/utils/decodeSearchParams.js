@@ -13,7 +13,7 @@ export default function decodeSearchParams(search) {
         .split("&")
         .filter((item) => item.length > 0)
         .reduce((params, item) => {
-            const [name, value] = item.split("=");
+            const [name = "", value = ""] = item.split("=");
             params[name] = value;
             return params;
         }, {});
