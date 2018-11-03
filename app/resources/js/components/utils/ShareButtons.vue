@@ -47,7 +47,7 @@
             url: {
                 type: String,
                 default() {
-                    return this.$services.getConfig().url.app + this.$route.fullPath;
+                    return window.location.href;
                 },
             },
             title: {
