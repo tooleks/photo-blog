@@ -8,7 +8,7 @@
                          class="btn btn-light btn-sm">
                 <i class="fa fa-pencil" aria-hidden="true"></i> Edit photo
             </router-link>
-            <share-buttons class="float-sm-right"></share-buttons>
+            <share-buttons :url="pageCanonicalUrl" :title="pageTitle" class="float-sm-right"/>
         </div>
         <div class="card-body">
             <div class="row">
@@ -51,6 +51,7 @@
 </style>
 
 <script>
+    import {mapState} from "vuex";
     import LocationInput from "../map/LocationInput";
     import ExifDescription from "./ExifDescription";
     import ShareButtons from "../utils/ShareButtons";
@@ -71,7 +72,14 @@
             photo: {
                 type: Object,
             },
+            canonicalUrl: {
+                type: String,
+            },
         },
+        computed: mapState({
+            pageCanonicalUrl: (state) => state.meta.pageCanonicalUrl,
+            pageTitle: (state) => state.meta.pageTitle,
+        }),
         methods: {
             emitBackEvent() {
                 this.$emit("onBack");
