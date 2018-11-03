@@ -43,16 +43,18 @@
 
 <script>
     export default {
-        computed: {
-            url() {
-                let url = this.$services.getConfig().url.app;
-                if (this.$route.fullPath) {
-                    url += this.$route.fullPath;
-                }
-                return url;
+        props: {
+            url: {
+                type: String,
+                default() {
+                    return this.$services.getConfig().url.app + this.$route.fullPath;
+                },
             },
-            title() {
-                return document.title;
+            title: {
+                type: String,
+                default() {
+                    return document.title;
+                },
             },
         },
         methods: {

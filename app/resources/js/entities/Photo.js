@@ -30,7 +30,7 @@ export default class Photo {
         this.valueOf = this.valueOf.bind(this);
         this.toString = this.toString.bind(this);
         this.clone = this.clone.bind(this);
-        this.is = this.is.bind(this);
+        this.equals = this.equals.bind(this);
         this.replaceImage = this.replaceImage.bind(this);
     }
 
@@ -102,7 +102,7 @@ export default class Photo {
      * @param {Photo} photo
      * @return {boolean}
      */
-    is(photo) {
+    equals(photo) {
         return this.id === photo.id;
     }
 

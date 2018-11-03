@@ -215,7 +215,7 @@
                 $(this.carouselSelector).carousel("next");
             },
             slideToImage(currentImage) {
-                const index = this.images.findIndex((image) => currentImage.is(image));
+                const index = this.images.findIndex((image) => currentImage.equals(image));
                 if (index !== -1) {
                     $(this.carouselSelector).carousel(index);
                 }
@@ -233,11 +233,11 @@
                 this.$emit("onExit");
             },
             isFirstImage(currentImage) {
-                const index = this.images.findIndex((image) => image.is(currentImage));
+                const index = this.images.findIndex((image) => image.equals(currentImage));
                 return index === 0;
             },
             isLastImage(currentImage) {
-                const index = this.images.findIndex((image) => image.is(currentImage));
+                const index = this.images.findIndex((image) => image.equals(currentImage));
                 return index === this.images.length - 1;
             },
             toggleFullScreenMode() {

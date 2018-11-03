@@ -63,7 +63,7 @@ export default class Masonry {
     }
 
     exists(newImage) {
-        return this.getRowsImages().some((image) => image.model.is(newImage.model));
+        return this.getRowsImages().some((image) => image.model.equals(newImage.model));
     }
 
     renderCurrentRowIfFilled(force) {
