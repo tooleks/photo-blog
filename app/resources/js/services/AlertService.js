@@ -5,9 +5,6 @@ Vue.use(VueNotification);
 
 // Note: Don't forget to add <notifications group="main"></notifications> component to the app component.
 
-/** @type {Function} */
-const notify = Vue.prototype.$notify;
-
 export const GROUP = "main";
 export const POSITION = "center";
 export const DURATION_INFINITE = -1;
@@ -37,7 +34,7 @@ export default class AlertService {
      * @return {void}
      */
     notify(title, text = "", type = TYPE_SUCCESS) {
-        notify({
+        Vue.prototype.$notify({
             group: GROUP,
             duration: type === TYPE_ERROR
                 ? DURATION_FIVE_SECONDS
