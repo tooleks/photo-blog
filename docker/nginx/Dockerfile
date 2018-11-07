@@ -1,12 +1,11 @@
 FROM pb-app as pb-app
 
-
 FROM nginx:1.15
 
 # Change the working directory.
 WORKDIR /var/www/app
 
-# Copy the application artifacts.
+# Copy the application source code.
 COPY --from=pb-app /var/www/app .
 
 # Copy webserver configuration files.

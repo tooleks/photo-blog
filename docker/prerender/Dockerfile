@@ -8,11 +8,9 @@ RUN apt-get update && apt-get install -y google-chrome-stable
 # Change the working directory.
 WORKDIR /home/node/app
 
-# Copy the application package files.
+# Install the application dependencies.
 COPY ./package.json ./package.json
 COPY ./package-lock.json ./package-lock.json
-
-# Install the application dependencies.
 RUN npm install --only=production
 
 # Copy the application source code.
