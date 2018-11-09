@@ -3,8 +3,8 @@ initialization: install-dependencies
 	ln -sfn ../storage/app/public app/public/storage
 
 install-dependencies:
-	docker run --rm --mount "type=bind,source=${PWD}/app,target=/app" -w "/app" node:10 npm install
-	docker run --rm --mount "type=bind,source=${PWD}/app,target=/app" -w "/app" composer:1.7 install \
+	docker run --rm -v "${PWD}/app:/app" -w "/app" node:10 npm install
+	docker run --rm -v "${PWD}/app:/app" -w "/app" composer:1.7 install \
 		--ignore-platform-reqs \
 		--no-interaction \
 		--no-plugins \
@@ -12,8 +12,8 @@ install-dependencies:
 		--prefer-dist
 
 update-dependencies:
-	docker run --rm --mount "type=bind,source=${PWD}/app,target=/app" -w "/app" node:10 npm update
-	docker run --rm --mount "type=bind,source=${PWD}/app,target=/app" -w "/app" composer:1.7 update \
+	docker run --rm --mount -v "${PWD}/app:/app" -w "/app" node:10 npm update
+	docker run --rm --mount -v "${PWD}/app:/app" -w "/app" composer:1.7 update \
 		--ignore-platform-reqs \
 		--no-interaction \
 		--no-plugins \
