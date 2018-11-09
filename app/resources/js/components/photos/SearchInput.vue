@@ -43,7 +43,7 @@
         },
         methods: {
             init() {
-                this.input = this.$route.params.searchPhrase || this.$route.query.searchPhrase;
+                this.input = this.$route.params.searchPhrase || this.$route.query.searchPhrase || "";
             },
             search() {
                 this.input
@@ -51,12 +51,8 @@
                     : this.$router.push({name: "photos"});
             },
         },
-        computed: {
-            debounceSearch() {
-                return debounce(() => this.search(), this.delay);
-            },
-        },
         created() {
+            this.debounceSearch = debounce(() => this.search(), this.delay);
             this.init();
         },
     }

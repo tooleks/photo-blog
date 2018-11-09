@@ -181,11 +181,11 @@
         },
         methods: {
             init() {
-                this.emitcurrentImageEvents(this.currentImage);
+                this.emitCurrentImageEvents(this.currentImage);
                 $(this.carouselItemSelector).first().addClass("active");
                 $(this.carouselSelector).on("slide.bs.carousel", (event) => {
                     const currentImage = this.images[event.to];
-                    this.emitcurrentImageEvents(currentImage);
+                    this.emitCurrentImageEvents(currentImage);
                 });
             },
             onKeyUp(event) {
@@ -220,7 +220,7 @@
                     $(this.carouselSelector).carousel(index);
                 }
             },
-            emitcurrentImageEvents(currentImage) {
+            emitCurrentImageEvents(currentImage) {
                 this.$emit("update:currentImage", currentImage);
                 if (this.isFirstImage(currentImage)) {
                     this.$emit("onFirstImage", currentImage);
