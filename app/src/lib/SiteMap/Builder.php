@@ -3,6 +3,7 @@
 namespace Lib\SiteMap;
 
 use Lib\SiteMap\Contracts\Builder as BuilderContract;
+use Lib\SiteMap\Contracts\Item as ItemContract;
 
 /**
  * Class SiteMapBuilder.
@@ -11,6 +12,9 @@ use Lib\SiteMap\Contracts\Builder as BuilderContract;
  */
 class Builder implements BuilderContract
 {
+    /**
+     * @var array
+     */
     protected $items = [];
 
     /**
@@ -26,7 +30,9 @@ class Builder implements BuilderContract
      */
     public function setItems(array $items)
     {
-        $this->items = $items;
+        $this->items = array_map(function (ItemContract $item) {
+            return $item;
+        }, $items);
 
         return $this;
     }

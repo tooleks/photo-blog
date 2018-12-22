@@ -2,7 +2,7 @@
 
 ### Tech Stack
 
-Docker 17.10, Docker Compose 1.14, NGINX 1.15, MySQL 5.7, Redis 4, PHP 7.2, Laravel 5.7, Node.js 10, Vue.js 2.5.
+Docker 17.10, Docker Compose 1.14, NGINX 1.15, MySQL 5.7, Redis 4, PHP 7.3, Laravel 5.7, Node.js 10, Vue.js 2.5.
 
 ### Installation
 

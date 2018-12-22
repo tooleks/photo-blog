@@ -11,10 +11,7 @@ use Illuminate\Contracts\Validation\Rule;
  */
 class ReCaptchaRule implements Rule
 {
-    /**
-     * @var string
-     */
-    private $apiEndpoint = 'https://www.google.com/recaptcha/api/siteverify';
+    public const API_ENDPOINT = 'https://www.google.com/recaptcha/api/siteverify';
 
     /**
      * @var string
@@ -29,16 +26,6 @@ class ReCaptchaRule implements Rule
     public function __construct(?string $secretKey)
     {
         $this->secretKey = $secretKey;
-    }
-
-    /**
-     * Determine if reCAPTCHA is enabled.
-     *
-     * @return bool
-     */
-    public function isEnabled(): bool
-    {
-        return (bool) $this->secretKey;
     }
 
     /**
@@ -61,10 +48,20 @@ class ReCaptchaRule implements Rule
             ],
         ]);
 
-        $response = file_get_contents($this->apiEndpoint, false, $context);
+        $response = file_get_contents(static::API_ENDPOINT, false, $context);
         $result = json_decode($response);
 
         return optional($result)->success;
+    }
+
+    /**
+     * Determine if reCAPTCHA is enabled.
+     *
+     * @return bool
+     */
+    public function isEnabled(): bool
+    {
+        return (bool) $this->secretKey;
     }
 
     /**

@@ -2,11 +2,12 @@
 
 namespace App\Managers\Post;
 
-use function App\Util\validator_filter_attributes;
 use App\Models\Post;
 use App\Models\Tables\Constant;
 use Illuminate\Validation\Factory as ValidatorFactory;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
+use function App\Util\validator_filter_attributes;
 
 /**
  * Class PostValidator.
@@ -33,6 +34,7 @@ class PostValidator
     /**
      * @param array $attributes
      * @return array
+     * @throws ValidationException
      */
     public function validateForCreate(array $attributes): array
     {
@@ -58,6 +60,7 @@ class PostValidator
      * @param Post $post
      * @param array $attributes
      * @return array
+     * @throws ValidationException
      */
     public function validateForUpdate(Post $post, array $attributes): array
     {
@@ -77,6 +80,11 @@ class PostValidator
         return validator_filter_attributes($attributes, $rules);
     }
 
+    /**
+     * @param array $filters
+     * @return array
+     * @throws ValidationException
+     */
     public function validateForFiltering(array $filters): array
     {
         $rules = [

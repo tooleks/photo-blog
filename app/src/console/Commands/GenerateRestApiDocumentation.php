@@ -3,8 +3,8 @@
 namespace Console\Commands;
 
 use Illuminate\Console\Command;
-use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 /**
  * Class GenerateRestApiDocumentation.
@@ -34,7 +34,13 @@ class GenerateRestApiDocumentation extends Command
      */
     public function handle(): void
     {
-        $command = base_path('node_modules/.bin/apidoc') . ' ' . '-i ./src/api/ -o ./docs/rest_api/dist';
+        $command = implode(' ', [
+            base_path('node_modules/.bin/apidoc'),
+            '-i',
+            './src/api/',
+            '-o',
+            './docs/rest_api/dist',
+        ]);
 
         $process = new Process($command);
 

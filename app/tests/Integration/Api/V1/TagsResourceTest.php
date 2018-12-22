@@ -9,18 +9,6 @@ namespace Tests\Integration\Api\V1;
  */
 class TagsResourceTest extends TestCase
 {
-    protected function getResourceName(): string
-    {
-        return 'tags';
-    }
-
-    protected function getResourceStructure(): array
-    {
-        return [
-            'value',
-        ];
-    }
-
     public function testPaginateSuccess(): void
     {
         $this->createTag();
@@ -33,5 +21,17 @@ class TagsResourceTest extends TestCase
                     '*' => $this->getResourceStructure(),
                 ],
             ]);
+    }
+
+    protected function getResourceStructure(): array
+    {
+        return [
+            'value',
+        ];
+    }
+
+    protected function getResourceName(): string
+    {
+        return 'tags';
     }
 }

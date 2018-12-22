@@ -2,8 +2,8 @@
 
 namespace App\Models\Builders;
 
-use App\Models\Role;
 use App\Models\Tables\Constant;
+use Core\Entities\UserEntity;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
@@ -23,7 +23,7 @@ class RoleBuilder extends Builder
      */
     public function whereNameCustomer()
     {
-        return $this->where("{$this->rolesTable}.name", Role::NAME_CUSTOMER);
+        return $this->where("{$this->rolesTable}.name", UserEntity::ROLE_CUSTOMER);
     }
 
     /**
@@ -31,6 +31,6 @@ class RoleBuilder extends Builder
      */
     public function whereNameAdministrator()
     {
-        return $this->where("{$this->rolesTable}.name", Role::NAME_ADMINISTRATOR);
+        return $this->where("{$this->rolesTable}.name", UserEntity::ROLE_ADMINISTRATOR);
     }
 }

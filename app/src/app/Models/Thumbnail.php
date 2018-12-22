@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Builders\ThumbnailBuilder;
+use Core\Entities\ThumbnailEntity;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -10,12 +11,17 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property int id
  * @property string path
- * @property float width
- * @property float height
+ * @property int width
+ * @property int height
  * @package App\Models
  */
 class Thumbnail extends Model
 {
+    /**
+     * @inheritdoc
+     */
+    public $timestamps = false;
+
     /**
      * @inheritdoc
      */
@@ -24,11 +30,6 @@ class Thumbnail extends Model
         'width',
         'height',
     ];
-
-    /**
-     * @inheritdoc
-     */
-    public $timestamps = false;
 
     /**
      * @inheritdoc
@@ -52,5 +53,17 @@ class Thumbnail extends Model
     public function photos()
     {
         return $this->belongsToMany(Photo::class, 'photos_thumbnails');
+    }
+
+    /**
+     * @return ThumbnailEntity
+     */
+    public function toEntity(): ThumbnailEntity
+    {
+        return new ThumbnailEntity([
+            'path' => $this->path,
+            'width' => $this->width,
+            'height' => $this->height,
+        ]);
     }
 }

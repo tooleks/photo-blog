@@ -4,11 +4,11 @@ namespace Api\V1\Http\Proxy;
 
 use Api\V1\Http\Proxy\Contracts\OAuthProxy as OAuthProxyContract;
 use Illuminate\Auth\AuthenticationException;
-use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Contracts\Cookie\Factory as CookieFactory;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Foundation\Application;
 use Laravel\Passport\ClientRepository as OAuthClientRepository;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -82,24 +82,6 @@ class CookieOAuthProxy implements OAuthProxyContract
     }
 
     /**
-     * @inheritdoc
-     */
-    public function requestTokenByRefreshToken(?string $clientId, ?string $refreshToken)
-    {
-        $proxy = Request::create('oauth/token', 'POST', [
-            'grant_type' => 'refresh_token',
-            'client_id' => $clientId,
-            'client_secret' => $this->oAuthClientRepository->findActive($clientId)->secret ?? null,
-            'scope' => '*',
-            'refresh_token' => $refreshToken,
-        ]);
-
-        $response = $this->app->handle($proxy);
-
-        return $this->handleResponse($response);
-    }
-
-    /**
      * Handle proxy response.
      *
      * @param Response $response
@@ -144,6 +126,17 @@ class CookieOAuthProxy implements OAuthProxyContract
     }
 
     /**
+     * Decode a response content string.
+     *
+     * @param string $content
+     * @return mixed
+     */
+    private function decodeResponseContent(string $content)
+    {
+        return \GuzzleHttp\json_decode($content, true);
+    }
+
+    /**
      * On error response callback.
      *
      * @param Response $response
@@ -162,13 +155,20 @@ class CookieOAuthProxy implements OAuthProxyContract
     }
 
     /**
-     * Decode a response content string.
-     *
-     * @param string $content
-     * @return mixed
+     * @inheritdoc
      */
-    private function decodeResponseContent(string $content)
+    public function requestTokenByRefreshToken(?string $clientId, ?string $refreshToken)
     {
-        return \GuzzleHttp\json_decode($content, true);
+        $proxy = Request::create('oauth/token', 'POST', [
+            'grant_type' => 'refresh_token',
+            'client_id' => $clientId,
+            'client_secret' => $this->oAuthClientRepository->findActive($clientId)->secret ?? null,
+            'scope' => '*',
+            'refresh_token' => $refreshToken,
+        ]);
+
+        $response = $this->app->handle($proxy);
+
+        return $this->handleResponse($response);
     }
 }

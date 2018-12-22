@@ -1,21 +1,28 @@
-FROM php:7.2-fpm
+FROM php:7.3-fpm
 
-# Update dependencies list and install system dependencies.
-RUN apt-get update -yqq
-
-# Install PHP dependencies.
-RUN apt-get install -y \
-        libjpeg-dev \
-        libpng-dev \
-        libfreetype6-dev \
+# Install PHP extensions/modules.
+RUN apt-get update -y \
+    && docker-php-ext-install pdo pdo_mysql \
+    && docker-php-ext-install mbstring \
+    && docker-php-ext-install tokenizer \
+    && apt-get install -y libxml2-dev \
+    && docker-php-ext-install xml \
+    && docker-php-ext-install ctype \
+    && docker-php-ext-install json \
+    && docker-php-ext-install bcmath \
+    && apt-get install -y libzip-dev \
+    && docker-php-ext-install zip \
+    && docker-php-ext-install opcache \
+    && docker-php-ext-install exif \
+    && apt-get install -y libjpeg-dev libpng-dev libfreetype6-dev \
     && docker-php-ext-configure gd --with-jpeg-dir=/usr/include --with-png-dir=/usr/include --with-freetype-dir=/usr/include \
-    && docker-php-ext-install -j$(nproc) gd \
-    && docker-php-ext-install -j$(nproc) exif \
-    && docker-php-ext-install -j$(nproc) pdo_mysql \
-    && docker-php-ext-install -j$(nproc) zip \
-    && docker-php-ext-install -j$(nproc) opcache \
+    && docker-php-ext-install gd \
+    && apt-get install -y libmagickwand-dev --no-install-recommends \
+    && pecl install imagick \
     && pecl install redis \
-    && docker-php-ext-enable redis
+    && docker-php-ext-enable --ini-name pecl.ini imagick redis \
+    && apt-get -y clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Copy PHP configuration.
 COPY ./php.ini-production /usr/local/etc/php/php.ini
@@ -27,9 +34,15 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php -r "unlink('composer-setup.php');"
 
 # Install Node.js, npm.
-RUN apt-get install -y apt-transport-https lsb-release gnupg \
+RUN apt-get update -y \
+    && apt-get install -y \
+        apt-transport-https \
+        lsb-release \
+        gnupg \
     && curl -sL https://deb.nodesource.com/setup_10.x | bash - \
-    && apt-get install -y nodejs
+    && apt-get install -y nodejs \
+    && apt-get -y clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Change the working directory.
 WORKDIR /var/www/app
@@ -39,7 +52,6 @@ COPY ./database ./database
 COPY ./composer.json ./composer.json
 COPY ./composer.lock ./composer.lock
 RUN composer install \
- --ignore-platform-reqs \
  --no-interaction \
  --no-plugins \
  --no-scripts \
@@ -58,10 +70,3 @@ RUN npm run prod
 
 # Generate REST API documentation.
 RUN ./node_modules/.bin/apidoc -i ./src/api -o ./docs/rest_api/dist
-
-# Clean up.
-RUN apt-get -y autoclean \
-    && apt-get -y autoremove \
-    && apt-get -y clean \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
-    && rm /var/log/lastlog /var/log/faillog

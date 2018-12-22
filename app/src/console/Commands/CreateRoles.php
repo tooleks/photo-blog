@@ -3,6 +3,7 @@
 namespace Console\Commands;
 
 use App\Models\Role;
+use Core\Entities\UserEntity;
 use Illuminate\Console\Command;
 
 /**
@@ -35,8 +36,8 @@ class CreateRoles extends Command
     {
         if (!Role::exists()) {
             Role::insert([
-                ['name' => Role::NAME_ADMINISTRATOR],
-                ['name' => Role::NAME_CUSTOMER],
+                ['name' => UserEntity::ROLE_ADMINISTRATOR],
+                ['name' => UserEntity::ROLE_CUSTOMER],
             ]);
         }
     }

@@ -14,8 +14,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Role extends Model
 {
-    public const NAME_CUSTOMER = 'Customer';
-    public const NAME_ADMINISTRATOR = 'Administrator';
+    /**
+     * @inheritdoc
+     */
+    public $timestamps = false;
 
     /**
      * @inheritdoc
@@ -23,11 +25,6 @@ class Role extends Model
     protected $fillable = [
         'name',
     ];
-
-    /**
-     * @inheritdoc
-     */
-    public $timestamps = false;
 
     /**
      * @inheritdoc

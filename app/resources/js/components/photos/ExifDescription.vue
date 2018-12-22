@@ -21,6 +21,10 @@
             <th class="w-50 pl-3">ISO</th>
             <td class="w-50 pr-3">{{ exif.iso }}</td>
         </tr>
+        <tr v-if="exif.iso">
+            <th class="w-50 pl-3">Software</th>
+            <td class="w-50 pr-3">{{ exif.software }}</td>
+        </tr>
         </tbody>
     </table>
 </template>

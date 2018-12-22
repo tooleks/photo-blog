@@ -9,26 +9,6 @@ namespace Tests\Integration\Api\V1;
  */
 class PostsResourceTest extends TestCase
 {
-    protected function getResourceName(): string
-    {
-        return 'posts';
-    }
-
-    protected function getResourceStructure(): array
-    {
-        return [
-            'id',
-            'created_by_user_id',
-            'is_published',
-            'description',
-            'published_at',
-            'created_at',
-            'updated_at',
-            'photo',
-            'tags',
-        ];
-    }
-
     public function validAttributesProvider(): array
     {
         $this->refreshApplication();
@@ -70,6 +50,21 @@ class PostsResourceTest extends TestCase
             ->assertStatus(201)
             ->assertJsonStructure($this->getResourceStructure())
             ->assertJson($requestBody);
+    }
+
+    protected function getResourceStructure(): array
+    {
+        return [
+            'id',
+            'created_by_user_id',
+            'is_published',
+            'description',
+            'published_at',
+            'created_at',
+            'updated_at',
+            'photo',
+            'tags',
+        ];
     }
 
     /**
@@ -334,5 +329,10 @@ class PostsResourceTest extends TestCase
         $this
             ->json('DELETE', "{$this->getResourceFullName()}/{$post->id}")
             ->assertStatus(401);
+    }
+
+    protected function getResourceName(): string
+    {
+        return 'posts';
     }
 }

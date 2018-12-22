@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Builders\TagBuilder;
 use App\Models\Tables\Constant;
+use Core\Entities\TagEntity;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,14 +21,14 @@ class Tag extends Model
     /**
      * @inheritdoc
      */
-    protected $fillable = [
-        'value',
-    ];
+    public $timestamps = false;
 
     /**
      * @inheritdoc
      */
-    public $timestamps = false;
+    protected $fillable = [
+        'value',
+    ];
 
     /**
      * @inheritdoc
@@ -76,5 +77,16 @@ class Tag extends Model
         $this->attributes['value'] = trim(str_replace(' ', '_', strtolower($value)));
 
         return $this;
+    }
+
+    /**
+     * @return TagEntity
+     */
+    public function toEntity(): TagEntity
+    {
+        return new TagEntity([
+            'id' => $this->id,
+            'value' => $this->value,
+        ]);
     }
 }

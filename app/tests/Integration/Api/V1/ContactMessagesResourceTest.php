@@ -12,11 +12,6 @@ use Illuminate\Support\Facades\Mail;
  */
 class ContactMessagesResourceTest extends TestCase
 {
-    protected function getResourceName(): string
-    {
-        return 'contact_messages';
-    }
-
     public function validCreateAttributesProvider(): array
     {
         return [
@@ -96,5 +91,10 @@ class ContactMessagesResourceTest extends TestCase
         $this
             ->json('POST', $this->getResourceFullName(), $requestBody)
             ->assertStatus(422);
+    }
+
+    protected function getResourceName(): string
+    {
+        return 'contact_messages';
     }
 }

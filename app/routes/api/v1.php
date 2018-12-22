@@ -4,7 +4,6 @@ use App\Models\Photo;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Contracts\Config\Repository as Config;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,12 +12,8 @@ use Illuminate\Contracts\Config\Repository as Config;
 |
 */
 
-Route::get('/', function (Config $config) {
-    return [
-        'name' => $config->get('app.name'),
-        'version' => '1',
-    ];
-});
+Route::get('/')
+    ->uses(\Api\V1\Http\Actions\InfoGetAction::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -28,13 +23,13 @@ Route::get('/', function (Config $config) {
 Route::group(['prefix' => 'auth'], function () {
 
     Route::post('/token')
-        ->uses('AuthController@create')
-        ->middleware('throttle:10,1');
+        ->middleware('throttle:10,1')
+        ->uses(\Api\V1\Http\Actions\AuthCreateAction::class);
 
     Route::delete('/token')
-        ->uses('AuthController@delete')
         ->middleware('auth:api')
-        ->middleware('throttle:10,1');
+        ->middleware('throttle:10,1')
+        ->uses(\Api\V1\Http\Actions\AuthDeleteAction::class);
 
 });
 
@@ -46,28 +41,28 @@ Route::group(['prefix' => 'auth'], function () {
 Route::group(['prefix' => 'users'], function () {
 
     Route::post('/')
-        ->uses('UsersController@create')
         ->middleware('auth:api')
         ->middleware('can:access-administrator-part')
-        ->middleware(sprintf('can:create-resource,%s', User::class));
+        ->middleware(sprintf('can:create-resource,%s', User::class))
+        ->uses(\Api\V1\Http\Actions\UserCreateAction::class);
 
     Route::get('/{id}')
-        ->uses('UsersController@get')
         ->middleware('auth:api')
         ->middleware('can:access-administrator-part')
-        ->middleware('can:get-resource,user');
+        ->middleware('can:get-resource,user')
+        ->uses(\Api\V1\Http\Actions\UserGetByIdAction::class);
 
     Route::put('/{id}')
-        ->uses('UsersController@update')
         ->middleware('auth:api')
         ->middleware('can:access-administrator-part')
-        ->middleware('can:update-resource,user');
+        ->middleware('can:update-resource,user')
+        ->uses(\Api\V1\Http\Actions\UserUpdateByIdAction::class);
 
     Route::delete('/{id}')
-        ->uses('UsersController@delete')
         ->middleware('auth:api')
         ->middleware('can:access-administrator-part')
-        ->middleware('can:delete-resource,user');
+        ->middleware('can:delete-resource,user')
+        ->uses(\Api\V1\Http\Actions\UserDeleteByIdAction::class);
 
 });
 
@@ -79,22 +74,22 @@ Route::group(['prefix' => 'users'], function () {
 Route::group(['prefix' => 'photos'], function () {
 
     Route::post('/')
-        ->uses('PhotosController@create')
         ->middleware('auth:api')
         ->middleware('can:access-administrator-part')
-        ->middleware(sprintf('can:create-resource,%s', Photo::class));
+        ->middleware(sprintf('can:create-resource,%s', Photo::class))
+        ->uses(\Api\V1\Http\Actions\PhotoCreateAction::class);
 
     Route::put('/{id}')
-        ->uses('PhotosController@update')
         ->middleware('auth:api')
         ->middleware('can:access-administrator-part')
-        ->middleware(sprintf('can:update-resource,%s', Photo::class));
+        ->middleware(sprintf('can:update-resource,%s', Photo::class))
+        ->uses(\Api\V1\Http\Actions\PhotoUpdateByIdAction::class);
 
     Route::delete('/{id}')
-        ->uses('PhotosController@delete')
         ->middleware('auth:api')
         ->middleware('can:access-administrator-part')
-        ->middleware('can:delete-resource,photo');
+        ->middleware('can:delete-resource,photo')
+        ->uses(\Api\V1\Http\Actions\PhotoDeleteByIdAction::class);
 
 });
 
@@ -106,34 +101,34 @@ Route::group(['prefix' => 'photos'], function () {
 Route::group(['prefix' => 'posts'], function () {
 
     Route::post('/')
-        ->uses('PostsController@create')
         ->middleware('auth:api')
         ->middleware('can:access-administrator-part')
-        ->middleware(sprintf('can:create-resource,%s', Post::class));
+        ->middleware(sprintf('can:create-resource,%s', Post::class))
+        ->uses(\Api\V1\Http\Actions\PostCreateAction::class);
 
     Route::get('/')
-        ->uses('PostsController@paginate');
+        ->uses(\Api\V1\Http\Actions\PostPaginateAction::class);
 
     Route::get('/{id}')
-        ->uses('PostsController@get');
+        ->uses(\Api\V1\Http\Actions\PostGetByIdAction::class);
 
     Route::get('/{id}/previous')
-        ->uses('PostsController@getPrevious');
+        ->uses(\Api\V1\Http\Actions\PostGetBeforeIdAction::class);
 
     Route::get('/{id}/next')
-        ->uses('PostsController@getNext');
+        ->uses(\Api\V1\Http\Actions\PostGetAfterIdAction::class);
 
     Route::put('/{id}')
-        ->uses('PostsController@update')
         ->middleware('auth:api')
         ->middleware('can:access-administrator-part')
-        ->middleware('can:update-resource,photo');
+        ->middleware('can:update-resource,photo')
+        ->uses(\Api\V1\Http\Actions\PostUpdateByIdAction::class);
 
     Route::delete('/{id}')
-        ->uses('PostsController@delete')
         ->middleware('auth:api')
         ->middleware('can:access-administrator-part')
-        ->middleware('can:delete-resource,photo');
+        ->middleware('can:delete-resource,photo')
+        ->uses(\Api\V1\Http\Actions\PostDeleteByIdAction::class);
 
 });
 
@@ -145,7 +140,7 @@ Route::group(['prefix' => 'posts'], function () {
 Route::group(['prefix' => 'tags'], function () {
 
     Route::get('/')
-        ->uses('TagsController@paginate');
+        ->uses(\Api\V1\Http\Actions\TagPaginateAction::class);
 
 });
 
@@ -157,8 +152,8 @@ Route::group(['prefix' => 'tags'], function () {
 Route::group(['prefix' => 'contact_messages'], function () {
 
     Route::post('/')
-        ->uses('ContactMessagesController@create')
-        ->middleware('throttle:10,1');
+        ->middleware('throttle:10,1')
+        ->uses(\Api\V1\Http\Actions\ContactMessageSendAction::class);
 
 });
 
@@ -170,16 +165,16 @@ Route::group(['prefix' => 'contact_messages'], function () {
 Route::group(['prefix' => 'subscriptions'], function () {
 
     Route::post('/')
-        ->uses('SubscriptionsController@create')
-        ->middleware('throttle:10,1');
+        ->middleware('throttle:10,1')
+        ->uses(\Api\V1\Http\Actions\SubscriptionCreateAction::class);
 
     Route::get('/')
-        ->uses('SubscriptionsController@paginate')
         ->middleware('auth:api')
-        ->middleware('can:access-administrator-part');
+        ->middleware('can:access-administrator-part')
+        ->uses(\Api\V1\Http\Actions\SubscriptionPaginateAction::class);
 
     Route::delete('/{token}')
-        ->uses('SubscriptionsController@delete')
-        ->middleware('throttle:10,1');
+        ->middleware('throttle:10,1')
+        ->uses(\Api\V1\Http\Actions\SubscriptionDeleteByTokenAction::class);
 
 });

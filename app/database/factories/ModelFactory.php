@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Exif;
 use App\Models\Photo;
 use App\Models\Post;
 use App\Models\Role;
@@ -21,18 +20,12 @@ use Faker\Generator;
 |
 */
 
-$factory->define(Exif::class, function (Generator $faker) {
-    return [
-        'photo_id' => (new Photo)->newQuery()->inRandomOrder()->firstOrFail()->id,
-        'data' => [],
-    ];
-});
-
 $factory->define(Photo::class, function (Generator $faker) {
     return [
         'created_by_user_id' => (new User)->newQuery()->inRandomOrder()->firstOrFail()->id,
         'path' => sprintf('/%s/%s.%s', str_random(12), str_random(5), str_random(3)),
         'avg_color' => $faker->hexColor,
+        'metadata' => [],
     ];
 });
 

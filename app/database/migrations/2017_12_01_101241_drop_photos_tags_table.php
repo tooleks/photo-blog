@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class DropPhotosTagsTable extends Migration
 {
@@ -23,7 +23,7 @@ class DropPhotosTagsTable extends Migration
      */
     public function down()
     {
-        Schema::create('photo_tags', function (Blueprint $table) {
+        Schema::create('photos_tags', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('photo_id');
             $table->unsignedInteger('tag_id');

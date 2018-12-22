@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Builders\PostBuilder;
 use App\Models\Tables\Constant;
 use Carbon\Carbon;
+use Core\Entities\PostEntity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
@@ -14,9 +15,9 @@ use Illuminate\Support\Collection;
  * @property int id
  * @property int created_by_user_id
  * @property string description
- * @property Carbon published_at
  * @property Carbon created_at
  * @property Carbon updated_at
+ * @property Carbon published_at
  * @property bool is_published
  * @property User createdByUser
  * @property Collection photos
@@ -52,6 +53,16 @@ class Post extends Model
     ];
 
     /**
+     * @var array
+     */
+    public static $entityRelations = [
+        'tags',
+        'photos',
+        'photos.location',
+        'photos.thumbnails',
+    ];
+
+    /**
      * @inheritdoc
      */
     protected static function boot()
@@ -81,11 +92,11 @@ class Post extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function createdByUser()
+    public function tags()
     {
-        return $this->belongsTo(User::class, 'created_by_user_id');
+        return $this->belongsToMany(Tag::class, Constant::TABLE_POSTS_TAGS);
     }
 
     /**
@@ -97,11 +108,11 @@ class Post extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function tags()
+    public function createdByUser()
     {
-        return $this->belongsToMany(Tag::class, Constant::TABLE_POSTS_TAGS);
+        return $this->belongsTo(User::class, 'created_by_user_id');
     }
 
     /**
@@ -141,5 +152,30 @@ class Post extends Model
         }
 
         return $isPublished;
+    }
+
+    /**
+     * @return $this
+     */
+    public function loadEntityRelations(): Post
+    {
+        return $this->load(static::$entityRelations);
+    }
+
+    /**
+     * @return PostEntity
+     */
+    public function toEntity(): PostEntity
+    {
+        return new PostEntity([
+            'id' => $this->id,
+            'created_by_user_id' => $this->created_by_user_id,
+            'description' => $this->description,
+            'photo' => $this->photo->toArray(),
+            'tags' => $this->tags->toArray(),
+            'created_at' => $this->created_at->toAtomString(),
+            'updated_at' => $this->updated_at->toAtomString(),
+            'published_at' => $this->published_at ? $this->published_at->toAtomString() : null,
+        ]);
     }
 }

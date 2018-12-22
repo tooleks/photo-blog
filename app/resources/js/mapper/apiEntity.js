@@ -45,9 +45,10 @@ export function toImage({url, width, height}) {
  * @param {string} attributes.aperture
  * @param {string} attributes.iso
  * @param {string} attributes.taken_at
+ * @param {string} attributes.software
  * @return {Exif}
  */
-export function toExif({manufacturer, model, exposure_time, aperture, iso, taken_at}) {
+export function toExif({manufacturer, model, exposure_time, aperture, iso, taken_at, software}) {
     return new Exif({
         manufacturer,
         model,
@@ -55,6 +56,7 @@ export function toExif({manufacturer, model, exposure_time, aperture, iso, taken
         aperture,
         iso,
         takenAt: taken_at,
+        software: software,
     });
 }
 

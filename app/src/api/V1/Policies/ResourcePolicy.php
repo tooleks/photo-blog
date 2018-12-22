@@ -20,7 +20,7 @@ class ResourcePolicy
      */
     public function create(User $authUser, string $resourceClass)
     {
-        if ($authUser->isAdministrator()) {
+        if ($authUser->toEntity()->isAdministrator()) {
             return true;
         }
 
@@ -37,6 +37,30 @@ class ResourcePolicy
     public function get(User $authUser, $resource)
     {
         return $this->hasAccessToResource($authUser, $resource);
+    }
+
+    /**
+     * Determine if an authenticated user has access to a resource.
+     *
+     * @param User $authUser
+     * @param $resource
+     * @return bool
+     */
+    private function hasAccessToResource(User $authUser, $resource): bool
+    {
+        if ($authUser->toEntity()->isAdministrator()) {
+            return true;
+        }
+
+        if ($resource instanceof User && $authUser->id === optional($resource)->id) {
+            return true;
+        }
+
+        if ($authUser->id === optional($resource)->created_by_user_id) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -61,29 +85,5 @@ class ResourcePolicy
     public function delete(User $authUser, $resource)
     {
         return $this->hasAccessToResource($authUser, $resource);
-    }
-
-    /**
-     * Determine if an authenticated user has access to a resource.
-     *
-     * @param User $authUser
-     * @param $resource
-     * @return bool
-     */
-    private function hasAccessToResource(User $authUser, $resource): bool
-    {
-        if ($authUser->isAdministrator()) {
-            return true;
-        }
-
-        if ($resource instanceof User && $authUser->id === optional($resource)->id) {
-            return true;
-        }
-
-        if ($authUser->id === optional($resource)->created_by_user_id) {
-            return true;
-        }
-
-        return false;
     }
 }

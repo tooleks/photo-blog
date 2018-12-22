@@ -2,14 +2,6 @@
 
 namespace Console;
 
-use Console\Commands\ChangeUserPassword;
-use Console\Commands\CreateAdministratorUser;
-use Console\Commands\DeleteDetachedPhotosOlderThanWeek;
-use Console\Commands\DeleteUnusedObjectsFromPhotoStorage;
-use Console\Commands\CreateRoles;
-use Console\Commands\GenerateRestApiDocumentation;
-use Console\Commands\SendWeeklySubscriptionMails;
-use Console\Commands\TestScheduler;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -26,14 +18,15 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        ChangeUserPassword::class,
-        CreateAdministratorUser::class,
-        CreateRoles::class,
-        DeleteDetachedPhotosOlderThanWeek::class,
-        DeleteUnusedObjectsFromPhotoStorage::class,
-        GenerateRestApiDocumentation::class,
-        SendWeeklySubscriptionMails::class,
-        TestScheduler::class,
+        \Console\Commands\ChangeUserPassword::class,
+        \Console\Commands\CreateAdministratorUser::class,
+        \Console\Commands\CreateRoles::class,
+        \Console\Commands\DeleteDetachedPhotosOlderThanWeek::class,
+        \Console\Commands\DeleteUnusedObjectsFromPhotoStorage::class,
+        \Console\Commands\GeneratePhotosMetadata::class,
+        \Console\Commands\GenerateRestApiDocumentation::class,
+        \Console\Commands\SendWeeklySubscriptionMails::class,
+        \Console\Commands\TestScheduler::class,
     ];
 
     /**
@@ -44,18 +37,18 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command(TestScheduler::class)
+        $schedule->command(\Console\Commands\TestScheduler::class)
             ->hourly();
 
-        $schedule->command(DeleteDetachedPhotosOlderThanWeek::class)
+        $schedule->command(\Console\Commands\DeleteDetachedPhotosOlderThanWeek::class)
             ->dailyAt('00:00')
             ->onOneServer();
 
-        $schedule->command(DeleteUnusedObjectsFromPhotoStorage::class)
+        $schedule->command(\Console\Commands\DeleteUnusedObjectsFromPhotoStorage::class)
             ->dailyAt('00:10')
             ->onOneServer();
 
-        $schedule->command(SendWeeklySubscriptionMails::class)
+        $schedule->command(\Console\Commands\SendWeeklySubscriptionMails::class)
             ->weekly()
             ->sundays()
             ->at('06:00')
