@@ -160,6 +160,10 @@ final class ImageMetadata implements Arrayable, JsonSerializable
             $items->push("Aperture: {$this->getAperture()}");
         }
 
+        if ($this->getFocalLength()) {
+            $items->push("Focal Length: {$this->getFocalLength()}");
+        }
+
         if ($this->getIso()) {
             $items->push("ISO: {$this->getIso()}");
         }
