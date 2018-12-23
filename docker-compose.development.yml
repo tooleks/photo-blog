@@ -30,6 +30,7 @@ services:
     volumes:
     - ./app:/var/www/app
     - ./app/php.ini-development:/usr/local/etc/php/php.ini
+    - ./app/policy.xml:/etc/ImageMagick-6/policy.xml
 
   pb-app-queue.docker:
     build:

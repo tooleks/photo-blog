@@ -6,7 +6,7 @@ use App\Services\Image\Contracts\ImageProcessor;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
 use Illuminate\Contracts\Validation\Factory as ValidatorFactory;
 use Illuminate\Validation\Rule;
-use Imagine\Image\AbstractImagine as Imagine;
+use Imagine\Image\ImagineInterface as Imagine;
 use Imagine\Image\Box;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\Metadata\ExifMetadataReader;

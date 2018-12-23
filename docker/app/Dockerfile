@@ -27,6 +27,9 @@ RUN apt-get update -y \
 # Copy PHP configuration.
 COPY ./php.ini-production /usr/local/etc/php/php.ini
 
+# Copy Imagick configuration.
+COPY ./policy.xml /etc/ImageMagick-6/policy.xml
+
 # Install Composer.
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php -r "if (hash_file('SHA384', 'composer-setup.php') === trim(file_get_contents('https://composer.github.io/installer.sig'))) { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \

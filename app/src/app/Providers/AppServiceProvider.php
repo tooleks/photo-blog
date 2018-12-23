@@ -41,7 +41,7 @@ class AppServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
-            \Imagine\Image\AbstractImagine::class,
+            \Imagine\Image\ImagineInterface::class,
             \Imagine\Imagick\Imagine::class
         );
 
