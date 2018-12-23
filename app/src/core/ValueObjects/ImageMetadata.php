@@ -88,6 +88,28 @@ final class ImageMetadata implements Arrayable, JsonSerializable
     /**
      * @return string|null
      */
+    public function getFocalLength(): ?string
+    {
+        $raw = $this->attributes['exif.FocalLength'] ?? null;
+
+        if (!is_string($raw)) {
+            return null;
+        }
+
+        [$numerator, $denominator] = explode('/', $raw);
+
+        if (!is_numeric($numerator) || !is_numeric($denominator)) {
+            return null;
+        }
+
+        $value = $numerator / $denominator;
+
+        return round($value);
+    }
+
+    /**
+     * @return string|null
+     */
     public function getIso(): ?string
     {
         return $this->attributes['exif.ISOSpeedRatings'] ?? null;

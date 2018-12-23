@@ -9,15 +9,17 @@ export default class Exif {
      * @param {string} attributes.model
      * @param {string} attributes.exposureTime
      * @param {string} attributes.aperture
+     * @param {string} attributes.focalLength
      * @param {string} attributes.iso
      * @param {string} attributes.takenAt
      * @param {string} attributes.software
      */
-    constructor({manufacturer, model, exposureTime, aperture, iso, takenAt, software}) {
+    constructor({manufacturer, model, exposureTime, aperture, focalLength, iso, takenAt, software}) {
         this.manufacturer = manufacturer;
         this.model = model;
         this.exposureTime = exposureTime;
         this.aperture = aperture;
+        this.focalLength = focalLength;
         this.iso = iso;
         this.software = software;
         this.takenAt = takenAt;
@@ -57,6 +59,7 @@ export default class Exif {
             model: this.model,
             exposureTime: this.exposureTime,
             aperture: this.aperture,
+            focalLength: this.focalLength,
             iso: this.iso,
             takenAt: this.takenAt,
             software: this.software,

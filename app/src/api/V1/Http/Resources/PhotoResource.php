@@ -25,6 +25,7 @@ class PhotoResource extends PhotoPlainResource
                 'model' => to_string(html_purify($this->resource->getMetadata()->getModel())),
                 'exposure_time' => to_string(html_purify($this->resource->getMetadata()->getExposureTime())),
                 'aperture' => to_string(html_purify($this->resource->getMetadata()->getAperture())),
+                'focal_length' => to_string(html_purify($this->resource->getMetadata()->getFocalLength())),
                 'iso' => to_string(html_purify($this->resource->getMetadata()->getIso())),
                 'taken_at' => to_string(html_purify(optional($this->resource->getMetadata()->getTakenAt())->toAtomString())),
                 'software' => to_string(html_purify($this->resource->getMetadata()->getSoftware())),
