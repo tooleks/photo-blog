@@ -60,7 +60,7 @@ final class ImageMetadata implements Arrayable, JsonSerializable
 
         $value = $denominator / $numerator;
 
-        return '1/' . number_format($value, 0, '.', '');
+        return '1/' . round($value);
     }
 
     /**
@@ -82,7 +82,7 @@ final class ImageMetadata implements Arrayable, JsonSerializable
 
         $value = $numerator / $denominator;
 
-        return 'f/' . number_format($value, 1, '.', '');
+        return 'f/' . round($value, 1);
     }
 
     /**
