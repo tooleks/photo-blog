@@ -6,6 +6,10 @@ export default class EventBus {
      */
     constructor() {
         this.vue = new Vue;
+        this.emit = this.emit.bind(this);
+        this.on = this.on.bind(this);
+        this.once = this.once.bind(this);
+        this.off = this.off.bind(this);
     }
 
     /**
