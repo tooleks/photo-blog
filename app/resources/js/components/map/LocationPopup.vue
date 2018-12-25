@@ -1,6 +1,6 @@
 <template>
     <div class="location">
-        <span class="value">{{ formattedLat }}, {{ formattedLng }}</span>
+        <span class="value">{{ lat.toFixed(4) }}, {{ lng.toFixed(4) }}</span>
         <span class="value" :title="address">{{ address }}</span>
     </div>
 </template>
@@ -19,14 +19,6 @@
             lat: {type: Number},
             lng: {type: Number},
             address: {type: String},
-        },
-        computed: {
-            formattedLat() {
-                return this.lat.toFixed(4);
-            },
-            formattedLng() {
-                return this.lng.toFixed(4);
-            },
         },
     };
 </script>

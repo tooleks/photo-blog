@@ -14,41 +14,6 @@ use Illuminate\Support\Facades\Storage;
  */
 class PhotosResourceTest extends TestCase
 {
-    protected function getResourceName(): string
-    {
-        return 'photos';
-    }
-
-    protected function getResourceStructure(): array
-    {
-        return [
-            'id',
-            'created_by_user_id',
-            'avg_color',
-            'created_at',
-            'exif' => [
-                'manufacturer',
-                'model',
-                'exposure_time',
-                'aperture',
-                'iso',
-                'taken_at',
-            ],
-            'thumbnails' => [
-                'medium' => [
-                    'url',
-                    'width',
-                    'height',
-                ],
-                'large' => [
-                    'url',
-                    'width',
-                    'height',
-                ],
-            ],
-        ];
-    }
-
     public function validAttributesProvider(): array
     {
         $this->refreshApplication();
@@ -89,7 +54,7 @@ class PhotosResourceTest extends TestCase
         /** @var Photo $photo */
         $photo = (new Photo)
             ->newQuery()
-            ->withThumbnails()
+            ->withEntityRelations()
             ->whereIdEquals($responseBody['id'])
             ->firstOrFail();
 
@@ -97,6 +62,37 @@ class PhotosResourceTest extends TestCase
         $photo->thumbnails->each(function (Thumbnail $thumbnail) {
             Storage::assertExists($thumbnail->path);
         });
+    }
+
+    protected function getResourceStructure(): array
+    {
+        return [
+            'id',
+            'created_by_user_id',
+            'avg_color',
+            'created_at',
+            'exif' => [
+                'manufacturer',
+                'model',
+                'exposure_time',
+                'aperture',
+                'iso',
+                'taken_at',
+                'software',
+            ],
+            'thumbnails' => [
+                'medium' => [
+                    'url',
+                    'width',
+                    'height',
+                ],
+                'large' => [
+                    'url',
+                    'width',
+                    'height',
+                ],
+            ],
+        ];
     }
 
     /**
@@ -158,5 +154,10 @@ class PhotosResourceTest extends TestCase
         $photo->thumbnails->each(function (Thumbnail $thumbnail) {
             Storage::assertMissing($thumbnail->path);
         });
+    }
+
+    protected function getResourceName(): string
+    {
+        return 'photos';
     }
 }

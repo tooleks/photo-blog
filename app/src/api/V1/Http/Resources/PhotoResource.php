@@ -2,7 +2,9 @@
 
 namespace Api\V1\Http\Resources;
 
-use App\Util\CastValue;
+use function App\Util\html_purify;
+use function App\Util\to_object;
+use function App\Util\to_string;
 
 /**
  * Class PhotoResource.
@@ -17,11 +19,20 @@ class PhotoResource extends PhotoPlainResource
     public function toArray($request)
     {
         return array_merge(parent::toArray($request), [
-            'location' => CastValue::toClassObjectOrNull($this->resource->location, LocationPlainResource::class),
-            'exif' => CastValue::toClassObjectOrNull($this->resource->exif, ExifPlainResource::class),
+            'location' => to_object($this->resource->getLocation(), LocationPlainResource::class),
+            'exif' => [
+                'manufacturer' => to_string(html_purify($this->resource->getMetadata()->getManufacturer())),
+                'model' => to_string(html_purify($this->resource->getMetadata()->getModel())),
+                'exposure_time' => to_string(html_purify($this->resource->getMetadata()->getExposureTime())),
+                'aperture' => to_string(html_purify($this->resource->getMetadata()->getAperture())),
+                'focal_length' => to_string(html_purify($this->resource->getMetadata()->getFocalLength())),
+                'iso' => to_string(html_purify($this->resource->getMetadata()->getIso())),
+                'taken_at' => to_string(html_purify(optional($this->resource->getMetadata()->getTakenAt())->toAtomString())),
+                'software' => to_string(html_purify($this->resource->getMetadata()->getSoftware())),
+            ],
             'thumbnails' => [
-                'medium' => CastValue::toClassObjectOrNull(data_get($this->resource, 'thumbnails.0'), ThumbnailPlainResource::class),
-                'large' => CastValue::toClassObjectOrNull(data_get($this->resource, 'thumbnails.1'), ThumbnailPlainResource::class),
+                'medium' => to_object($this->resource->getThumbnails()->offsetGet(0), ThumbnailPlainResource::class),
+                'large' => to_object($this->resource->getThumbnails()->offsetGet(1), ThumbnailPlainResource::class),
             ],
         ]);
     }

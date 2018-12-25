@@ -6,8 +6,7 @@ export const AUTH_KEY = "currentUser";
 
 export default class AuthManager {
     /**
-     * AuthManager constructor.
-     *
+     * @constructor
      * @param store
      * @param {LocalStorageManager} localStorage
      */

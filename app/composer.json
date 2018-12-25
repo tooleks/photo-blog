@@ -2,16 +2,23 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": "^7.2",
-        "ext-gd": "*",
-        "ext-exif": "*",
+        "php": "^7.3",
+        "ext-pdo": "*",
         "ext-pdo_mysql": "*",
+        "ext-mbstring": "*",
+        "ext-tokenizer": "*",
+        "ext-xml": "*",
+        "ext-ctype": "*",
+        "ext-json": "*",
+        "ext-bcmath": "*",
+        "ext-zip": "*",
+        "ext-imagick": "*",
+        "ext-exif": "*",
         "ext-redis": "*",
         "laravel/framework": "5.7.*",
         "fideloper/proxy": "~4.0",
         "doctrine/dbal": "~2.3",
         "imagine/imagine": "^0.6.3",
-        "tooleks/php-avg-color-picker": "^1.0.0",
         "guzzlehttp/guzzle": "~6.0",
         "laravel/passport": "^5.0",
         "ezyang/htmlpurifier": "^4.9"
@@ -29,7 +36,8 @@
     "autoload": {
         "files": [
             "src/app/functions.php",
-            "src/app/Util/functions.php"
+            "src/app/Util/functions.php",
+            "src/app/Util/types.php"
         ],
         "classmap": [
             "database"
@@ -38,6 +46,7 @@
             "Api\\": "src/api/",
             "App\\": "src/app/",
             "Console\\": "src/console/",
+            "Core\\": "src/core/",
             "Lib\\": "src/lib/"
         }
     },

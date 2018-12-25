@@ -2,6 +2,8 @@
 
 namespace App\Util;
 
+use Exception;
+use Illuminate\Support\Str;
 use InvalidArgumentException;
 
 /**
@@ -10,8 +12,10 @@ use InvalidArgumentException;
  * @param int $length
  * @param string $alphabet
  * @return string
+ * @throws InvalidArgumentException
+ * @throws Exception
  */
-function str_unique(int $length = 40, $alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'): string
+function str_unique(int $length = 40, string $alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'): string
 {
     if ($length < 1) {
         throw new InvalidArgumentException('Length parameter value should be greater than or equals to 1.');
@@ -19,7 +23,7 @@ function str_unique(int $length = 40, $alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabc
 
     $str = '';
 
-    $alphabetLength = strlen($alphabet);
+    $alphabetLength = Str::length($alphabet);
 
     for ($i = 0; $i < $length; $i++) {
         $str .= $alphabet[random_int(0, $alphabetLength - 1)];
@@ -32,38 +36,38 @@ function str_unique(int $length = 40, $alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabc
  * Remove all malicious code from HTML string.
  *
  * @param mixed $html
- * @return string
+ * @return string|null
  */
-function html_purify($html)
+function html_purify($html): ?string
 {
     $value = value($html);
 
     if (is_null($value)) {
-        return $value;
+        return null;
     }
 
     return app()->make('HTMLPurifier')->purify($value);
 }
 
 /**
- * Remove keys from an array that are not exists in a structure array.
+ * Remove keys that missing in the schema array.
  *
  * @example array_filter_structure(['key_0' => 'value', 'key_1' => 'value'], ['key_0']); // ['key_0' => 'value']
  *
  * @param array $array
- * @param array $structure
+ * @param array $schema
  * @return array
  */
-function array_filter_structure(array $array, array $structure): array
+function array_filter_schema(array $array, array $schema): array
 {
     $result = [];
 
     foreach ($array as $key => $value) {
-        if (array_key_exists($key, $structure)) {
-            $result[$key] = is_array($value) && is_array($structure[$key]) ? array_filter_structure($value, $structure[$key]) : $value;
-        } elseif (is_int($key) && array_key_exists('*', $structure)) {
-            $result[$key] = is_array($value) && is_array($structure['*']) ? array_filter_structure($value, $structure['*']) : $value;
-        } elseif (in_array($key, $structure, true)) {
+        if (array_key_exists($key, $schema)) {
+            $result[$key] = is_array($value) && is_array($schema[$key]) ? array_filter_schema($value, $schema[$key]) : $value;
+        } elseif (is_int($key) && array_key_exists('*', $schema)) {
+            $result[$key] = is_array($value) && is_array($schema['*']) ? array_filter_schema($value, $schema['*']) : $value;
+        } elseif (in_array($key, $schema, true)) {
             $result[$key] = $value;
         }
     }
@@ -99,28 +103,7 @@ function array_remove_dot_notation(array $array): array
  */
 function validator_filter_attributes(array $attributes, array $rules): array
 {
-    return array_filter_structure($attributes, array_remove_dot_notation(array_flip(array_keys($rules))));
-}
-
-/**
- * Normalize math fraction value.
- *
- * @example fraction_normalize("2/4"); // 1/2
- *
- * @param string $value
- * @return null|string
- */
-function fraction_normalize(string $value): ?string
-{
-    $result = null;
-
-    $values = explode('/', $value);
-    if (count($values) === 2) {
-        [$numerator, $denominator] = $values;
-        $result = '1/' . (int) ($denominator / $numerator);
-    }
-
-    return $result;
+    return array_filter_schema($attributes, array_remove_dot_notation(array_flip(array_keys($rules))));
 }
 
 /**
@@ -152,7 +135,7 @@ function url_frontend(string $path = ''): string
  */
 function url_frontend_sign_in(): string
 {
-    return url_frontend("/sign-in");
+    return url_frontend('/sign-in');
 }
 
 /**
@@ -163,7 +146,7 @@ function url_frontend_sign_in(): string
  */
 function url_frontend_photo(int $id): string
 {
-    return url_frontend("/photo/{$id}");
+    return url_frontend(sprintf('/photo/%s', urlencode($id)));
 }
 
 /**
@@ -174,7 +157,7 @@ function url_frontend_photo(int $id): string
  */
 function url_frontend_tag(string $tag): string
 {
-    return url_frontend("/photos/tag/{$tag}");
+    return url_frontend(sprintf('/photos/tag/%s', urlencode($tag)));
 }
 
 /**
@@ -185,5 +168,5 @@ function url_frontend_tag(string $tag): string
  */
 function url_frontend_unsubscription(string $token): string
 {
-    return url_frontend("/unsubscription/{$token}");
+    return url_frontend(sprintf('/unsubscription/%s', urlencode($token)));
 }

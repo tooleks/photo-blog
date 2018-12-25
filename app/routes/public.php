@@ -12,16 +12,16 @@ Route::options('{any}')
 
 Route::get('sitemap.xml')
     ->name('sitemap')
-    ->uses('SiteMapController@xml');
+    ->uses(\App\Http\Actions\SiteMapGetAction::class);
 
 Route::get('rss.xml')
     ->name('rss')
-    ->uses('RssController@xml');
+    ->uses(\App\Http\Actions\RssGetAction::class);
 
 Route::get('manifest.json')
     ->name('manifest')
-    ->uses('ManifestController@json');
+    ->uses(\App\Http\Actions\ManifestGetAction::class);
 
 Route::get('{any}')
     ->where('any', '.*')
-    ->uses('IndexController@index');
+    ->uses(\App\Http\Actions\IndexGetAction::class);

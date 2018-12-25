@@ -11,23 +11,6 @@ use App\Models\User;
  */
 class UsersResourceTest extends TestCase
 {
-    protected function getResourceName(): string
-    {
-        return 'users';
-    }
-
-    protected function getResourceStructure(): array
-    {
-        return [
-            'id',
-            'name',
-            'email',
-            'role',
-            'created_at',
-            'updated_at',
-        ];
-    }
-
     public function validCreateAttributesProvider(): array
     {
         return [
@@ -105,6 +88,18 @@ class UsersResourceTest extends TestCase
             ->json('POST', $this->getResourceFullName(), $requestBody)
             ->assertStatus(201)
             ->assertJsonStructure($this->getResourceStructure());
+    }
+
+    protected function getResourceStructure(): array
+    {
+        return [
+            'id',
+            'name',
+            'email',
+            'role',
+            'created_at',
+            'updated_at',
+        ];
     }
 
     /**
@@ -250,5 +245,10 @@ class UsersResourceTest extends TestCase
         $this
             ->json('DELETE', "{$this->getResourceFullName()}/{$user->id}")
             ->assertStatus(401);
+    }
+
+    protected function getResourceName(): string
+    {
+        return 'users';
     }
 }

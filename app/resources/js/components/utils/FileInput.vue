@@ -3,10 +3,10 @@
            :class="attributes.class"
            :disabled="attributes.disabled"
            v-on-drop-file="onFileChange"
-           title="Choose a file or drag it here.">
+           :title="$lang('Choose a file or drag it here.')">
         <slot>
             <span>
-                <i class="fa fa-cloud-upload" aria-hidden="true"></i> Choose a file or drag it here.
+                <i class="fa fa-cloud-upload" aria-hidden="true"></i> {{ $lang("Choose a file or drag it here.") }}
             </span>
         </slot>
         <input v-if="fileInputReady"

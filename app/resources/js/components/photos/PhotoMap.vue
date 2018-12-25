@@ -54,7 +54,7 @@
             },
         },
         created() {
-            this.setPageTitle("Photo Map");
+            this.setPageTitle(this.$lang("Photo Map"));
             this.loadImages();
         },
     }

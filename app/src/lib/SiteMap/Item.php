@@ -35,6 +35,14 @@ class Item implements ItemContract
     /**
      * @inheritdoc
      */
+    public function getLocation(): string
+    {
+        return $this->location;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function setLocation(string $value)
     {
         $this->location = $value;
@@ -45,17 +53,17 @@ class Item implements ItemContract
     /**
      * @inheritdoc
      */
-    public function getLocation(): string
+    public function hasLocation(): bool
     {
-        return $this->location;
+        return (bool) $this->location;
     }
 
     /**
      * @inheritdoc
      */
-    public function hasLocation(): bool
+    public function getLastModified(): string
     {
-        return !!$this->location;
+        return $this->lastModified;
     }
 
     /**
@@ -71,17 +79,17 @@ class Item implements ItemContract
     /**
      * @inheritdoc
      */
-    public function getLastModified(): string
+    public function hasLastModified(): bool
     {
-        return $this->lastModified;
+        return (bool) $this->lastModified;
     }
 
     /**
      * @inheritdoc
      */
-    public function hasLastModified(): bool
+    public function getChangeFrequency(): string
     {
-        return !!$this->lastModified;
+        return $this->changeFrequency;
     }
 
     /**
@@ -97,17 +105,17 @@ class Item implements ItemContract
     /**
      * @inheritdoc
      */
-    public function getChangeFrequency(): string
+    public function hasChangeFrequency(): bool
     {
-        return $this->changeFrequency;
+        return (bool) $this->changeFrequency;
     }
 
     /**
      * @inheritdoc
      */
-    public function hasChangeFrequency(): bool
+    public function getPriority(): string
     {
-        return !!$this->changeFrequency;
+        return $this->priority;
     }
 
     /**
@@ -123,16 +131,8 @@ class Item implements ItemContract
     /**
      * @inheritdoc
      */
-    public function getPriority(): string
-    {
-        return $this->priority;
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function hasPriority(): bool
     {
-        return !!$this->priority;
+        return (bool) $this->priority;
     }
 }

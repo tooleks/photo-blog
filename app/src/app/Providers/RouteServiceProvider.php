@@ -2,9 +2,9 @@
 
 namespace App\Providers;
 
+use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 /**
  * Class RouteServiceProvider.
@@ -13,15 +13,6 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
  */
 class RouteServiceProvider extends ServiceProvider
 {
-    /**
-     * This namespace is applied to your controller routes.
-     *
-     * In addition, it is set as the URL generator's root namespace.
-     *
-     * @var string
-     */
-    protected $namespace = 'App\Http\Controllers';
-
     /**
      * Define your route model bindings, pattern filters, etc.
      *
@@ -32,6 +23,22 @@ class RouteServiceProvider extends ServiceProvider
         $this->registerParametersBindings();
 
         parent::boot();
+    }
+
+    /**
+     * Register model bindings.
+     *
+     * @return void
+     */
+    public function registerParametersBindings()
+    {
+        Route::bind('id', function ($id) {
+            // Resolve 'me' value as identifier of an authorized user.
+            if ($id === 'me') {
+                $id = optional(Auth::user())->id;
+            }
+            return $id;
+        });
     }
 
     /**
@@ -61,20 +68,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::prefix('api/v1')
             ->middleware('api/v1')
-            ->namespace('Api\V1\Http\Controllers')
             ->group(base_path('routes/api/v1.php'));
-    }
-
-    /**
-     * Define the "public" routes for the application.
-     *
-     * @return void
-     */
-    protected function mapPublicRoutes()
-    {
-        Route::middleware('public')
-            ->namespace($this->namespace)
-            ->group(base_path('routes/public.php'));
     }
 
     /**
@@ -87,23 +81,17 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapWebRoutes()
     {
         Route::middleware('web')
-            ->namespace($this->namespace)
             ->group(base_path('routes/web.php'));
     }
 
     /**
-     * Register model bindings.
+     * Define the "public" routes for the application.
      *
      * @return void
      */
-    public function registerParametersBindings()
+    protected function mapPublicRoutes()
     {
-        Route::bind('id', function ($id) {
-            // Resolve 'me' value as identifier of an authorized user.
-            if ($id === 'me') {
-                $id = optional(Auth::user())->id;
-            }
-            return $id;
-        });
+        Route::middleware('public')
+            ->group(base_path('routes/public.php'));
     }
 }

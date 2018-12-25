@@ -5,8 +5,8 @@
                 <table class="table table-bordered bg-white">
                     <thead>
                     <tr>
-                        <th>Email</th>
-                        <th>Unsubscribe</th>
+                        <th>{{ $lang("Email") }}</th>
+                        <th>{{ $lang("Unsubscribe") }}</th>
                         <th class="width-3em"></th>
                     </tr>
                     </thead>
@@ -24,8 +24,10 @@
                             <button @click="deleteSubscription(subscription)"
                                     class="btn btn-secondary btn-sm"
                                     type="button"
-                                    aria-label="Delete"
-                                    title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                    :aria-label="$lang('Delete')"
+                                    :title="$lang('Delete')">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </button>
                         </td>
                     </tr>
                     </tbody>
@@ -34,7 +36,7 @@
         </div>
         <div v-if="!loading && !subscriptions.length" class="row">
             <div class="col mt-3">
-                <div class="alert alert-secondary">No subscriptions found</div>
+                <div class="alert alert-secondary">{{ $lang("No subscriptions found") }}</div>
             </div>
         </div>
         <div v-if="previousPageExists || nextPageExists" class="row">
@@ -43,13 +45,13 @@
                         v-if="previousPageExists"
                         :to="{name: this.$route.name, params: {page: this.previousPage}}"
                         class="btn btn-secondary float-left"
-                        title="Previous Page">Previous
+                        :title="$lang('Previous page')">{{ $lang("Previous") }}
                 </router-link>
                 <router-link
                         v-if="nextPageExists"
                         :to="{name: this.$route.name, params: {page: this.nextPage}}"
                         class="btn btn-secondary float-right"
-                        title="Next Page">Next
+                        :title="$lang('Next page')">{{ $lang("Next") }}
                 </router-link>
             </div>
         </div>
@@ -112,11 +114,11 @@
                 }
             },
             async deleteSubscription(subscription) {
-                if (confirm(`Do you really want to delete the ${subscription.email} subscription?`)) {
+                if (confirm(this.$lang("Do you really want to delete {email} subscription?", subscription.email))) {
                     this.loading = true;
                     try {
                         await this.$services.getSubscriptionManager().deleteByToken(subscription.token);
-                        this.$services.getAlert().success("The subscription has been successfully deleted.");
+                        this.$services.getAlert().success(this.$lang("The subscription has been successfully deleted."));
                         await this.loadSubscriptions();
                     } catch (error) {
                         // The error is handled by the API service.
@@ -128,7 +130,7 @@
             },
         },
         created() {
-            this.setPageTitle("Subscriptions");
+            this.setPageTitle(this.$lang("Subscriptions"));
             this.loadSubscriptions();
         },
     };

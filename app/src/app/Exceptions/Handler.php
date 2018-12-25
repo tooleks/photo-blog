@@ -2,13 +2,13 @@
 
 namespace App\Exceptions;
 
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException as EloquentModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\HttpException as SymfonyHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException as SymfonyNotFoundHttpException;
-use Exception;
 
 /**
  * Class Handler.

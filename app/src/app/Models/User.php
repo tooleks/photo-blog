@@ -4,8 +4,9 @@ namespace App\Models;
 
 use App\Models\Builders\UserBuilder;
 use Carbon\Carbon;
-use Illuminate\Notifications\Notifiable;
+use Core\Entities\UserEntity;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use Laravel\Passport\HasApiTokens;
 
@@ -91,18 +92,18 @@ class User extends Authenticatable
     }
 
     /**
-     * @return bool
+     * @return UserEntity
      */
-    public function isAdministrator(): bool
+    public function toEntity(): UserEntity
     {
-        return optional($this->role)->name === Role::NAME_ADMINISTRATOR;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isCustomer(): bool
-    {
-        return optional($this->role)->name === Role::NAME_CUSTOMER;
+        return new UserEntity([
+            'id' => $this->id,
+            'name' => $this->name,
+            'email' => $this->email,
+            'password_hash' => $this->password,
+            'role' => optional($this->role)->name,
+            'created_at' => $this->created_at->toAtomString(),
+            'updated_at' => $this->updated_at->toAtomString(),
+        ]);
     }
 }

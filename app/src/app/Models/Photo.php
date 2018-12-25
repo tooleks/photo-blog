@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Builders\PhotoBuilder;
 use App\Models\Tables\Constant;
 use Carbon\Carbon;
+use Core\Entities\PhotoEntity;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,11 +17,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property int location_id
  * @property string path
  * @property string avg_color
+ * @property array metadata
  * @property Carbon created_at
  * @property Carbon updated_at
  * @property User createdByUser
  * @property User location
- * @property Exif exif
  * @property Collection thumbnails
  * @property Post post
  * @property Collection posts
@@ -34,6 +35,14 @@ class Photo extends Model
     protected $attributes = [
         'path' => '',
         'avg_color' => '',
+        'metadata' => '',
+    ];
+
+    /**
+     * @inheritdoc
+     */
+    protected $casts = [
+        'metadata' => 'array',
     ];
 
     /**
@@ -41,9 +50,15 @@ class Photo extends Model
      */
     protected $fillable = [
         'created_by_user_id',
-        'location_id',
         'path',
-        'avg_color',
+    ];
+
+    /**
+     * @var array
+     */
+    public static $entityRelations = [
+        'location',
+        'thumbnails',
     ];
 
     /**
@@ -54,7 +69,6 @@ class Photo extends Model
         parent::boot();
 
         static::deleting(function (self $photo) {
-            $photo->exif()->delete();
             $photo->thumbnails()->detach();
         });
     }
@@ -92,19 +106,21 @@ class Photo extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function exif()
+    public function thumbnails()
     {
-        return $this->hasOne(Exif::class);
+        return $this->belongsToMany(Thumbnail::class, Constant::TABLE_PHOTOS_THUMBNAILS)
+            ->orderBy('width')
+            ->orderBy('height');
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function thumbnails()
+    public function posts()
     {
-        return $this->belongsToMany(Thumbnail::class, Constant::TABLE_PHOTOS_THUMBNAILS)->orderBy('width')->orderBy('height');
+        return $this->belongsToMany(Post::class, Constant::TABLE_POSTS_PHOTOS);
     }
 
     /**
@@ -114,16 +130,34 @@ class Photo extends Model
     {
         $this->setRelation('post', collect($this->posts)->first());
 
-        $photo = $this->getRelation('post');
+        $post = $this->getRelation('post');
 
-        return $photo;
+        return $post;
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return $this
      */
-    public function posts()
+    public function loadEntityRelations(): Photo
     {
-        return $this->belongsToMany(Post::class, Constant::TABLE_POSTS_PHOTOS);
+        return $this->load(static::$entityRelations);
+    }
+
+    /**
+     * @return PhotoEntity
+     */
+    public function toEntity(): PhotoEntity
+    {
+        return new PhotoEntity([
+            'id' => $this->id,
+            'created_by_user_id' => $this->created_by_user_id,
+            'path' => $this->path,
+            'avg_color' => $this->avg_color,
+            'metadata' => $this->metadata,
+            'created_at' => $this->created_at->toAtomString(),
+            'updated_at' => $this->updated_at->toAtomString(),
+            'location' => $this->location ? $this->location->toArray() : null,
+            'thumbnails' => $this->thumbnails->toArray(),
+        ]);
     }
 }

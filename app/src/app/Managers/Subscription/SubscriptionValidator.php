@@ -2,10 +2,11 @@
 
 namespace App\Managers\Subscription;
 
-use function App\Util\validator_filter_attributes;
 use App\Models\Tables\Constant;
 use Illuminate\Validation\Factory as ValidatorFactory;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
+use function App\Util\validator_filter_attributes;
 
 /**
  * Class SubscriptionValidator.
@@ -32,6 +33,7 @@ class SubscriptionValidator
     /**
      * @param array $attributes
      * @return array
+     * @throws ValidationException
      */
     public function validateForCreate(array $attributes): array
     {
@@ -53,6 +55,7 @@ class SubscriptionValidator
     /**
      * @param array $filters
      * @return array
+     * @throws ValidationException
      */
     public function validateForPaginate(array $filters): array
     {

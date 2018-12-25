@@ -2,8 +2,8 @@
 
 namespace Lib\Rss;
 
-use Lib\Rss\Contracts\Item as ItemContract;
 use Lib\Rss\Contracts\Enclosure;
+use Lib\Rss\Contracts\Item as ItemContract;
 
 /**
  * Class Item.

@@ -2,16 +2,16 @@
 
 namespace Console\Commands;
 
-use function App\Util\url_frontend;
-use function App\Util\url_frontend_unsubscription;
+use App\Mail\WeeklySubscription;
 use App\Models\Builders\SubscriptionBuilder;
 use App\Models\Post;
-use App\Mail\WeeklySubscription;
 use App\Models\Subscription;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Mail;
+use function App\Util\url_frontend;
+use function App\Util\url_frontend_unsubscription;
 
 /**
  * Class SendWeeklySubscriptionMails.
@@ -57,7 +57,7 @@ class SendWeeklySubscriptionMails extends Command
                 })
                 ->chunk($this->option('chunk_size'), function (Collection $subscriptions) {
                     $subscriptions->each(function (Subscription $subscription) {
-                        $this->comment("Sending subscription mail to {$subscription->email}.");
+                        $this->comment("Queuing subscription mail to {$subscription->email}...");
                         Mail::queue(new WeeklySubscription([
                             'website_url' => url_frontend(),
                             'subscriber_email' => $subscription->email,

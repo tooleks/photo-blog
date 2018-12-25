@@ -12,7 +12,7 @@
                        :speed="50"
                        :acceleration="2"
                        :scrollDistance="150"
-                       title="Go to top">
+                       :title="$lang('Go to top')">
             <i class="fa fa-arrow-up" aria-hidden="true"></i>
         </go-top-button>
     </div>
@@ -58,6 +58,40 @@
             routeKey() {
                 return this.$route.meta.transition !== false ? this.$route.fullPath : null;
             },
+        },
+        watch: {
+            $route() {
+                this.initSearchInput(this.$route.params.searchPhrase);
+            },
+        },
+        methods: {
+            initSearchInput(searchPhrase) {
+                // Initialize search input value if search phrase is provided.
+                if (searchPhrase) {
+                    this.$services.getEventBus().emit("search.init", searchPhrase);
+                }
+                // Otherwise, clear search input value.
+                else {
+                    this.$services.getEventBus().emit("search.clear");
+                }
+            },
+            onSearch(searchPhrase) {
+                // Redirect to search photos page if search phrase is provided.
+                if (searchPhrase) {
+                    this.$router.push({name: "photos-search", params: {searchPhrase}});
+                }
+                // Otherwise, fallback to all photos page.
+                else {
+                    this.$router.push({name: "photos"});
+                }
+            },
+        },
+        created() {
+            this.$nextTick(() => this.initSearchInput(this.$route.params.searchPhrase));
+            this.$services.getEventBus().on("search", this.onSearch);
+        },
+        beforeDestroy() {
+            this.$services.getEventBus().off("search", this.onSearch);
         },
     }
 </script>

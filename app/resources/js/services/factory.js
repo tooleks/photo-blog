@@ -1,9 +1,10 @@
 import Vue from "vue";
-import {EventEmitter} from "tooleks";
-
 import config from "../config";
 import store from "../store";
 import CookiesManager from "./CookiesManager";
+import EventBus from "./EventBus";
+import Localization from "./Localization";
+import lang from "../resources/lang";
 import LocalStorageManager from "./LocalStorageManager";
 import AlertService from "./AlertService";
 import ApiHandler from "./api/ApiHandler";
@@ -25,28 +26,35 @@ export function getStore() {
     return store;
 }
 
-/** @type {EventEmitter} */
-const eventEmitter = new EventEmitter;
+/** @type {EventBus} */
+const eventBus = new EventBus;
 
-/** @return {EventEmitter} */
-export function getEventEmitter() {
-    return eventEmitter;
+/** @return {EventBus} */
+export function getEventBus() {
+    return eventBus;
 }
-
-/** @type {CookiesManager} */
-const cookiesManager = new CookiesManager;
 
 /** @return {CookiesManager} */
 export function getCookies() {
-    return cookiesManager;
+    return new CookiesManager;
 }
 
-/** @type {LocalStorageManager} */
-const localStorageManager = new LocalStorageManager;
+/** @return {Localization} */
+export function getLocalization(locale = "en") {
+    return new Localization(lang, locale);
+}
+
+/** @type {Localization} */
+const localization = getLocalization();
+
+/** @return {string} */
+export function getLang(key, ...params) {
+    return localization.get(key, ...params);
+}
 
 /** @return {LocalStorageManager} */
 export function getLocalStorage() {
-    return localStorageManager;
+    return new LocalStorageManager;
 }
 
 /** @type {AlertService} */

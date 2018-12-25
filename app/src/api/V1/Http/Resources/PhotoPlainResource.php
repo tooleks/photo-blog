@@ -2,10 +2,11 @@
 
 namespace Api\V1\Http\Resources;
 
-use function App\Util\html_purify;
-use App\Models\Photo;
-use App\Util\CastValue;
+use Core\Entities\PhotoEntity;
 use Illuminate\Http\Resources\Json\Resource;
+use function App\Util\html_purify;
+use function App\Util\to_int;
+use function App\Util\to_string;
 
 /**
  * Class PhotoPlainResource.
@@ -15,7 +16,7 @@ use Illuminate\Http\Resources\Json\Resource;
 class PhotoPlainResource extends Resource
 {
     /**
-     * @var Photo
+     * @var PhotoEntity
      */
     public $resource;
 
@@ -25,10 +26,10 @@ class PhotoPlainResource extends Resource
     public function toArray($request)
     {
         return [
-            'id' => CastValue::toIntOrNull(html_purify($this->resource->id)),
-            'created_by_user_id' => CastValue::toIntOrNull(html_purify($this->resource->created_by_user_id)),
-            'avg_color' => CastValue::toStringOrNull(html_purify($this->resource->avg_color)),
-            'created_at' => CastValue::toStringOrNull(html_purify(optional($this->resource->created_at)->toAtomString())),
+            'id' => to_int(html_purify($this->resource->getId())),
+            'created_by_user_id' => to_int(html_purify($this->resource->getCreatedByUserId())),
+            'avg_color' => to_string(html_purify($this->resource->getAvgColor())),
+            'created_at' => to_string(html_purify($this->resource->getCreatedAt()->toAtomString())),
         ];
     }
 }

@@ -9,7 +9,6 @@ namespace App\Models\Tables;
  */
 final class Constant
 {
-    public const TABLE_EXIF = 'exif';
     public const TABLE_LOCATIONS = 'locations';
     public const TABLE_PHOTOS = 'photos';
     public const TABLE_PHOTOS_THUMBNAILS = 'photos_thumbnails';

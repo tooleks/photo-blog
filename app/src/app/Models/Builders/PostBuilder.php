@@ -2,9 +2,10 @@
 
 namespace App\Models\Builders;
 
+use App\Models\Post;
 use App\Models\Tables\Constant;
-use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * Class PostBuilder.
@@ -25,25 +26,9 @@ class PostBuilder extends Builder
     /**
      * @return $this
      */
-    public function withPhoto()
+    public function withEntityRelations()
     {
-        return $this->withPhotos();
-    }
-
-    /**
-     * @return $this
-     */
-    public function withPhotos()
-    {
-        return $this->with('photos', 'photos.thumbnails', 'photos.exif');
-    }
-
-    /**
-     * @return $this
-     */
-    public function withTags()
-    {
-        return $this->with('tags');
+        return $this->with(Post::$entityRelations);
     }
 
     /**

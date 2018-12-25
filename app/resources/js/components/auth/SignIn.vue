@@ -6,8 +6,8 @@
                     <div class="card-body">
                         <form @submit.prevent="$refs.reCaptcha.verify">
                             <div class="form-group">
-                                <label for="email">Email
-                                    <small>Required</small>
+                                <label for="email">{{ $lang("Email") }}
+                                    <small>{{ $lang("Required") }}</small>
                                 </label>
                                 <input type="email"
                                        required
@@ -17,8 +17,8 @@
                                        v-focus>
                             </div>
                             <div class="form-group">
-                                <label for="password">Password
-                                    <small>Required</small>
+                                <label for="password">{{ $lang("Password") }}
+                                    <small>{{ $lang("Required") }}</small>
                                 </label>
                                 <input type="password"
                                        required
@@ -29,7 +29,9 @@
                             <div class="form-group">
                                 <re-captcha ref="reCaptcha" @verified="signIn"/>
                             </div>
-                            <button :disabled="loading" type="submit" class="btn btn-secondary">Sign In</button>
+                            <button :disabled="loading" type="submit" class="btn btn-secondary">
+                                {{ $lang("Sign In") }}
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -70,7 +72,7 @@
                         password: this.password,
                         g_recaptcha_response: reCaptchaResponse,
                     });
-                    this.$services.getAlert().success(`Hello ${user.name}!`);
+                    this.$services.getAlert().success(this.$lang("Hello {name}!", user.name));
                     this.goToRedirectUrl();
                 } catch (error) {
                     // The error is handled by the API service.
@@ -81,7 +83,7 @@
             },
         },
         created() {
-            this.setPageTitle("Sign In");
+            this.setPageTitle(this.$lang("Sign In"));
             if (this.authenticated) {
                 this.goToRedirectUrl();
             }

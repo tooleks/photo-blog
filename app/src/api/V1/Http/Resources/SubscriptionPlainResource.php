@@ -2,10 +2,10 @@
 
 namespace Api\V1\Http\Resources;
 
-use function App\Util\html_purify;
-use App\Models\Subscription;
-use App\Util\CastValue;
+use Core\Entities\SubscriptionEntity;
 use Illuminate\Http\Resources\Json\Resource;
+use function App\Util\html_purify;
+use function App\Util\to_string;
 
 /**
  * Class SubscriptionPlainResource.
@@ -15,7 +15,7 @@ use Illuminate\Http\Resources\Json\Resource;
 class SubscriptionPlainResource extends Resource
 {
     /**
-     * @var Subscription
+     * @var SubscriptionEntity
      */
     public $resource;
 
@@ -25,8 +25,8 @@ class SubscriptionPlainResource extends Resource
     public function toArray($request)
     {
         return [
-            'email' => CastValue::toStringOrNull(html_purify($this->resource->email)),
-            'token' => CastValue::toStringOrNull(html_purify($this->resource->token)),
+            'email' => to_string(html_purify($this->resource->getEmail())),
+            'token' => to_string(html_purify($this->resource->getToken())),
         ];
     }
 }

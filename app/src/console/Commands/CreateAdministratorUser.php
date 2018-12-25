@@ -2,7 +2,7 @@
 
 namespace Console\Commands;
 
-use App\Managers\User\Contracts\UserManager;
+use App\Managers\User\ARUserManager;
 use App\Models\Role;
 use Illuminate\Console\Command;
 use function App\Util\url_frontend_sign_in;
@@ -29,16 +29,16 @@ class CreateAdministratorUser extends Command
     protected $description = 'Create administrator user';
 
     /**
-     * @var UserManager
+     * @var ARUserManager
      */
     private $userManager;
 
     /**
      * CreateAdministratorUser constructor.
      *
-     * @param UserManager $userManager
+     * @param ARUserManager $userManager
      */
-    public function __construct(UserManager $userManager)
+    public function __construct(ARUserManager $userManager)
     {
         parent::__construct();
 

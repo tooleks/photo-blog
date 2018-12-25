@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\User;
 use Carbon\Carbon;
+use Core\Entities\UserEntity;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Passport\Passport;
@@ -60,15 +61,15 @@ class AuthServiceProvider extends ServiceProvider
     public function registerGates(): void
     {
         Gate::define('access-administrator-part', function (User $authUser) {
-            return $authUser->isAdministrator();
+            return $authUser->toEntity()->isAdministrator();
         });
 
-        Gate::define('view-user-contacts', function (User $authUser, User $user) {
-            return $authUser->isAdministrator() || $authUser->id === $user->id;
+        Gate::define('view-user-contacts', function (User $authUser, UserEntity $user) {
+            return $authUser->toEntity()->isAdministrator() || $authUser->id === $user->getId();
         });
 
         Gate::define('view-unpublished-posts', function (User $authUser) {
-            return $authUser->isAdministrator();
+            return $authUser->toEntity()->isAdministrator();
         });
     }
 

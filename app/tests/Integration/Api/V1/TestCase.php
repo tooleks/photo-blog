@@ -11,10 +11,10 @@ use Tests\TestCase as BaseTestCase;
  */
 abstract class TestCase extends BaseTestCase
 {
-    abstract protected function getResourceName(): string;
-
     protected function getResourceFullName(): string
     {
         return 'api/v1/' . $this->getResourceName();
     }
+
+    abstract protected function getResourceName(): string;
 }

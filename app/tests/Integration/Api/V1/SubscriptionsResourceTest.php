@@ -11,19 +11,6 @@ use App\Models\Subscription;
  */
 class SubscriptionsResourceTest extends TestCase
 {
-    protected function getResourceName(): string
-    {
-        return 'subscriptions';
-    }
-
-    protected function getResourceStructure(): array
-    {
-        return [
-            'email',
-            'token',
-        ];
-    }
-
     public function validCreateAttributesProvider(): array
     {
         return [
@@ -51,6 +38,14 @@ class SubscriptionsResourceTest extends TestCase
             ->assertStatus(201)
             ->assertJsonStructure($this->getResourceStructure())
             ->assertJson($requestBody);
+    }
+
+    protected function getResourceStructure(): array
+    {
+        return [
+            'email',
+            'token',
+        ];
     }
 
     /**
@@ -126,5 +121,10 @@ class SubscriptionsResourceTest extends TestCase
             (new Subscription)->newQuery()->whereTokenEquals($subscription->token)->exists(),
             'The subscription was not deleted.'
         );
+    }
+
+    protected function getResourceName(): string
+    {
+        return 'subscriptions';
     }
 }

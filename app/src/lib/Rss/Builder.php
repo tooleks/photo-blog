@@ -4,6 +4,7 @@ namespace Lib\Rss;
 
 use Lib\Rss\Contracts\Builder as BuilderContract;
 use Lib\Rss\Contracts\Channel;
+use Lib\Rss\Contracts\Item as ItemContract;
 
 /**
  * Class Builder.
@@ -53,7 +54,9 @@ class Builder implements BuilderContract
      */
     public function setItems(array $items)
     {
-        $this->items = $items;
+        $this->items = array_map(function (ItemContract $item) {
+            return $item;
+        }, $items);
 
         return $this;
     }

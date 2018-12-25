@@ -2,12 +2,13 @@
 
 namespace Api\V1\Http\Resources;
 
-use function App\Util\html_purify;
-use function App\Util\url_storage;
-use App\Models\Thumbnail;
-use App\Util\CastValue;
+use Core\Entities\ThumbnailEntity;
 use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Support\Facades\Storage;
+use function App\Util\html_purify;
+use function App\Util\to_int;
+use function App\Util\to_string;
+use function App\Util\url_storage;
 
 /**
  * Class ThumbnailPlainResource.
@@ -17,7 +18,7 @@ use Illuminate\Support\Facades\Storage;
 class ThumbnailPlainResource extends Resource
 {
     /**
-     * @var Thumbnail
+     * @var ThumbnailEntity
      */
     public $resource;
 
@@ -27,11 +28,11 @@ class ThumbnailPlainResource extends Resource
     public function toArray($request)
     {
         return [
-            'url' => CastValue::toStringOrNull(html_purify(function () {
-                return url_storage(Storage::url($this->resource->path));
+            'url' => to_string(html_purify(function () {
+                return url_storage(Storage::url($this->resource->getPath()));
             })),
-            'width' => CastValue::toIntOrNull(html_purify($this->resource->width)),
-            'height' => CastValue::toIntOrNull(html_purify($this->resource->height)),
+            'width' => to_int(html_purify($this->resource->getWidth())),
+            'height' => to_int(html_purify($this->resource->getHeight())),
         ];
     }
 }

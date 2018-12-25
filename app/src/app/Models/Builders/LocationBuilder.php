@@ -3,7 +3,7 @@
 namespace App\Models\Builders;
 
 use App\Models\Tables\Constant;
-use App\ValueObjects\Coordinates;
+use Core\ValueObjects\Coordinates;
 use Illuminate\Database\Eloquent\Builder;
 
 /**

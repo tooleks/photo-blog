@@ -4,7 +4,7 @@ initialization: install-dependencies
 
 install-dependencies:
 	docker run --rm -v "${PWD}/app:/app" -w "/app" node:10 npm install
-	docker run --rm -v "${PWD}/app:/app" -w "/app" composer:1.7 install \
+	docker run --rm -v "${PWD}/app:/app" -w "/app" composer:1.8 install \
 		--ignore-platform-reqs \
 		--no-interaction \
 		--no-plugins \
@@ -12,8 +12,8 @@ install-dependencies:
 		--prefer-dist
 
 update-dependencies:
-	docker run --rm --mount -v "${PWD}/app:/app" -w "/app" node:10 npm update
-	docker run --rm --mount -v "${PWD}/app:/app" -w "/app" composer:1.7 update \
+	docker run --rm -v "${PWD}/app:/app" -w "/app" node:10 npm update
+	docker run --rm -v "${PWD}/app:/app" -w "/app" composer:1.8 update \
 		--ignore-platform-reqs \
 		--no-interaction \
 		--no-plugins \

@@ -64,12 +64,12 @@ class DeleteUnusedObjectsFromPhotoStorage extends Command
     public function handle(): void
     {
         foreach ($this->getDirectoriesToDelete() as $directory) {
-            $this->comment("Deleting {$directory}.");
+            $this->comment("Deleting directory {$directory}...");
             $this->storage->deleteDirectory($directory);
         }
 
         foreach ($this->getFilesToDelete() as $file) {
-            $this->comment("Deleting {$file}.");
+            $this->comment("Deleting file {$file}...");
             $this->storage->delete($file);
         }
     }
@@ -89,20 +89,6 @@ class DeleteUnusedObjectsFromPhotoStorage extends Command
     }
 
     /**
-     * Get files to delete.
-     *
-     * @return array
-     */
-    protected function getFilesToDelete(): array
-    {
-        $files = array_diff($this->getAllFilesFromStorage(), $this->getAllFilesFromDataProvider());
-
-        return array_filter(array_unique($files), function ($directory) {
-            return Str::length($directory) > 0;
-        });
-    }
-
-    /**
      * Get all directories from a storage.
      *
      * @return array
@@ -110,16 +96,6 @@ class DeleteUnusedObjectsFromPhotoStorage extends Command
     protected function getAllDirectoriesFromStorage(): array
     {
         return array_values($this->storage->allDirectories('photos'));
-    }
-
-    /**
-     * Get all files from a storage.
-     *
-     * @return array
-     */
-    protected function getAllFilesFromStorage(): array
-    {
-        return array_values($this->storage->allFiles('photos'));
     }
 
     /**
@@ -135,11 +111,35 @@ class DeleteUnusedObjectsFromPhotoStorage extends Command
             ->newQuery()
             ->chunk($this->option('chunk_size'), function (Collection $photos) use (&$directories) {
                 $photos->each(function (Photo $photo) use (&$directories) {
-                    $directories[] = dirname($photo->path);
+                    $directories[] = pathinfo($photo->path, PATHINFO_DIRNAME);
                 });
             });
 
         return array_values($directories);
+    }
+
+    /**
+     * Get files to delete.
+     *
+     * @return array
+     */
+    protected function getFilesToDelete(): array
+    {
+        $files = array_diff($this->getAllFilesFromStorage(), $this->getAllFilesFromDataProvider());
+
+        return array_filter(array_unique($files), function ($directory) {
+            return Str::length($directory) > 0;
+        });
+    }
+
+    /**
+     * Get all files from a storage.
+     *
+     * @return array
+     */
+    protected function getAllFilesFromStorage(): array
+    {
+        return array_values($this->storage->allFiles('photos'));
     }
 
     /**

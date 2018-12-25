@@ -2,11 +2,12 @@
 
 namespace App\Managers\User;
 
-use function App\Util\validator_filter_attributes;
-use App\Models\User;
 use App\Models\Tables\Constant;
+use App\Models\User;
 use Illuminate\Validation\Factory as ValidatorFactory;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
+use function App\Util\validator_filter_attributes;
 
 /**
  * Class UserValidator.
@@ -33,6 +34,7 @@ class UserValidator
     /**
      * @param array $attributes
      * @return array
+     * @throws ValidationException
      */
     public function validateForCreate(array $attributes): array
     {
@@ -55,6 +57,7 @@ class UserValidator
      * @param User $user
      * @param array $attributes
      * @return array
+     * @throws ValidationException
      */
     public function validateForSave(User $user, array $attributes): array
     {

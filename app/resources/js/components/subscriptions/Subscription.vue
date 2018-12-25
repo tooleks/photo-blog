@@ -5,7 +5,7 @@
                 <div class="row">
                     <div class="col">
                         <p class="alert alert-secondary">
-                            Sign up with your email address to receive the website updates.
+                            {{ $lang("Sign up with your email address to receive the website updates.") }}
                         </p>
                     </div>
                 </div>
@@ -15,8 +15,8 @@
                             <div class="card-body">
                                 <form @submit.prevent="$refs.reCaptcha.verify">
                                     <div class="form-group">
-                                        <label for="email">Email
-                                            <small>Required</small>
+                                        <label for="email">{{ $lang("Email") }}
+                                            <small>{{ $lang("Required") }}</small>
                                         </label>
                                         <input type="email"
                                                required
@@ -28,7 +28,9 @@
                                     <div class="form-group">
                                         <re-captcha ref="reCaptcha" @verified="subscribe"/>
                                     </div>
-                                    <button :disabled="loading" type="submit" class="btn btn-secondary">Send</button>
+                                    <button :disabled="loading" type="submit" class="btn btn-secondary">
+                                        {{ $lang("Send") }}
+                                    </button>
                                 </form>
                             </div>
                         </div>
@@ -67,7 +69,7 @@
                         email: this.email,
                         g_recaptcha_response: reCaptchaResponse,
                     });
-                    this.$services.getAlert().success("You have been successfully subscribed to the website updates.");
+                    this.$services.getAlert().success(this.$lang("You have been successfully subscribed to the website updates."));
                     this.goToHomePage();
                 } catch (error) {
                     // The error is handled by the API service.
@@ -78,7 +80,7 @@
             },
         },
         created() {
-            this.setPageTitle("Subscription");
+            this.setPageTitle(this.$lang("Subscription"));
         },
     }
 </script>

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Builders\SubscriptionBuilder;
+use Core\Entities\SubscriptionEntity;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -18,14 +19,14 @@ class Subscription extends Model
     /**
      * @inheritdoc
      */
-    protected $fillable = [
-        'email',
-    ];
+    public $timestamps = false;
 
     /**
      * @inheritdoc
      */
-    public $timestamps = false;
+    protected $fillable = [
+        'email',
+    ];
 
     /**
      * @inheritdoc
@@ -41,5 +42,17 @@ class Subscription extends Model
     public function newQuery(): SubscriptionBuilder
     {
         return parent::newQuery();
+    }
+
+    /**
+     * @return SubscriptionEntity
+     */
+    public function toEntity(): SubscriptionEntity
+    {
+        return new SubscriptionEntity([
+            'id' => $this->id,
+            'email' => $this->email,
+            'token' => $this->token,
+        ]);
     }
 }

@@ -3,8 +3,7 @@ import * as apiEntityMapper from "../mapper/apiEntity";
 
 export default class LoginManager {
     /**
-     * LoginManager constructor.
-     *
+     * @constructor
      * @param {ApiService} api
      * @param {CookiesManager} cookies
      * @param {AuthManager} auth

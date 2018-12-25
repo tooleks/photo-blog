@@ -4,8 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use GuzzleHttp\ClientInterface as HttpClient;
-use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request as IlluminateRequest;
@@ -168,6 +168,26 @@ class Prerender
     }
 
     /**
+     * Determine if values exist in the list.
+     *
+     * @param array $list
+     * @param mixed $values
+     * @return bool
+     */
+    private function isListed(array $list, $values): bool
+    {
+        foreach ($list as $pattern) {
+            foreach (Arr::wrap($values) as $value) {
+                if (Str::is($pattern, $value)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Determine if request URI is in the black list.
      *
      * @param IlluminateRequest $request
@@ -185,26 +205,6 @@ class Prerender
             }
             if ($this->isListed($this->blacklist, $uris)) {
                 return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Determine if values exist in the list.
-     *
-     * @param array $list
-     * @param mixed $values
-     * @return bool
-     */
-    private function isListed(array $list, $values): bool
-    {
-        foreach ($list as $pattern) {
-            foreach (Arr::wrap($values) as $value) {
-                if (Str::is($pattern, $value)) {
-                    return true;
-                }
             }
         }
 

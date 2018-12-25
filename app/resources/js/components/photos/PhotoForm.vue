@@ -21,8 +21,8 @@
                     <div class="col">
                         <form @submit.prevent="savePhoto">
                             <div class="form-group">
-                                <label for="message">Description
-                                    <small>Required</small>
+                                <label for="message">{{ $lang("Description") }}
+                                    <small>{{ $lang("Required") }}</small>
                                 </label>
                                 <textarea id="message"
                                           required
@@ -32,22 +32,22 @@
                                           rows="3"></textarea>
                             </div>
                             <div class="form-group">
-                                <label for="tags">Tags
-                                    <small>Required</small>
+                                <label for="tags">{{ $lang("Tags") }}
+                                    <small>{{ $lang("Required") }}</small>
                                 </label>
                                 <tag-input :tags.sync="photo.tags"
                                            :attributes="{id: 'tags', class: 'form-control', rows: '3', required: true, disabled: loading}"></tag-input>
-                                <small class="form-text text-muted">Comma-separated tag values.</small>
+                                <small class="form-text text-muted">{{ $lang("Comma-separated tag values.") }}</small>
                             </div>
                             <button :disabled="loading" type="submit" class="btn btn-secondary">
-                                <i class="fa fa-floppy-o" aria-hidden="true"></i> Save
+                                <i class="fa fa-floppy-o" aria-hidden="true"></i> {{ $lang("Save") }}
                             </button>
                             <button v-if="photo.published"
                                     @click="deletePhoto"
                                     :disabled="loading"
                                     type="button"
                                     class="btn btn-danger float-right">
-                                <i class="fa fa-trash" aria-hidden="true"></i> Delete
+                                <i class="fa fa-trash" aria-hidden="true"></i> {{ $lang("Delete") }}
                             </button>
                         </form>
                     </div>
@@ -122,7 +122,7 @@
                     } else {
                         this.photo = photo;
                     }
-                    this.$services.getAlert().success("The photo has been successfully uploaded. Don't forget to save changes before exit.");
+                    this.$services.getAlert().success(this.$lang("The photo has been successfully uploaded. Don't forget to save changes before exit."));
                 } catch (error) {
                     // The error is handled by the API service.
                     // No additional actions needed.
@@ -134,7 +134,7 @@
                 this.loading = true;
                 try {
                     this.photo = await this.$services.getPhotoManager().publish(this.photo);
-                    this.$services.getAlert().success("The photo has been successfully saved.");
+                    this.$services.getAlert().success(this.$lang("The photo has been successfully saved."));
                 } catch (error) {
                     // The error is handled by the API service.
                     // No additional actions needed.
@@ -147,7 +147,7 @@
                     this.loading = true;
                     try {
                         await this.$services.getPhotoManager().deleteByPostId(this.photo.postId);
-                        this.$services.getAlert().success("The photo has been successfully deleted.");
+                        this.$services.getAlert().success(this.$lang("The photo has been successfully deleted."));
                         this.goToHomePage();
                     } catch (error) {
                         // The error is handled by the API service.

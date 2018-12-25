@@ -2,16 +2,20 @@
 
 namespace App\Models;
 
-use App\ValueObjects\Coordinates;
 use App\Models\Builders\LocationBuilder;
 use App\Models\Tables\Constant;
-use App\ValueObjects\Latitude;
-use App\ValueObjects\Longitude;
+use Core\Entities\LocationEntity;
+use Core\ValueObjects\Coordinates;
+use Core\ValueObjects\Latitude;
+use Core\ValueObjects\Longitude;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 /**
  * Class Location.
+ *
+ * Note: Laravel does not support spatial types.
+ * See: https://dev.mysql.com/doc/refman/5.7/en/spatial-type-overview.html
  *
  * @property int id
  * @property Coordinates coordinates
@@ -19,6 +23,11 @@ use Illuminate\Support\Str;
  */
 class Location extends Model
 {
+    /**
+     * @inheritdoc
+     */
+    public $timestamps = false;
+
     /**
      * @inheritdoc
      */
@@ -30,42 +39,6 @@ class Location extends Model
     protected $fillable = [
         'coordinates',
     ];
-
-    /**
-     * @inheritdoc
-     */
-    public $timestamps = false;
-
-    /**
-     * Note: Laravel does not support spatial types.
-     * See: https://dev.mysql.com/doc/refman/5.7/en/spatial-type-overview.html
-     *
-     * @param Coordinates $coordinates
-     * @return $this
-     */
-    public function setCoordinatesAttribute(Coordinates $coordinates)
-    {
-        $expression = "ST_GeomFromText('POINT({$coordinates})')";
-
-        $this->attributes['coordinates'] = $this->getConnection()->raw($expression);
-
-        return $this;
-    }
-
-    /**
-     * Note: Laravel does not support spatial types.
-     * See: https://dev.mysql.com/doc/refman/5.7/en/spatial-type-overview.html
-     *
-     * @return Coordinates
-     */
-    public function getCoordinatesAttribute(): Coordinates
-    {
-        $text = Str::before(Str::after($this->attributes['coordinates'], 'POINT('), ')');
-
-        [$latitude, $longitude] = explode(' ', $text);
-
-        return new Coordinates(new Latitude($latitude), new Longitude($longitude));
-    }
 
     /**
      * @inheritdoc
@@ -89,5 +62,41 @@ class Location extends Model
     public function photos()
     {
         return $this->hasMany(Photo::class, 'location_id');
+    }
+
+    /**
+     * @param Coordinates $coordinates
+     * @return $this
+     */
+    public function setCoordinatesAttribute(Coordinates $coordinates)
+    {
+        $expression = "ST_GeomFromText('POINT({$coordinates})')";
+
+        $this->attributes['coordinates'] = $this->getConnection()->raw($expression);
+
+        return $this;
+    }
+
+    /**
+     * @return Coordinates
+     */
+    public function getCoordinatesAttribute(): Coordinates
+    {
+        $raw = Str::before(Str::after($this->attributes['coordinates'], 'POINT('), ')');
+
+        [$latitude, $longitude] = explode(' ', $raw);
+
+        return new Coordinates(new Latitude($latitude), new Longitude($longitude));
+    }
+
+    /**
+     * @return LocationEntity
+     */
+    public function toEntity(): LocationEntity
+    {
+        return new LocationEntity([
+            'id' => $this->id,
+            'coordinates' => $this->coordinates->toArray(),
+        ]);
     }
 }

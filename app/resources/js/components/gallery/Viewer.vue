@@ -23,28 +23,30 @@
                 @click="slideToPreviousImage"
                 class="carousel-control carousel-control-prev"
                 role="button"
-                title="Previous"
-                aria-label="Previous">
+                :title="$lang('Previous')"
+                :aria-label="$lang('Previous')">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
+            <span class="sr-only">{{ $lang("Previous") }}</span>
         </button>
         <button v-if="!isLastImage(this.currentImage)"
                 @click="slideToNextImage"
                 class="carousel-control carousel-control-next"
                 role="button"
-                title="Next"
-                aria-label="Next">
+                :title="$lang('Next')"
+                :aria-label="$lang('Next')">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
+            <span class="sr-only">{{ $lang("Next") }}</span>
         </button>
         <div class="carousel-actions">
             <button @click="toggleFullScreenMode"
                     class="carousel-action"
                     type="button"
-                    aria-label="Toggle full screen mode"
-                    title="Toggle full screen mode"><i class="fa"
-                                                       :class="{'fa-expand': !inFullScreenMode, 'fa-close': inFullScreenMode}"
-                                                       aria-hidden="true"></i></button>
+                    :aria-label="$lang('Toggle full screen mode')"
+                    :title="$lang('Toggle full screen mode')">
+                <i class="fa"
+                   :class="{'fa-expand': !inFullScreenMode, 'fa-close': inFullScreenMode}"
+                   aria-hidden="true"></i>
+            </button>
         </div>
     </div>
 </template>
