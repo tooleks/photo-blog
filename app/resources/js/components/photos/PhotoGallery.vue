@@ -8,7 +8,7 @@
         </div>
         <div v-if="!loading && !photos.length" class="row">
             <div class="col mt-3">
-                <div class="alert alert-secondary">No photos found</div>
+                <div class="alert alert-secondary">{{ $lang("No photos found") }}</div>
             </div>
         </div>
         <div v-if="previousPageExists || nextPageExists" class="row">
@@ -17,13 +17,13 @@
                         v-if="previousPageExists"
                         :to="{name: $route.name, params: {page: previousPage}}"
                         class="btn btn-secondary float-left"
-                        title="Previous Page">Previous
+                        :title="$lang('Previous Page')">{{ $lang("Previous") }}
                 </router-link>
                 <router-link
                         v-if="nextPageExists"
                         :to="{name: $route.name, params: {page: nextPage}}"
                         class="btn btn-secondary float-right"
-                        title="Next Page">Next
+                        :title="$lang('Next Page')">{{ $lang("Next") }}
                 </router-link>
             </div>
         </div>
@@ -87,10 +87,10 @@
                 this.nextPage = nextPage;
                 this.previousPage = previousPage;
             },
-            async loadPhotos() {
+            async loadPhotos(params = this.$route.params) {
                 this.loading = true;
                 try {
-                    this.setPhotos(await this.$services.getPhotoManager().paginate(this.$route.params));
+                    this.setPhotos(await this.$services.getPhotoManager().paginate(params));
                 } catch (error) {
                     // The error is handled by the API service.
                     // No additional actions needed.
@@ -102,11 +102,11 @@
         created() {
             this.loadPhotos();
             if (this.$route.params.searchPhrase) {
-                this.setPageTitle(`Search "${this.$route.params.searchPhrase}"`);
+                this.setPageTitle(this.$lang("Search \"{phrase}\"", this.$route.params.searchPhrase));
             } else if (this.$route.params.tag) {
-                this.setPageTitle(`Tag #${this.$route.params.tag}`);
+                this.setPageTitle(this.$lang("Tag #{tag}", this.$route.params.tag));
             } else {
-                this.setPageTitle("All photos");
+                this.setPageTitle(this.$lang("All photos"));
             }
         },
     }

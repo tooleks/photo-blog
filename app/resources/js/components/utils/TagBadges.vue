@@ -4,7 +4,7 @@
                 class="btn btn-secondary btn-sm d-inline-block"
                 v-for="tag in tags" :key="`${tag}`"
                 :to="{name: 'photos-tag', params: {tag: `${tag}`}}"
-                :title="`Find all tagged as ${tag}`">
+                :title="$lang('Find all tagged as {tag}', tag)">
             <i class="fa fa-tag" aria-hidden="true"></i> {{ `${tag}` }}
         </router-link>
     </div>

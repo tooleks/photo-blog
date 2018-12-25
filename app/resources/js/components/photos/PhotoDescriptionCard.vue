@@ -2,11 +2,11 @@
     <div v-if="photo" class="card">
         <div class="card-header bg-white">
             <button @click="emitBackEvent" class="btn btn-light btn-sm">
-                <i class="fa fa-arrow-left" aria-hidden="true"></i> Back to gallery
+                <i class="fa fa-arrow-left" aria-hidden="true"></i> {{ $lang("Back to gallery") }}
             </button>
             <router-link v-if="authenticated && photo.published" :to="{name: 'photo/edit', params: {id: photo.postId}}"
                          class="btn btn-light btn-sm">
-                <i class="fa fa-pencil" aria-hidden="true"></i> Edit photo
+                <i class="fa fa-pencil" aria-hidden="true"></i> {{ $lang("Edit photo") }}
             </router-link>
             <share-buttons :url="pageCanonicalUrl" :title="pageTitle" class="float-sm-right"/>
         </div>
@@ -14,9 +14,9 @@
             <div class="row">
                 <div class="col-md">
                     <p v-if="photo.exif && photo.exif.takenAt" class="card-text">
-                        Taken on {{ photo.exif.takenAt.format("LLLL") }}
+                        {{ $lang("Taken on {date}", photo.exif.takenAt.format("LLLL")) }}
                     </p>
-                    <p class="card-text" title="Description">{{ photo.description }}</p>
+                    <p class="card-text" :title="$lang('Description')">{{ photo.description }}</p>
                     <tag-badges :tags="photo.tags"></tag-badges>
                 </div>
                 <div class="col-md mt-3 mt-md-0">

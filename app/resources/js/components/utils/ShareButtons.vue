@@ -3,23 +3,31 @@
         <a :href="getFacebookShareUrl()"
            target="_blank"
            class="btn"
-           aria-label="Share on Facebook"
-           title="Share on Facebook"><i class="fa fa-facebook color-facebook" aria-hidden="true"></i></a>
+           :aria-label="$lang('Share on Facebook')"
+           :title="$lang('Share on Facebook')">
+            <i class="fa fa-facebook color-facebook" aria-hidden="true"></i>
+        </a>
         <a :href="getTwitterShareUrl()"
            target="_blank"
            class="btn"
-           aria-label="Share on Twitter"
-           title="Share on Twitter"><i class="fa fa-twitter color-twitter" aria-hidden="true"></i></a>
+           :aria-label="$lang('Share on Twitter')"
+           :title="$lang('Share on Twitter')">
+            <i class="fa fa-twitter color-twitter" aria-hidden="true"></i>
+        </a>
         <a :href="getGooglePlusShareUrl()"
            target="_blank"
            class="btn"
-           aria-label="Share on Google+"
-           title="Share on Google+"><i class="fa fa-google-plus color-google-plus" aria-hidden="true"></i></a>
+           :aria-label="$lang('Share on Google+')"
+           :title="$lang('Share on Google+')">
+            <i class="fa fa-google-plus color-google-plus" aria-hidden="true"></i>
+        </a>
         <a :href="getLinkedInShareUrl()"
            target="_blank"
            class="btn"
-           aria-label="Share on LinkedIn"
-           title="Share on LinkedIn"><i class="fa fa-linkedin color-linkedin" aria-hidden="true"></i></a>
+           :aria-label="$lang('Share on LinkedIn')"
+           :title="$lang('Share on LinkedIn')">
+            <i class="fa fa-linkedin color-linkedin" aria-hidden="true"></i>
+        </a>
     </div>
 </template>
 

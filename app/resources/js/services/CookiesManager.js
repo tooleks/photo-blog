@@ -1,6 +1,6 @@
 export default class CookiesManager {
     /**
-     * CookiesManager constructor.
+     * @constructor
      */
     constructor() {
         this.getAll = this.getAll.bind(this);

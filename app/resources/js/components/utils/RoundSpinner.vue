@@ -2,7 +2,7 @@
     <transition name="fade">
         <div class="round-spinner" v-if="visible">
             <div class="round-spinner-inner">
-            <span class="round-spinner-icon" aria-label="Loading...">
+            <span class="round-spinner-icon" :aria-label="$lang('Loading...')">
                 <div class="round-spinner-animation" aria-hidden="true"></div>
             </span>
             </div>

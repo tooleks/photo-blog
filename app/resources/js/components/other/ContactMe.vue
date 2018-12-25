@@ -5,7 +5,7 @@
                 <div class="row">
                     <div class="col">
                         <p class="alert alert-secondary">
-                            If you have any questions just send a message in the form below.
+                            {{ $lang("If you have any questions just send a message in the form below.") }}
                         </p>
                     </div>
                 </div>
@@ -15,8 +15,8 @@
                             <div class="card-body">
                                 <form @submit.prevent="$refs.reCaptcha.verify">
                                     <div class="form-group">
-                                        <label for="email">Email
-                                            <small>Required</small>
+                                        <label for="email">{{ $lang("Email") }}
+                                            <small>{{ $lang("Required") }}</small>
                                         </label>
                                         <input type="email"
                                                required
@@ -26,8 +26,8 @@
                                                v-focus>
                                     </div>
                                     <div class="form-group">
-                                        <label for="name">Name
-                                            <small>Required</small>
+                                        <label for="name">{{ $lang("Name") }}
+                                            <small>{{ $lang("Required") }}</small>
                                         </label>
                                         <input type="text"
                                                required
@@ -36,8 +36,8 @@
                                                v-model.trim="name">
                                     </div>
                                     <div class="form-group">
-                                        <label for="subject">Subject
-                                            <small>Required</small>
+                                        <label for="subject">{{ $lang("Subject") }}
+                                            <small>{{ $lang("Required") }}</small>
                                         </label>
                                         <input type="text"
                                                required
@@ -46,8 +46,8 @@
                                                v-model.trim="subject">
                                     </div>
                                     <div class="form-group">
-                                        <label for="message">Message
-                                            <small>Required</small>
+                                        <label for="message">{{ $lang("Message") }}
+                                            <small>{{ $lang("Required") }}</small>
                                         </label>
                                         <textarea id="message"
                                                   required
@@ -58,7 +58,9 @@
                                     <div class="form-group">
                                         <re-captcha ref="reCaptcha" @verified="contactMe"/>
                                     </div>
-                                    <button :disabled="loading" type="submit" class="btn btn-secondary">Send</button>
+                                    <button :disabled="loading" type="submit" class="btn btn-secondary">
+                                        {{ $lang("Send") }}
+                                    </button>
                                 </form>
                             </div>
                         </div>
@@ -106,7 +108,7 @@
                         message: this.message,
                         g_recaptcha_response: reCaptchaResponse,
                     });
-                    this.$services.getAlert().success("Your message has been successfully sent.");
+                    this.$services.getAlert().success(this.$lang("Your message has been successfully sent."));
                     this.goToHomePage();
                 } catch (error) {
                     // The error is handled by the API service.
@@ -117,7 +119,7 @@
             },
         },
         created() {
-            this.setPageTitle("Contact Me");
+            this.setPageTitle(this.$lang("Contact Me"));
         },
     }
 </script>

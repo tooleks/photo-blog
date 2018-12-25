@@ -5,17 +5,17 @@
                 <div class="row">
                     <div class="col">
                         <p class="alert alert-secondary">
-                            Would you like to unsubscribe from receiving the website updates?
+                            {{ $lang("Would you like to unsubscribe from receiving the website updates?") }}
                         </p>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-12">
                         <button type="button" class="btn btn-danger" @click="deleteSubscription()" :disabled="loading">
-                            Yes
+                            {{ $lang("Yes") }}
                         </button>
                         <button type="button" class="btn btn-secondary" @click="goToHomePage" :disabled="loading">
-                            No
+                            {{ $lang("No") }}
                         </button>
                     </div>
                 </div>
@@ -43,7 +43,7 @@
                 this.loading = true;
                 try {
                     await this.$services.getSubscriptionManager().deleteByToken(token);
-                    this.$services.getAlert().success("You have been successfully unsubscribed from the website updates.");
+                    this.$services.getAlert().success(this.$lang("You have been successfully unsubscribed from the website updates."));
                 } catch (error) {
                     // The error is handled by the API service.
                     // No additional actions needed.
@@ -54,7 +54,7 @@
             },
         },
         created() {
-            this.setPageTitle("Unsubscribe");
+            this.setPageTitle(this.$lang("Unsubscribe"));
         },
     }
 </script>

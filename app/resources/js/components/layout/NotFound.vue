@@ -2,11 +2,11 @@
     <div class="container my-15 text-center">
         <div class="row">
             <div class="col">
-                <h1>404
-                    <small>Page not found</small>
+                <h1>{{ $lang("404") }}
+                    <small>{{ $lang("Page not found") }}</small>
                 </h1>
-                <span>The link you followed may be broken, or the page may have been removed. <router-link
-                        :to="{name: 'home'}">Go to the home page.</router-link></span>
+                <span>{{ $lang("The link you followed may be broken, or the page may have been removed.") }} <router-link
+                        :to="{name: 'home'}">{{ $lang("Go to the home page.") }}</router-link></span>
             </div>
         </div>
     </div>
@@ -27,7 +27,7 @@
         ],
         created() {
             this.setPageStatusCode(404);
-            this.setPageTitle("Page not found");
+            this.setPageTitle(this.$lang("Page not found"));
         },
     }
 </script>

@@ -3,8 +3,7 @@ import * as entityApiMapper from "../mapper/entityApi";
 
 export default class PhotoManager {
     /**
-     * PhotoProvider constructor.
-     *
+     * @constructor
      * @param {ApiService} api
      */
     constructor(api) {

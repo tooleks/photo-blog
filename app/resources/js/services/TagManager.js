@@ -2,8 +2,7 @@ import * as apiEntityMapper from "../mapper/apiEntity";
 
 export default class TagManager {
     /**
-     * TagManager constructor.
-     *
+     * @constructor
      * @param {ApiService} api
      */
     constructor(api) {

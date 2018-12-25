@@ -7,16 +7,15 @@ Vue.use(VueNotification);
 
 export const GROUP = "main";
 export const POSITION = "center";
-export const DURATION_INFINITE = -1;
-export const DURATION_THREE_SECONDS = 3 * 1000;
-export const DURATION_FIVE_SECONDS = 5 * 1000;
+export const DURATION_SHORT = 3 * 1000;
+export const DURATION_LONG = 5 * 1000;
 export const TYPE_SUCCESS = "success";
 export const TYPE_WARN = "warn";
 export const TYPE_ERROR = "error";
 
 export default class AlertService {
     /**
-     * AlertService constructor.
+     * @constructor
      */
     constructor() {
         this.notify = this.notify.bind(this);
@@ -37,8 +36,8 @@ export default class AlertService {
         Vue.prototype.$notify({
             group: GROUP,
             duration: type === TYPE_ERROR
-                ? DURATION_FIVE_SECONDS
-                : DURATION_THREE_SECONDS,
+                ? DURATION_LONG
+                : DURATION_SHORT,
             position: POSITION,
             title,
             text,

@@ -2,8 +2,7 @@ import * as apiEntityMapper from "../mapper/apiEntity";
 
 export default class SubscriptionManager {
     /**
-     * SubscriptionManager constructor.
-     *
+     * @constructor
      * @param {ApiService} api
      */
     constructor(api) {

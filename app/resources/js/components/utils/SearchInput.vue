@@ -6,15 +6,17 @@
                    v-focus
                    class="form-control border-0"
                    type="search"
-                   aria-label="Search"
-                   placeholder="Search photos"
+                   :aria-label="$lang('Search')"
+                   :placeholder="$lang('Search...')"
                    required>
             <div class="input-group-append">
                 <button @click="debounceSearch"
                         type="button"
                         class="btn btn-secondary border-0"
-                        aria-label="Search"
-                        title="Search"><i class="fa fa-search" aria-hidden="true"></i></button>
+                        :title="$lang('Search')"
+                        :aria-label="$lang('Search')">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </button>
             </div>
         </div>
     </form>
@@ -36,24 +38,27 @@
                 input: "",
             };
         },
-        watch: {
-            ["$route"]() {
-                this.init();
-            },
-        },
         methods: {
-            init() {
-                this.input = this.$route.params.searchPhrase || this.$route.query.searchPhrase || "";
-            },
             search() {
-                this.input
-                    ? this.$router.push({name: "photos-search", params: {searchPhrase: this.input}})
-                    : this.$router.push({name: "photos"});
+                this.$services.getEventBus().emit("search", this.input);
             },
         },
         created() {
-            this.debounceSearch = debounce(() => this.search(), this.delay);
-            this.init();
+            this.debounceSearch = debounce(this.search, this.delay);
+            this.$services
+                .getEventBus()
+                .on("search.init", (input) => {
+                    this.input = input;
+                })
+                .on("search.clear", () => {
+                    this.input = "";
+                });
+        },
+        beforeDestroy() {
+            this.$services
+                .getEventBus()
+                .off("search.init")
+                .off("search.clear");
         },
     }
 </script>

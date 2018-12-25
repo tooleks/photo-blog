@@ -1,6 +1,6 @@
 export default class LocalStorageManager {
     /**
-     * LocalStorageManager constructor.
+     * @constructor
      */
     constructor() {
         this.set = this.set.bind(this);
