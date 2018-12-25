@@ -19,7 +19,11 @@
         </tr>
         <tr v-if="exif.focalLength">
             <th class="w-50 pl-3">{{ $lang("Focal Length") }}</th>
-            <td class="w-50 pr-3">{{ $lang("{value} mm", exif.focalLength) }}</td>
+            <td class="w-50 pr-3">{{ $lang("{value}mm", exif.focalLength) }}</td>
+        </tr>
+        <tr v-if="exif.focalLengthIn35mm">
+            <th class="w-50 pl-3">{{ $lang("Focal Length In 35mm Format") }}</th>
+            <td class="w-50 pr-3">{{ $lang("{value}mm", exif.focalLengthIn35mm) }}</td>
         </tr>
         <tr v-if="exif.iso">
             <th class="w-50 pl-3">{{ $lang("ISO") }}</th>
