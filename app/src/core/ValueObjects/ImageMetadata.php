@@ -110,6 +110,20 @@ final class ImageMetadata implements Arrayable, JsonSerializable
     /**
      * @return string|null
      */
+    public function getFocalLengthIn35mm(): ?string
+    {
+        $value = $this->attributes['exif.FocalLengthIn35mmFilm'] ?? null;
+
+        if (!is_numeric($value)) {
+            return null;
+        }
+
+        return $value;
+    }
+
+    /**
+     * @return string|null
+     */
     public function getIso(): ?string
     {
         return $this->attributes['exif.ISOSpeedRatings'] ?? null;
@@ -162,6 +176,10 @@ final class ImageMetadata implements Arrayable, JsonSerializable
 
         if ($this->getFocalLength()) {
             $items->push("Focal Length: {$this->getFocalLength()}");
+        }
+
+        if ($this->getFocalLengthIn35mm()) {
+            $items->push("Focal Length in 35mm Format: {$this->getFocalLengthIn35mm()}");
         }
 
         if ($this->getIso()) {
