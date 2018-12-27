@@ -10,7 +10,7 @@
             <td class="w-50 pr-3">{{ exif.model }}</td>
         </tr>
         <tr v-if="exif.exposureTime">
-            <th class="w-50 pl-3">{{ $lang("Exposure Time") }}</th>
+            <th class="w-50 pl-3">{{ $lang("Exposure time") }}</th>
             <td class="w-50 pr-3">{{ exif.exposureTime }}</td>
         </tr>
         <tr v-if="exif.aperture">
@@ -18,11 +18,11 @@
             <td class="w-50 pr-3">{{ exif.aperture }}</td>
         </tr>
         <tr v-if="exif.focalLength">
-            <th class="w-50 pl-3">{{ $lang("Focal Length") }}</th>
+            <th class="w-50 pl-3">{{ $lang("Focal length") }}</th>
             <td class="w-50 pr-3">{{ $lang("{value}mm", exif.focalLength) }}</td>
         </tr>
         <tr v-if="exif.focalLengthIn35mm">
-            <th class="w-50 pl-3">{{ $lang("Focal Length In 35mm Format") }}</th>
+            <th class="w-50 pl-3">{{ $lang("Focal length (35mm equivalent)") }}</th>
             <td class="w-50 pr-3">{{ $lang("{value}mm", exif.focalLengthIn35mm) }}</td>
         </tr>
         <tr v-if="exif.iso">
