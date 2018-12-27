@@ -3,7 +3,7 @@
         <app-header class="app-header"/>
         <div class="app-router">
             <transition name="fade">
-                <router-view :key="routeKey"></router-view>
+                <router-view :key="routeKey"/>
             </transition>
         </div>
         <notifications group="main"/>
