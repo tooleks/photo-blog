@@ -5,7 +5,7 @@ export default class EventBus {
      * @constructor
      */
     constructor() {
-        this.vue = new Vue;
+        this._vue = new Vue;
         this.emit = this.emit.bind(this);
         this.on = this.on.bind(this);
         this.once = this.once.bind(this);
@@ -20,7 +20,7 @@ export default class EventBus {
      * @return {EventBus}
      */
     emit(event, ...args) {
-        this.vue.$emit(event, ...args);
+        this._vue.$emit(event, ...args);
         return this;
     }
 
@@ -32,7 +32,7 @@ export default class EventBus {
      * @return {EventBus}
      */
     on(event, callback) {
-        this.vue.$on(event, callback);
+        this._vue.$on(event, callback);
         return this;
     }
 
@@ -44,7 +44,7 @@ export default class EventBus {
      * @return {EventBus}
      */
     once(event, callback) {
-        this.vue.$once(event, callback);
+        this._vue.$once(event, callback);
         return this;
     }
 
@@ -56,7 +56,7 @@ export default class EventBus {
      * @return {EventBus}
      */
     off(event, callback) {
-        this.vue.$off(event, callback);
+        this._vue.$off(event, callback);
         return this;
     }
 }
