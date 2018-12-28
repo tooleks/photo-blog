@@ -14,10 +14,11 @@ export default class LocalStorageManager {
      *
      * @param {string} key
      * @param {*} value
-     * @return {void}
+     * @return {LocalStorageManager}
      */
     set(key, value) {
         localStorage.setItem(key, JSON.stringify(value));
+        return this;
     }
 
     /**
@@ -25,9 +26,11 @@ export default class LocalStorageManager {
      *
      * @param {string} key
      * @return {void}
+     * @return {LocalStorageManager}
      */
     remove(key) {
         localStorage.removeItem(key);
+        return this;
     }
 
     /**
