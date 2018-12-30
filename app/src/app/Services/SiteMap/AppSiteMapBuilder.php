@@ -66,13 +66,6 @@ class AppSiteMapBuilder implements SiteMapBuilder
 
         $items->push(
             (new Item)
-                ->setLocation(url_frontend('/about-me'))
-                ->setChangeFrequency('monthly')
-                ->setPriority('0.4')
-        );
-
-        $items->push(
-            (new Item)
                 ->setLocation(url_frontend('/contact-me'))
                 ->setChangeFrequency('monthly')
                 ->setPriority('0.2')
