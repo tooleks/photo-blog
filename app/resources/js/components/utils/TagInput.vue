@@ -1,18 +1,14 @@
 <template>
-    <textarea v-model.trim="input" v-bind="attributes"></textarea>
+    <textarea v-bind="$attrs"
+              v-model.trim="input"></textarea>
 </template>
 
 <script>
     import Tag from "../../entities/Tag";
 
     export default {
+        inheritAttrs: false,
         props: {
-            attributes: {
-                type: Object,
-                default() {
-                    return {};
-                },
-            },
             tags: {
                 type: Array,
                 default() {

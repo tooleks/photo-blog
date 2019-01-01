@@ -1,19 +1,17 @@
 <template>
     <label class="file-input card bg-light"
-           :class="attributes.class"
-           :disabled="attributes.disabled"
-           v-on-drop-file="onFileChange"
-           :title="$lang('Choose a file or drag it here.')">
+           v-bind="$attrs"
+           v-on-drop-file="onSelect">
         <slot>
             <span>
                 <i class="fa fa-cloud-upload" aria-hidden="true"></i> {{ $lang("Choose a file or drag it here.") }}
             </span>
         </slot>
-        <input v-if="fileInputReady"
-               hidden
+        <input v-if="ready"
                type="file"
-               v-bind="attributes"
-               @change="onFileChange($event.target.files.item(0))">
+               hidden
+               v-bind="$attrs"
+               @change="onSelect($event.target.files.item(0))">
     </label>
 </template>
 
@@ -36,31 +34,22 @@
 
 <script>
     export default {
-        props: {
-            attributes: {
-                type: Object,
-                default() {
-                    return {
-                        class: "btn btn-secondary",
-                    };
-                },
-            },
-        },
+        inheritAttrs: false,
         data() {
             return {
                 /** @type {boolean} */
-                fileInputReady: true,
+                ready: true,
             };
         },
         methods: {
-            onFileChange(file) {
-                this.$emit("change", file);
-                this.clearFileInput();
+            onSelect(file) {
+                this.$emit("select", file);
+                this.reset();
             },
-            clearFileInput() {
-                this.fileInputReady = false;
+            reset() {
+                this.ready = false;
                 this.$nextTick(() => {
-                    this.fileInputReady = true;
+                    this.ready = true;
                 });
             },
         },

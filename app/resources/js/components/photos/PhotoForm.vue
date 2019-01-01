@@ -1,8 +1,11 @@
 <template>
     <div class="container py-3">
         <round-spinner :loading="loading" :delay="0"/>
-        <file-input :attributes="{id: 'file', name: 'file', disabled: loading}"
-                    @change="uploadPhoto"/>
+        <file-input id="file"
+                    class="btn"
+                    required="true"
+                    :disabled="loading"
+                    @select="uploadPhoto"/>
         <div v-if="photo.image" class="card mt-3">
             <div class="card-body">
                 <div class="row">
@@ -35,8 +38,12 @@
                                 <label for="tags">{{ $lang("Tags") }}
                                     <small>{{ $lang("Required") }}</small>
                                 </label>
-                                <tag-input :tags.sync="photo.tags"
-                                           :attributes="{id: 'tags', class: 'form-control', rows: '3', required: true, disabled: loading}"></tag-input>
+                                <tag-input id="tags"
+                                           class="form-control"
+                                           rows="3"
+                                           required="true"
+                                           :disabled="loading"
+                                           :tags.sync="photo.tags"></tag-input>
                                 <small class="form-text text-muted">{{ $lang("Comma-separated tag values.") }}</small>
                             </div>
                             <button :disabled="loading" type="submit" class="btn btn-secondary">
