@@ -175,11 +175,11 @@ final class ImageMetadata implements Arrayable, JsonSerializable
         }
 
         if ($this->getFocalLength()) {
-            $items->push("Focal Length: {$this->getFocalLength()}");
+            $items->push("Focal length: {$this->getFocalLength()}");
         }
 
         if ($this->getFocalLengthIn35mm()) {
-            $items->push("Focal Length in 35mm Format: {$this->getFocalLengthIn35mm()}");
+            $items->push("Focal length (35mm equivalent): {$this->getFocalLengthIn35mm()}");
         }
 
         if ($this->getIso()) {
