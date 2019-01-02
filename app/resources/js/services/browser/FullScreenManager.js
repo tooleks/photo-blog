@@ -16,11 +16,17 @@ export default class FullScreenManager {
     request(element = document.documentElement) {
         if (element.requestFullscreen) {
             element.requestFullscreen();
-        } else if (element.mozRequestFullScreen) { /* Firefox */
+        }
+        // Firefox
+        else if (element.mozRequestFullScreen) {
             element.mozRequestFullScreen();
-        } else if (element.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+        }
+        // Chrome, Safari and Opera
+        else if (element.webkitRequestFullscreen) {
             element.webkitRequestFullscreen();
-        } else if (element.msRequestFullscreen) { /* IE/Edge */
+        }
+        // IE/Edge
+        else if (element.msRequestFullscreen) {
             element.msRequestFullscreen();
         }
     }
@@ -33,11 +39,17 @@ export default class FullScreenManager {
     close() {
         if (document.exitFullscreen) {
             document.exitFullscreen();
-        } else if (document.mozCancelFullScreen) { /* Firefox */
+        }
+        // Firefox
+        else if (document.mozCancelFullScreen) {
             document.mozCancelFullScreen();
-        } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+        }
+        // Chrome, Safari and Opera
+        else if (document.webkitExitFullscreen) {
             document.webkitExitFullscreen();
-        } else if (document.msExitFullscreen) { /* IE/Edge */
+        }
+        // IE/Edge
+        else if (document.msExitFullscreen) {
             document.msExitFullscreen();
         }
     }
