@@ -1,18 +1,19 @@
 import Vue from "vue";
 import config from "../config";
 import store from "../store";
-import CookiesManager from "./CookiesManager";
-import EventBus from "./EventBus";
-import Localization from "./Localization";
 import lang from "../resources/lang";
-import LocalStorageManager from "./LocalStorageManager";
-import AlertService from "./AlertService";
 import ApiHandler from "./api/ApiHandler";
 import ApiService from "./api/ApiService";
-import AuthManager from "./AuthManager";
-import LoginManager from "./LoginManager";
+import CookiesManager from "./browser/CookiesManager";
+import FullScreenManager from "./browser/FullScreenManager";
+import LocalStorageManager from "./browser/LocalStorageManager";
 import BrowserReCaptcha from "./recaptcha/BrowserReCaptcha";
 import DummyReCaptcha from "./recaptcha/DummyReCaptcha";
+import AlertService from "./AlertService";
+import AuthManager from "./AuthManager";
+import EventBus from "./EventBus";
+import Localization from "./Localization";
+import LoginManager from "./LoginManager";
 import PhotoManager from "./PhotoManager";
 import SubscriptionManager from "./SubscriptionManager";
 import TagManager from "./TagManager";
@@ -37,6 +38,11 @@ export function getEventBus() {
 /** @return {CookiesManager} */
 export function getCookies() {
     return new CookiesManager;
+}
+
+/** @return {FullScreenManager} */
+export function getFullScreen() {
+    return new FullScreenManager;
 }
 
 /** @return {Localization} */
