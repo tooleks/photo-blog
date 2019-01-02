@@ -11,8 +11,7 @@ export const HTTP_STATUS = Object.freeze({
 
 export default class ApiHandler {
     /**
-     * ApiHandler constructor.
-     *
+     * @constructor
      * @param {AlertService} alert
      */
     constructor(alert) {

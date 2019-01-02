@@ -2,8 +2,7 @@ import axios from "axios";
 
 export default class ApiService {
     /**
-     * ApiService constructor.
-     *
+     * @constructor
      * @param {string} baseUrl
      * @param {Function} onData
      * @param {Function} onError

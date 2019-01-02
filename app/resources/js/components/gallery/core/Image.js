@@ -1,7 +1,6 @@
 export default class Image {
     /**
-     * Image constructor.
-     *
+     * @constructor
      * @param {*} model
      */
     constructor(model) {

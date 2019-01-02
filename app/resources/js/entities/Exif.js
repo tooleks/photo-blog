@@ -2,8 +2,7 @@ import moment from "moment";
 
 export default class Exif {
     /**
-     * Exif constructor.
-     *
+     * @constructor
      * @param {Object} attributes
      * @param {string} attributes.manufacturer
      * @param {string} attributes.model

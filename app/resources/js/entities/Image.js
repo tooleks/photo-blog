@@ -1,7 +1,6 @@
 export default class Image {
     /**
-     * Image constructor.
-     *
+     * @constructor
      * @param {Object} attributes
      * @param {string} attributes.url
      * @param {number} attributes.width

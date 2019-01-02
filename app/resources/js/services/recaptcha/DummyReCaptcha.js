@@ -1,7 +1,6 @@
 export default class DummyReCaptcha {
     /**
-     * DummyRecaptcha constructor.
-     *
+     * @constructor
      * @param {Function} onVerified
      */
     constructor(onVerified) {

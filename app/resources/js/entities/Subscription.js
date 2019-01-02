@@ -1,7 +1,6 @@
 export default class Subscription {
     /**
-     * Subscription constructor.
-     *
+     * @constructor
      * @param {Object} attributes
      * @param {string} attributes.email
      * @param {string} attributes.token

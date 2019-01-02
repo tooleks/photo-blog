@@ -4,8 +4,7 @@ import {routeName} from "../router/identifiers";
 
 export default class Photo {
     /**
-     * Photo constructor.
-     *
+     * @constructor
      * @param {Object} attributes
      * @param {number} attributes.postId
      * @param {number} attributes.id
