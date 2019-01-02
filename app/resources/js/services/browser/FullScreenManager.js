@@ -10,7 +10,7 @@ export default class FullScreenManager {
     /**
      * Request the fullscreen mode.
      *
-     * @param {HTMLElement} element
+     * @param {HTMLElement} [element]
      * @return {void}
      */
     request(element = document.documentElement) {
