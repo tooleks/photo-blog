@@ -1,7 +1,6 @@
 export default class Tag {
     /**
-     * Tag constructor.
-     *
+     * @constructor
      * @param {Object} attributes
      * @param {string} attributes.value
      */

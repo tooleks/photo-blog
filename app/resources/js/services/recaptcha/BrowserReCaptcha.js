@@ -3,8 +3,7 @@ import getOrCreateHeadElement from "../../utils/getOrCreateHeadElement";
 
 export default class BrowserReCaptcha {
     /**
-     * BrowserRecaptcha constructor.
-     *
+     * @constructor
      * @param {HTMLElement} element
      * @param {string} siteKey
      * @param {Function} onVerified

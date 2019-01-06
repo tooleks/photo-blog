@@ -1,7 +1,6 @@
 export default class Location {
     /**
-     * Location constructor.
-     *
+     * @constructor
      * @param {Object} attributes
      * @param {number} attributes.lat
      * @param {number} attributes.lng

@@ -2,8 +2,7 @@ import moment from "moment";
 
 export default class User {
     /**
-     * User constructor.
-     *
+     * @constructor
      * @param {Object} attributes
      * @param {number} attributes.id
      * @param {string} attributes.name

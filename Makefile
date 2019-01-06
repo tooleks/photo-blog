@@ -1,4 +1,5 @@
-initialization: install-dependencies
+init: install-dependencies
+	cp -n ./docker-compose.development.yml ./docker-compose.override.yml
 	cp -n ./app/.env.example ./app/.env
 	ln -sfn ../storage/app/public app/public/storage
 
@@ -20,7 +21,7 @@ update-dependencies:
 		--no-scripts \
 		--prefer-dist
 
-configuration:
+config:
 	docker exec -it pb-app bash -c "chown -R www-data:www-data ./storage"
 	docker exec -it pb-app bash -c "php artisan key:generate"
 	docker exec -it pb-app bash -c "php artisan package:discover"
@@ -31,26 +32,26 @@ configuration:
 	docker exec -it pb-app bash -c "php artisan generate:rest_api_documentation"
 	docker exec -it pb-app bash -c "php artisan create:administrator_user"
 
-build-dev:
-	docker-compose --file ./docker-compose.development.yml build
+build:
+	docker-compose build
 
-start-dev:
-	docker-compose --file ./docker-compose.development.yml up
+rebuild:
+	docker-compose build --no-cache
 
-watch-dev:
-	docker exec -it pb-app bash -c "npm run watch"
+start:
+	docker-compose up
 
-build-prod:
-	docker-compose --file ./docker-compose.production.yml build
+start-daemon:
+	docker-compose up -d
 
-up-prod:
-	docker-compose --file ./docker-compose.production.yml up --build -d
-
-down-prod:
-	docker-compose --file ./docker-compose.production.yml down
+stop-daemon:
+	docker-compose down
 
 test:
 	docker exec -it pb-app bash -c "./vendor/bin/phpunit"
+
+app-watch:
+	docker exec -it pb-app bash -c "npm run watch"
 
 app-logs:
 	docker exec -it pb-app bash -c "tail -n 1000 -f ./storage/logs/laravel.log"

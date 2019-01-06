@@ -2,68 +2,27 @@ version: '3.3'
 
 services:
   pb-nginx.docker:
-    build:
-      context: ./docker/nginx
-    image: pb-nginx
-    container_name: pb-nginx
-    depends_on:
-    - pb-app.docker
-    ports:
-    - 8080:8080
-    - 8081:8081
-    - 8082:8082
     volumes:
-    - ./app:/var/www/app
-    - ./docker/nginx/sites:/etc/nginx/conf.d
+      - ./app:/var/www/app
+      - ./docker/nginx/sites:/etc/nginx/conf.d
 
   pb-app.docker:
-    build:
-      context: ./app
-      dockerfile: ${PWD}/docker/app/Dockerfile
-    image: pb-app
-    container_name: pb-app
-    depends_on:
-    - pb-prerender.docker
-    - pb-redis.docker
-    - pb-mysql.docker
-    - pb-maildev.docker
     volumes:
-    - ./app:/var/www/app
-    - ./app/php.ini-development:/usr/local/etc/php/php.ini
-    - ./app/policy.xml:/etc/ImageMagick-6/policy.xml
+      - ./app:/var/www/app
+      - ./app/php.ini-development:/usr/local/etc/php/php.ini
+      - ./app/policy.xml:/etc/ImageMagick-6/policy.xml
 
   pb-app-queue.docker:
-    build:
-      context: ./docker/app-queue
-    image: pb-app-queue
-    container_name: pb-app-queue
-    depends_on:
-    - pb-app.docker
     volumes:
-    - ./app:/var/www/app
-    - ./app/php.ini-development:/usr/local/etc/php/php.ini
+      - ./app:/var/www/app
+      - ./app/php.ini-development:/usr/local/etc/php/php.ini
+      - ./app/policy.xml:/etc/ImageMagick-6/policy.xml
 
   pb-app-scheduler.docker:
-    build:
-      context: ./docker/app-scheduler
-    image: pb-app-scheduler
-    container_name: pb-app-scheduler
-    depends_on:
-    - pb-app.docker
     volumes:
-    - ./app:/var/www/app
-    - ./app/php.ini-development:/usr/local/etc/php/php.ini
-
-  pb-prerender.docker:
-    build:
-      context: ./prerender
-      dockerfile: ${PWD}/docker/prerender/Dockerfile
-    image: pb-prerender
-    container_name: pb-prerender
-
-  pb-redis.docker:
-    image: redis:4
-    container_name: pb-redis
+      - ./app:/var/www/app
+      - ./app/php.ini-development:/usr/local/etc/php/php.ini
+      - ./app/policy.xml:/etc/ImageMagick-6/policy.xml
 
   pb-mysql.docker:
     image: mysql:5.7
@@ -74,14 +33,14 @@ services:
       MYSQL_USER: 'dev'
       MYSQL_PASSWORD: 'dev'
     ports:
-    - 3306:3306
+      - 3306:3306
     volumes:
-    - ./docker/mysql/seed:/docker-entrypoint-initdb.d
-    - ./docker/mysql/storage:/var/lib/mysql
-    - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+      - ./docker/mysql/seed:/docker-entrypoint-initdb.d
+      - ./docker/mysql/storage:/var/lib/mysql
+      - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
 
   pb-maildev.docker:
     image: djfarrelly/maildev
     container_name: pb-maildev
     ports:
-    - 8083:80
+      - 8083:80

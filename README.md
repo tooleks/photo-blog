@@ -2,7 +2,15 @@
 
 ### Tech Stack
 
-Docker 17.10, Docker Compose 1.14, NGINX 1.15, MySQL 5.7, Redis 4, PHP 7.3, Laravel 5.7, Node.js 10, Vue.js 2.5.
+- Docker 17.10
+- Docker Compose 1.14
+- NGINX 1.15
+- MySQL 5.7
+- Redis 4
+- PHP-FPM 7.3
+- Laravel 5.7
+- Node.js 10
+- Vue.js 2.5.
 
 ### Installation
 
@@ -11,13 +19,13 @@ Please make sure you have installed and running [Docker](https://docs.docker.com
 Run the command (within the project root directory) to initialize the project.
 
 ```
-make initialization
+make init
 ```
 
-Run the command (within the project root directory) to start Docker containers in the **development** mode.
+Run the command (within the project root directory) to start Docker containers.
 
 ```
-make start-dev
+make start
 ```
 
 **Tip:** `Ctrl`+`C` interrupts the process.
@@ -25,7 +33,7 @@ make start-dev
 Run the command (in another terminal window, within the project root directory) to configure the application and create the administrator user.
 
 ```
-make configuration
+make config
 ```
 
 Open the [localhost:8080/sign-in](http://localhost:8080/sign-in) link in a browser and sign in with a newly created administrator user account.
@@ -42,8 +50,8 @@ Open the [localhost:8080/sign-in](http://localhost:8080/sign-in) link in a brows
 
 | Command Signature  | Description |
 |:-------------------|:-------------|
-| `make watch-dev`   | Automatically recompile assets when Webpack detects a change. |
 | `make test`        | Execute the application tests. |
+| `make app-watch`   | Automatically recompile assets when Webpack detects a change. |
 | `make app-logs`    | Fetch the application logs. |
 | `make mysql-logs`  | Fetch MySQL logs. |
 
