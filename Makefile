@@ -33,6 +33,9 @@ config:
 	docker exec -it pb-app bash -c "php artisan create:administrator_user"
 
 build:
+	docker-compose build
+
+rebuild:
 	docker-compose build --no-cache
 
 start:
