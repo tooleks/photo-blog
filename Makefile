@@ -38,10 +38,10 @@ build:
 start:
 	docker-compose up
 
-start-deamon:
+start-daemon:
 	docker-compose up -d
 
-stop-deamon:
+stop-daemon:
 	docker-compose down
 
 test:
