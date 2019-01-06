@@ -2,7 +2,15 @@
 
 ### Tech Stack
 
-Docker 17.10, Docker Compose 1.14, NGINX 1.15, MySQL 5.7, Redis 4, PHP 7.3, Laravel 5.7, Node.js 10, Vue.js 2.5.
+- Docker 17.10
+- Docker Compose 1.14
+- NGINX 1.15
+- MySQL 5.7
+- Redis 4
+- PHP-FPM 7.3
+- Laravel 5.7
+- Node.js 10
+- Vue.js 2.5.
 
 ### Installation
 
@@ -14,7 +22,7 @@ Run the command (within the project root directory) to initialize the project.
 make init
 ```
 
-Run the command (within the project root directory) to start Docker containers in the **development** mode.
+Run the command (within the project root directory) to start Docker containers.
 
 ```
 make start
