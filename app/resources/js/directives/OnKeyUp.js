@@ -1,7 +1,7 @@
 const subscribers = new Map;
 
 const OnKeyUp = {
-    inserted(element, bindings) {
+    bind(element, bindings) {
         const onKeyUp = (event) => bindings.value(event);
         window.addEventListener("keyup", onKeyUp);
         subscribers.set(element, () => window.removeEventListener("keyup", onKeyUp));

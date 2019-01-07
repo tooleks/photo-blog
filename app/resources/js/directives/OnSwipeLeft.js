@@ -3,7 +3,7 @@ import Hammer from "hammerjs";
 const subscribers = new Map;
 
 const OnSwipeLeft = {
-    inserted(element, bindings) {
+    bind(element, bindings) {
         const onSwipeLeft = () => bindings.value();
         const mc = new Hammer(element);
         mc.on("swipeleft", onSwipeLeft);
