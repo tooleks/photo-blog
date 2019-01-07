@@ -1,37 +1,31 @@
+const subscribers = new Map;
+
 const onDropFile = {
     inserted(element, bindings) {
-        // Event handler to prevent the default action of the event being triggered.
-        const preventDefault = (event) => {
-            event.preventDefault();
-        };
-
-        // Event handler to call the directive's handler function with the dropped file as an argument.
-        const onDrop = (event) => {
-            event.preventDefault();
-            const file = event.dataTransfer.files.item(0);
-            bindings.value(file);
-        };
-
-        element.addEventListener("drag", preventDefault);
-        element.addEventListener("dragstart", preventDefault);
-        element.addEventListener("dragend", preventDefault);
-        element.addEventListener("dragover", preventDefault);
-        element.addEventListener("dragenter", preventDefault);
-        element.addEventListener("dragleave", preventDefault);
+        const onDragAndDrop = (event) => event.preventDefault();
+        const onDrop = (event) => bindings.value(event.dataTransfer.files.item(0));
+        element.addEventListener("drag", onDragAndDrop);
+        element.addEventListener("dragstart", onDragAndDrop);
+        element.addEventListener("dragend", onDragAndDrop);
+        element.addEventListener("dragover", onDragAndDrop);
+        element.addEventListener("dragenter", onDragAndDrop);
+        element.addEventListener("dragleave", onDragAndDrop);
+        element.addEventListener("drop", onDragAndDrop);
         element.addEventListener("drop", onDrop);
-
-        element.$destroyOnDropFile = () => {
-            element.removeEventListener("drag", preventDefault);
-            element.removeEventListener("dragstart", preventDefault);
-            element.removeEventListener("dragend", preventDefault);
-            element.removeEventListener("dragover", preventDefault);
-            element.removeEventListener("dragenter", preventDefault);
-            element.removeEventListener("dragleave", preventDefault);
+        subscribers.set(element, () => {
+            element.removeEventListener("drag", onDragAndDrop);
+            element.removeEventListener("dragstart", onDragAndDrop);
+            element.removeEventListener("dragend", onDragAndDrop);
+            element.removeEventListener("dragover", onDragAndDrop);
+            element.removeEventListener("dragenter", onDragAndDrop);
+            element.removeEventListener("dragleave", onDragAndDrop);
+            element.removeEventListener("drop", onDragAndDrop);
             element.removeEventListener("drop", onDrop);
-        };
+        });
     },
     unbind(element) {
-        element.$destroyOnDropFile();
+        subscribers.get(element)();
+        subscribers.delete(element);
     },
 };
 
