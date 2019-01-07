@@ -1,18 +1,16 @@
 import Hammer from "hammerjs";
 
-const subscribers = new Map;
+const listeners = new Map;
 
-const OnSwipeLeft = {
+export default {
     bind(element, bindings) {
         const onSwipeLeft = () => bindings.value();
-        const mc = new Hammer(element);
-        mc.on("swipeleft", onSwipeLeft);
-        subscribers.set(element, () => mc.off("swipeleft", onSwipeLeft));
+        const eventManager = new Hammer(element);
+        eventManager.on("swipeleft", onSwipeLeft);
+        listeners.set(element, () => eventManager.off("swipeleft", onSwipeLeft));
     },
     unbind(element) {
-        subscribers.get(element)();
-        subscribers.delete(element);
+        listeners.get(element)();
+        listeners.delete(element);
     },
 };
-
-export default OnSwipeLeft;

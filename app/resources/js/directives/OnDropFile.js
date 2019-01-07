@@ -1,6 +1,6 @@
-const subscribers = new Map;
+const listeners = new Map;
 
-const OnDropFile = {
+export default {
     bind(element, bindings) {
         const onDragAndDrop = (event) => event.preventDefault();
         const onDrop = (event) => bindings.value(event.dataTransfer.files.item(0));
@@ -12,7 +12,7 @@ const OnDropFile = {
         element.addEventListener("dragleave", onDragAndDrop);
         element.addEventListener("drop", onDragAndDrop);
         element.addEventListener("drop", onDrop);
-        subscribers.set(element, () => {
+        listeners.set(element, () => {
             element.removeEventListener("drag", onDragAndDrop);
             element.removeEventListener("dragstart", onDragAndDrop);
             element.removeEventListener("dragend", onDragAndDrop);
@@ -24,9 +24,7 @@ const OnDropFile = {
         });
     },
     unbind(element) {
-        subscribers.get(element)();
-        subscribers.delete(element);
+        listeners.get(element)();
+        listeners.delete(element);
     },
 };
-
-export default OnDropFile;
