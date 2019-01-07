@@ -1,15 +1,13 @@
-const subscribers = new Map;
+const listeners = new Map;
 
-const OnKeyUp = {
+export default {
     bind(element, bindings) {
         const onKeyUp = (event) => bindings.value(event);
         window.addEventListener("keyup", onKeyUp);
-        subscribers.set(element, () => window.removeEventListener("keyup", onKeyUp));
+        listeners.set(element, () => window.removeEventListener("keyup", onKeyUp));
     },
     unbind(element) {
-        subscribers.get(element)();
-        subscribers.delete(element);
+        listeners.get(element)();
+        listeners.delete(element);
     },
 };
-
-export default OnKeyUp;
