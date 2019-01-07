@@ -1,11 +1,17 @@
 import Hammer from "hammerjs";
 
+const subscribers = new Map;
+
 const onSwipeRight = {
     inserted(element, bindings) {
-        Hammer(element).on("swiperight", () => bindings.value());
+        const onSwipeLeft = () => bindings.value();
+        const mc = new Hammer(element);
+        mc.on("swiperight", onSwipeLeft);
+        subscribers.set(element, () => mc.off("swiperight", onSwipeLeft));
     },
     unbind(element) {
-        Hammer(element).off("swiperight");
+        subscribers.get(element)();
+        subscribers.delete(element);
     },
 };
 
