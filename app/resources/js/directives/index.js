@@ -1,7 +1,7 @@
-import focus from "./focus";
-import onDropFile from "./onDropFile";
-import onKeyUp from "./onKeyUp";
-import onSwipeLeft from "./onSwipeLeft";
-import onSwipeRight from "./onSwipeRight";
+import Focus from "./Focus";
+import OnDropFile from "./OnDropFile";
+import OnKeyUp from "./OnKeyUp";
+import OnSwipeLeft from "./OnSwipeLeft";
+import OnSwipeRight from "./OnSwipeRight";
 
-export {focus, onDropFile, onKeyUp, onSwipeLeft, onSwipeRight};
+export {Focus, OnDropFile, OnKeyUp, OnSwipeLeft, OnSwipeRight};

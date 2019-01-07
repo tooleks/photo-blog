@@ -1,7 +1,7 @@
-const focus = {
+const Focus = {
     inserted(element) {
         element.focus();
     },
 };
 
-export default focus;
+export default Focus;

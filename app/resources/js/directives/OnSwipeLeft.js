@@ -2,7 +2,7 @@ import Hammer from "hammerjs";
 
 const subscribers = new Map;
 
-const onSwipeLeft = {
+const OnSwipeLeft = {
     inserted(element, bindings) {
         const onSwipeLeft = () => bindings.value();
         const mc = new Hammer(element);
@@ -15,4 +15,4 @@ const onSwipeLeft = {
     },
 };
 
-export default onSwipeLeft;
+export default OnSwipeLeft;

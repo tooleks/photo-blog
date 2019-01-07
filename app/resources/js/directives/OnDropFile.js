@@ -1,6 +1,6 @@
 const subscribers = new Map;
 
-const onDropFile = {
+const OnDropFile = {
     inserted(element, bindings) {
         const onDragAndDrop = (event) => event.preventDefault();
         const onDrop = (event) => bindings.value(event.dataTransfer.files.item(0));
@@ -29,4 +29,4 @@ const onDropFile = {
     },
 };
 
-export default onDropFile;
+export default OnDropFile;

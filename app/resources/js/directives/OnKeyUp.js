@@ -1,6 +1,6 @@
 const subscribers = new Map;
 
-const onKeyUp = {
+const OnKeyUp = {
     inserted(element, bindings) {
         const onKeyUp = (event) => bindings.value(event);
         window.addEventListener("keyup", onKeyUp);
@@ -12,4 +12,4 @@ const onKeyUp = {
     },
 };
 
-export default onKeyUp;
+export default OnKeyUp;
