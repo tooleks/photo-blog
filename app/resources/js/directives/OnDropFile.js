@@ -1,7 +1,7 @@
 const subscribers = new Map;
 
 const OnDropFile = {
-    inserted(element, bindings) {
+    bind(element, bindings) {
         const onDragAndDrop = (event) => event.preventDefault();
         const onDrop = (event) => bindings.value(event.dataTransfer.files.item(0));
         element.addEventListener("drag", onDragAndDrop);
