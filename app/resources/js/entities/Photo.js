@@ -4,7 +4,6 @@ import {routeName} from "../router/identifiers";
 
 export default class Photo {
     /**
-     * @constructor
      * @param {Object} attributes
      * @param {number} attributes.postId
      * @param {number} attributes.id
@@ -36,7 +35,7 @@ export default class Photo {
     /**
      * Warning! This getter definitely shouldn't be here.
      *
-     * @return {Object}
+     * @returns {Object}
      */
     get route() {
         const route = router.history.current;
@@ -53,35 +52,35 @@ export default class Photo {
     }
 
     /**
-     * @return {boolean}
+     * @returns {boolean}
      */
     get published() {
         return Boolean(this.postId);
     }
 
     /**
-     * @return {Image}
+     * @returns {Image}
      */
     get image() {
         return this.original;
     }
 
     /**
-     * @return {string}
+     * @returns {string}
      */
     valueOf() {
         return this.original.toString();
     }
 
     /**
-     * @return {string}
+     * @returns {string}
      */
     toString() {
         return String(this.valueOf());
     }
 
     /**
-     * @return {Photo}
+     * @returns {Photo}
      */
     clone() {
         return new Photo({
@@ -99,7 +98,7 @@ export default class Photo {
 
     /**
      * @param {Photo} photo
-     * @return {boolean}
+     * @returns {boolean}
      */
     equals(photo) {
         return this.id === photo.id;
@@ -107,7 +106,7 @@ export default class Photo {
 
     /**
      * @param {Photo} photo
-     * @return {Photo}
+     * @returns {Photo}
      */
     replaceImage(photo) {
         this.id = photo.id;

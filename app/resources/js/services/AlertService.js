@@ -15,7 +15,6 @@ export const TYPE_ERROR = "error";
 
 export default class AlertService {
     /**
-     * @constructor
      */
     constructor() {
         this.notify = this.notify.bind(this);
@@ -30,7 +29,7 @@ export default class AlertService {
      * @param {string} title
      * @param {string} [text]
      * @param {string} [type]
-     * @return {void}
+     * @returns {void}
      */
     notify(title, text = "", type = TYPE_SUCCESS) {
         Vue.prototype.$notify({
@@ -50,7 +49,7 @@ export default class AlertService {
      *
      * @param {string} title
      * @param {string} [text]
-     * @return {void}
+     * @returns {void}
      */
     success(title, text) {
         this.notify(title, text, TYPE_SUCCESS);
@@ -61,7 +60,7 @@ export default class AlertService {
      *
      * @param {string} title
      * @param {string} [text]
-     * @return {void}
+     * @returns {void}
      */
     warning(title, text) {
         this.notify(title, text, TYPE_WARN);
@@ -72,7 +71,7 @@ export default class AlertService {
      *
      * @param {string} title
      * @param {string} [text]
-     * @return {void}
+     * @returns {void}
      */
     error(title, text) {
         this.notify(title, text, TYPE_ERROR);

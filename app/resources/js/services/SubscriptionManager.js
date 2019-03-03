@@ -2,7 +2,6 @@ import * as apiEntityMapper from "../mapper/apiEntity";
 
 export default class SubscriptionManager {
     /**
-     * @constructor
      * @param {ApiService} api
      */
     constructor(api) {
@@ -15,7 +14,7 @@ export default class SubscriptionManager {
      * Delete the subscription by token value.
      *
      * @param {string} token
-     * @return {Promise<void>}
+     * @returns {Promise<void>}
      */
     async deleteByToken(token) {
         await this._api.deleteSubscription(token);
@@ -27,7 +26,7 @@ export default class SubscriptionManager {
      * @param {Object} [params]
      * @param {number} [params.page]
      * @param {number} [params.perPage]
-     * @return {Promise<Object>}
+     * @returns {Promise<Object>}
      */
     async paginate({page, perPage} = {}) {
         const response = await this._api.getSubscriptions({page, per_page: perPage});

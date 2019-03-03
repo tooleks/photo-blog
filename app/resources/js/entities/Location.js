@@ -1,6 +1,5 @@
 export default class Location {
     /**
-     * @constructor
      * @param {Object} attributes
      * @param {number} attributes.lat
      * @param {number} attributes.lng
@@ -14,7 +13,7 @@ export default class Location {
     }
 
     /**
-     * @return {number}
+     * @returns {number}
      */
     get lat() {
         return this._lat;
@@ -32,7 +31,7 @@ export default class Location {
     }
 
     /**
-     * @return {number}
+     * @returns {number}
      */
     get lng() {
         return this._lng;
@@ -50,21 +49,21 @@ export default class Location {
     }
 
     /**
-     * @return {string}
+     * @returns {string}
      */
     valueOf() {
         return `${this.lat.toFixed(4)}, ${this.lng.toFixed(4)}`;
     }
 
     /**
-     * @return {string}
+     * @returns {string}
      */
     toString() {
         return String(this.valueOf());
     }
 
     /**
-     * @return {Location}
+     * @returns {Location}
      */
     clone() {
         return new Location({

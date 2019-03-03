@@ -10,7 +10,7 @@ import User from "../entities/User";
 /**
  * @param {Object} attributes
  * @param {string} attributes.value
- * @return {Tag}
+ * @returns {Tag}
  */
 export function toTag({value}) {
     return new Tag({value});
@@ -20,7 +20,7 @@ export function toTag({value}) {
  * @param {Object} attributes
  * @param {number} attributes.id
  * @param {string} attributes.name
- * @return {User}
+ * @returns {User}
  */
 export function toUser({id, name}) {
     return new User({id, name});
@@ -31,7 +31,7 @@ export function toUser({id, name}) {
  * @param {string} attributes.url
  * @param {number} attributes.width
  * @param {number} attributes.height
- * @return {Image}
+ * @returns {Image}
  */
 export function toImage({url, width, height}) {
     return new Image({url, width, height});
@@ -47,7 +47,7 @@ export function toImage({url, width, height}) {
  * @param {string} attributes.iso
  * @param {string} attributes.taken_at
  * @param {string} attributes.software
- * @return {Exif}
+ * @returns {Exif}
  */
 export function toExif({manufacturer, model, exposure_time, aperture, focal_length, focal_length_in_35_mm, iso, taken_at, software}) {
     return new Exif({
@@ -67,7 +67,7 @@ export function toExif({manufacturer, model, exposure_time, aperture, focal_leng
  * @param {Object} attributes
  * @param {number} attributes.latitude
  * @param {number} attributes.longitude
- * @return {Location}
+ * @returns {Location}
  */
 export function toLocation({latitude, longitude}) {
     return new Location({
@@ -82,7 +82,7 @@ export function toLocation({latitude, longitude}) {
  * @param {string} [attributes.description]
  * @param {Array<Object>} [attributes.tags]
  * @param {Object} attributes.photo
- * @return {Photo}
+ * @returns {Photo}
  */
 export function toPhoto({id, description = "", tags = [], photo}) {
     return new Photo({
@@ -102,7 +102,7 @@ export function toPhoto({id, description = "", tags = [], photo}) {
  * @param {Object} attributes
  * @param {string} attributes.email
  * @param {string} attributes.token
- * @return {Subscription}
+ * @returns {Subscription}
  */
 export function toSubscription({email, token}) {
     return new Subscription({email, token});
@@ -112,7 +112,7 @@ export function toSubscription({email, token}) {
  * @param {Object} body
  * @param {Array<Object>} body.data
  * @param {Function} transform
- * @return {Array<*>}
+ * @returns {Array<*>}
  */
 export function toList(body, transform) {
     return body.data.map((attributes) => transform(attributes));
@@ -125,7 +125,7 @@ export function toList(body, transform) {
  * @param {string|null} body.next_page_url
  * @param {number} body.current_page
  * @param {Function} transform
- * @return {Object}
+ * @returns {Object}
  */
 export function toPaginator(body, transform) {
     const items = body.data.map((attributes) => transform(attributes));

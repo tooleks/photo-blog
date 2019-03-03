@@ -4,7 +4,7 @@ import Tag from "../entities/Tag";
 
 /**
  * @param {Tag} tag
- * @return {Object}
+ * @returns {Object}
  */
 export function toTag(tag) {
     return {
@@ -14,7 +14,7 @@ export function toTag(tag) {
 
 /**
  * @param {Location} location
- * @return {Object}
+ * @returns {Object}
  */
 export function toLocation(location) {
     return {
@@ -25,7 +25,7 @@ export function toLocation(location) {
 
 /**
  * @param {Photo} photo
- * @return {Object}
+ * @returns {Object}
  */
 export function toPhoto(photo) {
     return {
@@ -36,7 +36,7 @@ export function toPhoto(photo) {
 
 /**
  * @param {Photo} photo
- * @return {Object}
+ * @returns {Object}
  */
 export function toPost(photo) {
     return {

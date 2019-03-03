@@ -6,34 +6,31 @@ export const AUTH_KEY = "currentUser";
 
 export default class AuthManager {
     /**
-     * @constructor
-     * @param store
      * @param {LocalStorageManager} localStorage
      */
-    constructor(store, localStorage) {
-        this._store = store;
+    constructor(localStorage) {
         this._localStorage = localStorage;
+        this._user = null;
         this.loadUser = this.loadUser.bind(this);
         this.setUser = this.setUser.bind(this);
         this.getUser = this.getUser.bind(this);
-
+        //
         this.loadUser();
     }
 
     /**
-     * @return {void}
+     * @returns {void}
      */
     loadUser() {
         const object = this._localStorage.get(AUTH_KEY);
-
-        if (object === null) {
+        if (object == null) {
             return;
         }
 
         // Construct a new object of the user from the plain object.
         const user = User.fromObject(object);
 
-        // The user is valid only if the session expiration datetime is in the future.
+        // A user is valid only if the session expiration datetime is in the future.
         if (moment.utc().isAfter(user.expiresAt)) {
             this.removeUser();
             return;
@@ -44,26 +41,33 @@ export default class AuthManager {
 
     /**
      * @param {User} user
-     * @return {void}
+     * @returns {void}
      * @throws {TypeError}
      */
     setUser(user) {
-        this._store.dispatch("auth/setUser", user);
+        this._user = user;
         this._localStorage.set(AUTH_KEY, user);
     }
 
     /**
-     * @return {void}
+     * @returns {void}
      */
     removeUser() {
-        this._store.dispatch("auth/removeUser");
+        this._user = null;
         this._localStorage.remove(AUTH_KEY);
     }
 
     /**
-     * @return {User}
+     * @returns {User|null}
      */
     getUser() {
-        return this._store.state.auth.user;
+        return this._user;
+    }
+
+    /**
+     * @returns {boolean}
+     */
+    hasUser() {
+        return Boolean(this._user);
     }
 }

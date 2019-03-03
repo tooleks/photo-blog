@@ -158,6 +158,8 @@ return [
          * Package Service Providers...
          */
         Laravel\Passport\PassportServiceProvider::class,
+        Illuminate\Notifications\NotificationServiceProvider::class,
+        Illuminate\Notifications\SlackChannelServiceProvider::class,
 
     ],
 

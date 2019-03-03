@@ -3,7 +3,6 @@ import getOrCreateHeadElement from "../../utils/getOrCreateHeadElement";
 
 export default class BrowserReCaptcha {
     /**
-     * @constructor
      * @param {HTMLElement} element
      * @param {string} siteKey
      * @param {Function} onVerified
@@ -19,7 +18,7 @@ export default class BrowserReCaptcha {
     }
 
     /**
-     * @return {Promise<void>}
+     * @returns {Promise<void>}
      */
     async execute() {
         const grecaptcha = await this.load();
@@ -27,7 +26,7 @@ export default class BrowserReCaptcha {
     }
 
     /**
-     * @return {Promise<void>}
+     * @returns {Promise<void>}
      */
     async render() {
         const grecaptcha = await this.load();
@@ -42,7 +41,7 @@ export default class BrowserReCaptcha {
     }
 
     /**
-     * @return {Promise<void>}
+     * @returns {Promise<void>}
      */
     async reset() {
         const grecaptcha = await this.load();
@@ -50,7 +49,7 @@ export default class BrowserReCaptcha {
     }
 
     /**
-     * @return {Promise<void>}
+     * @returns {Promise<void>}
      */
     async load() {
         getOrCreateHeadElement("script", {src: "https://www.google.com/recaptcha/api.js"});

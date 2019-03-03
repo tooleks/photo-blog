@@ -1,6 +1,5 @@
 export default class Image {
     /**
-     * @constructor
      * @param {Object} attributes
      * @param {string} attributes.url
      * @param {number} attributes.width
@@ -16,21 +15,21 @@ export default class Image {
     }
 
     /**
-     * @return {string}
+     * @returns {string}
      */
     valueOf() {
         return this.url;
     }
 
     /**
-     * @return {string}
+     * @returns {string}
      */
     toString() {
         return String(this.valueOf());
     }
 
     /**
-     * @return {Image}
+     * @returns {Image}
      */
     clone() {
         return new Image({

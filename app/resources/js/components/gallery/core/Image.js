@@ -1,6 +1,5 @@
 export default class Image {
     /**
-     * @constructor
      * @param {*} model
      */
     constructor(model) {
@@ -36,7 +35,7 @@ export default class Image {
     }
 
     /**
-     * @return {Image}
+     * @returns {Image}
      */
     clone() {
         const image = new Image(this.model);
@@ -47,7 +46,7 @@ export default class Image {
 
     /**
      * @param {number} ratio
-     * @return {Image}
+     * @returns {Image}
      */
     scale(ratio) {
         const width = this.width * 100 / ratio;
@@ -60,7 +59,7 @@ export default class Image {
 
     /**
      * @param {number} height
-     * @return {Image}
+     * @returns {Image}
      */
     scaleToHeight(height) {
         const ratio = this.height * 100 / height;
@@ -69,7 +68,7 @@ export default class Image {
 
     /**
      * @param {number} width
-     * @return {Image}
+     * @returns {Image}
      */
     scaleToWidth(width) {
         const ratio = this.width * 100 / width;

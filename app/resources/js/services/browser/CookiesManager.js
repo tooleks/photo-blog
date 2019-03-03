@@ -1,6 +1,5 @@
 export default class CookiesManager {
     /**
-     * @constructor
      */
     constructor() {
         this.getAll = this.getAll.bind(this);
@@ -10,7 +9,7 @@ export default class CookiesManager {
     /**
      * Get all cookies.
      *
-     * @return {Object}
+     * @returns {Object}
      */
     getAll() {
         return document.cookie
@@ -27,7 +26,7 @@ export default class CookiesManager {
      * Get cookie by name.
      *
      * @param {string} name
-     * @return {string}
+     * @returns {string}
      */
     get(name) {
         return this.getAll()[name];

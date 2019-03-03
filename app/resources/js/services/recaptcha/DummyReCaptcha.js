@@ -1,6 +1,5 @@
 export default class DummyReCaptcha {
     /**
-     * @constructor
      * @param {Function} onVerified
      */
     constructor(onVerified) {
@@ -12,28 +11,28 @@ export default class DummyReCaptcha {
     }
 
     /**
-     * @return {Promise<void>}
+     * @returns {Promise<void>}
      */
     async execute() {
         this._onVerified.call(this._onVerified);
     }
 
     /**
-     * @return {Promise<void>}
+     * @returns {Promise<void>}
      */
     async render() {
         //
     }
 
     /**
-     * @return {Promise<void>}
+     * @returns {Promise<void>}
      */
     async reset() {
         //
     }
 
     /**
-     * @return {Promise<void>}
+     * @returns {Promise<void>}
      */
     async load() {
         //

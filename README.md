@@ -8,9 +8,9 @@
 - MySQL 5.7
 - Redis 4
 - PHP-FPM 7.3
-- Laravel 5.7
+- Laravel 5.8
 - Node.js 10
-- Vue.js 2.5.
+- Vue.js 2.6
 
 ### Installation
 

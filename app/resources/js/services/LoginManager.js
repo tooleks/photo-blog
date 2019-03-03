@@ -3,7 +3,6 @@ import * as apiEntityMapper from "../mapper/apiEntity";
 
 export default class LoginManager {
     /**
-     * @constructor
      * @param {ApiService} api
      * @param {CookiesManager} cookies
      * @param {AuthManager} auth
@@ -20,7 +19,7 @@ export default class LoginManager {
      * Sign in a user.
      *
      * @param {Object} credentials
-     * @return {Promise<Object>}
+     * @returns {Promise<Object>}
      */
     async signIn(credentials) {
         await this._api.createToken(credentials);
@@ -35,7 +34,7 @@ export default class LoginManager {
     /**
      * Sign out a user.
      *
-     * @return {Promise}
+     * @returns {Promise}
      */
     async signOut() {
         try {

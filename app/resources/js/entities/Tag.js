@@ -1,6 +1,5 @@
 export default class Tag {
     /**
-     * @constructor
      * @param {Object} attributes
      * @param {string} attributes.value
      */
@@ -12,21 +11,21 @@ export default class Tag {
     }
 
     /**
-     * @return {string}
+     * @returns {string}
      */
     valueOf() {
         return this.value;
     }
 
     /**
-     * @return {string}
+     * @returns {string}
      */
     toString() {
         return String(this.valueOf());
     }
 
     /**
-     * @return {Tag}
+     * @returns {Tag}
      */
     clone() {
         return new Tag({
@@ -37,7 +36,7 @@ export default class Tag {
 
 /**
  * @param {string} value
- * @return {Tag}
+ * @returns {Tag}
  */
 Tag.fromValue = function fromValue(value) {
     return new Tag({value});
