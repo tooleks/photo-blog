@@ -6,9 +6,10 @@ use App\Services\Image\Contracts\ImageProcessor;
 use Illuminate\Contracts\Filesystem\Factory as Storage;
 use Illuminate\Contracts\Validation\Factory as ValidatorFactory;
 use Illuminate\Validation\Rule;
-use Imagine\Image\ImagineInterface as Imagine;
 use Imagine\Image\Box;
 use Imagine\Image\ImageInterface;
+use Imagine\Image\ImagineInterface as Imagine;
+use Imagine\Image\ManipulatorInterface;
 use Imagine\Image\Metadata\ExifMetadataReader;
 use Imagine\Image\Point;
 use InvalidArgumentException;
@@ -57,7 +58,7 @@ class ImagineImageProcessor implements ImageProcessor
     {
         $validator = $validatorFactory->make($config, [
             'thumbnails' => ['required', 'array'],
-            'thumbnails.*.mode' => ['required', Rule::in(['inset', 'outbound'])],
+            'thumbnails.*.mode' => ['required', Rule::in([ManipulatorInterface::THUMBNAIL_INSET, ManipulatorInterface::THUMBNAIL_OUTBOUND])],
             'thumbnails.*.quality' => ['required', 'integer', 'min:0', 'max:100'],
             'thumbnails.*.prefix' => ['required', 'string', 'min:1'],
             'thumbnails.*.width' => ['required', 'integer', 'min:1'],
