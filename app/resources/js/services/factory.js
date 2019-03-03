@@ -1,6 +1,5 @@
 import Vue from "vue";
 import config from "../config";
-import store from "../store";
 import lang from "../resources/lang";
 import ApiHandler from "./api/ApiHandler";
 import ApiService from "./api/ApiService";
@@ -14,6 +13,7 @@ import AuthManager from "./AuthManager";
 import EventBus from "./EventBus";
 import Localization from "./Localization";
 import LoginManager from "./LoginManager";
+import MetaManager from "./MetaManager";
 import PhotoManager from "./PhotoManager";
 import SubscriptionManager from "./SubscriptionManager";
 import TagManager from "./TagManager";
@@ -21,10 +21,6 @@ import TagManager from "./TagManager";
 /** @type {Object} */
 export function getConfig() {
     return config;
-}
-
-export function getStore() {
-    return store;
 }
 
 /** @type {EventBus} */
@@ -82,11 +78,11 @@ export function getApi() {
 }
 
 /** @type {AuthManager} */
-const authManager = new AuthManager(getLocalStorage());
+const authManager = Vue.observable(new AuthManager(getLocalStorage()));
 
 /** @returns {AuthManager} */
 export function getAuth() {
-    return Vue.observable(authManager);
+    return authManager;
 }
 
 /** @type {LoginManager} */
@@ -95,6 +91,14 @@ const loginManager = new LoginManager(getApi(), getCookies(), getAuth());
 /** @returns {LoginManager} */
 export function getLogin() {
     return loginManager;
+}
+
+/** @type {MetaManager} */
+const metaManager = Vue.observable(new MetaManager());
+
+/** @returns {MetaManager} */
+export function getMeta() {
+    return metaManager;
 }
 
 /** @returns {BrowserReCaptcha|DummyReCaptcha} */

@@ -1,4 +1,5 @@
-import {mapActions, mapState} from "vuex";
+/* global document */
+
 import getOrCreateHeadElement from "../utils/getOrCreateHeadElement";
 
 export default {
@@ -37,30 +38,62 @@ export default {
             this.setPageCanonicalUrl(baseUrl + this.$route.path);
         },
     },
-    computed: mapState({
-        pageStatusCode: (state) => state.meta.pageStatusCode,
-        pageName: (state) => state.meta.pageName,
-        pageDescription: (state) => state.meta.pageDescription,
-        pageKeywords: (state) => state.meta.pageKeywords,
-        pageTitle: (state) => state.meta.pageTitle,
-        pageImage: (state) => state.meta.pageImage,
-        pageUrl: (state) => state.meta.pageUrl,
-        pageCanonicalUrl: (state) => state.meta.pageCanonicalUrl,
-    }),
-    methods: mapActions("meta", [
-        "setPageStatusCode",
-        "setPageName",
-        "setPageDescription",
-        "setPageKeywords",
-        "setPageTitle",
-        "setPageImage",
-        "setPageUrl",
-        "setPageCanonicalUrl",
-    ]),
+    computed: {
+        pageStatusCode() {
+            return this.$services.getMeta().statusCode;
+        },
+        pageName() {
+            return this.$services.getMeta().name;
+        },
+        pageDescription() {
+            return this.$services.getMeta().description;
+        },
+        pageKeywords() {
+            return this.$services.getMeta().keywords;
+        },
+        pageTitle() {
+            return this.$services.getMeta().title;
+        },
+        pageImage() {
+            return this.$services.getMeta().image;
+        },
+        pageUrl() {
+            return this.$services.getMeta().url;
+        },
+        pageCanonicalUrl() {
+            return this.$services.getMeta().canonicalUrl;
+        },
+    },
+    methods: {
+        setPageStatusCode(statusCode) {
+            this.$services.getMeta().statusCode = statusCode;
+        },
+        setPageName(name) {
+            this.$services.getMeta().name = name;
+        },
+        setPageDescription(description) {
+            this.$services.getMeta().description = description;
+        },
+        setPageKeywords(keywords) {
+            this.$services.getMeta().keywords = keywords;
+        },
+        setPageTitle(title) {
+            this.$services.getMeta().title = title;
+        },
+        setPageImage(image) {
+            this.$services.getMeta().image = image;
+        },
+        setPageUrl(url) {
+            this.$services.getMeta().url = url;
+        },
+        setPageCanonicalUrl(canonicalUrl) {
+            this.$services.getMeta().canonicalUrl = canonicalUrl;
+        },
+    },
     created() {
         getOrCreateHeadElement("meta", {property: "og:type"}).setAttribute("content", "article");
         getOrCreateHeadElement("meta", {name: "twitter:card"}).setAttribute("content", "summary_large_image");
-        this.setPageStatusCode(200);
+        this.setPageStatusCode("200");
         this.setPageName(this.$services.getConfig().app.name);
         this.setPageDescription(this.$services.getConfig().app.description);
         this.setPageKeywords(this.$services.getConfig().app.keywords);

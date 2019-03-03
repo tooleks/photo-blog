@@ -51,7 +51,6 @@
 </style>
 
 <script>
-    import {mapState} from "vuex";
     import LocationInput from "../map/LocationInput";
     import ExifDescription from "./ExifDescription";
     import ShareButtons from "../utils/ShareButtons";
@@ -76,10 +75,6 @@
                 type: String,
             },
         },
-        computed: mapState({
-            pageCanonicalUrl: (state) => state.meta.pageCanonicalUrl,
-            pageTitle: (state) => state.meta.pageTitle,
-        }),
         methods: {
             emitBackEvent() {
                 this.$emit("onBack");
