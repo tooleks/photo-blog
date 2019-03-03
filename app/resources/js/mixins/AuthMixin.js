@@ -1,8 +1,12 @@
-import {mapState} from "vuex";
+import * as services from "../services/factory";
 
 export default {
-    computed: mapState({
-        currentUser: (state) => state.auth.user,
-        authenticated: (state) => state.auth.authenticated,
-    }),
+    computed: {
+        currentUser() {
+            return services.getAuth().getUser();
+        },
+        authenticated() {
+            return services.getAuth().hasUser();
+        },
+    },
 }

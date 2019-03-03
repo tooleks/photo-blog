@@ -1,6 +1,5 @@
 export default class LocalStorageManager {
     /**
-     * @constructor
      */
     constructor() {
         this.set = this.set.bind(this);
@@ -14,7 +13,7 @@ export default class LocalStorageManager {
      *
      * @param {string} key
      * @param {*} value
-     * @return {LocalStorageManager}
+     * @returns {LocalStorageManager}
      */
     set(key, value) {
         localStorage.setItem(key, JSON.stringify(value));
@@ -25,8 +24,8 @@ export default class LocalStorageManager {
      * Remove value by key from a local storage.
      *
      * @param {string} key
-     * @return {void}
-     * @return {LocalStorageManager}
+     * @returns {void}
+     * @returns {LocalStorageManager}
      */
     remove(key) {
         localStorage.removeItem(key);
@@ -38,7 +37,7 @@ export default class LocalStorageManager {
      *
      * @param {string} key
      * @param {*} defaultValue
-     * @return {*}
+     * @returns {*}
      */
     get(key, defaultValue = null) {
         let value = defaultValue;
@@ -55,7 +54,7 @@ export default class LocalStorageManager {
      * Determine if value by key exists in local storage.
      *
      * @param {string} key
-     * @return {boolean}
+     * @returns {boolean}
      */
     exists(key) {
         return localStorage.getItem(key) !== null;

@@ -2,7 +2,6 @@ import Vue from "vue";
 
 export default class EventBus {
     /**
-     * @constructor
      */
     constructor() {
         this._vue = new Vue;
@@ -17,7 +16,7 @@ export default class EventBus {
      *
      * @param {string} event
      * @param {...*} [args]
-     * @return {EventBus}
+     * @returns {EventBus}
      */
     emit(event, ...args) {
         this._vue.$emit(event, ...args);
@@ -29,7 +28,7 @@ export default class EventBus {
      *
      * @param {string|Array<string>} event
      * @param {function} callback
-     * @return {EventBus}
+     * @returns {EventBus}
      */
     on(event, callback) {
         this._vue.$on(event, callback);
@@ -41,7 +40,7 @@ export default class EventBus {
      *
      * @param {string|Array<string>} event
      * @param {function} callback
-     * @return {EventBus}
+     * @returns {EventBus}
      */
     once(event, callback) {
         this._vue.$once(event, callback);
@@ -53,7 +52,7 @@ export default class EventBus {
      *
      * @param {string|Array<string>} event
      * @param {function} [callback]
-     * @return {EventBus}
+     * @returns {EventBus}
      */
     off(event, callback) {
         this._vue.$off(event, callback);

@@ -1,6 +1,6 @@
 /**
  * @param {string} search
- * @return {Object}
+ * @returns {Object}
  */
 export default function decodeSearchParams(search) {
     search = decodeURIComponent(search);

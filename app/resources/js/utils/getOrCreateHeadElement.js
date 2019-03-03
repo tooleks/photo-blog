@@ -1,7 +1,7 @@
 /**
  * @param {string} tag
  * @param {Object} attributes
- * @return {Node}
+ * @returns {Node}
  */
 export default function (tag, attributes) {
     // Find the element in the head tag.

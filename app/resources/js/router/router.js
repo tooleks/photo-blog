@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import * as services from "../services/factory";
 import store from "../store";
 import routes from "./routes";
 
@@ -15,7 +16,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    if (to.matched.some((route) => route.meta.requiresAuth) && !store.state.auth.authenticated) {
+    if (to.matched.some((route) => route.meta.requiresAuth) && !services.getAuth().hasUser()) {
         next({
             name: "sign-in",
             query: {redirectUrl: to.fullPath},

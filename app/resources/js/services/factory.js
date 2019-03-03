@@ -30,22 +30,22 @@ export function getStore() {
 /** @type {EventBus} */
 const eventBus = new EventBus;
 
-/** @return {EventBus} */
+/** @returns {EventBus} */
 export function getEventBus() {
     return eventBus;
 }
 
-/** @return {CookiesManager} */
+/** @returns {CookiesManager} */
 export function getCookies() {
     return new CookiesManager;
 }
 
-/** @return {FullScreenManager} */
+/** @returns {FullScreenManager} */
 export function getFullScreen() {
     return new FullScreenManager;
 }
 
-/** @return {Localization} */
+/** @returns {Localization} */
 export function getLocalization(locale = "en") {
     return new Localization(lang, locale);
 }
@@ -53,12 +53,12 @@ export function getLocalization(locale = "en") {
 /** @type {Localization} */
 const localization = getLocalization();
 
-/** @return {string} */
+/** @returns {string} */
 export function getLang(key, ...params) {
     return localization.get(key, ...params);
 }
 
-/** @return {LocalStorageManager} */
+/** @returns {LocalStorageManager} */
 export function getLocalStorage() {
     return new LocalStorageManager;
 }
@@ -66,7 +66,7 @@ export function getLocalStorage() {
 /** @type {AlertService} */
 const alertService = new AlertService;
 
-/** @return {AlertService} */
+/** @returns {AlertService} */
 export function getAlert() {
     return alertService;
 }
@@ -76,28 +76,28 @@ const apiHandler = new ApiHandler(getAlert());
 /** @type {ApiService} */
 const apiService = new ApiService(config.url.api, apiHandler.onData, apiHandler.onError);
 
-/** @return {ApiService} */
+/** @returns {ApiService} */
 export function getApi() {
     return apiService;
 }
 
 /** @type {AuthManager} */
-const authManager = new AuthManager(getStore(), getLocalStorage());
+const authManager = new AuthManager(getLocalStorage());
 
-/** @return {AuthManager} */
+/** @returns {AuthManager} */
 export function getAuth() {
-    return authManager;
+    return Vue.observable(authManager);
 }
 
 /** @type {LoginManager} */
 const loginManager = new LoginManager(getApi(), getCookies(), getAuth());
 
-/** @return {LoginManager} */
+/** @returns {LoginManager} */
 export function getLogin() {
     return loginManager;
 }
 
-/** @return {BrowserReCaptcha|DummyReCaptcha} */
+/** @returns {BrowserReCaptcha|DummyReCaptcha} */
 export function getReCaptcha(element, siteKey, onVerified) {
     // Provide Recaptcha service only in a browser environment,
     // and if the site key value is provided.
@@ -110,7 +110,7 @@ export function getReCaptcha(element, siteKey, onVerified) {
 /** @type {PhotoManager} */
 const photoManager = new PhotoManager(getApi());
 
-/** @return {PhotoManager} */
+/** @returns {PhotoManager} */
 export function getPhotoManager() {
     return photoManager;
 }
@@ -118,7 +118,7 @@ export function getPhotoManager() {
 /** @type {SubscriptionManager} */
 const subscriptionManager = new SubscriptionManager(getApi());
 
-/** @return {SubscriptionManager} */
+/** @returns {SubscriptionManager} */
 export function getSubscriptionManager() {
     return subscriptionManager;
 }
@@ -126,7 +126,7 @@ export function getSubscriptionManager() {
 /** @type {TagManager} */
 const tagManager = new TagManager(getApi());
 
-/** @return {TagManager} */
+/** @returns {TagManager} */
 export function getTagManager() {
     return tagManager;
 }

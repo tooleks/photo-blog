@@ -1,6 +1,5 @@
 export default class Subscription {
     /**
-     * @constructor
      * @param {Object} attributes
      * @param {string} attributes.email
      * @param {string} attributes.token
@@ -12,7 +11,7 @@ export default class Subscription {
     }
 
     /**
-     * @return {Subscription}
+     * @returns {Subscription}
      */
     clone() {
         return new Subscription({

@@ -2,7 +2,6 @@ import moment from "moment";
 
 export default class Exif {
     /**
-     * @constructor
      * @param {Object} attributes
      * @param {string} attributes.manufacturer
      * @param {string} attributes.model
@@ -28,7 +27,7 @@ export default class Exif {
     }
 
     /**
-     * @return {*}
+     * @returns {*}
      */
     get takenAt() {
         if (typeof this._takenAt === "undefined") {
@@ -52,7 +51,7 @@ export default class Exif {
     }
 
     /**
-     * @return {Exif}
+     * @returns {Exif}
      */
     clone() {
         return new Exif({

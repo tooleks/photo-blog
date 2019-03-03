@@ -1,6 +1,5 @@
 export default class Localization {
     /**
-     * @constructor
      * @param {Object} lang
      * @param {string} locale
      */
@@ -14,7 +13,7 @@ export default class Localization {
     /**
      * @param {string} key
      * @param {...string} params
-     * @return {string}
+     * @returns {string}
      */
     get(key, ...params) {
         let value = this._lang[this._locale][key];
@@ -30,7 +29,7 @@ export default class Localization {
      *
      * @param {string} value
      * @param {...string} params
-     * @return {string}
+     * @returns {string}
      */
     _fillParams(value, ...params) {
         return params.reduce((value, param) => value.replace(/\{[^\{\}]+\}/, param), value);

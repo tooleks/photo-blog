@@ -3,7 +3,6 @@ import * as entityApiMapper from "../mapper/entityApi";
 
 export default class PhotoManager {
     /**
-     * @constructor
      * @param {ApiService} api
      */
     constructor(api) {
@@ -22,7 +21,7 @@ export default class PhotoManager {
      * Upload a new photo file.
      *
      * @param {File} file
-     * @return {Promise<Photo>}
+     * @returns {Promise<Photo>}
      */
     async upload(file) {
         const response = await this._api.uploadPhotoFile(file);
@@ -35,7 +34,7 @@ export default class PhotoManager {
      * Publish the photo.
      *
      * @param {Photo} photo
-     * @return {Promise<Photo>}
+     * @returns {Promise<Photo>}
      */
     async publish(photo) {
         // Update the photo location in case if the photo location is set.
@@ -59,7 +58,7 @@ export default class PhotoManager {
      * Delete the photo by related post ID.
      *
      * @param {number} postId
-     * @return {Promise<void>}
+     * @returns {Promise<void>}
      */
     async deleteByPostId(postId) {
         await this._api.deletePost(postId);
@@ -72,7 +71,7 @@ export default class PhotoManager {
      * @param {Object} [params]
      * @param {string} [params.tag]
      * @param {string} [params.searchPhrase]
-     * @return {Promise<Photo>}
+     * @returns {Promise<Photo>}
      */
     async getByPostId(postId, {tag, searchPhrase} = {}) {
         const response = await this._api.getPost(postId, {
@@ -89,7 +88,7 @@ export default class PhotoManager {
      * @param {Object} [params]
      * @param {string} [params.tag]
      * @param {string} [params.searchPhrase]
-     * @return {Promise<Photo>}
+     * @returns {Promise<Photo>}
      */
     async getPreviousByPostId(postId, {tag, searchPhrase} = {}) {
         const response = await this._api.getPreviousPost(postId, {
@@ -108,7 +107,7 @@ export default class PhotoManager {
      * @param {Object} [params]
      * @param {string} [params.tag]
      * @param {string} [params.searchPhrase]
-     * @return {Promise<Photo>}
+     * @returns {Promise<Photo>}
      */
     async getNextByPostId(postId, {tag, searchPhrase} = {}) {
         const response = await this._api.getNextPost(postId, {
@@ -126,7 +125,7 @@ export default class PhotoManager {
      * @param {Object} [params]
      * @param {number} [params.page=1]
      * @param {number} [params.perPage=50]
-     * @return {Promise<Array<Photo>>}
+     * @returns {Promise<Array<Photo>>}
      */
     async getAll({page = 1, perPage = 50} = {}) {
         const response = await this._api.getPosts({page, per_page: perPage});
@@ -145,7 +144,7 @@ export default class PhotoManager {
      * @param {number} [params.perPage]
      * @param {string} [params.tag]
      * @param {string} [params.searchPhrase]
-     * @return {Promise<Object>}
+     * @returns {Promise<Object>}
      */
     async paginate({page = 1, perPage = 40, tag, searchPhrase}) {
         const response = await this._api.getPosts({

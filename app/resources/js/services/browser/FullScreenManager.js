@@ -1,6 +1,5 @@
 export default class FullScreenManager {
     /**
-     * @constructor
      */
     constructor() {
         this.request = this.request.bind(this);
@@ -11,7 +10,7 @@ export default class FullScreenManager {
      * Request the fullscreen mode.
      *
      * @param {HTMLElement} [element]
-     * @return {void}
+     * @returns {void}
      */
     request(element = document.documentElement) {
         if (element.requestFullscreen) {
@@ -34,7 +33,7 @@ export default class FullScreenManager {
     /**
      * Close the fullscreen mode.
      *
-     * @return {void}
+     * @returns {void}
      */
     close() {
         if (document.exitFullscreen) {

@@ -7,7 +7,7 @@ const DEFAULT_INTERVAL = 0; // 0 seconds
  * @param {Function} callback
  * @param {number} interval
  * @param {number} timeout
- * @return {Promise<*>}
+ * @returns {Promise<*>}
  */
 export default function (callback, timeout = DEFAULT_TIMEOUT, interval = DEFAULT_INTERVAL) {
     return new Promise((resolve, reject) => {

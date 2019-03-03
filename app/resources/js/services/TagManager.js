@@ -2,7 +2,6 @@ import * as apiEntityMapper from "../mapper/apiEntity";
 
 export default class TagManager {
     /**
-     * @constructor
      * @param {ApiService} api
      */
     constructor(api) {
@@ -13,7 +12,7 @@ export default class TagManager {
     /**
      * Get the most popular tags.
      *
-     * @return {Promise<Array<Tag>>}
+     * @returns {Promise<Array<Tag>>}
      */
     async getPopular() {
         const response = await this._api.getTags();

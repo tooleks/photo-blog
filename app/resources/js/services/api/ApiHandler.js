@@ -11,7 +11,6 @@ export const HTTP_STATUS = Object.freeze({
 
 export default class ApiHandler {
     /**
-     * @constructor
      * @param {AlertService} alert
      */
     constructor(alert) {
@@ -29,7 +28,7 @@ export default class ApiHandler {
 
     /**
      * @param {*} response
-     * @return {*}
+     * @returns {*}
      */
     onData(response) {
         // Empty response data.
@@ -48,7 +47,7 @@ export default class ApiHandler {
 
     /**
      * @param {Error} error
-     * @return {*}
+     * @returns {*}
      */
     onError(error) {
         if (error.response) {
@@ -62,7 +61,7 @@ export default class ApiHandler {
 
     /**
      * @param {Error} error
-     * @return {*}
+     * @returns {*}
      * @private
      */
     _onResponseError(error) {
@@ -87,7 +86,7 @@ export default class ApiHandler {
 
     /**
      * @private
-     * @return {*}
+     * @returns {*}
      * @private
      */
     _onSyntaxError(error) {
@@ -98,7 +97,7 @@ export default class ApiHandler {
 
     /**
      * @param {Error} error
-     * @return {*}
+     * @returns {*}
      * @private
      */
     _onConnectionError(error) {
@@ -108,7 +107,7 @@ export default class ApiHandler {
 
     /**
      * @param {Error} error
-     * @return {*}
+     * @returns {*}
      * @private
      */
     _onUnauthenticatedResponseError(error) {
@@ -118,7 +117,7 @@ export default class ApiHandler {
 
     /**
      * @param {Error} error
-     * @return {*}
+     * @returns {*}
      * @private
      */
     _onNotFoundResponseError(error) {
@@ -131,7 +130,7 @@ export default class ApiHandler {
 
     /**
      * @param {Error} error
-     * @return {*}
+     * @returns {*}
      * @private
      */
     _onValidationResponseError(error) {
@@ -144,7 +143,7 @@ export default class ApiHandler {
 
     /**
      * @param {Error} error
-     * @return {*}
+     * @returns {*}
      * @private
      */
     _onOtherResponseError(error) {

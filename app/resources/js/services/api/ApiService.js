@@ -2,7 +2,6 @@ import axios from "axios";
 
 export default class ApiService {
     /**
-     * @constructor
      * @param {string} baseUrl
      * @param {Function} onData
      * @param {Function} onError
@@ -34,7 +33,7 @@ export default class ApiService {
      * Create auth token.
      *
      * @param {Object} data
-     * @return {Promise}
+     * @returns {Promise}
      */
     createToken(data) {
         return this._api.post("/auth/token", data);
@@ -43,7 +42,7 @@ export default class ApiService {
     /**
      * Delete auth token.
      *
-     * @return {Promise}
+     * @returns {Promise}
      */
     deleteToken() {
         return this._api.delete("/auth/token");
@@ -53,7 +52,7 @@ export default class ApiService {
      * Get user by ID.
      *
      * @param {number} id
-     * @return {Promise}
+     * @returns {Promise}
      */
     getUser(id) {
         return this._api.get(`/users/${encodeURIComponent(id)}`);
@@ -63,7 +62,7 @@ export default class ApiService {
      * Upload photo file.
      *
      * @param {File} file
-     * @return {Promise}
+     * @returns {Promise}
      */
     uploadPhotoFile(file) {
         const data = new FormData;
@@ -76,7 +75,7 @@ export default class ApiService {
      *
      * @param {number} id
      * @param {Object} data
-     * @return {Promise}
+     * @returns {Promise}
      */
     updatePhoto(id, data) {
         return this._api.put(`/photos/${encodeURIComponent(id)}`, data);
@@ -86,7 +85,7 @@ export default class ApiService {
      * Created post.
      *
      * @param {Object} data
-     * @return {Promise}
+     * @returns {Promise}
      */
     createPost(data) {
         return this._api.post("/posts", {...data, is_published: true});
@@ -97,7 +96,7 @@ export default class ApiService {
      *
      * @param {number} id
      * @param {Object} data
-     * @return {Promise}
+     * @returns {Promise}
      */
     updatePost(id, data) {
         return this._api.put(`/posts/${encodeURIComponent(id)}`, data);
@@ -111,7 +110,7 @@ export default class ApiService {
      * @param {number} [params.per_page=15]
      * @param {string} [params.tag]
      * @param {string} [params.search_phrase]
-     * @return {Promise}
+     * @returns {Promise}
      */
     getPosts({page = 1, per_page = 15, tag, search_phrase} = {}) {
         return this._api.get("/posts", {params: {page, per_page, tag, search_phrase}});
@@ -125,7 +124,7 @@ export default class ApiService {
      * @param {string} params.tag
      * @param {string} params.search_phrase
      * @param {Object} [options]
-     * @return {Promise}
+     * @returns {Promise}
      */
     getPost(id, {tag, search_phrase} = {}, options = {}) {
         return this._api.get(`/posts/${encodeURIComponent(id)}`, {params: {tag, search_phrase}});
@@ -139,7 +138,7 @@ export default class ApiService {
      * @param {string} params.tag
      * @param {string} params.search_phrase
      * @param {Object} [options]
-     * @return {Promise}
+     * @returns {Promise}
      */
     getPreviousPost(id, {tag, search_phrase} = {}, options = {}) {
         return this._api.get(`/posts/${encodeURIComponent(id)}/previous`, {params: {tag, search_phrase}});
@@ -153,7 +152,7 @@ export default class ApiService {
      * @param {string} params.tag
      * @param {string} params.search_phrase
      * @param {Object} [options]
-     * @return {Promise}
+     * @returns {Promise}
      */
     getNextPost(id, {tag, search_phrase} = {}, options = {}) {
         return this._api.get(`/posts/${encodeURIComponent(id)}/next`, {params: {tag, search_phrase}});
@@ -163,7 +162,7 @@ export default class ApiService {
      * Delete post.
      *
      * @param {number} id
-     * @return {Promise}
+     * @returns {Promise}
      */
     deletePost(id) {
         return this._api.delete(`/posts/${encodeURIComponent(id)}`);
@@ -175,7 +174,7 @@ export default class ApiService {
      * @param {Object} [params]
      * @param {number} [params.page=1]
      * @param {number} [params.per_page=15]
-     * @return {Promise}
+     * @returns {Promise}
      */
     getTags({page = 1, per_page = 15} = {}) {
         return this._api.get("/tags", {params: {page, per_page}});
@@ -185,7 +184,7 @@ export default class ApiService {
      * Create contact message.
      *
      * @param {Object} data
-     * @return {Promise}
+     * @returns {Promise}
      */
     createContactMessage(data) {
         return this._api.post("/contact_messages", data);
@@ -195,7 +194,7 @@ export default class ApiService {
      * Create subscription.
      *
      * @param {Object} data
-     * @return {Promise}
+     * @returns {Promise}
      */
     createSubscription(data) {
         return this._api.post("/subscriptions", data);
@@ -205,7 +204,7 @@ export default class ApiService {
      * Delete subscription.
      *
      * @param {string} token
-     * @return {Promise}
+     * @returns {Promise}
      */
     deleteSubscription(token) {
         return this._api.delete(`/subscriptions/${encodeURIComponent(token)}`);
@@ -217,7 +216,7 @@ export default class ApiService {
      * @param {Object} [params]
      * @param {number} [params.page=1]
      * @param {number} [params.per_page=15]
-     * @return {Promise}
+     * @returns {Promise}
      */
     getSubscriptions({page = 1, per_page = 15} = {}) {
         return this._api.get("/subscriptions", {params: {page, per_page}});

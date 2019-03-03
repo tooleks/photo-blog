@@ -2,7 +2,6 @@ import moment from "moment";
 
 export default class User {
     /**
-     * @constructor
      * @param {Object} attributes
      * @param {number} attributes.id
      * @param {string} attributes.name
@@ -16,7 +15,7 @@ export default class User {
     }
 
     /**
-     * @return {User}
+     * @returns {User}
      */
     clone() {
         return new User({
@@ -29,7 +28,7 @@ export default class User {
 
 /**
  * @param {Object} object
- * @return {User}
+ * @returns {User}
  */
 User.fromObject = function fromObject(object) {
     const expiresAt = moment.utc(object.expiresAt);
