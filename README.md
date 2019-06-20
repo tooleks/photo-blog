@@ -16,7 +16,7 @@
 
 Please make sure you have installed and running [Docker](https://docs.docker.com/) and [Docker Compose](https://docs.docker.com/compose/install/) on the host machine as far as the following commands will rely on your setup.
 
-Run the command (within the project root directory) to initialize the project.
+Run the command (within the project root directory) to initialize the application.
 
 ```
 make init
@@ -30,29 +30,16 @@ make start
 
 **Tip:** `Ctrl`+`C` interrupts the process.
 
-Run the command (in another terminal window, within the project root directory) to configure the application and create the administrator user.
+Run the command (in another terminal window, within the project root directory) to perform post-initialization steps.
 
 ```
-make config
+make post-init
 ```
 
-Open the [localhost:8080/sign-in](http://localhost:8080/sign-in) link in a browser and sign in with a newly created administrator user account.
+**Tip:** Run `make help` to list all available commands.
 
-### Exposed Resources
+### Browsing
 
-| Resource Location                         | Description |
-|:------------------------------------------|:-------------|
-| [localhost:8080](http://localhost:8080)   | The photo blog application. |
-| [localhost:8081](http://localhost:8081)   | Documentation for RESTful API of the application. |
-| [localhost:8083](http://localhost:8083)   | SMTP Server + Web Interface for viewing and testing emails during development. |
-
-### Other Commands
-
-| Command Signature  | Description |
-|:-------------------|:-------------|
-| `make test`        | Execute the application tests. |
-| `make app-watch`   | Automatically recompile assets when Webpack detects a change. |
-| `make app-logs`    | Fetch the application logs. |
-| `make mysql-logs`  | Fetch MySQL logs. |
-
-**Tip:** Take a look at `./Makefile` file content to discover all available commands.
+* [http://localhost:8080](http://localhost:8080) - Web Application
+* [http://localhost:8081](http://localhost:8081) - REST API Documentation
+* [http://localhost:8083](http://localhost:8083) - SMTP Server Web Interface

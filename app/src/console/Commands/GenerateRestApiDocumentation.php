@@ -18,7 +18,7 @@ class GenerateRestApiDocumentation extends Command
      *
      * @var string
      */
-    protected $signature = 'generate:rest_api_documentation';
+    protected $signature = 'generate:rest-api-documentation';
 
     /**
      * The console command description.

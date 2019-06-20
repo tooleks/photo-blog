@@ -1,4 +1,4 @@
-FROM pb-app
+FROM photoblog/app
 
 # Copy the entrypoint command.
 COPY ./start.sh /usr/local/bin/start

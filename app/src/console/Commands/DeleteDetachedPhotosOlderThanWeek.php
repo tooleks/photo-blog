@@ -20,7 +20,7 @@ class DeleteDetachedPhotosOlderThanWeek extends Command
      *
      * @var string
      */
-    protected $signature = 'delete:detached_photos_older_than_week
+    protected $signature = 'delete:detached-photos-older-than-week
                                 {--chunk_size=50}';
 
     /**

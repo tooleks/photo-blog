@@ -25,7 +25,7 @@ class SendWeeklySubscriptionMails extends Command
      *
      * @var string
      */
-    protected $signature = 'send:weekly_subscription_mails
+    protected $signature = 'send:weekly-subscription-mails
                                 {--chunk_size=50}
                                 {--email=*}';
 

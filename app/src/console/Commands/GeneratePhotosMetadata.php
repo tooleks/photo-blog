@@ -20,7 +20,7 @@ class GeneratePhotosMetadata extends Command
      *
      * @var string
      */
-    protected $signature = 'generate:photos_metadata
+    protected $signature = 'generate:photos-metadata
                                 {--chunk_size=50}';
 
     /**
