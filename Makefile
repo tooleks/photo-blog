@@ -1,3 +1,6 @@
+# https://docs.docker.com/compose/reference/envvars/#compose_project_name
+COMPOSE_PROJECT_NAME=photoblog
+
 init: install-dependencies
 	cp -n ./docker-compose.development.yml ./docker-compose.override.yml
 	cp -n ./app/.env.example ./app/.env
@@ -22,16 +25,16 @@ update-dependencies:
 		--prefer-dist
 
 config:
-	docker exec -it pb-app bash -c "chown -R www-data:www-data ./storage"
-	docker exec -it pb-app bash -c "chown -R www-data:www-data ./bootstrap/cache"
-	docker exec -it pb-app bash -c "php artisan key:generate"
-	docker exec -it pb-app bash -c "php artisan package:discover"
-	docker exec -it pb-app bash -c "php artisan migrate"
-	docker exec -it pb-app bash -c "php artisan passport:install"
-	docker exec -it pb-app bash -c "php artisan create:roles"
-	docker exec -it pb-app bash -c "npm run prod"
-	docker exec -it pb-app bash -c "php artisan generate:rest_api_documentation"
-	docker exec -it pb-app bash -c "php artisan create:administrator_user"
+	docker exec -it ${COMPOSE_PROJECT_NAME}_app_1 bash -c "chown -R www-data:www-data ./storage"
+	docker exec -it ${COMPOSE_PROJECT_NAME}_app_1 bash -c "chown -R www-data:www-data ./bootstrap/cache"
+	docker exec -it ${COMPOSE_PROJECT_NAME}_app_1 bash -c "php artisan key:generate"
+	docker exec -it ${COMPOSE_PROJECT_NAME}_app_1 bash -c "php artisan package:discover"
+	docker exec -it ${COMPOSE_PROJECT_NAME}_app_1 bash -c "php artisan migrate"
+	docker exec -it ${COMPOSE_PROJECT_NAME}_app_1 bash -c "php artisan passport:install"
+	docker exec -it ${COMPOSE_PROJECT_NAME}_app_1 bash -c "php artisan create:roles"
+	docker exec -it ${COMPOSE_PROJECT_NAME}_app_1 bash -c "npm run prod"
+	docker exec -it ${COMPOSE_PROJECT_NAME}_app_1 bash -c "php artisan generate:rest-api-documentation"
+	docker exec -it ${COMPOSE_PROJECT_NAME}_app_1 bash -c "php artisan create:administrator-user"
 
 build:
 	docker-compose build
@@ -49,13 +52,13 @@ stop-daemon:
 	docker-compose down
 
 test:
-	docker exec -it pb-app bash -c "./vendor/bin/phpunit"
+	docker exec -it ${COMPOSE_PROJECT_NAME}_app_1 bash -c "./vendor/bin/phpunit"
 
 app-watch:
-	docker exec -it pb-app bash -c "npm run watch"
+	docker exec -it ${COMPOSE_PROJECT_NAME}_app_1 bash -c "npm run watch"
 
 app-logs:
-	docker exec -it pb-app bash -c "tail -n 1000 -f ./storage/logs/laravel.log"
+	docker exec -it ${COMPOSE_PROJECT_NAME}_app_1 bash -c "tail -n 1000 -f ./storage/logs/laravel.log"
 
 mysql-logs:
-	docker exec -it pb-mysql bash -c "tail -n 1000 -f /var/log/mysql/general.log"
+	docker exec -it ${COMPOSE_PROJECT_NAME}_mysql_1 bash -c "tail -n 1000 -f /var/log/mysql/general.log"

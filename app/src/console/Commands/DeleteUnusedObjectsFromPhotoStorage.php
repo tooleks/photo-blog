@@ -22,7 +22,7 @@ class DeleteUnusedObjectsFromPhotoStorage extends Command
      *
      * @var string
      */
-    protected $signature = 'delete:unused_objects_from_photo_storage
+    protected $signature = 'delete:unused-objects-from-photo-storage
                                 {--chunk_size=50}';
 
     /**

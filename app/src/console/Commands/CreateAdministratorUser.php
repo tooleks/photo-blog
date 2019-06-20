@@ -19,7 +19,7 @@ class CreateAdministratorUser extends Command
      *
      * @var string
      */
-    protected $signature = 'create:administrator_user';
+    protected $signature = 'create:administrator-user';
 
     /**
      * The console command description.

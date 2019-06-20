@@ -1,65 +1,59 @@
 version: '3.3'
 
 services:
-  pb-nginx.docker:
+  nginx:
     build:
       context: ./docker/nginx
-    image: pb-nginx
-    container_name: pb-nginx
-    restart: always
+    image: photoblog/nginx
     depends_on:
-      - pb-app.docker
+      - app
     ports:
       - 8080:8080
       - 8081:8081
       - 8082:8082
     volumes:
       - ./app/storage:/var/www/app/storage
+    restart: always
 
-  pb-app.docker:
+  app:
     build:
       context: ./app
       dockerfile: ${PWD}/docker/app/Dockerfile
-    image: pb-app
-    container_name: pb-app
-    restart: always
+    image: photoblog/app
     depends_on:
-      - pb-prerender.docker
-      - pb-redis.docker
+      - prerender
+      - redis
     volumes:
       - ./app/storage:/var/www/app/storage
+    restart: always
 
-  pb-app-queue.docker:
+  app-queue:
     build:
       context: ./docker/app-queue
-    image: pb-app-queue
-    container_name: pb-app-queue
-    restart: always
+    image: photoblog/app-queue
     depends_on:
-      - pb-app.docker
+      - app
     volumes:
       - ./app/storage:/var/www/app/storage
+    restart: always
 
-  pb-app-scheduler.docker:
+  app-scheduler:
     build:
       context: ./docker/app-scheduler
-    image: pb-app-scheduler
-    container_name: pb-app-scheduler
-    restart: always
+    image: photoblog/app-scheduler
     depends_on:
-      - pb-app.docker
+      - app
     volumes:
       - ./app/storage:/var/www/app/storage
+    restart: always
 
-  pb-prerender.docker:
+  prerender:
     build:
       context: ./prerender
       dockerfile: ${PWD}/docker/prerender/Dockerfile
-    image: pb-prerender
-    container_name: pb-prerender
+    image: photoblog/prerender
     restart: always
 
-  pb-redis.docker:
+  redis:
     image: redis:4
-    container_name: pb-redis
     restart: always

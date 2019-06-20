@@ -1,32 +1,36 @@
 version: '3.3'
 
 services:
-  pb-nginx.docker:
+  nginx:
     volumes:
       - ./app:/var/www/app
       - ./docker/nginx/sites:/etc/nginx/conf.d
+    restart: no
 
-  pb-app.docker:
+  app:
+
     volumes:
       - ./app:/var/www/app
       - ./app/php.ini-development:/usr/local/etc/php/php.ini
       - ./app/policy.xml:/etc/ImageMagick-6/policy.xml
+    restart: no
 
-  pb-app-queue.docker:
+  app-queue:
     volumes:
       - ./app:/var/www/app
       - ./app/php.ini-development:/usr/local/etc/php/php.ini
       - ./app/policy.xml:/etc/ImageMagick-6/policy.xml
+    restart: no
 
-  pb-app-scheduler.docker:
+  app-scheduler:
     volumes:
       - ./app:/var/www/app
       - ./app/php.ini-development:/usr/local/etc/php/php.ini
       - ./app/policy.xml:/etc/ImageMagick-6/policy.xml
+    restart: no
 
-  pb-mysql.docker:
+  mysql:
     image: mysql:5.7
-    container_name: pb-mysql
     environment:
       MYSQL_DATABASE: 'photo_blog'
       MYSQL_ROOT_PASSWORD: 'root'
@@ -38,9 +42,10 @@ services:
       - ./docker/mysql/seed:/docker-entrypoint-initdb.d
       - ./docker/mysql/storage:/var/lib/mysql
       - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+    restart: no
 
-  pb-maildev.docker:
+  maildev:
     image: djfarrelly/maildev
-    container_name: pb-maildev
     ports:
       - 8083:80
+    restart: no

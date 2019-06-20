@@ -17,7 +17,7 @@ class ChangeUserPassword extends Command
      *
      * @var string
      */
-    protected $signature = 'change:user_password';
+    protected $signature = 'change:user-password';
 
     /**
      * The console command description.
