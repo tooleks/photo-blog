@@ -1,5 +1,5 @@
 # https://docs.docker.com/compose/reference/envvars/#compose_project_name
-COMPOSE_PROJECT_NAME=photoblog
+COMPOSE_PROJECT_NAME = photoblog
 
 .DEFAULT_GOAL := help
 
@@ -44,19 +44,19 @@ update-deps: ## Update application dependencies on host machine
 		--prefer-dist
 
 build: ## Build Docker containers
-	docker-compose build
+	docker-compose -p ${COMPOSE_PROJECT_NAME} build
 
 rebuild: ## Rebuild Docker containers
-	docker-compose build --no-cache
+	docker-compose -p ${COMPOSE_PROJECT_NAME} build --no-cache
 
 start: ## Start Docker containers
-	docker-compose up
+	docker-compose -p ${COMPOSE_PROJECT_NAME} up
 
 start-daemon: ## Start Docker containers in background mode
-	docker-compose up -d
+	docker-compose -p ${COMPOSE_PROJECT_NAME} up -d
 
 stop-daemon: ## Stop Docker containers in background mode
-	docker-compose down
+	docker-compose -p ${COMPOSE_PROJECT_NAME} down
 
 test: ## Run application tests
 	docker exec -it ${COMPOSE_PROJECT_NAME}_app_1 bash -c "./vendor/bin/phpunit"
