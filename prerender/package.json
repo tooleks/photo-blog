@@ -6,6 +6,6 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "prerender": "^5.4.2"
+    "prerender": "^5.20.1"
   }
 }
